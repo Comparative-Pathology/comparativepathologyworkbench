@@ -1,0 +1,88 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:index' %}">
+				Matrices
+			</a>
+		</li>
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:matrix' matrix.id %}">
+			{{ matrix.title }}
+			</a>
+		</li>
+
+		<li class="breadcrumb-item active">
+			Cell Details
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+{% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
+
+	<br />
+	<h1>EDIT Cell {{ cell.id }}, Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+	<br />
+
+{% endif %}
+
+{% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
+
+	<br />
+	<h1>EDIT Row Header, Matrix {{ matrix.id }}, "{{ matrix.title }}" </h1>
+	<br />
+
+{% endif %}
+
+{% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
+
+	<br />
+	<h1>EDIT Column Header, Matrix {{ matrix.id }}, "{{ matrix.title }}" </h1>
+	<br />
+
+{% endif %}
+
+	    
+	<form method="POST" class="post-form">
+
+{% csrf_token %}
+
+{{ form.as_p}} 
+		
+    	<button type="submit" class="save btn btn-danger">Save</button>
+
+	
+	</form>
+
+		<a href="{{ request.META.HTTP_REFERER }}">
+			<button class="save btn btn-success">CANCEL</button>
+		</a>
+
+<style type="text/css">
+
+ul {
+	list-style-type: none;
+}
+
+</style>
+
+{% endblock %}
+

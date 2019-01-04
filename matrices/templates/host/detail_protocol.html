@@ -1,0 +1,24 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+ 
+ 	<br />
+	<h1>Server Protocol {{ protocol.id }}</h1>
+	<br />
+
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd>{{ protocol.name }}</dd>
+		</dl>
+
+		<br />
+
+		<a href="{% url 'matrices:maintenance' %}">
+			<button class="save btn btn-success">CANCEL</button>
+		</a>
+
+{% endblock %}

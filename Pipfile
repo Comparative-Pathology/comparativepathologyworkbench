@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+gunicorn = "*"
+"psycopg2" = "*"
+requests = "*"
+python-decouple = "*"
+django-widget-tweaks = "*"
+pycrypto = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "2.7"

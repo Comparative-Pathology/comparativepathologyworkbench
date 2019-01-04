@@ -1,0 +1,108 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<br />
+	
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:list_imaging_hosts' %}">
+				Servers
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			{{ server.name }}
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<h1>{{ server.name }}</h1>
+
+	<br />
+
+{% if group_list %}
+
+	<p>Server at {{ server.url }} contains {{ group_count }} Groups:</p>
+	
+    <hr>
+    
+	<div class="row">
+
+    {% for group in group_list %}
+
+    	<div class="col-md-4">
+
+			<h3>{{ group.name }}</h3>
+
+			<br />
+	
+		    <p class="pull-left">
+		
+		{% if group.randomImageName != 'NONE'  %}
+		
+		
+				<a href="{% url 'matrices:webgallery_show_image' server.id group.randomImageID %}">
+					<img class="img-thumbnail" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/>
+				</a>
+
+		{% endif %}
+		
+			</p>
+
+		    <div class="pull-left">
+    
+    	        <ul>
+        	        <li>Projects: {{ group.projectCount }}</li>
+            	    <li>Datasets: {{ group.datasetCount }}</li>
+
+		{% if group.imageCount != 0  %}
+
+                	<li>Images: {{ group.imageCount }}</li>
+
+		{% endif %}
+
+	            </ul>
+    
+            </div>
+
+            <div class="clearfix">
+            </div>
+    
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:webgallery_show_group' server.id group.id %}" role="button">
+					<button class="save btn btn-info">View Group &raquo;</button>
+				</a>
+			</p>
+
+        </div>
+
+        <div class="clearfix">
+        </div>
+
+    {% endfor %}
+
+    </div>
+
+{% else %}
+
+	<p>Unable to Log into the Server</p>
+
+{% endif %}
+
+
+{% endblock %}

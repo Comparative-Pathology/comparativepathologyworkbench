@@ -1,0 +1,102 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:list_imaging_hosts' %}">
+				Servers
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
+				{{ server.name }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			{{ group.name }}
+		</li>	
+	
+	</ol>
+	
+    <hr>
+
+	<h1>{{ group.name }}</h1>
+
+	<br />
+
+{% if project_list %}
+
+    <p>Group contains {{ project_count }} Projects:</p>
+
+    <hr>
+    
+	<div class="row">
+
+    {% for project in project_list %}
+
+		<div class="col-md-4">
+	
+			<h5>{{ project.name }}</h5>
+
+		    <p class="pull-left">
+
+		{% if project.randomImageName != 'NONE'  %}
+		
+				<a href="{% url 'matrices:webgallery_show_image' server.id project.randomImageID %}">
+					<img class="img-thumbnail" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/>
+				</a>
+
+		{% endif %}
+
+			</p>
+
+        	<div class="pull-left">
+    
+            	<ul>
+                	<li>Datasets: {{ project.datasetCount }}</li>
+	                <li>Images: {{ project.imageCount }}</li>
+    	        </ul>
+
+		    </div>
+    
+    	    <div class="clearfix">
+        	</div>
+
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:webgallery_show_project' server.id project.id %}" role="button">
+					<button class="save btn btn-info">View Project &raquo;</button>
+				</a>
+			</p>
+
+    	    <div class="clearfix">
+	        </div>
+    
+        </div>
+	
+    {% endfor %}
+
+	</div>
+
+{% else %}
+
+    <p>Group contains No Projects!</p>
+
+{% endif %}
+
+{% endblock %}

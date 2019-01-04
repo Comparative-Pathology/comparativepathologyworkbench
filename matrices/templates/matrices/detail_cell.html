@@ -1,0 +1,130 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:index' %}">
+				Matrices
+			</a>
+		</li>
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:matrix' matrix.id %}">
+			{{ matrix.title }}
+			</a>
+		</li>
+
+		<li class="breadcrumb-item active">
+			Cell Details
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+{% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
+
+	<br />
+	<h1>Cell {{ cell.id }}, Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+	<br />
+
+		<dl class="dl-horizontal">
+
+			<dt>Id:</dt>
+			<dd>{{ cell.id }}</dd>
+
+			<dt>Title:</dt>
+			<dd>{{ cell.title }}</dd>
+
+			<dt>Description:</dt>
+			<dd>{{ cell.description }}</dd>
+
+			<dt>Image:</dt>
+			<dd>{{ cell.image.name }}</dd>
+
+	{% if cell.blogpost != '' %}
+	
+			<dt>Blog Post:</dt>
+			<dd>
+				<a class="btn btn-default" href="{{ cell_link }}" role="button" target="_blank">
+					<button class="save btn btn-info">View Blog Post {{ cell.blogpost }} &raquo;</button>
+				</a>
+			</dd>
+			
+	{% endif %}
+	
+			<br />
+
+			<dt>
+			<!-- {{ cell.image.viewer_url }}; {{ cell.image.birdseye_url }} -->
+			</dt>
+			<dd><a href="{{ cell.image.viewer_url }}" target="_blank"><img src="{{ cell.image.birdseye_url }}"></a></dd>
+
+		</dl>
+
+{% endif %}
+
+{% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
+
+	<br />
+	<h1>Row Header, Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+	<br />
+
+		<dl class="dl-horizontal">
+
+			<dt>Id:</dt>
+			<dd>{{ cell.id }}</dd>
+
+			<dt>Title:</dt>
+			<dd>{{ cell.title }}</dd>
+
+			<dt>Description:</dt>
+			<dd>{{ cell.description }}</dd>
+
+		</dl>
+
+{% endif %}
+
+{% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
+
+	<br />
+	<h1>Column Header, Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+	<br />
+
+		<dl class="dl-horizontal">
+
+			<dt>Id:</dt>
+			<dd>{{ cell.id }}</dd>
+
+			<dt>Title:</dt>
+			<dd>{{ cell.title }}</dd>
+
+			<dt>Description:</dt>
+			<dd>{{ cell.description }}</dd>
+
+		</dl>
+
+{% endif %}
+
+	<br />
+
+		<!-- <a href="{% url 'matrices:matrix' matrix.id %}"> -->
+	<a href="{{ request.META.HTTP_REFERER }}">
+	<button class="save btn btn-success">Back</button>
+	</a>
+
+{% endblock %}

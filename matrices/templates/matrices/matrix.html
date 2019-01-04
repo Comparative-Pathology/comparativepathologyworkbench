@@ -1,0 +1,328 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:index' %}">
+				Matrices
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			{{ matrix.title }}
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+
+{% if rows %}
+
+		<br />
+	
+		<h1>Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+		
+		<p>Owned by {{ owner.username }} ({{ owner.first_name }} {{ owner.last_name }})</p>
+
+		<br />
+	
+		<div class="table-responsive">
+	
+			<table	id="myTable" class="test">
+		
+				<tbody>
+		
+	{% for row in rows %}
+
+					<tr>
+			
+		{% for column in columns %}
+
+	    	{% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
+
+						<td id="cell_{{ matrix_cell.id }}">
+				
+				{% if matrix_cell.xcoordinate == 0 and matrix_cell.ycoordinate == 0 %}
+
+							<div class="master">
+				
+								<div class="dropdown">
+			
+									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="fa fa-bars"></i>
+									</button>
+		
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+										<a class="dropdown-item" href="{% url 'matrices:detail_matrix' matrix.id %}">
+											<i class="fa fa-eye"></i> View Matrix 
+										</a>
+					
+					{% if matrix_link != '' %}
+
+						{% if matrix.blogpost != '' %}
+
+										<a class="dropdown-item" href="{% url 'matrices:detail_matrix_blog' matrix.id %}">
+											<i class="fa fa-eye"></i> View Matrix Commentary
+										</a>
+					
+						{% endif %}
+
+					{% endif %}
+
+					{% if user == owner %}
+					
+										<a class="dropdown-item" href="{% url 'matrices:edit_matrix' matrix.id %}">
+											<i class="fa fa-pencil-alt"></i> Edit Matrix 
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
+											<i class="fa fa-pencil-alt"></i> DELETE Matrix 
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:add_column' matrix.id %}">
+											<i class="fa fa-angle-double-right"></i> APPEND Column
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:delete_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')">
+											<i class="fa fa-angle-double-left"></i> Delete LAST Column
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:add_row' matrix.id %}">
+											<i class="fa fa-angle-double-down"></i> APPEND Row
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:delete_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')">
+											<i class="fa fa-angle-double-up"></i> Delete LAST Row
+										</a>
+
+					{% endif %}
+									</div>
+
+								</div>
+		
+							</div>
+
+				{% endif %}
+
+				{% if matrix_cell.xcoordinate == 0 and matrix_cell.ycoordinate != 0 %}
+					
+							<div class="headrow">
+			
+								<div class="dropdown">
+
+									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="fa fa-bars"></i>
+									</button>
+		
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+										<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+											<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+										</a>
+								
+					{% if user == owner %}
+
+										<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+											<i class="fa fa-pencil-alt"></i> Edit Row Header
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:add_row_above' matrix.id forloop.parentloop.counter0	%}">
+											<i class="fa fa-angle-up"></i> Add Row Above
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')">
+											<i class="fa fa-trash-alt"></i> Delete This Row
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:add_row_below' matrix.id forloop.parentloop.counter0 %}">
+											<i class="fa fa-angle-down"></i> Add Row Below
+										</a>
+
+					{% endif %}
+
+									</div>
+							
+								</div>
+		
+								<em>{{ matrix_cell.title|truncatechars:5 }}</em>
+						
+							</div>
+
+				{% endif %}
+
+				{% if matrix_cell.xcoordinate != 0 and matrix_cell.ycoordinate == 0 %}
+
+							<div class="headcol" align="right">
+
+								<div class="dropdown">
+
+									<em>{{ matrix_cell.title|truncatechars:20 }}</em>
+
+									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="fa fa-bars"></i>
+									</button>
+		
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+										<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+											<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+										</a>
+
+					{% if user == owner %}
+
+										<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+											<i class="fa fa-pencil-alt"></i> Edit Column Header
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:add_column_left' matrix.id forloop.counter0	%}">
+											<i class="fa fa-angle-left"></i> Add Column Left
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')">
+											<i class="fa fa-trash-alt"></i> Delete This Column
+										</a>
+
+										<a class="dropdown-item" href="{% url 'matrices:add_column_right' matrix.id forloop.counter0 %}">
+											<i class="fa fa-angle-right"></i> Add Column Right
+										</a>
+
+					{% endif %}
+
+									</div>
+						
+								</div>
+
+							</div>
+
+				{% endif %}
+
+				{% if matrix_cell.xcoordinate != 0 and matrix_cell.ycoordinate != 0 %}
+
+							<div class="cell" align="right">
+
+								<div class="dropdown">
+
+									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="fa fa-bars"></i>
+									</button>
+		
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+											<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+												<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+											</a>
+
+					{% if matrix_link != '' %}
+
+						{% if matrix_cell.blogpost != '' %}
+
+										<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}">
+											<i class="fa fa-eye"></i> View Cell Commentary
+										</a>
+					
+						{% endif %}
+		
+					{% endif %}
+
+					{% if user == owner %}
+
+											<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+												<i class="fa fa-pencil-alt"></i> Edit Cell
+											</a>
+
+					{% endif %}
+									</div>
+
+								</div> 
+
+								<div align="left">
+
+					{% if matrix_cell.image == "0"	%}
+	
+									<p class="text-left"></p>
+							
+					{% else %}
+
+									<p>	
+									<!-- X: {{ matrix_cell.xcoordinate }}<br /> -->
+									<!-- Y: {{ matrix_cell.ycoordinate }}<br /> -->
+									<!-- {{ matrix_cell.id }}<br /> -->
+									<!-- <em>{{ matrix_cell.title }}</em><br /> -->
+									<!-- {{ matrix_cell.image.title }}<br /> -->
+									<!-- {{ matrix_cell.image }} -->
+										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+											<img src="{{ matrix_cell.image.birdseye_url }}" ></a>
+									</p>
+
+								</div> 
+
+					{% endif %}
+	
+							</div>
+
+				{% endif %}
+
+						</td>
+		
+			{% endwith %}
+
+		{% endfor %}
+
+					</tr>								
+
+	{% endfor %}
+
+				</tbody>
+
+			</table>
+	
+		</div>
+
+{% else %}
+
+		<br />
+		<h1>Matrix {{ matrix.id }}, "{{ matrix.title }}" has NO Cells</h1>
+		<br />
+
+		<table>
+
+			<tr>
+
+				<td>
+	
+					<form action="{% url 'matrices:add_cell' matrix.id %}" method="post">
+{% csrf_token %}
+						<input class="btn btn-danger" type="submit" value="Add Cell" />
+
+					</form>
+
+					<a href="{% url 'matrices:index' %}">
+						<button class="save btn btn-success">Back</button>
+					</a>
+			
+				</td>
+
+			</tr>
+
+		</table>
+
+{% endif %}
+
+		
+{% endblock %}

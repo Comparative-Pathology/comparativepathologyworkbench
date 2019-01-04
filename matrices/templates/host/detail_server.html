@@ -1,0 +1,28 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	<h1>Server {{ server.id }}</h1>
+	<br />
+
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd>{{ server.name }}</dd>
+			<dt>URL:</dt>
+			<dd>{{ server.url }}</dd>
+			<dt>Type:</dt>
+			<dd>{{ server.type.name }}</dd>
+		</dl>
+
+		<br />
+
+		<a href="{% url 'matrices:list_imaging_hosts' %}">
+			<button class="save btn btn-success">CANCEL</button>
+		</a>
+
+{% endblock %}

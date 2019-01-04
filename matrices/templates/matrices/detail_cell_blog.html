@@ -1,0 +1,147 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:index' %}">
+				Matrices
+			</a>
+		</li>
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:matrix' matrix.id %}">
+			{{ matrix.title }}
+			</a>
+		</li>
+
+		<li class="breadcrumb-item active">
+			Cell Commentary
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<br />
+	<h1>Cell {{ cell.id }}, Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+	<br />
+	<h3>Commentary</h3>
+	<br />
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Post</th>
+            <th>Action</th>
+		</tr>
+        <tr>
+            <td>
+				{{ blogpost.date }}; 
+			</td>
+            <td>
+				{{ blogpost.author }}
+			</td>
+            <td>
+            	{{ blogpost.content }}
+            </td>
+            <td>
+				<a class="btn btn-default" href="{{ blogpost.url }}" role="button" target="_blank">
+					<button class="save btn btn-info">View &raquo;</button>
+				</a>
+            </td>
+		</tr>
+
+{% if comment_list %}
+
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+		
+	{% for comment in comment_list %}
+	
+		{% if forloop.first %}
+	
+        <tr>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Comment</th>
+            <th>Action</th>
+		</tr>
+		
+		{% endif %}
+
+        <tr>
+            <td>
+				{{ comment.date }}; 
+			</td>
+            <td>
+				{{ comment.author_name }}
+			</td>
+            <td>
+            	{{ comment.content }}
+            </td>
+            <td>
+				<a class="btn btn-default" href="{{ comment.url }}" role="button" target="_blank">
+					<button class="save btn btn-info">View &raquo;</button>
+				</a>
+            </td>
+		</tr>
+
+    {% endfor %}
+		
+{% else %}
+
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>No Comments!</td>
+            <td>&nbsp;</td>
+		</tr>
+	    
+{% endif %}
+
+    </table>
+
+	<br />
+	
+	<h5>Post a Comment:</h5>
+
+	<form method="POST" class="post-form">
+
+{% csrf_token %}
+
+{% include 'includes/form.html' %}
+
+	    <button type="submit" class="save btn btn-danger">COMMENT</button>
+
+	</form>
+	
+	<br />
+
+	<hr>
+
+
+	<!-- <a href="{% url 'matrices:matrix' matrix.id %}"> -->
+	<a href="{{ request.META.HTTP_REFERER }}">
+	<button class="save btn btn-success">Back</button>
+	</a>
+
+{% endblock %}

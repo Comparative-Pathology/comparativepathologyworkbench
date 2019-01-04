@@ -1,0 +1,27 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	<h1>EDIT Server Type {{ type.id }}</h1>
+	<br />
+
+	<form method="POST" class="post-form">
+		
+{% csrf_token %}
+
+{% include 'includes/form.html' %}
+
+	    <button type="submit" class="save btn btn-danger">Save</button>
+
+	</form>
+
+	<a href="{% url 'matrices:maintenance' %}">
+		<button class="save btn btn-success">CANCEL</button>
+	</a>
+
+{% endblock %}

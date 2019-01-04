@@ -1,0 +1,59 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:index' %}">
+				Matrices
+			</a>
+		</li>
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:matrix' matrix.id %}">
+			{{ matrix.title }}
+			</a>
+		</li>
+
+		<li class="breadcrumb-item active">
+			Matrix Edit
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<br />
+	<h1>EDIT Matrix {{ matrix.id }}</h1>
+	<br />
+
+	<form method="POST" class="post-form">
+
+{% csrf_token %}
+
+{% include 'includes/form.html' %}
+
+	    <button type="submit" class="save btn btn-danger">Save</button>
+
+	</form>
+
+	<br />
+		
+	<a href="{{ request.META.HTTP_REFERER }}">
+		<button class="save btn btn-success">CANCEL</button>
+	</a>
+
+{% endblock %}

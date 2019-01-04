@@ -1,0 +1,141 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			Servers
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<h1>Browse Image Servers</h1>
+	<br />
+
+	<p>Browse the list of Image Servers</p>
+
+	<hr>
+
+	<br />
+
+	<br />
+	<h2>Image Servers</h2>
+	<br />
+
+{% if server_list %}
+
+	{% for server in server_list %}
+	
+		{% if forloop.first %}
+	
+    <table>
+        <tr>
+            <th width="150px">Name</th>
+            <th width="250px">URL</th>
+            <th width="100px">User</th>
+            <th width="100px">Type</th>
+            <th width="100px">Owner</th>
+            <th>Action</th>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+
+		{% endif %}
+	
+        <tr>
+            <td>{{ server.name }}</td>
+            <td>{{ server.url }}</td>
+            <td>{{ server.uid }}</td>
+            <td>{{ server.type.name }}</td>
+            <td>{{ server.owner.username }}</td>
+
+		{% if user.id == server.owner.id %}
+            
+            <td>
+				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
+	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+				</a>
+				<a href="{% url 'matrices:detail_server' server.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+				<a href="{% url 'matrices:edit_server' server.id %}">
+					<button class="save btn btn-warning">Edit</button>
+				</a>
+				<a href="{% url 'matrices:delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this SERVER?')">
+					<button class="save btn btn-danger">DELETE!</button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
+	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+				</a>
+				<a href="{% url 'matrices:detail_server' server.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+            </td>
+
+		{% endif %}
+            <td>
+            </td>
+		</tr>
+
+		{% if forloop.last %}
+	
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>
+				<a href="{% url 'matrices:new_server' %}">
+					<button class="save btn btn-success">Add New Server</button>
+				</a>
+            </td>
+		</tr>
+
+    </table>
+
+		{% endif %}
+	
+    {% endfor %}
+
+{% else %}
+
+	<p>No Servers are available.</p>
+
+{% endif %}
+
+{% endblock %}

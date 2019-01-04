@@ -1,0 +1,41 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	<h1>Blog Command {{ blog.id }}</h1>
+	<br />
+
+		<dl class="dl-horizontal">
+
+			<dt>Name:</dt>
+			<dd><strong>{{ blog.name }}</strong></dd>
+
+			<dt>Protocol:</dt>
+			<dd>{{ blog.protocol.name }}</dd>
+
+			<dt>Application:</dt>
+			<dd>{{ blog.application }}</dd>
+
+			<dt>URL</dt>
+			<dd>{{ blog.url }}</dd>
+
+			<dt>Preamble:</dt>
+			<dd>{{ blog.preamble }}</dd>
+
+			<dt>Postamble:</dt>
+			<dd>{{ blog.postamble }}</dd>
+
+		</dl>
+
+		<br />
+
+		<a href="{% url 'matrices:maintenance' %}">
+			<button class="save btn btn-success">CANCEL</button>
+		</a>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			Authorization
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<br />
+	<h1>Authorization</h1>
+	<br />
+
+	<p>Authorisation Functions</p>
+
+	<hr>
+
+	<br />
+
+	<br />
+	<h2>Users</h2>
+	<br />
+
+{% if user_list %}
+
+    {% for userlist in user_list %}
+	
+		{% if forloop.first %}
+	
+    <table>
+        <tr>
+            <th width="200px">Name</th>
+            <th width="400px">Full Name</th>
+            <th>Action</th>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+
+		{% endif %}
+	
+        <tr>
+            <td>
+				{{ userlist.username }}
+            </td>
+            <td>
+				{{ userlist.get_full_name }}
+            </td>
+
+		{% if user.is_superuser and not userlist.is_superuser %}
+            
+            <td>
+				<a href="{% url 'matrices:detail_user' userlist.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+				<a href="{% url 'matrices:edit_user' userlist.id %}">
+					<button class="save btn btn-warning">Edit</button>
+				</a>
+				<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
+					<button class="save btn btn-danger">DELETE!</button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:detail_user' userlist.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+            </td>
+
+		{% endif %}
+
+		</tr>
+
+		{% if forloop.last %}
+	
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+	</table>
+
+		{% endif %}
+	
+    {% endfor %}
+
+{% else %}
+
+	<p>No users are available.</p>
+	
+{% endif %}
+
+{% endblock %}

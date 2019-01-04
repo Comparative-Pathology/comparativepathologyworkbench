@@ -1,0 +1,155 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<br />
+		
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:list_imaging_hosts' %}">
+				Servers
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
+				{{ server.name }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
+				{{ group.name }}
+			</a>
+		</li>
+	
+{% for project in projects %}
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:webgallery_show_project' server.id project.id %}">
+				{{ project.name }}
+			</a>
+		</li>	
+
+{% endfor %}
+
+{% for dataset in datasets %}
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}">
+				{{ dataset.name }}
+			</a>
+		</li>
+	
+{% endfor %}
+
+		<li class="breadcrumb-item active">
+			{{ image.name }}
+		</li>	
+	
+	</ol>
+	
+    <hr>
+	
+	<h1>{{ image.name }}</h1>
+
+	<br />
+
+    <p>{{ image.description }}</p>
+
+	<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
+		<button class="save btn btn-danger">Add to Image Cart</button>
+	</a>
+	
+
+    <hr>
+
+    <table>
+        <tr>
+            <th>Image:</th>
+            <td>
+				<a href="{{ image.viewer_url  }}" target="_blank">
+					<img  style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
+				</a>
+			</td>
+		</tr>
+
+        <tr>
+            <th>&nbsp;</th>
+            <td>&nbsp;</td>
+		</tr>
+
+        <tr>
+            <th>Dimensions (XY):</th>
+            <td>{{ image.sizeX }} x {{ image.sizeY }}</td>
+        </tr>
+
+        <tr>
+            <th>Pixels Type:</th>
+            <td>{{ image.pixelstype }}</td>
+        </tr>
+
+        <tr>
+            <th>Pixels Size (XYZ) (&#181m):</th>
+            <td>{{ image.pixelsizeX|floatformat:4 }} x {{ image.pixelsizeY|floatformat:4 }}</td>
+        </tr>
+
+        <tr>
+            <th>Z-sections/Timepoints:</th>
+            <td>{{ image.sizeZ }} x {{ image.sizeT }}</td>
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <p>Image has {{ image.roi_count }} Regions Of Interest (ROIs):</p>
+
+{% for roi in rois %}
+
+    <table>
+
+	{% for shape in roi.shapes %}
+	
+        <tr>
+            <th>ROI ID:</th>
+            <td>{{ shape.id }}</td>
+		</tr>
+
+        <tr>
+            <th>Coordinates:</th>
+            <td>X: {{ shape.x }}, Y: {{ shape.y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
+		</tr>
+
+        <tr>
+            <th>{{ shape.type }}</th>
+            <td>
+				<a href="{{ shape.shape_url }}" target="_blank">
+					<img style="width:256px;" title="{{ shape.type }}" src="{{ shape.shape_url }}" >
+				</a>
+            </td>
+        </tr>
+
+        <tr>
+            <th>&nbsp;</th>
+            <td>&nbsp;</td>
+		</tr>
+
+	{% endfor %}
+	
+    </table>
+
+{% endfor %}
+
+{% endblock %}

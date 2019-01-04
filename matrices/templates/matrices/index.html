@@ -1,0 +1,130 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			Matrices
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<br />
+	<h1>Browse Matrices</h1>
+	<br />
+
+	<p>Browse the list of Matrices</p>
+
+	<hr>
+
+	<br />
+
+	<br />
+	<h2>Matrices</h2>
+	<br />
+
+{% if matrix_list %}
+
+	{% for matrix in matrix_list %}
+	
+		{% if forloop.first %}
+	
+    <table>
+        <tr>
+            <th width="500px">Title:</th>
+            <th width="200px">Owner:</th>
+            <th>Action</th>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+
+		{% endif %}
+	
+        <tr>
+            <td>{{ matrix.title }}</td>
+            <td>{{ matrix.owner.username }}</td>
+
+		{% if user.id == matrix.owner.id %}
+            
+            <td>
+				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
+	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+				</a>
+				<a href="{% url 'matrices:detail_matrix' matrix.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+				<a href="{% url 'matrices:edit_matrix' matrix.id %}">
+					<button class="save btn btn-warning">Edit</button>
+				</a>
+				<a href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
+					<button class="save btn btn-danger">DELETE!</button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
+	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+				</a>
+				<a href="{% url 'matrices:detail_matrix' matrix.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+            </td>
+
+		{% endif %}
+
+		</tr>
+
+		{% if forloop.last %}
+	
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>
+				<a href="{% url 'matrices:new_matrix' %}">
+					<button class="save btn btn-success">Add New Matrix</button>
+				</a>
+            </td>
+		</tr>
+
+    </table>
+
+		{% endif %}
+	
+    {% endfor %}
+
+{% else %}
+
+	<p>No Matrices are available.</p>
+
+	<a href="{% url 'matrices:new_matrix' %}">
+		<button class="save btn btn-success">Add New Matrix</button>
+	</a>
+	
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<br />
+	
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item active">
+			Home
+		</li>
+	
+	</ol>
+	
+	<hr>
+
+	<br />
+	<h1>Home</h1>
+	<br />
+
+	<p>Home</p>
+
+	<hr>
+
+	<br />
+
+	<div class="row">
+
+    	<div class="col-md-4">
+
+			<h5>Matrices</h5>
+		
+			<p>Browse the list Matrices</p>
+
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:index' %}" role="button">
+					<button class="save btn btn-info">View Matrix List &raquo;</button>
+				</a>
+			</p>
+
+	    </div>
+
+		<div class="col-md-4">
+
+			<h5>Imaging Hosts</h5>
+		
+			<p>Browse the list of Imaging Hosts</p>
+
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:list_imaging_hosts' %}" role="button">
+					<button class="save btn btn-info">View Imaging Host List &raquo;</button>
+				</a>
+			</p>
+
+		</div>
+
+		<div class="col-md-4">
+
+			<h5>Your Image Collection</h5>
+		
+			<p>Browse your list of Selected Images</p>
+
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:list_image_cart' %}" role="button">
+					<button class="save btn btn-info">View Image Collection &raquo;</button>
+				</a>
+			</p>
+
+		</div>
+
+	</div>
+
+	<hr>
+
+{% if user.is_superuser %}
+	
+	<div class="row">
+
+    	<div class="col-md-4">
+
+			<h5>Maintenance</h5>
+		
+			<p>Maintenance functions</p>
+
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:maintenance' %}" role="button">
+					<button class="save btn btn-info">Maintenance &raquo;</button>
+				</a>
+			</p>
+
+	    </div>
+
+		<div class="col-md-4">
+
+			<h5>Authorisation</h5>
+		
+			<p>Authorisation functions</p>
+
+			<p style="margin-left:20px">
+				<a class="btn btn-default" href="{% url 'matrices:authorisation' %}" role="button">
+					<button class="save btn btn-info">Authorisation &raquo;</button>
+				</a>
+			</p>
+
+		</div>
+
+		<div class="col-md-4">
+
+		</div>
+
+	</div>
+
+	<hr>
+
+{% endif %}
+
+{% endblock %}

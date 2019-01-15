@@ -119,8 +119,16 @@
 			
 			{% endif %}
 
+			{% if image.roi == 0 %}
+
 							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
 	
+			{% else %}
+
+							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
+	
+			{% endif %}
+
 		{% endfor %}
 
 {% else %}
@@ -246,7 +254,7 @@
 
 						<ul class="list-unstyled">
 							<li>
-								<a href="https://www.chanzuckerberg.com/"><img src="https://www.chanzuckerberg.com/wp-content/themes/czi/images/build/CZINameAndCircleScriptLogo.gif" style="background-color: #FFFFFF;" height="70" width="125"></a>
+								<a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" height="70" width="125"></a>
 							</li>
 						</ul>
 

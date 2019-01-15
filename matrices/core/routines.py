@@ -61,7 +61,12 @@ def get_a_post_from_wordpress(user_name, post_id):
 	#print 'Data', data
 
 	post_id = data['id']
-	date = data['date']
+	datetime = data['date']
+	splitdatetime = datetime.split("T")
+	
+	date = splitdatetime[0]
+	time = splitdatetime[1]
+
 	author = data['author']
 	title = data['title']
 	content = data['content']
@@ -74,6 +79,7 @@ def get_a_post_from_wordpress(user_name, post_id):
 
 	post = {'id': str(post_id),
 		'date': date,
+		'time': time,
 		'author': credential.username,
 		'title': title_rendered,
 		'content': content_rendered[:-5][3:].rstrip(),
@@ -103,7 +109,13 @@ def get_a_post_comments_from_wordpress(user_name, post_id):
 	for c in data:
 
 		comment_id = c['id']
-		date = c['date']
+
+		datetime = c['date']
+		splitdatetime = datetime.split("T")
+	
+		date = splitdatetime[0]
+		time = splitdatetime[1]
+
 		author = c['author']
 		author_name = c['author_name']
 		content = c['content']
@@ -114,6 +126,7 @@ def get_a_post_comments_from_wordpress(user_name, post_id):
 
 		comment = {'id': str(comment_id),
 			'date': date,
+			'time': time,
 			'author': str(author),
 			'author_name': credential.username,
 			'content': content_rendered[:-5][3:].rstrip(),
@@ -1197,13 +1210,32 @@ def get_imaging_server_image_json(request, server_id, image_id):
 			shape_type = s['@type']
 			
 			types = shape_type.split('#')
+			#print 'types', types
 			type = types[1]
 			
 			coordX = ''
 			coordY = ''
-			width = ''
-			height = ''
+			width = '0'
+			height = '0'
 			
+			#print 'type', type
+			
+			if type == 'Point':
+	
+				intCoordX = int(s['X'])
+				intCoordY = int(s['Y'])
+				intHalf = 3192 / 2
+				intWidth = intHalf
+				intHeight = intHalf
+		
+				intNewCoordX = intCoordX - intWidth
+				intNewCoordY = intCoordY - intHeight
+				
+				coordX = str(intNewCoordX)
+				coordY = str(intNewCoordY)
+				width = str( 3192 )
+				height = str( 3192 )
+		
 			if type == 'Rectangle':
 	
 				intCoordX = int(s['X'])
@@ -1313,7 +1345,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 			shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
 			#print shape_url
 			
-			shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url })
+			shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'x': coordX, 'y': coordY, 'width': width, 'height': height })
 			
 			shape_list.append(shape)
 		

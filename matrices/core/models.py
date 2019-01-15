@@ -84,6 +84,7 @@ class Image(models.Model):
 	birdseye_url = models.CharField(max_length=255, blank=False, default='')
 	owner = models.ForeignKey(User)
 	active = models.BooleanField(default=True)
+	roi = models.IntegerField(default=0)
 	#cell = models.ForeignKey(Cell, null=True, on_delete=models.CASCADE)
 	
 	def __str__(self):

@@ -56,6 +56,13 @@
 			<dt>Image:</dt>
 			<dd>{{ cell.image.name }}</dd>
 
+	{% if cell.image.roi != 0 %}
+
+			<dt>Region Of Interest:</dt>
+			<dd>{{ cell.image.roi }}</dd>
+
+	{% endif %}
+
 	{% if cell.blogpost != '' %}
 	
 			<dt>Blog Post:</dt>
@@ -72,7 +79,7 @@
 			<dt>
 			<!-- {{ cell.image.viewer_url }}; {{ cell.image.birdseye_url }} -->
 			</dt>
-			<dd><a href="{{ cell.image.viewer_url }}" target="_blank"><img src="{{ cell.image.birdseye_url }}"></a></dd>
+			<dd><a href="{{ cell.image.viewer_url }}" target="_blank"><img  style="width:256px;" src="{{ cell.image.birdseye_url }}"></a></dd>
 
 		</dl>
 

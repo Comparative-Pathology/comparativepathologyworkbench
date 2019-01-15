@@ -46,10 +46,12 @@
     <table>
         <tr>
             <th>Image</th>
+            <th>ROI</th>
             <th>Server</th>
             <th>Action</th>
 		</tr>
         <tr>
+            <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -63,7 +65,19 @@
 					<img  style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
 				</a>
             </td>
+
+		{% if image.roi == 0 %}
+
+            <td>&nbsp;</td>
+
+		{% else %}
+
+            <td><strong>ROI</strong></td>
+
+		{% endif %}
+
             <td>{{ image.server.name }}, ( {{ image.server.url }} )</td>
+
             <td>
 				<a href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">	            	
 	            	<button class="save btn btn-info">View Image Details &raquo;</button>

@@ -1028,7 +1028,7 @@ def delete_server(request, server_id):
 # VIEWS FOR GALLERY
 #
 @login_required
-def add_image(request, server_id, image_id):
+def add_image(request, server_id, image_id, roi_id):
 
 	current_user = request.user
 
@@ -1040,18 +1040,35 @@ def add_image(request, server_id, image_id):
 	
 	image_count = Image.objects.filter(identifier=image_id).filter(active=True).count()
 
-	#if image_count == 0:
-	
 	data = get_imaging_server_image_json(request, server_id, image_id)
-		
+	
 	json_image = data['image']
 	name = json_image['name']
 	viewer_url = json_image['viewer_url']
 	birdseye_url = json_image['birdseye_url']
 
-	image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True)
-	image.save()
+	if roi_id == '0':
+		
+		image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=0)
+		image.save()
 
+	else:
+	
+		json_rois = data['rois']
+		
+		for rois in json_rois:
+		
+			for shape in rois['shapes']:
+			
+				if shape['id'] == int(roi_id):
+			
+					viewer_url = shape['shape_url']
+					birdseye_url = shape['shape_url']
+				
+					print 'shape_url', shape['shape_url']
+					
+					image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=roi_id)
+					image.save()
 					
 	return HttpResponseRedirect(reverse('matrices:webgallery_show_image', args=(server_id, image_id)))				
 	
@@ -1112,7 +1129,7 @@ def show_dataset(request, server_id, dataset_id):
 	"""
 	
 	data = get_imaging_server_dataset_json(request, server_id, dataset_id)
-
+	
 	return render(request, 'gallery/show_dataset.html', data)
 
 	
@@ -1123,6 +1140,8 @@ def show_image(request, server_id, image_id):
 	"""
 	
 	data = get_imaging_server_image_json(request, server_id, image_id)
+
+	#print 'data', data
 
 	return render(request, 'gallery/show_image.html', data)
 

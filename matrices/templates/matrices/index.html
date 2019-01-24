@@ -62,7 +62,9 @@
             <td>{{ matrix.title }}</td>
             <td>{{ matrix.owner.username }}</td>
 
-		{% if user.id == matrix.owner.id %}
+		{% if credential_flag %}
+		
+			{% if user.id == matrix.owner.id or user.username == 'admin' %}
             
             <td>
 				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
@@ -79,7 +81,7 @@
 				</a>
             </td>
 
-		{% else %}
+			{% else %}
 	
             <td>
 				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
@@ -89,6 +91,12 @@
 					<button class="save btn btn-primary">View</button>
 				</a>
             </td>
+
+			{% endif %}
+
+		{% else %}
+
+            <td>&nbsp;</td>
 
 		{% endif %}
 
@@ -104,11 +112,21 @@
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if credential_flag %}
+    
             <td>
 				<a href="{% url 'matrices:new_matrix' %}">
 					<button class="save btn btn-success">Add New Matrix</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+
 		</tr>
 
     </table>
@@ -121,10 +139,6 @@
 
 	<p>No Matrices are available.</p>
 
-	<a href="{% url 'matrices:new_matrix' %}">
-		<button class="save btn btn-success">Add New Matrix</button>
-	</a>
-	
 {% endif %}
 
 {% endblock %}

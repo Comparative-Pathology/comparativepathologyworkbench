@@ -129,13 +129,13 @@
 
         <tr>
             <th>Coordinates:</th>
-            <td>X: {{ shape.x }}, Y: {{ shape.y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
+            <td>X: {{ shape.centre_x }}, Y: {{ shape.centre_y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
 		</tr>
 
         <tr>
             <th>{{ shape.type }}</th>
             <td>
-				<a href="{{ shape.shape_url }}" target="_blank">
+				<a href="{{ shape.viewer_url }}" target="_blank">
 					<img style="width:256px;" title="{{ shape.type }}" src="{{ shape.shape_url }}" >
 				</a>
             </td>

@@ -159,9 +159,24 @@ def list_image_cart(request):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	credential_flag = ''	
+	
+	if credential_list:
 
-	return render(request, 'host/list_image_cart.html', data)
+		credential_flag = user.username
+
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/list_image_cart.html', data)
+
+	else:
+
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/list_image_cart.html', data)
 	
 
 @login_required
@@ -172,10 +187,27 @@ def list_imaging_hosts(request):
 	matrix_list = Matrix.objects.all
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
+	
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	print credential_list
+	
+	credential_flag = ''	
+	
+	if credential_list:
 
-	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		credential_flag = user.username
 
-	return render(request, 'host/list_imaging_hosts.html', data)
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/list_imaging_hosts.html', data)
+
+	else:
+
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/list_imaging_hosts.html', data)
 	
 
 @login_required
@@ -194,9 +226,16 @@ def maintenance(request):
 	blog_list = Blog.objects.all
 	credential_list = Credential.objects.all
 
-	data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'type_list': type_list, 'protocol_list': protocol_list, 'command_list': command_list, 'blog_list': blog_list, 'credential_list': credential_list }
+	if current_user.is_superuser == True:
 
-	return render(request, 'host/maintenance.html', data)
+		data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'type_list': type_list, 'protocol_list': protocol_list, 'command_list': command_list, 'blog_list': blog_list, 'credential_list': credential_list }
+
+		return render(request, 'host/maintenance.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 	
 
 @login_required
@@ -209,10 +248,16 @@ def authorisation(request):
 	server_list = Server.objects.all
 	user_list = User.objects.all
 
-	data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+	if current_user.is_superuser == True:
 
-	return render(request, 'host/authorisation.html', data)
+		data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/authorisation.html', data)
 	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def view_user(request, user_id):
@@ -224,10 +269,16 @@ def view_user(request, user_id):
 	matrix_list = Matrix.objects.all
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
-	
-	data = { 'user_id': user_id, 'user': user, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/detail_user.html', data)
+	if current_user.is_superuser == True:
+	
+		data = { 'user_id': user_id, 'user': user, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_user.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -267,8 +318,12 @@ def edit_user(request, user_id):
 			
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/edit_user.html', data)
+		return render(request, 'host/edit_user.html', data)
 	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 	
 @login_required
 def delete_user(request, user_id):
@@ -281,6 +336,10 @@ def delete_user(request, user_id):
 
 		user.delete()
 	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 	return HttpResponseRedirect(reverse('matrices:authorisation', args=()))						
 
 
@@ -321,9 +380,13 @@ def new_blog_command(request):
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/new_blog_command.html', data)
-
+		return render(request, 'host/new_blog_command.html', data)
 	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+
 @login_required
 def view_blog_command(request, blog_id):
 
@@ -337,10 +400,16 @@ def view_blog_command(request, blog_id):
 	
 	owner = get_object_or_404(User, pk=blog.owner_id)
 
-	data = { 'owner': owner, 'blog_id': blog_id, 'blog': blog, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return render(request, 'host/detail_blog_command.html', data)
+	if current_user.is_superuser == True:
 	
+		data = { 'owner': owner, 'blog_id': blog_id, 'blog': blog, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_blog_command.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def edit_blog_command(request, blog_id):
@@ -355,7 +424,7 @@ def edit_blog_command(request, blog_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	if current_user.is_superuser == True or blog.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		if request.method == "POST":
 	
@@ -387,7 +456,7 @@ def edit_blog_command(request, blog_id):
 	
 	else:
 
-		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -399,11 +468,15 @@ def delete_blog_command(request, blog_id):
 	
 	owner = get_object_or_404(User, pk=blog.owner_id)
 	
-	if current_user.is_superuser == True or blog.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		blog.delete()
 	
-	return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -443,7 +516,11 @@ def new_blog_credential(request):
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/new_blog_credential.html', data)
+		return render(request, 'host/new_blog_credential.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required
@@ -459,9 +536,16 @@ def view_blog_credential(request, credential_id):
 	
 	owner = get_object_or_404(User, pk=credential.owner_id)
 
-	data = { 'owner': owner, 'credential_id': credential_id, 'credential': credential, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+	if current_user.is_superuser == True:
 
-	return render(request, 'host/detail_blog_credential.html', data)
+		data = { 'owner': owner, 'credential_id': credential_id, 'credential': credential, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_blog_credential.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 	
 
 @login_required
@@ -477,7 +561,7 @@ def edit_blog_credential(request, credential_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	if current_user.is_superuser == True or credential.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		if request.method == "POST":
 	
@@ -509,7 +593,7 @@ def edit_blog_credential(request, credential_id):
 	
 	else:
 
-		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -521,11 +605,15 @@ def delete_blog_credential(request, credential_id):
 	
 	owner = get_object_or_404(User, pk=credential.owner_id)
 	
-	if current_user.is_superuser == True or credential.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		credential.delete()
 	
-	return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -565,7 +653,11 @@ def new_type(request):
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/new_type.html', data)
+		return render(request, 'host/new_type.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required
@@ -581,10 +673,16 @@ def view_type(request, type_id):
 	
 	owner = get_object_or_404(User, pk=type.owner_id)
 
-	data = { 'owner': owner, 'type_id': type_id, 'type': type, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return render(request, 'host/detail_type.html', data)
+	if current_user.is_superuser == True:
 	
+		data = { 'owner': owner, 'type_id': type_id, 'type': type, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_type.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def edit_type(request, type_id):
@@ -599,7 +697,7 @@ def edit_type(request, type_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	if current_user.is_superuser == True or type.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		if request.method == "POST":
 	
@@ -627,8 +725,11 @@ def edit_type(request, type_id):
 			
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/edit_type.html', data)
+		return render(request, 'host/edit_type.html', data)
 	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -640,12 +741,15 @@ def delete_type(request, type_id):
 	
 	owner = get_object_or_404(User, pk=type.owner_id)
 	
-	if current_user.is_superuser == True or type.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		type.delete()
 	
-	return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
 
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -685,7 +789,11 @@ def new_command(request):
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/new_command.html', data)
+		return render(request, 'host/new_command.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required
@@ -701,10 +809,16 @@ def view_command(request, command_id):
 	
 	owner = get_object_or_404(User, pk=command.owner_id)
 
-	data = { 'owner': owner, 'command_id': command_id, 'command': command, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return render(request, 'host/detail_command.html', data)
+	if current_user.is_superuser == True:
 	
+		data = { 'owner': owner, 'command_id': command_id, 'command': command, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_command.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def edit_command(request, command_id):
@@ -719,7 +833,7 @@ def edit_command(request, command_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	if current_user.is_superuser == True or command.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		if request.method == "POST":
 	
@@ -751,7 +865,7 @@ def edit_command(request, command_id):
 	
 	else:
 
-		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -763,12 +877,15 @@ def delete_command(request, command_id):
 	
 	owner = get_object_or_404(User, pk=command.owner_id)
 	
-	if current_user.is_superuser == True or command.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		command.delete()
 	
-	return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
 
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -808,7 +925,11 @@ def new_protocol(request):
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/new_protocol.html', data)
+		return render(request, 'host/new_protocol.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required
@@ -824,9 +945,15 @@ def view_protocol(request, protocol_id):
 	
 	owner = get_object_or_404(User, pk=protocol.owner_id)
 
-	data = { 'owner': owner, 'protocol_id': protocol_id, 'protocol': protocol, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+	if current_user.is_superuser == True:
+	
+		data = { 'owner': owner, 'protocol_id': protocol_id, 'protocol': protocol, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'host/detail_protocol.html', data)
+		return render(request, 'host/detail_protocol.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -842,7 +969,7 @@ def edit_protocol(request, protocol_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	if current_user.is_superuser == True or protocol.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		if request.method == "POST":
 	
@@ -874,7 +1001,7 @@ def edit_protocol(request, protocol_id):
 	
 	else:
 
-		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 
@@ -887,12 +1014,15 @@ def delete_protocol(request, protocol_id):
 	
 	owner = get_object_or_404(User, pk=protocol.owner_id)
 	
-	if current_user.is_superuser == True or protocol.owner_id == current_user.id:
+	if current_user.is_superuser == True:
 
 		protocol.delete()
 	
-	return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
 
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -904,38 +1034,51 @@ def new_server(request):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
-	if request.method == "POST":
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		form = ServerForm(request.POST)
-		
-		if form.is_valid():
-		
-			server = form.save(commit=False)
+	credential_flag = ''	
+	
+	if credential_list:
 
-			server.owner_id = current_user.id
+		credential_flag = user.username
 
-			encryptedPwd = encrypt(server.pwd)
+		if request.method == "POST":
+	
+			form = ServerForm(request.POST)
+		
+			if form.is_valid():
+		
+				server = form.save(commit=False)
+
+				server.owner_id = current_user.id
+
+				encryptedPwd = encrypt(server.pwd)
 					
-			server.pwd = encryptedPwd
+				server.pwd = encryptedPwd
 
-			server.save()
+				server.save()
 
-			return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
+				return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
+
+			else:
+
+				messages.error(request, "Error")
+
+				data = { 'credential_flag': credential_flag, 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 		else:
 
-			messages.error(request, "Error")
+			form = ServerForm()
 
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'credential_flag': credential_flag, 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/new_server.html', data)
 
 	else:
 
-		form = ServerForm()
-
-		data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return render(request, 'host/new_server.html', data)
-
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
 	
 @login_required
 def view_server(request, server_id):
@@ -950,9 +1093,18 @@ def view_server(request, server_id):
 	
 	owner = get_object_or_404(User, pk=server.owner_id)
 
-	data = { 'owner': owner, 'server_id': server_id, 'server': server, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-	return render(request, 'host/detail_server.html', data)
+		data = { 'owner': owner, 'server_id': server_id, 'server': server, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_server.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -968,43 +1120,52 @@ def edit_server(request, server_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	if current_user.is_superuser == True or server.owner_id == current_user.id:
-
-		if request.method == "POST":
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-			form = ServerForm(request.POST, instance=server)
+	if credential_list:
+
+		if server.owner_id == current_user.id or current_user.is_superuser == True:
+
+			if request.method == "POST":
+	
+				form = ServerForm(request.POST, instance=server)
 			
-			if form.is_valid():
+				if form.is_valid():
 			
-				server = form.save(commit=False)
+					server = form.save(commit=False)
 
-				encryptedPwd = encrypt(server.pwd)
+					encryptedPwd = encrypt(server.pwd)
 				
-				server.pwd = encryptedPwd
+					server.pwd = encryptedPwd
 				
-				server.owner_id = current_user.id
+					server.owner_id = current_user.id
 
-				server.save()
+					server.save()
 				
-				return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
+					return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
 
+				else:
+			
+					messages.error(request, "Error")
+	
+					data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			
 			else:
-			
-				messages.error(request, "Error")
 	
+				form = ServerForm(instance=server)
+			
 				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-			
-		else:
-	
-			form = ServerForm(instance=server)
-			
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-		return render(request, 'host/edit_server.html', data)
+			return render(request, 'host/edit_server.html', data)
 	
+		else:
+
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 	else:
 
-		return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 
@@ -1017,11 +1178,24 @@ def delete_server(request, server_id):
 	
 	owner = get_object_or_404(User, pk=server.owner_id)
 	
-	if current_user.is_superuser == True or server.owner_id == current_user.id:
-
-		server.delete()
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
+	if credential_list:
+
+		if server.owner_id == current_user.id or current_user.is_superuser == True:
+
+			server.delete()
+	
+			return HttpResponseRedirect(reverse('matrices:list_imaging_hosts', args=()))						
+
+		else:
+
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 #
@@ -1032,46 +1206,55 @@ def add_image(request, server_id, image_id, roi_id):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
-
-	server = get_object_or_404(Server, pk=server_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	image_count = Image.objects.filter(identifier=image_id).filter(active=True).count()
+	if credential_list:
 
-	data = get_imaging_server_image_json(request, server_id, image_id)
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+		server = get_object_or_404(Server, pk=server_id)
 	
-	json_image = data['image']
-	name = json_image['name']
-	viewer_url = json_image['viewer_url']
-	birdseye_url = json_image['birdseye_url']
+		image_count = Image.objects.filter(identifier=image_id).filter(active=True).count()
 
-	if roi_id == '0':
+		data = get_imaging_server_image_json(request, server_id, image_id)
+	
+		json_image = data['image']
+		name = json_image['name']
+		viewer_url = json_image['viewer_url']
+		birdseye_url = json_image['birdseye_url']
+
+		if roi_id == '0':
 		
-		image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=0)
-		image.save()
-
+			image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=0)
+			image.save()
+	
+		else:
+	
+			json_rois = data['rois']
+		
+			for rois in json_rois:
+		
+				for shape in rois['shapes']:
+			
+					if shape['id'] == int(roi_id):
+			
+						viewer_url = shape['viewer_url']
+						birdseye_url = shape['shape_url']
+				
+						#print 'shape_url', shape['shape_url']
+					
+						image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=roi_id)
+						image.save()
+						
+		return HttpResponseRedirect(reverse('matrices:webgallery_show_image', args=(server_id, image_id)))				
+	
 	else:
 	
-		json_rois = data['rois']
-		
-		for rois in json_rois:
-		
-			for shape in rois['shapes']:
-			
-				if shape['id'] == int(roi_id):
-			
-					viewer_url = shape['shape_url']
-					birdseye_url = shape['shape_url']
-				
-					print 'shape_url', shape['shape_url']
-					
-					image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=roi_id)
-					image.save()
-					
-	return HttpResponseRedirect(reverse('matrices:webgallery_show_image', args=(server_id, image_id)))				
-	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def delete_image(request, image_id):
@@ -1082,11 +1265,20 @@ def delete_image(request, image_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	image = get_object_or_404(Image, pk=image_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	image.delete()
+	if credential_list:
+
+		image = get_object_or_404(Image, pk=image_id)
+	
+		image.delete()
 					
-	return HttpResponseRedirect(reverse('matrices:list_image_cart', args=()))				
+		return HttpResponseRedirect(reverse('matrices:list_image_cart', args=()))				
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required()
@@ -1095,9 +1287,18 @@ def show_imaging_server(request, server_id):
 	Show the Imaging Server
 	"""
 
-	data = get_imaging_server_json(request, server_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-	return render(request, 'gallery/show_server.html', data)
+		data = get_imaging_server_json(request, server_id)
+
+		return render(request, 'gallery/show_server.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required()
@@ -1106,9 +1307,18 @@ def show_group(request, server_id, group_id):
 	Show a group
 	"""
 
-	data = get_imaging_server_group_json(request, server_id, group_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	return render(request, 'gallery/show_group.html', data)
+	if credential_list:
+
+		data = get_imaging_server_group_json(request, server_id, group_id)
+	
+		return render(request, 'gallery/show_group.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required()
@@ -1117,9 +1327,18 @@ def show_project(request, server_id, project_id):
 	Show a project
 	"""
 	
-	data = get_imaging_server_project_json(request, server_id, project_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-	return render(request, 'gallery/show_project.html', data)
+		data = get_imaging_server_project_json(request, server_id, project_id)
+
+		return render(request, 'gallery/show_project.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required()
@@ -1128,9 +1347,18 @@ def show_dataset(request, server_id, dataset_id):
 	Show a dataset
 	"""
 	
-	data = get_imaging_server_dataset_json(request, server_id, dataset_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	return render(request, 'gallery/show_dataset.html', data)
+	if credential_list:
+
+		data = get_imaging_server_dataset_json(request, server_id, dataset_id)
+	
+		return render(request, 'gallery/show_dataset.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required()
@@ -1139,11 +1367,18 @@ def show_image(request, server_id, image_id):
 	Show an image
 	"""
 	
-	data = get_imaging_server_image_json(request, server_id, image_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-	#print 'data', data
+		data = get_imaging_server_image_json(request, server_id, image_id)
 
-	return render(request, 'gallery/show_image.html', data)
+		return render(request, 'gallery/show_image.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 #
@@ -1158,9 +1393,26 @@ def index_matrix(request):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
-	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 
-	return render(request, 'matrices/index.html', data)
+	print credential_list
+	
+	credential_flag = ''	
+	
+	if credential_list:
+
+		credential_flag = user.username
+
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'matrices/index.html', data)
+
+	else:
+	
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'matrices/index.html', data)
 	
 
 @login_required
@@ -1176,23 +1428,32 @@ def matrix(request, matrix_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 
-	credential = Credential.objects.get(username=request.user.username)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	matrix_link = 'matrix_link'	
+	if credential_list:
+
+		credential = Credential.objects.get(username=request.user.username)
+
+		matrix_link = 'matrix_link'	
 	
-	if credential != []:
+		if credential != []:
 
-		if credential.apppwd == '':
+			if credential.apppwd == '':
 
-			matrix_link = ''	
+				matrix_link = ''	
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+		matrix_cells = generateMatrix(matrix_id)
+		columns = generateColumns(matrix_id)
+		rows = generateRows(matrix_id)
 
-	data = { 'matrix_link': matrix_link, 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'matrix_link': matrix_link, 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'matrices/matrix.html', data)
+		return render(request, 'matrices/matrix.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1200,13 +1461,22 @@ def list_matrix(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
 
-	return render(request, 'matrices/index.html', data)
+		data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'matrices/index.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1214,49 +1484,58 @@ def new_matrix(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
-
-	if request.method == "POST":
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		form = MatrixForm(request.POST)
-		
-		if form.is_valid():
-		
-			matrix = form.save(commit=False)
+	if credential_list:
 
-			credential = Credential.objects.get(username=request.user.username)
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+		if request.method == "POST":
 	
-			post_id = ''
+			form = MatrixForm(request.POST)
+		
+			if form.is_valid():
+		
+				matrix = form.save(commit=False)
+
+				credential = Credential.objects.get(username=request.user.username)
+	
+				post_id = ''
 			
-			if credential != []:
+				if credential != []:
 
-				if credential.apppwd != '':
+					if credential.apppwd != '':
 
-					post_id = post_a_post_to_wordpress(request.user.username, matrix.title, matrix.description)
+						post_id = post_a_post_to_wordpress(request.user.username, matrix.title, matrix.description)
 
-			matrix.blogpost = post_id
+				matrix.blogpost = post_id
 
-			matrix.owner_id = current_user.id
+				matrix.owner_id = current_user.id
 
-			matrix.save()
+				matrix.save()
 
-			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix.id,)))				
+				return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix.id,)))				
 
-		else:
+			else:
 		
-			messages.error(request, "Error")
+				messages.error(request, "Error")
+
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			
+		else:
+	
+			form = MatrixForm()
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-			
+
+		return render(request, 'matrices/new_matrix.html', data)
+		
 	else:
 	
-		form = MatrixForm()
-
-		data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return render(request, 'matrices/new_matrix.html', data)
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required
@@ -1266,51 +1545,58 @@ def view_matrix_blog(request, matrix_id):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	owner = get_object_or_404(User, pk=matrix.owner_id)
+	if credential_list:
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
-
-	blogpost = get_a_post_from_wordpress(request.user.username, matrix.blogpost)
-
-	comment_list = list()
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
 	
-	comment_list = get_a_post_comments_from_wordpress(request.user.username, matrix.blogpost)
+		owner = get_object_or_404(User, pk=matrix.owner_id)
 
+		matrix_cells = generateMatrix(matrix_id)
+		columns = generateColumns(matrix_id)
+		rows = generateRows(matrix_id)
+
+		blogpost = get_a_post_from_wordpress(request.user.username, matrix.blogpost)
+
+		comment_list = list()
 	
-	if request.method == "POST":
+		comment_list = get_a_post_comments_from_wordpress(request.user.username, matrix.blogpost)
 	
-		form = CommentForm(request.POST)
+		if request.method == "POST":
+	
+			form = CommentForm(request.POST)
 			
-		if form.is_valid():
+			if form.is_valid():
 
-			cd = form.cleaned_data
+				cd = form.cleaned_data
 				
-			comment = cd.get('comment')
+				comment = cd.get('comment')
 				
-			if comment != '':
+				if comment != '':
 				
-				response = post_a_comment_to_wordpress(request.user.username, matrix.blogpost, comment)
+					response = post_a_comment_to_wordpress(request.user.username, matrix.blogpost, comment)
 				
-			return HttpResponseRedirect(reverse('matrices:detail_matrix_blog', args=(matrix_id,)))						
+				return HttpResponseRedirect(reverse('matrices:detail_matrix_blog', args=(matrix_id,)))						
 
+			else:
+			
+				messages.error(request, "Error")
+	
 		else:
-			
-			messages.error(request, "Error")
 	
+			form = CommentForm()
+	
+		data = { 'form': form, 'owner': owner, 'matrix_id': matrix_id, 'matrix': matrix, 'blogpost': blogpost, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'comment_list': comment_list }
+
+		return render(request, 'matrices/detail_matrix_blog.html', data)
+
 	else:
 	
-		form = CommentForm()
-			
-	
-	data = { 'form': form, 'owner': owner, 'matrix_id': matrix_id, 'matrix': matrix, 'blogpost': blogpost, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'comment_list': comment_list }
-
-	return render(request, 'matrices/detail_matrix_blog.html', data)
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -1318,29 +1604,36 @@ def view_matrix(request, matrix_id):
 
 	matrix = get_object_or_404(Matrix, pk=matrix_id)
 
-	#print 'Matrix', matrix
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	blogLinkPost = Blog.objects.get(name='LinkPost')
+	if credential_list:
 
-	link_post_url = blogLinkPost.protocol.name + '://' + blogLinkPost.url + '/' + blogLinkPost.application + '/' + matrix.blogpost
+		blogLinkPost = Blog.objects.get(name='LinkPost')
 
-	matrix_link = link_post_url
+		link_post_url = blogLinkPost.protocol.name + '://' + blogLinkPost.url + '/' + blogLinkPost.application + '/' + matrix.blogpost
+
+		matrix_link = link_post_url
 	
-	current_user = request.user
+		current_user = request.user
 	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
 	
-	owner = get_object_or_404(User, pk=matrix.owner_id)
+		owner = get_object_or_404(User, pk=matrix.owner_id)
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+		matrix_cells = generateMatrix(matrix_id)
+		columns = generateColumns(matrix_id)
+		rows = generateRows(matrix_id)
 
-	data = { 'owner': owner, 'matrix_id': matrix_id, 'matrix': matrix, 'matrix_link': matrix_link, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'owner': owner, 'matrix_id': matrix_id, 'matrix': matrix, 'matrix_link': matrix_link, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'matrices/detail_matrix.html', data)
+		return render(request, 'matrices/detail_matrix.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1348,76 +1641,84 @@ def edit_matrix(request, matrix_id):
 
 	current_user = request.user
 
-	matrix = get_object_or_404(Matrix, pk=matrix_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	owner = get_object_or_404(User, pk=matrix.owner_id)
-	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+	if credential_list:
 
-	if matrix.owner_id == current_user.id:
-
-		if request.method == "POST":
+		matrix = get_object_or_404(Matrix, pk=matrix_id)
 	
-			form = MatrixForm(request.POST, instance=matrix)
+		owner = get_object_or_404(User, pk=matrix.owner_id)
+	
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+
+			if request.method == "POST":
+	
+				form = MatrixForm(request.POST, instance=matrix)
 			
-			if form.is_valid():
+				if form.is_valid():
 			
-				matrix = form.save(commit=False)
+					matrix = form.save(commit=False)
 
-				matrix.owner_id = current_user.id
+					matrix.owner_id = current_user.id
 
-				post_id = ''
+					post_id = ''
 				
-				if matrix.blogpost == '':
+					if matrix.blogpost == '':
 				
-					credential = Credential.objects.get(username=request.user.username)
+						credential = Credential.objects.get(username=request.user.username)
 	
-					if credential != []:
+						if credential != []:
 
-						if credential.apppwd != '':
+							if credential.apppwd != '':
 
-							post_id = post_a_post_to_wordpress(request.user.username, matrix.title, matrix.description)
+								post_id = post_a_post_to_wordpress(request.user.username, matrix.title, matrix.description)
 
-				matrix.blogpost = post_id
+						matrix.blogpost = post_id
 
-				matrix.save()
+					matrix.save()
 				
-				matrix_list = Matrix.objects.all
+					matrix_list = Matrix.objects.all
 
-				matrix_cells = generateMatrix(matrix_id)
-				columns = generateColumns(matrix_id)
-				rows = generateRows(matrix_id)
+					matrix_cells = generateMatrix(matrix_id)
+					columns = generateColumns(matrix_id)
+					rows = generateRows(matrix_id)
 							
-				data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+					data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 				
-				return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))						
+					return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))						
+
+				else:
+			
+					messages.error(request, "Error")
+	
+					data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 			else:
-			
-				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
+				form = MatrixForm(instance=matrix)
+			
+			return render(request, 'matrices/edit_matrix.html', {'owner': owner, 'form': form, 'matrix': matrix, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, })
+	
 		else:
-	
-			form = MatrixForm(instance=matrix)
-			
-		return render(request, 'matrices/edit_matrix.html', {'owner': owner, 'form': form, 'matrix': matrix, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, })
-	
-	else:
 
-		matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.all
 	
-		matrix_cells = generateMatrix(matrix_id)
-		columns = generateColumns(matrix_id)
-		rows = generateRows(matrix_id)
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 					
-		data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 			
-		return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))				
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))				
 
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -1425,53 +1726,62 @@ def delete_matrix(request, matrix_id):
 
 	current_user = request.user
 
-	matrix = get_object_or_404(Matrix, pk=matrix_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	owner = get_object_or_404(User, pk=matrix.owner_id)
+	if credential_list:
+
+		matrix = get_object_or_404(Matrix, pk=matrix_id)
 	
-	if matrix.owner_id == current_user.id:
+		owner = get_object_or_404(User, pk=matrix.owner_id)
+	
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 
-		oldCells = Cell.objects.filter(matrix=matrix_id)
+			oldCells = Cell.objects.filter(matrix=matrix_id)
 
-		for oldCell in oldCells:
+			for oldCell in oldCells:
 		
-			if oldCell.image is not None:
+				if oldCell.image is not None:
 				
-				image = Image.objects.get(id=oldCell.image.id)
+					image = Image.objects.get(id=oldCell.image.id)
 				
-				image.active = True
+					image.active = True
 				
-				image.save()
+					image.save()
 
-			if oldCell.blogpost != '':
+				if oldCell.blogpost != '':
 			
+					credential = Credential.objects.get(username=request.user.username)
+	
+					if credential != []:
+
+						if credential.apppwd != '':
+
+							response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
+
+			if matrix.blogpost != '':
+
 				credential = Credential.objects.get(username=request.user.username)
 	
 				if credential != []:
 
 					if credential.apppwd != '':
 
-						response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
+						response = delete_a_post_from_wordpress(request.user.username, matrix.blogpost)
 
-		if matrix.blogpost != '':
-
-			credential = Credential.objects.get(username=request.user.username)
+			matrix.delete()
 	
-			if credential != []:
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
 
-				if credential.apppwd != '':
-
-					response = delete_a_post_from_wordpress(request.user.username, matrix.blogpost)
-
-		matrix.delete()
-	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
-
-	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 			
-	return HttpResponseRedirect(reverse('matrices:index', args=()))
+		return HttpResponseRedirect(reverse('matrices:index', args=()))
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -1489,126 +1799,133 @@ def edit_cell(request, matrix_id, cell_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
-	if matrix.owner_id == current_user.id:
-
-		if request.method == "POST":
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-			if cell.xcoordinate == 0 or cell.ycoordinate == 0:
+	if credential_list:
+	
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 
-				form = HeaderForm(request.POST, instance=cell)
+			if request.method == "POST":
+	
+				if cell.xcoordinate == 0 or cell.ycoordinate == 0:
 
-				if form.is_valid():
+					form = HeaderForm(request.POST, instance=cell)
+
+					if form.is_valid():
 						
-					cell = form.save(commit=False)
+						cell = form.save(commit=False)
 				
-					cell.matrix_id = matrix_id
+						cell.matrix_id = matrix_id
 			
-					cell.save()
+						cell.save()
+
+					else:
+			
+						messages.error(request, "Error")
+	
+						data = { 'form': form, 'matrix': matrix, 'cell': cell, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				
+						return render(request, 'matrices/edit_cell.html', data)
 
 				else:
 			
-					messages.error(request, "Error")
+					imageOld = Image.objects.none
+					imageNew = Image.objects.none
+					
+					if cell.image is None:
+			
+						form = CellForm(request.user.id, None, request.POST, instance=cell)
+					
+					else:
+
+						form = CellForm(request.user.id, cell.image.id, request.POST, instance=cell)
+						
+						imageOld = Image.objects.get(pk=cell.image.id)
 	
-					data = { 'form': form, 'matrix': matrix, 'cell': cell, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+						imageOld.active = True
 				
-					return render(request, 'matrices/edit_cell.html', data)
+						imageOld.save()
+
+					if form.is_valid():
+						
+						imageNew = get_object_or_404(Image, pk=cell.image.id)
+				
+						imageNew.active = False
+				
+						imageNew.save()
+						
+						cell = form.save(commit=False)
+				
+						cell.matrix_id = matrix_id
+					
+						post_id = ''
+				
+						if cell.blogpost == '':
+				
+							credential = Credential.objects.get(username=request.user.username)
+	
+							if credential != []:
+
+								if credential.apppwd != '':
+
+									post_id = post_a_post_to_wordpress(request.user.username, cell.title, cell.description)
+
+							cell.blogpost = post_id
+
+						cell.save()
+
+					else:
+			
+						messages.error(request, "Error")
+	
+						data = { 'form': form, 'matrix': matrix, 'cell': cell, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				
+						return render(request, 'matrices/edit_cell.html', data)
+				
+				matrix_cells = generateMatrix(matrix_id)
+				columns = generateColumns(matrix_id)
+				rows = generateRows(matrix_id)
+			
+				data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			
+				return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))				
 
 			else:
-			
-				imageOld = Image.objects.none
-				imageNew = Image.objects.none
-				
-				if cell.image is None:
-			
-					form = CellForm(request.user.id, None, request.POST, instance=cell)
-					
+	
+				if cell.xcoordinate == 0 or cell.ycoordinate == 0:
+
+					form = HeaderForm(instance=cell)
+
 				else:
 
-					form = CellForm(request.user.id, cell.image.id, request.POST, instance=cell)
-						
-					imageOld = Image.objects.get(pk=cell.image.id)
-	
-					imageOld.active = True
-				
-					imageOld.save()
-
-				if form.is_valid():
-						
-					imageNew = get_object_or_404(Image, pk=cell.image.id)
-				
-					imageNew.active = False
-				
-					imageNew.save()
-						
-					cell = form.save(commit=False)
-				
-					cell.matrix_id = matrix_id
-					
-					post_id = ''
-				
-					if cell.blogpost == '':
-				
-						credential = Credential.objects.get(username=request.user.username)
-	
-						if credential != []:
-
-							if credential.apppwd != '':
-
-								post_id = post_a_post_to_wordpress(request.user.username, cell.title, cell.description)
-
-					cell.blogpost = post_id
-
-					cell.save()
-
-				else:
+					if cell.image is None:
 			
-					messages.error(request, "Error")
-	
-					data = { 'form': form, 'matrix': matrix, 'cell': cell, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-				
-					return render(request, 'matrices/edit_cell.html', data)
-				
+						form = CellForm(request.user.id, None, instance=cell)
+					
+					else:
+
+						form = CellForm(request.user.id, cell.image.id, instance=cell)
+
+			return render(request, 'matrices/edit_cell.html', {'form': form, 'matrix': matrix, 'cell': cell, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list })
+
+		else:
+
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
+			
 			matrix_cells = generateMatrix(matrix_id)
 			columns = generateColumns(matrix_id)
 			rows = generateRows(matrix_id)
-			
+					
 			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 			
-			#return render(request, 'matrices/matrix.html', data)
-			
-			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))				
-
-		else:
-	
-			if cell.xcoordinate == 0 or cell.ycoordinate == 0:
-
-				form = HeaderForm(instance=cell)
-
-			else:
-
-				if cell.image is None:
-			
-					form = CellForm(request.user.id, None, instance=cell)
-					
-				else:
-
-					form = CellForm(request.user.id, cell.image.id, instance=cell)
-
-		return render(request, 'matrices/edit_cell.html', {'form': form, 'matrix': matrix, 'cell': cell, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list })
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))		
 
 	else:
-
-		matrix_list = Matrix.objects.all
-		image_list = Image.objects.filter(owner=current_user).filter(active=True)
-		server_list = Server.objects.all
-			
-		matrix_cells = generateMatrix(matrix_id)
-		columns = generateColumns(matrix_id)
-		rows = generateRows(matrix_id)
-					
-		data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-			
-		return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))		
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -1619,17 +1936,26 @@ def view_cell(request, matrix_id, cell_id):
 	cell = get_object_or_404(Cell, pk=cell_id)
 	matrix = get_object_or_404(Matrix, pk=matrix_id)
 	
-	blogLinkPost = Blog.objects.get(name='LinkPost')
-
-	link_post_url = blogLinkPost.protocol.name + '://' + blogLinkPost.url + '/' + blogLinkPost.application + '/' + cell.blogpost
-
-	cell_link = link_post_url
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+	if credential_list:
 	
-	return render(request, 'matrices/detail_cell.html', {'cell': cell, 'cell_link': cell_link, 'matrix': matrix, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list })
+		blogLinkPost = Blog.objects.get(name='LinkPost')
+
+		link_post_url = blogLinkPost.protocol.name + '://' + blogLinkPost.url + '/' + blogLinkPost.application + '/' + cell.blogpost
+
+		cell_link = link_post_url
+	
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+	
+		return render(request, 'matrices/detail_cell.html', {'cell': cell, 'cell_link': cell_link, 'matrix': matrix, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list })
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -1640,43 +1966,52 @@ def view_cell_blog(request, matrix_id, cell_id):
 	cell = get_object_or_404(Cell, pk=cell_id)
 	matrix = get_object_or_404(Matrix, pk=matrix_id)
 	
-	blogpost = get_a_post_from_wordpress(request.user.username, cell.blogpost)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
+	
+		blogpost = get_a_post_from_wordpress(request.user.username, cell.blogpost)
 
-	comment_list = list()
+		comment_list = list()
 	
-	comment_list = get_a_post_comments_from_wordpress(request.user.username, cell.blogpost)
+		comment_list = get_a_post_comments_from_wordpress(request.user.username, cell.blogpost)
 	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
 		
-	if request.method == "POST":
+		if request.method == "POST":
 	
-		form = CommentForm(request.POST)
+			form = CommentForm(request.POST)
 			
-		if form.is_valid():
+			if form.is_valid():
 
-			cd = form.cleaned_data
+				cd = form.cleaned_data
 				
-			comment = cd.get('comment')
+				comment = cd.get('comment')
 				
-			if comment != '':
+				if comment != '':
 				
-				response = post_a_comment_to_wordpress(request.user.username, cell.blogpost, comment)
+					response = post_a_comment_to_wordpress(request.user.username, cell.blogpost, comment)
 				
-			return HttpResponseRedirect(reverse('matrices:view_cell_blog', args=(matrix_id, cell_id)))						
+				return HttpResponseRedirect(reverse('matrices:view_cell_blog', args=(matrix_id, cell_id)))						
 
+			else:
+			
+				messages.error(request, "Error")
+	
 		else:
-			
-			messages.error(request, "Error")
 	
+			form = CommentForm()
+
+		data = { 'form': form, 'matrix_id': matrix_id, 'cell': cell, 'matrix': matrix, 'blogpost': blogpost, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'comment_list': comment_list }
+
+		return render(request, 'matrices/detail_cell_blog.html', data)
+
 	else:
 	
-		form = CommentForm()
-
-	data = { 'form': form, 'matrix_id': matrix_id, 'cell': cell, 'matrix': matrix, 'blogpost': blogpost, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'comment_list': comment_list }
-
-	return render(request, 'matrices/detail_cell_blog.html', data)
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
@@ -1688,27 +2023,45 @@ def add_cell(request, matrix_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 
-	cell1 = Cell(matrix=matrix, title="", description="", xcoordinate=0, ycoordinate=0)
-	cell1.save()
-	cell2 = Cell(matrix=matrix, title="", description="", xcoordinate=0, ycoordinate=1)
-	cell2.save()
-	cell3 = Cell(matrix=matrix, title="", description="", xcoordinate=1, ycoordinate=0)
-	cell3.save()
-	cell4 = Cell(matrix=matrix, title="", description="", xcoordinate=1, ycoordinate=1)
-	cell4.save()
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			cell_list = Cell.objects.filter(matrix=matrix)
+			
+			if not cell_list:
+			
+				cell1 = Cell(matrix=matrix, title="", description="", xcoordinate=0, ycoordinate=0)
+				cell1.save()
+				cell2 = Cell(matrix=matrix, title="", description="", xcoordinate=0, ycoordinate=1)
+				cell2.save()
+				cell3 = Cell(matrix=matrix, title="", description="", xcoordinate=1, ycoordinate=0)
+				cell3.save()
+				cell4 = Cell(matrix=matrix, title="", description="", xcoordinate=1, ycoordinate=1)
+				cell4.save()
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1720,30 +2073,43 @@ def add_column(request, matrix_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
-
-		matrix = Matrix.objects.get(id=matrix_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		nextColumn = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct().count()
-		rows = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct()
+	if credential_list:
+
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+
+			matrix = Matrix.objects.get(id=matrix_id)
 	
-		for i, row in enumerate(rows):
+			nextColumn = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct().count()
+			rows = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct()
+	
+			for i, row in enumerate(rows):
 
-			cell = Cell(matrix=matrix, title="", description="", xcoordinate=nextColumn, ycoordinate=i)
-			cell.save()
+				cell = Cell(matrix=matrix, title="", description="", xcoordinate=nextColumn, ycoordinate=i)
+				cell.save()
 
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 					
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 			
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))				
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))				
+
+		else:
+		
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1755,35 +2121,48 @@ def add_column_left(request, matrix_id, column_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-		matrix = Matrix.objects.get(id=matrix_id)
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+
+			matrix = Matrix.objects.get(id=matrix_id)
 	
-		oldCells = Cell.objects.filter(matrix=matrix_id).filter(xcoordinate__gte=column_id)
-		rows = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct()
+			oldCells = Cell.objects.filter(matrix=matrix_id).filter(xcoordinate__gte=column_id)
+			rows = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct()
 	
-		for oldcell in oldCells:
+			for oldcell in oldCells:
 		
-			oldcell.xcoordinate += 1
-			oldcell.save()
+				oldcell.xcoordinate += 1
+				oldcell.save()
 
-		for i, row in enumerate(rows):
+			for i, row in enumerate(rows):
 
-			cell = Cell(matrix=matrix, title="", description="", xcoordinate=column_id, ycoordinate=i)
-			cell.save()
+				cell = Cell(matrix=matrix, title="", description="", xcoordinate=column_id, ycoordinate=i)
+				cell.save()
 
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1795,37 +2174,49 @@ def add_column_right(request, matrix_id, column_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-		matrix = Matrix.objects.get(id=matrix_id)
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+
+			matrix = Matrix.objects.get(id=matrix_id)
 	
-		oldCells = Cell.objects.filter(matrix=matrix_id).filter(xcoordinate__gt=column_id)
-		rows = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct()
+			oldCells = Cell.objects.filter(matrix=matrix_id).filter(xcoordinate__gt=column_id)
+			rows = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct()
 	
-		for oldcell in oldCells:
+			for oldcell in oldCells:
 		
-			oldcell.xcoordinate += 1
-			oldcell.save()
+				oldcell.xcoordinate += 1
+				oldcell.save()
 
-		new_column_id = int(column_id) + 1
+			new_column_id = int(column_id) + 1
 	
-		for i, row in enumerate(rows):
+			for i, row in enumerate(rows):
 
-			cell = Cell(matrix=matrix, title="", description="", xcoordinate=new_column_id, ycoordinate=i)
-			cell.save()
+				cell = Cell(matrix=matrix, title="", description="", xcoordinate=new_column_id, ycoordinate=i)
+				cell.save()
 
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
 
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 	
 
 @login_required
@@ -1837,31 +2228,43 @@ def add_row(request, matrix_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
-
-		matrix = Matrix.objects.get(id=matrix_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		nextRow = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct().count()
-		columns = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct()
+	if credential_list:
+
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+
+			matrix = Matrix.objects.get(id=matrix_id)
+		
+			nextRow = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct().count()
+			columns = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct()
 	
-		for i, column in enumerate(columns):
+			for i, column in enumerate(columns):
 
-			cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=nextRow)
-			cell.save()
+				cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=nextRow)
+				cell.save()
 
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
-
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
-
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 	
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+		
 
 @login_required
 def add_row_above(request, matrix_id, row_id):
@@ -1872,35 +2275,47 @@ def add_row_above(request, matrix_id, row_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-		matrix = Matrix.objects.get(id=matrix_id)
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 
-		oldCells = Cell.objects.filter(matrix=matrix_id).filter(ycoordinate__gte=row_id)
-		columns = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct()
+			matrix = Matrix.objects.get(id=matrix_id)
+
+			oldCells = Cell.objects.filter(matrix=matrix_id).filter(ycoordinate__gte=row_id)
+			columns = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct()
 		
-		for oldcell in oldCells:
+			for oldcell in oldCells:
 		
-			oldcell.ycoordinate += 1
-			oldcell.save()
+				oldcell.ycoordinate += 1
+				oldcell.save()
 
-		for i, column in enumerate(columns):
+			for i, column in enumerate(columns):
 
-			cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=row_id)
-			cell.save()
+				cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=row_id)
+				cell.save()
 
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
 
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 	
 @login_required
@@ -1912,38 +2327,50 @@ def add_row_below(request, matrix_id, row_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
 
-		matrix = Matrix.objects.get(id=matrix_id)
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 
-		oldCells = Cell.objects.filter(matrix=matrix_id).filter(ycoordinate__gt=row_id)
-		columns = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct()
+			matrix = Matrix.objects.get(id=matrix_id)
 
-		new_row_id = int(row_id) + 1
+			oldCells = Cell.objects.filter(matrix=matrix_id).filter(ycoordinate__gt=row_id)
+			columns = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct()
+
+			new_row_id = int(row_id) + 1
 			
-		for oldcell in oldCells:
+			for oldcell in oldCells:
 		
-			oldcell.ycoordinate += 1
-			oldcell.save()
+				oldcell.ycoordinate += 1
+				oldcell.save()
+	
+			for i, column in enumerate(columns):
 
-		for i, column in enumerate(columns):
+				cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=new_row_id)
+				cell.save()
 
-			cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=new_row_id)
-			cell.save()
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
-
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
 		
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+		
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def delete_column(request, matrix_id):
@@ -1954,50 +2381,62 @@ def delete_column(request, matrix_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		matrix = Matrix.objects.get(id=matrix_id)
-	
-		deleteColumn = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct().count()
-		deleteColumn = deleteColumn - 1
+	if credential_list:
 
-		oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+	
+			matrix = Matrix.objects.get(id=matrix_id)
+	
+			deleteColumn = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct().count()
+			deleteColumn = deleteColumn - 1
+
+			oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
 		
-		for oldCell in oldCells:
+			for oldCell in oldCells:
 		
-			if oldCell.image is not None:
+				if oldCell.image is not None:
 				
-				image = Image.objects.get(id=oldCell.image.id)
+					image = Image.objects.get(id=oldCell.image.id)
 				
-				image.active = True
+					image.active = True
 				
-				image.save()
+					image.save()
 			
-			if oldCell.blogpost != '':
+				if oldCell.blogpost != '':
 			
-				credential = Credential.objects.get(username=request.user.username)
+					credential = Credential.objects.get(username=request.user.username)
 	
-				if credential != []:
+					if credential != []:
 
-					if credential.apppwd != '':
+						if credential.apppwd != '':
 			
-						response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
+							response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
 
-		Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
+			Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
 
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
 	
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 
 @login_required
 def delete_this_column(request, matrix_id, column_id):
@@ -2008,50 +2447,67 @@ def delete_this_column(request, matrix_id, column_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		matrix = Matrix.objects.get(id=matrix_id)
+	if credential_list:
+
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 	
-		deleteColumn = int(column_id)
-
-		oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
+			matrix = Matrix.objects.get(id=matrix_id)
 	
-		for oldCell in oldCells:
-		
-			oldCell.xcoordinate -= 1
-			oldCell.save()
-		
-			if oldCell.image is not None:
-				
-				image = Image.objects.get(id=oldCell.image.id)
-				
-				image.active = True
-				
-				image.save()
-
-			if oldCell.blogpost != '':
-
-				credential = Credential.objects.get(username=request.user.username)
-	
-				if credential != []:
-
-					if credential.apppwd != '':
+			deleteColumn = int(column_id)
 			
-						response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
-
-		Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
+			oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
 	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			for oldCell in oldCells:
+		
+				if oldCell.image is not None:
+				
+					image = Image.objects.get(id=oldCell.image.id)
+				
+					image.active = True
+				
+					image.save()
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+				if oldCell.blogpost != '':
+
+					credential = Credential.objects.get(username=request.user.username)
 	
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+					if credential != []:
 
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+						if credential.apppwd != '':
+			
+							response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
+	
+			Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
+	
+			moveCells = Cell.objects.filter(matrix=matrix_id, xcoordinate__gt=deleteColumn)
+
+			for moveCell in moveCells:
+		
+				moveCell.xcoordinate -= 1
+				moveCell.save()
+			
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
+
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
+		
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 		
 
 @login_required
@@ -2063,50 +2519,62 @@ def delete_row(request, matrix_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		matrix = Matrix.objects.get(id=matrix_id)
+	if credential_list:
+
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
 	
-		deleteRow = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct().count()
-		deleteRow = deleteRow -1
+			matrix = Matrix.objects.get(id=matrix_id)
+	
+			deleteRow = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct().count()
+			deleteRow = deleteRow -1
 
-		oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
+			oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
 
-		for oldCell in oldCells:
+			for oldCell in oldCells:
 		
-			if oldCell.image is not None:
+				if oldCell.image is not None:
 				
-				image = Image.objects.get(id=oldCell.image.id)
+					image = Image.objects.get(id=oldCell.image.id)
+					
+					image.active = True
 				
-				image.active = True
-				
-				image.save()
+					image.save()
 
-			if oldCell.blogpost != '':
+				if oldCell.blogpost != '':
 
-				credential = Credential.objects.get(username=request.user.username)
+					credential = Credential.objects.get(username=request.user.username)
 	
-				if credential != []:
+					if credential != []:
 
-					if credential.apppwd != '':
+						if credential.apppwd != '':
 			
-						response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
+							response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
 
-		Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
+			Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
 
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
 
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))							
 
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+		
 
 @login_required
 def delete_this_row(request, matrix_id, row_id):
@@ -2117,49 +2585,66 @@ def delete_this_row(request, matrix_id, row_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	if matrix.owner_id == current_user.id:
-
-		matrix = Matrix.objects.get(id=matrix_id)
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-		deleteRow = int(row_id)
+	if credential_list:
 
-		oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
+		if matrix.owner_id == current_user.id or current_user.is_superuser == True:
+
+			matrix = Matrix.objects.get(id=matrix_id)
 	
-		for oldCell in oldCells:
+			deleteRow = int(row_id)
+
+			oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
+	
+			for oldCell in oldCells:
 		
-			oldCell.ycoordinate -= 1
-			oldCell.save()
-
-			if oldCell.image is not None:
+				if oldCell.image is not None:
 				
-				image = Image.objects.get(id=oldCell.image.id)
+					image = Image.objects.get(id=oldCell.image.id)
 				
-				image.active = True
+					image.active = True
 				
-				image.save()
+					image.save()
 
-			if oldCell.blogpost != '':
+				if oldCell.blogpost != '':
 
-				credential = Credential.objects.get(username=request.user.username)
+					credential = Credential.objects.get(username=request.user.username)
 	
-				if credential != []:
+					if credential != []:
 
-					if credential.apppwd != '':
+						if credential.apppwd != '':
 			
-						response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
+							response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
 
-		Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
+			Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
 	
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=current_user).filter(active=True)
-	server_list = Server.objects.all
+			moveCells = Cell.objects.filter(matrix=matrix_id, ycoordinate__gt=deleteRow)
 
-	matrix_cells = generateMatrix(matrix_id)
-	columns = generateColumns(matrix_id)
-	rows = generateRows(matrix_id)
+			for moveCell in moveCells:
+		
+				moveCell.ycoordinate -= 1
+				moveCell.save()
+			
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
 
-	data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-	return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+			matrix_cells = generateMatrix(matrix_id)
+			columns = generateColumns(matrix_id)
+			rows = generateRows(matrix_id)
 	
+			data = { 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+			return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix_id,)))
+
+		else:
+	
+			return HttpResponseRedirect(reverse('matrices:home', args=()))						
+	
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
 	

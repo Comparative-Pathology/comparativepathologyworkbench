@@ -253,14 +253,19 @@ def get_imaging_server_json(request, server_id):
 	#print "token_url", token_url
 	#print "login_url", login_url
 	
+	#proxies = {'http' : 'http://a.b.c.d:8080','https': 'https://a.b.c.d:4444'}
+           
 	session = requests.Session()
 	session.timeout = 10
+	#session.proxies = proxies
 	
 	try:
 		r = session.get(api_url)
 
 	except Exception as e:
-		
+
+		print 'Exception!', e
+				
 		matrix_list = Matrix.objects.all
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
@@ -287,13 +292,13 @@ def get_imaging_server_json(request, server_id):
 	if userid == "":
 
 		project_url = projects_url + '/' + commandProjects.postamble
-		#print project_url
+		print project_url
 
 		payload = {'limit': 50}
 		project_rsp = session.get(project_url, params=payload)
 		project_data = project_rsp.json()
 		
-		#print 'project_rsp.status_code', project_rsp.status_code
+		print 'project_rsp.status_code', project_rsp.status_code
 
 		if project_rsp.status_code == 200:
 
@@ -1215,6 +1220,8 @@ def get_imaging_server_image_json(request, server_id, image_id):
 			
 			coordX = ''
 			coordY = ''
+			centreX = ''
+			centreY = ''
 			width = '0'
 			height = '0'
 			
@@ -1222,6 +1229,8 @@ def get_imaging_server_image_json(request, server_id, image_id):
 			
 			if type == 'Point':
 	
+				centreX = s['X']
+				centreY = s['Y']
 				intCoordX = int(s['X'])
 				intCoordY = int(s['Y'])
 				intHalf = 3192 / 2
@@ -1238,6 +1247,8 @@ def get_imaging_server_image_json(request, server_id, image_id):
 		
 			if type == 'Rectangle':
 	
+				centreX = s['X']
+				centreY = s['Y']
 				intCoordX = int(s['X'])
 				intCoordY = int(s['Y'])
 				intWidth = int(s['Width'])
@@ -1250,6 +1261,8 @@ def get_imaging_server_image_json(request, server_id, image_id):
 		
 			if type == 'Ellipse':
 	
+				centreX = s['X']
+				centreY = s['Y']
 				oldCoordX = s['X']
 				oldCoordY = s['Y']
 				radiusX = s['RadiusX']
@@ -1291,6 +1304,8 @@ def get_imaging_server_image_json(request, server_id, image_id):
 	
 				coordX = str(minX)
 				coordY = str(minY)
+				centreX = coordX
+				centreY = coordY
 				
 				intWidth = maxX - minX
 				intHeight = maxY - minY
@@ -1321,6 +1336,8 @@ def get_imaging_server_image_json(request, server_id, image_id):
 	
 				coordX = str(minX)
 				coordY = str(minY)
+				centreX = coordX
+				centreY = coordY
 				
 				intWidth = maxX - minX
 				intHeight = maxY - minY
@@ -1343,9 +1360,9 @@ def get_imaging_server_image_json(request, server_id, image_id):
 				height = "3192"
 
 			shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
-			#print shape_url
+			viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
 			
-			shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'x': coordX, 'y': coordY, 'width': width, 'height': height })
+			shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'viewer_url': viewer_url, 'x': coordX, 'y': coordY, 'centre_x': centreX, 'centre_y': centreY, 'width': width, 'height': height })
 			
 			shape_list.append(shape)
 		

@@ -10,6 +10,9 @@
 	<h1>NEW Server</h1>
 	<br />
 
+{% if credential_flag %}
+
+
 	    <form method="POST" class="post-form">
 		
 {% csrf_token %}
@@ -23,5 +26,7 @@
 		<a href="{% url 'matrices:list_imaging_hosts' %}">
 			<button class="save btn btn-success">CANCEL</button>
 		</a>
+
+{% endif %}
 
 {% endblock %}

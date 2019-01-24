@@ -37,11 +37,13 @@
 	<h2>Images</h2>
 	<br />
 
-{% if image_list %}
+{% if credential_flag %}
 
-	{% for image in image_list %}
+	{% if image_list %}
+
+		{% for image in image_list %}
 	
-		{% if forloop.first %}
+			{% if forloop.first %}
 	
     <table>
         <tr>
@@ -57,7 +59,7 @@
             <td>&nbsp;</td>
 		</tr>
 
-		{% endif %}
+			{% endif %}
 	
         <tr>
             <td>
@@ -66,15 +68,15 @@
 				</a>
             </td>
 
-		{% if image.roi == 0 %}
+			{% if image.roi == 0 %}
 
             <td>&nbsp;</td>
 
-		{% else %}
+			{% else %}
 
             <td><strong>ROI</strong></td>
 
-		{% endif %}
+			{% endif %}
 
             <td>{{ image.server.name }}, ( {{ image.server.url }} )</td>
 
@@ -88,7 +90,7 @@
             </td>
 		</tr>
 
-		{% if forloop.last %}
+			{% if forloop.last %}
 	
         <tr>
             <td>&nbsp;</td>
@@ -103,13 +105,19 @@
 
     </table>
 
-		{% endif %}
+			{% endif %}
 	
-    {% endfor %}
+	    {% endfor %}
+
+	{% else %}
+
+	<p>No Images are available.</p>
+
+	{% endif %}
 
 {% else %}
 
-	<p>No Images are available.</p>
+	<p>No Images are allowed yet.</p>
 
 {% endif %}
 

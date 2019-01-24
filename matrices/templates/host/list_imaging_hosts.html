@@ -70,7 +70,9 @@
             <td>{{ server.type.name }}</td>
             <td>{{ server.owner.username }}</td>
 
-		{% if user.id == server.owner.id %}
+		{% if credential_flag %}
+		
+			{% if user.id == server.owner.id or user.username == 'admin' %}
             
             <td>
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
@@ -87,7 +89,7 @@
 				</a>
             </td>
 
-		{% else %}
+			{% else %}
 	
             <td>
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
@@ -98,7 +100,14 @@
 				</a>
             </td>
 
+			{% endif %}
+
+		{% else %}
+
+            <td>&nbsp;</td>
+
 		{% endif %}
+
             <td>
             </td>
 		</tr>
@@ -119,11 +128,21 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if credential_flag %}
+    
             <td>
 				<a href="{% url 'matrices:new_server' %}">
 					<button class="save btn btn-success">Add New Server</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
 		</tr>
 
     </table>

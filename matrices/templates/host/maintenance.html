@@ -102,11 +102,21 @@
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if user.is_superuser %}
+    
             <td>
 				<a href="{% url 'matrices:new_type' %}">
 					<button class="save btn btn-success">Add New Type</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
 		</tr>
 	</table>
 
@@ -118,11 +128,20 @@
 
 	<p>No types are available.</p>
 	
+	{% if user.is_superuser %}
+    
 	<p>
 		<a href="{% url 'matrices:new_type' %}">
 			<button class="save btn btn-success">Add New Type</button>
 		</a>
 	</p>
+
+	{% else %}
+
+	<p>&nbsp;
+	</p>
+
+	{% endif %}	
 
 {% endif %}
 
@@ -195,11 +214,21 @@
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if user.is_superuser %}
+    
             <td>
 				<a href="{% url 'matrices:new_protocol' %}">
 					<button class="save btn btn-success">Add New Protocol</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
 		</tr>
 
     </table>
@@ -211,12 +240,21 @@
 {% else %}
 
 	<p>No protocols are available.</p>
-	    
+
+	{% if user.is_superuser %}
+    
 	<p>
 		<a href="{% url 'matrices:new_protocol' %}">
 			<button class="save btn btn-success">Add New Protocol</button>
 		</a>
 	</p>
+
+	{% else %}
+
+	<p>&nbsp;
+	</p>
+
+	{% endif %}	
 
 {% endif %}
 
@@ -325,11 +363,21 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if user.is_superuser %}
+    
             <td>
 				<a href="{% url 'matrices:new_command' %}">
 					<button class="save btn btn-success">Add New Command</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
 		</tr>
     </table>
 
@@ -341,11 +389,20 @@
 
 	<p>No Commands are available.</p>
 	    
+	{% if user.is_superuser %}
+    
 	<p>
 		<a href="{% url 'matrices:new_command' %}">
 			<button class="save btn btn-success">Add New Command</button>
 		</a>
 	</p>
+
+	{% else %}
+
+	<p>&nbsp;
+	</p>
+
+	{% endif %}	
 
 {% endif %}
 
@@ -454,11 +511,21 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if user.is_superuser %}
+    
             <td>
 				<a href="{% url 'matrices:new_blog_command' %}">
 					<button class="save btn btn-success">Add New Blog Command</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
 		</tr>
     </table>
 
@@ -470,11 +537,20 @@
 
 	<p>No Blog Commands are available.</p>
 	    
+	{% if user.is_superuser %}
+    
 	<p>
 		<a href="{% url 'matrices:new_blog_command' %}">
 			<button class="save btn btn-success">Add New Blog Command</button>
 		</a>
 	</p>
+
+	{% else %}
+
+	<p>&nbsp;
+	</p>
+
+	{% endif %}	
 
 {% endif %}
 
@@ -494,7 +570,17 @@
         <tr>
             <th>User Name</th>
             <th>Wordpress Id</th>
+
+		{% if user.is_superuser %}
+
             <th>Application Password</th>
+
+		{% else %}
+
+            <td>&nbsp;</td>
+
+		{% endif %}
+
             <th>Owner</th>
             <th>Action</th>
 		</tr>
@@ -512,12 +598,23 @@
             <td>
 				{{ credential.username }}
             </td>
+
             <td>
             	{{ credential.wordpress }}
             </td>
+
+		{% if user.is_superuser %}
+
             <td>
             	{{ credential.apppwd }}
             </td>
+
+		{% else %}
+
+            <td>&nbsp;</td>
+
+		{% endif %}
+
             <td>
             	{{ credential.owner.username }}
             </td>
@@ -562,11 +659,21 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
+			{% if user.is_superuser %}
+    
             <td>
 				<a href="{% url 'matrices:new_blog_credential' %}">
 					<button class="save btn btn-success">Add New Blog Credential</button>
 				</a>
             </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
 		</tr>
     </table>
 
@@ -578,12 +685,21 @@
 
 	<p>No Blog Credentials are available.</p>
 	    
+	{% if user.is_superuser %}
+    
 	<p>
 		<a href="{% url 'matrices:new_blog_credential' %}">
 			<button class="save btn btn-success">Add New Blog Credential</button>
 		</a>
 	</p>
 
+	{% else %}
+
+	<p>&nbsp;
+	</p>
+
+	{% endif %}
+	
 {% endif %}
 
 	<hr>

@@ -72,7 +72,7 @@
 
 		{% if credential_flag %}
 		
-			{% if user.id == server.owner.id or user.username == 'admin' %}
+			{% if user.id == server.owner.id or user.is_superuser %}
             
             <td>
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	

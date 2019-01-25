@@ -64,7 +64,7 @@
 
 		{% if credential_flag %}
 		
-			{% if user.id == matrix.owner.id or user.username == 'admin' %}
+			{% if user.id == matrix.owner.id or user.is_superuser %}
             
             <td>
 				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
@@ -138,6 +138,21 @@
 {% else %}
 
 	<p>No Matrices are available.</p>
+
+	{% if credential_flag %}
+    
+    <p>
+		<a href="{% url 'matrices:new_matrix' %}">
+			<button class="save btn btn-success">Add New Matrix</button>
+		</a>
+    </p>
+
+	{% else %}
+
+    <p>You are not authorised to add Matrices yet!
+    </p>
+
+	{% endif %}
 
 {% endif %}
 

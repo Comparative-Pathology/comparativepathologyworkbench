@@ -191,7 +191,7 @@ def list_imaging_hosts(request):
 	user = get_object_or_404(User, pk=request.user.id)
 	credential_list = Credential.objects.filter(username=user.username).values('username')
 	
-	print credential_list
+	#print credential_list
 	
 	credential_flag = ''	
 	
@@ -1396,7 +1396,7 @@ def index_matrix(request):
 	user = get_object_or_404(User, pk=request.user.id)
 	credential_list = Credential.objects.filter(username=user.username).values('username')
 
-	print credential_list
+	#print credential_list
 	
 	credential_flag = ''	
 	

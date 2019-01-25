@@ -264,7 +264,7 @@ def get_imaging_server_json(request, server_id):
 
 	except Exception as e:
 
-		print 'Exception!', e
+		#print 'Exception!', e
 				
 		matrix_list = Matrix.objects.all
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
@@ -292,13 +292,13 @@ def get_imaging_server_json(request, server_id):
 	if userid == "":
 
 		project_url = projects_url + '/' + commandProjects.postamble
-		print project_url
+		#print project_url
 
 		payload = {'limit': 50}
 		project_rsp = session.get(project_url, params=payload)
 		project_data = project_rsp.json()
 		
-		print 'project_rsp.status_code', project_rsp.status_code
+		#print 'project_rsp.status_code', project_rsp.status_code
 
 		if project_rsp.status_code == 200:
 

@@ -75,9 +75,21 @@
 			{% if user.id == server.owner.id or user.is_superuser %}
             
             <td>
+
+				{% if server.type.name == 'WORDPRESS' %}
+	
+				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
+	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+				</a>
+
+				{% else %}
+	
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
 	            	<button class="save btn btn-info">BROWSE &raquo;</button>
 				</a>
+
+				{% endif %}
+	
 				<a href="{% url 'matrices:detail_server' server.id %}">
 					<button class="save btn btn-primary">View</button>
 				</a>
@@ -92,9 +104,21 @@
 			{% else %}
 	
             <td>
+
+				{% if server.type.name == 'WORDPRESS' %}
+	
+				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
+	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+				</a>
+
+				{% else %}
+	
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
 	            	<button class="save btn btn-info">BROWSE &raquo;</button>
 				</a>
+
+				{% endif %}
+	
 				<a href="{% url 'matrices:detail_server' server.id %}">
 					<button class="save btn btn-primary">View</button>
 				</a>

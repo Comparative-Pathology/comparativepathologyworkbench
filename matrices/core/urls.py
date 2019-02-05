@@ -19,6 +19,9 @@ urlpatterns = [
 	url(r'^show_dataset/(?P<server_id>[0-9]+)/(?P<dataset_id>[0-9]+)/$', views.show_dataset, name='webgallery_show_dataset'),
 	url(r'^show_image/(?P<server_id>[0-9]+)/(?P<image_id>[0-9]+)/$', views.show_image, name='webgallery_show_image'),
 
+	url(r'^show_wordpress/(?P<server_id>[0-9]+)/(?P<page_id>[0-9]+)/$', views.show_wordpress, name='webgallery_show_wordpress'),
+	url(r'^show_wordpress_image/(?P<server_id>[0-9]+)/(?P<image_id>[0-9]+)/$', views.show_wordpress_image, name='webgallery_show_wordpress_image'),
+
 	url(r'^add_image/(?P<server_id>[0-9]+)/(?P<image_id>[0-9]+)/(?P<roi_id>[0-9]+)/$', views.add_image, name='webgallery_add_image'),
 	url(r'^delete_image/(?P<image_id>[0-9]+)/$', views.delete_image, name='webgallery_delete_image'),
 

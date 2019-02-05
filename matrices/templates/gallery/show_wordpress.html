@@ -22,38 +22,23 @@
 			</a>
 		</li>
 	
-{% if group %}
-
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
-				{{ group.name }}
-			</a>
-		</li>
-	
-{% endif %}
-
-{% if projects %}
-
-	{% for project in projects %}
-
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_project' server.id project.id %}">
-				{{ project.name }}
-			</a>
-		</li>	
-
-	{% endfor %}
-
-{% endif %}
-
-{% if group %}
 
 		<li class="breadcrumb-item active">
 			{{ dataset.name }}
 		</li>	
 	
-{% endif %}
-
+		<li class="breadcrumb-item active">
+			<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
+	            Page {{ dataset.prev_page }}
+			</a>
+		</li>	
+	
+		<li class="breadcrumb-item active">
+			<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.next_page %}">	            	
+	            Page {{ dataset.next_page }}
+			</a>
+		</li>	
+	
 	</ol>
 	
     <hr>
@@ -63,22 +48,14 @@
 	
 	<br />
 
-{% if group %}
-
-    <p>Dataset contains {{ dataset.imageCount }} images</p>
-
-{% else %}
-
     <p>{{ dataset.name }} contains {{ dataset.imageCount }} images</p>
-
-{% endif %}
 
     <hr>
 
 
     {% for image in images %}
 
-		<a href="{% url 'matrices:webgallery_show_image' server.id image.id %}">
+		<a href="{% url 'matrices:webgallery_show_wordpress_image' server.id image.id %}">
 			<img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
 		</a>
 

@@ -9,6 +9,8 @@ import json, urllib, requests, base64
 
 from random import randint
 
+from django.contrib.auth.models import User
+
 from matrices.core.models import Matrix, Cell, Type, Protocol, Server, Command, Image
 from matrices.core.models import Blog, Credential
 
@@ -222,6 +224,291 @@ def delete_a_post_from_wordpress(user_name, post_id):
 """
 	Get the JSON Details for the Requested Server
 """
+def get_imaging_wordpress_json(request, server_id, page_id):
+
+	current_user = request.user
+
+	server = get_object_or_404(Server, pk=server_id)
+	
+	password = decrypt(server.pwd)
+
+	user = get_object_or_404(User, pk=request.user.id)
+	credential = Credential.objects.get(username=request.user.username)
+
+	commandWordpressImages = Command.objects.filter(type=server.type).get(name='WordpressImages')
+	
+	images_url = commandWordpressImages.protocol.name + '://' + server.url + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + page_id + commandWordpressImages.postamble + str(credential.wordpress)
+
+	#print images_url 
+		
+	token = base64.standard_b64encode(credential.username + ':' + credential.apppwd)
+	headers = {'Authorization': 'Basic ' + token}
+	
+	data = {}
+
+	try:
+
+		response = requests.get(images_url, headers=headers, timeout=5)
+	
+		if response.status_code == requests.codes.ok:
+		
+			media_data = response.json()
+
+			images_list = list()
+	
+			image_count = 0
+
+			for media in media_data:
+
+				id = media['id']
+				title = media['title']
+				title_rendered = title['rendered']
+				image_viewer_url = media['source_url']
+				media_details = media['media_details']
+				sizes = media_details['sizes']
+				thumbnail = sizes['thumbnail']
+				image_thumbnail_url = thumbnail['source_url']
+				medium = sizes['medium']
+				image_birdseye_url = medium['source_url']
+
+				image = ({
+					'id': id, 
+					'name': title_rendered,
+					'viewer_url': image_viewer_url,
+					'birdseye_url': image_birdseye_url,
+					'thumbnail_url': image_thumbnail_url
+				})
+				
+				#print 'Image', image
+			
+				image_count = image_count + 1
+		
+				images_list.append(image)
+
+			group = ''
+			project_list = []
+
+			prev_page = '1'
+			next_page = '1'
+	
+			page_count = int(page_id) * 21
+
+			if page_count % image_count == 0:
+	
+				next_page = int(page_id) + 1
+				
+				if int(page_id) != 1:
+				
+					prev_page = int(page_id) - 1
+		
+			if image_count == 0:
+	
+				next_page = '1'
+				prev_page = '1'
+
+			dataset = ({
+				'id': '0',
+				'name': 'Your WordPress Media Library',
+				'imageCount': image_count,
+				'prev_page': prev_page,
+				'next_page': next_page
+			})
+
+			#print dataset
+	
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
+
+			data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+		
+		else:
+
+			group = ''
+			project_list = []
+			images_list = list()
+
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
+
+			image_count = 0
+
+			next_page = int(page_id)
+			prev_page = '1'
+
+			dataset = ({
+				'id': '0',
+				'name': 'Your WordPress Media Library',
+				'imageCount': image_count,
+				'prev_page': prev_page,
+				'next_page': next_page
+			})
+
+			data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+	
+	except Exception as e:
+
+		#print 'Exception!', e
+
+		group = ''
+		project_list = []
+		images_list = list()
+
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+		image_count = 0
+
+		next_page = int(page_id)
+		prev_page = '1'
+		
+		if int(next_page) == 1:
+		
+			prev_page = '1'
+
+		dataset = ({
+				'id': '0',
+				'name': 'Please REFRESH Your WordPress Media Library',
+				'imageCount': image_count,
+				'prev_page': prev_page,
+				'next_page': next_page
+		})
+
+		data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+
+	return data
+
+
+
+"""
+	Get the JSON Details for the Requested Image
+"""
+def get_imaging_wordpress_image_json(request, server_id, image_id):
+	
+	current_user = request.user
+
+	server = get_object_or_404(Server, pk=server_id)
+	
+	userid = server.uid
+	password = decrypt(server.pwd)
+
+	user = get_object_or_404(User, pk=request.user.id)
+	credential = Credential.objects.get(username=request.user.username)
+
+	commandWordpressImage = Command.objects.filter(type=server.type).get(name='WordpressImage')
+	
+	image_url = commandWordpressImage.protocol.name + '://' + server.url + '/' + commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + image_id
+	
+	#print image_url
+	
+	token = base64.standard_b64encode(credential.username + ':' + credential.apppwd)
+	headers = {'Authorization': 'Basic ' + token}
+	
+	data = {}
+
+	try:
+
+		response = requests.get(image_url, headers=headers, timeout=5)
+
+		if response.status_code == requests.codes.ok:
+		
+			media_data = response.json()
+
+			caption = media_data['caption']
+			caption_rendered = caption['rendered']
+			
+			title = media_data['title']
+			title_rendered = title['rendered']
+			
+			description = media_data['alt_text']
+
+			image_viewer_url = media_data['source_url']
+			media_details = media_data['media_details']
+			sizes = media_details['sizes']
+			thumbnail = sizes['thumbnail']
+			image_thumbnail_url = thumbnail['source_url']
+			medium = sizes['medium']
+			image_birdseye_url = medium['source_url']
+
+			image = ({
+				'id': image_id,
+				'name': title_rendered,
+				'caption': caption_rendered[:-5][3:].rstrip(),
+				'description': description,
+				'viewer_url': image_viewer_url,
+				'birdseye_url': image_birdseye_url,
+				'thumbnail_url': image_thumbnail_url
+			})
+
+			#print image
+
+			group = ''
+			project_list = []
+			datasets = []
+			projects = []
+	
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
+	
+			data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+
+		else:
+
+			image = ({
+				'id': image_id,
+				'name': '',
+				'caption': '',
+				'description': '',
+				'viewer_url': '',
+				'birdseye_url': '',
+				'thumbnail_url': ''
+			})
+
+			group = ''
+			project_list = []
+			datasets = []
+			projects = []
+	
+			matrix_list = Matrix.objects.all
+			image_list = Image.objects.filter(owner=current_user).filter(active=True)
+			server_list = Server.objects.all
+	
+			data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+
+	except Exception as e:
+
+		#print 'Exception!', e
+
+		image = ({
+			'id': image_id,
+			'name': '',
+			'caption': '',
+			'description': '',
+			'viewer_url': '',
+			'birdseye_url': '',
+			'thumbnail_url': ''
+		})
+
+		group = ''
+		project_list = []
+		datasets = []
+		projects = []
+	
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+	
+		data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+
+	return data
+
+
+"""
+	Get the JSON Details for the Requested Server
+"""
 def get_imaging_server_json(request, server_id):
 
 	current_user = request.user
@@ -282,6 +569,9 @@ def get_imaging_server_json(request, server_id):
 	
 	userid = server.uid
 	password = decrypt(server.pwd)
+	
+	#print userid
+	#print password
 
 	memberOfGroup_list = list()
 	

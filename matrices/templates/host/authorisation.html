@@ -116,4 +116,154 @@
 	
 {% endif %}
 
+	<hr>
+	
+	<br />
+	<h2>Blog Credentials</h2>
+	<br />
+
+{% if credential_list %}
+
+	{% for credential in credential_list %}
+	
+		{% if forloop.first %}
+	
+    <table>
+        <tr>
+            <th>User Name</th>
+            <th>Wordpress Id</th>
+
+		{% if user.is_superuser %}
+
+            <th>Application Password</th>
+
+		{% else %}
+
+            <td>&nbsp;</td>
+
+		{% endif %}
+
+            <th>Owner</th>
+            <th>Action</th>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+
+		{% endif %}
+	
+        <tr>
+            <td>
+				{{ credential.username }}
+            </td>
+
+            <td>
+            	{{ credential.wordpress }}
+            </td>
+
+		{% if user.is_superuser %}
+
+            <td>
+            	{{ credential.apppwd }}
+            </td>
+
+		{% else %}
+
+            <td>&nbsp;</td>
+
+		{% endif %}
+
+            <td>
+            	{{ credential.owner.username }}
+            </td>
+
+		{% if user.id == credential.owner_id or user.is_superuser %}
+            
+            <td>
+				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+				<a href="{% url 'matrices:edit_blog_credential' credential.id %}">
+					<button class="save btn btn-warning">Edit</button>
+				</a>
+				<a href="{% url 'matrices:delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
+					<button class="save btn btn-danger">DELETE!</button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+					<button class="save btn btn-primary">View</button>
+				</a>
+            </td>
+
+		{% endif %}
+
+		</tr>
+
+		{% if forloop.last %}
+	
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
+			{% if user.is_superuser %}
+    
+            <td>
+				<a href="{% url 'matrices:new_blog_credential' %}">
+					<button class="save btn btn-success">Add New Blog Credential</button>
+				</a>
+            </td>
+
+			{% else %}
+
+            <td>&nbsp;</td>
+
+			{% endif %}
+	
+		</tr>
+    </table>
+
+		{% endif %}
+	
+    {% endfor %}
+
+{% else %}
+
+	<p>No Blog Credentials are available.</p>
+	    
+	{% if user.is_superuser %}
+    
+	<p>
+		<a href="{% url 'matrices:new_blog_credential' %}">
+			<button class="save btn btn-success">Add New Blog Credential</button>
+		</a>
+	</p>
+
+	{% else %}
+
+	<p>&nbsp;
+	</p>
+
+	{% endif %}
+	
+{% endif %}
+
+	<hr>
+
 {% endblock %}

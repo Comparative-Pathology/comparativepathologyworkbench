@@ -40,6 +40,10 @@ from matrices.core.models import Blog, Credential
 from .routines import generateMatrix, generateRows, generateColumns, countRows
 from .routines import countColumns, generateCells, get_imaging_server_json
 
+from .routines import get_imaging_wordpress_json
+from .routines import get_imaging_wordpress_image_json
+
+from .routines import get_imaging_server_json
 from .routines import get_imaging_server_group_json
 from .routines import get_imaging_server_project_json
 from .routines import get_imaging_server_dataset_json
@@ -224,11 +228,10 @@ def maintenance(request):
 	command_list = Command.objects.all
 	user_list = User.objects.all
 	blog_list = Blog.objects.all
-	credential_list = Credential.objects.all
 
 	if current_user.is_superuser == True:
 
-		data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'type_list': type_list, 'protocol_list': protocol_list, 'command_list': command_list, 'blog_list': blog_list, 'credential_list': credential_list }
+		data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'type_list': type_list, 'protocol_list': protocol_list, 'command_list': command_list, 'blog_list': blog_list }
 
 		return render(request, 'host/maintenance.html', data)
 	
@@ -247,10 +250,11 @@ def authorisation(request):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	user_list = User.objects.all
+	credential_list = Credential.objects.all
 
 	if current_user.is_superuser == True:
 
-		data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'user_list': user_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'credential_list': credential_list }
 
 		return render(request, 'host/authorisation.html', data)
 	
@@ -502,7 +506,7 @@ def new_blog_credential(request):
 
 				credential.save()
 
-				return HttpResponseRedirect(reverse('matrices:maintenance', args=()))
+				return HttpResponseRedirect(reverse('matrices:authorisation', args=()))
 		
 			else:
 		
@@ -575,7 +579,7 @@ def edit_blog_credential(request, credential_id):
 
 				credential.save()
 						
-				return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+				return HttpResponseRedirect(reverse('matrices:authorisation', args=()))						
 
 			else:
 			
@@ -609,7 +613,7 @@ def delete_blog_credential(request, credential_id):
 
 		credential.delete()
 	
-		return HttpResponseRedirect(reverse('matrices:maintenance', args=()))						
+		return HttpResponseRedirect(reverse('matrices:authorisation', args=()))						
 
 	else:
 
@@ -1219,7 +1223,13 @@ def add_image(request, server_id, image_id, roi_id):
 	
 		image_count = Image.objects.filter(identifier=image_id).filter(active=True).count()
 
-		data = get_imaging_server_image_json(request, server_id, image_id)
+		if server.type.name == 'OMERO_5.4.7':
+	
+			data = get_imaging_server_image_json(request, server_id, image_id)
+	
+		if server.type.name == 'WORDPRESS':
+
+			data = get_imaging_wordpress_image_json(request, server_id, image_id)
 	
 		json_image = data['image']
 		name = json_image['name']
@@ -1229,6 +1239,8 @@ def add_image(request, server_id, image_id, roi_id):
 		if roi_id == '0':
 		
 			image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=0)
+			
+			#print image
 			image.save()
 	
 		else:
@@ -1249,7 +1261,13 @@ def add_image(request, server_id, image_id, roi_id):
 						image = Image(identifier=image_id, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, owner=current_user, active=True, roi=roi_id)
 						image.save()
 						
-		return HttpResponseRedirect(reverse('matrices:webgallery_show_image', args=(server_id, image_id)))				
+		if server.type.name == 'OMERO_5.4.7':
+	
+			return HttpResponseRedirect(reverse('matrices:webgallery_show_image', args=(server_id, image_id)))				
+	
+		if server.type.name == 'WORDPRESS':
+
+			return HttpResponseRedirect(reverse('matrices:webgallery_show_wordpress_image', args=(server_id, image_id)))				
 	
 	else:
 	
@@ -1292,9 +1310,37 @@ def show_imaging_server(request, server_id):
 	
 	if credential_list:
 
-		data = get_imaging_server_json(request, server_id)
+		server = get_object_or_404(Server, pk=server_id)
+		
+		if server.type.name == 'OMERO_5.4.7':
+		
+			data = get_imaging_server_json(request, server_id)
+		
+			return render(request, 'gallery/show_server.html', data)
+		
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
-		return render(request, 'gallery/show_server.html', data)
+
+@login_required()
+def show_wordpress(request, server_id, page_id):
+	"""
+	Show the Imaging Server
+	"""
+
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
+
+		server = get_object_or_404(Server, pk=server_id)
+		
+		if server.type.name == 'WORDPRESS':
+		
+			data = get_imaging_wordpress_json(request, server_id, page_id)
+		
+			return render(request, 'gallery/show_wordpress.html', data)
 
 	else:
 	
@@ -1375,6 +1421,26 @@ def show_image(request, server_id, image_id):
 		data = get_imaging_server_image_json(request, server_id, image_id)
 
 		return render(request, 'gallery/show_image.html', data)
+
+	else:
+	
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+
+@login_required()
+def show_wordpress_image(request, server_id, image_id):
+	"""
+	Show an image
+	"""
+	
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	if credential_list:
+
+		data = get_imaging_wordpress_image_json(request, server_id, image_id)
+
+		return render(request, 'gallery/show_wordpress_image.html', data)
 
 	else:
 	

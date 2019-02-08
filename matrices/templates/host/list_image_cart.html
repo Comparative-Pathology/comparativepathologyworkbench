@@ -6,8 +6,6 @@
 
 {% block content %}
     
-	<br />
-	
 	<ol class="breadcrumb">
 	
 		<li class="breadcrumb-item">
@@ -17,25 +15,20 @@
 		</li>
 	
 		<li class="breadcrumb-item active">
-			Image
+			Images
 		</li>
 	
 	</ol>
 	
-	<hr>
-
-	<h1>Browse Image Cart</h1>
+	<h1>Browse Images</h1>
 	<br />
 
 	<p>Browse the list of Images you have collected</p>
 
 	<hr>
 
-	<br />
-
-	<br />
-	<h2>Images</h2>
-	<br />
+	<!-- <h2>Images</h2> -->
+	<!-- <br /> -->
 
 {% if credential_flag %}
 
@@ -48,8 +41,9 @@
     <table>
         <tr>
             <th>Image</th>
-            <th>ROI</th>
-            <th>Server</th>
+            <th width="100px">ROI</th>
+            <th width="250px">Server</th>
+            
             <th>Action</th>
 		</tr>
         <tr>
@@ -64,7 +58,7 @@
         <tr>
             <td>
 				<a href="{{ image.viewer_url  }}" target="_blank">
-					<img  style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
+					<img  style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
 				</a>
             </td>
 
@@ -78,12 +72,24 @@
 
 			{% endif %}
 
-            <td>{{ image.server.name }}, ( {{ image.server.url }} )</td>
+            <td>{{ image.server.name }}<br />( {{ image.server.url }} )</td>
 
             <td>
+
+				{% if image.server.type.name == 'WORDPRESS' %}
+
+				<a href="{% url 'matrices:webgallery_show_wordpress_image' image.server.id image.identifier %}">	            	
+	            	<button class="save btn btn-info">View Image Details &raquo;</button>
+				</a>
+
+				{% else %}
+	
 				<a href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">	            	
 	            	<button class="save btn btn-info">View Image Details &raquo;</button>
 				</a>
+
+				{% endif %}
+
 				<a href="{% url 'matrices:webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')">
 					<button class="save btn btn-danger">DELETE!</button>
 				</a>

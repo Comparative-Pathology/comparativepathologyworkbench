@@ -6,8 +6,6 @@
 
 {% block content %}
     
-	<br />
-	
 	<ol class="breadcrumb">
 	
 		<li class="breadcrumb-item">
@@ -22,9 +20,6 @@
 	
 	</ol>
 	
-	<hr>
-
-	<br />
 	<h1>Authorization</h1>
 	<br />
 
@@ -32,9 +27,6 @@
 
 	<hr>
 
-	<br />
-
-	<br />
 	<h2>Users</h2>
 	<br />
 
@@ -46,11 +38,16 @@
 	
     <table>
         <tr>
-            <th width="200px">Name</th>
-            <th width="400px">Full Name</th>
+			<th width="200px">User Name</th>
+			<th width="200px">Full Name</th>
+			<th width="350px">Email</th>
+			<th width="100px">Is Super User?</th>
+			
             <th>Action</th>
 		</tr>
         <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -65,8 +62,14 @@
             <td>
 				{{ userlist.get_full_name }}
             </td>
+            <td>
+				{{ userlist.email }}
+            </td>
+            <td>
+				{{ userlist.is_superuser }}
+            </td>
 
-		{% if user.is_superuser and not userlist.is_superuser %}
+		{% if user.is_superuser %}
             
             <td>
 				<a href="{% url 'matrices:detail_user' userlist.id %}">
@@ -98,9 +101,6 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-		</tr>
-        <tr>
-            <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
 		</tr>
@@ -118,7 +118,6 @@
 
 	<hr>
 	
-	<br />
 	<h2>Blog Credentials</h2>
 	<br />
 
@@ -130,20 +129,21 @@
 	
     <table>
         <tr>
-            <th>User Name</th>
-            <th>Wordpress Id</th>
+            <th width="200px">User Name</th>
+            <th width="200px">Wordpress Id</th>
 
 		{% if user.is_superuser %}
 
-            <th>Application Password</th>
+            <th width="350px">Application Password</th>
 
 		{% else %}
 
-            <td>&nbsp;</td>
+            <th width="350px">&nbsp;</td>
 
 		{% endif %}
 
-            <th>Owner</th>
+            <th width="100px">Owner</th>
+            
             <th>Action</th>
 		</tr>
         <tr>

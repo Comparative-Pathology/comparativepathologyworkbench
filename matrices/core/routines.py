@@ -239,7 +239,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 	
 	images_url = commandWordpressImages.protocol.name + '://' + server.url + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + page_id + commandWordpressImages.postamble + str(credential.wordpress)
 
-	#print images_url 
+	print images_url 
 		
 	token = base64.standard_b64encode(credential.username + ':' + credential.apppwd)
 	headers = {'Authorization': 'Basic ' + token}
@@ -291,25 +291,38 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 			prev_page = '1'
 			next_page = '1'
 	
-			page_count = int(page_id) * 21
+			page_count = int(page_id) * 14
+			image_total = ( int(page_id) * 14 ) + image_count
 
-			if page_count % image_count == 0:
+			print 'page_count', page_count
+			print 'image_total', image_total
+			
+			
+			if image_count < 14:
+			
+				next_page = '1'
+				
+			if image_total % 14 == 0:
 	
 				next_page = int(page_id) + 1
-				
-				if int(page_id) != 1:
-				
-					prev_page = int(page_id) - 1
-		
-			if image_count == 0:
-	
+			
+			else:
+
 				next_page = '1'
-				prev_page = '1'
+
+			if int(page_id) == 1:
+				
+				prev_page = page_id
+				
+			else: 
+	
+				prev_page = int(page_id) - 1
+		
 
 			dataset = ({
 				'id': '0',
 				'name': 'Your WordPress Media Library',
-				'imageCount': image_count,
+				'imageCount': page_count,
 				'prev_page': prev_page,
 				'next_page': next_page
 			})
@@ -370,7 +383,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 
 		dataset = ({
 				'id': '0',
-				'name': 'Please REFRESH Your WordPress Media Library',
+				'name': 'Your WordPress Media Library',
 				'imageCount': image_count,
 				'prev_page': prev_page,
 				'next_page': next_page
@@ -442,7 +455,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 				'thumbnail_url': image_thumbnail_url
 			})
 
-			#print image
+			print image
 
 			group = ''
 			project_list = []

@@ -25,6 +25,9 @@ urlpatterns = [
 	url(r'^add_image/(?P<server_id>[0-9]+)/(?P<image_id>[0-9]+)/(?P<roi_id>[0-9]+)/$', views.add_image, name='webgallery_add_image'),
 	url(r'^delete_image/(?P<image_id>[0-9]+)/$', views.delete_image, name='webgallery_delete_image'),
 
+	url(r'^detail_user_general/(?P<user_id>[0-9]+)/$', views.view_user_general, name='detail_user_general'), 
+	url(r'^edit_user_general/(?P<user_id>[0-9]+)/$', views.edit_user_general, name='edit_user_general'),
+
 	url(r'^detail_user/(?P<user_id>[0-9]+)/$', views.view_user, name='detail_user'), 
 	url(r'^edit_user/(?P<user_id>[0-9]+)/$', views.edit_user, name='edit_user'),
 	url(r'^delete_user/(?P<user_id>[0-9]+)/$', views.delete_user, name='delete_user'),

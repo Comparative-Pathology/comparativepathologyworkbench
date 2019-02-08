@@ -6,8 +6,6 @@
 
 {% block content %}
     
-	<br />
-	
 	<ol class="breadcrumb">
 	
 		<li class="breadcrumb-item">
@@ -18,26 +16,23 @@
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:index' %}">
-				Matrices
+				Workbenches
 			</a>
 		</li>
 
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:matrix' matrix.id %}">
-			{{ matrix.title }}
+				CPW:{{ matrix.id|stringformat:"06d" }}
 			</a>
 		</li>
 
 		<li class="breadcrumb-item active">
-			Matrix Edit
+			Workbench Edit
 		</li>
 	
 	</ol>
 	
-	<hr>
-
-	<br />
-	<h1>EDIT Matrix {{ matrix.id }}</h1>
+	<h1>EDIT Workbench {{ matrix.id|stringformat:"06d" }}</h1>
 	<br />
 
 	<form method="POST" class="post-form">

@@ -14,25 +14,13 @@
 			</a>
 		</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:authorisation' %}">
-				Authorisation
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
-				Blog Credential {{ credential.id }}
-			</a>
-		</li>
-	
 		<li class="breadcrumb-item active">
-			Blog Credential Details
+			User Details
 		</li>
 	
 	</ol>
 	
-	<h1>EDIT Blog Command {{ credential.id }}</h1>
+	<h1>EDIT User {{ user.id }}</h1>
 	<br />
 
 	<form method="POST" class="post-form">

@@ -14,18 +14,6 @@
 			</a>
 		</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:authorisation' %}">
-				Authorisation
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:detail_user' user.id %}">
-				User {{ user.id }}
-			</a>
-		</li>
-	
 		<li class="breadcrumb-item active">
 			User Details
 		</li>
@@ -56,11 +44,11 @@
 
 		<br />
 
-		<a href="{% url 'matrices:authorisation' %}">
+		<a href="{% url 'matrices:home' %}">
 			<button class="save btn btn-success">BACK</button>
 		</a>
 
-		<a href="{% url 'matrices:edit_user' user.id %}">
+		<a href="{% url 'matrices:edit_user_general' user.id %}">
 			<button class="save btn btn-warning">EDIT</button>
 		</a>
 

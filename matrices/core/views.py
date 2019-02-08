@@ -32,7 +32,7 @@ from matrices.core.tokens import account_activation_token
 
 from matrices.core.forms import MatrixForm, CellForm, HeaderForm, CommandForm, ServerForm, CommentForm
 from matrices.core.forms import BlogForm, CredentialForm
-from matrices.core.forms import ProtocolForm, TypeForm, EditUserForm
+from matrices.core.forms import ProtocolForm, TypeForm, EditUserForm, EditUserGeneralForm
 
 from matrices.core.models import Matrix, Cell, Type, Protocol, Server, Command, Image
 from matrices.core.models import Blog, Credential
@@ -330,6 +330,72 @@ def edit_user(request, user_id):
 
 	
 @login_required
+def view_user_general(request, user_id):
+
+	current_user = request.user
+
+	user = get_object_or_404(User, pk=user_id)
+
+	matrix_list = Matrix.objects.all
+	image_list = Image.objects.filter(owner=current_user).filter(active=True)
+	server_list = Server.objects.all
+
+	if current_user.id == user.id:
+	
+		data = { 'user_id': user_id, 'user': user, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/detail_user_general.html', data)
+
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+
+@login_required
+def edit_user_general(request, user_id):
+
+	current_user = request.user
+
+	user = get_object_or_404(User, pk=user_id)
+	
+	matrix_list = Matrix.objects.all
+	image_list = Image.objects.filter(owner=current_user).filter(active=True)
+	server_list = Server.objects.all
+
+	if current_user.id == user.id:
+
+		if request.method == "POST":
+	
+			form = EditUserGeneralForm(request.POST, instance=user)
+			
+			if form.is_valid():
+			
+				user = form.save(commit=False)
+
+				user.save()
+						
+				return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+			else:
+			
+				messages.error(request, "Error")
+	
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			
+		else:
+	
+			form = EditUserGeneralForm(instance=user)
+			
+			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'host/edit_user_general.html', data)
+	
+	else:
+
+		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+
+	
+@login_required
 def delete_user(request, user_id):
 
 	current_user = request.user
@@ -448,13 +514,13 @@ def edit_blog_command(request, blog_id):
 			
 				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'blog': blog }
 			
 		else:
 	
 			form = BlogForm(instance=blog)
 			
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'blog': blog }
 
 		return render(request, 'host/edit_blog_command.html', data)
 	
@@ -585,13 +651,13 @@ def edit_blog_credential(request, credential_id):
 			
 				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'credential': credential }
 			
 		else:
 	
 			form = CredentialForm(instance=credential)
 			
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'credential': credential }
 
 		return render(request, 'host/edit_blog_credential.html', data)
 	
@@ -721,13 +787,13 @@ def edit_type(request, type_id):
 			
 				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'type': type }
 			
 		else:
 	
 			form = TypeForm(instance=type)
 			
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'type': type }
 
 		return render(request, 'host/edit_type.html', data)
 	
@@ -857,13 +923,13 @@ def edit_command(request, command_id):
 			
 				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'command': command }
 			
 		else:
 	
 			form = CommandForm(instance=command)
 			
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'command': command }
 
 		return render(request, 'host/edit_command.html', data)
 	
@@ -993,13 +1059,13 @@ def edit_protocol(request, protocol_id):
 			
 				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'protocol': protocol }
 			
 		else:
 	
 			form = ProtocolForm(instance=protocol)
 			
-			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'protocol': protocol }
 
 		return render(request, 'host/edit_protocol.html', data)
 	
@@ -1153,13 +1219,13 @@ def edit_server(request, server_id):
 			
 					messages.error(request, "Error")
 	
-					data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+					data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'server': server }
 			
 			else:
 	
 				form = ServerForm(instance=server)
 			
-				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list, 'server': server }
 
 			return render(request, 'host/edit_server.html', data)
 	
@@ -1223,18 +1289,28 @@ def add_image(request, server_id, image_id, roi_id):
 	
 		image_count = Image.objects.filter(identifier=image_id).filter(active=True).count()
 
+		json_image = ''
+		name = ''
+		viewer_url = ''
+		birdseye_url = ''
+
 		if server.type.name == 'OMERO_5.4.7':
 	
 			data = get_imaging_server_image_json(request, server_id, image_id)
 	
+			json_image = data['image']
+			name = json_image['name']
+			viewer_url = json_image['viewer_url']
+			birdseye_url = json_image['birdseye_url']
+
 		if server.type.name == 'WORDPRESS':
 
 			data = get_imaging_wordpress_image_json(request, server_id, image_id)
 	
-		json_image = data['image']
-		name = json_image['name']
-		viewer_url = json_image['viewer_url']
-		birdseye_url = json_image['birdseye_url']
+			json_image = data['image']
+			name = json_image['name']
+			viewer_url = json_image['viewer_url']
+			birdseye_url = json_image['thumbnail_url']
 
 		if roi_id == '0':
 		

@@ -6,8 +6,33 @@
 
 {% block content %}
     
-	<br />
-	<h1>EDIT Server {{ server.id }}</h1>
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:list_imaging_hosts' %}">
+				Sources
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:detail_server' server.id %}">
+				Source {{ server.id }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			Source EDIT
+		</li>
+	
+	</ol>
+	
+	<h1>EDIT Source {{ server.id }}</h1>
 	<br />
 
 	<form method="POST" class="post-form">

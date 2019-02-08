@@ -6,8 +6,6 @@
 
 {% block content %}
 
-	<br />
-		
 	<ol class="breadcrumb">
 	
 		<li class="breadcrumb-item">
@@ -18,7 +16,7 @@
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Servers
+				Sources
 			</a>
 		</li>
 	
@@ -60,8 +58,6 @@
 	
 	</ol>
 	
-    <hr>
-	
 	<h1>{{ image.name }}</h1>
 
 	<br />
@@ -80,7 +76,7 @@
             <th>Image:</th>
             <td>
 				<a href="{{ image.viewer_url  }}" target="_blank">
-					<img  style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
+					<img  style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
 				</a>
 			</td>
 		</tr>

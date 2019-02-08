@@ -19,7 +19,17 @@ html {
 	background-color: #FFFFFF;
 }
 
+.navbar.navbar-expand-lg.navbar-light {
+	max-width: 100%;
+	background-color: #e3f2fd;
+ 	/*padding-top: 4.5rem;*/
+}
 
+#sausage {
+	max-width: 100%;
+	background-color: #e3f2fd;
+ 	/*padding-top: 4.5rem;*/
+}
 
 body {
 	min-height: 75rem;
@@ -111,10 +121,20 @@ textarea {
 	border-collapse: separate;
 }
 
+#matrix_blind {
+	padding: 10px;
+    width: 100%;
+    height: 110px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius:	5px 5px 5px 5px;
+	border-radius:		 5px 5px 5px 5px;
+	background-color: #e3f2fd;
+}
+
 .cell {
 	padding: 10px;
-	width: 225px;
-	height: 225px;
+	width: 215px;
+	height: 215px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -137,201 +157,6 @@ textarea {
 	box-shadow:		 #B3B3B3 2px 2px 2px;
 }
 
-.big_cell {
-	padding: 10px;
-	width: 1100px;
-	height: 450px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #CCFFCC;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_view {
-	padding: 10px;
-	width: 1100px;
-	height: 450px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #CCFFCC;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_edit {
-	padding: 10px;
-	width: 1100px;
-	height: 450px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_view_1_line {
-	padding: 10px;
-	width: 1100px;
-	height: 150px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #CCFFCC;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_view_5_line {
-	padding: 10px;
-	width: 1100px;
-	height: 380px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #CCFFCC;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_view_6_line {
-	padding: 10px;
-	width: 1100px;
-	height: 430px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #CCFFCC;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_edit_1_line {
-	padding: 10px;
-	width: 1100px;
-	height: 180px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_edit_5_line {
-	padding: 10px;
-	width: 1100px;
-	height: 460px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.maintenance_edit_6_line {
-	padding: 10px;
-	width: 1100px;
-	height: 510px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.matrix_new {
-	padding: 10px;
-	width: 1100px;
-	height: 350px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.matrix_view {
-	padding: 10px;
-	width: 1100px;
-	height: 350px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.matrix_edit {
-	padding: 10px;
-	width: 1100px;
-	height: 350px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.header_new {
-	padding: 10px;
-	width: 1100px;
-	height: 350px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.header_view {
-	padding: 10px;
-	width: 1100px;
-	height: 350px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.header_edit {
-	padding: 10px;
-	width: 1100px;
-	height: 350px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #F9E79F;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
 .master {
 	padding: 10px;
 	width: 50px;
@@ -348,7 +173,7 @@ textarea {
 .headrow {
 	padding: 10px;
 	width: 50px;
-	height: 225px;
+	height: 215px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -360,7 +185,7 @@ textarea {
 
 .headcol {
 	padding: 10px;
-	width: 225px;
+	width: 215px;
 	height: 50px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;

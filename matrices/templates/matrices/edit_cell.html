@@ -6,8 +6,6 @@
 
 {% block content %}
     
-	<br />
-	
 	<ol class="breadcrumb">
 	
 		<li class="breadcrumb-item">
@@ -18,13 +16,13 @@
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:index' %}">
-				Matrices
+				Workbenches
 			</a>
 		</li>
 
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:matrix' matrix.id %}">
-			{{ matrix.title }}
+				CPW:{{ matrix.id|stringformat:"06d" }}
 			</a>
 		</li>
 
@@ -34,28 +32,23 @@
 	
 	</ol>
 	
-	<hr>
-
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 
-	<br />
-	<h1>EDIT Cell {{ cell.id }}, Matrix {{ matrix.id }}, "{{ matrix.title }}"</h1>
+	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
 	<br />
 
 {% endif %}
 
 {% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
 
-	<br />
-	<h1>EDIT Row Header, Matrix {{ matrix.id }}, "{{ matrix.title }}" </h1>
+	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header, "{{ matrix.title }}" </h1>
 	<br />
 
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
 
-	<br />
-	<h1>EDIT Column Header, Matrix {{ matrix.id }}, "{{ matrix.title }}" </h1>
+	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header, "{{ matrix.title }}" </h1>
 	<br />
 
 {% endif %}

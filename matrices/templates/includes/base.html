@@ -29,6 +29,7 @@
 
 	<link rel="stylesheet" href="{% static 'styles.css' %}">
 
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
@@ -42,18 +43,22 @@
 
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+	<div class="container">
+	
+	<nav class="navbar navbar-expand-lg navbar-light">
 
-		<div class="container">
-
+		<div class="navbar-brand abs">
+		
 			<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-				<img src="{% static 'ccp-logo.png' %}" alt="Logo">
+				<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=25px>
 			</a>
 
 			<a class="navbar-brand" href="{% url 'matrices:home' %}">
-				<strong>The Comparative Pathology Workbench</strong>
+				<strong>Comparative Pathology Workbench</strong>
 			</a>
 			
+		</div>
+
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -66,7 +71,7 @@
 	
 {% if matrix_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Matrices ({{ matrix_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workbenches ({{ matrix_list.count }})</a>
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
@@ -74,15 +79,15 @@
 
 			{% if forloop.first %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:index' %}">List Matrices</a>
+							<a class="dropdown-item" href="{% url 'matrices:index' %}">List Workbenches</a>
 			
 			{% endif %}
 
-							<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.id %}">{{ matrix.id }}, {{ matrix.title }}</a>
+							<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
 	
 			{% if forloop.last %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Matrix</a>
+							<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Workbench</a>
 			
 			{% endif %}
 			
@@ -90,58 +95,15 @@
 
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Matrices</a>
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workbenches</a>
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
-							<a class="dropdown-item" href="#">No matrices are available!</a>
+							<a class="dropdown-item" href="#">No Workbenches are available!</a>
 
 {% endif %}
 
 						</div>
-
-					</li>
-
-					<li class="nav-item dropdown">
-	
-{% if image_list %}
-
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
-	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
-					
-
-		{% for image in image_list %}
-
-			{% if forloop.first %}
-		
-							<a class="dropdown-item" href="{% url 'matrices:list_image_cart' %}">Your Image Collection</a>
-			
-			{% endif %}
-
-			{% if image.roi == 0 %}
-
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
-	
-			{% else %}
-
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
-	
-			{% endif %}
-
-		{% endfor %}
-
-{% else %}
-
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images</a>
-	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
-					
-							<a class="dropdown-item" href="#">No Images are available!</a>
-
-						</div>
-
-{% endif %}
 
 					</li>
 
@@ -149,7 +111,7 @@
 	
 {% if server_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Servers ({{ server_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources ({{ server_list.count }})</a>
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
@@ -158,7 +120,7 @@
 
 			{% if forloop.first %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">List Imaging Servers</a>
+							<a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">List Sources</a>
 			
 			{% endif %}
 			
@@ -181,11 +143,68 @@
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
-							<a class="dropdown-item" href="#">No Imaging Servers are available!</a>
+							<a class="dropdown-item" href="#">No Sources are available!</a>
 
 						</div>
 
 {% endif %}
+
+					</li>
+
+					<li class="nav-item dropdown">
+	
+{% if image_list %}
+
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
+	
+						<div class="dropdown-menu" aria-labelledby="dropdown07">
+					
+
+		{% for image in image_list %}
+
+			{% if forloop.first %}
+		
+							<a class="dropdown-item" href="{% url 'matrices:list_image_cart' %}">List Your Image Collection</a>
+			
+			{% endif %}
+
+			{% if image.roi == 0 %}
+			
+				{% if image.server.type.name == 'WORDPRESS' %}
+
+							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
+
+				{% else %}
+	
+							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
+	
+				{% endif %}
+	
+		{% else %}
+
+							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
+	
+			{% endif %}
+
+		{% endfor %}
+
+{% else %}
+
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images</a>
+	
+						<div class="dropdown-menu" aria-labelledby="dropdown07">
+					
+							<a class="dropdown-item" href="#">No Images are available!</a>
+
+						</div>
+
+{% endif %}
+
+					</li>
+
+				</ul>
+
+				<ul class="navbar-nav ml-auto">
 
 {% if user.is_authenticated %}
 
@@ -197,7 +216,9 @@
             			
             			<div class="dropdown-menu" aria-labelledby="dropdown01">
 
-		                    <a class="dropdown-item" href="#">My account</a>
+							<a class="dropdown-item" href="{% url 'matrices:detail_user_general' user.id %}">
+			                    My account
+		                    </a>
         		
         		            <a class="dropdown-item" href="{% url 'password_reset' %}">Reset password</a>
 				
@@ -205,8 +226,18 @@
 				
 							<a class="dropdown-item" href="{% url 'logout' %}">Logout</a> 
 
+	{% if user.is_superuser %}
+
+							<a class="dropdown-item" href="{% url 'matrices:maintenance' %}">Maintenance</a>
+
+							<a class="dropdown-item" href="{% url 'matrices:authorisation' %}">Authorisation</a>
+
+	{% endif %}
+
             			</div>
 
+            		</li>
+            		
 {% else %}
 
 					<li class="nav-item dropdown">
@@ -223,17 +254,18 @@
 
             			</div>
 
-{% endif %}
-
             		</li>
             		
+{% endif %}
+
 				</ul>
 
 			</div>
 
-		</div>
 
 	</nav>
+	
+	</div>
 	
 	<main role="main" class="container">
     
@@ -334,6 +366,30 @@
 							"cols": "50"
 		});
 });
+
+</script>
+
+<script>
+
+	$( '.breadcrumb' ).click(function(event) {
+		var id = event.target.id;
+		//console.log('id = ' + id); 
+		var blind = "#matrix_blind"
+		$( blind ).toggle( "blind" );
+	});
+
+	$( '.myTable' ).click(function(event) {
+		var id = event.target.id;
+
+		cell_menu = "#" + id
+		//dropdown_menu = "dropdown_" + id
+		dropdown_menu = id
+
+  		//console.log('cell_menu = ' + cell_menu); 
+  		//console.log('dropdown_menu = ' + dropdown_menu); 
+
+		$( dropdown_menu ).dropdown()
+	});
 
 </script>
 		

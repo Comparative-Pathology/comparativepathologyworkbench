@@ -6,8 +6,6 @@
 
 {% block content %}
 	
-	<br />
-
 	<ol class="breadcrumb">
 	
 		<li class="breadcrumb-item">
@@ -18,37 +16,36 @@
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Servers
+				Sources
 			</a>
 		</li>
 	
 
 		<li class="breadcrumb-item active">
-			{{ dataset.name }}
+			<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
+				{{ dataset.name }}
+			</a>
 		</li>	
 	
 		<li class="breadcrumb-item active">
 			<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
-	            Page {{ dataset.prev_page }}
+	            Prev
 			</a>
 		</li>	
 	
 		<li class="breadcrumb-item active">
 			<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.next_page %}">	            	
-	            Page {{ dataset.next_page }}
+	            Next
 			</a>
 		</li>	
 	
 	</ol>
 	
-    <hr>
-    
-
 	<h1>{{ dataset.name }}</h1>
 	
 	<br />
 
-    <p>{{ dataset.name }} contains {{ dataset.imageCount }} images</p>
+    <p>{{ dataset.name }} contains {{ dataset.imageCount }} images, so far</p>
 
     <hr>
 

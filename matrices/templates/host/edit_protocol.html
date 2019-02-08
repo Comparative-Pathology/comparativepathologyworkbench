@@ -6,7 +6,32 @@
 
 {% block content %}
     
-	<br />
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:maintenance' %}">
+				Maintenance
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:detail_protocol' protocol.id %}">
+				Server Protocol {{ protocol.id }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			EDIT Server Protocol
+		</li>
+	
+	</ol>
+	
 	<h1>EDIT Server Protocol {{ protocol.id }}</h1>
 	<br />
 

@@ -6,7 +6,32 @@
 
 {% block content %}
     
-	<br />
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:maintenance' %}">
+				Maintenance
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:detail_command' command.id %}">
+				API Command {{ command.id }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			EDIT API Command
+		</li>
+	
+	</ol>
+	
 	<h1>EDIT API Command {{ command.id }}</h1>
 	<br />
 

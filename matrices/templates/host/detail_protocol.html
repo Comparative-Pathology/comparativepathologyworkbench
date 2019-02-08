@@ -6,7 +6,32 @@
 
 {% block content %}
  
- 	<br />
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:maintenance' %}">
+				Maintenance
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:detail_protocol' protocol.id %}">
+				Server Protocol {{ protocol.id }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			Server Protocol Details
+		</li>
+	
+	</ol>
+	
 	<h1>Server Protocol {{ protocol.id }}</h1>
 	<br />
 
@@ -18,7 +43,16 @@
 		<br />
 
 		<a href="{% url 'matrices:maintenance' %}">
-			<button class="save btn btn-success">CANCEL</button>
+			<button class="save btn btn-success">BACK</button>
 		</a>
+
+{% if user.id == blog.owner_id or user.is_superuser %}
+            
+		<a href="{% url 'matrices:edit_protocol' protocol.id %}">
+			<button class="save btn btn-warning">Edit</button>
+		</a>
+
+{% endif %}
+
 
 {% endblock %}

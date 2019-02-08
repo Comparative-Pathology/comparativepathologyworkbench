@@ -6,7 +6,26 @@
 
 {% block content %}
     
-	<br />
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:maintenance' %}">
+				Maintenance
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			NEW Server Type
+		</li>
+	
+	</ol>
+	
 	<h1>NEW Server Type</h1>
 	<br />
 

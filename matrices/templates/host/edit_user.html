@@ -6,7 +6,32 @@
 
 {% block content %}
     
-	<br />
+	<ol class="breadcrumb">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:authorisation' %}">
+				Authorisation
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:detail_user' user.id %}">
+				User {{ user.id }}
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			User Details
+		</li>
+	
+	</ol>
+	
 	<h1>EDIT User {{ user.id }}</h1>
 	<br />
 

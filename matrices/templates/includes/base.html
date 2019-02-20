@@ -93,6 +93,7 @@
 			
 		{% endfor %}
 
+						</div>
 {% else %}
 
 						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workbenches</a>
@@ -101,9 +102,9 @@
 					
 							<a class="dropdown-item" href="#">No Workbenches are available!</a>
 
-{% endif %}
-
 						</div>
+
+{% endif %}
 
 					</li>
 
@@ -137,6 +138,8 @@
 	
 		{% endfor %}
 
+						</div>
+
 {% else %}
 
 						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Servers</a>
@@ -155,7 +158,7 @@
 	
 {% if image_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Images ({{ image_list.count }})</a>
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
@@ -188,9 +191,10 @@
 
 		{% endfor %}
 
+						</div>
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images</a>
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Images</a>
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
@@ -371,25 +375,17 @@
 
 <script>
 
-	$( '.breadcrumb' ).click(function(event) {
-		var id = event.target.id;
-		//console.log('id = ' + id); 
-		var blind = "#matrix_blind"
-		$( blind ).toggle( "blind" );
+$(document).ready(function(){
+	
+	$("#matrix_info").on("hide.bs.collapse", function(){
+		$(".btn-expand").html('<i class="fa fa-plus"></i>');
+	});
+	
+	$("#matrix_info").on("show.bs.collapse", function(){
+		$(".btn-expand").html('<i class="fa fa-minus"></i>');
 	});
 
-	$( '.myTable' ).click(function(event) {
-		var id = event.target.id;
-
-		cell_menu = "#" + id
-		//dropdown_menu = "dropdown_" + id
-		dropdown_menu = id
-
-  		//console.log('cell_menu = ' + cell_menu); 
-  		//console.log('dropdown_menu = ' + dropdown_menu); 
-
-		$( dropdown_menu ).dropdown()
-	});
+});
 
 </script>
 		

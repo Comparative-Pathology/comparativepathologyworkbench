@@ -6,7 +6,7 @@
 
 {% block content %}
     
-	<ol class="breadcrumb">
+	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:home' %}">
@@ -37,25 +37,55 @@
 		{% if forloop.first %}
 	
     <table>
+
         <tr>
+
+            <th width="250px">Action</th>
 			<th width="200px">User Name</th>
 			<th width="200px">Full Name</th>
-			<th width="350px">Email</th>
-			<th width="100px">Is Super User?</th>
+			<th width="250px">Email</th>
+			<th>Is Super User?</th>
 			
-            <th>Action</th>
 		</tr>
+
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
 
 		{% endif %}
 	
         <tr>
+
+		{% if user.is_superuser %}
+            
+            <td>
+				<a href="{% url 'matrices:detail_user' userlist.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+				<a href="{% url 'matrices:edit_user' userlist.id %}">
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+				</a>
+				<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:detail_user' userlist.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+            </td>
+
+		{% endif %}
+
             <td>
 				{{ userlist.username }}
             </td>
@@ -68,30 +98,6 @@
             <td>
 				{{ userlist.is_superuser }}
             </td>
-
-		{% if user.is_superuser %}
-            
-            <td>
-				<a href="{% url 'matrices:detail_user' userlist.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-				<a href="{% url 'matrices:edit_user' userlist.id %}">
-					<button class="save btn btn-warning">Edit</button>
-				</a>
-				<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
-					<button class="save btn btn-danger">DELETE!</button>
-				</a>
-            </td>
-
-		{% else %}
-	
-            <td>
-				<a href="{% url 'matrices:detail_user' userlist.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-            </td>
-
-		{% endif %}
 
 		</tr>
 
@@ -128,7 +134,11 @@
 		{% if forloop.first %}
 	
     <table>
+
         <tr>
+
+            <th width="150px">Action</th>
+            <th width="100px">Owner</th>
             <th width="200px">User Name</th>
             <th width="200px">Wordpress Id</th>
 
@@ -141,11 +151,9 @@
             <th width="350px">&nbsp;</td>
 
 		{% endif %}
-
-            <th width="100px">Owner</th>
             
-            <th>Action</th>
 		</tr>
+
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -157,6 +165,35 @@
 		{% endif %}
 	
         <tr>
+
+		{% if user.id == credential.owner_id or user.is_superuser %}
+            
+            <td>
+				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+				<a href="{% url 'matrices:edit_blog_credential' credential.id %}">
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+				</a>
+				<a href="{% url 'matrices:delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+            </td>
+
+		{% endif %}
+
+            <td>
+            	{{ credential.owner.username }}
+            </td>
+
             <td>
 				{{ credential.username }}
             </td>
@@ -177,56 +214,27 @@
 
 		{% endif %}
 
-            <td>
-            	{{ credential.owner.username }}
-            </td>
-
-		{% if user.id == credential.owner_id or user.is_superuser %}
-            
-            <td>
-				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-				<a href="{% url 'matrices:edit_blog_credential' credential.id %}">
-					<button class="save btn btn-warning">Edit</button>
-				</a>
-				<a href="{% url 'matrices:delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
-					<button class="save btn btn-danger">DELETE!</button>
-				</a>
-            </td>
-
-		{% else %}
-	
-            <td>
-				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-            </td>
-
-		{% endif %}
-
 		</tr>
 
 		{% if forloop.last %}
 	
         <tr>
+
             <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
-        <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
 
+		</tr>
+
+        <tr>
+
 			{% if user.is_superuser %}
     
             <td>
 				<a href="{% url 'matrices:new_blog_credential' %}">
-					<button class="save btn btn-success">Add New Blog Credential</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -236,7 +244,13 @@
 
 			{% endif %}
 	
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
 		</tr>
+
     </table>
 
 		{% endif %}
@@ -251,7 +265,7 @@
     
 	<p>
 		<a href="{% url 'matrices:new_blog_credential' %}">
-			<button class="save btn btn-success">Add New Blog Credential</button>
+			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 		</a>
 	</p>
 

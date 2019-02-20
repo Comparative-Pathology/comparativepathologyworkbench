@@ -5,8 +5,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 from django.template import loader
 
-from django.shortcuts import get_object_or_404, render, redirect
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.shortcuts import redirect
 
 from django.core.urlresolvers import reverse
 
@@ -20,25 +21,52 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages 
 
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.utils.encoding import force_text
+
+from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode
 
 from django.template.loader import render_to_string
 
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
+#from django.contrib.auth.hashers import heck_password
 
 from matrices.core.forms import SignUpForm
 from matrices.core.tokens import account_activation_token
 
-from matrices.core.forms import MatrixForm, CellForm, HeaderForm, CommandForm, ServerForm, CommentForm
-from matrices.core.forms import BlogForm, CredentialForm
-from matrices.core.forms import ProtocolForm, TypeForm, EditUserForm, EditUserGeneralForm
+from matrices.core.forms import MatrixForm
+from matrices.core.forms import CellForm
+from matrices.core.forms import HeaderForm
+from matrices.core.forms import CommandForm
+from matrices.core.forms import ServerForm
+from matrices.core.forms import CommentForm
+from matrices.core.forms import BlogForm
+from matrices.core.forms import CredentialForm
+from matrices.core.forms import ProtocolForm
+from matrices.core.forms import TypeForm
+from matrices.core.forms import EditUserForm
+from matrices.core.forms import EditUserGeneralForm
 
-from matrices.core.models import Matrix, Cell, Type, Protocol, Server, Command, Image
-from matrices.core.models import Blog, Credential
+from matrices.core.models import Matrix
+from matrices.core.models import Cell
+from matrices.core.models import Type
+from matrices.core.models import Protocol
+from matrices.core.models import Server
+from matrices.core.models import Command
+from matrices.core.models import Image
+from matrices.core.models import Blog
+from matrices.core.models import Credential
 
-from .routines import generateMatrix, generateRows, generateColumns, countRows
-from .routines import countColumns, generateCells, get_imaging_server_json
+from .routines import generateMatrix
+from .routines import generateCellComments
+from .routines import generateMatrixComments
+from .routines import generateRows
+from .routines import generateColumns
+from .routines import countRows
+from .routines import countColumns
+from .routines import generateCells
+from .routines import get_imaging_server_json
 
 from .routines import get_imaging_wordpress_json
 from .routines import get_imaging_wordpress_image_json
@@ -49,7 +77,8 @@ from .routines import get_imaging_server_project_json
 from .routines import get_imaging_server_dataset_json
 from .routines import get_imaging_server_image_json
 
-from .routines import encrypt, decrypt
+from .routines import encrypt
+from .routines import decrypt
 
 from .routines import get_a_post_from_wordpress
 from .routines import get_a_post_comments_from_wordpress
@@ -1586,10 +1615,13 @@ def matrix(request, matrix_id):
 				matrix_link = ''	
 
 		matrix_cells = generateMatrix(matrix_id)
+		matrix_comments = generateMatrixComments(matrix_id)
+		matrix_cells_comments = generateCellComments(matrix_id)
+		
 		columns = generateColumns(matrix_id)
 		rows = generateRows(matrix_id)
 
-		data = { 'matrix_link': matrix_link, 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'matrix_link': matrix_link, 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 		return render(request, 'matrices/matrix.html', data)
 
@@ -1706,7 +1738,8 @@ def view_matrix_blog(request, matrix_id):
 
 		comment_list = list()
 	
-		comment_list = get_a_post_comments_from_wordpress(request.user.username, matrix.blogpost)
+		#comment_list = get_a_post_comments_from_wordpress(request.user.username, matrix.blogpost)
+		comment_list = get_a_post_comments_from_wordpress(matrix.blogpost)
 	
 		if request.method == "POST":
 	
@@ -2117,7 +2150,8 @@ def view_cell_blog(request, matrix_id, cell_id):
 
 		comment_list = list()
 	
-		comment_list = get_a_post_comments_from_wordpress(request.user.username, cell.blogpost)
+		#comment_list = get_a_post_comments_from_wordpress(request.user.username, cell.blogpost)
+		comment_list = get_a_post_comments_from_wordpress(cell.blogpost)
 	
 		matrix_list = Matrix.objects.all
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)

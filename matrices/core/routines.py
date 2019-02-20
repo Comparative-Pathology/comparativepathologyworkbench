@@ -94,7 +94,7 @@ def get_a_post_from_wordpress(user_name, post_id):
 """
 	Create a Blog Post
 """
-def get_a_post_comments_from_wordpress(user_name, post_id):
+def get_a_post_comments_from_wordpress(post_id):
 
 	blogGetPostComments = Blog.objects.get(name='GetPostComments')
 
@@ -105,6 +105,8 @@ def get_a_post_comments_from_wordpress(user_name, post_id):
 	response = requests.get(get_post_comments_url)
 
 	data = response.json()
+
+	#print "data", data
 
 	comment_list = list()
 
@@ -139,6 +141,8 @@ def get_a_post_comments_from_wordpress(user_name, post_id):
 	
 	comment_list.reverse()
 	
+	#print "comment_list", comment_list
+
 	return comment_list
 
 
@@ -239,7 +243,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 	
 	images_url = commandWordpressImages.protocol.name + '://' + server.url + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + page_id + commandWordpressImages.postamble + str(credential.wordpress)
 
-	print images_url 
+	#print images_url 
 		
 	token = base64.standard_b64encode(credential.username + ':' + credential.apppwd)
 	headers = {'Authorization': 'Basic ' + token}
@@ -294,8 +298,8 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 			page_count = int(page_id) * 14
 			image_total = ( int(page_id) * 14 ) + image_count
 
-			print 'page_count', page_count
-			print 'image_total', image_total
+			#print 'page_count', page_count
+			#print 'image_total', image_total
 			
 			
 			if image_count < 14:
@@ -455,7 +459,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 				'thumbnail_url': image_thumbnail_url
 			})
 
-			print image
+			#print image
 
 			group = ''
 			project_list = []
@@ -1796,8 +1800,11 @@ def generateMatrix(matrix_id):
 		for j, column in enumerate(columns):
 			
 			matrix_cell = row_cells.filter(xcoordinate=j)[0]
+			
+			#print 'matrix_cell', matrix_cell
+			
 			matrix_cells[i][j] = matrix_cell
-
+			
 	return matrix_cells
 
 
@@ -1848,4 +1855,85 @@ def generateCells(matrix_id):
 
 	cells = Cell.objects.filter(matrix=matrix_id)
 
+	for cell in cells:
+		
+		comment_list = ()
+		
+		if cell.blogpost  != '':
+		
+			comments = get_a_post_comments_from_wordpress(cell.blogpost)
+			
+			#print 'Comments', comments
+
 	return cells
+
+
+"""
+	Get Cell Comments in Matrix
+"""
+def generateCellComments(matrix_id):
+
+	cells = Cell.objects.filter(matrix=matrix_id)
+
+	cell_comment_list = list()
+		
+	for cell in cells:
+		
+		comment_list = list()
+		
+		if cell.blogpost  != '':
+		
+			comment_list = get_a_post_comments_from_wordpress(cell.blogpost)
+		
+		else:
+			
+			comment_list = []
+			
+		cellComments = ({
+				'id': cell.id,
+				'matrix': cell.matrix, 
+				'title': cell.title, 
+				'description': cell.description, 
+				'xcoordinate': cell.xcoordinate, 
+				'ycoordinate': cell.ycoordinate, 
+				'blogpost': cell.blogpost,
+				'image': cell.image,
+				'comment_list': comment_list
+				})
+		
+		cell_comment_list.append(cellComments)
+	
+		#print 'cellComments', cellComments
+		
+	return cell_comment_list
+
+
+"""
+	Get Cell Comments in Matrix
+"""
+def generateMatrixComments(matrix_id):
+
+	matrix = Matrix.objects.get(id=matrix_id)
+
+	comment_list = list()
+		
+	if matrix.blogpost  != '':
+		
+		comment_list = get_a_post_comments_from_wordpress(matrix.blogpost)
+		
+	else:
+			
+		comment_list = []
+			
+	matrixComments = ({
+		'id': matrix.id,
+		'title': matrix.title, 
+		'description': matrix.description, 
+		'blogpost': matrix.blogpost,
+		'comment_list': comment_list
+	})
+		
+	#print 'matrixComments', matrixComments
+		
+	return matrixComments
+	

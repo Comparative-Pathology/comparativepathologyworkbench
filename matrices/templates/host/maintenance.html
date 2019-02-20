@@ -6,7 +6,7 @@
 
 {% block content %}
     
-	<ol class="breadcrumb">
+	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:home' %}">
@@ -37,39 +37,38 @@
 		{% if forloop.first %}
 	
     <table>
+
         <tr>
-            <th width="600px">Name</th>
-            <th width="250px">Owner</th>
+
+            <th width="150px">Action</th>
+            <th width="100px">Owner</th>
+            <th>Name</th>
             
-            <th>Action</th>
 		</tr>
+
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
 
 		{% endif %}
 	
         <tr>
-            <td>
-				{{ type.name }}
-            </td>
-            <td>
-            	{{ type.owner.username }}
-            </td>
 
 		{% if user.id == type.owner_id or user.is_superuser %}
             
             <td>
 				<a href="{% url 'matrices:detail_type' type.id %}">
-					<button class="save btn btn-primary">View</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
 				<a href="{% url 'matrices:edit_type' type.id %}">
-					<button class="save btn btn-warning">Edit</button>
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 				</a>
 				<a href="{% url 'matrices:delete_type' type.id %}" onclick="return confirm('Are you sure you want to DELETE this Type?')">
-					<button class="save btn btn-danger">DELETE!</button>
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 				</a>
             </td>
 
@@ -77,30 +76,38 @@
 	
             <td>
 				<a href="{% url 'matrices:detail_type' type.id %}">
-					<button class="save btn btn-primary">View</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
             </td>
 
 		{% endif %}
+
+            <td>
+            	{{ type.owner.username }}
+            </td>
+            <td>
+				{{ type.name }}
+            </td>
 
 		</tr>
 
 		{% if forloop.last %}
 	
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
+
         <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
 
 			{% if user.is_superuser %}
     
             <td>
 				<a href="{% url 'matrices:new_type' %}">
-					<button class="save btn btn-success">Add New Type</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -110,7 +117,11 @@
 
 			{% endif %}
 	
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
 		</tr>
+
 	</table>
 
 		{% endif %}
@@ -125,7 +136,7 @@
     
 	<p>
 		<a href="{% url 'matrices:new_type' %}">
-			<button class="save btn btn-success">Add New Type</button>
+			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 		</a>
 	</p>
 
@@ -150,39 +161,38 @@
 		{% if forloop.first %}
 	
     <table>
+
         <tr>
-            <th width="600px">Name</th>
-            <th width="250px">Owner</th>
-            
-            <th>Action</th>
+
+            <th width="150px">Action</th>
+            <th width="100px">Owner</th>
+            <th>Name</th>
+
 		</tr>
+
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
 
 		{% endif %}
 	
         <tr>
-            <td>
-				{{ protocol.name }}
-            </td>
-            <td>
-            	{{ protocol.owner.username }}
-            </td>
 
 		{% if user.id == protocol.owner_id or user.is_superuser %}
             
             <td>
 				<a href="{% url 'matrices:detail_protocol' protocol.id %}">
-					<button class="save btn btn-primary">View</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
 				<a href="{% url 'matrices:edit_protocol' protocol.id %}">
-					<button class="save btn btn-warning">Edit</button>
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 				</a>
 				<a href="{% url 'matrices:delete_protocol' protocol.id %}" onclick="return confirm('Are you sure you want to DELETE this PROTOCOL?')">
-					<button class="save btn btn-danger">DELETE!</button>
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 				</a>
             </td>
 
@@ -190,30 +200,39 @@
 	
             <td>
 				<a href="{% url 'matrices:detail_protocol' protocol.id %}">
-					<button class="save btn btn-primary">View</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
             </td>
 
 		{% endif %}
+
+            <td>
+            	{{ protocol.owner.username }}
+            </td>
+
+            <td>
+				{{ protocol.name }}
+            </td>
 
 		</tr>
 
 		{% if forloop.last %}
 	
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
+
         <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
 
 			{% if user.is_superuser %}
     
             <td>
 				<a href="{% url 'matrices:new_protocol' %}">
-					<button class="save btn btn-success">Add New Protocol</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -223,6 +242,9 @@
 
 			{% endif %}
 	
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
 		</tr>
 
     </table>
@@ -239,7 +261,7 @@
     
 	<p>
 		<a href="{% url 'matrices:new_protocol' %}">
-			<button class="save btn btn-success">Add New Protocol</button>
+			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 		</a>
 	</p>
 
@@ -264,18 +286,22 @@
 		{% if forloop.first %}
 	
     <table>
+
         <tr>
-            <th width="100px">Name</th>
-            <th width="100px">Type</th>
-            <th width="100px">Protocol</th>
-            <th width="100px">Application</th>
-            <th width="100px">Preamble</th>
-            <th width="100px">Postamble</th>
-            <th width="50px">Owner</th>
+
+            <th width="150px">Action</th>
+            <th width="100px">Owner</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Protocol</th>
+            <th>Application</th>
+            <th>Preamble</th>
+            <th>Postamble</th>
             
-            <th>Action</th>
 		</tr>
+
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -284,11 +310,40 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
 
 		{% endif %}
 	
         <tr>
+
+		{% if user.id == command.owner_id or user.is_superuser %}
+            
+            <td>
+				<a href="{% url 'matrices:detail_command' command.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+				<a href="{% url 'matrices:edit_command' command.id %}">
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+				</a>
+				<a href="{% url 'matrices:delete_command' command.id %}" onclick="return confirm('Are you sure you want to DELETE this COMMAND?')">
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:detail_command' command.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+            </td>
+
+		{% endif %}
+
+            <td>
+            	{{ command.owner.username }}
+            </td>
             <td>
 				{{ command.name }}
             </td>
@@ -307,39 +362,13 @@
             <td>
             	{{ command.postamble }}
             </td>
-            <td>
-            	{{ command.owner.username }}
-            </td>
-
-		{% if user.id == command.owner_id or user.is_superuser %}
-            
-            <td>
-				<a href="{% url 'matrices:detail_command' command.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-				<a href="{% url 'matrices:edit_command' command.id %}">
-					<button class="save btn btn-warning">Edit</button>
-				</a>
-				<a href="{% url 'matrices:delete_command' command.id %}" onclick="return confirm('Are you sure you want to DELETE this COMMAND?')">
-					<button class="save btn btn-danger">DELETE!</button>
-				</a>
-            </td>
-
-		{% else %}
-	
-            <td>
-				<a href="{% url 'matrices:detail_command' command.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-            </td>
-
-		{% endif %}
 
 		</tr>
 
 		{% if forloop.last %}
 	
         <tr>
+        
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -348,21 +377,16 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+		
 		</tr>
+		
         <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
 
 			{% if user.is_superuser %}
     
             <td>
 				<a href="{% url 'matrices:new_command' %}">
-					<button class="save btn btn-success">Add New Command</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -372,7 +396,16 @@
 
 			{% endif %}
 	
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
 		</tr>
+
     </table>
 
 		{% endif %}
@@ -387,7 +420,7 @@
     
 	<p>
 		<a href="{% url 'matrices:new_command' %}">
-			<button class="save btn btn-success">Add New Command</button>
+			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 		</a>
 	</p>
 
@@ -413,15 +446,14 @@
 	
     <table>
         <tr>
-            <th width="100px">Name</th>
-            <th width="100px">Protocol</th>
-            <th width="100px">URL</th>
-            <th width="100px">Application</th>
-            <th width="100px">Preamble</th>
-            <th width="100px">Postamble</th>
-            <th width="50px">Owner</th>
-            
-            <th>Action</th>
+            <th width="150px">Action</th>
+            <th width="100px">Owner</th>
+            <th>Name</th>
+            <th>Protocol</th>
+            <th>URL</th>
+            <th>Application</th>
+            <th>Preamble</th>
+            <th>Postamble</th>
 		</tr>
         <tr>
             <td>&nbsp;</td>
@@ -437,6 +469,34 @@
 		{% endif %}
 	
         <tr>
+
+		{% if user.id == blog.owner_id or user.is_superuser %}
+            
+            <td>
+				<a href="{% url 'matrices:detail_blog_command' blog.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+				<a href="{% url 'matrices:edit_blog_command' blog.id %}">
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+				</a>
+				<a href="{% url 'matrices:delete_blog_command' blog.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+				</a>
+            </td>
+
+		{% else %}
+	
+            <td>
+				<a href="{% url 'matrices:detail_blog_command' blog.id %}">
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+				</a>
+            </td>
+
+		{% endif %}
+
+            <td>
+            	{{ blog.owner.username }}
+            </td>
             <td>
 				{{ blog.name }}
             </td>
@@ -455,49 +515,14 @@
             <td>
             	{{ blog.postamble }}
             </td>
-            <td>
-            	{{ blog.owner.username }}
-            </td>
-
-		{% if user.id == blog.owner_id or user.is_superuser %}
-            
-            <td>
-				<a href="{% url 'matrices:detail_blog_command' blog.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-				<a href="{% url 'matrices:edit_blog_command' blog.id %}">
-					<button class="save btn btn-warning">Edit</button>
-				</a>
-				<a href="{% url 'matrices:delete_blog_command' blog.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
-					<button class="save btn btn-danger">DELETE!</button>
-				</a>
-            </td>
-
-		{% else %}
-	
-            <td>
-				<a href="{% url 'matrices:detail_blog_command' blog.id %}">
-					<button class="save btn btn-primary">View</button>
-				</a>
-            </td>
-
-		{% endif %}
 
 		</tr>
 
 		{% if forloop.last %}
 	
         <tr>
+
             <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
-        <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -506,11 +531,15 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
 
+		</tr>
+
+        <tr>
+
 			{% if user.is_superuser %}
     
             <td>
 				<a href="{% url 'matrices:new_blog_command' %}">
-					<button class="save btn btn-success">Add New Blog Command</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -520,7 +549,16 @@
 
 			{% endif %}
 	
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
 		</tr>
+
     </table>
 
 		{% endif %}
@@ -535,7 +573,7 @@
     
 	<p>
 		<a href="{% url 'matrices:new_blog_command' %}">
-			<button class="save btn btn-success">Add New Blog Command</button>
+			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 		</a>
 	</p>
 

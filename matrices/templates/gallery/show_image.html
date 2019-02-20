@@ -6,7 +6,7 @@
 
 {% block content %}
 
-	<ol class="breadcrumb">
+	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:home' %}">
@@ -65,7 +65,7 @@
     <p>{{ image.description }}</p>
 
 	<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
-		<button class="save btn btn-danger">Add Image to Image Collection</button>
+		<button class="save btn btn-success">Add Image to Image Collection</button>
 	</a>
 	
 
@@ -141,7 +141,7 @@
             <th>&nbsp;</th>
             <td>
 				<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')">
-					<button class="save btn btn-danger">Add ROI to Image Collection</button>
+					<button class="save btn btn-success">Add ROI to Image Collection</button>
 				</a>
             </td>
 		</tr>

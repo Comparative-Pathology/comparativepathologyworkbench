@@ -6,7 +6,7 @@
 
 {% block content %}
     
-	<ol class="breadcrumb">
+	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:home' %}">
@@ -36,15 +36,17 @@
 	
 		{% if forloop.first %}
 	
-    <table>
-        <tr>
-            <th width="150px">Name</th>
-            <th width="350px">URL</th>
-            <th width="100px">Type</th>
-            <th width="100px">Owner</th>
+    <table border="0">
 
-            <th>Action</th>
+        <tr>
+            <th width="200px">Action</th>
+            <th width="150px">Owner</th>
+            <th>Name</th>
+            <th>URL</th>
+            <th>Type</th>
+
 		</tr>
+
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -56,11 +58,7 @@
 		{% endif %}
 	
         <tr>
-            <td>{{ server.name }}</td>
-            <td>{{ server.url }}</td>
-            <td>{{ server.type.name }}</td>
-            <td>{{ server.owner.username }}</td>
-
+        
 		{% if credential_flag %}
 		
 			{% if user.id == server.owner.id or user.is_superuser %}
@@ -70,25 +68,25 @@
 				{% if server.type.name == 'WORDPRESS' %}
 	
 				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
-	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
 
 				{% else %}
 	
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
-	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
 
 				{% endif %}
 	
 				<a href="{% url 'matrices:detail_server' server.id %}">
-					<button class="save btn btn-primary">Details</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
 				<a href="{% url 'matrices:edit_server' server.id %}">
-					<button class="save btn btn-warning">Edit</button>
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 				</a>
 				<a href="{% url 'matrices:delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this SERVER?')">
-					<button class="save btn btn-danger">DELETE!</button>
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 				</a>
             </td>
 
@@ -99,19 +97,19 @@
 				{% if server.type.name == 'WORDPRESS' %}
 	
 				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
-	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
 
 				{% else %}
 	
 				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">	            	
-	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
 
 				{% endif %}
 	
 				<a href="{% url 'matrices:detail_server' server.id %}">
-					<button class="save btn btn-primary">Details</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
             </td>
 
@@ -123,8 +121,11 @@
 
 		{% endif %}
 
-            <td>
-            </td>
+            <td>{{ server.owner.username }}</td>
+            <td>{{ server.name }}</td>
+            <td>{{ server.url }}</td>
+            <td>{{ server.type.name }}</td>
+
 		</tr>
 
 		{% if forloop.last %}
@@ -136,17 +137,14 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
 		</tr>
+
         <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
 
 			{% if credential_flag %}
     
             <td>
 				<a href="{% url 'matrices:new_server' %}">
-					<button class="save btn btn-success">Add New Source</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -156,6 +154,11 @@
 
 			{% endif %}
 	
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+
 		</tr>
 
     </table>

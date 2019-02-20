@@ -6,7 +6,7 @@
 
 {% block content %}
 
-	<ol class="breadcrumb">
+	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item">
 			<a href="{% url 'matrices:home' %}">
@@ -38,11 +38,11 @@
 	
     <table>
         <tr>
+            <th width="200px">Action</th>
+            <th width="150px">Owner:</th>
             <th width="150px">Id:</th>
-            <th width="400px">Title:</th>
-            <th width="200px">Owner:</th>
+            <th>Title:</th>
             
-            <th>Action</th>
 		</tr>
         <tr>
             <td>&nbsp;</td>
@@ -54,9 +54,6 @@
 		{% endif %}
 	
         <tr>
-            <td>CPW:{{ matrix.id|stringformat:"06d" }}</td>
-            <td>{{ matrix.title }}</td>
-            <td>{{ matrix.owner.username }}</td>
 
 		{% if credential_flag %}
 		
@@ -64,16 +61,16 @@
             
             <td>
 				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
-	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
 				<a href="{% url 'matrices:detail_matrix' matrix.id %}">
-					<button class="save btn btn-primary">Details</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
 				<a href="{% url 'matrices:edit_matrix' matrix.id %}">
-					<button class="save btn btn-warning">Edit</button>
+					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 				</a>
 				<a href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
-					<button class="save btn btn-danger">DELETE!</button>
+					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 				</a>
             </td>
 
@@ -81,10 +78,10 @@
 	
             <td>
 				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
-	            	<button class="save btn btn-info">BROWSE &raquo;</button>
+	            	<button class="save btn btn-info"><i class="fa fa-eye"></button>
 				</a>
 				<a href="{% url 'matrices:detail_matrix' matrix.id %}">
-					<button class="save btn btn-primary">Details</button>
+					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 				</a>
             </td>
 
@@ -96,26 +93,30 @@
 
 		{% endif %}
 
+            <td>{{ matrix.owner.username }}</td>
+            <td>CPW:{{ matrix.id|stringformat:"06d" }}</td>
+            <td>{{ matrix.title }}</td>
+
 		</tr>
 
 		{% if forloop.last %}
 	
         <tr>
+
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+
 		</tr>
+
         <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
 
 			{% if credential_flag %}
     
             <td>
 				<a href="{% url 'matrices:new_matrix' %}">
-					<button class="save btn btn-success">Add New Workbench</button>
+					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 				</a>
             </td>
 
@@ -124,6 +125,10 @@
             <td>&nbsp;</td>
 
 			{% endif %}
+
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
 
 		</tr>
 
@@ -141,7 +146,7 @@
     
     <p>
 		<a href="{% url 'matrices:new_matrix' %}">
-			<button class="save btn btn-success">Add New Workbench</button>
+			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 		</a>
     </p>
 

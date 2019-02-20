@@ -102,7 +102,7 @@ class Cell(models.Model):
 	image = models.ForeignKey(Image, null=True, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return '%s %s %s %s %s %s %s' % (self.id, self.matrix, self.title, self.description, self.xcoordinate, self.ycoordinate, self.image)
+		return '%s %s %s %s %s %s %s %s' % (self.id, self.matrix, self.title, self.description, self.xcoordinate, self.ycoordinate, self.blogpost, self.image)
 
 
 class Blog(models.Model):

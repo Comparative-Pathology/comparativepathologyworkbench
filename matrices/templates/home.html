@@ -6,7 +6,7 @@
 
 {% block content %}
 
-	<ol class="breadcrumb">
+	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item active">
 			Home
@@ -22,95 +22,5 @@
 	<hr>
 
 	<br />
-
-	<div class="row">
-
-    	<div class="col-md-4">
-
-			<h5>Workbenches</h5>
-		
-			<p>Browse the list Workbenches</p>
-
-			<p>
-				<a href="{% url 'matrices:index' %}">
-					<button class="btn btn-info">View Workbench List &raquo;</button>
-				</a>
-			</p>
-
-	    </div>
-
-		<div class="col-md-4">
-
-			<h5>Sources</h5>
-		
-			<p>Browse the list of Sources</p>
-
-			<p>
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
-					<button class="save btn btn-info">View Source List &raquo;</button>
-				</a>
-			</p>
-
-		</div>
-
-		<div class="col-md-4">
-
-			<h5>Images</h5>
-		
-			<p>Browse Your list of Selected Images</p>
-
-			<p>
-				<a href="{% url 'matrices:list_image_cart' %}">
-					<button class="save btn btn-info">View Image Collection &raquo;</button>
-				</a>
-			</p>
-
-		</div>
-
-	</div>
-
-	<hr>
-
-{% if user.is_superuser %}
-	
-	<div class="row">
-
-    	<div class="col-md-4">
-
-			<h5>Maintenance</h5>
-		
-			<p>Maintenance functions</p>
-
-			<p>
-				<a href="{% url 'matrices:maintenance' %}">
-					<button class="save btn btn-info">Maintenance &raquo;</button>
-				</a>
-			</p>
-
-	    </div>
-
-		<div class="col-md-4">
-
-			<h5>Authorisation</h5>
-		
-			<p>Authorisation functions</p>
-
-			<p>
-				<a href="{% url 'matrices:authorisation' %}">
-					<button class="save btn btn-info">Authorisation &raquo;</button>
-				</a>
-			</p>
-
-		</div>
-
-		<div class="col-md-4">
-
-		</div>
-
-	</div>
-
-	<hr>
-
-{% endif %}
 
 {% endblock %}

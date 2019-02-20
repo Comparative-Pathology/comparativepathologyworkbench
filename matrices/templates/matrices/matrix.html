@@ -6,31 +6,37 @@
 
 {% block content %}
 
-	<ol id="sausage" class="breadcrumb">
+			<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
+		
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:index' %}">
+						Workbenches
+					</a>
+				</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:index' %}">
-				Workbenches
-			</a>
-		</li>
+				<li class="breadcrumb-item active">
+					CPW:{{ matrix.id|stringformat:"06d" }}
+				</li>
 	
-		<li class="breadcrumb-item active">
-			CPW:{{ matrix.id|stringformat:"06d" }}
-		</li>
-	
-	</ol>
+				<li class="breadcrumb-item">
+					<a href="#" class="btn-expand btn-link" data-toggle="collapse" data-target="#matrix_info" role="button">
+						<i class="fa fa-plus"></i>
+					</a>
+				</li>
+		
+			</ol>
 
-{% if rows %}
+	<div class="collapse subheading" id="matrix_info">
 
-	<div id="matrix_blind">
-
-		<dl class="row">
+		<div class="card bg-custom card-body">
+  
+			<dl class="row">
 
 			<dt class="col-sm-2">Id:</dt>
 			<dd class="col-sm-2">CPW:{{ matrix.id|stringformat:"06d" }}</dd>
@@ -48,12 +54,154 @@
 			<dd class="col-sm-2"></dd>
 
 			<dt class="col-sm-2">Description:</dt>
-			<dd class="col-sm-10">{{ matrix.description|truncatechars:125 }}</dd>
-		</dl>
+			<dd class="col-sm-10">{{ matrix.description|truncatechars:100 }}</dd>
+			</dl>
+
+		</div>
 
 	</div>
 	
+
+<!-- Modal -->
+<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ matrix_comments.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Workbench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+		<dl class="row">
+
+			<dt class="col-sm-2">Matrix Title</dt>
+			<dd class="col-sm-2">{{ matrix_comments.title }}</dd>
+
+			<dt class="col-sm-2">Description</dt>
+			<dd class="col-sm-2">{{ matrix_comments.description|truncatechars:20 }}</dd>
+
+		</dl>
+
+		{% if matrix_comments.comment_list %}
+		
+		<table>
+
+        	<tr>
+	            <th width="100px">Date</th>
+    	        <th width="100px">Time</th>
+        	    <th width="100px">Author</th>
+            	<th>Comment</th>
+			</tr>
+
+			{% for comment in matrix_comments.comment_list %}
+
+    	    <tr>
+            	<td>
+					{{ comment.date }} 
+				</td>
+    	        <td>
+					{{ comment.time }}
+				</td>
+    	        <td>
+				{{ comment.author_name }}
+				</td>
+	            <td>
+				{{ comment.content|safe|truncatechars:50 }}
+				</td>
+    	    </tr>
+			
+			{% endfor %}
+
+		</table>
+		
+		{% endif %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+					
 	
+{% if matrix_cells_comments %}
+
+	{% for cell in matrix_cells_comments %}
+
+<!-- Modal -->
+<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ cell.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for CELL: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+		<dl class="row">
+
+			<dt class="col-sm-2">Cell Title</dt>
+			<dd class="col-sm-2">{{ cell.title }}</dd>
+
+			<dt class="col-sm-2">Description</dt>
+			<dd class="col-sm-2">{{ cell.description|truncatechars:20 }}</dd>
+
+		</dl>
+
+		{% if cell.comment_list %}
+		
+		<table>
+
+        	<tr>
+	            <th width="100px">Date</th>
+    	        <th width="100px">Time</th>
+        	    <th width="100px">Author</th>
+            	<th>Comment</th>
+			</tr>
+
+			{% for comment in cell.comment_list %}
+
+    	    <tr>
+            	<td>
+					{{ comment.date }} 
+				</td>
+    	        <td>
+					{{ comment.time }}
+				</td>
+    	        <td>
+				{{ comment.author_name }}
+				</td>
+	            <td>
+				{{ comment.content|safe|truncatechars:20 }}
+				</td>
+    	    </tr>
+			
+			{% endfor %}
+
+		</table>
+		
+		{% endif %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+					
+	{% endfor %}
+
+{% endif %}
+
+
+{% if rows %}
+
 		<div class="table-responsive">
 	
 			<table id="myTable" class="test">
@@ -86,12 +234,24 @@
 											<i class="fa fa-eye"></i> View Workbench Details
 										</a>
 					
+					{% if user == owner %}
+					
+										<a class="dropdown-item" href="{% url 'matrices:edit_matrix' matrix.id %}">
+											<i class="fa fa-pencil-alt"></i> Edit Workbench Details
+										</a>
+
+					{% endif %}
+
 					{% if matrix_link != '' %}
 
 						{% if matrix.blogpost != '' %}
 
+										<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix.id }}">
+											<i class="fa fa-eye"></i> <em>View Workbench Commentary</em>
+										</a>
+
 										<a class="dropdown-item" href="{% url 'matrices:detail_matrix_blog' matrix.id %}">
-											<i class="fa fa-eye"></i> View Workbench Commentary
+											<i class="fa fa-edit"></i> Edit Workbench Commentary
 										</a>
 					
 						{% endif %}
@@ -100,12 +260,10 @@
 
 					{% if user == owner %}
 					
-										<a class="dropdown-item" href="{% url 'matrices:edit_matrix' matrix.id %}">
-											<i class="fa fa-pencil-alt"></i> Edit Workbench Details
-										</a>
+										<div class="dropdown-divider"></div>
 
 										<a class="dropdown-item" href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
-											<i class="fa fa-pencil-alt"></i> DELETE Workbench 
+											<i class="fa fa-trash-alt"></i> DELETE Workbench 
 										</a>
 
 										<a class="dropdown-item" href="{% url 'matrices:add_column' matrix.id %}">
@@ -159,6 +317,8 @@
 											<i class="fa fa-pencil-alt"></i> Edit Row Header
 										</a>
 
+										<div class="dropdown-divider"></div>
+
 										<a class="dropdown-item" href="{% url 'matrices:add_row_above' matrix.id forloop.parentloop.counter0	%}">
 											<i class="fa fa-angle-up"></i> Add Row Above
 										</a>
@@ -211,6 +371,8 @@
 											<i class="fa fa-pencil-alt"></i> Edit Column Header
 										</a>
 
+										<div class="dropdown-divider"></div>
+
 										<a class="dropdown-item" href="{% url 'matrices:add_column_left' matrix.id forloop.counter0	%}">
 											<i class="fa fa-angle-left"></i> Add Column Left
 										</a>
@@ -255,20 +417,6 @@
 											</a>
 										</li>								
 
-					{% if matrix_link != '' %}
-
-						{% if matrix_cell.blogpost != '' %}
-
-										<li>								
-											<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}">
-												<i class="fa fa-eye"></i> View Cell Commentary
-											</a>
-										</li>								
-					
-						{% endif %}
-		
-					{% endif %}
-
 					{% if user == owner %}
 
 										<li>								
@@ -277,6 +425,26 @@
 											</a>
 										</li>								
 
+					{% endif %}
+
+										<li>								
+											<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix_cell.id }}">
+												<i class="fa fa-eye"></i> <em>View Commentary</em>
+											</a>
+										</li>								
+
+					{% if matrix_link != '' %}
+
+						{% if matrix_cell.blogpost != '' %}
+
+										<li>								
+											<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}">
+												<i class="fa fa-edit"></i> Edit Commentary
+											</a>
+										</li>								
+					
+						{% endif %}
+		
 					{% endif %}
 
 									</ul> 
@@ -320,10 +488,10 @@
 										</a>
 									</p>
 							
-								</div> 
-
 					{% endif %}
 	
+								</div> 
+
 							</div> 
 							
 						</td>
@@ -344,7 +512,7 @@
 			</table>
 	
 		</div>
-
+		
 {% else %}
 
 		<h1>CPW:{{ matrix.id }}, "{{ matrix.title }}" has NO Cells</h1>

@@ -57,11 +57,20 @@ class HeaderForm(forms.ModelForm):
 		fields = ('title', 'description')
 
 		
+class NewMatrixForm(forms.ModelForm):
+	columns = forms.IntegerField(initial=1)
+	rows = forms.IntegerField(initial=1)
+
+	class Meta:
+		model = Matrix
+		fields = ('title', 'description', 'height', 'width' )
+
+
 class MatrixForm(forms.ModelForm):
 
 	class Meta:
 		model = Matrix
-		fields = ('title', 'description', )
+		fields = ('title', 'description', 'height', 'width' )
 
 
 class CommandForm(forms.ModelForm):

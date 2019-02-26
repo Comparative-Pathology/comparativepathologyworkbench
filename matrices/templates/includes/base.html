@@ -49,10 +49,6 @@
 
 		<div class="navbar-brand abs">
 		
-			<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-				<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=25px>
-			</a>
-
 			<a class="navbar-brand" href="{% url 'matrices:home' %}">
 				<strong>Comparative Pathology Workbench</strong>
 			</a>
@@ -79,7 +75,7 @@
 
 			{% if forloop.first %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:index' %}">List Workbenches</a>
+							<a class="dropdown-item" href="{% url 'matrices:index' %}">Benches</a>
 			
 			{% endif %}
 
@@ -121,7 +117,7 @@
 
 			{% if forloop.first %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">List Sources</a>
+							<a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">Sources</a>
 			
 			{% endif %}
 			
@@ -158,7 +154,7 @@
 	
 {% if image_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Images ({{ image_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
 	
 						<div class="dropdown-menu" aria-labelledby="dropdown07">
 					
@@ -203,6 +199,22 @@
 						</div>
 
 {% endif %}
+
+					</li>
+
+					<li class="nav-item dropdown">
+	
+						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+	
+						<div class="dropdown-menu" aria-labelledby="dropdown07">
+
+							<a class="dropdown-item" href="{% url 'matrices:about' %}">About</a>
+			
+							<a class="dropdown-item" href="{% url 'matrices:people' %}">People</a>
+
+							<a class="dropdown-item" href="{% url 'matrices:howto' %}">How To</a>
+
+						</div>
 
 					</li>
 

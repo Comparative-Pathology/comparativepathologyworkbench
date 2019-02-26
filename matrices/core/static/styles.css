@@ -125,37 +125,14 @@ textarea {
 	border-collapse: separate;
 }
 
-#matrix_blind {
-	padding: 10px;
-    width: 100%;
-    height: 110px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #e3f2fd;
-}
-
 .cell {
 	padding: 10px;
-	width: 215px;
-	height: 215px;
+	/*width: 215px;*/
+	/*height: 215px;*/
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
 	background-color: #CCFFCC;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
-	box-shadow:		 #B3B3B3 2px 2px 2px;
-}
-
-.header {
-	padding: 10px;
-	width: 200px;
-	height: 200px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-moz-border-radius:	5px 5px 5px 5px;
-	border-radius:		 5px 5px 5px 5px;
-	background-color: #808080;
 	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
 	box-shadow:		 #B3B3B3 2px 2px 2px;
@@ -176,8 +153,8 @@ textarea {
 
 .headrow {
 	padding: 10px;
-	width: 50px;
-	height: 215px;
+	/*width: 50px;*/
+	/*height: 215px;*/
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -189,8 +166,8 @@ textarea {
 
 .headcol {
 	padding: 10px;
-	width: 215px;
-	height: 50px;
+	/*width: 215px;*/
+	/*height: 50px;*/
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;

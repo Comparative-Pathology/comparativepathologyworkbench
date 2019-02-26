@@ -46,6 +46,12 @@
 			<dt>Description:</dt>
 			<dd>{{ matrix.description }}</dd>
 
+			<dt>Cell Height:</dt>
+			<dd>{{ matrix.height }}</dd>
+
+			<dt>Cell Width:</dt>
+			<dd>{{ matrix.width }}</dd>
+
 			<dt>Blog Post:</dt>
 			<dd>
 				<a class="btn btn-default" href="{{ matrix_link }}" role="button" target="_blank">
@@ -55,6 +61,12 @@
 			
 			<dt>Owner:</dt>
 			<dd>{{ owner.username }} ({{ owner.first_name }} {{ owner.last_name }})</dd>
+
+			<dt>Created:</dt>
+			<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+			
+			<dt>Last Modified:</dt>
+			<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
 		</dl>
 
 	<br />

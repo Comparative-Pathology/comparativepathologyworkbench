@@ -1,0 +1,36 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<ol class="breadcrumb subheading">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+		
+		<li class="breadcrumb-item active">
+			How To
+		</li>
+	
+	</ol>
+
+	<h1>How To</h1>
+	<br />
+
+	<p>How to use the Comparative Pathology Workbench</p>
+
+	<hr>
+
+	<h3>Instructions</h3>
+
+	<p>.... Some Instructions will appear here, to tell you HOW TO use the Workbench ... !</p>
+
+	<br />
+
+{% endblock %}

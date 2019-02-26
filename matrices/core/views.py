@@ -36,6 +36,7 @@ from matrices.core.forms import SignUpForm
 from matrices.core.tokens import account_activation_token
 
 from matrices.core.forms import MatrixForm
+from matrices.core.forms import NewMatrixForm
 from matrices.core.forms import CellForm
 from matrices.core.forms import HeaderForm
 from matrices.core.forms import CommandForm
@@ -110,6 +111,78 @@ def home(request):
 	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 	return render(request, 'home.html', data)
+
+
+#
+# ABOUT VIEW
+#
+def about(request):
+
+	if request.user.is_anonymous():
+
+		matrix_list = []
+		image_list = []
+		server_list = []
+	
+	else:
+	
+		current_user = request.user
+	
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+	return render(request, 'about.html', data)
+
+
+#
+# PEOPLE VIEW
+#
+def people(request):
+
+	if request.user.is_anonymous():
+
+		matrix_list = []
+		image_list = []
+		server_list = []
+	
+	else:
+	
+		current_user = request.user
+	
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+	return render(request, 'people.html', data)
+
+
+#
+# PEOPLE VIEW
+#
+def howto(request):
+
+	if request.user.is_anonymous():
+
+		matrix_list = []
+		image_list = []
+		server_list = []
+	
+	else:
+	
+		current_user = request.user
+	
+		matrix_list = Matrix.objects.all
+		image_list = Image.objects.filter(owner=current_user).filter(active=True)
+		server_list = Server.objects.all
+
+	data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+	return render(request, 'howto.html', data)
 
 
 #
@@ -1669,11 +1742,42 @@ def new_matrix(request):
 
 		if request.method == "POST":
 	
-			form = MatrixForm(request.POST)
+			form = NewMatrixForm(request.POST)
 		
 			if form.is_valid():
-		
+			
 				matrix = form.save(commit=False)
+
+				rows = form.cleaned_data['rows']
+				columns = form.cleaned_data['columns']
+				
+				if rows == 0:
+					rows = 1
+
+				if columns == 0:
+					columns = 1
+				
+				if rows > 10:
+					rows = 1
+
+				if columns > 10:
+					columns = 1
+				
+				if matrix.height < 75:
+					
+					matrix.height = 75
+
+				if matrix.width < 75:
+					
+					matrix.width = 75
+
+				if matrix.height > 450:
+					
+					matrix.height = 450
+
+				if matrix.width > 450:
+					
+					matrix.width = 450
 
 				credential = Credential.objects.get(username=request.user.username)
 	
@@ -1691,6 +1795,21 @@ def new_matrix(request):
 
 				matrix.save()
 
+				x = 0 
+				
+				while x <= columns:
+				
+					y = 0
+	
+					while y <= rows:
+
+						cell = Cell(matrix=matrix, title="", description="", xcoordinate=x, ycoordinate=y)
+						cell.save()
+						
+						y = y + 1
+					
+					x = x + 1
+
 				return HttpResponseRedirect(reverse('matrices:matrix', args=(matrix.id,)))				
 
 			else:
@@ -1701,7 +1820,7 @@ def new_matrix(request):
 			
 		else:
 	
-			form = MatrixForm()
+			form = NewMatrixForm()
 
 			data = { 'form': form, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
 
@@ -1838,6 +1957,22 @@ def edit_matrix(request, matrix_id):
 				if form.is_valid():
 			
 					matrix = form.save(commit=False)
+					
+					if matrix.height < 75:
+					
+						matrix.height = 75
+
+					if matrix.width < 75:
+					
+						matrix.width = 75
+
+					if matrix.height > 450:
+					
+						matrix.height = 450
+
+					if matrix.width > 450:
+					
+						matrix.width = 450
 
 					matrix.owner_id = current_user.id
 
@@ -1995,6 +2130,8 @@ def edit_cell(request, matrix_id, cell_id):
 			
 						cell.save()
 
+						matrix.save()
+
 					else:
 			
 						messages.error(request, "Error")
@@ -2049,6 +2186,8 @@ def edit_cell(request, matrix_id, cell_id):
 							cell.blogpost = post_id
 
 						cell.save()
+
+						matrix.save()
 
 					else:
 			
@@ -2218,6 +2357,8 @@ def add_cell(request, matrix_id):
 				cell3.save()
 				cell4 = Cell(matrix=matrix, title="", description="", xcoordinate=1, ycoordinate=1)
 				cell4.save()
+				
+				matrix.save()
 
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
@@ -2265,6 +2406,8 @@ def add_column(request, matrix_id):
 
 				cell = Cell(matrix=matrix, title="", description="", xcoordinate=nextColumn, ycoordinate=i)
 				cell.save()
+
+			matrix.save()
 
 
 			matrix_list = Matrix.objects.all
@@ -2318,6 +2461,8 @@ def add_column_left(request, matrix_id, column_id):
 
 				cell = Cell(matrix=matrix, title="", description="", xcoordinate=column_id, ycoordinate=i)
 				cell.save()
+
+			matrix.save()
 
 
 			matrix_list = Matrix.objects.all
@@ -2374,6 +2519,9 @@ def add_column_right(request, matrix_id, column_id):
 				cell = Cell(matrix=matrix, title="", description="", xcoordinate=new_column_id, ycoordinate=i)
 				cell.save()
 
+			matrix.save()
+
+
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
@@ -2420,6 +2568,9 @@ def add_row(request, matrix_id):
 
 				cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=nextRow)
 				cell.save()
+
+			matrix.save()
+
 
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
@@ -2472,6 +2623,9 @@ def add_row_above(request, matrix_id, row_id):
 
 				cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=row_id)
 				cell.save()
+
+			matrix.save()
+
 
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
@@ -2526,6 +2680,9 @@ def add_row_below(request, matrix_id, row_id):
 
 				cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=new_row_id)
 				cell.save()
+
+			matrix.save()
+
 
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
@@ -2592,6 +2749,9 @@ def delete_column(request, matrix_id):
 							response = delete_a_post_from_wordpress(request.user.username, oldCell.blogpost)
 
 			Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
+
+			matrix.save()
+
 
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
@@ -2665,6 +2825,9 @@ def delete_this_column(request, matrix_id, column_id):
 				moveCell.xcoordinate -= 1
 				moveCell.save()
 			
+			matrix.save()
+
+
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
@@ -2731,6 +2894,9 @@ def delete_row(request, matrix_id):
 
 			Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
 
+			matrix.save()
+
+
 			matrix_list = Matrix.objects.all
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
@@ -2796,6 +2962,9 @@ def delete_this_row(request, matrix_id, row_id):
 
 			Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
 	
+			matrix.save()
+
+
 			moveCells = Cell.objects.filter(matrix=matrix_id, ycoordinate__gt=deleteRow)
 
 			for moveCell in moveCells:

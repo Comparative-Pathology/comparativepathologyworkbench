@@ -38,25 +38,31 @@
   
 			<dl class="row">
 
-			<dt class="col-sm-2">Id:</dt>
-			<dd class="col-sm-2">CPW:{{ matrix.id|stringformat:"06d" }}</dd>
+				<dt class="col-sm-2">Id:</dt>
+				<dd class="col-sm-2">CPW:{{ matrix.id|stringformat:"06d" }}</dd>
 
-			<dt class="col-sm-2">Title:</dt>
-			<dd class="col-sm-6">{{ matrix.title }}</dd>
+				<dt class="col-sm-2">Title:</dt>
+				<dd class="col-sm-6">{{ matrix.title }}</dd>
 
-			<dt class="col-sm-2">Owner:</dt>
-			<dd class="col-sm-2">{{ owner.username }}</dd>
+				<dt class="col-sm-2">Owner:</dt>
+				<dd class="col-sm-2">{{ owner.username }}</dd>
 			
-			<dt class="col-sm-2">Created:</dt>
-			<dd class="col-sm-2"></dd>
+				<dt class="col-sm-2">Cell Height:</dt>
+				<dd class="col-sm-2">{{ matrix.height }}</dd>
 			
-			<dt class="col-sm-2">Last Modified:</dt>
-			<dd class="col-sm-2"></dd>
+				<dt class="col-sm-2">Cell Width:</dt>
+				<dd class="col-sm-2">{{ matrix.width }}</dd>
+	
+				<dt class="col-sm-2">Description:</dt>
+				<dd class="col-sm-10">{{ matrix.description|truncatechars:100 }}</dd>
 
-			<dt class="col-sm-2">Description:</dt>
-			<dd class="col-sm-10">{{ matrix.description|truncatechars:100 }}</dd>
+				<dt class="col-sm-2">Created:</dt>
+				<dd class="col-sm-2">{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+			
+				<dt class="col-sm-2">Last Modified:</dt>
+				<dd class="col-sm-6">{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
+
 			</dl>
-
 		</div>
 
 	</div>
@@ -297,7 +303,7 @@
 					
 						<td id="{{ matrix_cell.id }}">
 				
-							<div class="headrow">
+							<div style="height:{{ matrix.height }}px;" class="headrow">
 			
 								<div class="dropdown">
 
@@ -349,7 +355,7 @@
 
 						<td id="{{ matrix_cell.id }}">
 				
-							<div class="headcol" align="right">
+							<div style="width:{{ matrix.width }}px;" class="headcol" align="right">
 
 								<div class="dropdown">
 
@@ -401,7 +407,7 @@
 
 						<td id="{{ matrix_cell.id }}">
 				
-							<div class="cell" align="right">
+							<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
 
 								<div class="dropdown">
 
@@ -451,7 +457,7 @@
 
 								</div>
 
-								<div style="width:175px; height:175px;" align="left">
+								<div align="left">
 
 					{% if matrix_cell.image %}
 	
@@ -459,7 +465,7 @@
 						
 									<p>	
 										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-											<img src="{{ matrix_cell.image.birdseye_url }}" >
+											<img style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
 										</a>
 									</p>
 
@@ -467,24 +473,17 @@
 	
 									<p>	
 										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-											<img style="width:175px;" src="{{ matrix_cell.image.birdseye_url }}" >
+											<img style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
 										</a>
 									</p>
 
-									<!-- X: {{ matrix_cell.xcoordinate }}<br /> -->
-									<!-- Y: {{ matrix_cell.ycoordinate }}<br /> -->
-									<!-- {{ matrix_cell.id }}<br /> -->
-									<!-- <em>{{ matrix_cell.title }}</em><br /> -->
-									<!-- {{ matrix_cell.image.title }}<br /> -->
-									<!-- {{ matrix_cell.image }} -->
 						{% endif %}
 	
 					{% else %}
 
 									<p class="text-left">
 										<a href="#">
-											<img style="width:170px; height:110px;" src="/static/ccp-logo.png">
-											<!-- <img style="width:170px; height:110px;" src="/static/ccp-logo.png"> -->
+											<img style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="/static/ccp-logo.png">
 										</a>
 									</p>
 							

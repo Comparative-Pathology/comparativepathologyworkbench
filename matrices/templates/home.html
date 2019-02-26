@@ -14,13 +14,194 @@
 	
 	</ol>
 
-	<h1>Home</h1>
-	<br />
-
-	<p>The Home Page</p>
-
-	<hr>
 
 	<br />
+
+<div class="row">
+
+	<div class="col-md-4">
+
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Workbench for Atlas Data
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">About</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+
+				<p>Learn more about the Project</p>
+		
+				<br />
+
+				<a href="{% url 'matrices:about' %}">
+					<button class="save btn btn-info">About &raquo;</button>
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="col-md-4">
+    	
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Workbench for Atlas Data
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Contributors</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+
+				<p>Learn more about the Project Contributors</p>
+
+				<br />
+
+				<a href="{% url 'matrices:people' %}">
+					<button class="save btn btn-info">Contributors &raquo;</button>
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+	    
+	<div class="col-md-4">
+    	
+		<div class="card text-center">
+
+			<div class="card-header">
+				The Centre for Comparative Pathology
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Centre for Comparative Pathology</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Learn more about the Centre for Comparative Pathology</p>
+	
+				<a href="https://www.ed.ac.uk/comparative-pathology">
+					<button class="save btn btn-info">About &raquo;</button>
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+	    
+</div>
+
+<br />
+
+<div class="row">
+
+	<div class="col-md-4">
+    	
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">How To</h5>
+			
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Learn more about how to use the Workbench</p>
+
+				<a href="{% url 'matrices:howto' %}">
+					<button class="save btn btn-info">How To &raquo;</button>
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+	    
+	<div class="col-md-4">
+    	
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Browse</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Browse all active Benches in the Workbench</p>
+
+				<a href="{% url 'matrices:index' %}">
+					<button class="save btn btn-info">Benches &raquo;</button>
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+	    
+	<div class="col-md-4">
+
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Registration</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Register to use the Workbench</p>
+		
+				<br />
+
+				<a href="{% url 'signup' %}">
+					<button class="save btn btn-danger">Register &raquo;</button>
+				</a>
+	
+			</div>
+
+		</div>
+
+	</div>
+	    
+</div>
+
+<br />
+
 
 {% endblock %}

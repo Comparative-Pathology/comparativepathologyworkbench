@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -12,6 +13,10 @@ class Matrix(models.Model):
 	title = models.CharField(max_length=255, default='')
 	description = models.TextField(max_length=4095, default='')
 	blogpost = models.CharField(max_length=50, blank=True, default='')
+	created = models.DateTimeField(auto_now_add=True)
+	modified = models.DateTimeField(auto_now=True)
+	height = models.IntegerField(default=75, blank=False)
+	width = models.IntegerField(default=75, blank=False)
 	owner = models.ForeignKey(User)
 	
 	def __str__(self):

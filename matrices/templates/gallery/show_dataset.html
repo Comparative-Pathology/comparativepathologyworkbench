@@ -74,7 +74,7 @@
     {% for image in images %}
 
 		<a href="{% url 'matrices:webgallery_show_image' server.id image.id %}">
-			<img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
+			<img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
 		</a>
 
     {% endfor %}

@@ -12,6 +12,8 @@ urlpatterns = [
 
 	url(r'^$', views.index_matrix, name='index'),
 
+	url(r'^list_matrix/$', views.list_matrix, name='list_matrix'),
+
 	url(r'^list_imaging_hosts/$', views.list_imaging_hosts, name='list_imaging_hosts'),
 	url(r'^maintenance/$', views.maintenance, name='maintenance'),
 	url(r'^authorisation/$', views.authorisation, name='authorisation'),
@@ -65,8 +67,6 @@ urlpatterns = [
 	url(r'^new_type/$', views.new_type, name='new_type'),
 	url(r'^edit_type/(?P<type_id>[0-9]+)/$', views.edit_type, name='edit_type'),
 	url(r'^delete_type/(?P<type_id>[0-9]+)/$', views.delete_type, name='delete_type'),
-
-	url(r'^list_matrix/$', views.list_matrix, name='list_matrix'),
 
 	url(r'^(?P<matrix_id>[0-9]+)/detail_matrix_blog/$', views.view_matrix_blog, name='detail_matrix_blog'), 
 	url(r'^(?P<matrix_id>[0-9]+)/view_cell_blog/(?P<cell_id>[0-9]+)/$', views.view_cell_blog, name='view_cell_blog'),

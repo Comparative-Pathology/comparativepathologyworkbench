@@ -55,7 +55,7 @@
 		{% if project.randomImageName != 'NONE'  %}
 		
 				<a href="{% url 'matrices:webgallery_show_image' server.id project.randomImageID %}">
-					<img class="img-thumbnail" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/>
+					<img class="img-thumbnail" alt="{{ project.randomImageName }}" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/>
 				</a>
 
 		{% endif %}

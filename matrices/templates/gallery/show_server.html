@@ -52,7 +52,7 @@
 		
 		
 				<a href="{% url 'matrices:webgallery_show_image' server.id group.randomImageID %}">
-					<img class="img-thumbnail" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/>
+					<img class="img-thumbnail" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/>
 				</a>
 
 		{% endif %}

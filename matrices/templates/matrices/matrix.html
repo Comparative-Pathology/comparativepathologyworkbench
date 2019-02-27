@@ -70,7 +70,7 @@
 
 <!-- Modal -->
 <div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ matrix_comments.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Workbench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
@@ -139,7 +139,7 @@
 
 <!-- Modal -->
 <div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ cell.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Commentary for CELL: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
@@ -158,6 +158,16 @@
 			<dd class="col-sm-2">{{ cell.description|truncatechars:20 }}</dd>
 
 		</dl>
+		
+		{% if cell.viewer_url != '' %}
+
+		<p>	
+			<a href="{{ cell.viewer_url }}" target="_blank">
+				<img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width:450px; height:450px;" src="{{ cell.birdseye_url }}" >
+			</a>
+		</p>
+
+		{% endif %}
 
 		{% if cell.comment_list %}
 		
@@ -183,7 +193,7 @@
 				{{ comment.author_name }}
 				</td>
 	            <td>
-				{{ comment.content|safe|truncatechars:20 }}
+				{{ comment.content|safe|truncatechars:50 }}
 				</td>
     	    </tr>
 			
@@ -228,13 +238,15 @@
 				
 							<div class="master">
 				
-								<div class="dropdown">
+								<div class="dropdown dropright">
 			
-									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fa fa-bars"></i>
-									</button>
-		
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+									<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
+										<span class="sr-only">Toggle Dropright</span>
+									</a>
+
+
+  									<div class="dropdown-menu" aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
 
 										<a class="dropdown-item" href="{% url 'matrices:detail_matrix' matrix.id %}">
 											<i class="fa fa-eye"></i> View Workbench Details
@@ -256,7 +268,7 @@
 											<i class="fa fa-eye"></i> <em>View Workbench Commentary</em>
 										</a>
 
-										<a class="dropdown-item" href="{% url 'matrices:detail_matrix_blog' matrix.id %}">
+										<a class="dropdown-item" href="{% url 'matrices:detail_matrix_blog' matrix.id %}" target="_blank">
 											<i class="fa fa-edit"></i> Edit Workbench Commentary
 										</a>
 					
@@ -300,103 +312,132 @@
 				{% endif %}
 
 				{% if matrix_cell.xcoordinate == 0 and matrix_cell.ycoordinate != 0 %}
-					
+
 						<td id="{{ matrix_cell.id }}">
 				
 							<div style="height:{{ matrix.height }}px;" class="headrow">
-			
-								<div class="dropdown">
 
-									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fa fa-bars"></i>
-									</button>
-		
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<table border="0">
 
-										<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
-											<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-										</a>
+									<tr>
+
+										<td>
+
+											<div class="dropdown dropright">
+
+												<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
+													<span class="sr-only">Toggle Dropright</span>
+												</a>
+
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+													<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+														<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+													</a>
 								
 					{% if user == owner %}
 
-										<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
-											<i class="fa fa-pencil-alt"></i> Edit Row Header
-										</a>
+													<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+														<i class="fa fa-pencil-alt"></i> Edit Row Header
+													</a>
 
-										<div class="dropdown-divider"></div>
+													<div class="dropdown-divider"></div>
 
-										<a class="dropdown-item" href="{% url 'matrices:add_row_above' matrix.id forloop.parentloop.counter0	%}">
-											<i class="fa fa-angle-up"></i> Add Row Above
-										</a>
+													<a class="dropdown-item" href="{% url 'matrices:add_row_above' matrix.id forloop.parentloop.counter0	%}">
+														<i class="fa fa-angle-up"></i> Add Row Above
+													</a>
 
-										<a class="dropdown-item" href="{% url 'matrices:delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')">
-											<i class="fa fa-trash-alt"></i> Delete This Row
-										</a>
+													<a class="dropdown-item" href="{% url 'matrices:delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')">
+														<i class="fa fa-trash-alt"></i> Delete This Row
+													</a>
 
-										<a class="dropdown-item" href="{% url 'matrices:add_row_below' matrix.id forloop.parentloop.counter0 %}">
-											<i class="fa fa-angle-down"></i> Add Row Below
-										</a>
+													<a class="dropdown-item" href="{% url 'matrices:add_row_below' matrix.id forloop.parentloop.counter0 %}">
+														<i class="fa fa-angle-down"></i> Add Row Below
+													</a>
 
 					{% endif %}
 
-									</div>
+												</div>
 							
-								</div>
-		
-								<em>{{ matrix_cell.title|truncatechars:5 }}</em>
-						
+											</div>
+
+										</td>
+
+									</tr>
+
+									<tr>
+
+										<td align="center" height={{ matrix.height|add:"-40" }}px><p class="vertical_text">{{ matrix_cell.title|truncatechars:20 }}</p>
+										</td>
+
+									</tr>
+
+								</table>
+				
 							</div>
 
 						</td>
 
 				{% endif %}
-
+				
 				{% if matrix_cell.xcoordinate != 0 and matrix_cell.ycoordinate == 0 %}
 
 						<td id="{{ matrix_cell.id }}">
 				
-							<div style="width:{{ matrix.width }}px;" class="headcol" align="right">
+							<div style="width:{{ matrix.width }}px;" class="headcol">
 
-								<div class="dropdown">
+								<table border="0">
 
-									<em>{{ matrix_cell.title|truncatechars:20 }}</em>
+									<tr>
 
-									<button class="btn btn-secondary btn-danger btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fa fa-bars"></i>
-									</button>
-		
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<td align="center" width={{ matrix.width|add:"-40" }}px><em>{{ matrix_cell.title|truncatechars:20 }}</em>
+										</td>
 
-										<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
-											<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-										</a>
+									<td>
+
+										<div class="dropdown dropright">
+											<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
+												<span class="sr-only">Toggle Dropright</span>
+											</a>
+									
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+												<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+												</a>
 
 					{% if user == owner %}
 
-										<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
-											<i class="fa fa-pencil-alt"></i> Edit Column Header
-										</a>
+												<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+													<i class="fa fa-pencil-alt"></i> Edit Column Header
+												</a>
 
-										<div class="dropdown-divider"></div>
+												<div class="dropdown-divider"></div>
 
-										<a class="dropdown-item" href="{% url 'matrices:add_column_left' matrix.id forloop.counter0	%}">
-											<i class="fa fa-angle-left"></i> Add Column Left
-										</a>
+												<a class="dropdown-item" href="{% url 'matrices:add_column_left' matrix.id forloop.counter0	%}">
+													<i class="fa fa-angle-left"></i> Add Column Left
+												</a>
 
-										<a class="dropdown-item" href="{% url 'matrices:delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')">
-											<i class="fa fa-trash-alt"></i> Delete This Column
-										</a>
-
-										<a class="dropdown-item" href="{% url 'matrices:add_column_right' matrix.id forloop.counter0 %}">
-											<i class="fa fa-angle-right"></i> Add Column Right
-										</a>
+												<a class="dropdown-item" href="{% url 'matrices:delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')">
+													<i class="fa fa-trash-alt"></i> Delete This Column
+												</a>
+	
+												<a class="dropdown-item" href="{% url 'matrices:add_column_right' matrix.id forloop.counter0 %}">
+													<i class="fa fa-angle-right"></i> Add Column Right
+												</a>
 
 					{% endif %}
 
-									</div>
+											</div>
 						
-								</div>
+										</div>
+			
+									</td>
 
+									</tr>
+
+								</table>
+				
 							</div>
 
 						</td>
@@ -409,10 +450,10 @@
 				
 							<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
 
-								<div class="dropdown">
+								<div class="dropdown dropright">
 
-									<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle">
-										<b class="caret"></b>
+									<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
+										<span class="sr-only">Toggle Dropright</span>
 									</a>
 								
 							        <ul class="dropdown-menu">
@@ -444,7 +485,7 @@
 						{% if matrix_cell.blogpost != '' %}
 
 										<li>								
-											<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}">
+											<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}" target="_blank">
 												<i class="fa fa-edit"></i> Edit Commentary
 											</a>
 										</li>								
@@ -465,7 +506,7 @@
 						
 									<p>	
 										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-											<img style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
+											<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
 										</a>
 									</p>
 
@@ -473,7 +514,7 @@
 	
 									<p>	
 										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-											<img style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
+											<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
 										</a>
 									</p>
 
@@ -483,7 +524,7 @@
 
 									<p class="text-left">
 										<a href="#">
-											<img style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="/static/ccp-logo.png">
+											<img alt="Comparative Pathology Workbench Logo" title="Comparative Pathology Workbench Logo" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="/static/ccp-logo.png">
 										</a>
 									</p>
 							

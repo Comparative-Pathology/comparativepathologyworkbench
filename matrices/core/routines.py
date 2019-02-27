@@ -1879,6 +1879,8 @@ def generateCellComments(matrix_id):
 		
 	for cell in cells:
 		
+		#print 'cell.image', cell.image
+
 		comment_list = list()
 		
 		if cell.blogpost  != '':
@@ -1888,6 +1890,17 @@ def generateCellComments(matrix_id):
 		else:
 			
 			comment_list = []
+
+		viewer_url = ''
+		birdseye_url = ''
+		image_name = ''
+		
+		if cell.image != None:
+		
+			viewer_url = cell.image.viewer_url
+			birdseye_url = cell.image.birdseye_url
+			image_name = cell.image.name
+		
 			
 		cellComments = ({
 				'id': cell.id,
@@ -1898,6 +1911,9 @@ def generateCellComments(matrix_id):
 				'ycoordinate': cell.ycoordinate, 
 				'blogpost': cell.blogpost,
 				'image': cell.image,
+				'viewer_url': viewer_url,
+				'birdseye_url': birdseye_url,
+				'image_name': image_name,
 				'comment_list': comment_list
 				})
 		

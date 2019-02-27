@@ -62,43 +62,46 @@
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 	
 				<ul class="navbar-nav mr-auto">
-	
+
+
 					<li class="nav-item dropdown">
 	
 {% if matrix_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workbenches ({{ matrix_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches ({{ matrix_list.count }})</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
+							<li><a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">All Benches</a></li>
+
+			                <li class="dropdown-submenu">
+
+			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#" data-toggle="dropdown">My Benches</a>
+
+			                    <ul class="dropdown-menu">	
+
+									<li><a class="dropdown-item" href="{% url 'matrices:index' %}">My Benches</a></li>
+		
 		{% for matrix in matrix_list %}
 
-			{% if forloop.first %}
-		
-							<a class="dropdown-item" href="{% url 'matrices:index' %}">Benches</a>
-			
-			{% endif %}
-
-							<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
+									<li><a class="dropdown-item" href="{% url 'matrices:matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a></li>
 	
-			{% if forloop.last %}
-		
-							<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Workbench</a>
-			
-			{% endif %}
-			
 		{% endfor %}
 
-						</div>
+								</ul>
+
+							<li><a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a></li>
+
+						</ul>
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workbenches</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Benches</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
-							<a class="dropdown-item" href="#">No Workbenches are available!</a>
+							<li><a class="dropdown-item" href="#">No Benches are available!</a></li>
 
-						</div>
+						</ul>
 
 {% endif %}
 
@@ -108,43 +111,43 @@
 	
 {% if server_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources ({{ server_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources ({{ server_list.count }})</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
 
 		{% for server in server_list %}
 
 			{% if forloop.first %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">Sources</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">Sources</a></li>
 			
 			{% endif %}
 			
 			{% if server.type.name == 'WORDPRESS' %}
 	
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a></li>
 
 			{% else %}
 	
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
 
 			{% endif %}
 
 	
 		{% endfor %}
 
-						</div>
+						</ul>
 
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Servers</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Servers</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
-							<a class="dropdown-item" href="#">No Sources are available!</a>
+							<li><a class="dropdown-item" href="#">No Sources are available!</a>
 
-						</div>
+						</ul>
 
 {% endif %}
 
@@ -154,16 +157,16 @@
 	
 {% if image_list %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
 
 		{% for image in image_list %}
 
 			{% if forloop.first %}
 		
-							<a class="dropdown-item" href="{% url 'matrices:list_image_cart' %}">List Your Image Collection</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:list_image_cart' %}">List Your Image Collection</a></li>
 			
 			{% endif %}
 
@@ -171,32 +174,32 @@
 			
 				{% if image.server.type.name == 'WORDPRESS' %}
 
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
 
 				{% else %}
 	
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
 	
 				{% endif %}
 	
 		{% else %}
 
-							<a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a></li>
 	
 			{% endif %}
 
 		{% endfor %}
 
-						</div>
+						</ul>
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Images</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Images</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
-							<a class="dropdown-item" href="#">No Images are available!</a>
+							<li><a class="dropdown-item" href="#">No Images are available!</a></li>
 
-						</div>
+						</ul>
 
 {% endif %}
 
@@ -204,17 +207,17 @@
 
 					<li class="nav-item dropdown">
 	
-						<a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
 	
-						<div class="dropdown-menu" aria-labelledby="dropdown07">
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 
-							<a class="dropdown-item" href="{% url 'matrices:about' %}">About</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:about' %}">About</a></li>
 			
-							<a class="dropdown-item" href="{% url 'matrices:people' %}">People</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:people' %}">People</a></li>
 
-							<a class="dropdown-item" href="{% url 'matrices:howto' %}">How To</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:howto' %}">How To</a></li>
 
-						</div>
+						</ul>
 
 					</li>
 
@@ -226,31 +229,31 @@
 
 					<li class="nav-item dropdown">
 			            
-			            <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			            	{{ user.username }}
 			            </a>
             			
-            			<div class="dropdown-menu" aria-labelledby="dropdown01">
+            			<ul class="dropdown-menu" aria-labelledby="dropdown01">
 
-							<a class="dropdown-item" href="{% url 'matrices:detail_user_general' user.id %}">
+							<li><a class="dropdown-item" href="{% url 'matrices:detail_user_general' user.id %}">
 			                    My account
 		                    </a>
         		
-        		            <a class="dropdown-item" href="{% url 'password_reset' %}">Reset password</a>
+        		            <li><a class="dropdown-item" href="{% url 'password_reset' %}">Reset password</a></li>
 				
-        		            <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+        		            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
 				
-							<a class="dropdown-item" href="{% url 'logout' %}">Logout</a> 
+							<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
 
 	{% if user.is_superuser %}
 
-							<a class="dropdown-item" href="{% url 'matrices:maintenance' %}">Maintenance</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:maintenance' %}">Maintenance</a></li>
 
-							<a class="dropdown-item" href="{% url 'matrices:authorisation' %}">Authorisation</a>
+							<li><a class="dropdown-item" href="{% url 'matrices:authorisation' %}">Authorisation</a></li>
 
 	{% endif %}
 
-            			</div>
+						</ul>
 
             		</li>
             		
@@ -258,17 +261,17 @@
 
 					<li class="nav-item dropdown">
 			            
-			            <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			            	User
 			            </a>
             			
-            			<div class="dropdown-menu" aria-labelledby="dropdown01">
+            			<ul class="dropdown-menu" aria-labelledby="dropdown01">
 
-							<a class="dropdown-item" href="{% url 'login' %}">Login</a> 
+							<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
 
-							<a class="dropdown-item" href="{% url 'signup' %}">Register</a>
+							<li><a class="dropdown-item" href="{% url 'signup' %}">Register</a></li>
 
-            			</div>
+						</ul>
 
             		</li>
             		
@@ -398,6 +401,40 @@ $(document).ready(function(){
 	});
 
 });
+
+
+/*!
+ * Bootstrap 4 multi dropdown navbar ( https://bootstrapthemes.co/demo/resource/bootstrap-4-multi-dropdown-navbar/ )
+ * Copyright 2017.
+ * Licensed under the GPL license
+ */
+
+
+$( document ).ready( function () {
+    $( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
+        var $el = $( this );
+        $el.toggleClass('active-dropdown');
+        var $parent = $( this ).offsetParent( ".dropdown-menu" );
+        if ( !$( this ).next().hasClass( 'show' ) ) {
+            $( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
+        }
+        var $subMenu = $( this ).next( ".dropdown-menu" );
+        $subMenu.toggleClass( 'show' );
+        
+        $( this ).parent( "li" ).toggleClass( 'show' );
+
+        $( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
+            $( '.dropdown-menu .show' ).removeClass( "show" );
+            $el.removeClass('active-dropdown');
+        } );
+        
+         if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
+            $el.next().css( { "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 } );
+        }
+
+        return false;
+    } );
+} );
 
 </script>
 		

@@ -127,8 +127,6 @@ textarea {
 
 .cell {
 	padding: 10px;
-	/*width: 215px;*/
-	/*height: 215px;*/
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -140,8 +138,6 @@ textarea {
 
 .master {
 	padding: 10px;
-	width: 50px;
-	height: 50px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -153,8 +149,6 @@ textarea {
 
 .headrow {
 	padding: 10px;
-	/*width: 50px;*/
-	/*height: 215px;*/
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -166,8 +160,6 @@ textarea {
 
 .headcol {
 	padding: 10px;
-	/*width: 215px;*/
-	/*height: 50px;*/
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -181,3 +173,12 @@ textarea {
 	position: absolute;
 }
 
+.vertical_text{
+    width:1px;
+    word-wrap: break-word;
+    font-style: italic;
+}
+
+.dropdown-toggle.active-dropdown::after {
+    transform: rotate(-90deg);
+}

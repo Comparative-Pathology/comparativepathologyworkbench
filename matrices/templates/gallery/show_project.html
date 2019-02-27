@@ -58,7 +58,7 @@
 
 		    <p class="pull-left">
 				<a href="{% url 'matrices:webgallery_show_image' server.id dataset.randomImageID %}">
-					<img class="img-thumbnail" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/>
+					<img class="img-thumbnail" alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/>
 				</a>
 			</p>
 

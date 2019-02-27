@@ -104,7 +104,7 @@ def home(request):
 	
 		current_user = request.user
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -128,7 +128,7 @@ def about(request):
 	
 		current_user = request.user
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -152,7 +152,7 @@ def people(request):
 	
 		current_user = request.user
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -176,7 +176,7 @@ def howto(request):
 	
 		current_user = request.user
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -261,7 +261,7 @@ def list_image_cart(request):
 
 	current_user = request.user
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -290,7 +290,7 @@ def list_imaging_hosts(request):
 
 	current_user = request.user
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -321,7 +321,7 @@ def maintenance(request):
 
 	current_user = request.user
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -348,7 +348,7 @@ def authorisation(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	user_list = User.objects.all
@@ -372,7 +372,7 @@ def view_user(request, user_id):
 
 	user = get_object_or_404(User, pk=user_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -394,7 +394,7 @@ def edit_user(request, user_id):
 
 	user = get_object_or_404(User, pk=user_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -438,7 +438,7 @@ def view_user_general(request, user_id):
 
 	user = get_object_or_404(User, pk=user_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -460,7 +460,7 @@ def edit_user_general(request, user_id):
 
 	user = get_object_or_404(User, pk=user_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -520,7 +520,7 @@ def new_blog_command(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -566,7 +566,7 @@ def view_blog_command(request, blog_id):
 
 	blog = get_object_or_404(Blog, pk=blog_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -592,7 +592,7 @@ def edit_blog_command(request, blog_id):
 	
 	owner = get_object_or_404(User, pk=blog.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -656,7 +656,7 @@ def new_blog_credential(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -702,7 +702,7 @@ def view_blog_credential(request, credential_id):
 
 	credential = get_object_or_404(Credential, pk=credential_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -729,7 +729,7 @@ def edit_blog_credential(request, credential_id):
 	
 	owner = get_object_or_404(User, pk=credential.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -793,7 +793,7 @@ def new_type(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -839,7 +839,7 @@ def view_type(request, type_id):
 
 	type = get_object_or_404(Type, pk=type_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -865,7 +865,7 @@ def edit_type(request, type_id):
 	
 	owner = get_object_or_404(User, pk=type.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -929,7 +929,7 @@ def new_command(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -975,7 +975,7 @@ def view_command(request, command_id):
 
 	command = get_object_or_404(Command, pk=command_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1001,7 +1001,7 @@ def edit_command(request, command_id):
 	
 	owner = get_object_or_404(User, pk=command.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -1065,7 +1065,7 @@ def new_protocol(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -1111,7 +1111,7 @@ def view_protocol(request, protocol_id):
 
 	protocol = get_object_or_404(Protocol, pk=protocol_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1137,7 +1137,7 @@ def edit_protocol(request, protocol_id):
 	
 	owner = get_object_or_404(User, pk=protocol.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -1202,7 +1202,7 @@ def new_server(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1259,7 +1259,7 @@ def view_server(request, server_id):
 
 	server = get_object_or_404(Server, pk=server_id)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1288,7 +1288,7 @@ def edit_server(request, server_id):
 	
 	owner = get_object_or_404(User, pk=server.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -1383,7 +1383,7 @@ def add_image(request, server_id, image_id, roi_id):
 	
 	if credential_list:
 
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -1457,7 +1457,7 @@ def delete_image(request, image_id):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -1626,14 +1626,15 @@ def show_wordpress_image(request, server_id, image_id):
 
 
 #
-# VIEWS FOR MATRICES
+# VIEWS FOR ALL MY MATRICES
 #
 @login_required
 def index_matrix(request):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all().select_related('owner')
+	matrix_all_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user).select_related('owner')
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1648,13 +1649,45 @@ def index_matrix(request):
 
 		credential_flag = user.username
 
-		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'credential_flag': credential_flag, 'matrix_all_list': matrix_all_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'matrices/mine.html', data)
+
+	else:
+	
+		data = { 'credential_flag': credential_flag, 'matrix_all_list': matrix_all_list, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+		return render(request, 'matrices/mine.html', data)
+	
+
+@login_required
+def list_matrix(request):
+
+	current_user = request.user
+
+	matrix_all_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
+	image_list = Image.objects.filter(owner=current_user).filter(active=True)
+	server_list = Server.objects.all
+
+	user = get_object_or_404(User, pk=request.user.id)
+	credential_list = Credential.objects.filter(username=user.username).values('username')
+	
+	#print credential_list
+	
+	credential_flag = ''	
+	
+	if credential_list:
+
+		credential_flag = user.username
+
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'matrix_all_list': matrix_all_list, 'image_list': image_list, 'server_list': server_list }
 
 		return render(request, 'matrices/index.html', data)
 
 	else:
 	
-		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
+		data = { 'credential_flag': credential_flag, 'matrix_list': matrix_list, 'matrix_all_list': matrix_all_list, 'image_list': image_list, 'server_list': server_list }
 
 		return render(request, 'matrices/index.html', data)
 	
@@ -1664,7 +1697,7 @@ def matrix(request, matrix_id):
 
 	current_user = request.user
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -1704,29 +1737,6 @@ def matrix(request, matrix_id):
 	
 
 @login_required
-def list_matrix(request):
-
-	current_user = request.user
-
-	user = get_object_or_404(User, pk=request.user.id)
-	credential_list = Credential.objects.filter(username=user.username).values('username')
-	
-	if credential_list:
-
-		matrix_list = Matrix.objects.all
-		image_list = Image.objects.filter(owner=current_user).filter(active=True)
-		server_list = Server.objects.all
-
-		data = { 'matrix_list': matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-		return render(request, 'matrices/index.html', data)
-
-	else:
-	
-		return HttpResponseRedirect(reverse('matrices:home', args=()))						
-	
-
-@login_required
 def new_matrix(request):
 
 	current_user = request.user
@@ -1736,7 +1746,7 @@ def new_matrix(request):
 	
 	if credential_list:
 
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -1843,7 +1853,7 @@ def view_matrix_blog(request, matrix_id):
 	
 	if credential_list:
 
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 	
@@ -1911,7 +1921,7 @@ def view_matrix(request, matrix_id):
 	
 		current_user = request.user
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 	
@@ -1944,7 +1954,7 @@ def edit_matrix(request, matrix_id):
 	
 		owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -1992,7 +2002,7 @@ def edit_matrix(request, matrix_id):
 
 					matrix.save()
 				
-					matrix_list = Matrix.objects.all
+					matrix_list = Matrix.objects.filter(owner=current_user)
 
 					matrix_cells = generateMatrix(matrix_id)
 					columns = generateColumns(matrix_id)
@@ -2016,7 +2026,7 @@ def edit_matrix(request, matrix_id):
 	
 		else:
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 	
 			matrix_cells = generateMatrix(matrix_id)
 			columns = generateColumns(matrix_id)
@@ -2081,7 +2091,7 @@ def delete_matrix(request, matrix_id):
 
 			matrix.delete()
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -2105,7 +2115,7 @@ def edit_cell(request, matrix_id, cell_id):
 	
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -2225,7 +2235,7 @@ def edit_cell(request, matrix_id, cell_id):
 
 		else:
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 			
@@ -2261,7 +2271,7 @@ def view_cell(request, matrix_id, cell_id):
 
 		cell_link = link_post_url
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 	
@@ -2292,7 +2302,7 @@ def view_cell_blog(request, matrix_id, cell_id):
 		#comment_list = get_a_post_comments_from_wordpress(request.user.username, cell.blogpost)
 		comment_list = get_a_post_comments_from_wordpress(cell.blogpost)
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 		
@@ -2360,7 +2370,7 @@ def add_cell(request, matrix_id):
 				
 				matrix.save()
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2410,7 +2420,7 @@ def add_column(request, matrix_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2465,7 +2475,7 @@ def add_column_left(request, matrix_id, column_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2522,7 +2532,7 @@ def add_column_right(request, matrix_id, column_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2572,7 +2582,7 @@ def add_row(request, matrix_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2627,7 +2637,7 @@ def add_row_above(request, matrix_id, row_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2684,7 +2694,7 @@ def add_row_below(request, matrix_id, row_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2753,7 +2763,7 @@ def delete_column(request, matrix_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2828,7 +2838,7 @@ def delete_this_column(request, matrix_id, column_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2897,7 +2907,7 @@ def delete_row(request, matrix_id):
 			matrix.save()
 
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -2972,7 +2982,7 @@ def delete_this_row(request, matrix_id, row_id):
 				moveCell.ycoordinate -= 1
 				moveCell.save()
 			
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 

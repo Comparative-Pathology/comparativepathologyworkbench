@@ -44,25 +44,22 @@
 <body>
 
 	<div class="container">
-	
-	<nav class="navbar navbar-expand-lg navbar-light">
 
-		<div class="navbar-brand abs">
+    <header>
 		
-			<a class="navbar-brand" href="{% url 'matrices:home' %}">
+		<nav class="navbar navbar-expand-lg navbar-light">
+        
+            <a class="navbar-brand" href="{% url 'matrices:home' %}">
 				<strong>Comparative Pathology Workbench</strong>
 			</a>
-			
-		</div>
 
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarCollapseWholeMenu" aria-controls="navbarCollapseWholeMenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
-			<div class="collapse navbar-collapse" id="navbarCollapse">
-	
-				<ul class="navbar-nav mr-auto">
+			<div class="collapse navbar-collapse" id="navbarCollapseWholeMenu">
 
+				<ul class="navbar-nav mr-auto">
 
 					<li class="nav-item dropdown">
 	
@@ -120,7 +117,7 @@
 
 			{% if forloop.first %}
 		
-							<li><a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">Sources</a></li>
+							<li><a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">All Sources</a></li>
 			
 			{% endif %}
 			
@@ -141,7 +138,7 @@
 
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Servers</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources</a>
 	
 						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
@@ -279,14 +276,17 @@
 
 				</ul>
 
-			</div>
+              </ul>
 
+            </div>
 
-	</nav>
-	
+    	</nav>
+
+	</header>
+    
 	</div>
-	
-	<main role="main" class="container">
+
+    <main role="main" class="container">
     
 	{% block content %}
 

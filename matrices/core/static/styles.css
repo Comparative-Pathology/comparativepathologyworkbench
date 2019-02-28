@@ -41,6 +41,11 @@ body {
     background-color: #e3f2fd !important;
 }
 
+nav.container {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
 main.container {
 	min-height: 60rem;
 	/*padding-top: 4.5rem;*/

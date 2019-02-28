@@ -333,7 +333,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 
 			#print dataset
 	
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -345,7 +345,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 			project_list = []
 			images_list = list()
 
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -372,7 +372,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 		project_list = []
 		images_list = list()
 
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -466,7 +466,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 			datasets = []
 			projects = []
 	
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 	
@@ -489,7 +489,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 			datasets = []
 			projects = []
 	
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 	
@@ -514,7 +514,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 		datasets = []
 		projects = []
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 	
@@ -570,7 +570,7 @@ def get_imaging_server_json(request, server_id):
 
 		#print 'Exception!', e
 				
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -652,7 +652,7 @@ def get_imaging_server_json(request, server_id):
 	
 		except AssertionError:
 	
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -815,7 +815,7 @@ def get_imaging_server_json(request, server_id):
 	for group in new_group_list:
 		group_count = group_count + 1
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
@@ -865,7 +865,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 
 	except Exception as e:
 		
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -945,7 +945,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 	
 		except AssertionError:
 	
-			matrix_list = Matrix.objects.all
+			matrix_list = Matrix.objects.filter(owner=current_user)
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
@@ -1080,7 +1080,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 	for project in project_list:
 		project_count = project_count + 1
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1130,7 +1130,7 @@ def get_imaging_server_project_json(request, server_id, project_id):
 
 	except Exception as e:
 	
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -1241,7 +1241,7 @@ def get_imaging_server_project_json(request, server_id, project_id):
 
 		dataset_list.append(dataset)
 
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1297,7 +1297,7 @@ def get_imaging_server_dataset_json(request, server_id, dataset_id):
 
 	except Exception as e:
 		
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -1400,7 +1400,7 @@ def get_imaging_server_dataset_json(request, server_id, dataset_id):
 			
 		images_list.append(image)
 		
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
@@ -1474,7 +1474,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 
 	except Exception as e:
 		
-		matrix_list = Matrix.objects.all
+		matrix_list = Matrix.objects.filter(owner=current_user)
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 
@@ -1769,7 +1769,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 
 		datasets.append(dataset)
 	
-	matrix_list = Matrix.objects.all
+	matrix_list = Matrix.objects.filter(owner=current_user)
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	

@@ -73,7 +73,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Workbench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -142,7 +142,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for CELL: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -249,13 +249,13 @@
   									<div class="dropdown-menu" aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
 
 										<a class="dropdown-item" href="{% url 'matrices:detail_matrix' matrix.id %}">
-											<i class="fa fa-eye"></i> View Workbench Details
+											<i class="fa fa-eye"></i> View Bench Details
 										</a>
 					
 					{% if user == owner %}
 					
 										<a class="dropdown-item" href="{% url 'matrices:edit_matrix' matrix.id %}">
-											<i class="fa fa-pencil-alt"></i> Edit Workbench Details
+											<i class="fa fa-pencil-alt"></i> Edit Bench Details
 										</a>
 
 					{% endif %}
@@ -265,11 +265,11 @@
 						{% if matrix.blogpost != '' %}
 
 										<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix.id }}">
-											<i class="fa fa-eye"></i> <em>View Workbench Commentary</em>
+											<i class="fa fa-eye"></i> <em>View Bench Commentary</em>
 										</a>
 
 										<a class="dropdown-item" href="{% url 'matrices:detail_matrix_blog' matrix.id %}" target="_blank">
-											<i class="fa fa-edit"></i> Edit Workbench Commentary
+											<i class="fa fa-edit"></i> Edit Bench Commentary
 										</a>
 					
 						{% endif %}
@@ -281,7 +281,7 @@
 										<div class="dropdown-divider"></div>
 
 										<a class="dropdown-item" href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
-											<i class="fa fa-trash-alt"></i> DELETE Workbench 
+											<i class="fa fa-trash-alt"></i> DELETE Bench 
 										</a>
 
 										<a class="dropdown-item" href="{% url 'matrices:add_column' matrix.id %}">

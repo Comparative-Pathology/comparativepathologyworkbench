@@ -51,49 +51,6 @@ main.container {
 	/*padding-top: 4.5rem;*/
 }
 
- /* Dropdown Button */
-.dropbtn {
-	background-color: #CCFFCC;
-	width: 25px;
-	height: 31px;
-	border: none;
-	display: block;
-}
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-	display: block;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-	display: none;
-	position: relative;
-	background-color: #CCFFCC;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-	color: #000000;
-	padding: 3px 4px;
-	text-decoration: none;
-	display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-	display: block;
-} 
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {
-	display: none; 
-} 
-
 text-left {
 	font-family: Verdana, Geneva, sans-serif;
 	color: #000000;
@@ -142,7 +99,7 @@ textarea {
 }
 
 .master {
-	padding: 10px;
+	padding: 5px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -153,7 +110,7 @@ textarea {
 }
 
 .headrow {
-	padding: 10px;
+	padding: 9px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -164,7 +121,7 @@ textarea {
 }
 
 .headcol {
-	padding: 10px;
+	padding: 4px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
@@ -174,9 +131,65 @@ textarea {
 	box-shadow:		 #B3B3B3 2px 2px 2px;
 }
 
-.dropdown {
-	position: absolute;
+ /* Dropdown Button */
+.dropbtn {
+	background-color: #F9E79F;
+	color: white;
+	padding: 0px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
 }
+
+.dropmaster {
+	background-color: #F9E79F;
+	color: white;
+	padding: 5px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+}
+
+ /* Dropdown Button */
+.dropcell {
+	background-color: #CCFFCC;
+	color: white;
+	padding: 5px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #F9E79F;} 
+
+
 
 .vertical_text{
     width:1px;

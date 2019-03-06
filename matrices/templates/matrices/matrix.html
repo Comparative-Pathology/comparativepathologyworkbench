@@ -215,7 +215,6 @@
 
 {% endif %}
 
-
 {% if rows %}
 
 		<div class="table-responsive">
@@ -238,15 +237,13 @@
 				
 							<div class="master">
 				
-								<div class="dropdown dropright">
-			
-
-									<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
-										<span class="sr-only">Toggle Dropright</span>
+								<div class="dropdown">
+	
+									<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropmaster">
+										<i class="fa fa-bars"></i>
 									</a>
 
-
-  									<div class="dropdown-menu" aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
+  									<div class="dropdown-content dropdown-menu" aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
 
 										<a class="dropdown-item" href="{% url 'matrices:detail_matrix' matrix.id %}">
 											<i class="fa fa-eye"></i> View Bench Details
@@ -321,15 +318,25 @@
 
 									<tr>
 
-										<td>
+										<td align="center" height={{ matrix.height|add:"-40" }}px>
 
-											<div class="dropdown dropright">
+											<div class="dropdown">
 
-												<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
-													<span class="sr-only">Toggle Dropright</span>
+												<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
+
+						{% if matrix_cell.title == '' %}
+
+													<i class="fa fa-bars"></i>
+												
+						{% else %}
+
+													<p class="vertical_text">{{ matrix_cell.title|truncatechars:20 }}</p>
+
+						{% endif %}
+	
 												</a>
 
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<div class="dropdown-content dropdown-menu"  aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
 
 													<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
 														<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
@@ -365,13 +372,6 @@
 
 									</tr>
 
-									<tr>
-
-										<td align="center" height={{ matrix.height|add:"-40" }}px><p class="vertical_text">{{ matrix_cell.title|truncatechars:20 }}</p>
-										</td>
-
-									</tr>
-
 								</table>
 				
 							</div>
@@ -390,17 +390,25 @@
 
 									<tr>
 
-										<td align="center" width={{ matrix.width|add:"-40" }}px><em>{{ matrix_cell.title|truncatechars:20 }}</em>
-										</td>
+										<td align="center" width={{ matrix.width|add:"-40" }}px>
 
-									<td>
+										<div class="dropdown">
+										
+											<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
 
-										<div class="dropdown dropright">
-											<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
-												<span class="sr-only">Toggle Dropright</span>
+						{% if matrix_cell.title == '' %}
+
+												<i class="fa fa-bars"></i>
+												
+						{% else %}
+
+												<em>{{ matrix_cell.title|truncatechars:20 }}</em>
+
+						{% endif %}
+
 											</a>
 									
-											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+											<div class="dropdown-content dropdown-menu" aria-labelledby="dropdownMenuButton">
 
 												<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
 													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
@@ -432,7 +440,7 @@
 						
 										</div>
 			
-									</td>
+										</td>
 
 									</tr>
 
@@ -450,13 +458,13 @@
 				
 							<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
 
-								<div class="dropdown dropright">
+								<div class="dropdown dropleft">
 
-									<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" class="dropdown-toggle dropdown-toggle-split">
-										<span class="sr-only">Toggle Dropright</span>
+									<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropcell">
+										<i class="fa fa-bars"></i>
 									</a>
 								
-							        <ul class="dropdown-menu">
+							        <ul class="dropdown-content dropdown-menu">
 
 										<li>								
 											<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">

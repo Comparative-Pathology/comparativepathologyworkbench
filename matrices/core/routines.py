@@ -978,7 +978,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 	
 			payload = {'limit': 100}
 			project_data = session.get(project_url, params=payload).json()
-			assert len(project_data['data']) < 100
+			assert len(project_data['data']) < 200
 	
 			project_meta = project_data['meta']
 			projectCount = project_meta['totalCount']
@@ -1216,7 +1216,7 @@ def get_imaging_server_project_json(request, server_id, project_id):
 			
 		payload = {'limit': 100}
 		image_data = session.get(image_url, params=payload).json()
-		assert len(image_data['data']) < 100
+		assert len(image_data['data']) < 200
 			
 		for i in image_data['data']:
 				
@@ -1333,15 +1333,15 @@ def get_imaging_server_dataset_json(request, server_id, dataset_id):
 
 	payload = {'limit': 100}
 	images_data = session.get(images_url, params=payload).json()
-	assert len(images_data['data']) < 100
+	assert len(images_data['data']) < 200
 	
 	payload = {'limit': 100}
 	dataset_data = session.get(dataset_url, params=payload).json()
-	assert len(dataset_data['data']) < 100
+	assert len(dataset_data['data']) < 200
 	
 	payload = {'limit': 100}
 	projects_data = session.get(projects_url, params=payload).json()
-	assert len(projects_data['data']) < 100
+	assert len(projects_data['data']) < 200
 	
 	ddata = dataset_data['data']
 	idata = images_data['data']
@@ -1502,7 +1502,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 	
 	payload = {'limit': 100}
 	rois_data = session.get(rois_url, params=payload).json()
-	assert len(rois_data['data']) < 100
+	assert len(rois_data['data']) < 200
 	
 	rmeta = rois_data['meta']
 	roiCount = rmeta['totalCount']
@@ -1683,7 +1683,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 
 	payload = {'limit': 100}
 	image_data = session.get(image_url, params=payload).json()
-	assert len(image_data['data']) < 100
+	assert len(image_data['data']) < 200
 	
 	data = image_data['data']
 	name = data['Name']
@@ -1743,7 +1743,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 
 	payload = {'limit': 100}
 	dataset_data = session.get(dataset_url, params=payload).json()
-	assert len(dataset_data['data']) < 100
+	assert len(dataset_data['data']) < 200
 	
 	ddata = dataset_data['data']
 	
@@ -1759,7 +1759,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 
 		payload = {'limit': 100}
 		project_data = session.get(projects_url, params=payload).json()
-		assert len(project_data['data']) < 100
+		assert len(project_data['data']) < 200
 
 		pdata = project_data['data']
 

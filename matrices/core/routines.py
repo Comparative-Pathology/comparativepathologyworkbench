@@ -283,8 +283,6 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 					'thumbnail_url': image_thumbnail_url
 				})
 				
-				#print 'Image', image
-			
 				image_count = image_count + 1
 		
 				images_list.append(image)
@@ -295,18 +293,15 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 			prev_page = '1'
 			next_page = '1'
 	
-			page_count = int(page_id) * 14
-			image_total = ( int(page_id) * 14 ) + image_count
+			page_count = int(page_id) * 35
+			image_total = ( ( int(page_id) - 1 ) * 35 ) + image_count
 
-			#print 'page_count', page_count
-			#print 'image_total', image_total
 			
-			
-			if image_count < 14:
+			if image_count < 35:
 			
 				next_page = '1'
 				
-			if image_total % 14 == 0:
+			if image_total % 35 == 0:
 	
 				next_page = int(page_id) + 1
 			
@@ -326,7 +321,8 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 			dataset = ({
 				'id': '0',
 				'name': 'Your WordPress Media Library',
-				'imageCount': page_count,
+#				'imageCount': page_count,
+				'imageCount': image_total,
 				'prev_page': prev_page,
 				'next_page': next_page
 			})

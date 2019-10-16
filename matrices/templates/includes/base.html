@@ -43,6 +43,20 @@
 
 <body>
 
+{% if settings.LOCATION == 'CANADA' %}
+
+	<div class="container">
+
+    <header>
+		
+		<nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #f5776e;">
+        
+            <a class="navbar-brand" href="{% url 'matrices:home' %}">
+				<strong>Comparative Pathology Workbench in CANADA</strong>
+			</a>
+
+{% else %}
+
 	<div class="container">
 
     <header>
@@ -52,6 +66,8 @@
             <a class="navbar-brand" href="{% url 'matrices:home' %}">
 				<strong>Comparative Pathology Workbench</strong>
 			</a>
+
+{% endif %}
 
 			<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarCollapseWholeMenu" aria-controls="navbarCollapseWholeMenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -426,7 +442,7 @@ $( document ).ready( function () {
 
         return false;
     } );
-} );
+} );	
  
 </script>
 		

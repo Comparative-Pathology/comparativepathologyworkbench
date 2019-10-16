@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -154,3 +155,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = config('SESSION_EXPIRE_AT_BROWSER_CLOSE', cast
 #X_FRAME_OPTIONS='DENY'
 
 #SECURE_HSTS_SECONDS=3600
+
+LOCATION = config('LOCATION')
+
+SETTINGS_EXPORT = [
+    'LOCATION',
+]

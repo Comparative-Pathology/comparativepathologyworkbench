@@ -94,6 +94,8 @@ import requests
 #
 def home(request):
 
+	#print 'local', local
+
 	if request.user.is_anonymous():
 
 		matrix_list = []

@@ -18,6 +18,7 @@ from Crypto.Cipher import AES
 
 from decouple import config
 
+
 """
 	Encryption Methods
 """
@@ -333,7 +334,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 
-			data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+			data = { 'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 		
 		else:
 
@@ -358,7 +359,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 				'next_page': next_page
 			})
 
-			data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+			data = { 'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 	
 	except Exception as e:
 
@@ -389,7 +390,7 @@ def get_imaging_wordpress_json(request, server_id, page_id):
 				'next_page': next_page
 		})
 
-		data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+		data = { 'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 
 	return data
 
@@ -466,7 +467,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 	
-			data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+			data = { 'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 
 		else:
 
@@ -489,7 +490,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 			image_list = Image.objects.filter(owner=current_user).filter(active=True)
 			server_list = Server.objects.all
 	
-			data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+			data = { 'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 
 	except Exception as e:
 
@@ -514,7 +515,7 @@ def get_imaging_wordpress_image_json(request, server_id, image_id):
 		image_list = Image.objects.filter(owner=current_user).filter(active=True)
 		server_list = Server.objects.all
 	
-		data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+		data = { 'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 
 	return data
 
@@ -573,7 +574,7 @@ def get_imaging_server_json(request, server_id):
 		group_count = 0
 		group_list = []
 	
-		data = {'server': server, 'group_list': group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+		data = { 'server': server, 'group_list': group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
 
 		return data	
 
@@ -655,7 +656,7 @@ def get_imaging_server_json(request, server_id):
 			group_count = 0
 			group_list = []
 	
-			data = {'server': server, 'group_list': group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+			data = { 'server': server, 'group_list': group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
 
 			return data
 	
@@ -815,7 +816,7 @@ def get_imaging_server_json(request, server_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 
-	data = {'server': server, 'group_list': new_group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+	data = { 'server': server, 'group_list': new_group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
 
 	return data
 
@@ -868,7 +869,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 		group_count = 0
 		group_list = []
 	
-		data = {'server': server, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+		data = { 'server': server, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
 
 		return data
 
@@ -948,7 +949,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 			groupCount = 0
 			group_list = []
 	
-			data = {'server': server, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+			data = { 'server': server, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
 
 			return data
 	
@@ -1082,7 +1083,7 @@ def get_imaging_server_group_json(request, server_id, group_id):
 	
 	group = group_list[0]
 	
-	data = {'server': server, 'project_count': project_count, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+	data = { 'server': server, 'project_count': project_count, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
 
 	return data
 
@@ -1134,7 +1135,7 @@ def get_imaging_server_project_json(request, server_id, project_id):
 		project = ''
 		dataset_list = []
 	
-		data = {'server': server, 'group': group, 'project': project, 'dataset_list': dataset_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+		data = { 'server': server, 'group': group, 'project': project, 'dataset_list': dataset_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 	
 		return data
 
@@ -1241,7 +1242,7 @@ def get_imaging_server_project_json(request, server_id, project_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
-	data = {'server': server, 'group': group, 'project': project, 'dataset_list': dataset_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+	data = { 'server': server, 'group': group, 'project': project, 'dataset_list': dataset_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 	
 	return data
 
@@ -1302,7 +1303,7 @@ def get_imaging_server_dataset_json(request, server_id, dataset_id):
 		images_list = []
 		project_list = []
 	
-		data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+		data = { 'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 	
 		return data
 
@@ -1400,7 +1401,7 @@ def get_imaging_server_dataset_json(request, server_id, dataset_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
-	data = {'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+	data = { 'server': server, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 	
 	return data
 
@@ -1477,7 +1478,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 		group_count = 0
 		group_list = []
 	
-		data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+		data = { 'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 	
 		return data
 
@@ -1769,7 +1770,7 @@ def get_imaging_server_image_json(request, server_id, image_id):
 	image_list = Image.objects.filter(owner=current_user).filter(active=True)
 	server_list = Server.objects.all
 	
-	data = {'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+	data = { 'server': server, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 
 	return data
 

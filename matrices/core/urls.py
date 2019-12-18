@@ -19,6 +19,8 @@ urlpatterns = [
 	url(r'^authorisation/$', views.authorisation, name='authorisation'),
 	url(r'^list_image_cart/$', views.list_image_cart, name='list_image_cart'),
 
+	url(r'^show_ebi_server/(?P<server_id>[0-9]+)/$', views.show_ebi_server, name='ebi_show_ebi_server'),
+
 	url(r'^show_server/(?P<server_id>[0-9]+)/$', views.show_imaging_server, name='webgallery_show_imaging_server'),
 	url(r'^show_group/(?P<server_id>[0-9]+)/(?P<group_id>[0-9]+)/$', views.show_group, name='webgallery_show_group'),
 	url(r'^show_project/(?P<server_id>[0-9]+)/(?P<project_id>[0-9]+)/$', views.show_project, name='webgallery_show_project'),

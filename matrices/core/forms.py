@@ -35,7 +35,7 @@ class CellForm(forms.ModelForm):
 		self.fields['image'] = forms.ModelChoiceField(widget=forms.RadioSelect(), queryset=querysetCombined, empty_label=None)
 		self.fields['image'].label_from_instance = self.label_from_instance
 
-  	@staticmethod
+	@staticmethod
 	def label_from_instance(obj):
 		"""
 		Shows an image with the label

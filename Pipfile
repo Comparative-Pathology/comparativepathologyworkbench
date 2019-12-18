@@ -10,9 +10,10 @@ gunicorn = "*"
 requests = "*"
 python-decouple = "*"
 django-widget-tweaks = "*"
-pycrypto = "*"
+pycryptodome = "*"
+django_settings_export = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "2.7"
+python_version = "3.7"

@@ -55,9 +55,9 @@
 	
         <tr>
 
-		{% if credential_flag %}
+		{% if credential_flag != '' %}
 		
-			{% if user.id == matrix.owner.id or user.is_superuser %}
+			{% if user.id == matrix.owner.id or user.is_superuser == True %}
             
             <td>
 				<a href="{% url 'matrices:matrix' matrix.id %}">	            	

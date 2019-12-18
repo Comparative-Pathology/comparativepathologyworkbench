@@ -52,6 +52,8 @@
 			<dt>Cell Width:</dt>
 			<dd>{{ matrix.width }}</dd>
 
+	{% if matrix.blogpost != '' %}
+	
 			<dt>Blog Post:</dt>
 			<dd>
 				<a class="btn btn-default" href="{{ matrix_link }}" role="button" target="_blank">
@@ -59,6 +61,8 @@
 				</a>
 			</dd>
 			
+	{% endif %}
+
 			<dt>Owner:</dt>
 			<dd>{{ owner.username }} ({{ owner.first_name }} {{ owner.last_name }})</dd>
 

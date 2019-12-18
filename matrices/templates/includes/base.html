@@ -19,6 +19,7 @@
 	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}">
 	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}">
 	<link rel="icon" type="image/png" sizes="192x192"  href="{% static 'android-icon-192x192.png' %}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon.ico' %}">
 	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
 	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}">
 	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
@@ -85,27 +86,55 @@
 	
 						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 					
-							<li><a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">All Benches</a></li>
-
 			                <li class="dropdown-submenu">
+
+			                    <a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">List Benches</a>
+
+			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#" data-toggle="dropdown">All Benches</a>
+
+			                    <ul class="dropdown-menu">	
+
+	{% for matrix in matrix_list %}
+
+									<li><a class="dropdown-item" href="{% url 'matrices:matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a></li>
+	
+	{% endfor %}
+		
+								</ul>
+
+							</li>
+							
+							<li class="dropdown-submenu">
 
 			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#" data-toggle="dropdown">My Benches</a>
 
 			                    <ul class="dropdown-menu">	
 
-									<li><a class="dropdown-item" href="{% url 'matrices:index' %}">My Benches</a></li>
-		
-		{% for matrix in matrix_list %}
+	{% if my_matrix_list %}
+	
+		{% for my_matrix in my_matrix_list %}
 
-									<li><a class="dropdown-item" href="{% url 'matrices:matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a></li>
+									<li><a class="dropdown-item" href="{% url 'matrices:matrix' my_matrix.id %}">CPW:{{ my_matrix.id|stringformat:"06d" }}, {{ my_matrix.title }}</a></li>
 	
 		{% endfor %}
 
+	{% else %}
+
+									<li><a class="dropdown-item" href="#">You have NO Benches!</a></li>
+	{% endif %}
+	
 								</ul>
 
-							<li><a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a></li>
+							</li>
+							
+							<li class="dropdown-submenu">
 
+								<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a>
+
+							</li>
+							
 						</ul>
+
 {% else %}
 
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Benches</a>

@@ -7,6 +7,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.timezone import now
 
+from django.conf import settings
+
 import requests
 
 from requests.exceptions import HTTPError
@@ -137,9 +139,19 @@ class Matrix(models.Model):
         return Cell.objects.filter(matrix=self.id).values('ycoordinate').distinct()
 
 
+    def get_row(self, a_row):
+
+        return Cell.objects.filter(matrix=self.id).filter(ycoordinate=a_row)
+
+
     def get_columns(self):
     
         return Cell.objects.filter(matrix=self.id).values('xcoordinate').distinct()
+
+
+    def get_column(self, a_column):
+
+        return Cell.objects.filter(matrix=self.id).filter(xcoordinate=a_column)
 
 
     def get_row_count(self):
@@ -150,6 +162,22 @@ class Matrix(models.Model):
     def get_column_count(self):
 
         return Cell.objects.filter(matrix=self.id).values('xcoordinate').distinct().count()
+
+    def get_max_row(self):
+    
+    	row_count = self.get_row_count()
+    	
+    	row_count = row_count - 1
+    	
+    	return row_count
+
+    def get_max_column(self):
+    
+    	column_count = self.get_column_count()
+    	
+    	column_count = column_count - 1
+
+    	return column_count
 
     """
         Get Matrix Cell Comments
@@ -1058,11 +1086,11 @@ class Server(models.Model):
     
         payload = {'limit': 99}
         data = session.get(experiments_url, params=payload).json()
-        assert len(data['aaData']) < 1000
+        assert len(data['experiments']) < 1000
     
         experiment_list = list()
     
-        for p in data['aaData']:
+        for p in data['experiments']:
             experiment = ({
                 'experimentType': p['experimentType'],
                 'experimentAccession': p['experimentAccession'],
@@ -1070,7 +1098,7 @@ class Server(models.Model):
                 'loadDate': p['loadDate'],
                 'lastUpdate': p['lastUpdate'],
                 'numberOfAssays': p['numberOfAssays'],
-                'numberOfContrasts': p['numberOfContrasts'],
+                'numberOfContrasts': '',
                 'species': p['species'],
                 'kingdom': p['kingdom']
             })
@@ -1089,8 +1117,30 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Server
     """
+    def get_ebi_widget_json(self, request):
+    
+        current_user = request.user
+    
+        matrix_list = Matrix.objects.filter(owner=current_user)
+        image_list = Image.objects.filter(owner=current_user).filter(active=True)
+        server_list = Server.objects.all
+    
+        data = { 'server': self, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+    
+        return data
+    
+    
+    """
+        Get the JSON Details for the Requested Server
+    """
     def get_imaging_server_json(self, request):
     
+        #print('STATICFILES_DIRS : ', settings.STATICFILES_DIRS)
+        #print('BASE_DIR         : ', settings.BASE_DIR)
+        #print('PROJECT_DIR      : ', settings.PROJECT_DIR)
+        #print('STATIC_ROOT      : ', settings.STATIC_ROOT)
+        #print('STATIC_URL       : ', settings.STATIC_URL)
+
         current_user = request.user
     
         commandAPI = Command.objects.filter(type=self.type).get(name='API')
@@ -2128,7 +2178,7 @@ class Server(models.Model):
                     coordY = str(intCoordY)
                     width = str(intWidth)
                     height = str(intHeight)
-            
+                    
                 if type == 'Ellipse':
         
                     centreX = s['X']
@@ -2223,8 +2273,8 @@ class Server(models.Model):
                     intX = middleX - ( 3192 / 2 )
                     intY = middleY - ( 3192 / 2 )
                 
-                    coordX = str(intX)
-                    coordY = str(intY)
+                    coordX = str(int(intX))
+                    coordY = str(int(intY))
                     
                     width = "3192"
                     height = "3192"
@@ -2488,6 +2538,12 @@ class Cell(models.Model):
             
     def set_matrix(self, a_matrix):
         self.matrix = a_matrix
+
+    def set_xcoordinate(self, a_column):
+        self.xcoordinate = a_column
+
+    def set_ycoordinate(self, a_row):
+        self.ycoordinate = a_row
 
     def increment_x(self):
         self.xcoordinate += 1

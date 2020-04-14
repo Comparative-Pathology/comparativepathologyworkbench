@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 {% load custom %}
 
 {% load static %}
@@ -19,7 +20,7 @@
 	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}">
 	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}">
 	<link rel="icon" type="image/png" sizes="192x192"  href="{% static 'android-icon-192x192.png' %}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon.ico' %}">
+	<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
 	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}">
 	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
@@ -30,13 +31,16 @@
 
 	<link rel="stylesheet" href="{% static 'styles.css' %}">
 
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>	
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
 	<title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
 	
@@ -372,7 +376,7 @@
 						<!-- Links -->
 						<ul class="list-unstyled">
 							<li>
-								<a href="https://www.humancellatlas.org/"><img src="https://www.humancellatlas.org/bundles/hca/img/logo.png" style="background-color: #FFFFFF;" height="55" width="140"></a>
+								<a href="https://www.humancellatlas.org/"><img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" height="55" width="170"></a>
 							</li>
 						</ul>
 
@@ -474,6 +478,7 @@ $( document ).ready( function () {
 } );	
  
 </script>
+
 		
 </body>
 

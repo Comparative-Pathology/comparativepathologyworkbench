@@ -131,6 +131,39 @@ textarea {
 	box-shadow:		 #B3B3B3 2px 2px 2px;
 }
 
+.bottom {
+	padding: 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius:	5px 5px 5px 5px;
+	border-radius:		 5px 5px 5px 5px;
+	background-color: #f5f3f2;
+	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
+	box-shadow:		 #B3B3B3 2px 2px 2px;
+}
+
+.bottomrow {
+	padding: 9px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius:	5px 5px 5px 5px;
+	border-radius:		 5px 5px 5px 5px;
+	background-color: #f5f3f2;
+	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
+	box-shadow:		 #B3B3B3 2px 2px 2px;
+}
+
+.bottomcol {
+	padding: 4px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius:	5px 5px 5px 5px;
+	border-radius:		 5px 5px 5px 5px;
+	background-color: #f5f3f2;
+	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
+	box-shadow:		 #B3B3B3 2px 2px 2px;
+}
+
  /* Dropdown Button */
 .dropbtn {
 	background-color: #F9E79F;

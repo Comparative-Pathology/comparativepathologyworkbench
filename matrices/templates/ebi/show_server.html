@@ -75,7 +75,8 @@
         <tr>
         
             <td>
-				<a href="">	            	
+				<!-- <a href="http://localhost:3000/experiment/{{ experiment.experimentAccession }}">-->
+				<a href="{% url 'matrices:ebi_show_ebi_widget' server.id experiment.experimentAccession %}">
 	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
             </td>

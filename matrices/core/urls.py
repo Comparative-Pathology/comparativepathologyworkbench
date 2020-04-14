@@ -1,4 +1,6 @@
 from django.conf.urls import url, include
+from django.urls import path
+
 from django.contrib.auth import views as auth_views
 
 from . import views
@@ -19,7 +21,14 @@ urlpatterns = [
 	url(r'^authorisation/$', views.authorisation, name='authorisation'),
 	url(r'^list_image_cart/$', views.list_image_cart, name='list_image_cart'),
 
+    url(r'^ajax/overwrite_cell_leave/$', views.overwrite_cell_leave, name='overwrite_cell_leave'),
+    url(r'^ajax/overwrite_cell/$', views.overwrite_cell, name='overwrite_cell'),
+    url(r'^ajax/swap_cells/$', views.swap_cells, name='swap_cells'),
+    url(r'^ajax/swap_columns/$', views.swap_columns, name='swap_columns'),
+    url(r'^ajax/swap_rows/$', views.swap_rows, name='swap_rows'),
+
 	url(r'^show_ebi_server/(?P<server_id>[0-9]+)/$', views.show_ebi_server, name='ebi_show_ebi_server'),
+	path('show_ebi_widget/<int:server_id>/<slug:experiment_id>/', views.show_ebi_widget, name='ebi_show_ebi_widget'),
 
 	url(r'^show_server/(?P<server_id>[0-9]+)/$', views.show_imaging_server, name='webgallery_show_imaging_server'),
 	url(r'^show_group/(?P<server_id>[0-9]+)/(?P<group_id>[0-9]+)/$', views.show_group, name='webgallery_show_group'),
@@ -91,5 +100,4 @@ urlpatterns = [
 	url(r'^(?P<matrix_id>[0-9]+)/add_row_below/(?P<row_id>[0-9]+)/$', views.add_row_below, name='add_row_below'),
 	url(r'^(?P<matrix_id>[0-9]+)/delete_this_row/(?P<row_id>[0-9]+)/$', views.delete_this_row, name='delete_this_row'),
 	url(r'^(?P<matrix_id>[0-9]+)/delete_row/$', views.delete_row, name='delete_row'),
-] 
-
+]

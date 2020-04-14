@@ -1,0 +1,54 @@
+{% extends 'includes/base.html' %}
+
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+	<ol class="breadcrumb subheading">
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:home' %}">
+				Home
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'matrices:list_imaging_hosts' %}">
+				Sources
+			</a>
+		</li>
+	
+		<li class="breadcrumb-item active">
+			https://www.ebi.ac.uk/gxa/sc/json/experiments/
+		</li>
+	
+	</ol>
+	
+	<h1>https://www.ebi.ac.uk/gxa/sc/json/experiments/</h1>
+
+	<br />
+
+	<p>Server at https://www.ebi.ac.uk/gxa/sc/json/experiments/ contains Experiments:</p>
+	
+    <hr>
+    
+    <div id="target"></div>
+
+<script defer src="../../../../static/bundles/vendors.bundle.js"></script>
+<script defer src="../../../../static/bundles/TSnePlotWidgetDemo.bundle.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(event) {
+    TSnePlotWidgetDemo.render({
+		experimentAccession: '{{ experimentAccession }}',
+		geneId: '{{ geneId }}',
+	}, 'target');
+  })
+</script>
+
+{% endblock %}
+
+

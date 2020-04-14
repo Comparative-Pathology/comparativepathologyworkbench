@@ -28,7 +28,7 @@ class AESCipher:
 
     def encrypt( self, raw ):
 
-        print("raw : ", raw)
+        #print("raw : ", raw)
 
         raw = pad(raw)
         iv = Random.new().read( AES.block_size )
@@ -36,14 +36,14 @@ class AESCipher:
 
         encoded = base64.b64encode( iv + cipher.encrypt( raw.encode('utf8') ) )
 
-        print("encoded : ", encoded)
+        #print("encoded : ", encoded)
 
         return encoded
 
 
     def decrypt( self, enc ):
 
-        print("enc : ", enc)
+        #print("enc : ", enc)
 
         enc = base64.b64decode(enc)
         iv = enc[:16]
@@ -51,6 +51,6 @@ class AESCipher:
 
         decoded = unpad(cipher.decrypt( enc[16:] ))
 
-        print("decoded : ", decoded)
+        #print("decoded : ", decoded)
 
         return decoded

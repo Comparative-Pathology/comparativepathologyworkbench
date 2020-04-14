@@ -217,7 +217,7 @@
 
 {% if rows %}
 
-		<div class="table-responsive">
+		<div id="responsive-table" class="table-responsive">
 	
 			<table id="myTable" class="test">
 		
@@ -231,7 +231,7 @@
 
 	    	{% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
 
-				{% if matrix_cell.xcoordinate == 0 and matrix_cell.ycoordinate == 0 %}
+				{% if matrix_cell.is_master %}
 
 						<td id="{{ matrix_cell.id }}">
 				
@@ -308,241 +308,401 @@
 
 				{% endif %}
 
-				{% if matrix_cell.xcoordinate == 0 and matrix_cell.ycoordinate != 0 %}
+				{% if matrix_cell.is_column_header and not matrix_cell.is_row_header %}
 
-						<td id="{{ matrix_cell.id }}">
+					{% if matrix.get_max_row == matrix_cell.ycoordinate %}
+
+						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 				
-							<div style="height:{{ matrix.height }}px;" class="headrow">
+							<span draggable="true" ondragstart="dragRow(event)" id="span_{{ matrix_cell.id }}">
 
-								<table border="0">
+								<div style="width:34px; height:34px;" class="bottomrow">
 
-									<tr>
+									<table border="0">
 
-										<td align="center" height={{ matrix.height|add:"-40" }}px>
+										<tr>
 
-											<div class="dropdown">
+											<td align="center">
 
-												<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
+											</td>
 
-						{% if matrix_cell.title == '' %}
+										</tr>
 
-													<i class="fa fa-bars"></i>
-												
-						{% else %}
-
-													<p class="vertical_text">{{ matrix_cell.title|truncatechars:20 }}</p>
-
-						{% endif %}
-	
-												</a>
-
-												<div class="dropdown-content dropdown-menu"  aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
-
-													<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
-														<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-													</a>
-								
-					{% if user == owner %}
-
-													<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
-														<i class="fa fa-pencil-alt"></i> Edit Row Header
-													</a>
-
-													<div class="dropdown-divider"></div>
-
-													<a class="dropdown-item" href="{% url 'matrices:add_row_above' matrix.id forloop.parentloop.counter0	%}">
-														<i class="fa fa-angle-up"></i> Add Row Above
-													</a>
-
-													<a class="dropdown-item" href="{% url 'matrices:delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')">
-														<i class="fa fa-trash-alt"></i> Delete This Row
-													</a>
-
-													<a class="dropdown-item" href="{% url 'matrices:add_row_below' matrix.id forloop.parentloop.counter0 %}">
-														<i class="fa fa-angle-down"></i> Add Row Below
-													</a>
-
-					{% endif %}
-
-												</div>
-							
-											</div>
-
-										</td>
-
-									</tr>
-
-								</table>
+									</table>
 				
-							</div>
+								</div>
+
+							</span>
 
 						</td>
 
-				{% endif %}
+					{% endif %}
+
+					{% if matrix.get_max_row != matrix_cell.ycoordinate %}
+
+						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 				
-				{% if matrix_cell.xcoordinate != 0 and matrix_cell.ycoordinate == 0 %}
+							<span draggable="true" ondragstart="dragRow(event)" id="span_{{ matrix_cell.id }}">
 
-						<td id="{{ matrix_cell.id }}">
-				
-							<div style="width:{{ matrix.width }}px;" class="headcol">
+								<div style="height:{{ matrix.height }}px;" class="headrow">
 
-								<table border="0">
+									<table border="0">
 
-									<tr>
+										<tr>
 
-										<td align="center" width={{ matrix.width|add:"-40" }}px>
+											<td align="center" height={{ matrix.height|add:"-40" }}px>
 
-										<div class="dropdown">
-										
-											<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
+												<div class="dropdown">
+
+													<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
 
 						{% if matrix_cell.title == '' %}
 
-												<i class="fa fa-bars"></i>
+														<i class="fa fa-bars"></i>
 												
 						{% else %}
 
-												<em>{{ matrix_cell.title|truncatechars:20 }}</em>
+														<p class="vertical_text">{{ matrix_cell.title|truncatechars:20 }}</p>
+
+						{% endif %}
+	
+													</a>
+
+													<div class="dropdown-content dropdown-menu"  aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
+
+														<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+														</a>
+								
+						{% if user == owner %}
+
+														<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+															<i class="fa fa-pencil-alt"></i> Edit Row Header
+														</a>
+
+														<div class="dropdown-divider"></div>
+
+														<a class="dropdown-item" href="{% url 'matrices:add_row_above' matrix.id forloop.parentloop.counter0	%}">
+															<i class="fa fa-angle-up"></i> Add Row Above
+														</a>
+
+														<a class="dropdown-item" href="{% url 'matrices:delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')">
+															<i class="fa fa-trash-alt"></i> Delete This Row
+														</a>
+
+														<a class="dropdown-item" href="{% url 'matrices:add_row_below' matrix.id forloop.parentloop.counter0 %}">
+															<i class="fa fa-angle-down"></i> Add Row Below
+														</a>
 
 						{% endif %}
 
-											</a>
-									
-											<div class="dropdown-content dropdown-menu" aria-labelledby="dropdownMenuButton">
+													</div>
+							
+												</div>
 
+											</td>
+
+										</tr>
+
+									</table>
+				
+								</div>
+
+							</span>
+
+						</td>
+
+					{% endif %}
+
+				{% endif %}
+				
+				{% if not matrix_cell.is_column_header and matrix_cell.is_row_header %}
+
+					{% if matrix.get_max_column == matrix_cell.xcoordinate %}
+
+						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+				
+							<span draggable="true" ondragstart="dragCol(event)" id="span_{{ matrix_cell.id }}">
+
+								<div style="width:34px; height:34px;" class="bottomcol">
+
+									<table border="0">
+
+										<tr>
+
+											<td align="center">
+
+											</td>
+
+										</tr>
+
+									</table>
+				
+								</div>
+
+							</span>
+
+						</td>
+
+					{% endif %}
+
+					{% if matrix.get_max_column != matrix_cell.xcoordinate %}
+
+						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+				
+							<span draggable="true" ondragstart="dragCol(event)" id="span_{{ matrix_cell.id }}">
+
+								<div style="width:{{ matrix.width }}px;" class="headcol">
+
+									<table border="0">
+
+										<tr>
+
+											<td align="center" width={{ matrix.width|add:"-40" }}px>
+
+												<div class="dropdown">
+										
+													<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
+
+						{% if matrix_cell.title == '' %}
+
+														<i class="fa fa-bars"></i>
+												
+						{% else %}
+
+														<em>{{ matrix_cell.title|truncatechars:20 }}</em>
+
+						{% endif %}
+
+													</a>
+									
+													<div class="dropdown-content dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+														<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+														</a>
+
+						{% if user == owner %}
+
+														<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
+															<i class="fa fa-pencil-alt"></i> Edit Column Header
+														</a>
+
+														<div class="dropdown-divider"></div>
+
+														<a class="dropdown-item" href="{% url 'matrices:add_column_left' matrix.id forloop.counter0	%}">
+															<i class="fa fa-angle-left"></i> Add Column Left
+														</a>
+
+														<a class="dropdown-item" href="{% url 'matrices:delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')">
+															<i class="fa fa-trash-alt"></i> Delete This Column
+														</a>
+	
+														<a class="dropdown-item" href="{% url 'matrices:add_column_right' matrix.id forloop.counter0 %}">
+															<i class="fa fa-angle-right"></i> Add Column Right
+														</a>
+
+						{% endif %}
+
+													</div>
+						
+												</div>
+			
+											</td>
+
+										</tr>
+
+									</table>
+				
+								</div>
+
+							</span>
+
+						</td>
+
+					{% endif %}
+
+				{% endif %}
+
+				{% if not matrix_cell.is_column_header and not matrix_cell.is_row_header %}
+
+					{% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
+				
+						{% csrf_token %}
+
+						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+				
+								<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
+
+									<div class="dropdown dropleft">
+
+										<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropcell">
+											<i class="fa fa-bars"></i>
+										</a>
+								
+								        <ul class="dropdown-content dropdown-menu">
+
+											<li>								
 												<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
 													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
 												</a>
+											</li>								
 
-					{% if user == owner %}
+						{% if user == owner %}
 
+											<li>								
 												<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
-													<i class="fa fa-pencil-alt"></i> Edit Column Header
+													<i class="fa fa-pencil-alt"></i> Edit Cell
 												</a>
+											</li>								
 
-												<div class="dropdown-divider"></div>
+						{% endif %}
 
-												<a class="dropdown-item" href="{% url 'matrices:add_column_left' matrix.id forloop.counter0	%}">
-													<i class="fa fa-angle-left"></i> Add Column Left
+											<li>								
+												<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix_cell.id }}">
+													<i class="fa fa-eye"></i> <em>View Commentary</em>
 												</a>
+											</li>								
 
-												<a class="dropdown-item" href="{% url 'matrices:delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')">
-													<i class="fa fa-trash-alt"></i> Delete This Column
+						{% if matrix_link != '' %}
+
+							{% if matrix_cell.blogpost != '' %}
+
+											<li>								
+												<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}" target="_blank">
+													<i class="fa fa-edit"></i> Edit Commentary
 												</a>
-	
-												<a class="dropdown-item" href="{% url 'matrices:add_column_right' matrix.id forloop.counter0 %}">
-													<i class="fa fa-angle-right"></i> Add Column Right
-												</a>
-
-					{% endif %}
-
-											</div>
-						
-										</div>
-			
-										</td>
-
-									</tr>
-
-								</table>
-				
-							</div>
-
-						</td>
-
-				{% endif %}
-
-				{% if matrix_cell.xcoordinate != 0 and matrix_cell.ycoordinate != 0 %}
-
-						<td id="{{ matrix_cell.id }}">
-				
-							<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
-
-								<div class="dropdown dropleft">
-
-									<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropcell">
-										<i class="fa fa-bars"></i>
-									</a>
-								
-							        <ul class="dropdown-content dropdown-menu">
-
-										<li>								
-											<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
-												<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-											</a>
-										</li>								
-
-					{% if user == owner %}
-
-										<li>								
-											<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
-												<i class="fa fa-pencil-alt"></i> Edit Cell
-											</a>
-										</li>								
-
-					{% endif %}
-
-										<li>								
-											<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix_cell.id }}">
-												<i class="fa fa-eye"></i> <em>View Commentary</em>
-											</a>
-										</li>								
-
-					{% if matrix_link != '' %}
-
-						{% if matrix_cell.blogpost != '' %}
-
-										<li>								
-											<a class="dropdown-item" href="{% url 'matrices:view_cell_blog' matrix.id matrix_cell.id %}" target="_blank">
-												<i class="fa fa-edit"></i> Edit Commentary
-											</a>
-										</li>								
+											</li>								
 					
-						{% endif %}
+							{% endif %}
 		
-					{% endif %}
+						{% endif %}
 
-									</ul> 
+										</ul> 
 
-								</div>
+									</div>
 
-								<div align="left">
+									<div align="left">
 
-					{% if matrix_cell.image %}
+						{% if matrix_cell.image %}
 	
-						{% if matrix_cell.image.roi == 0 %}
+							{% if matrix_cell.image.roi == 0 %}
 						
-									<p>	
-										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-											<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
-										</a>
-									</p>
+										<p>	
+											<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+												<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
+											</a>
+										</p>
 
-						{% else %}
+							{% else %}
 	
-									<p>	
-										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-											<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
-										</a>
-									</p>
+										<p>	
+											<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+												<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
+											</a>
+										</p>
 
+							{% endif %}
+	
+						{% else %}
+
+										<p class="text-left">
+											<a href="#">
+												<img alt="Comparative Pathology Workbench Logo" title="Comparative Pathology Workbench Logo" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="/static/ccp-logo.png">
+											</a>
+										</p>
+							
 						{% endif %}
 	
-					{% else %}
+									</div> 
 
-									<p class="text-left">
-										<a href="#">
-											<img alt="Comparative Pathology Workbench Logo" title="Comparative Pathology Workbench Logo" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="/static/ccp-logo.png">
-										</a>
-									</p>
-							
-					{% endif %}
-	
 								</div> 
-
-							</div> 
 							
+							</span>							
+
 						</td>
+
+					{% endif %}
+
+					{% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
+				
+						{% csrf_token %}
+
+						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+				
+								<div style="width:34px; height:{{ matrix.height }}px;" class="bottom" align="right">
+
+									<div align="left">
+
+										<p class="text-left">
+
+										</p>
+							
+									</div> 
+
+								</div> 
+							
+							</span>							
+
+						</td>
+
+					{% endif %}
+
+					{% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
+				
+						{% csrf_token %}
+
+						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+				
+								<div style="width:{{ matrix.width }}px; height:34px;" class="bottom" align="right">
+
+									<div align="left">
+
+										<p class="text-left">
+
+										</p>
+							
+									</div> 
+
+								</div> 
+							
+							</span>							
+
+						</td>
+
+					{% endif %}
+
+					{% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
+				
+						{% csrf_token %}
+
+						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+				
+								<div style="width:34px; height:34px;" class="bottom" align="right">
+
+									<div align="left">
+
+										<p class="text-left">
+
+										</p>
+							
+									</div> 
+
+								</div> 
+							
+							</span>							
+
+						</td>
+
+					{% endif %}
 
 				{% endif %}
 
@@ -590,6 +750,254 @@
 		</table>
 
 {% endif %}
+
+
+<script type="text/javascript">
+
+function confirmation(question) {
+
+	var defer = $.Deferred();
+	
+	$('<div></div>')
+    	.html(question)
+	    .dialog({
+    	    autoOpen: true,
+        	modal: true,
+	        title: 'Confirmation',
+    	    buttons: {
+        	    "SWAP": function () {
+            	    defer.resolve("swap");
+                	$(this).dialog("close");
+            	},
+	            "OVERWRITE": function () {
+    	            defer.resolve("overwrite");
+        	        $(this).dialog("close");
+	            },
+	            "OVERWRITE and LEAVE": function () {
+    	            defer.resolve("overwrite_leave");
+        	        $(this).dialog("close");
+	            }
+    	    },
+        	close: function () {
+	            //$(this).remove();
+    	        $(this).dialog('destroy').remove();
+    	        window.location.reload();
+        	}
+	    });
+	
+	return defer.promise();
+	
+	};
+
+function onclick(source, target){
+	
+	var question = "Do you want to SWAP Cells or OVERWRITE the Target Cell?";
+
+	confirmation(question).then(function (answer) {
+    
+    	//console.log(answer);
+	
+    	if (answer == "swap"){
+        	
+        	//alert("Swapping Cell " + target + " with Cell " + source);
+        	
+			//console.log(source);
+	    	//console.log(target);
+	
+		    $.ajax({
+        		url: '{% url 'matrices:swap_cells' %}',
+		        data: {
+        		  'source': source,
+		          'target': target,
+        		  csrfmiddlewaretoken: '{{ csrf_token }}'
+		        },
+		        dataType: 'json',
+		        type: 'post',
+        		success: function (data) {
+        			if (data.failure) {
+        				alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
+        			}
+					window.location.reload();
+        		}
+        	});
+		}
+
+    	if (answer == "overwrite"){
+        
+        	//alert("Overwriting Cell " + target + " with Cell " + source);
+
+			//console.log(source);
+	    	//console.log(target);
+	
+		    $.ajax({
+        		url: '{% url 'matrices:overwrite_cell' %}',
+		        data: {
+        		  'source': source,
+		          'target': target,
+        		  csrfmiddlewaretoken: '{{ csrf_token }}'
+		        },
+		        dataType: 'json',
+		        type: 'post',
+        		success: function (data) {
+        			if (data.failure) {
+        				alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
+        			}
+        			window.location.reload();
+        		}
+        	});
+    	}
+    	
+    	if (answer == "overwrite_leave"){
+        
+        	//alert("Overwriting Cell " + target + " and Leave Cell " + source);
+
+			//console.log(source);
+	    	//console.log(target);
+	
+		    $.ajax({
+        		url: '{% url 'matrices:overwrite_cell_leave' %}',
+		        data: {
+        		  'source': source,
+		          'target': target,
+        		  csrfmiddlewaretoken: '{{ csrf_token }}'
+		        },
+		        dataType: 'json',
+		        type: 'post',
+        		success: function (data) {
+        			if (data.failure) {
+        				alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
+        			}
+        			window.location.reload();
+        		}
+        	});
+    	}
+    	
+		//window.location.reload();
+
+	});
+}
+
+
+function allowDrop(ev){
+	ev.preventDefault();
+}
+
+function drag(ev){
+	ev.dataTransfer.setData("Text",ev.target.id);
+}
+
+function drop(ev){
+
+
+	ev.preventDefault();
+
+    var src = document.getElementById(ev.dataTransfer.getData("Text"));
+	var srcParent = src.parentNode;
+
+	var source_array = src.id.split("_",2);
+	var source = source_array[1];
+    
+    var tgt = ev.currentTarget.firstElementChild;
+	var target_array = tgt.id.split("_",2);
+	var target = target_array[1];
+
+	ev.currentTarget.replaceChild(src, tgt);
+    srcParent.appendChild(tgt);
+
+	onclick(source, target);
+    
+
+}
+
+
+function allowColDrop(ev){
+	ev.preventDefault();
+}
+
+function dragCol(ev){
+	ev.dataTransfer.setData("Text",ev.target.id);
+}
+
+function dropCol(ev){
+
+	ev.preventDefault();
+    var src = document.getElementById(ev.dataTransfer.getData("Text"));
+    var srcParent = src.parentNode;
+
+	var source_array = src.id.split("_",2);
+	var source = source_array[1];
+    
+    var tgt = ev.currentTarget.firstElementChild;
+	var target_array = tgt.id.split("_",2);
+	var target = target_array[1];
+
+    ev.currentTarget.replaceChild(src, tgt);
+    srcParent.appendChild(tgt);
+
+    $.ajax({
+        url: '{% url 'matrices:swap_columns' %}',
+        data: {
+          'source': source,
+          'target': target,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function (data) {
+          if (data.failure) {
+            alert("Column Swap Failed! Source: " + data.source + "  Target: " + data.target);
+          }
+		  window.location.reload();
+        }
+      });
+
+}
+
+function allowRowDrop(ev){
+	ev.preventDefault();
+}
+
+function dragRow(ev){
+	ev.dataTransfer.setData("Text",ev.target.id);
+}
+
+function dropRow(ev){
+
+	ev.preventDefault();
+    var src = document.getElementById(ev.dataTransfer.getData("Text"));
+    var srcParent = src.parentNode;
+
+	var source_array = src.id.split("_",2);
+	var source = source_array[1];
+
+    var tgt = ev.currentTarget.firstElementChild;
+	var target_array = tgt.id.split("_",2);
+	var target = target_array[1];
+
+    ev.currentTarget.replaceChild(src, tgt);
+    srcParent.appendChild(tgt);
+
+    $.ajax({
+        url: '{% url 'matrices:swap_rows' %}',
+        data: {
+          'source': source,
+          'target': target,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function (data) {
+          if (data.failure) {
+            alert("Row Swap Failed! Source: " + data.source + "  Target: " + data.target);
+          }
+		  window.location.reload();
+        }
+      });
+
+}
+
+</script>
+
 
 		
 {% endblock %}

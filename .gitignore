@@ -1,7 +1,11 @@
 # mwicks23 gitignore customisations
 *.sql
 *.lock
+logfile
 
+# Dependency directories
+node_modules/
+jspm_packages/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -281,12 +281,10 @@
             			
             			<ul class="dropdown-menu" aria-labelledby="dropdown01">
 
-							<li><a class="dropdown-item" href="{% url 'matrices:detail_user_general' user.id %}">
+							<li><a class="dropdown-item" href="{% url 'matrices:detail_user' user.id %}">
 			                    My account
 		                    </a>
         		
-        		            <li><a class="dropdown-item" href="{% url 'password_reset' %}">Reset password</a></li>
-				
         		            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
 				
 							<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>

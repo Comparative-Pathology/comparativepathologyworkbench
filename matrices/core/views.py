@@ -50,7 +50,6 @@ from matrices.core.forms import CredentialForm
 from matrices.core.forms import ProtocolForm
 from matrices.core.forms import TypeForm
 from matrices.core.forms import EditUserForm
-from matrices.core.forms import EditUserGeneralForm
 
 from matrices.core.models import Matrix
 from matrices.core.models import Cell
@@ -336,44 +335,49 @@ def authorisation(request):
 @login_required
 def view_user(request, user_id):
 
-	user = get_object_or_404(User, pk=user_id)
+	subject = get_object_or_404(User, pk=user_id)
+	user = get_object_or_404(User, pk=request.user.id)
 
-	my_matrix_list = Matrix.objects.filter(owner=request.user)
+	my_matrix_list = Matrix.objects.filter(owner=user)
 	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=request.user).filter(active=True)
+	image_list = Image.objects.filter(owner=user).filter(active=True)
 	server_list = Server.objects.all
 
-	if request.user.is_superuser == True:
+	if user.is_superuser == True:
 	
-		data = { 'user_id': user_id, 'user': user, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
-
+		data = { 'subject': subject, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
+		
 		return render(request, 'host/detail_user.html', data)
-
+	
 	else:
 
-		return HttpResponseRedirect(reverse('matrices:home', args=()))						
+		data = { 'subject': subject, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
+		
+		return render(request, 'host/detail_user.html', data)
+		#return HttpResponseRedirect(reverse('matrices:home', args=()))						
 
 
 @login_required
 def edit_user(request, user_id):
 
-	user = get_object_or_404(User, pk=user_id)
-	
-	my_matrix_list = Matrix.objects.filter(owner=request.user)
+	subject = get_object_or_404(User, pk=user_id)
+	user = get_object_or_404(User, pk=request.user.id)
+		
+	my_matrix_list = Matrix.objects.filter(owner=user)
 	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=request.user).filter(active=True)
+	image_list = Image.objects.filter(owner=user).filter(active=True)
 	server_list = Server.objects.all
 
-	if request.user.is_superuser == True:
+	if user.is_superuser == True:
 
 		if request.method == "POST":
 	
-			form = EditUserForm(request.POST, instance=user)
+			form = EditUserForm(request.POST, instance=subject)
 			
 			if form.is_valid() == True:
 			
 				user = form.save(commit=False)
-
+				
 				user.save()
 						
 				return HttpResponseRedirect(reverse('matrices:authorisation', args=()))						
@@ -382,13 +386,13 @@ def edit_user(request, user_id):
 			
 				messages.error(request, "Error")
 	
-				data = { 'form': form, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
+				data = { 'subject': subject, 'form': form, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 			
 		else:
 	
-			form = EditUserForm(instance=user)
+			form = EditUserForm(instance=subject)
 			
-			data = { 'form': form, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
+			data = { 'subject': subject, 'form': form, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 		return render(request, 'host/edit_user.html', data)
 	
@@ -398,77 +402,13 @@ def edit_user(request, user_id):
 
 	
 @login_required
-def view_user_general(request, user_id):
-
-	user = get_object_or_404(User, pk=user_id)
-
-	my_matrix_list = Matrix.objects.filter(owner=request.user)
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=request.user).filter(active=True)
-	server_list = Server.objects.all
-
-	if request.user.id == user.id:
-	
-		data = { 'user_id': user_id, 'user': user, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-		return render(request, 'host/detail_user_general.html', data)
-
-	else:
-
-		return HttpResponseRedirect(reverse('matrices:home', args=()))						
-
-
-@login_required
-def edit_user_general(request, user_id):
-
-	user = get_object_or_404(User, pk=user_id)
-	
-	my_matrix_list = Matrix.objects.filter(owner=request.user)
-	matrix_list = Matrix.objects.all
-	image_list = Image.objects.filter(owner=request.user).filter(active=True)
-	server_list = Server.objects.all
-
-	if request.user.id == user.id:
-
-		if request.method == "POST":
-	
-			form = EditUserGeneralForm(request.POST, instance=user)
-			
-			if form.is_valid() == True:
-			
-				user = form.save(commit=False)
-
-				user.save()
-						
-				return HttpResponseRedirect(reverse('matrices:home', args=()))						
-
-			else:
-			
-				messages.error(request, "Error")
-	
-				data = { 'form': form, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
-			
-		else:
-	
-			form = EditUserGeneralForm(instance=user)
-			
-			data = { 'form': form, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
-
-		return render(request, 'host/edit_user_general.html', data)
-	
-	else:
-
-		return HttpResponseRedirect(reverse('matrices:home', args=()))						
-
-	
-@login_required
 def delete_user(request, user_id):
 
-	user = get_object_or_404(User, pk=user_id)
+	subject = get_object_or_404(User, pk=user_id)
 	
 	if request.user.is_superuser == True:
 
-		user.delete()
+		subject.delete()
 	
 	else:
 
@@ -3009,8 +2949,6 @@ def overwrite_cell(request):
 	AJAX - Overwrite Cell
 	"""
 
-	#print("overwrite_cell");
-	
 	source = request.POST['source']
 	target = request.POST['target']
 	
@@ -3128,8 +3066,6 @@ def overwrite_cell_leave(request):
 	AJAX - Overwrite Cell
 	"""
 
-	#print("overwrite_cell_leave");
-	
 	source = request.POST['source']
 	target = request.POST['target']
 	
@@ -3269,8 +3205,6 @@ def swap_cells(request):
 	AJAX - Swap Cells
 	"""
 
-	#print("swap_cells");
-	
 	source = request.POST['source']
 	target = request.POST['target']
 	

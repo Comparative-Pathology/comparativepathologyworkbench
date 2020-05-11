@@ -6,34 +6,57 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:index' %}">
-				Workbenches
-			</a>
-		</li>
+<div class="row">
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:matrix' matrix_id %}">
-				CPW:{{ matrix.id|stringformat:"06d" }}
-			</a>
-		</li>
+	<div class="col-md-12">
 
-		<li class="breadcrumb-item active">
-			Workbench Details
-		</li>
+		<div>
+		
+			<ol class="breadcrumb subheading">
 	
-	</ol>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
 	
-	<h1>Workbench CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h1>
-	<br />
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:index' %}">
+						Workbenches
+					</a>
+				</li>
+
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:matrix' matrix_id %}">
+						CPW:{{ matrix.id|stringformat:"06d" }}
+					</a>
+				</li>
+
+				<li class="breadcrumb-item active">
+					Workbench Details
+				</li>
+	
+			</ol>
+
+		</div>
+
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+
+	<div class="col-md-9" id="content">
+	
+		<h1>Workbench CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h1>
+		<br />
+
+		<p>Browse the Bench Details</p>
+		<hr>
 
 		<dl class="dl-horizontal">
 
@@ -73,11 +96,19 @@
 			<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
 		</dl>
 
-	<br />
+		<br />
 
-	<!-- <a href="{% url 'matrices:matrix' matrix_id %}"> -->
-	<a href="{{ request.META.HTTP_REFERER }}">
-		<button class="save btn btn-success">Back</button>
-	</a>
+		<!-- <a href="{% url 'matrices:matrix' matrix_id %}"> -->
+		<a href="{{ request.META.HTTP_REFERER }}">
+			<button class="save btn btn-success">Back</button>
+		</a>
+
+	</div>
+	
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

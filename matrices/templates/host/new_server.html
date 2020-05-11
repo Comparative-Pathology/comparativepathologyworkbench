@@ -6,28 +6,44 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:list_imaging_hosts' %}">
+					Sources
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item active">
-			NEW Source
-		</li>
+			<li class="breadcrumb-item active">
+				NEW Source
+			</li>
 	
-	</ol>
+		</ol>
 	
-	<h1>NEW Source</h1>
-	<br />
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>NEW Source</h1>
+		<br />
 
 {% if credential_flag %}
 
@@ -46,5 +62,13 @@
 		</a>
 
 {% endif %}
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

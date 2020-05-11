@@ -2,51 +2,75 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<div>
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+
+			<li class="breadcrumb-item active">
+				Login
+			</li>
+	
+		</ol>
+
+		</div>
 		
-		<li class="breadcrumb-item active">
-			Login
-		</li>
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<br />
 	
-	</ol>
+		<h2>Comparative Pathology Workbench Authorization</h2>
+	
+		<br />
 
-	<br />
-	<h2>Comparative Pathology Workbench Authorization</h2>
-	<br />
+		<p>Login here to access the Comparative Pathology Workbench.</p>
 
-	<p>Login here to access the Comparative Pathology Workbench.</p>
+		<hr>
 
-	<hr>
-
-	<br />
+		<br />
 
 {% if form.errors %}
 
-	<p style="color: red">Your username and password didn't match. Please try again.</p>
+		<p style="color: red">Your username and password didn't match. Please try again.</p>
 
 {% endif %}
 
-	<form method="post">
+		<form method="post">
 
 {% csrf_token %}
 
-		<input type="hidden" name="next" value="{{ next }}" />
+			<input type="hidden" name="next" value="{{ next }}" />
 
 {% for field in form %}
 
-		<p>
+			<p>
 		
-			{{ field.label_tag }}<br>
-			{{ field }}<br>
+				{{ field.label_tag }}<br>
+				{{ field }}<br>
+					
+			</p>
 
 	{% for error in field.errors %}
-			
+				
 			<p style="color: red">{{ error }}</p>
 	
 	{% endfor %}
@@ -54,24 +78,25 @@
 	{% if field.help_text %}
 	
 			<p><small style="color: grey">{{ field.help_text }}</small></p>
+	
 	{% endif %}
 		
-		</p>
-
 {% endfor %}
 
-		<button type="submit">Log in</button>
+			<button type="submit">Log in</button>
 
-	</form>
+		</form>
 	
-	<br />
+		<br />
 
-	<hr>
+		<p>If you have forgotten your password, <a href="{% url 'password_reset' %}">Click Here</a></p>
 
-	<br />
+	</div>
 
-	<p>If you have forgotten your password, <a href="{% url 'password_reset' %}">Click Here</a></p>
+	<div class="col-md-2">
 
+	</div>
 
+</div>
 
 {% endblock %}

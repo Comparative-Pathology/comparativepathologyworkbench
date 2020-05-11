@@ -5,24 +5,46 @@
 {% load static %}
 
 {% block content %}
-    
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item active">
-			Workbenches
-		</li>
-	
-	</ol>
-	
-	<h1>NEW Workbench</h1>
 
+<div class="row">
+
+	<div class="col-md-12">
+
+		<div>
+		
+			<ol class="breadcrumb subheading">
+	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
+	
+				<li class="breadcrumb-item active">
+					Workbenches
+				</li>
+	
+			</ol>
+
+		</div>
+
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+
+	<div class="col-md-9" id="content">
+
+	<h1>NEW Workbench</h1>
 	<br />
+
+	<p>Create a NEW Bench</p>
+	<hr>
 
 	<form method="POST" class="post-form">
 
@@ -38,4 +60,13 @@
 		
 	</form>
 
+	</div>
+	
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+
 {% endblock %}
+

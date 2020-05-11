@@ -6,34 +6,50 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:maintenance' %}">
-				Maintenance
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:maintenance' %}">
+					Maintenance
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:detail_type' type.id %}">
-				Server Type {{ type.id }}
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:detail_type' type.id %}">
+					Server Type {{ type.id }}
+				</a>
+			</li>
+		
+			<li class="breadcrumb-item active">
+				Server Type Details
+			</li>
 	
-		<li class="breadcrumb-item active">
-			Server Type Details
-		</li>
-	
-	</ol>
-	
-	<h1>Server Type {{ type.id }}</h1>
-	<br />
+		</ol>
+			
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>Server Type {{ type.id }}</h1>
+		<br />
 
 		<dl class="dl-horizontal">
 			<dt>Name:</dt>
@@ -54,5 +70,12 @@
 
 {% endif %}
 
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

@@ -41,7 +41,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-
 	<title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
 	
 </head>
@@ -62,7 +61,7 @@
 
 {% else %}
 
-	<div class="container">
+	<!-- ><div class="container"> -->
 
     <header>
 		
@@ -92,7 +91,7 @@
 					
 			                <li class="dropdown-submenu">
 
-			                    <a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">List Benches</a>
+			                    <a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">List All Benches</a>
 
 			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#" data-toggle="dropdown">All Benches</a>
 
@@ -109,6 +108,8 @@
 							</li>
 							
 							<li class="dropdown-submenu">
+
+			                    <a class="dropdown-item" href="{% url 'matrices:index' %}">List My Benches</a>
 
 			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#" data-toggle="dropdown">My Benches</a>
 
@@ -279,7 +280,7 @@
 			            	{{ user.username }}
 			            </a>
             			
-            			<ul class="dropdown-menu" aria-labelledby="dropdown01">
+            			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
 
 							<li><a class="dropdown-item" href="{% url 'matrices:detail_user' user.id %}">
 			                    My account
@@ -309,7 +310,7 @@
 			            	User
 			            </a>
             			
-            			<ul class="dropdown-menu" aria-labelledby="dropdown01">
+            			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
 
 							<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
 
@@ -333,7 +334,9 @@
     
 	</div>
 
-    <main role="main" class="container">
+    <!-- <main role="main" class="container"> -->
+    
+    <main role="main">
     
 	{% block content %}
 
@@ -342,88 +345,116 @@
 	
 	</main>
 
-	<!-- Footer -->
-	<footer class="footer">
+<div class="row">
 
-		<!-- Footer Links -->
-		<div class="container">
+	<div class="col-md-1" id="sidebar">
 
-			<div>
+	</div>
 
-				<!-- Grid row -->
-				<div class="row">
+	<div class="col-md-9" id="content">
 
-					<!-- Grid column -->
-					<div class="col-md-3 mx-auto">
+		<br />
 
-						<!-- Links -->
-						<!-- <h5 class="font-weight-bold text-uppercase mt-3 mb-4" >Links</h5> -->
+		<hr>
 
-						<ul class="list-unstyled">
-							<li>
-								<a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" height="70" width="125"></a>
-							</li>
-						</ul>
+	</div>
 
-					</div>
-					<!-- Grid column -->
+	<div class="col-md-2">
 
-					<!-- Grid column -->
-					<div class="col-md-3 mx-auto">
+	</div>
 
-						<!-- Links -->
-						<ul class="list-unstyled">
-							<li>
-								<a href="https://www.humancellatlas.org/"><img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" height="55" width="170"></a>
-							</li>
-						</ul>
+</div>
 
-					</div>
-					<!-- Grid column -->
 
-					<!-- Grid column -->
-					<div class="col-md-3 mx-auto">
+<div class="row">
 
-						<!-- Links -->
-						<ul class="list-unstyled">
-							<li>
-								<a href="https://www.hw.ac.uk/"><img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" height="55" width="125"></a>
-							</li>
-						</ul>
+	<div class="col-md-1" id="sidebar">
 
-					</div>
-					<!-- Grid column -->
+	</div>
 
-					<!-- Grid column -->
-					<div class="col-md-3 mx-auto">
+	<div class="col-md-1">
 
-						<!-- Links -->
-						<ul class="list-unstyled">
-							<li>
-								<a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" height="55" width="220"></a>
-							</li>
-						</ul>
+		<ul class="list-unstyled">
+			<li>
+				<a href="https://helmsleytrust.org/">
+					<img src="{% static 'helmsley.png' %}" style="background-color: #FFFFFF;" width="170">
+				</a>
+			</li>
+		</ul>
 
-					</div>
-					<!-- Grid column -->
+	</div>
 
-				</div>
-				<!-- Grid row -->
+	<div class="col-md-1">
 
-			</div>
+	</div>
+					
+	<div class="col-md-1">
 
-		</div>
-		<!-- Footer Links -->
+		<ul class="list-unstyled">
+			<li>
+				<a href="https://www.humancellatlas.org/">
+					<img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" width="170">
+				</a>
+			</li>
+		</ul>
 
-		<!-- Copyright -->
-		<div class="footer-copyright text-center">
-			&copy; University of Edinburgh | 
-			<a href="https://www.ed.ac.uk/about/website/privacy/">Privacy & Cookies</a>
-		</div>
-		<!-- Copyright -->
+	</div>
+					
+	<div class="col-md-1">
+						
+	</div>
+					
+	<div class="col-md-1">
 
-	</footer>
-	<!-- Footer -->		
+		<ul class="list-unstyled">
+			<li>
+				<a href="https://www.ed.ac.uk/pathology">
+					<img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220">
+				</a>
+			</li>
+		</ul>
+
+	</div>
+					
+	<div class="col-md-1">
+
+	</div>
+					
+	<div class="col-md-1">
+
+		<ul class="list-unstyled">
+			<li>
+				<a href="https://www.hw.ac.uk/">
+					<img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" width="125">
+				</a>
+			</li>
+		</ul>
+
+	</div>
+					
+	<div class="col-md-1">
+
+	</div>
+					
+	<div class="col-md-1">
+
+		<ul class="list-unstyled">
+			<li>
+				<a href="https://www.chanzuckerberg.com/">
+					<img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125">
+				</a>
+			</li>
+		</ul>
+
+	</div>
+					
+					
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+
 
 <script>
 
@@ -433,21 +464,26 @@
 		});
 });
 
-</script>
-
-<script>
-
 $(document).ready(function(){
 	
 	$("#matrix_info").on("hide.bs.collapse", function(){
-		$(".btn-expand").html('<i class="fa fa-plus"></i>');
+		$(".toggle-info").html('<i class="fa fa-info fa-lg"></i>');
 	});
 	
 	$("#matrix_info").on("show.bs.collapse", function(){
-		$(".btn-expand").html('<i class="fa fa-minus"></i>');
+		$(".toggle-info").html('<i class="fa fa-window-minimize fa-lg"></i>');
 	});
 
 });
+
+$( document ).ready( function () {
+	$(".toggle-sidebar").click(function () {
+		$("#sidebar").toggleClass("visible invisible");
+		$("#indicator-2").toggleClass("fa-window-minimize fa-cart-arrow-down");
+		
+		return false;
+	});
+}); 
 
 $( document ).ready( function () {
     $( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
@@ -474,7 +510,8 @@ $( document ).ready( function () {
         return false;
     } );
 } );	
- 
+
+
 </script>
 
 		

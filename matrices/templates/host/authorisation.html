@@ -6,29 +6,44 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item active">
-			Authorization
-		</li>
-	
-	</ol>
-	
-	<h1>Authorization</h1>
-	<br />
+<div class="row">
 
-	<p>Authorisation Functions</p>
+	<div class="col-md-12">
 
-	<hr>
+		<ol class="breadcrumb subheading">
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item active">
+				Authorization
+			</li>
+	
+		</ol>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
 
-	<h2>Users</h2>
-	<br />
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>Authorization</h1>
+		<br />
+
+		<p>Authorisation Functions</p>
+		<hr>
+
+		<h2>Users</h2>
+		<br />
 
 {% if user_list %}
 
@@ -36,81 +51,76 @@
 	
 		{% if forloop.first %}
 	
-    <table>
+	    <table>
 
-        <tr>
+    	    <tr>
+        	    <th width="250px">Action</th>
+				<th width="200px">User Name</th>
+				<th width="200px">Full Name</th>
+				<th width="250px">Email</th>
+				<th>Is Super User?</th>
+			</tr>
 
-            <th width="250px">Action</th>
-			<th width="200px">User Name</th>
-			<th width="200px">Full Name</th>
-			<th width="250px">Email</th>
-			<th>Is Super User?</th>
-			
-		</tr>
-
-        <tr>
-
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-
-		</tr>
+    	    <tr>
+    	    	<td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+			</tr>
 
 		{% endif %}
 	
-        <tr>
+    	    <tr>
 
 		{% if user.is_superuser %}
             
-            <td>
-				<a href="{% url 'matrices:detail_user' userlist.id %}">
-					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-				</a>
-				<a href="{% url 'matrices:edit_user' userlist.id %}">
-					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-				</a>
-				<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
-					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-				</a>
-            </td>
+        	    <td>
+					<a href="{% url 'matrices:detail_user' userlist.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+					<a href="{% url 'matrices:edit_user' userlist.id %}">
+						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+					</a>
+					<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
+						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+					</a>
+	            </td>
 
 		{% else %}
 	
-            <td>
-				<a href="{% url 'matrices:detail_user' userlist.id %}">
-					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-				</a>
-            </td>
+        	    <td>
+					<a href="{% url 'matrices:detail_user' userlist.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+        	    </td>
 
 		{% endif %}
 
-            <td>
-				{{ userlist.username }}
-            </td>
-            <td>
-				{{ userlist.get_full_name }}
-            </td>
-            <td>
-				{{ userlist.email }}
-            </td>
-            <td>
-				{{ userlist.is_superuser }}
-            </td>
-
-		</tr>
+	            <td>
+					{{ userlist.username }}
+        	    </td>
+            	<td>
+					{{ userlist.get_full_name }}
+	            </td>
+    	        <td>
+					{{ userlist.email }}
+            	</td>
+	            <td>	
+					{{ userlist.is_superuser }}
+        	    </td>
+			</tr>
 
 		{% if forloop.last %}
 	
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
-	</table>
+    	    <tr>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+	            <td>&nbsp;</td>
+			</tr>
+		</table>
 
 		{% endif %}
 	
@@ -118,14 +128,14 @@
 
 {% else %}
 
-	<p>No users are available.</p>
+		<p>No users are available.</p>
 	
 {% endif %}
 
-	<hr>
+		<hr>
 	
-	<h2>Blog Credentials</h2>
-	<br />
+		<h2>Blog Credentials</h2>
+		<br />
 
 {% if credential_list %}
 
@@ -133,125 +143,119 @@
 	
 		{% if forloop.first %}
 	
-    <table>
+	    <table>
 
-        <tr>
-
-            <th width="150px">Action</th>
-            <th width="100px">Owner</th>
-            <th width="200px">User Name</th>
-            <th width="200px">Wordpress Id</th>
+    	    <tr>
+	            <th width="150px">Action</th>
+        	    <th width="100px">Owner</th>
+            	<th width="200px">User Name</th>
+	            <th width="200px">Wordpress Id</th>
 
 		{% if user.is_superuser %}
 
-            <th width="350px">Application Password</th>
+    	        <th width="350px">Application Password</th>
 
 		{% else %}
 
-            <th width="350px">&nbsp;</td>
+        	    <th width="350px">&nbsp;</td>
 
 		{% endif %}
             
-		</tr>
+			</tr>
 
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
+    	    <tr>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+	            <td>&nbsp;</td>
+			</tr>
 
 		{% endif %}
 	
-        <tr>
+	        <tr>
 
 		{% if user.id == credential.owner_id or user.is_superuser %}
             
-            <td>
-				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
-					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-				</a>
-				<a href="{% url 'matrices:edit_blog_credential' credential.id %}">
-					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-				</a>
-				<a href="{% url 'matrices:delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
-					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-				</a>
-            </td>
+    	        <td>
+					<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+					<a href="{% url 'matrices:edit_blog_credential' credential.id %}">
+						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+					</a>
+					<a href="{% url 'matrices:delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
+						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+					</a>
+    	        </td>
 
 		{% else %}
 	
-            <td>
-				<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
-					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-				</a>
-            </td>
-
+        	    <td>
+					<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+    	        </td>
+	
 		{% endif %}
 
-            <td>
-            	{{ credential.owner.username }}
-            </td>
-
-            <td>
-				{{ credential.username }}
-            </td>
-
-            <td>
-            	{{ credential.wordpress }}
-            </td>
+    	        <td>
+        	    	{{ credential.owner.username }}
+	            </td>
+		        <td>
+					{{ credential.username }}
+            	</td>
+	            <td>
+    	        	{{ credential.wordpress }}
+        	    </td>
 
 		{% if user.is_superuser %}
 
-            <td>
-            	{{ credential.apppwd }}
-            </td>
+	            <td>
+    	        	{{ credential.apppwd }}
+        	    </td>
 
 		{% else %}
 
-            <td>&nbsp;</td>
+            	<td>&nbsp;</td>
 
 		{% endif %}
 
-		</tr>
+			</tr>
 
 		{% if forloop.last %}
 	
-        <tr>
+    	    <tr>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+	            <td>&nbsp;</td>
+			</tr>
 
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-
-		</tr>
-
-        <tr>
+        	<tr>
 
 			{% if user.is_superuser %}
     
-            <td>
-				<a href="{% url 'matrices:new_blog_credential' %}">
-					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-				</a>
-            </td>
+            	<td>
+					<a href="{% url 'matrices:new_blog_credential' %}">
+						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+					</a>
+    	        </td>
 
 			{% else %}
 
-            <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
 
 			{% endif %}
 	
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+			</tr>
 
-		</tr>
-
-    </table>
+	    </table>
 
 		{% endif %}
 	
@@ -259,25 +263,31 @@
 
 {% else %}
 
-	<p>No Blog Credentials are available.</p>
+		<p>No Blog Credentials are available.</p>
 	    
 	{% if user.is_superuser %}
     
-	<p>
-		<a href="{% url 'matrices:new_blog_credential' %}">
-			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-		</a>
-	</p>
+		<p>
+			<a href="{% url 'matrices:new_blog_credential' %}">
+				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			</a>
+		</p>
 
 	{% else %}
 
-	<p>&nbsp;
-	</p>
+		<p>&nbsp;
+		</p>
 
 	{% endif %}
 	
 {% endif %}
 
-	<hr>
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

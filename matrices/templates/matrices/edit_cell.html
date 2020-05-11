@@ -5,69 +5,103 @@
 {% load static %}
 
 {% block content %}
-    
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:index' %}">
-				Workbenches
-			</a>
-		</li>
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:matrix' matrix.id %}">
-				CPW:{{ matrix.id|stringformat:"06d" }}
-			</a>
-		</li>
+<div class="row">
 
-		<li class="breadcrumb-item active">
-			Cell Details
-		</li>
+	<div class="col-md-12">
+
+		<div>
+		
+			<ol class="breadcrumb subheading">
 	
-	</ol>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
 	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:index' %}">
+						Workbenches
+					</a>
+				</li>
+
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:matrix' matrix.id %}">
+						CPW:{{ matrix.id|stringformat:"06d" }}
+					</a>
+				</li>
+
+				<li class="breadcrumb-item active">
+					Cell Details
+				</li>
+			</ol>
+
+		</div>
+
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+
+	<div class="col-md-9" id="content">
+	    
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 
-	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
-	<br />
+		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
+		<br />
+		<p>Edit a Cell</p>
+		<hr>
 
 {% endif %}
 
 {% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
 
-	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header, "{{ matrix.title }}" </h1>
-	<br />
+		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header, "{{ matrix.title }}" </h1>
+		<br />
+		<p>Edit a Row Header Cell</p>
+		<hr>
 
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
 
-	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header, "{{ matrix.title }}" </h1>
-	<br />
+		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header, "{{ matrix.title }}" </h1>
+		<br />
+		<p>Edit a Column Header Cell</p>
+		<hr>
 
 {% endif %}
-
 	    
-	<form method="POST" class="post-form">
+		<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {{ form.as_p}} 
 		
-    	<button type="submit" class="save btn btn-danger">Save</button>
-
+    		<button type="submit" class="save btn btn-danger">Save</button>
 	
-	</form>
+		</form>
+		
+		<br />
 
 		<a href="{{ request.META.HTTP_REFERER }}">
 			<button class="save btn btn-success">CANCEL</button>
 		</a>
+
+	</div>
+	
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+
 
 <style type="text/css">
 
@@ -76,6 +110,7 @@ ul {
 }
 
 </style>
+
 
 {% endblock %}
 

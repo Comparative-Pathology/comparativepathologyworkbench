@@ -6,47 +6,71 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:maintenance' %}">
-				Maintenance
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:detail_protocol' protocol.id %}">
-				Server Protocol {{ protocol.id }}
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item active">
-			EDIT Server Protocol
-		</li>
-	
-	</ol>
-	
-	<h1>EDIT Server Protocol {{ protocol.id }}</h1>
-	<br />
+<div class="row">
 
-	<form method="POST" class="post-form">
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:maintenance' %}">
+					Maintenance
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:detail_protocol' protocol.id %}">
+					Server Protocol {{ protocol.id }}
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item active">
+				EDIT Server Protocol
+			</li>
+	
+		</ol>
+	
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>EDIT Server Protocol {{ protocol.id }}</h1>
+		<br />
+
+		<form method="POST" class="post-form">
 		
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-	    <button type="submit" class="save btn btn-danger">Save</button>
+	    	<button type="submit" class="save btn btn-danger">Save</button>
 
-	</form>
+		</form>
 
-	<a href="{% url 'matrices:maintenance' %}">
-		<button class="save btn btn-success">CANCEL</button>
-	</a>
+		<a href="{% url 'matrices:maintenance' %}">
+			<button class="save btn btn-success">CANCEL</button>
+		</a>
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

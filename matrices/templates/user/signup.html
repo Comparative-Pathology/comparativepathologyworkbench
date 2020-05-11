@@ -2,59 +2,83 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
 		
-		<li class="breadcrumb-item active">
-			Signup
-		</li>
+			<li class="breadcrumb-item active">
+				Signup
+			</li>
 	
-	</ol>
+		</ol>
 
-	<br />
-	<h2>Comparative Pathology Workbench Authorization</h2>
-	<br />
+	</div>
+			
+</div>
+		
+<div class="row">
 
-	<p>Register here for access to the Comparative Pathology Workbench.</p>
+	<div class="col-md-1" id="sidebar">
 
-	<hr>
+	</div>
+			
+	<div class="col-md-9" id="content">
 
-	<br />
+		<br />
+		<h2>Comparative Pathology Workbench Authorization</h2>
+		<br />
 
-	<form method="post">
+		<p>Register here for access to the Comparative Pathology Workbench.</p>
+
+		<hr>
+		<br />
+
+		<form method="post">
 
 {% csrf_token %}
 
 {% for field in form %}
 
-		<p>
+			<p>
 
 	{{ field.label_tag }}<br />
 	{{ field }}
 
 	{% if field.help_text %}
 		
-			<small style="color: grey">{{ field.help_text|safe }}</small>
+				<small style="color: grey">{{ field.help_text|safe }}</small>
 		
 	{% endif %}
 
 	{% for error in field.errors %}
 		
-			<p style="color: red">{{ error }}</p>
+				<p style="color: red">{{ error }}</p>
 		
 	{% endfor %}
 
-		</p>
+			</p>
 
 {% endfor %}
 
-		<button type="submit">Sign up</button>
+			<button type="submit">Sign up</button>
 
-	</form>
+		</form>
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}
+

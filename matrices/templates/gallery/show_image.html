@@ -6,155 +6,177 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:list_imaging_hosts' %}">
+					Sources
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
-				{{ server.name }}
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
-				{{ group.name }}
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
+					{{ server.name }}
+				</a>
+			</li>
+			
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
+					{{ group.name|truncatechars:20 }}
+				</a>
+			</li>
 	
 {% for project in projects %}
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_project' server.id project.id %}">
-				{{ project.name }}
-			</a>
-		</li>	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:webgallery_show_project' server.id project.id %}">
+					{{ project.name|truncatechars:20 }}
+				</a>
+			</li>	
 
 {% endfor %}
 
 {% for dataset in datasets %}
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}">
-				{{ dataset.name }}
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}">
+					{{ dataset.name|truncatechars:20 }}
+				</a>
+			</li>
 	
 {% endfor %}
 
-		<li class="breadcrumb-item active">
-			{{ image.name }}
-		</li>	
+			<li class="breadcrumb-item active">
+				{{ image.name|truncatechars:20 }}
+			</li>	
 	
-	</ol>
-	
-	<h1>{{ image.name }}</h1>
+		</ol>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
 
-	<br />
+	<div class="col-md-1" id="sidebar">
 
-    <p>{{ image.description }}</p>
+	</div>
+			
+	<div class="col-md-9" id="content">
 
-	<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
-		<button class="save btn btn-success">Add Image to Image Collection</button>
-	</a>
-	
+		<h1>{{ image.name|truncatechars:20 }}</h1>
+		<br />
 
-    <hr>
+	    <p>{{ image.description }}</p>
 
-    <table>
-        <tr>
-            <th>Image:</th>
-            <td>
-				<a href="{{ image.viewer_url  }}" target="_blank">
-					<img  style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
-				</a>
-			</td>
-		</tr>
+		<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
+			<button class="save btn btn-success">Add Image to Image Collection</button>
+		</a>
 
-        <tr>
-            <th>&nbsp;</th>
-            <td>&nbsp;</td>
-		</tr>
+	    <hr>
 
-        <tr>
-            <th>Dimensions (XY):</th>
-            <td>{{ image.sizeX }} x {{ image.sizeY }}</td>
-        </tr>
+    	<table>
+        	<tr>
+            	<th>Image:</th>
+	            <td>
+					<a href="{{ image.viewer_url  }}" target="_blank">
+						<img  style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
+					</a>
+				</td>
+			</tr>
 
-        <tr>
-            <th>Pixels Type:</th>
-            <td>{{ image.pixelstype }}</td>
-        </tr>
+        	<tr>
+            	<th>&nbsp;</th>
+	            <td>&nbsp;</td>
+			</tr>
 
-        <tr>
-            <th>Pixels Size (XYZ) (&#181m):</th>
-            <td>{{ image.pixelsizeX|floatformat:4 }} x {{ image.pixelsizeY|floatformat:4 }}</td>
-        </tr>
+        	<tr>
+            	<th>Dimensions (XY):</th>
+	            <td>{{ image.sizeX }} x {{ image.sizeY }}</td>
+    	    </tr>
 
-        <tr>
-            <th>Z-sections/Timepoints:</th>
-            <td>{{ image.sizeZ }} x {{ image.sizeT }}</td>
-        </tr>
+        	<tr>
+            	<th>Pixels Type:</th>
+	            <td>{{ image.pixelstype }}</td>
+    	    </tr>
 
-    </table>
+        	<tr>
+            	<th>Pixels Size (XYZ) (&#181m):</th>
+	            <td>{{ image.pixelsizeX|floatformat:4 }} x {{ image.pixelsizeY|floatformat:4 }}</td>
+    	    </tr>
 
-    <hr>
+        	<tr>
+            	<th>Z-sections/Timepoints:</th>
+	            <td>{{ image.sizeZ }} x {{ image.sizeT }}</td>
+    	    </tr>
 
-    <p>Image has {{ image.roi_count }} Regions Of Interest (ROIs):</p>
+	    </table>
+
+    	<hr>
+
+	    <p>Image has {{ image.roi_count }} Regions Of Interest (ROIs):</p>
 
 {% for roi in rois %}
 
-    <table>
+    	<table>
 
 	{% for shape in roi.shapes %}
 	
-        <tr>
-            <th>ROI ID:</th>
-            <td>{{ shape.id }}</td>
-		</tr>
+        	<tr>
+            	<th>ROI ID:</th>
+	            <td>{{ shape.id }}</td>
+			</tr>
 
-        <tr>
-            <th>Coordinates:</th>
-            <td>X: {{ shape.centre_x }}, Y: {{ shape.centre_y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
-		</tr>
+        	<tr>
+            	<th>Coordinates:</th>
+	            <td>X: {{ shape.centre_x }}, Y: {{ shape.centre_y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
+			</tr>
 
-        <tr>
-            <th>{{ shape.type }}</th>
-            <td>
-				<a href="{{ shape.viewer_url }}" target="_blank">
-					<img style="width:256px;" alt="{{ shape.type }}" title="{{ shape.type }}" src="{{ shape.shape_url }}" >
-				</a>
-            </td>
-        </tr>
+        	<tr>
+            	<th>{{ shape.type }}</th>
+	            <td>
+					<a href="{{ shape.viewer_url }}" target="_blank">
+						<img style="width:256px;" alt="{{ shape.type }}" title="{{ shape.type }}" src="{{ shape.shape_url }}" >
+					</a>
+	            </td>
+    	    </tr>
 
-        <tr>
-            <th>&nbsp;</th>
-            <td>
-				<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')">
-					<button class="save btn btn-success">Add ROI to Image Collection</button>
-				</a>
-            </td>
-		</tr>
+        	<tr>
+            	<th>&nbsp;</th>
+	            <td>
+					<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')">
+						<button class="save btn btn-success">Add ROI to Image Collection</button>
+					</a>
+	            </td>
+			</tr>
 
-        <tr>
-            <th>&nbsp;</th>
-            <td>&nbsp;</td>
-		</tr>
+        	<tr>
+            	<th>&nbsp;</th>
+	            <td>&nbsp;</td>
+			</tr>
 
 	{% endfor %}
 	
-    </table>
+	    </table>
 
 {% endfor %}
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

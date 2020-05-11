@@ -2,14 +2,55 @@
 
 {% block content %}
 
-	<br />
-	<h2>Comparative Pathology Workbench Authorization</h2>
-	<br />
+<div class="row">
 
-	<p>Please confirm your email address to complete the registration.</p>
+	<div class="col-md-12">
 
-	<hr>
+		<div>
 
-	<br />
+		<ol class="breadcrumb subheading">
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+
+			<li class="breadcrumb-item active">
+				Confirm Email Address
+			</li>
+	
+		</ol>
+
+		</div>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<br />
+		<h2>Comparative Pathology Workbench Authorization</h2>
+		<br />
+
+		<p>Please confirm your email address to complete the registration.</p>
+
+		<hr>
+		<br />
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

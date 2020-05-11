@@ -6,133 +6,149 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<div>
+
+			<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
 	
-		<li class="breadcrumb-item active">
-			My Benches
-		</li>
+				<li class="breadcrumb-item active">
+					My Benches
+				</li>
 	
-	</ol>
+			</ol>
 	
-	<h1>Browse My Benches</h1>
-	<br />
+		</div>
 
-	<p>Browse the list of My Benches</p>
+	</div>
 
-	<hr>
+</div>
 
-	<!-- <h2>Benches</h2> -->
-	<!-- <br /> -->
+<div class="row row-no-padding" id="row-main">
 
-{% if matrix_list %}
+	<div class="col-md-1 visible" id="sidebar">
 
-	{% for matrix in matrix_list %}
+	</div>
+
+	<div class="col-md-9">
+
+		<h1>Browse My Benches</h1>
+		<br />
+
+		<p>Browse the list of My Benches</p>
+		<hr>
+
+{% if my_matrix_list %}
+
+	{% for matrix in my_matrix_list %}
 	
 		{% if forloop.first %}
 	
-    <table>
-        <tr>
-            <th width="200px">Action</th>
-            <th width="150px">Owner:</th>
-            <th width="150px">Id:</th>
-            <th>Title:</th>
+    	<table>
+        	<tr>
+            	<th width="200px">Action</th>
+	            <th width="150px">Owner:</th>
+    	        <th width="150px">Id:</th>
+        	    <th>Title:</th>
             
-		</tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
+			</tr>
+    	    <tr>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+			</tr>
 
 		{% endif %}
 	
-        <tr>
+	        <tr>
 
 		{% if credential_flag %}
 		
 			{% if user.id == matrix.owner.id or user.is_superuser %}
             
-            <td>
-				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
-	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-				</a>
-				<a href="{% url 'matrices:detail_matrix' matrix.id %}">
-					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-				</a>
-				<a href="{% url 'matrices:edit_matrix' matrix.id %}">
-					<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-				</a>
-				<a href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
-					<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-				</a>
-            </td>
+    	        <td>
+					<a href="{% url 'matrices:matrix' matrix.id %}">	            	
+	        	    	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
+					</a>
+					<a href="{% url 'matrices:detail_matrix' matrix.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+					<a href="{% url 'matrices:edit_matrix' matrix.id %}">
+						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+					</a>
+					<a href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
+						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+					</a>
+    	        </td>
 
 			{% else %}
 	
-            <td>
-				<a href="{% url 'matrices:matrix' matrix.id %}">	            	
-	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-				</a>
-				<a href="{% url 'matrices:detail_matrix' matrix.id %}">
-					<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-				</a>
-            </td>
+        	    <td>
+					<a href="{% url 'matrices:matrix' matrix.id %}">	            	
+	            		<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
+					</a>
+					<a href="{% url 'matrices:detail_matrix' matrix.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+    	        </td>
 
 			{% endif %}
 
 		{% else %}
 
-            <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
 
 		{% endif %}
 
-            <td>{{ matrix.owner.username }}</td>
-            <td>CPW:{{ matrix.id|stringformat:"06d" }}</td>
-            <td>{{ matrix.title }}</td>
+	            <td>{{ matrix.owner.username }}</td>
+    	        <td>CPW:{{ matrix.id|stringformat:"06d" }}</td>
+        	    <td>{{ matrix.title }}</td>
 
-		</tr>
+			</tr>
 
 		{% if forloop.last %}
 	
-        <tr>
+    	    <tr>
 
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
 
-		</tr>
+			</tr>
 
-        <tr>
+    	    <tr>
 
 			{% if credential_flag %}
     
-            <td>
-				<a href="{% url 'matrices:new_matrix' %}">
-					<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-				</a>
-            </td>
+        	    <td>
+					<a href="{% url 'matrices:new_matrix' %}">
+						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+					</a>
+        	    </td>
 
 			{% else %}
 
-            <td>&nbsp;</td>
+	            <td>&nbsp;</td>
 
 			{% endif %}
 
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
 
-		</tr>
+			</tr>
 
-    </table>
+	    </table>
 
 		{% endif %}
 	
@@ -140,23 +156,31 @@
 
 {% else %}
 
-	<p>No Benches are available.</p>
+		<p>No Benches are available.</p>
 
 	{% if credential_flag %}
     
-    <p>
-		<a href="{% url 'matrices:new_matrix' %}">
-			<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-		</a>
-    </p>
+    	<p>
+			<a href="{% url 'matrices:new_matrix' %}">
+				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			</a>
+    	</p>
 
 	{% else %}
 
-    <p>You are not authorised to add Benches yet!
-    </p>
+	    <p>You are not authorised to add Benches yet!
+    	</p>
 
 	{% endif %}
 
 {% endif %}
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

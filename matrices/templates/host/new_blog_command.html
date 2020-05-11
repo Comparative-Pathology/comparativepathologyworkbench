@@ -6,28 +6,44 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:maintenance' %}">
-				Maintenance
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:maintenance' %}">
+					Maintenance
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item active">
-			NEW Blog Credential
-		</li>
+			<li class="breadcrumb-item active">
+				NEW Blog Credential
+			</li>
 	
-	</ol>
-	
-	<h1>NEW Blog Command</h1>
-	<br />
+		</ol>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>NEW Blog Command</h1>
+		<br />
 
 	    <form method="POST" class="post-form">
 		
@@ -42,5 +58,13 @@
 		<a href="{% url 'matrices:maintenance' %}">
 			<button class="save btn btn-success">CANCEL</button>
 		</a>
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

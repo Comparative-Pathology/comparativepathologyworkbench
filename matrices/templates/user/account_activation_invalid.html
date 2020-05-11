@@ -2,14 +2,55 @@
 
 {% block content %}
 
-	<br />
-	<h2>Comparative Pathology Workbench Authorization</h2>
-	<br />
+<div class="row">
 
-	<p>The confirmation link was invalid, possibly because it has already been used.</p>
+	<div class="col-md-12">
 
-	<hr>
+		<div>
 
-	<br />
+		<ol class="breadcrumb subheading">
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+
+			<li class="breadcrumb-item active">
+				Invalid Confirmation Link
+			</li>
+	
+		</ol>
+
+		</div>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<br />
+		<h2>Comparative Pathology Workbench Authorization</h2>
+		<br />
+
+		<p>The confirmation link was invalid, possibly because it has already been used.</p>
+
+		<hr>
+		<br />
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

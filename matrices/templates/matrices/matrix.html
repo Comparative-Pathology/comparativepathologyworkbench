@@ -6,6 +6,12 @@
 
 {% block content %}
 
+<div class="row">
+
+	<div class="col-md-12">
+
+		<div>
+
 			<ol class="breadcrumb subheading">
 	
 				<li class="breadcrumb-item">
@@ -21,195 +27,363 @@
 				</li>
 	
 				<li class="breadcrumb-item active">
-					CPW:{{ matrix.id|stringformat:"06d" }}
-				</li>
-	
-				<li class="breadcrumb-item">
-					<a href="#" class="btn-expand btn-link" data-toggle="collapse" data-target="#matrix_info" role="button">
-						<i class="fa fa-plus"></i>
+					CPW:{{ matrix.id|stringformat:"06d" }} : 
+					<a class="btn-expand toggle-info" data-toggle="collapse" href="#matrix_info" role="button" aria-expanded="false" aria-controls="matrix_info">
+						<i class="fa fa-info fa-lg" title="Bench Details"></i>
+						<span class="sr-only">Bench Details</span>
 					</a>
+
+{% if user == owner %}
+
+	{% if credential_flag %}
+
+		{% if image_list %}
+
+					
+					<a class="btn-expand toggle-sidebar" href="#sidebar" role="button" aria-expanded="false" aria-controls="sidebar">
+						<i aria-hidden="true" id="indicator-2" class="fa fa-cart-arrow-down fa-lg" title="Image Basket"></i>
+						<span class="sr-only">Image Basket</span>
+					</a>
+
+		{% endif %}
+
+	{% endif %}
+
+{% endif %}
+
 				</li>
-		
+
 			</ol>
 
-	<div class="collapse subheading" id="matrix_info">
-
-		<div class="card bg-custom card-body">
-  
-			<dl class="row">
-
-				<dt class="col-sm-2">Id:</dt>
-				<dd class="col-sm-2">CPW:{{ matrix.id|stringformat:"06d" }}</dd>
-
-				<dt class="col-sm-2">Title:</dt>
-				<dd class="col-sm-6">{{ matrix.title }}</dd>
-
-				<dt class="col-sm-2">Owner:</dt>
-				<dd class="col-sm-2">{{ owner.username }}</dd>
-			
-				<dt class="col-sm-2">Cell Height:</dt>
-				<dd class="col-sm-2">{{ matrix.height }}</dd>
-			
-				<dt class="col-sm-2">Cell Width:</dt>
-				<dd class="col-sm-2">{{ matrix.width }}</dd>
-	
-				<dt class="col-sm-2">Description:</dt>
-				<dd class="col-sm-10">{{ matrix.description|truncatechars:100 }}</dd>
-
-				<dt class="col-sm-2">Created:</dt>
-				<dd class="col-sm-2">{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
-			
-				<dt class="col-sm-2">Last Modified:</dt>
-				<dd class="col-sm-6">{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
-
-			</dl>
 		</div>
 
-	</div>
+		<div class="collapse subheading" id="matrix_info">
+
+			<div class="card bg-custom card-body">
+  
+				<dl class="row">
+
+					<dt class="col-sm-2">Id:</dt>
+					<dd class="col-sm-2">CPW:{{ matrix.id|stringformat:"06d" }}</dd>
+
+					<dt class="col-sm-2">Title:</dt>
+					<dd class="col-sm-6">{{ matrix.title }}</dd>
+
+					<dt class="col-sm-2">Owner:</dt>
+					<dd class="col-sm-2">{{ owner.username }}</dd>
+			
+					<dt class="col-sm-2">Cell Height:</dt>
+					<dd class="col-sm-2">{{ matrix.height }}</dd>
+			
+					<dt class="col-sm-2">Cell Width:</dt>
+					<dd class="col-sm-2">{{ matrix.width }}</dd>
 	
+					<dt class="col-sm-2">Description:</dt>
+					<dd class="col-sm-10">{{ matrix.description|truncatechars:100 }}</dd>
 
-<!-- Modal -->
-<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ matrix_comments.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+					<dt class="col-sm-2">Created:</dt>
+					<dd class="col-sm-2">{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+			
+					<dt class="col-sm-2">Last Modified:</dt>
+					<dd class="col-sm-6">{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
+
+				</dl>
+			
+			</div>
+
+		</div>
+	
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="col-md-1 invisible" id="sidebar">
+
+{% if user == owner %}
+
+	{% if credential_flag %}
+
+		{% if image_list %}
+
+			{% for image in image_list %}
+	
+				{% if forloop.first %}
+	
+    	<table border="0" class="basket">
+
+				{% endif %}
+	
+        	<tr>
+
+				<td id="image_{{ image.id }}">
+
+				{% if user == owner %}
+				
+					<span draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
+		
+				{% else %}
+				
+					<span id="image_{{ image.id }}">
+
+				{% endif %}
+
+						<div style="width:115px; height:115px;" class="image" align="right"> 
+				
+							<a href="{{ image.viewer_url  }}" target="_blank">
+				
+								<img alt="{{ image.name }}" title="{{ image.name }}" style="width:95px; height:95px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" > 
+				
+							</a>
+				
+						</div>
+				
+					</span>							
+
+	            </td>
+
+			</tr>
+
+				{% if forloop.last %}
+	
+	        <tr>
+
+    	        <td>&nbsp;</td>
+
+			</tr>
+
+	        <tr>
+
+	            <td>&nbsp;</td>
+
+			</tr>
+
+	    </table>
+
+				{% endif %}
+	
+		    {% endfor %}
+
+		{% else %}
+
+    	<table border="0" class="basket">
+        	<tr>
+				<td>
+					<div style="width:115px; height:115px;" class="image" align="right"> 
+						No Images are available!
+					</div>
+	            </td>
+			</tr>
+	    </table>
+
+		{% endif %}
+
+	{% else %}
+
+    	<table border="0" class="basket">
+        	<tr>
+				<td>
+					<div style="width:115px; height:115px;" class="image" align="right"> 
+						No Images are allowed yet!
+					</div>
+	            </td>
+			</tr>
+	    </table>
+
+	{% endif %}
+
+{% endif %}
+
+	</div>
+
+	<div class="col-md-11" id="content">
+
+		<!-- Modal -->
+		<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ matrix_comments.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			
+			<div class="modal-dialog modal-lg" role="document">
+			
+			    <div class="modal-content">
+				
+					<div class="modal-header">
+
+				    	<h5 class="modal-title" id="exampleModalLongTitle">Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
+				
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        	<span aria-hidden="true">&times;</span>
+				        </button>
+				    
+				    </div>
+				    
+				    <div class="modal-body">
         
-		<dl class="row">
+						<dl class="row">
 
-			<dt class="col-sm-2">Matrix Title</dt>
-			<dd class="col-sm-2">{{ matrix_comments.title }}</dd>
+							<dt class="col-sm-2">Matrix Title</dt>
+							<dd class="col-sm-2">{{ matrix_comments.title }}</dd>
 
-			<dt class="col-sm-2">Description</dt>
-			<dd class="col-sm-2">{{ matrix_comments.description|truncatechars:20 }}</dd>
+							<dt class="col-sm-2">Description</dt>
+							<dd class="col-sm-2">{{ matrix_comments.description|truncatechars:20 }}</dd>
 
-		</dl>
+						</dl>
 
 		{% if matrix_comments.comment_list %}
 		
-		<table>
+						<table>
 
-        	<tr>
-	            <th width="100px">Date</th>
-    	        <th width="100px">Time</th>
-        	    <th width="100px">Author</th>
-            	<th>Comment</th>
-			</tr>
+				        	<tr>
+	            				<th width="100px">Date</th>
+					    	    <th width="100px">Time</th>
+				        	    <th width="100px">Author</th>
+            					<th>Comment</th>
+							</tr>
 
 			{% for comment in matrix_comments.comment_list %}
 
-    	    <tr>
-            	<td>
+				    	    <tr>
+            					<td>
+				
 					{{ comment.date }} 
-				</td>
-    	        <td>
+				
+								</td>
+    	        				<td>
+
 					{{ comment.time }}
-				</td>
-    	        <td>
+				
+								</td>
+    	        				<td>
+
 				{{ comment.author_name }}
-				</td>
-	            <td>
+
+								</td>
+	            				<td>
+
 				{{ comment.content|safe|truncatechars:50 }}
-				</td>
-    	    </tr>
+				
+								</td>
+				
+				    	    </tr>
 			
 			{% endfor %}
 
-		</table>
+						</table>
 		
 		{% endif %}
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+					</div>
+				    
+				    <div class="modal-footer">
+				    
+				    	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				    
+				    </div>
+				
+				</div>
+				
+			</div>
+		
+		</div>
 					
 	
 {% if matrix_cells_comments %}
 
 	{% for cell in matrix_cells_comments %}
 
-<!-- Modal -->
-<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ cell.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+		<!-- Modal -->
+		<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ cell.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		
+			<div class="modal-dialog modal-lg" role="document">
+		    	
+		    	<div class="modal-content">
+			    	
+			    	<div class="modal-header">
+				    	
+				    	<h5 class="modal-title" id="exampleModalLongTitle">Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
+				
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        	<span aria-hidden="true">&times;</span>
+				        </button>
+					
+					</div>
+				    
+				    <div class="modal-body">
         
-		<dl class="row">
+						<dl class="row">
 
-			<dt class="col-sm-2">Cell Title</dt>
-			<dd class="col-sm-2">{{ cell.title }}</dd>
+							<dt class="col-sm-2">Cell Title</dt>
+							<dd class="col-sm-2">{{ cell.title }}</dd>
 
-			<dt class="col-sm-2">Description</dt>
-			<dd class="col-sm-2">{{ cell.description|truncatechars:20 }}</dd>
+							<dt class="col-sm-2">Description</dt>
+							<dd class="col-sm-2">{{ cell.description|truncatechars:20 }}</dd>
 
-		</dl>
+						</dl>
 		
 		{% if cell.viewer_url != '' %}
 
-		<p>	
-			<a href="{{ cell.viewer_url }}" target="_blank">
-				<img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width:450px; height:450px;" src="{{ cell.birdseye_url }}" >
-			</a>
-		</p>
+						<p>	
+							<a href="{{ cell.viewer_url }}" target="_blank">
+								<img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width:450px; height:450px;" src="{{ cell.birdseye_url }}" >
+							</a>
+						</p>
 
 		{% endif %}
 
 		{% if cell.comment_list %}
 		
-		<table>
+						<table>
 
-        	<tr>
-	            <th width="100px">Date</th>
-    	        <th width="100px">Time</th>
-        	    <th width="100px">Author</th>
-            	<th>Comment</th>
-			</tr>
+				        	<tr>
+	            				<th width="100px">Date</th>
+				    	        <th width="100px">Time</th>
+        	    				<th width="100px">Author</th>
+				            	<th>Comment</th>
+							</tr>
 
 			{% for comment in cell.comment_list %}
 
-    	    <tr>
-            	<td>
-					{{ comment.date }} 
-				</td>
-    	        <td>
-					{{ comment.time }}
-				</td>
-    	        <td>
+				    	    <tr>
+            					<td>
+
+				{{ comment.date }} 
+
+								</td>
+				    	        <td>
+				
+				{{ comment.time }}
+				
+								</td>
+				    	        <td>
+
 				{{ comment.author_name }}
-				</td>
-	            <td>
+				
+								</td>
+					            <td>
+				
 				{{ comment.content|safe|truncatechars:50 }}
-				</td>
-    	    </tr>
+				
+								</td>
+					    	</tr>
 			
 			{% endfor %}
 
-		</table>
+						</table>
 		
 		{% endif %}
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+					</div>
+				    
+				    <div class="modal-footer">
+				    
+				    	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					
+					</div>
+				
+				</div>
+			
+			</div>
+		
+		</div>
 					
 	{% endfor %}
 
@@ -219,7 +393,7 @@
 
 		<div id="responsive-table" class="table-responsive">
 	
-			<table id="myTable" class="test">
+			<table id="myTable" class="bench">
 		
 				<tbody>
 		
@@ -314,7 +488,15 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 				
-							<span draggable="true" ondragstart="dragRow(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
+				
+							<span draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
+		
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+
+						{% endif %}
 
 								<div style="width:34px; height:34px;" class="bottomrow">
 
@@ -342,7 +524,15 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 				
-							<span draggable="true" ondragstart="dragRow(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
+				
+							<span draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
+		
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+
+						{% endif %}
 
 								<div style="height:{{ matrix.height }}px;" class="headrow">
 
@@ -421,8 +611,16 @@
 					{% if matrix.get_max_column == matrix_cell.xcoordinate %}
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+
+						{% if user == owner %}
 				
-							<span draggable="true" ondragstart="dragCol(event)" id="span_{{ matrix_cell.id }}">
+							<span draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
+		
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+
+						{% endif %}
 
 								<div style="width:34px; height:34px;" class="bottomcol">
 
@@ -450,7 +648,15 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 				
-							<span draggable="true" ondragstart="dragCol(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
+				
+							<span draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
+
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+
+						{% endif %}
 
 								<div style="width:{{ matrix.width }}px;" class="headcol">
 
@@ -532,8 +738,16 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
 				
+							<span draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+				
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+				
+						{% endif %}
+
 								<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
 
 									<div class="dropdown dropleft">
@@ -632,8 +846,16 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
 				
+							<span draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+				
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+				
+						{% endif %}
+
 								<div style="width:34px; height:{{ matrix.height }}px;" class="bottom" align="right">
 
 									<div align="left">
@@ -658,8 +880,16 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
 				
+							<span draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+				
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+				
+						{% endif %}
+
 								<div style="width:{{ matrix.width }}px; height:34px;" class="bottom" align="right">
 
 									<div align="left">
@@ -684,8 +914,16 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-							<span draggable="true" ondragstart="drag(event)" id="span_{{ matrix_cell.id }}">
+						{% if user == owner %}
 				
+							<span draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+				
+						{% else %}
+				
+							<span id="cell_{{ matrix_cell.id }}">
+				
+						{% endif %}
+
 								<div style="width:34px; height:34px;" class="bottom" align="right">
 
 									<div align="left">
@@ -751,10 +989,13 @@
 
 {% endif %}
 
+	</div>
+
+</div>
 
 <script type="text/javascript">
 
-function confirmation(question) {
+function confirmation_cell(question) {
 
 	var defer = $.Deferred();
 	
@@ -769,17 +1010,20 @@ function confirmation(question) {
             	    defer.resolve("swap");
                 	$(this).dialog("close");
             	},
-	            "OVERWRITE": function () {
+	            "MOVE": function () {
     	            defer.resolve("overwrite");
         	        $(this).dialog("close");
 	            },
-	            "OVERWRITE and LEAVE": function () {
+	            "COPY": function () {
     	            defer.resolve("overwrite_leave");
         	        $(this).dialog("close");
-	            }
+	            },
+	            "CLOSE": function () {
+	    	        $(this).dialog('destroy').remove();
+    		        window.location.reload();
+        		}
     	    },
         	close: function () {
-	            //$(this).remove();
     	        $(this).dialog('destroy').remove();
     	        window.location.reload();
         	}
@@ -789,92 +1033,144 @@ function confirmation(question) {
 	
 	};
 
-function onclick(source, target){
-	
-	var question = "Do you want to SWAP Cells or OVERWRITE the Target Cell?";
+function confirmation_image(question) {
 
-	confirmation(question).then(function (answer) {
+	var defer = $.Deferred();
+	
+	$('<div></div>')
+    	.html(question)
+	    .dialog({
+    	    autoOpen: true,
+        	modal: true,
+	        title: 'Confirmation',
+    	    buttons: {
+	            "MOVE": function () {
+    	            defer.resolve("move");
+        	        $(this).dialog("close");
+	            },
+	            "CLOSE": function () {
+	    	        $(this).dialog('destroy').remove();
+    		        window.location.reload();
+        		}
+    	    },
+        	close: function () {
+    	        $(this).dialog('destroy').remove();
+    	        window.location.reload();
+        	}
+	    });
+	
+	return defer.promise();
+	
+	};
+
+function onclick(source, target, source_type){
+	
+   	if (source_type == "cell") {
+
+		var question = "Do you want to SWAP Cells, MOVE or COPY the Source Cell to the Target Cell?";
+
+		confirmation_cell(question).then(function (answer) {
     
-    	//console.log(answer);
-	
-    	if (answer == "swap"){
+	    	if (answer == "swap"){
         	
-        	//alert("Swapping Cell " + target + " with Cell " + source);
+			    $.ajax({
+    	    		url: '{% url 'matrices:swap_cells' %}',
+			        data: {
+        				'source': source,
+		        		'target': target,
+        				'source_type': source_type,
+	        			csrfmiddlewaretoken: '{{ csrf_token }}'
+			        },
+			        dataType: 'json',
+		    	    type: 'post',
+        			success: function (data) {
+        				if (data.failure) {
+        					alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
+	        			}
+						window.location.reload();
+        			}
+        		});
+			}
+
+	    	if (answer == "overwrite"){
+        
+			    $.ajax({
+        			url: '{% url 'matrices:overwrite_cell' %}',
+		        	data: {
+        				'source': source,
+			        	'target': target,
+    	    			'source_type': source_type,
+        				csrfmiddlewaretoken: '{{ csrf_token }}'
+		    	    },
+		        	dataType: 'json',
+			        type: 'post',
+    	    		success: function (data) {
+        				if (data.failure) {
+        					alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
+        				}
+        				window.location.reload();
+	        		}
+    	    	});
+    		}
+    	
+	    	if (answer == "overwrite_leave"){
+        
+			    $.ajax({
+    	    		url: '{% url 'matrices:overwrite_cell_leave' %}',
+			        data: {
+        				'source': source,
+		        		'target': target,
+        				'source_type': source_type,
+	        			csrfmiddlewaretoken: '{{ csrf_token }}'
+			        },
+			        dataType: 'json',
+		    	    type: 'post',
+        			success: function (data) {
+        				if (data.failure) {
+        					alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
+	        			}
+    	    			window.location.reload();
+        			}
+        		});
+	    	}
+    	
+			//window.location.reload();
+
+		});
+   	
+   	}
+   	
+   	if (source_type == "image") {
+
+		var question = "Do you want to MOVE this Image to this CELL?";
+
+		confirmation_image(question).then(function (answer) {
+    
+	    	if (answer == "move"){
         	
-			//console.log(source);
-	    	//console.log(target);
-	
-		    $.ajax({
-        		url: '{% url 'matrices:swap_cells' %}',
-		        data: {
-        		  'source': source,
-		          'target': target,
-        		  csrfmiddlewaretoken: '{{ csrf_token }}'
-		        },
-		        dataType: 'json',
-		        type: 'post',
-        		success: function (data) {
-        			if (data.failure) {
-        				alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
+			    $.ajax({
+    	    		url: '{% url 'matrices:import_image' %}',
+			        data: {
+        				'source': source,
+		        		'target': target,
+        				'source_type': source_type,
+	        			csrfmiddlewaretoken: '{{ csrf_token }}'
+			        },
+			        dataType: 'json',
+		    	    type: 'post',
+        			success: function (data) {
+        				if (data.failure) {
+        					alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
+	        			}
+						window.location.reload();
         			}
-					window.location.reload();
-        		}
-        	});
-		}
+        		});
+			}
 
-    	if (answer == "overwrite"){
-        
-        	//alert("Overwriting Cell " + target + " with Cell " + source);
-
-			//console.log(source);
-	    	//console.log(target);
-	
-		    $.ajax({
-        		url: '{% url 'matrices:overwrite_cell' %}',
-		        data: {
-        		  'source': source,
-		          'target': target,
-        		  csrfmiddlewaretoken: '{{ csrf_token }}'
-		        },
-		        dataType: 'json',
-		        type: 'post',
-        		success: function (data) {
-        			if (data.failure) {
-        				alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
-        			}
-        			window.location.reload();
-        		}
-        	});
-    	}
-    	
-    	if (answer == "overwrite_leave"){
-        
-        	//alert("Overwriting Cell " + target + " and Leave Cell " + source);
-
-			//console.log(source);
-	    	//console.log(target);
-	
-		    $.ajax({
-        		url: '{% url 'matrices:overwrite_cell_leave' %}',
-		        data: {
-        		  'source': source,
-		          'target': target,
-        		  csrfmiddlewaretoken: '{{ csrf_token }}'
-		        },
-		        dataType: 'json',
-		        type: 'post',
-        		success: function (data) {
-        			if (data.failure) {
-        				alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
-        			}
-        			window.location.reload();
-        		}
-        	});
-    	}
-    	
-		//window.location.reload();
-
-	});
+		});
+   	
+   	}
+   	
 }
 
 
@@ -888,25 +1184,24 @@ function drag(ev){
 
 function drop(ev){
 
-
 	ev.preventDefault();
 
     var src = document.getElementById(ev.dataTransfer.getData("Text"));
 	var srcParent = src.parentNode;
 
 	var source_array = src.id.split("_",2);
-	var source = source_array[1];
-    
+	var source_id = source_array[1];
+	var source_type = source_array[0];
+
     var tgt = ev.currentTarget.firstElementChild;
 	var target_array = tgt.id.split("_",2);
-	var target = target_array[1];
+	var target_id = target_array[1];
+	var target_type = target_array[0];
 
-	ev.currentTarget.replaceChild(src, tgt);
-    srcParent.appendChild(tgt);
+	//ev.currentTarget.replaceChild(src, tgt);
+    //srcParent.appendChild(tgt);
 
-	onclick(source, target);
-    
-
+	onclick(source_id, target_id, source_type);
 }
 
 
@@ -937,20 +1232,19 @@ function dropCol(ev){
     $.ajax({
         url: '{% url 'matrices:swap_columns' %}',
         data: {
-          'source': source,
-          'target': target,
-          csrfmiddlewaretoken: '{{ csrf_token }}'
+        	'source': source,
+        	'target': target,
+        	csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         dataType: 'json',
         type: 'post',
         success: function (data) {
-          if (data.failure) {
-            alert("Column Swap Failed! Source: " + data.source + "  Target: " + data.target);
-          }
-		  window.location.reload();
+        	if (data.failure) {
+            	alert("Column Swap Failed! Source: " + data.source + "  Target: " + data.target);
+	        }
+			window.location.reload();
         }
-      });
-
+    });
 }
 
 function allowRowDrop(ev){
@@ -978,26 +1272,24 @@ function dropRow(ev){
     srcParent.appendChild(tgt);
 
     $.ajax({
-        url: '{% url 'matrices:swap_rows' %}',
+    	url: '{% url 'matrices:swap_rows' %}',
         data: {
-          'source': source,
-          'target': target,
-          csrfmiddlewaretoken: '{{ csrf_token }}'
+        	'source': source,
+	        'target': target,
+          	csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         dataType: 'json',
         type: 'post',
         success: function (data) {
-          if (data.failure) {
-            alert("Row Swap Failed! Source: " + data.source + "  Target: " + data.target);
-          }
-		  window.location.reload();
+        	if (data.failure) {
+            	alert("Row Swap Failed! Source: " + data.source + "  Target: " + data.target);
+        	}
+			window.location.reload();
         }
-      });
-
+    });
 }
 
 </script>
 
 
-		
 {% endblock %}

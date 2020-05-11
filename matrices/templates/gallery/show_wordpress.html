@@ -6,57 +6,80 @@
 
 {% block content %}
 	
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:list_imaging_hosts' %}">
+					Sources
+				</a>
+			</li>
+
+			<li class="breadcrumb-item active">
+				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
+					{{ dataset.name }}
+				</a>
+			</li>	
+	
+			<li class="breadcrumb-item active">
+				<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
+	            	Prev
+				</a>
+			</li>	
+	
+			<li class="breadcrumb-item active">
+				<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.next_page %}">	            	
+	            	Next
+				</a>
+			</li>	
+	
+		</ol>
+			
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>{{ dataset.name|truncatechars:20 }}</h1>
+		<br />
+
+	    <p>{{ dataset.name|truncatechars:20 }} contains {{ dataset.imageCount }} images, so far</p>
+    	<hr>
+
+		<div class="row justify-content-center">
+
+{% for image in images %}
+
+			<a href="{% url 'matrices:webgallery_show_wordpress_image' server.id image.id %}">
+				<img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
 			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
-	
 
-		<li class="breadcrumb-item active">
-			<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
-				{{ dataset.name }}
-			</a>
-		</li>	
-	
-		<li class="breadcrumb-item active">
-			<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
-	            Prev
-			</a>
-		</li>	
-	
-		<li class="breadcrumb-item active">
-			<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.next_page %}">	            	
-	            Next
-			</a>
-		</li>	
-	
-	</ol>
-	
-	<h1>{{ dataset.name }}</h1>
-	
-	<br />
+{% endfor %}
 
-    <p>{{ dataset.name }} contains {{ dataset.imageCount }} images, so far</p>
+		</div>
 
-    <hr>
+	</div>
 
+	<div class="col-md-2">
 
-    {% for image in images %}
+	</div>
 
-		<a href="{% url 'matrices:webgallery_show_wordpress_image' server.id image.id %}">
-			<img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
-		</a>
-
-    {% endfor %}
-
+</div>
 
 {% endblock %}

@@ -5,33 +5,53 @@
 {% load static %}
 
 {% block content %}
-    
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:index' %}">
-				Workbenches
-			</a>
-		</li>
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:matrix' matrix.id %}">
-				CPW:{{ matrix.id|stringformat:"06d" }}
-			</a>
-		</li>
+<div class="row">
 
-		<li class="breadcrumb-item active">
-			Cell Commentary
-		</li>
+	<div class="col-md-12">
+
+		<div>
+		
+			<ol class="breadcrumb subheading">
 	
-	</ol>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
 	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:index' %}">
+						Workbenches
+					</a>
+				</li>
+
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:matrix' matrix.id %}">
+						CPW:{{ matrix.id|stringformat:"06d" }}
+					</a>
+				</li>
+
+				<li class="breadcrumb-item active">
+					Cell Commentary
+				</li>
+	
+			</ol>
+
+		</div>
+
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+
+	<div class="col-md-9" id="content">
+	    
 	<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
 	<br />
 
@@ -164,12 +184,17 @@
 	
 	<br />
 
-	<hr>
-
-
 	<!-- <a href="{% url 'matrices:matrix' matrix.id %}"> -->
 	<a href="{{ request.META.HTTP_REFERER }}">
 	<button class="save btn btn-success">Back</button>
 	</a>
+
+	</div>
+	
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

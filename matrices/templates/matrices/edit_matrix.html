@@ -6,49 +6,81 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:index' %}">
-				Workbenches
-			</a>
-		</li>
+<div class="row">
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:matrix' matrix.id %}">
-				CPW:{{ matrix.id|stringformat:"06d" }}
-			</a>
-		</li>
+	<div class="col-md-12">
 
-		<li class="breadcrumb-item active">
-			Workbench Edit
-		</li>
+		<div>
+		
+			<ol class="breadcrumb subheading">
 	
-	</ol>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
 	
-	<h1>EDIT Workbench {{ matrix.id|stringformat:"06d" }}</h1>
-	<br />
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:index' %}">
+						Workbenches
+					</a>
+				</li>
 
-	<form method="POST" class="post-form">
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:matrix' matrix.id %}">
+						CPW:{{ matrix.id|stringformat:"06d" }}
+					</a>
+				</li>
+
+				<li class="breadcrumb-item active">
+					Workbench Edit
+				</li>
+	
+			</ol>
+
+		</div>
+
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+
+	<div class="col-md-9" id="content">
+
+		<h1>EDIT Workbench {{ matrix.id|stringformat:"06d" }}</h1>
+		<br />
+
+		<p>Edit an Existing Bench</p>
+		<hr>
+
+		<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-	    <button type="submit" class="save btn btn-danger">Save</button>
+		    <button type="submit" class="save btn btn-danger">Save</button>
 
-	</form>
+		</form>
 
-	<br />
+		<br />
 		
-	<a href="{{ request.META.HTTP_REFERER }}">
-		<button class="save btn btn-success">CANCEL</button>
-	</a>
+		<a href="{{ request.META.HTTP_REFERER }}">
+			<button class="save btn btn-success">CANCEL</button>
+		</a>
 
+	</div>
+	
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+	
 {% endblock %}
+

@@ -3,6 +3,38 @@ html {
 	min-height: 100%;
 }
 
+
+.invisible {
+    display: none;
+}
+
+@media (min-width: 1140px) {
+    .invisible {
+        display: block;
+    	margin-left: -8%;
+    }
+}
+
+#row-main {
+    overflow-x: hidden;
+}
+
+
+#content {
+    -webkit-transition: width 0.3s ease;
+    -moz-transition: width 0.3s ease;
+    -o-transition: width 0.3s ease;
+    transition: width 0.3s ease;
+}
+
+#sidebar {
+    -webkit-transition: margin 0.3s ease;
+    -moz-transition: margin 0.3s ease;
+    -o-transition: margin 0.3s ease;
+    transition: margin 0.3s ease;
+	width: 5%;
+}
+
 .footer {
 	bottom: 0;
 	width: 100%;
@@ -82,9 +114,29 @@ textarea {
 	overflow: auto;
 }
 
-.test {
+.bench {
 	border-spacing: 5px;
 	border-collapse: separate;
+	/* padding-top: 10px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+	padding-left: 10px;*/
+}
+
+.basket {
+	border-spacing: 5px;
+	border-collapse: separate;
+	/*padding-top: 10px;
+	padding-bottom: 10px;*/
+}
+
+.row-no-padding {
+  margin-left: 0;
+  margin-right: 0;
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 .cell {
@@ -93,6 +145,28 @@ textarea {
 	-moz-border-radius:	5px 5px 5px 5px;
 	border-radius:		 5px 5px 5px 5px;
 	background-color: #CCFFCC;
+	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
+	box-shadow:		 #B3B3B3 2px 2px 2px;
+}
+
+.image {
+	padding: 10px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius:	5px 5px 5px 5px;
+	border-radius:		 5px 5px 5px 5px;
+	background-color: #ff8c69;
+	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
+	box-shadow:		 #B3B3B3 2px 2px 2px;
+}
+
+.first_image {
+	padding: 10px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius:	5px 5px 5px 5px;
+	border-radius:		 5px 5px 5px 5px;
+	background-color:  #f5f3f2;
 	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	-moz-box-shadow:	#B3B3B3 2px 2px 2px;
 	box-shadow:		 #B3B3B3 2px 2px 2px;

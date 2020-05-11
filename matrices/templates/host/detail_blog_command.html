@@ -6,34 +6,50 @@
 
 {% block content %}
     
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:maintenance' %}">
-				Maintenance
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:maintenance' %}">
+					Maintenance
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:detail_blog_command' blog.id %}">
-				Blog Command {{ blog.id }}
-			</a>
-		</li>
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:detail_blog_command' blog.id %}">
+					Blog Command {{ blog.id }}
+				</a>
+			</li>
 	
-		<li class="breadcrumb-item active">
-			Blog Command Details
-		</li>
+			<li class="breadcrumb-item active">
+				Blog Command Details
+			</li>
 	
-	</ol>
+		</ol>
 	
-	<h1>Blog Command {{ blog.id }}</h1>
-	<br />
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>Blog Command {{ blog.id }}</h1>
+		<br />
 
 		<dl class="dl-horizontal">
 
@@ -71,4 +87,13 @@
 
 {% endif %}
 
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+
 {% endblock %}
+

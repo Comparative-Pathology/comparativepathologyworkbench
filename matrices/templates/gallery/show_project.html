@@ -6,92 +6,120 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
-				{{ server.name }}
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
-				{{ group.name }}
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item active">
-			{{ project.name }}
-		</li>	
-	
-	</ol>
-	
-	<h1>{{ project.name }}</h1>
+<div class="row">
 
-	<br />
+	<div class="col-md-12">
+
+		<div>
+
+			<ol class="breadcrumb subheading">
+	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
+	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:list_imaging_hosts' %}">
+						Sources
+					</a>
+				</li>
+	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
+						{{ server.name }}
+					</a>
+				</li>
+	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
+						{{ group.name|truncatechars:20 }}
+					</a>
+				</li>
+	
+				<li class="breadcrumb-item active">
+					{{ project.name|truncatechars:20 }}
+				</li>	
+	
+			</ol>
+
+		</div>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>{{ project.name }}</h1>
+		<br />
 
 {% if dataset_list %}
 
-    <p>Project contains {{ project.datasetCount }} datasets:</p>
+	    <p>Project contains {{ project.datasetCount }} datasets:</p>
 
-    <hr>
+    	<hr>
     
-	<div class="row">
+		<div class="row">
 
     {% for dataset in dataset_list %}
 
-		<div class="col-md-4">
+			<div class="col-md-4">
 	
-			<h5>{{ dataset.name }}</h5>
+				<h5>{{ dataset.name|truncatechars:20 }}</h5>
 
-		    <p class="pull-left">
-				<a href="{% url 'matrices:webgallery_show_image' server.id dataset.randomImageID %}">
-					<img class="img-thumbnail" alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/>
-				</a>
-			</p>
+		    	<p class="pull-left">
+					<a href="{% url 'matrices:webgallery_show_image' server.id dataset.randomImageID %}">
+						<img class="img-thumbnail" alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/>
+					</a>
+				</p>
 
-        	<div class="pull-left">
+        		<div class="pull-left">
     
-            	<ul>
-	                <li>Images: {{ dataset.imageCount }}</li>
-    	        </ul>
+            		<ul>
+	                	<li>Images: {{ dataset.imageCount }}</li>
+	    	        </ul>
 
-		    </div>
+			    </div>
     
-    	    <div class="clearfix">
-        	</div>
+    		    <div class="clearfix">
+        		</div>
 
-			<p style="margin-left:20px">
-				<a class="btn btn-default" href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}" role="button">
-					<button class="save btn btn-info">View Dataset &raquo;</button>
-				</a>
-			</p>
+				<p style="margin-left:20px">
+					<a class="btn btn-default" href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}" role="button">
+						<button class="save btn btn-info">View Dataset &raquo;</button>
+					</a>
+				</p>
 
-    	    <div class="clearfix">
+    		    <div class="clearfix">
+	    	    </div>
+    
 	        </div>
-    
-        </div>
 	
     {% endfor %}
 
-    </div>
+    	</div>
 
 {% else %}
 
-    <p>Project contains No Datasets!</p>
+	    <p>Project contains No Datasets!</p>
 
 {% endif %}
+
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

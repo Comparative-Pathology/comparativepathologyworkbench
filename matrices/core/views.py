@@ -111,7 +111,7 @@ def about(request):
 
 	data = { 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'about.html', data)
+	return render(request, 'about/about.html', data)
 
 
 #
@@ -135,7 +135,7 @@ def people(request):
 
 	data = { 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'people.html', data)
+	return render(request, 'about/people.html', data)
 
 
 #
@@ -159,7 +159,7 @@ def howto(request):
 
 	data = { 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
-	return render(request, 'howto.html', data)
+	return render(request, 'about/howto.html', data)
 
 
 #
@@ -1614,6 +1614,8 @@ def matrix(request, matrix_id):
 	owner = get_object_or_404(User, pk=matrix.owner_id)
 
 	user = get_object_or_404(User, pk=request.user.id)
+
+	credential_flag = ''	
 	
 	if Credential.objects.filter(username=user.username).values('username').exists():
 
@@ -1633,7 +1635,9 @@ def matrix(request, matrix_id):
 		columns = matrix.get_columns()
 		rows = matrix.get_rows()
 
-		data = { 'matrix_link': matrix_link, 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
+		credential_flag = user.username
+
+		data = { 'credential_flag': credential_flag, 'matrix_link': matrix_link, 'owner': owner, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 		return render(request, 'matrices/matrix.html', data)
 
@@ -2893,6 +2897,8 @@ def delete_this_row(request, matrix_id, row_id):
 					image = Image.objects.get(id=oldCell.image.id)
 				
 					image.set_active()
+					
+					print("image : ", image)
 				
 					image.save()
 
@@ -2946,12 +2952,13 @@ def delete_this_row(request, matrix_id, row_id):
 @login_required()
 def overwrite_cell(request):
 	"""
-	AJAX - Overwrite Cell
+	AJAX - Overwrite Cell - MOVE
 	"""
 
 	source = request.POST['source']
 	target = request.POST['target']
-	
+	source_type = request.POST['source_type']
+
 	source_cell = get_object_or_404(Cell, pk=source)
 	target_cell = get_object_or_404(Cell, pk=target)
 	
@@ -3068,6 +3075,7 @@ def overwrite_cell_leave(request):
 
 	source = request.POST['source']
 	target = request.POST['target']
+	source_type = request.POST['source_type']
 	
 	source_cell = get_object_or_404(Cell, pk=source)
 	target_cell = get_object_or_404(Cell, pk=target)
@@ -3131,8 +3139,19 @@ def overwrite_cell_leave(request):
 
 			target_cell.title = source_cell.title
 			target_cell.description = source_cell.description
+			
+			if source_cell.has_image() == True:
+			
+				imageOld = Image.objects.get(pk=source_cell.image.id)
 
-			target_cell.image = source_cell.image
+				imageNew = Image(identifier=imageOld.identifier, name=imageOld.name, server=imageOld.server, viewer_url=imageOld.viewer_url, birdseye_url=imageOld.birdseye_url, owner=imageOld.owner, active=imageOld.active, roi=imageOld.roi)
+	
+				imageNew.set_inactive()
+				
+				imageNew.save()
+				
+				target_cell.image = imageNew
+
 			
 			target_cell.blogpost = source_cell.blogpost
 
@@ -3207,6 +3226,7 @@ def swap_cells(request):
 
 	source = request.POST['source']
 	target = request.POST['target']
+	source_type = request.POST['source_type']
 	
 	source_cell = get_object_or_404(Cell, pk=source)
 	target_cell = get_object_or_404(Cell, pk=target)
@@ -3259,6 +3279,121 @@ def swap_cells(request):
 			target_cell.ycoordinate = source_ycoordinate
 
 			source_cell.save()
+			target_cell.save()
+
+
+			data = {'failure': False,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+
+		else:
+		
+			data = {'failure': True,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+	
+	else:
+	
+			data = {'failure': True,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+
+
+@login_required()
+def import_image(request):
+	"""
+	AJAX - Import Image
+	"""
+
+	source = request.POST['source']
+	target = request.POST['target']
+	source_type = request.POST['source_type']
+	
+	source_image = get_object_or_404(Image, pk=source)
+	target_cell = get_object_or_404(Cell, pk=target)
+	
+	matrix = target_cell.matrix
+	
+	owner = get_object_or_404(User, pk=matrix.owner_id)
+	user = get_object_or_404(User, pk=request.user.id)
+
+	serverWordpress = Server.objects.get(url=config('WORDPRESS'))
+
+	if Credential.objects.filter(username=user.username).values('username').exists():
+
+		if matrix.is_owned_by(request.user) == True or request.user.is_superuser == True:
+
+			if matrix.get_max_row() == target_cell.ycoordinate:
+
+				nextRow = matrix.get_row_count()
+				columns = matrix.get_columns()
+
+				for i, column in enumerate(columns):
+
+					cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=nextRow)
+					cell.save()
+
+				matrix.save()
+
+			if matrix.get_max_column() == target_cell.xcoordinate:
+	
+				nextColumn = matrix.get_column_count()
+				rows = matrix.get_rows()
+	
+				for i, row in enumerate(rows):
+
+					cell = Cell(matrix=matrix, title="", description="", xcoordinate=nextColumn, ycoordinate=i)
+
+					cell.save()
+
+				matrix.save()
+
+			if target_cell.has_image() == True:
+			
+				imageOld = Image.objects.get(pk=target_cell.image.id)
+	
+				imageOld.set_active()
+				
+				imageOld.save()
+
+			source_image.set_inactive()
+			
+			source_image.save()
+						
+			post_id = ''
+				
+			target_cell.title = source_image.name
+			target_cell.description = source_image.name
+			
+			target_cell.image = source_image
+			
+			if target_cell.has_no_blogpost() == True:
+				
+				credential = Credential.objects.get(username=request.user.username)
+	
+				if credential.has_apppwd() == True:
+
+					returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, target_cell.title, target_cell.description)
+								
+					if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+								
+						post_id = returned_blogpost['id']
+
+					else:
+								
+						messages.error(request, "WordPress Error - Contact System Administrator")
+								
+				target_cell.set_blogpost(post_id)
+
 			target_cell.save()
 
 

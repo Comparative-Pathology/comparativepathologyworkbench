@@ -5,37 +5,60 @@
 {% load static %}
 
 {% block content %}
-    
-	<ol class="breadcrumb subheading">
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
-	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:index' %}">
-				Matrices
-			</a>
-		</li>
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:matrix' matrix.id %}">
-				CPW:{{ matrix.id|stringformat:"06d" }}
-			</a>
-		</li>
+<div class="row">
 
-		<li class="breadcrumb-item active">
-			Cell Details
-		</li>
+	<div class="col-md-12">
+
+		<div>
+		
+			<ol class="breadcrumb subheading">
 	
-	</ol>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
+	
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:index' %}">
+						Matrices
+					</a>
+				</li>
+
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:matrix' matrix.id %}">
+						CPW:{{ matrix.id|stringformat:"06d" }}
+					</a>
+				</li>
+
+				<li class="breadcrumb-item active">
+					Cell Details
+				</li>
+	
+			</ol>
+
+		</div>
+
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+
+	<div class="col-md-9" id="content">
 	
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 
-	<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
-	<br />
+		<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
+		<br />
+
+		<p>Browse the Cell Details</p>
+		<hr>
 
 		<dl class="dl-horizontal">
 
@@ -82,8 +105,11 @@
 
 {% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
 
-	<h1>CPW:{{ matrix.id|stringformat:"06d" }} Row Header, "{{ matrix.title }}"</h1>
-	<br />
+		<h1>CPW:{{ matrix.id|stringformat:"06d" }} Row Header, "{{ matrix.title }}"</h1>
+		<br />
+
+		<p>Browse the Row Header Details</p>
+		<hr>
 
 		<dl class="dl-horizontal">
 
@@ -102,8 +128,11 @@
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
 
-	<h1>CPW:{{ matrix.id|stringformat:"06d" }} Column Header, "{{ matrix.title }}"</h1>
-	<br />
+		<h1>CPW:{{ matrix.id|stringformat:"06d" }} Column Header, "{{ matrix.title }}"</h1>
+		<br />
+
+		<p>Browse the Column Header Details</p>
+		<hr>
 
 		<dl class="dl-horizontal">
 
@@ -120,11 +149,19 @@
 
 {% endif %}
 
-	<br />
+		<br />
 
 		<!-- <a href="{% url 'matrices:matrix' matrix.id %}"> -->
-	<a href="{{ request.META.HTTP_REFERER }}">
-	<button class="save btn btn-success">Back</button>
-	</a>
+		<a href="{{ request.META.HTTP_REFERER }}">
+			<button class="save btn btn-success">Back</button>
+		</a>
+
+	</div>
+	
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

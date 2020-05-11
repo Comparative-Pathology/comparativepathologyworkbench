@@ -6,26 +6,46 @@
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<div class="row">
+
+	<div class="col-md-12">
+
+		<div>
+
+			<ol class="breadcrumb subheading">
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
-				Home
-			</a>
-		</li>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:home' %}">
+						Home
+					</a>
+				</li>
 	
-		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
+				<li class="breadcrumb-item">
+					<a href="{% url 'matrices:list_imaging_hosts' %}">
+						Sources
+					</a>
+				</li>
 	
-		<li class="breadcrumb-item active">
-			{{ server.name }}
-		</li>
+				<li class="breadcrumb-item active">
+					{{ server.name }}
+				</li>
 	
-	</ol>
-	
+			</ol>
+
+		</div>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
 	<h1>{{ server.name }}</h1>
 
 	<br />
@@ -99,5 +119,12 @@
 
 {% endif %}
 
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
 
 {% endblock %}

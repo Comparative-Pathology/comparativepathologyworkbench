@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^ajax/overwrite_cell_leave/$', views.overwrite_cell_leave, name='overwrite_cell_leave'),
     url(r'^ajax/overwrite_cell/$', views.overwrite_cell, name='overwrite_cell'),
     url(r'^ajax/swap_cells/$', views.swap_cells, name='swap_cells'),
+    url(r'^ajax/import_image/$', views.import_image, name='import_image'),
     url(r'^ajax/swap_columns/$', views.swap_columns, name='swap_columns'),
     url(r'^ajax/swap_rows/$', views.swap_rows, name='swap_rows'),
 

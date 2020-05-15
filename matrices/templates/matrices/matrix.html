@@ -133,7 +133,7 @@
 				
 							<a href="{{ image.viewer_url  }}" target="_blank">
 				
-								<img alt="{{ image.name }}" title="{{ image.name }}" style="width:95px; height:95px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" > 
+								<img alt="{{ image.name }}" title="{{ image.name }}" style="width:95px; height:95px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}"> 
 				
 							</a>
 				
@@ -1226,11 +1226,11 @@ function dropCol(ev){
 	var target_array = tgt.id.split("_",2);
 	var target = target_array[1];
 
-    ev.currentTarget.replaceChild(src, tgt);
-    srcParent.appendChild(tgt);
+    //ev.currentTarget.replaceChild(src, tgt);
+    //srcParent.appendChild(tgt);
 
     $.ajax({
-        url: '{% url 'matrices:swap_columns' %}',
+        url: '{% url 'matrices:shuffle_columns' %}',
         data: {
         	'source': source,
         	'target': target,
@@ -1268,11 +1268,11 @@ function dropRow(ev){
 	var target_array = tgt.id.split("_",2);
 	var target = target_array[1];
 
-    ev.currentTarget.replaceChild(src, tgt);
-    srcParent.appendChild(tgt);
+    //ev.currentTarget.replaceChild(src, tgt);
+    //srcParent.appendChild(tgt);
 
     $.ajax({
-    	url: '{% url 'matrices:swap_rows' %}',
+    	url: '{% url 'matrices:shuffle_rows' %}',
         data: {
         	'source': source,
 	        'target': target,

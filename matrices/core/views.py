@@ -3593,3 +3593,227 @@ def swap_columns(request):
 			}
 	
 			return JsonResponse(data)
+
+
+@login_required()
+def shuffle_columns(request):
+	"""
+	AJAX - Shuffle Columns
+	"""
+
+	source = request.POST['source']
+	target = request.POST['target']
+		
+	in_source_cell = get_object_or_404(Cell, pk=source)
+	in_target_cell = get_object_or_404(Cell, pk=target)
+	
+	source_xcoordinate = in_source_cell.xcoordinate
+	target_xcoordinate = in_target_cell.xcoordinate
+	
+	matrix = in_source_cell.matrix
+
+	owner = get_object_or_404(User, pk=matrix.owner_id)
+	user = get_object_or_404(User, pk=request.user.id)
+
+	if Credential.objects.filter(username=user.username).values('username').exists():
+
+		if matrix.is_owned_by(request.user) == True or request.user.is_superuser == True:
+
+			source_column_cells = matrix.get_column(source_xcoordinate)
+
+			if source_xcoordinate < target_xcoordinate:
+			
+				oldCells = Cell.objects.filter(matrix=matrix.id).filter(xcoordinate__gt=source_xcoordinate).filter(xcoordinate__lte=target_xcoordinate)
+
+				output_cells = list()
+	
+				for oldcell in oldCells:
+		
+					oldcell.decrement_x()
+				
+					output_cells.append(oldcell)
+				
+				for source_cell in source_column_cells:
+	
+					source_cell.set_xcoordinate(target_xcoordinate)
+	
+					output_cells.append(source_cell)
+			
+				for output_cell in output_cells:
+			
+					output_cell.save()
+
+
+			if source_xcoordinate > target_xcoordinate:
+
+				oldCells = Cell.objects.filter(matrix=matrix.id).filter(xcoordinate__gte=target_xcoordinate).filter(xcoordinate__lt=source_xcoordinate)
+
+				output_cells = list()
+	
+				for oldcell in oldCells:
+		
+					oldcell.increment_x()
+				
+					output_cells.append(oldcell)
+				
+				for source_cell in source_column_cells:
+	
+					source_cell.set_xcoordinate(target_xcoordinate)
+	
+					output_cells.append(source_cell)
+			
+				for output_cell in output_cells:
+			
+					output_cell.save()
+
+
+			if matrix.get_max_column() == target_xcoordinate:
+	
+				nextColumn = matrix.get_column_count()
+				rows = matrix.get_rows()
+	
+				for i, row in enumerate(rows):
+
+					cell = Cell(matrix=matrix, title="", description="", xcoordinate=nextColumn, ycoordinate=i)
+
+					cell.save()
+
+				matrix.save()
+
+	
+			data = {'failure': False,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)	
+
+		else:
+		
+			data = {'failure': True,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+	
+	else:
+	
+			data = {'failure': True,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+
+
+@login_required()
+def shuffle_rows(request):
+	"""
+	AJAX - Shuffle the Rows
+	"""
+
+	source = request.POST['source']
+	target = request.POST['target']
+		
+	in_source_cell = get_object_or_404(Cell, pk=source)
+	in_target_cell = get_object_or_404(Cell, pk=target)
+	
+	source_ycoordinate = in_source_cell.ycoordinate
+	target_ycoordinate = in_target_cell.ycoordinate
+
+	matrix = in_source_cell.matrix
+
+	owner = get_object_or_404(User, pk=matrix.owner_id)
+	user = get_object_or_404(User, pk=request.user.id)
+
+	if Credential.objects.filter(username=user.username).values('username').exists():
+
+		if matrix.is_owned_by(request.user) == True or request.user.is_superuser == True:
+
+			source_row_cells = matrix.get_row(source_ycoordinate)
+			
+			if source_ycoordinate < target_ycoordinate:
+			
+				oldCells = Cell.objects.filter(matrix=matrix.id).filter(ycoordinate__gt=source_ycoordinate).filter(ycoordinate__lte=target_ycoordinate)
+
+				output_cells = list()
+	
+				for oldcell in oldCells:
+		
+					oldcell.decrement_y()
+				
+					output_cells.append(oldcell)
+				
+				for source_cell in source_row_cells:
+	
+					source_cell.set_ycoordinate(target_ycoordinate)
+	
+					output_cells.append(source_cell)
+			
+				for output_cell in output_cells:
+			
+					output_cell.save()
+
+
+			if source_ycoordinate > target_ycoordinate:
+
+				oldCells = Cell.objects.filter(matrix=matrix.id).filter(ycoordinate__gte=target_ycoordinate).filter(ycoordinate__lt=source_ycoordinate)
+
+				output_cells = list()
+	
+				for oldcell in oldCells:
+		
+					oldcell.increment_y()
+				
+					output_cells.append(oldcell)
+				
+				for source_cell in source_row_cells:
+	
+					source_cell.set_ycoordinate(target_ycoordinate)
+	
+					output_cells.append(source_cell)
+			
+				for output_cell in output_cells:
+			
+					output_cell.save()
+
+
+			if matrix.get_max_row() == target_ycoordinate:
+
+				nextRow = matrix.get_row_count()
+				columns = matrix.get_columns()
+
+				for i, column in enumerate(columns):
+
+					cell = Cell(matrix=matrix, title="", description="", xcoordinate=i, ycoordinate=nextRow)
+					cell.save()
+
+				matrix.save()
+
+	
+			data = {'failure': False,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+
+
+		else:
+		
+			data = {'failure': True,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)
+	
+	else:
+	
+			data = {'failure': True,
+					'source': str(source),
+					'target': str(target)
+			}
+	
+			return JsonResponse(data)

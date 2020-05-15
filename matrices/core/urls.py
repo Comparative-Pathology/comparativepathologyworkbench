@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^ajax/import_image/$', views.import_image, name='import_image'),
     url(r'^ajax/swap_columns/$', views.swap_columns, name='swap_columns'),
     url(r'^ajax/swap_rows/$', views.swap_rows, name='swap_rows'),
+    url(r'^ajax/shuffle_columns/$', views.shuffle_columns, name='shuffle_columns'),
+    url(r'^ajax/shuffle_rows/$', views.shuffle_rows, name='shuffle_rows'),
 
 	url(r'^show_ebi_server/(?P<server_id>[0-9]+)/$', views.show_ebi_server, name='ebi_show_ebi_server'),
 	path('show_ebi_widget/<int:server_id>/<slug:experiment_id>/', views.show_ebi_widget, name='ebi_show_ebi_widget'),

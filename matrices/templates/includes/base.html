@@ -464,6 +464,7 @@
 		});
 });
 
+
 $(document).ready(function(){
 	
 	$("#matrix_info").on("hide.bs.collapse", function(){
@@ -476,14 +477,87 @@ $(document).ready(function(){
 
 });
 
+
 $( document ).ready( function () {
 	$(".toggle-sidebar").click(function () {
-		$("#sidebar").toggleClass("visible invisible");
-		$("#indicator-2").toggleClass("fa-window-minimize fa-cart-arrow-down");
+
+		var flag = sessionStorage.getItem("sidebartoggle");
+			
+		//console.log("click BEFORE sessionStorage.sidebartoggle = ", flag)
+	
+		if (flag == "true") {
+	
+			//console.log("click Flag TRUE");
+
+			sessionStorage.setItem("sidebartoggle", "false");
+	
+			$("#sidebar").removeClass("visible");
+			$("#indicator-2").removeClass("fa-window-minimize");
+			$("#sidebar").addClass("invisible");
+			$("#indicator-2").addClass("fa-cart-arrow-down");
+		}
+		else {
+	
+			//console.log("click Flag FALSE");
 		
+			sessionStorage.setItem("sidebartoggle", "true");
+	
+			$("#sidebar").removeClass("invisible");
+			$("#sidebar").addClass("visible");
+			$("#indicator-2").removeClass("fa-cart-arrow-down");
+			$("#indicator-2").addClass("fa-window-minimize");
+		}
+
 		return false;
 	});
 }); 
+
+$( document ).ready( function () {
+
+    window.onload = function (e) {
+
+		//console.log("window.onload");
+
+		if(sessionStorage) {
+		
+			var flag = sessionStorage.getItem("sidebartoggle");
+			
+			//console.log("onload sessionStorage.sidebartoggle = ", flag)
+
+			if (flag == ""){
+			
+			    sessionStorage.setItem("sidebartoggle", "false");
+
+				$("#sidebar").removeClass("visible");
+				$("#indicator-2").removeClass("fa-window-minimize");
+				$("#sidebar").addClass("invisible");
+				$("#indicator-2").addClass("fa-cart-arrow-down");
+			}
+			else {
+			
+				if (flag == "true") {
+	
+					//console.log("Load Flag TRUE")
+
+					$("#sidebar").removeClass("invisible");
+					$("#sidebar").addClass("visible");
+					$("#indicator-2").removeClass("fa-cart-arrow-down");
+					$("#indicator-2").addClass("fa-window-minimize");
+				}
+				else {
+	
+					//console.log("Load Flag FALSE")
+		
+					$("#sidebar").removeClass("visible");
+					$("#indicator-2").removeClass("fa-window-minimize");
+					$("#sidebar").addClass("invisible");
+					$("#indicator-2").addClass("fa-cart-arrow-down");
+				}
+			}
+		}
+    };
+}); 
+
 
 $( document ).ready( function () {
     $( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {

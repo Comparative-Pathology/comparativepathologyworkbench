@@ -491,9 +491,9 @@ $( document ).ready( function () {
 
 			sessionStorage.setItem("sidebartoggle", "false");
 	
-			$("#sidebar").removeClass("visible");
+			$("#matrix_sidebar").removeClass("visible");
+			$("#matrix_sidebar").addClass("invisible");
 			$("#indicator-2").removeClass("fa-window-minimize");
-			$("#sidebar").addClass("invisible");
 			$("#indicator-2").addClass("fa-cart-arrow-down");
 		}
 		else {
@@ -502,8 +502,8 @@ $( document ).ready( function () {
 		
 			sessionStorage.setItem("sidebartoggle", "true");
 	
-			$("#sidebar").removeClass("invisible");
-			$("#sidebar").addClass("visible");
+			$("#matrix_sidebar").removeClass("invisible");
+			$("#matrix_sidebar").addClass("visible");
 			$("#indicator-2").removeClass("fa-cart-arrow-down");
 			$("#indicator-2").addClass("fa-window-minimize");
 		}
@@ -528,9 +528,9 @@ $( document ).ready( function () {
 			
 			    sessionStorage.setItem("sidebartoggle", "false");
 
-				$("#sidebar").removeClass("visible");
+				$("#matrix_sidebar").removeClass("visible");
+				$("#matrix_sidebar").addClass("invisible");
 				$("#indicator-2").removeClass("fa-window-minimize");
-				$("#sidebar").addClass("invisible");
 				$("#indicator-2").addClass("fa-cart-arrow-down");
 			}
 			else {
@@ -539,8 +539,8 @@ $( document ).ready( function () {
 	
 					//console.log("Load Flag TRUE")
 
-					$("#sidebar").removeClass("invisible");
-					$("#sidebar").addClass("visible");
+					$("#matrix_sidebar").removeClass("invisible");
+					$("#matrix_sidebar").addClass("visible");
 					$("#indicator-2").removeClass("fa-cart-arrow-down");
 					$("#indicator-2").addClass("fa-window-minimize");
 				}
@@ -548,9 +548,9 @@ $( document ).ready( function () {
 	
 					//console.log("Load Flag FALSE")
 		
-					$("#sidebar").removeClass("visible");
+					$("#matrix_sidebar").removeClass("visible");
+					$("#matrix_sidebar").addClass("invisible");
 					$("#indicator-2").removeClass("fa-window-minimize");
-					$("#sidebar").addClass("invisible");
 					$("#indicator-2").addClass("fa-cart-arrow-down");
 				}
 			}

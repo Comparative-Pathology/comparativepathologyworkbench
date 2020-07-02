@@ -5,7 +5,7 @@
 {% load static %}
 
 {% block content %}
- 
+    
 <div class="row">
 
 	<div class="col-md-12">
@@ -24,18 +24,12 @@
 				</a>
 			</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:detail_protocol' protocol.id %}">
-					Server Protocol {{ protocol.id }}
-				</a>
-			</li>
-	
 			<li class="breadcrumb-item active">
-				Server Protocol Details
+				NEW Authority
 			</li>
 	
 		</ol>
-	
+		
 	</div>
 			
 </div>
@@ -48,27 +42,22 @@
 			
 	<div class="col-md-9" id="content">
 
-		<h1>Server Protocol {{ protocol.id }}</h1>
+		<h1>NEW Authority</h1>
 		<br />
 
-		<dl class="dl-horizontal">
-			<dt>Name:</dt>
-			<dd>{{ protocol.name }}</dd>
-		</dl>
+		<form method="POST" class="post-form">
+		
+{% csrf_token %}
 
-		<br />
+{% include 'includes/form.html' %}
+
+	    	<button type="submit" class="save btn btn-danger">Save</button>
+
+		</form>
 
 		<a href="{% url 'matrices:maintenance' %}">
-			<button class="save btn btn-success">BACK</button>
+			<button class="save btn btn-success">CANCEL</button>
 		</a>
-
-{% if user.is_superuser %}
-            
-		<a href="{% url 'matrices:edit_protocol' protocol.id %}">
-			<button class="save btn btn-warning">Edit</button>
-		</a>
-
-{% endif %}
 
 	</div>
 
@@ -77,5 +66,5 @@
 	</div>
 
 </div>
-
+	
 {% endblock %}

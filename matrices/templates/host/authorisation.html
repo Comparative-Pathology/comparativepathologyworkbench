@@ -85,6 +85,9 @@
 					<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
+					<a href="{% url 'matrices:list_user_bench_authorisation' userlist.id %}">
+						<button class="save btn btn-info"><i class="fa fa-universal-access"></i></button>
+					</a>
 	            </td>
 
 		{% else %}
@@ -175,7 +178,7 @@
 	
 	        <tr>
 
-		{% if user.id == credential.owner_id or user.is_superuser %}
+		{% if user.is_superuser %}
             
     	        <td>
 					<a href="{% url 'matrices:detail_blog_credential' credential.id %}">

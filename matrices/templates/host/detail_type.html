@@ -62,7 +62,7 @@
 			<button class="save btn btn-success">BACK</button>
 		</a>
 
-{% if user.id == blog.owner_id or user.is_superuser %}
+{% if user.is_superuser %}
             
 		<a href="{% url 'matrices:edit_type' type.id %}">
 			<button class="save btn btn-warning">Edit</button>

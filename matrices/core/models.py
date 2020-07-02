@@ -2,9 +2,14 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import Q 
+
 from django.contrib.auth.models import User
+
 from django.db.models.signals import post_save
+
 from django.dispatch import receiver
+
 from django.utils.timezone import now
 
 from django.conf import settings
@@ -44,9 +49,6 @@ class Matrix(models.Model):
     
     def __str__(self):
         return '%s, %s, %s, %s, %s' % (self.id, self.title, self.description, self.blogpost, self.owner.id)
-
-    def __unicode__(self):
-        return '%s, %s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.title, self.description, self.blogpost, self.created, self.modified, self.height, self.width, self.owner.id)
 
     def is_too_wide(self):
         if self.width > 450:
@@ -295,9 +297,6 @@ class Profile(models.Model):
     def __str__(self):
         return '%s, %s, %s, %s, %s' % (self.id, self.bio, self.location, self.birth_date, self.email_confirmed)
 
-    def __unicode__(self):
-        return '%s, %s, %s, %s, %s, %s' % (self.id, self.user.id, self.bio, self.location, self.birth_date, self.email_confirmed)
-
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
@@ -311,11 +310,7 @@ class Type(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        #return '%s %s %s' % (self.id, self.name, self.owner)
-        return '%s' % ( self.name )
-
-    def __unicode__(self):
-        return '%s, %s, %s' % (self.id, self.name, self.owner.id)
+    	return '%s' % ( self.name )
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:
@@ -333,9 +328,6 @@ class Protocol(models.Model):
 
     def __str__(self):
         return '%s' % ( self.name )
-
-    def __unicode__(self):
-        return '%s, %s, %s' % (self.id, self.name, self.owner.id)
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:
@@ -358,9 +350,6 @@ class Server(models.Model):
     def __str__(self):
         return '%s, %s, %s, %s, %s, %s, %s' % (self.id, self.name, self.url, self.uid, self.pwd, self.type.id, self.owner.id)
 
-    def __unicode__(self):
-        return '%s, %s, %s, %s, %s, %s, %s' % (self.id, self.name, self.url, self.uid, self.pwd, self.type.id, self.owner.id)
-
     def is_owned_by(self, a_user):
         if self.owner == a_user:
             return True
@@ -381,6 +370,12 @@ class Server(models.Model):
 
     def is_omero547(self):
         if  self.type.name == 'OMERO_5.4.7':
+            return True
+        else:
+            return False
+
+    def is_omero56(self):
+        if  self.type.name == 'OMERO_5.6':
             return True
         else:
             return False
@@ -2403,9 +2398,6 @@ class Command(models.Model):
     def __str__(self):
         return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.name, self.application, self.preamble, self.postamble, self.protocol.id, self.type.id, self.owner.id)
 
-    def __unicode__(self):
-        return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.name, self.application, self.preamble, self.postamble, self.protocol.id, self.type.id, self.owner.id)
-
     def is_owned_by(self, a_user):
         if self.owner == a_user:
             return True
@@ -2425,13 +2417,8 @@ class Image(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     active = models.BooleanField(default=True)
     roi = models.IntegerField(default=0)
-    #cell = models.ForeignKey(Cell, null=True, on_delete=models.CASCADE)
     
     def __str__(self):
-        return '%s, %s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.identifier, self.name, self.server.id, self.viewer_url, self.birdseye_url, self.owner.id, self.active, self.roi)
-        #return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.identifier, self.name, self.server.id, self.viewer_url, self.birdseye_url, self.owner.id, self.active, self.roi)
-
-    def __unicode__(self):
         return '%s, %s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.identifier, self.name, self.server.id, self.viewer_url, self.birdseye_url, self.owner.id, self.active, self.roi)
 
     def is_owned_by(self, a_user):
@@ -2480,10 +2467,6 @@ class Cell(models.Model):
             str_image = "None"
         
         return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.matrix.id, self.title, self.description, self.xcoordinate, self.ycoordinate, self.blogpost, str_image)
-        #return '%s, %s, %s, %s, %s, %s' % (self.matrix.id, self.title, self.description, self.xcoordinate, self.ycoordinate, self.blogpost)
-
-    def __unicode__(self):
-        return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.matrix.id, self.title, self.description, self.xcoordinate, self.ycoordinate, self.blogpost, self.image.id)
 
     def is_header(self):
         if self.xcoordinate == 0 or self.ycoordinate == 0:
@@ -2570,9 +2553,6 @@ class Blog(models.Model):
     def __str__(self):
         return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.name, self.protocol.id, self.url, self.application, self.preamble, self.postamble, self.owner.id)
 
-    def __unicode__(self):
-        return '%s, %s, %s, %s, %s, %s, %s, %s' % (self.id, self.name, self.protocol.id, self.url, self.application, self.preamble, self.postamble, self.owner.id)
-
     def is_owned_by(self, a_user):
         if self.owner == a_user:
             return True
@@ -2590,9 +2570,6 @@ class Credential(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     
     def __str__(self):
-        return '%s, %s, %s, %s, %s' % (self.id, self.username, self.wordpress, self.apppwd, self.owner.id)
-
-    def __unicode__(self):
         return '%s, %s, %s, %s, %s' % (self.id, self.username, self.wordpress, self.apppwd, self.owner.id)
 
     def has_no_apppwd(self):
@@ -2799,4 +2776,291 @@ def get_a_post_comments_from_wordpress(post_id):
         comment_list.reverse()
         
     return comment_list
+
+
+class Authority(models.Model):
+    name = models.CharField(max_length=12, blank=False, unique=True, default='')
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+    	return '%s' % ( self.name )
+
+    def is_owned_by(self, a_user):
+        if self.owner == a_user:
+            return True
+        else:
+            return False
+            
+    def set_owner(self, a_user):
+        self.owner = a_user
+
+    def set_none(self):
+        self.name = 'NONE'
+
+    def set_editor(self):
+        self.name = 'EDITOR'
+
+    def set_viewer(self):
+        self.name = 'VIEWER'
+
+    def set_owner(self):
+        self.name = 'OWNER'
+
+    def set_admin(self):
+        self.name = 'ADMIN'
+
+    def is_none(self):
+        if self.name == 'NONE':
+            return True
+        else:
+            return False
+            
+    def is_editor(self):
+        if self.name == 'EDITOR':
+            return True
+        else:
+            return False
+            
+    def is_viewer(self):
+        if self.name == 'VIEWER':
+            return True
+        else:
+            return False
+
+    def is_owner(self):
+        if self.name == 'OWNER':
+            return True
+        else:
+            return False
+        
+    def is_admin(self):
+        if self.name == 'ADMIN':
+            return True
+        else:
+            return False
+        
+
+class Authorisation(models.Model):
+    matrix = models.ForeignKey(Matrix, on_delete=models.DO_NOTHING)
+    permitted = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    authority = models.ForeignKey(Authority, on_delete=models.DO_NOTHING)
+    
+    def __str__(self):
+        return '%s, %s, %s, %s' % (self.id, self.matrix.id, self.permitted.id, self.authority.id)
+
+    def set_matrix(self, a_matrix):
+        self.matrix = a_matrix
+
+    def is_permitted_by(self, a_user):
+        if self.permitted == a_user:
+            return True
+        else:
+            return False
+            
+    def set_permitted(self, a_user):
+        self.permitted = a_user
+        
+    def is_authority(self, a_authority):
+        if self.authority == a_authority:
+            return True
+        else:
+            return False
+            
+    def set_authority(self, a_authority):
+        self.authority = a_authority
+        
+    def has_authority(self, a_matrix, a_user):
+        if self.permitted == a_user:
+            return True
+        else:
+            return False
+            
+
+def authorisation_list_select_related_matrix():
+
+	queryset = Authorisation.objects.select_related('matrix').all()
+	
+	matrices = list()
+	
+	for authorisation in queryset:
+	
+		out_matrix = ({
+			'matrix_id': authorisation.matrix.id, 
+	        'matrix_title': authorisation.matrix.title, 
+   		    'matrix_description': authorisation.matrix.description, 
+        	'matrix_blogpost': authorisation.matrix.blogpost, 
+	        'matrix_created': authorisation.matrix.created, 
+   		    'matrix_modified': authorisation.matrix.modified, 
+       		'matrix_height': authorisation.matrix.height, 
+	        'matrix_width': authorisation.matrix.width, 
+   		    'matrix_owner': authorisation.matrix.owner.username,
+    	    'authorisation_id': authorisation.id, 
+   	    	'authorisation_authority': authorisation.authority.name,
+       		'authorisation_permitted': authorisation.permitted.username})
+       		
+		matrices.append(out_matrix)
+    
+	return matrices
+
+
+def authorisation_list_select_related_matrix_by_user(a_user):
+
+	queryset = Authorisation.objects.select_related('matrix').filter(permitted=a_user)
+	
+	matrices = list()
+	
+	for authorisation in queryset:
+	
+		out_matrix = ({
+			'matrix_id': authorisation.matrix.id, 
+	        'matrix_title': authorisation.matrix.title, 
+   		    'matrix_description': authorisation.matrix.description, 
+        	'matrix_blogpost': authorisation.matrix.blogpost, 
+	        'matrix_created': authorisation.matrix.created, 
+   		    'matrix_modified': authorisation.matrix.modified, 
+       		'matrix_height': authorisation.matrix.height, 
+	        'matrix_width': authorisation.matrix.width, 
+   		    'matrix_owner': authorisation.matrix.owner.username,
+    	    'authorisation_id': authorisation.id, 
+   	    	'authorisation_authority': authorisation.authority.name,
+       		'authorisation_permitted': authorisation.permitted.username})
+       		
+		matrices.append(out_matrix)
+    
+	return matrices
+
+
+def matrix_list_by_user(a_user):
+
+	queryset = Matrix.objects.filter(owner=a_user)
+	
+	matrices = list()
+	
+	for matrix in queryset:
+	
+		out_matrix = ({
+        	'matrix_id': matrix.id, 
+	        'matrix_title': matrix.title, 
+   		    'matrix_description': matrix.description, 
+        	'matrix_blogpost': matrix.blogpost, 
+	        'matrix_created': matrix.created, 
+   		    'matrix_modified': matrix.modified, 
+       		'matrix_height': matrix.height, 
+	        'matrix_width': matrix.width, 
+   		    'matrix_owner': matrix.owner.username,
+    	    'authorisation_id': "0", 
+    	    'authorisation_authority': "OWNER",
+    	    'authorisation_permitted': matrix.owner.username
+		})
+
+		matrices.append(out_matrix)
+    
+	return matrices
+
+
+def matrix_list_not_by_user(a_user):
+
+	queryset = Matrix.objects.filter(~Q(owner=a_user))
+	
+	matrices = list()
+	
+	for matrix in queryset:
+	
+		out_matrix = ({
+        	'matrix_id': matrix.id, 
+	        'matrix_title': matrix.title, 
+   		    'matrix_description': matrix.description, 
+        	'matrix_blogpost': matrix.blogpost, 
+	        'matrix_created': matrix.created, 
+   		    'matrix_modified': matrix.modified, 
+       		'matrix_height': matrix.height, 
+	        'matrix_width': matrix.width, 
+   		    'matrix_owner': matrix.owner.username,
+    	    'authorisation_id': "0", 
+    	    'authorisation_authority': "ADMIN",
+    	    'authorisation_permitted': matrix.owner.username
+		})
+
+		matrices.append(out_matrix)
+    
+	return matrices
+
+
+def matrix_list_all():
+
+	queryset = Matrix.objects.all()
+	
+	matrices = list()
+	
+	for matrix in queryset:
+	
+		out_matrix = ({
+        	'matrix_id': matrix.id, 
+	        'matrix_title': matrix.title, 
+   		    'matrix_description': matrix.description, 
+        	'matrix_blogpost': matrix.blogpost, 
+	        'matrix_created': matrix.created, 
+   		    'matrix_modified': matrix.modified, 
+       		'matrix_height': matrix.height, 
+	        'matrix_width': matrix.width, 
+   		    'matrix_owner': matrix.owner.username,
+    	    'authorisation_id': "0", 
+   	    	'authorisation_authority': "ADMIN",
+       		'authorisation_permitted': matrix.owner.username
+        	})
+
+		matrices.append(out_matrix)
+    
+	return matrices
+
+
+def get_authority_for_matrix_and_user_and_requester(a_matrix, a_user):
+
+	authority = Authority(name="NONE", owner=a_user)
+
+	if a_user.is_superuser == True:
+		authority.set_admin()
+
+	else:
+
+		if a_user == a_matrix.owner:
+			authority.set_owner()
+
+		else:
+	
+			if Authorisation.objects.filter(Q(matrix=a_matrix) & Q(permitted=a_user)).exists():
+		
+				authorisation = Authorisation.objects.get(Q(matrix=a_matrix) & Q(permitted=a_user))
+				
+				if authorisation.authority.is_owner() == True:
+					authority.set_owner()
+
+				if authorisation.authority.is_admin() == True:
+					authority.set_admin()
+
+				if authorisation.authority.is_viewer() == True:
+					authority.set_viewer()
+
+				if authorisation.authority.is_editor() == True:
+					authority.set_editor()
+			
+			else:
+				authority.set_none()
+
+	return authority
+
+
+def credential_exists(a_user):
+
+	return Credential.objects.filter(username=a_user.username).values('username').exists()
+
+
+def authorisation_exits_for_matrix_and_permitted(a_matrix, a_user):
+
+	return Authorisation.objects.filter(matrix=a_matrix).filter(permitted=a_user).exists()
+
+
+def get_primary_wordpress_server():
+
+	return Server.objects.get(url=config('WORDPRESS'))
 

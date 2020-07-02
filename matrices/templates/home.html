@@ -161,7 +161,18 @@
 		</div>
 
 	</div>
+
+{% if credential_flag == '' %}
+
+	<div class="col-md-3">
+    	
+	</div>
 	    
+
+{% else %}
+	    
+	{% if my_matrix_list %}
+
 	<div class="col-md-3">
     	
 		<div class="card text-center">
@@ -177,10 +188,10 @@
 				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
 					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
 				</a>
-	
-				<p>Browse all active Benches in the Workbench</p>
 
-				<a href="{% url 'matrices:list_matrix' %}">
+					<p>Browse All Permitted Benches in the Workbench ({{ matrix_list|length }})</p>
+
+				<a href="{% url 'matrices:index' %}">
 					<button class="save btn btn-info">Benches &raquo;</button>
 				</a>
 
@@ -189,6 +200,40 @@
 		</div>
 
 	</div>
+	    
+	{% else %}
+	
+	<div class="col-md-3">
+    	
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">ADD</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+
+					<p>Add a NEW Bench!</p>
+
+				<a href="{% url 'matrices:new_matrix' %}">
+					<button class="save btn btn-success">ADD &raquo;</button>
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+	    
+	{% endif %}
+
+{% endif %}
 	    
 	<div class="col-md-3">
 

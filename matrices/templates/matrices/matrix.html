@@ -33,7 +33,9 @@
 						<span class="sr-only">Bench Details</span>
 					</a>
 
-{% if user == owner %}
+{% if authority.is_viewer %}
+
+{% else %}
 
 	{% if credential_flag %}
 
@@ -70,7 +72,7 @@
 					<dd class="col-sm-6">{{ matrix.title }}</dd>
 
 					<dt class="col-sm-2">Owner:</dt>
-					<dd class="col-sm-2">{{ owner.username }}</dd>
+					<dd class="col-sm-2">{{ matrix.owner.username }}</dd>
 			
 					<dt class="col-sm-2">Cell Height:</dt>
 					<dd class="col-sm-2">{{ matrix.height }}</dd>
@@ -101,7 +103,9 @@
 
 	<div class="col-md-1 invisible" id="matrix_sidebar">
 
-{% if user == owner %}
+{% if authority.is_viewer %}
+
+{% else %}
 
 	{% if credential_flag %}
 
@@ -119,14 +123,14 @@
 
 				<td id="image_{{ image.id }}">
 
-				{% if user == owner %}
-				
-					<div draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
-		
-				{% else %}
+				{% if authority.is_viewer %}
 				
 					<div id="image_{{ image.id }}">
 
+				{% else %}
+				
+					<div draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
+		
 				{% endif %}
 
 						<div style="width:115px; height:115px;" class="image" align="right"> 
@@ -419,11 +423,17 @@
 
   									<div class="dropdown-content dropdown-menu" aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
 
+					{% if authority.is_viewer %}
+					
 										<a class="dropdown-item" href="{% url 'matrices:detail_matrix' matrix.id %}">
 											<i class="fa fa-eye"></i> View Bench Details
 										</a>
 					
-					{% if user == owner %}
+					{% else %}
+
+										<a class="dropdown-item" href="{% url 'matrices:detail_matrix' matrix.id %}">
+											<i class="fa fa-eye"></i> View Bench Details
+										</a>
 					
 										<a class="dropdown-item" href="{% url 'matrices:edit_matrix' matrix.id %}">
 											<i class="fa fa-pencil-alt"></i> Edit Bench Details
@@ -447,8 +457,10 @@
 
 					{% endif %}
 
-					{% if user == owner %}
+					{% if authority.is_viewer %}
 					
+					{% else %}
+
 										<div class="dropdown-divider"></div>
 
 										<a class="dropdown-item" href="{% url 'matrices:delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
@@ -488,14 +500,14 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 				
-						{% if user == owner %}
-				
-							<div draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
-		
-						{% else %}
+						{% if authority.is_viewer %}
 				
 							<div id="cell_{{ matrix_cell.id }}">
 
+						{% else %}
+				
+							<div draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
+		
 						{% endif %}
 
 								<div style="width:34px; height:34px;" class="bottomrow">
@@ -524,14 +536,14 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 				
-						{% if user == owner %}
-				
-							<div draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
-		
-						{% else %}
+						{% if authority.is_viewer %}
 				
 							<div id="cell_{{ matrix_cell.id }}">
 
+						{% else %}
+				
+							<div draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
+		
 						{% endif %}
 
 								<div style="height:{{ matrix.height }}px;" class="headrow">
@@ -560,12 +572,18 @@
 
 													<div class="dropdown-content dropdown-menu"  aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
 
+						{% if authority.is_viewer %}
+
 														<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
 															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
 														</a>
 								
-						{% if user == owner %}
+						{% else %}
 
+														<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+														</a>
+								
 														<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
 															<i class="fa fa-pencil-alt"></i> Edit Row Header
 														</a>
@@ -612,14 +630,14 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 
-						{% if user == owner %}
-				
-							<div draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
-		
-						{% else %}
+						{% if authority.is_viewer %}
 				
 							<div id="cell_{{ matrix_cell.id }}">
 
+						{% else %}
+				
+							<div draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
+		
 						{% endif %}
 
 								<div style="width:34px; height:34px;" class="bottomcol">
@@ -648,13 +666,13 @@
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 				
-						{% if user == owner %}
+						{% if authority.is_viewer %}
 				
-							<div draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
+							<div id="cell_{{ matrix_cell.id }}">
 
 						{% else %}
 				
-							<div id="cell_{{ matrix_cell.id }}">
+							<div draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
 
 						{% endif %}
 
@@ -684,11 +702,17 @@
 									
 													<div class="dropdown-content dropdown-menu" aria-labelledby="dropdownMenuButton">
 
+						{% if authority.is_viewer %}
+
 														<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
 															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
 														</a>
 
-						{% if user == owner %}
+						{% else %}
+
+														<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+														</a>
 
 														<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
 															<i class="fa fa-pencil-alt"></i> Edit Column Header
@@ -738,13 +762,13 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-						{% if user == owner %}
+						{% if authority.is_viewer %}
 				
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+							<div id="cell_{{ matrix_cell.id }}">
 				
 						{% else %}
 				
-							<div id="cell_{{ matrix_cell.id }}">
+							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
 				
 						{% endif %}
 
@@ -758,13 +782,21 @@
 								
 								        <ul class="dropdown-content dropdown-menu">
 
+						{% if authority.is_viewer %}
+
 											<li>								
 												<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
 													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
 												</a>
 											</li>								
 
-						{% if user == owner %}
+						{% else %}
+
+											<li>								
+												<a class="dropdown-item" href="{% url 'matrices:view_cell' matrix.id matrix_cell.id %}">
+													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
+												</a>
+											</li>								
 
 											<li>								
 												<a class="dropdown-item" href="{% url 'matrices:edit_cell' matrix.id matrix_cell.id %}">
@@ -846,13 +878,13 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-						{% if user == owner %}
+						{% if authority.is_viewer %}
 				
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+							<div id="cell_{{ matrix_cell.id }}">
 				
 						{% else %}
 				
-							<div id="cell_{{ matrix_cell.id }}">
+							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
 				
 						{% endif %}
 
@@ -880,13 +912,13 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-						{% if user == owner %}
+						{% if authority.is_viewer %}
 				
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+							<div id="cell_{{ matrix_cell.id }}">
 				
 						{% else %}
 				
-							<div id="cell_{{ matrix_cell.id }}">
+							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
 				
 						{% endif %}
 
@@ -914,13 +946,13 @@
 
 						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-						{% if user == owner %}
+						{% if authority.is_viewer %}
 				
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+							<div id="cell_{{ matrix_cell.id }}">
 				
 						{% else %}
 				
-							<div id="cell_{{ matrix_cell.id }}">
+							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
 				
 						{% endif %}
 

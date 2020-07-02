@@ -13,12 +13,12 @@ urlpatterns = [
 	url(r'^howto/$', views.howto, name='howto'),
 
 	url(r'^$', views.index_matrix, name='index'),
+	url(r'^list_matrix/$', views.index_matrix, name='list_matrix'),
 
-	url(r'^list_matrix/$', views.list_matrix, name='list_matrix'),
-
-	url(r'^list_imaging_hosts/$', views.list_imaging_hosts, name='list_imaging_hosts'),
 	url(r'^maintenance/$', views.maintenance, name='maintenance'),
 	url(r'^authorisation/$', views.authorisation, name='authorisation'),
+
+	url(r'^list_imaging_hosts/$', views.list_imaging_hosts, name='list_imaging_hosts'),
 	url(r'^list_image_cart/$', views.list_image_cart, name='list_image_cart'),
 
     url(r'^ajax/overwrite_cell_leave/$', views.overwrite_cell_leave, name='overwrite_cell_leave'),
@@ -79,6 +79,11 @@ urlpatterns = [
 	url(r'^edit_type/(?P<type_id>[0-9]+)/$', views.edit_type, name='edit_type'),
 	url(r'^delete_type/(?P<type_id>[0-9]+)/$', views.delete_type, name='delete_type'),
 
+	url(r'^detail_authority/(?P<authority_id>[0-9]+)/$', views.view_authority, name='detail_authority'),
+	url(r'^new_authority/$', views.new_authority, name='new_authority'),
+	url(r'^edit_authority/(?P<authority_id>[0-9]+)/$', views.edit_authority, name='edit_authority'),
+	url(r'^delete_authority/(?P<authority_id>[0-9]+)/$', views.delete_authority, name='delete_authority'),
+
 	url(r'^(?P<matrix_id>[0-9]+)/detail_matrix_blog/$', views.view_matrix_blog, name='detail_matrix_blog'), 
 	url(r'^(?P<matrix_id>[0-9]+)/view_cell_blog/(?P<cell_id>[0-9]+)/$', views.view_cell_blog, name='view_cell_blog'),
 
@@ -100,4 +105,19 @@ urlpatterns = [
 	url(r'^(?P<matrix_id>[0-9]+)/add_row_below/(?P<row_id>[0-9]+)/$', views.add_row_below, name='add_row_below'),
 	url(r'^(?P<matrix_id>[0-9]+)/delete_this_row/(?P<row_id>[0-9]+)/$', views.delete_this_row, name='delete_this_row'),
 	url(r'^(?P<matrix_id>[0-9]+)/delete_row/$', views.delete_row, name='delete_row'),
+	
+	url(r'^list_authorisation/$', views.list_authorisation, name='list_authorisation'),
+	url(r'^list_my_authorisation/$', views.list_my_authorisation, name='list_my_authorisation'),
+	url(r'^list_bench_authorisation/(?P<matrix_id>[0-9]+)/$', views.list_bench_authorisation, name='list_bench_authorisation'),
+	url(r'^list_my_bench_authorisation/(?P<matrix_id>[0-9]+)/(?P<user_id>[0-9]+)/$', views.list_my_bench_authorisation, name='list_my_bench_authorisation'),
+	url(r'^list_user_bench_authorisation/(?P<user_id>[0-9]+)/$', views.list_user_bench_authorisation, name='list_user_bench_authorisation'),
+
+	url(r'^detail_authorisation/(?P<authorisation_id>[0-9]+)/$', views.view_authorisation, name='detail_authorisation'),
+	url(r'^new_authorisation/(?P<matrix_id>[0-9]+)/$', views.new_matrix_authorisation, name='new_matrix_authorisation'),
+	url(r'^new_authorisation/$', views.new_authorisation, name='new_authorisation'),
+	url(r'^edit_authorisation/(?P<authorisation_id>[0-9]+)/$', views.edit_authorisation, name='edit_authorisation'),
+	url(r'^edit_authorisation/(?P<matrix_id>[0-9]+)/(?P<authorisation_id>[0-9]+)/$', views.edit_matrix_authorisation, name='edit_matrix_authorisation'),
+	url(r'^delete_authorisation/(?P<authorisation_id>[0-9]+)/$', views.delete_authorisation, name='delete_authorisation'),
+
+
 ]

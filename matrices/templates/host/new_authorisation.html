@@ -1,0 +1,72 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item">
+				<a href="{{ request.META.HTTP_REFERER }}">
+					Permissions
+				</a>
+			</li>
+	
+			<li class="breadcrumb-item active">
+				NEW Permission {{ text_flag }}
+			</li>
+	
+		</ol>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>NEW Permission {{ text_flag }}</h1>
+		<br />
+
+		<form method="POST" class="post-form">
+		
+{% csrf_token %}
+
+{% include 'includes/form.html' %}
+
+			<input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+
+	    	<button type="submit" class="save btn btn-danger">Save</button>
+
+		</form>
+
+		<a href="{{ request.META.HTTP_REFERER }}">
+			<button class="save btn btn-success">BACK</button>
+		</a>
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+	
+{% endblock %}

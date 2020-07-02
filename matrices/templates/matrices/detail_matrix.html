@@ -27,7 +27,7 @@
 				</li>
 
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:matrix' matrix_id %}">
+					<a href="{% url 'matrices:matrix' matrix.id %}">
 						CPW:{{ matrix.id|stringformat:"06d" }}
 					</a>
 				</li>
@@ -75,7 +75,7 @@
 			<dt>Cell Width:</dt>
 			<dd>{{ matrix.width }}</dd>
 
-	{% if matrix.blogpost != '' %}
+{% if matrix.blogpost != '' %}
 	
 			<dt>Blog Post:</dt>
 			<dd>
@@ -84,10 +84,10 @@
 				</a>
 			</dd>
 			
-	{% endif %}
+{% endif %}
 
 			<dt>Owner:</dt>
-			<dd>{{ owner.username }} ({{ owner.first_name }} {{ owner.last_name }})</dd>
+			<dd>{{ matrix.owner.username }} ({{ matrix.owner.first_name }} {{ matrix.owner.last_name }})</dd>
 
 			<dt>Created:</dt>
 			<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
@@ -98,10 +98,17 @@
 
 		<br />
 
-		<!-- <a href="{% url 'matrices:matrix' matrix_id %}"> -->
 		<a href="{{ request.META.HTTP_REFERER }}">
 			<button class="save btn btn-success">Back</button>
 		</a>
+
+{% if user == matrix.owner or user.is_superuser %}
+            
+		<a href="{% url 'matrices:edit_matrix' matrix.id %}">
+			<button class="save btn btn-warning">Edit</button>
+		</a>
+
+{% endif %}
 
 	</div>
 	

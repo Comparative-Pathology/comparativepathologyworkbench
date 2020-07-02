@@ -1,0 +1,207 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+    
+<div class="row">
+
+	<div class="col-md-12">
+
+		<ol class="breadcrumb subheading">
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:home' %}">
+					Home
+				</a>
+			</li>
+	
+{% if user.is_superuser %}
+	
+			<li class="breadcrumb-item">
+				<a href="{% url 'matrices:authorisation' %}">
+					Authorisation
+				</a>
+			</li>
+	
+{% endif %}
+	
+			<li class="breadcrumb-item active">
+				{{ text_flag }} 
+			</li>
+	
+		</ol>
+		
+	</div>
+			
+</div>
+		
+<div class="row">
+
+	<div class="col-md-1" id="sidebar">
+
+	</div>
+			
+	<div class="col-md-9" id="content">
+
+		<h1>Browse {{ text_flag }}</h1>
+		<br />
+
+		<p>Browse the list of {{ text_flag }}</p>
+		<hr>
+
+{% if authorisation_list %}
+
+	{% for authorisation in authorisation_list %}
+	
+		{% if forloop.first %}
+	
+	    <table border="0">
+
+        	<tr>
+    	        <th width="150px">Action</th>
+	            <th width="100px">ID</th>
+            	<th width="200px">Bench</th>
+            	<th width="200px">Owner</th>
+        	    <th width="200px">Permitted</th>
+        	    <th width="200px">Authority</th>
+			</tr>
+
+	        <tr>
+        	    <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+	            <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+			</tr>
+
+		{% endif %}
+	
+    	    <tr>
+
+	            <td>
+
+					<a href="{% url 'matrices:detail_authorisation' authorisation.id %}">
+						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
+					</a>
+
+		{% if matrix_id == '' %}
+
+					<a href="{% url 'matrices:edit_authorisation' authorisation.id %}">
+						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+					</a>
+	
+		{% else %}
+
+					<a href="{% url 'matrices:edit_matrix_authorisation' matrix_id authorisation.id %}">
+						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
+					</a>
+	
+		{% endif %}
+	
+					<a href="{% url 'matrices:delete_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this AUTHORISATION?')">
+						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
+					</a>
+	            </td>
+
+        	    <td>
+            		{{ authorisation.id }}
+	            </td>
+
+            	<td>
+            		CPW:{{ authorisation.matrix.id|stringformat:"06d" }}
+        	    </td>
+
+            	<td>
+            		{{ authorisation.matrix.owner.username }}
+        	    </td>
+
+    	        <td>
+            		{{ authorisation.permitted.username }}
+        	    </td>
+
+    	        <td>
+            		{{ authorisation.authority.name }}
+        	    </td>
+			</tr>
+
+		{% if forloop.last %}
+	
+	        <tr>
+	            <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+			</tr>
+
+	        <tr>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+	            <td>&nbsp;</td>
+    	        <td>&nbsp;</td>
+        	    <td>&nbsp;</td>
+            	<td>&nbsp;</td>
+			</tr>
+
+	    </table>
+
+		{% endif %}
+	
+	{% endfor %}
+
+	{% if matrix_id == '' %}
+
+		<p>
+			<a href="{% url 'matrices:new_authorisation' %}">
+				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			</a>
+		</p>
+	
+	{% else %}
+
+		<p>
+			<a href="{% url 'matrices:new_matrix_authorisation' matrix_id%}">
+				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			</a>
+		</p>
+	
+	{% endif %}
+	
+{% else %}
+
+		<p>No Permissions are available.</p>
+
+	{% if matrix_id == '' %}
+
+		<p>
+			<a href="{% url 'matrices:new_authorisation' %}">
+				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			</a>
+		</p>
+	
+	{% else %}
+
+		<p>
+			<a href="{% url 'matrices:new_matrix_authorisation' matrix_id%}">
+				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			</a>
+		</p>
+	
+	{% endif %}
+	
+{% endif %}
+
+	</div>
+
+	<div class="col-md-2">
+
+	</div>
+
+</div>
+
+{% endblock %}

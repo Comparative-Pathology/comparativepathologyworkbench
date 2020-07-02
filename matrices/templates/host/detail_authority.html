@@ -5,13 +5,13 @@
 {% load static %}
 
 {% block content %}
-    
+
 <div class="row">
 
 	<div class="col-md-12">
 
 		<ol class="breadcrumb subheading">
-
+	
 			<li class="breadcrumb-item">
 				<a href="{% url 'matrices:home' %}">
 					Home
@@ -19,23 +19,23 @@
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
-					Sources
+				<a href="{% url 'matrices:maintenance' %}">
+					Maintenance
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:detail_server' server.id %}">
-					Source {{ server.id }}
+				<a href="{% url 'matrices:detail_authority' authority.id %}">
+					Authority {{ authority.id }}
 				</a>
 			</li>
-	
+		
 			<li class="breadcrumb-item active">
-				Source Details
+				Authority Details
 			</li>
 	
 		</ol>
-	
+			
 	</div>
 			
 </div>
@@ -48,32 +48,27 @@
 			
 	<div class="col-md-9" id="content">
 
-		<h1>Source {{ server.id }}</h1>
+		<h1>Authority {{ authority.id }}</h1>
 		<br />
 
 		<dl class="dl-horizontal">
 			<dt>Name:</dt>
-			<dd>{{ server.name }}</dd>
-			<dt>URL:</dt>
-			<dd>{{ server.url }}</dd>
-			<dt>Type:</dt>
-			<dd>{{ server.type.name }}</dd>
+			<dd>{{ authority.name }}</dd>
 		</dl>
 
 		<br />
 
-		<a href="{% url 'matrices:list_imaging_hosts' %}">
+		<a href="{% url 'matrices:maintenance' %}">
 			<button class="save btn btn-success">BACK</button>
 		</a>
 
-{% if user == server.owner or user.is_superuser %}
+{% if user.is_superuser %}
             
-		<a href="{% url 'matrices:edit_server' server.id %}">
+		<a href="{% url 'matrices:edit_authority' authority.id %}">
 			<button class="save btn btn-warning">Edit</button>
 		</a>
 
 {% endif %}
-
 
 	</div>
 

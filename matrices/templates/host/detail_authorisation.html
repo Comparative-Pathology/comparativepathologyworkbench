@@ -5,37 +5,35 @@
 {% load static %}
 
 {% block content %}
-    
+
 <div class="row">
 
 	<div class="col-md-12">
 
 		<ol class="breadcrumb subheading">
-
+	
 			<li class="breadcrumb-item">
 				<a href="{% url 'matrices:home' %}">
 					Home
 				</a>
 			</li>
-	
+
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
-					Sources
+				<a href="{{ request.META.HTTP_REFERER }}">
+					Permissions
 				</a>
 			</li>
-	
+
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:detail_server' server.id %}">
-					Source {{ server.id }}
-				</a>
+				Permission {{ authorisation.id }}
 			</li>
-	
+		
 			<li class="breadcrumb-item active">
-				Source Details
+				Permission Details
 			</li>
 	
 		</ol>
-	
+			
 	</div>
 			
 </div>
@@ -48,32 +46,27 @@
 			
 	<div class="col-md-9" id="content">
 
-		<h1>Source {{ server.id }}</h1>
+		<h1>Permission {{ authorisation.id }}</h1>
 		<br />
 
 		<dl class="dl-horizontal">
-			<dt>Name:</dt>
-			<dd>{{ server.name }}</dd>
-			<dt>URL:</dt>
-			<dd>{{ server.url }}</dd>
-			<dt>Type:</dt>
-			<dd>{{ server.type.name }}</dd>
+			<dt>Bench Id:</dt>
+			<dd>{{ authorisation.matrix.id }}</dd>
+			<dt>User:</dt>
+			<dd>{{ authorisation.permitted.username }}</dd>
+			<dt>Authority:</dt>
+			<dd>{{ authorisation.authority.name }}</dd>
 		</dl>
 
 		<br />
 
-		<a href="{% url 'matrices:list_imaging_hosts' %}">
+		<a href="{{ request.META.HTTP_REFERER }}">
 			<button class="save btn btn-success">BACK</button>
 		</a>
 
-{% if user == server.owner or user.is_superuser %}
+{% if user.is_superuser %}
             
-		<a href="{% url 'matrices:edit_server' server.id %}">
-			<button class="save btn btn-warning">Edit</button>
-		</a>
-
 {% endif %}
-
 
 	</div>
 

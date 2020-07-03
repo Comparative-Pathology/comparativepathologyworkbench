@@ -2841,7 +2841,7 @@ class Authority(models.Model):
         
 
 class Authorisation(models.Model):
-    matrix = models.ForeignKey(Matrix, on_delete=models.DO_NOTHING)
+    matrix = models.ForeignKey(Matrix, on_delete=models.CASCADE)
     permitted = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     authority = models.ForeignKey(Authority, on_delete=models.DO_NOTHING)
     

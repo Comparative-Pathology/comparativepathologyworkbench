@@ -134,8 +134,6 @@ def home(request):
 		image_list = Image.objects.filter(owner=request.user).filter(active=True)
 		server_list = Server.objects.all()
 
-	print("request.user : ", request.user)
-
 	data = { 'credential_flag': credential_flag, 'my_matrix_list': my_matrix_list, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
 	return render(request, 'home.html', data)
@@ -3849,8 +3847,6 @@ def delete_this_row(request, matrix_id, row_id):
 				
 					image.set_active()
 					
-					print("image : ", image)
-				
 					image.save()
 
 				if oldCell.has_blogpost() == True:
@@ -5034,7 +5030,13 @@ def new_authorisation(request):
 
 		form = AuthorisationForm()
 
-		form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
+		if request.user.is_superuser == True:
+
+			form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.all())
+		
+		else:
+
+			form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
 
 		form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 
@@ -5177,6 +5179,14 @@ def edit_authorisation(request, authorisation_id):
 		text_flag = ''
 		
 		form = AuthorisationForm(instance=authorisation)
+
+		if request.user.is_superuser == True:
+
+			form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.all())
+		
+		else:
+
+			form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
 
 		form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 			

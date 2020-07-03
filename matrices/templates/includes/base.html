@@ -105,7 +105,11 @@
 
 			{% endif %}
 			
-									<li><a class="dropdown-item" href="{% url 'matrices:matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a></li>
+									<li>
+
+										<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
+
+									</li>
 	
 			{% if forloop.last %}
 		
@@ -143,7 +147,11 @@
 
 			{% endif %}
 			
-								<li><a class="dropdown-item" href="{% url 'matrices:matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a></li>
+								<li>
+								
+									<a class="dropdown-item" href="{% url 'matrices:matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
+								
+								</li>
 	
 			{% if forloop.last %}
 		
@@ -172,7 +180,11 @@
 	
 						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 
-							<li><a class="dropdown-item" href="#">No Benches are available!</a></li>
+							<li>
+							
+								<a class="dropdown-item" href="#">No Benches are available!</a>
+							
+							</li>
 
 			            </ul>
 
@@ -181,11 +193,13 @@
 
 {% else %}
 
+	{% if not matrix_list and not my_matrix_list%}
+	
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches</a>
 	
 						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 
-		{% if user.is_authenticated %}
+			{% if user.is_authenticated %}
 
 			                <li class="dropdown-submenu">
 
@@ -193,16 +207,107 @@
 
 				            </li>
 
-		{% else %}
-							<li class="dropdown-submenu">
+			{% else %}
+			
+							<li>
 
 								<a class="dropdown-item" href="#">No Benches are available!</a>
 
 							</li>
-							
+
+			{% endif %}
+	
+			            </ul>
+
+	{% else %}
+
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches ({{ matrix_list|length }})</a>
+
+						<ul class="dropdown-menu" aria-labelledby="dropdown07">
+
+		{% if matrix_list %}
+
+			                <li class="dropdown-submenu">
+
+			{% for matrix in matrix_list %}
+
+				{% if forloop.first %}
+		
+			                    <a class="dropdown-item" href="{% url 'matrices:index' %}">List All Benches ({{ matrix_list|length }})</a>
+
+			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">All Benches</a>
+
+			                    <ul class="dropdown-menu">	
+
+				{% endif %}
+			
+									<li>
+									
+										<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
+									
+									</li>
+	
+				{% if forloop.last %}
+		
+			                    </ul>
+
+				{% endif %}
+			
+			{% endfor %}
+
 		{% endif %}
 
-						</ul>
+
+		{% if my_matrix_list %}
+
+			                <li class="dropdown-submenu">
+
+			{% for my_matrix in my_matrix_list %}
+
+				{% if forloop.first %}
+		
+								<a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
+
+					            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">My Benches</a>
+
+			                    <ul class="dropdown-menu">	
+
+				{% endif %}
+			
+									<li>
+
+										<a class="dropdown-item" href="{% url 'matrices:matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
+
+									</li>
+	
+				{% if forloop.last %}
+		
+			                    </ul>
+
+				{% endif %}
+			
+			{% endfor %}
+				            </li>
+
+			            </ul>
+
+		{% else %}
+
+			{% if user.is_authenticated %}
+
+			                <li class="dropdown-submenu">
+
+								<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a>
+
+				            </li>
+
+			{% endif %}
+	
+			            </ul>
+
+		{% endif %}
+
+	{% endif %}
 
 {% endif %}
 

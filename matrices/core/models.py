@@ -2794,19 +2794,19 @@ class Authority(models.Model):
     def set_owner(self, a_user):
         self.owner = a_user
 
-    def set_none(self):
+    def set_as_none(self):
         self.name = 'NONE'
 
-    def set_editor(self):
+    def set_as_editor(self):
         self.name = 'EDITOR'
 
-    def set_viewer(self):
+    def set_as_viewer(self):
         self.name = 'VIEWER'
 
-    def set_owner(self):
+    def set_as_owner(self):
         self.name = 'OWNER'
 
-    def set_admin(self):
+    def set_as_admin(self):
         self.name = 'ADMIN'
 
     def is_none(self):
@@ -3019,12 +3019,12 @@ def get_authority_for_matrix_and_user_and_requester(a_matrix, a_user):
 	authority = Authority(name="NONE", owner=a_user)
 
 	if a_user.is_superuser == True:
-		authority.set_admin()
+		authority.set_as_admin()
 
 	else:
 
 		if a_user == a_matrix.owner:
-			authority.set_owner()
+			authority.set_as_owner()
 
 		else:
 	
@@ -3033,19 +3033,19 @@ def get_authority_for_matrix_and_user_and_requester(a_matrix, a_user):
 				authorisation = Authorisation.objects.get(Q(matrix=a_matrix) & Q(permitted=a_user))
 				
 				if authorisation.authority.is_owner() == True:
-					authority.set_owner()
+					authority.set_as_owner()
 
 				if authorisation.authority.is_admin() == True:
-					authority.set_admin()
+					authority.set_as_admin()
 
 				if authorisation.authority.is_viewer() == True:
-					authority.set_viewer()
+					authority.set_as_viewer()
 
 				if authorisation.authority.is_editor() == True:
-					authority.set_editor()
+					authority.set_as_editor()
 			
 			else:
-				authority.set_none()
+				authority.set_as_none()
 
 	return authority
 

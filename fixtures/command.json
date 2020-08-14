@@ -1,0 +1,275 @@
+[
+{
+  "model": "core.command",
+  "pk": 1,
+  "fields": {
+    "name": "Images",
+    "application": "api/v0/m",
+    "preamble": "images",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 2,
+  "fields": {
+    "name": "ImageDatasets",
+    "application": "api/v0/m",
+    "preamble": "images",
+    "postamble": "datasets",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 3,
+  "fields": {
+    "name": "API",
+    "application": "api",
+    "preamble": "",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 4,
+  "fields": {
+    "name": "Token",
+    "application": "api/v0/token",
+    "preamble": "",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 5,
+  "fields": {
+    "name": "Login",
+    "application": "api/v0/login",
+    "preamble": "",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 6,
+  "fields": {
+    "name": "GroupDatasets",
+    "application": "api/v0/m",
+    "preamble": "datasets/?group=",
+    "postamble": "&childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 7,
+  "fields": {
+    "name": "GroupImages",
+    "application": "api/v0/m",
+    "preamble": "images/?group=",
+    "postamble": "&childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 8,
+  "fields": {
+    "name": "Projects",
+    "application": "api/v0/m",
+    "preamble": "projects",
+    "postamble": "?childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 9,
+  "fields": {
+    "name": "GroupProjects",
+    "application": "api/v0/m",
+    "preamble": "projects/?group=",
+    "postamble": "&childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 10,
+  "fields": {
+    "name": "Region",
+    "application": "webgateway",
+    "preamble": "render_image_region",
+    "postamble": "0/0/?region=",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 11,
+  "fields": {
+    "name": "Thumbnail",
+    "application": "webgateway",
+    "preamble": "render_thumbnail",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 12,
+  "fields": {
+    "name": "Viewer",
+    "application": "iviewer",
+    "preamble": "?images=",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 13,
+  "fields": {
+    "name": "BirdsEye",
+    "application": "webgateway",
+    "preamble": "render_birds_eye_view",
+    "postamble": "175",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 14,
+  "fields": {
+    "name": "Dataset",
+    "application": "api/v0/m",
+    "preamble": "datasets",
+    "postamble": "?childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 15,
+  "fields": {
+    "name": "DatasetImages",
+    "application": "api/v0/m",
+    "preamble": "datasets",
+    "postamble": "images/?childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 16,
+  "fields": {
+    "name": "DatasetProjects",
+    "application": "api/v0/m",
+    "preamble": "datasets",
+    "postamble": "projects",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 17,
+  "fields": {
+    "name": "ImageROIs",
+    "application": "api/v0/m",
+    "preamble": "images",
+    "postamble": "rois/?childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 18,
+  "fields": {
+    "name": "ProjectDatasets",
+    "application": "api/v0/m",
+    "preamble": "projects",
+    "postamble": "datasets/?childCount=true",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 19,
+  "fields": {
+    "name": "PublicViewer",
+    "application": "webclient",
+    "preamble": "img_detail",
+    "postamble": "",
+    "protocol": 1,
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 29,
+  "fields": {
+    "name": "WordpressImages",
+    "application": "wp-json/wp/v2",
+    "preamble": "media?per_page=14&page=",
+    "postamble": "&author=",
+    "protocol": 1,
+    "type": 30,
+    "owner": 1
+  }
+},
+{
+  "model": "core.command",
+  "pk": 30,
+  "fields": {
+    "name": "WordpressImage",
+    "application": "wp-json/wp/v2",
+    "preamble": "media",
+    "postamble": "",
+    "protocol": 1,
+    "type": 30,
+    "owner": 1
+  }
+}
+]

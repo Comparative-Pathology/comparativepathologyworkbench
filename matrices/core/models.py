@@ -871,11 +871,27 @@ class Server(models.Model):
     
                 #print dataset
         
-                matrix_list = Matrix.objects.filter(owner=current_user)
-                image_list = Image.objects.filter(owner=current_user).filter(active=True)
-                server_list = Server.objects.all
+                matrix_list = list()
+                my_matrix_list = list()
+
+                if request.user.is_superuser == True:
+        
+                    matrix_list = matrix_list_not_by_user(request.user)
+                    my_matrix_list = matrix_list_by_user(request.user)
+        
+                else:
+        
+                    matrix_list_1 = matrix_list_by_user(request.user)
+                    matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+                    matrix_list = matrix_list_1 + matrix_list_2
+                    my_matrix_list = matrix_list_by_user(request.user)
+            
+                image_list = Image.objects.filter(owner=request.user).filter(active=True)
+                server_list = Server.objects.all()
+
     
-                data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+                data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
             
             else:
     
@@ -883,10 +899,26 @@ class Server(models.Model):
                 project_list = []
                 images_list = list()
     
-                matrix_list = Matrix.objects.filter(owner=current_user)
-                image_list = Image.objects.filter(owner=current_user).filter(active=True)
-                server_list = Server.objects.all
-    
+                matrix_list = list()
+                my_matrix_list = list()
+
+                if request.user.is_superuser == True:
+        
+                    matrix_list = matrix_list_not_by_user(request.user)
+                    my_matrix_list = matrix_list_by_user(request.user)
+        
+                else:
+        
+                    matrix_list_1 = matrix_list_by_user(request.user)
+                    matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+                    matrix_list = matrix_list_1 + matrix_list_2
+                    my_matrix_list = matrix_list_by_user(request.user)
+            
+                image_list = Image.objects.filter(owner=request.user).filter(active=True)
+                server_list = Server.objects.all()
+
+
                 image_count = 0
     
                 next_page = int(page_id)
@@ -900,7 +932,7 @@ class Server(models.Model):
                     'next_page': next_page
                 })
     
-                data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+                data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
         
         except Exception as e:
     
@@ -910,9 +942,25 @@ class Server(models.Model):
             project_list = []
             images_list = list()
     
-            matrix_list = Matrix.objects.filter(owner=current_user)
-            image_list = Image.objects.filter(owner=current_user).filter(active=True)
-            server_list = Server.objects.all
+            matrix_list = list()
+            my_matrix_list = list()
+
+            if request.user.is_superuser == True:
+        
+                matrix_list = matrix_list_not_by_user(request.user)
+                my_matrix_list = matrix_list_by_user(request.user)
+        
+            else:
+        
+                matrix_list_1 = matrix_list_by_user(request.user)
+                matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+                matrix_list = matrix_list_1 + matrix_list_2
+                my_matrix_list = matrix_list_by_user(request.user)
+            
+            image_list = Image.objects.filter(owner=request.user).filter(active=True)
+            server_list = Server.objects.all()
+
     
             image_count = 0
     
@@ -931,7 +979,7 @@ class Server(models.Model):
                     'next_page': next_page
             })
     
-            data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+            data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
     
         return data
     
@@ -1007,11 +1055,27 @@ class Server(models.Model):
                 datasets = []
                 projects = []
         
-                matrix_list = Matrix.objects.filter(owner=current_user)
-                image_list = Image.objects.filter(owner=current_user).filter(active=True)
-                server_list = Server.objects.all
+                matrix_list = list()
+                my_matrix_list = list()
+
+                if request.user.is_superuser == True:
         
-                data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+                    matrix_list = matrix_list_not_by_user(request.user)
+                    my_matrix_list = matrix_list_by_user(request.user)
+        
+                else:
+        
+                    matrix_list_1 = matrix_list_by_user(request.user)
+                    matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+                    matrix_list = matrix_list_1 + matrix_list_2
+                    my_matrix_list = matrix_list_by_user(request.user)
+            
+                image_list = Image.objects.filter(owner=request.user).filter(active=True)
+                server_list = Server.objects.all()
+
+        
+                data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
     
             else:
     
@@ -1030,11 +1094,27 @@ class Server(models.Model):
                 datasets = []
                 projects = []
         
-                matrix_list = Matrix.objects.filter(owner=current_user)
-                image_list = Image.objects.filter(owner=current_user).filter(active=True)
-                server_list = Server.objects.all
+                matrix_list = list()
+                my_matrix_list = list()
+
+                if request.user.is_superuser == True:
         
-                data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+                    matrix_list = matrix_list_not_by_user(request.user)
+                    my_matrix_list = matrix_list_by_user(request.user)
+        
+                else:
+        
+                    matrix_list_1 = matrix_list_by_user(request.user)
+                    matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+                    matrix_list = matrix_list_1 + matrix_list_2
+                    my_matrix_list = matrix_list_by_user(request.user)
+            
+                image_list = Image.objects.filter(owner=request.user).filter(active=True)
+                server_list = Server.objects.all()
+
+        
+                data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
     
         except Exception as e:
     
@@ -1055,11 +1135,27 @@ class Server(models.Model):
             datasets = []
             projects = []
         
-            matrix_list = Matrix.objects.filter(owner=current_user)
-            image_list = Image.objects.filter(owner=current_user).filter(active=True)
-            server_list = Server.objects.all
+            matrix_list = list()
+            my_matrix_list = list()
+
+            if request.user.is_superuser == True:
         
-            data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+                matrix_list = matrix_list_not_by_user(request.user)
+                my_matrix_list = matrix_list_by_user(request.user)
+        
+            else:
+        
+                matrix_list_1 = matrix_list_by_user(request.user)
+                matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+                matrix_list = matrix_list_1 + matrix_list_2
+                my_matrix_list = matrix_list_by_user(request.user)
+            
+            image_list = Image.objects.filter(owner=request.user).filter(active=True)
+            server_list = Server.objects.all()
+
+        
+            data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
     
         return data
             
@@ -1423,11 +1519,27 @@ class Server(models.Model):
         for group in new_group_list:
             group_count = group_count + 1
     
-        matrix_list = Matrix.objects.filter(owner=current_user)
-        image_list = Image.objects.filter(owner=current_user).filter(active=True)
-        server_list = Server.objects.all
+        matrix_list = list()
+        my_matrix_list = list()
+
+        if request.user.is_superuser == True:
+        
+            matrix_list = matrix_list_not_by_user(request.user)
+            my_matrix_list = matrix_list_by_user(request.user)
+        
+        else:
+        
+            matrix_list_1 = matrix_list_by_user(request.user)
+            matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+            matrix_list = matrix_list_1 + matrix_list_2
+            my_matrix_list = matrix_list_by_user(request.user)
+            
+        image_list = Image.objects.filter(owner=request.user).filter(active=True)
+        server_list = Server.objects.all()
+
     
-        data = { 'server': self, 'group_list': new_group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+        data = { 'server': self, 'group_list': new_group_list, 'group_count': group_count, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list  }
     
         return data
     
@@ -1688,13 +1800,29 @@ class Server(models.Model):
         for project in project_list:
             project_count = project_count + 1
         
-        matrix_list = Matrix.objects.filter(owner=current_user)
-        image_list = Image.objects.filter(owner=current_user).filter(active=True)
-        server_list = Server.objects.all
+        matrix_list = list()
+        my_matrix_list = list()
+
+        if request.user.is_superuser == True:
         
+            matrix_list = matrix_list_not_by_user(request.user)
+            my_matrix_list = matrix_list_by_user(request.user)
+        
+        else:
+        
+            matrix_list_1 = matrix_list_by_user(request.user)
+            matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+            matrix_list = matrix_list_1 + matrix_list_2
+            my_matrix_list = matrix_list_by_user(request.user)
+            
+        image_list = Image.objects.filter(owner=request.user).filter(active=True)
+        server_list = Server.objects.all()
+
+
         group = group_list[0]
         
-        data = { 'server': self, 'project_count': project_count, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list  }
+        data = { 'server': self, 'project_count': project_count, 'project_list': project_list, 'group': group, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list  }
     
         return data
     
@@ -1849,11 +1977,27 @@ class Server(models.Model):
     
             dataset_list.append(dataset)
     
-        matrix_list = Matrix.objects.filter(owner=current_user)
-        image_list = Image.objects.filter(owner=current_user).filter(active=True)
-        server_list = Server.objects.all
+        matrix_list = list()
+        my_matrix_list = list()
+
+        if request.user.is_superuser == True:
         
-        data = { 'server': self, 'group': group, 'project': project, 'dataset_list': dataset_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+            matrix_list = matrix_list_not_by_user(request.user)
+            my_matrix_list = matrix_list_by_user(request.user)
+        
+        else:
+        
+            matrix_list_1 = matrix_list_by_user(request.user)
+            matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+            matrix_list = matrix_list_1 + matrix_list_2
+            my_matrix_list = matrix_list_by_user(request.user)
+            
+        image_list = Image.objects.filter(owner=request.user).filter(active=True)
+        server_list = Server.objects.all()
+
+        
+        data = { 'server': self, 'group': group, 'project': project, 'dataset_list': dataset_list, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
         
         return data
     
@@ -2008,11 +2152,27 @@ class Server(models.Model):
                 
             images_list.append(image)
             
-        matrix_list = Matrix.objects.filter(owner=current_user)
-        image_list = Image.objects.filter(owner=current_user).filter(active=True)
-        server_list = Server.objects.all
+        matrix_list = list()
+        my_matrix_list = list()
+
+        if request.user.is_superuser == True:
         
-        data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+            matrix_list = matrix_list_not_by_user(request.user)
+            my_matrix_list = matrix_list_by_user(request.user)
+        
+        else:
+        
+            matrix_list_1 = matrix_list_by_user(request.user)
+            matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+            matrix_list = matrix_list_1 + matrix_list_2
+            my_matrix_list = matrix_list_by_user(request.user)
+            
+        image_list = Image.objects.filter(owner=request.user).filter(active=True)
+        server_list = Server.objects.all()
+
+        
+        data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
         
         return data
     
@@ -2377,11 +2537,27 @@ class Server(models.Model):
     
             datasets.append(dataset)
         
-        matrix_list = Matrix.objects.filter(owner=current_user)
-        image_list = Image.objects.filter(owner=current_user).filter(active=True)
-        server_list = Server.objects.all
+        matrix_list = list()
+        my_matrix_list = list()
+
+        if request.user.is_superuser == True:
         
-        data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+            matrix_list = matrix_list_not_by_user(request.user)
+            my_matrix_list = matrix_list_by_user(request.user)
+        
+        else:
+        
+            matrix_list_1 = matrix_list_by_user(request.user)
+            matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+            
+            matrix_list = matrix_list_1 + matrix_list_2
+            my_matrix_list = matrix_list_by_user(request.user)
+            
+        image_list = Image.objects.filter(owner=request.user).filter(active=True)
+        server_list = Server.objects.all()
+
+        
+        data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'server_list': server_list, 'image_list': image_list }
     
         return data
     

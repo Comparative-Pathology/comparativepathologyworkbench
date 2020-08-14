@@ -1,0 +1,34 @@
+[
+{
+  "model": "core.type",
+  "pk": 1,
+  "fields": {
+    "name": "OTHER",
+    "owner": 1
+  }
+},
+{
+  "model": "core.type",
+  "pk": 2,
+  "fields": {
+    "name": "OMERO_5.4.7",
+    "owner": 1
+  }
+},
+{
+  "model": "core.type",
+  "pk": 30,
+  "fields": {
+    "name": "WORDPRESS",
+    "owner": 1
+  }
+},
+{
+  "model": "core.type",
+  "pk": 31,
+  "fields": {
+    "name": "OMERO_5.6",
+    "owner": 1
+  }
+}
+]

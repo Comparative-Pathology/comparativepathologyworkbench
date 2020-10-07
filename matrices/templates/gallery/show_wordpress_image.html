@@ -13,19 +13,19 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
+				<a href="{% url 'list_imaging_hosts' %}">
 					Sources
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">
+				<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">
 					{{ server.name }}
 				</a>
 			</li>
@@ -55,7 +55,7 @@
 
     	<p>{{ image.description }}</p>
 
-		<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
+		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
 			<button class="save btn btn-success">Add Image to Image Collection</button>
 		</a>
 	

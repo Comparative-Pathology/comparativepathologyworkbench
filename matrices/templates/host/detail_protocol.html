@@ -13,19 +13,19 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:maintenance' %}">
+				<a href="{% url 'maintenance' %}">
 					Maintenance
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:detail_protocol' protocol.id %}">
+				<a href="{% url 'detail_protocol' protocol.id %}">
 					Server Protocol {{ protocol.id }}
 				</a>
 			</li>
@@ -58,13 +58,13 @@
 
 		<br />
 
-		<a href="{% url 'matrices:maintenance' %}">
+		<a href="{% url 'maintenance' %}">
 			<button class="save btn btn-success">BACK</button>
 		</a>
 
 {% if user.is_superuser %}
             
-		<a href="{% url 'matrices:edit_protocol' protocol.id %}">
+		<a href="{% url 'edit_protocol' protocol.id %}">
 			<button class="save btn btn-warning">Edit</button>
 		</a>
 

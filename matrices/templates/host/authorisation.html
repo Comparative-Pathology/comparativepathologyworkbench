@@ -13,7 +13,7 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
@@ -76,16 +76,16 @@
 		{% if user.is_superuser %}
             
         	    <td>
-					<a href="{% url 'matrices:detail_user' userlist.id %}">
+					<a href="{% url 'detail_user' userlist.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_user' userlist.id %}">
+					<a href="{% url 'edit_user' userlist.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
+					<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
-					<a href="{% url 'matrices:list_user_bench_authorisation' userlist.id %}">
+					<a href="{% url 'list_user_bench_authorisation' userlist.id %}">
 						<button class="save btn btn-info"><i class="fa fa-universal-access"></i></button>
 					</a>
 	            </td>
@@ -93,7 +93,7 @@
 		{% else %}
 	
         	    <td>
-					<a href="{% url 'matrices:detail_user' userlist.id %}">
+					<a href="{% url 'detail_user' userlist.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
         	    </td>
@@ -181,13 +181,13 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+					<a href="{% url 'detail_blog_credential' credential.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_blog_credential' credential.id %}">
+					<a href="{% url 'edit_blog_credential' credential.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
+					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
     	        </td>
@@ -195,7 +195,7 @@
 		{% else %}
 	
         	    <td>
-					<a href="{% url 'matrices:detail_blog_credential' credential.id %}">
+					<a href="{% url 'detail_blog_credential' credential.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
     	        </td>
@@ -241,7 +241,7 @@
 			{% if user.is_superuser %}
     
             	<td>
-					<a href="{% url 'matrices:new_blog_credential' %}">
+					<a href="{% url 'new_blog_credential' %}">
 						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 					</a>
     	        </td>
@@ -271,7 +271,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'matrices:new_blog_credential' %}">
+			<a href="{% url 'new_blog_credential' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>

@@ -1,6 +1,6 @@
 [
 {
-  "model": "core.type",
+  "model": "matrices.type",
   "pk": 1,
   "fields": {
     "name": "OTHER",
@@ -8,7 +8,7 @@
   }
 },
 {
-  "model": "core.type",
+  "model": "matrices.type",
   "pk": 2,
   "fields": {
     "name": "OMERO_5.4.7",
@@ -16,16 +16,16 @@
   }
 },
 {
-  "model": "core.type",
-  "pk": 30,
+  "model": "matrices.type",
+  "pk": 3,
   "fields": {
     "name": "WORDPRESS",
     "owner": 1
   }
 },
 {
-  "model": "core.type",
-  "pk": 31,
+  "model": "matrices.type",
+  "pk": 4,
   "fields": {
     "name": "OMERO_5.6",
     "owner": 1

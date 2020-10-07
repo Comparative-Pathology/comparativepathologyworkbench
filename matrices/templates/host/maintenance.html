@@ -13,7 +13,7 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
@@ -72,13 +72,13 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'matrices:detail_authority' authority.id %}">
+					<a href="{% url 'detail_authority' authority.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_authority' authority.id %}">
+					<a href="{% url 'edit_authority' authority.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_authority' authority.id %}" onclick="return confirm('Are you sure you want to DELETE this Authority?')">
+					<a href="{% url 'delete_authority' authority.id %}" onclick="return confirm('Are you sure you want to DELETE this Authority?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
     	        </td>
@@ -86,7 +86,7 @@
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'matrices:detail_authority' authority.id %}">
+					<a href="{% url 'detail_authority' authority.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
 	            </td>
@@ -114,7 +114,7 @@
 			{% if user.is_superuser %}
     
 	            <td>
-					<a href="{% url 'matrices:new_authority' %}">
+					<a href="{% url 'new_authority' %}">
 						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 					</a>
 	            </td>
@@ -142,7 +142,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'matrices:new_authority' %}">
+			<a href="{% url 'new_authority' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -188,13 +188,13 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'matrices:detail_type' type.id %}">
+					<a href="{% url 'detail_type' type.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_type' type.id %}">
+					<a href="{% url 'edit_type' type.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_type' type.id %}" onclick="return confirm('Are you sure you want to DELETE this Type?')">
+					<a href="{% url 'delete_type' type.id %}" onclick="return confirm('Are you sure you want to DELETE this Type?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
     	        </td>
@@ -202,7 +202,7 @@
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'matrices:detail_type' type.id %}">
+					<a href="{% url 'detail_type' type.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
 	            </td>
@@ -230,7 +230,7 @@
 			{% if user.is_superuser %}
     
 	            <td>
-					<a href="{% url 'matrices:new_type' %}">
+					<a href="{% url 'new_type' %}">
 						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 					</a>
 	            </td>
@@ -258,7 +258,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'matrices:new_type' %}">
+			<a href="{% url 'new_type' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -304,13 +304,13 @@
 		{% if user.is_superuser %}
             
 	            <td>
-					<a href="{% url 'matrices:detail_protocol' protocol.id %}">
+					<a href="{% url 'detail_protocol' protocol.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_protocol' protocol.id %}">
+					<a href="{% url 'edit_protocol' protocol.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_protocol' protocol.id %}" onclick="return confirm('Are you sure you want to DELETE this PROTOCOL?')">
+					<a href="{% url 'delete_protocol' protocol.id %}" onclick="return confirm('Are you sure you want to DELETE this PROTOCOL?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
 	            </td>
@@ -318,7 +318,7 @@
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'matrices:detail_protocol' protocol.id %}">
+					<a href="{% url 'detail_protocol' protocol.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
 	            </td>
@@ -346,7 +346,7 @@
 			{% if user.is_superuser %}
     
     	        <td>
-					<a href="{% url 'matrices:new_protocol' %}">
+					<a href="{% url 'new_protocol' %}">
 						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 					</a>
             	</td>
@@ -374,7 +374,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'matrices:new_protocol' %}">
+			<a href="{% url 'new_protocol' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -430,13 +430,13 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'matrices:detail_command' command.id %}">
+					<a href="{% url 'detail_command' command.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_command' command.id %}">
+					<a href="{% url 'edit_command' command.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_command' command.id %}" onclick="return confirm('Are you sure you want to DELETE this COMMAND?')">
+					<a href="{% url 'delete_command' command.id %}" onclick="return confirm('Are you sure you want to DELETE this COMMAND?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
     	        </td>
@@ -444,7 +444,7 @@
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'matrices:detail_command' command.id %}">
+					<a href="{% url 'detail_command' command.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
 	            </td>
@@ -492,7 +492,7 @@
 			{% if user.is_superuser %}
     
 	            <td>
-					<a href="{% url 'matrices:new_command' %}">
+					<a href="{% url 'new_command' %}">
 						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 					</a>
     	        </td>
@@ -525,7 +525,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'matrices:new_command' %}">
+			<a href="{% url 'new_command' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -579,13 +579,13 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'matrices:detail_blog_command' blog.id %}">
+					<a href="{% url 'detail_blog_command' blog.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
-					<a href="{% url 'matrices:edit_blog_command' blog.id %}">
+					<a href="{% url 'edit_blog_command' blog.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
-					<a href="{% url 'matrices:delete_blog_command' blog.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
+					<a href="{% url 'delete_blog_command' blog.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
     	        </td>
@@ -593,7 +593,7 @@
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'matrices:detail_blog_command' blog.id %}">
+					<a href="{% url 'detail_blog_command' blog.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
     	        </td>
@@ -642,7 +642,7 @@
 			{% if user.is_superuser %}
     
     	        <td>
-					<a href="{% url 'matrices:new_blog_command' %}">
+					<a href="{% url 'new_blog_command' %}">
 						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 					</a>
         	    </td>
@@ -675,7 +675,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'matrices:new_blog_command' %}">
+			<a href="{% url 'new_blog_command' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>

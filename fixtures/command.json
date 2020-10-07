@@ -1,6 +1,6 @@
 [
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 1,
   "fields": {
     "name": "Images",
@@ -13,7 +13,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 2,
   "fields": {
     "name": "ImageDatasets",
@@ -26,7 +26,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 3,
   "fields": {
     "name": "API",
@@ -39,7 +39,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 4,
   "fields": {
     "name": "Token",
@@ -52,7 +52,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 5,
   "fields": {
     "name": "Login",
@@ -65,7 +65,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 6,
   "fields": {
     "name": "GroupDatasets",
@@ -78,7 +78,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 7,
   "fields": {
     "name": "GroupImages",
@@ -91,7 +91,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 8,
   "fields": {
     "name": "Projects",
@@ -104,7 +104,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 9,
   "fields": {
     "name": "GroupProjects",
@@ -117,7 +117,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 10,
   "fields": {
     "name": "Region",
@@ -130,7 +130,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 11,
   "fields": {
     "name": "Thumbnail",
@@ -143,7 +143,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 12,
   "fields": {
     "name": "Viewer",
@@ -156,7 +156,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 13,
   "fields": {
     "name": "BirdsEye",
@@ -169,7 +169,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 14,
   "fields": {
     "name": "Dataset",
@@ -182,7 +182,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 15,
   "fields": {
     "name": "DatasetImages",
@@ -195,7 +195,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 16,
   "fields": {
     "name": "DatasetProjects",
@@ -208,7 +208,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 17,
   "fields": {
     "name": "ImageROIs",
@@ -221,7 +221,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 18,
   "fields": {
     "name": "ProjectDatasets",
@@ -234,7 +234,7 @@
   }
 },
 {
-  "model": "core.command",
+  "model": "matrices.command",
   "pk": 19,
   "fields": {
     "name": "PublicViewer",
@@ -247,28 +247,28 @@
   }
 },
 {
-  "model": "core.command",
-  "pk": 29,
+  "model": "matrices.command",
+  "pk": 20,
   "fields": {
     "name": "WordpressImages",
     "application": "wp-json/wp/v2",
     "preamble": "media?per_page=14&page=",
     "postamble": "&author=",
     "protocol": 1,
-    "type": 30,
+    "type": 3,
     "owner": 1
   }
 },
 {
-  "model": "core.command",
-  "pk": 30,
+  "model": "matrices.command",
+  "pk": 21,
   "fields": {
     "name": "WordpressImage",
     "application": "wp-json/wp/v2",
     "preamble": "media",
     "postamble": "",
     "protocol": 1,
-    "type": 30,
+    "type": 3,
     "owner": 1
   }
 }

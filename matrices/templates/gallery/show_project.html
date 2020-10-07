@@ -15,25 +15,25 @@
 			<ol class="breadcrumb subheading">
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:home' %}">
+					<a href="{% url 'home' %}">
 						Home
 					</a>
 				</li>
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:list_imaging_hosts' %}">
+					<a href="{% url 'list_imaging_hosts' %}">
 						Sources
 					</a>
 				</li>
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
+					<a href="{% url 'webgallery_show_imaging_server' server.id %}">
 						{{ server.name }}
 					</a>
 				</li>
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
+					<a href="{% url 'webgallery_show_group' server.id group.id %}">
 						{{ group.name|truncatechars:20 }}
 					</a>
 				</li>
@@ -76,7 +76,7 @@
 				<h5>{{ dataset.name|truncatechars:20 }}</h5>
 
 		    	<p class="pull-left">
-					<a href="{% url 'matrices:webgallery_show_image' server.id dataset.randomImageID %}">
+					<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}">
 						<img class="img-thumbnail" alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/>
 					</a>
 				</p>
@@ -93,7 +93,7 @@
         		</div>
 
 				<p style="margin-left:20px">
-					<a class="btn btn-default" href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}" role="button">
+					<a class="btn btn-default" href="{% url 'webgallery_show_dataset' server.id dataset.id %}" role="button">
 						<button class="save btn btn-info">View Dataset &raquo;</button>
 					</a>
 				</p>

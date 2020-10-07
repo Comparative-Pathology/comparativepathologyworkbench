@@ -9,13 +9,13 @@
 	<ol class="breadcrumb subheading">
 	
 		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:home' %}">
+			<a href="{% url 'home' %}">
 				Home
 			</a>
 		</li>
 	
 		<li class="breadcrumb-item">
-			<a href="{% url 'matrices:list_imaging_hosts' %}">
+			<a href="{% url 'list_imaging_hosts' %}">
 				Sources
 			</a>
 		</li>
@@ -76,7 +76,7 @@
         
             <td>
 				<!-- <a href="http://localhost:3000/experiment/{{ experiment.experimentAccession }}">-->
-				<a href="{% url 'matrices:ebi_show_ebi_widget' server.id experiment.experimentAccession %}">
+				<a href="{% url 'ebi_show_ebi_widget' server.id experiment.experimentAccession %}">
 	            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
 				</a>
             </td>

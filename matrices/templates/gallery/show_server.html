@@ -15,13 +15,13 @@
 			<ol class="breadcrumb subheading">
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:home' %}">
+					<a href="{% url 'home' %}">
 						Home
 					</a>
 				</li>
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:list_imaging_hosts' %}">
+					<a href="{% url 'list_imaging_hosts' %}">
 						Sources
 					</a>
 				</li>
@@ -52,7 +52,7 @@
 
 {% if group_list %}
 
-	<p>Server at {{ server.url }} contains {{ group_count }} Groups:</p>
+	<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
 	
     <hr>
     
@@ -71,7 +71,7 @@
 		{% if group.randomImageName != 'NONE'  %}
 		
 		
-				<a href="{% url 'matrices:webgallery_show_image' server.id group.randomImageID %}">
+				<a href="{% url 'webgallery_show_image' server.id group.randomImageID %}">
 					<img class="img-thumbnail" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/>
 				</a>
 
@@ -99,7 +99,7 @@
             </div>
     
 			<p style="margin-left:20px">
-				<a class="btn btn-default" href="{% url 'matrices:webgallery_show_group' server.id group.id %}" role="button">
+				<a class="btn btn-default" href="{% url 'webgallery_show_group' server.id group.id %}" role="button">
 					<button class="save btn btn-info">View Group &raquo;</button>
 				</a>
 			</p>

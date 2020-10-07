@@ -13,25 +13,25 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
+				<a href="{% url 'list_imaging_hosts' %}">
 					Sources
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">
+				<a href="{% url 'webgallery_show_imaging_server' server.id %}">
 					{{ server.name }}
 				</a>
 			</li>
 			
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
+				<a href="{% url 'webgallery_show_group' server.id group.id %}">
 					{{ group.name|truncatechars:20 }}
 				</a>
 			</li>
@@ -39,7 +39,7 @@
 {% for project in projects %}
 
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_project' server.id project.id %}">
+				<a href="{% url 'webgallery_show_project' server.id project.id %}">
 					{{ project.name|truncatechars:20 }}
 				</a>
 			</li>	
@@ -49,7 +49,7 @@
 {% for dataset in datasets %}
 
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_dataset' server.id dataset.id %}">
+				<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">
 					{{ dataset.name|truncatechars:20 }}
 				</a>
 			</li>
@@ -79,7 +79,7 @@
 
 	    <p>{{ image.description }}</p>
 
-		<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
+		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
 			<button class="save btn btn-success">Add Image to Image Collection</button>
 		</a>
 
@@ -154,7 +154,7 @@
         	<tr>
             	<th>&nbsp;</th>
 	            <td>
-					<a class="dropdown-item" href="{% url 'matrices:webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')">
+					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')">
 						<button class="save btn btn-success">Add ROI to Image Collection</button>
 					</a>
 	            </td>

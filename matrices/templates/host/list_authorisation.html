@@ -13,7 +13,7 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
@@ -21,7 +21,7 @@
 {% if user.is_superuser %}
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:authorisation' %}">
+				<a href="{% url 'authorisation' %}">
 					Authorisation
 				</a>
 			</li>
@@ -84,25 +84,25 @@
 
 	            <td>
 
-					<a href="{% url 'matrices:detail_authorisation' authorisation.id %}">
+					<a href="{% url 'detail_authorisation' authorisation.id %}">
 						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
 					</a>
 
 		{% if matrix_id == '' %}
 
-					<a href="{% url 'matrices:edit_authorisation' authorisation.id %}">
+					<a href="{% url 'edit_authorisation' authorisation.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
 	
 		{% else %}
 
-					<a href="{% url 'matrices:edit_matrix_authorisation' matrix_id authorisation.id %}">
+					<a href="{% url 'edit_matrix_authorisation' matrix_id authorisation.id %}">
 						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
 					</a>
 	
 		{% endif %}
 	
-					<a href="{% url 'matrices:delete_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this AUTHORISATION?')">
+					<a href="{% url 'delete_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this AUTHORISATION?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
 	            </td>
@@ -157,7 +157,7 @@
 	{% if matrix_id == '' %}
 
 		<p>
-			<a href="{% url 'matrices:new_authorisation' %}">
+			<a href="{% url 'new_authorisation' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -165,7 +165,7 @@
 	{% else %}
 
 		<p>
-			<a href="{% url 'matrices:new_matrix_authorisation' matrix_id%}">
+			<a href="{% url 'new_matrix_authorisation' matrix_id%}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -179,7 +179,7 @@
 	{% if matrix_id == '' %}
 
 		<p>
-			<a href="{% url 'matrices:new_authorisation' %}">
+			<a href="{% url 'new_authorisation' %}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
@@ -187,7 +187,7 @@
 	{% else %}
 
 		<p>
-			<a href="{% url 'matrices:new_matrix_authorisation' matrix_id%}">
+			<a href="{% url 'new_matrix_authorisation' matrix_id%}">
 				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>

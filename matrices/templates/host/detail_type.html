@@ -13,19 +13,19 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:maintenance' %}">
+				<a href="{% url 'maintenance' %}">
 					Maintenance
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:detail_type' type.id %}">
+				<a href="{% url 'detail_type' type.id %}">
 					Server Type {{ type.id }}
 				</a>
 			</li>
@@ -58,13 +58,13 @@
 
 		<br />
 
-		<a href="{% url 'matrices:maintenance' %}">
+		<a href="{% url 'maintenance' %}">
 			<button class="save btn btn-success">BACK</button>
 		</a>
 
 {% if user.is_superuser %}
             
-		<a href="{% url 'matrices:edit_type' type.id %}">
+		<a href="{% url 'edit_type' type.id %}">
 			<button class="save btn btn-warning">Edit</button>
 		</a>
 

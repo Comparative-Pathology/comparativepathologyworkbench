@@ -1,0 +1,62 @@
+[
+{
+  "model": "matrices.server",
+  "pk": 1,
+  "fields": {
+    "name": "IDR",
+    "url": "idr.openmicroscopy.org",
+    "uid": "",
+    "pwd": "gUhd9TxpnQppnZVAf7cv9oFIXfU8aZ0KaZ2VQH+3L/Y=",
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "matrices.server",
+  "pk": 2,
+  "fields": {
+    "name": "mwicks23@omero1",
+    "url": "omero1.igmm.ed.ac.uk",
+    "uid": "mwicks23",
+    "pwd": "UpQwB/YMnT51F8IPCEzdi68A4PiBdxMjsZf9wKb3v04=",
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "matrices.server",
+  "pk": 3,
+  "fields": {
+    "name": "mwicks23@CompPathUofE",
+    "url": "omero-czi-cpw.mvm.ed.ac.uk",
+    "uid": "mwicks23",
+    "pwd": "bX+zHDgsHREij1y8nwXHsoMjlKPMi44BXSFLVA/P228=",
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "matrices.server",
+  "pk": 4,
+  "fields": {
+    "name": "public_user@CompPathUofE",
+    "url": "omero-czi-cpw.mvm.ed.ac.uk",
+    "uid": "public_user",
+    "pwd": "g029GJ9FqP/9dExbnvuIL6Y6bC3f8hwdenafMNSsqBw=",
+    "type": 2,
+    "owner": 1
+  }
+},
+{
+  "model": "matrices.server",
+  "pk": 5,
+  "fields": {
+    "name": "Your WordPress Images",
+    "url": "workbench-czi-cpw.mvm.ed.ac.uk/wordpress",
+    "uid": "",
+    "pwd": "gUhd9TxpnQppnZVAf7cv9oFIXfU8aZ0KaZ2VQH+3L/Y=",
+    "type": 3,
+    "owner": 1
+  }
+}
+]

@@ -14,13 +14,13 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
+				<a href="{% url 'list_imaging_hosts' %}">
 					Sources
 				</a>
 			</li>
@@ -28,7 +28,7 @@
 {% if group %}
 
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_group' server.id group.id %}">
+				<a href="{% url 'webgallery_show_group' server.id group.id %}">
 					{{ group.name|truncatechars:20 }}
 				</a>
 			</li>
@@ -40,7 +40,7 @@
 	{% for project in projects %}
 
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:webgallery_show_project' server.id project.id %}">
+				<a href="{% url 'webgallery_show_project' server.id project.id %}">
 					{{ project.name|truncatechars:20 }}
 				</a>
 			</li>	
@@ -88,7 +88,7 @@
 
     {% for image in images %}
 
-			<a href="{% url 'matrices:webgallery_show_image' server.id image.id %}">
+			<a href="{% url 'webgallery_show_image' server.id image.id %}">
 				<img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
 			</a>
 

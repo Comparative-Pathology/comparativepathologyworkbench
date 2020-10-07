@@ -1,6 +1,6 @@
 [
 {
-  "model": "core.blog",
+  "model": "matrices.blog",
   "pk": 1,
   "fields": {
     "name": "PostAPost",
@@ -13,7 +13,7 @@
   }
 },
 {
-  "model": "core.blog",
+  "model": "matrices.blog",
   "pk": 2,
   "fields": {
     "name": "GetPostComments",
@@ -26,7 +26,7 @@
   }
 },
 {
-  "model": "core.blog",
+  "model": "matrices.blog",
   "pk": 3,
   "fields": {
     "name": "PostAComment",
@@ -39,7 +39,7 @@
   }
 },
 {
-  "model": "core.blog",
+  "model": "matrices.blog",
   "pk": 4,
   "fields": {
     "name": "GetPost",
@@ -52,7 +52,7 @@
   }
 },
 {
-  "model": "core.blog",
+  "model": "matrices.blog",
   "pk": 5,
   "fields": {
     "name": "LinkPost",
@@ -65,7 +65,7 @@
   }
 },
 {
-  "model": "core.blog",
+  "model": "matrices.blog",
   "pk": 6,
   "fields": {
     "name": "DeletePost",

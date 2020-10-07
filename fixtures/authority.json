@@ -1,6 +1,6 @@
 [
 {
-  "model": "core.authority",
+  "model": "matrices.authority",
   "pk": 1,
   "fields": {
     "name": "VIEWER",
@@ -8,7 +8,7 @@
   }
 },
 {
-  "model": "core.authority",
+  "model": "matrices.authority",
   "pk": 2,
   "fields": {
     "name": "EDITOR",

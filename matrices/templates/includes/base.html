@@ -55,7 +55,7 @@
 		
 		<nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #f5776e;">
         
-            <a class="navbar-brand" href="{% url 'matrices:home' %}">
+            <a class="navbar-brand" href="{% url 'home' %}">
 				<strong>Comparative Pathology Workbench in CANADA</strong>
 			</a>
 
@@ -67,7 +67,7 @@
 		
 		<nav class="navbar navbar-expand-lg navbar-light">
         
-            <a class="navbar-brand" href="{% url 'matrices:home' %}">
+            <a class="navbar-brand" href="{% url 'home' %}">
 				<strong>Comparative Pathology Workbench</strong>
 			</a>
 
@@ -97,7 +97,7 @@
 
 			{% if forloop.first %}
 		
-			                    <a class="dropdown-item" href="{% url 'matrices:index' %}">List All Benches ({{ matrix_list|length }})</a>
+			                    <a class="dropdown-item" href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
 
 			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">All Benches</a>
 
@@ -107,7 +107,7 @@
 			
 									<li>
 
-										<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
+										<a class="dropdown-item" href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
 
 									</li>
 	
@@ -139,7 +139,7 @@
 
 			{% if forloop.first %}
 		
-								<a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
+								<a class="dropdown-item" href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
 
 					            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">My Benches</a>
 
@@ -149,7 +149,7 @@
 			
 								<li>
 								
-									<a class="dropdown-item" href="{% url 'matrices:matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
+									<a class="dropdown-item" href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
 								
 								</li>
 	
@@ -166,7 +166,7 @@
 
 			                <li class="dropdown-submenu">
 
-								<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a>
+								<a class="dropdown-item" href="{% url 'new_matrix' %}">Add New Bench</a>
 
 				            </li>
 
@@ -203,7 +203,7 @@
 
 			                <li class="dropdown-submenu">
 
-								<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a>
+								<a class="dropdown-item" href="{% url 'new_matrix' %}">Add New Bench</a>
 
 				            </li>
 
@@ -233,7 +233,7 @@
 
 				{% if forloop.first %}
 		
-			                    <a class="dropdown-item" href="{% url 'matrices:index' %}">List All Benches ({{ matrix_list|length }})</a>
+			                    <a class="dropdown-item" href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
 
 			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">All Benches</a>
 
@@ -243,7 +243,7 @@
 			
 									<li>
 									
-										<a class="dropdown-item" href="{% url 'matrices:matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
+										<a class="dropdown-item" href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
 									
 									</li>
 	
@@ -266,7 +266,7 @@
 
 				{% if forloop.first %}
 		
-								<a class="dropdown-item" href="{% url 'matrices:list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
+								<a class="dropdown-item" href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
 
 					            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">My Benches</a>
 
@@ -276,7 +276,7 @@
 			
 									<li>
 
-										<a class="dropdown-item" href="{% url 'matrices:matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
+										<a class="dropdown-item" href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
 
 									</li>
 	
@@ -297,7 +297,7 @@
 
 			                <li class="dropdown-submenu">
 
-								<a class="dropdown-item" href="{% url 'matrices:new_matrix' %}">Add New Bench</a>
+								<a class="dropdown-item" href="{% url 'new_matrix' %}">Add New Bench</a>
 
 				            </li>
 
@@ -326,17 +326,17 @@
 
 			{% if forloop.first %}
 		
-							<li><a class="dropdown-item" href="{% url 'matrices:list_imaging_hosts' %}">All Sources</a></li>
+							<li><a class="dropdown-item" href="{% url 'list_imaging_hosts' %}">All Sources</a></li>
 			
 			{% endif %}
 			
 			{% if server.type.name == 'WORDPRESS' %}
 	
-							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a></li>
+							<li><a class="dropdown-item" href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a></li>
 
 			{% else %}
 	
-							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
+							<li><a class="dropdown-item" href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
 
 			{% endif %}
 
@@ -372,7 +372,7 @@
 
 			{% if forloop.first %}
 		
-							<li><a class="dropdown-item" href="{% url 'matrices:list_image_cart' %}">List Your Image Collection</a></li>
+							<li><a class="dropdown-item" href="{% url 'list_image_cart' %}">List Your Image Collection</a></li>
 			
 			{% endif %}
 
@@ -380,17 +380,17 @@
 			
 				{% if image.server.type.name == 'WORDPRESS' %}
 
-							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
+							<li><a class="dropdown-item" href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
 
 				{% else %}
 	
-							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
+							<li><a class="dropdown-item" href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
 	
 				{% endif %}
 	
 			{% else %}
 
-							<li><a class="dropdown-item" href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a></li>
+							<li><a class="dropdown-item" href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a></li>
 	
 			{% endif %}
 
@@ -417,11 +417,11 @@
 	
 						<ul class="dropdown-menu" aria-labelledby="dropdown07">
 
-							<li><a class="dropdown-item" href="{% url 'matrices:about' %}">About</a></li>
+							<li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
 			
-							<li><a class="dropdown-item" href="{% url 'matrices:people' %}">People</a></li>
+							<li><a class="dropdown-item" href="{% url 'people' %}">People</a></li>
 
-							<li><a class="dropdown-item" href="{% url 'matrices:howto' %}">How To</a></li>
+							<li><a class="dropdown-item" href="{% url 'howto' %}">How To</a></li>
 
 						</ul>
 
@@ -441,9 +441,9 @@
             			
             			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
 
-							<li><a class="dropdown-item" href="{% url 'matrices:detail_user' user.id %}">My account</a></li>
+							<li><a class="dropdown-item" href="{% url 'detail_user' user.id %}">My account</a></li>
         		
-							<li><a class="dropdown-item" href="{% url 'matrices:list_my_authorisation' %}">My Permissions</a></li>
+							<li><a class="dropdown-item" href="{% url 'list_my_authorisation' %}">My Permissions</a></li>
         		
         		            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
 				
@@ -451,11 +451,11 @@
 
 	{% if user.is_superuser %}
 
-							<li><a class="dropdown-item" href="{% url 'matrices:list_authorisation' %}">All Permissions</a></li>
+							<li><a class="dropdown-item" href="{% url 'list_authorisation' %}">All Permissions</a></li>
         		
-							<li><a class="dropdown-item" href="{% url 'matrices:maintenance' %}">Maintenance</a></li>
+							<li><a class="dropdown-item" href="{% url 'maintenance' %}">Maintenance</a></li>
 
-							<li><a class="dropdown-item" href="{% url 'matrices:authorisation' %}">Authorisation</a></li>
+							<li><a class="dropdown-item" href="{% url 'authorisation' %}">Authorisation</a></li>
 
 	{% endif %}
 

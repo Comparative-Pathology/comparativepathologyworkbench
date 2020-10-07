@@ -15,19 +15,19 @@
 			<ol class="breadcrumb subheading">
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:home' %}">
+					<a href="{% url 'home' %}">
 						Home
 					</a>
 				</li>
 	
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:index' %}">
+					<a href="{% url 'index' %}">
 						Matrices
 					</a>
 				</li>
 
 				<li class="breadcrumb-item">
-					<a href="{% url 'matrices:matrix' matrix.id %}">
+					<a href="{% url 'matrix' matrix.id %}">
 						CPW:{{ matrix.id|stringformat:"06d" }}
 					</a>
 				</li>
@@ -150,7 +150,7 @@
 
 		<br />
 
-		<!-- <a href="{% url 'matrices:matrix' matrix.id %}"> -->
+		<!-- <a href="{% url 'matrix' matrix.id %}"> -->
 		<a href="{{ request.META.HTTP_REFERER }}">
 			<button class="save btn btn-success">Back</button>
 		</a>

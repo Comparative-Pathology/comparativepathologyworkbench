@@ -13,7 +13,7 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
@@ -74,19 +74,19 @@
 
 				{% if image.server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'matrices:webgallery_show_wordpress_image' image.server.id image.identifier %}">	            	
+					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">	            	
 	        	    	<button class="save btn btn-info"><i class="fa fa-info"></i></button>
 					</a>
 
 				{% else %}
 	
-					<a href="{% url 'matrices:webgallery_show_image' image.server.id image.identifier %}">	            	
+					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">	            	
 	            		<button class="save btn btn-info"><i class="fa fa-info"></i></button>
 					</a>
 
 				{% endif %}
 
-					<a href="{% url 'matrices:webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')">
+					<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')">
 						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
 					</a>
 	            </td>

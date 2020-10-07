@@ -13,19 +13,19 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 		
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:maintenance' %}">
+				<a href="{% url 'maintenance' %}">
 					Maintenance
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:detail_blog_command' blog.id %}">
+				<a href="{% url 'detail_blog_command' blog.id %}">
 					Blog Command {{ blog.id }}
 				</a>
 			</li>
@@ -61,7 +61,7 @@
 
 		</form>
 
-		<a href="{% url 'matrices:maintenance' %}">
+		<a href="{% url 'maintenance' %}">
 			<button class="save btn btn-success">CANCEL</button>
 		</a>
 

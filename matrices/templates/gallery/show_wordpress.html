@@ -13,31 +13,31 @@
 		<ol class="breadcrumb subheading">
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:home' %}">
+				<a href="{% url 'home' %}">
 					Home
 				</a>
 			</li>
 	
 			<li class="breadcrumb-item">
-				<a href="{% url 'matrices:list_imaging_hosts' %}">
+				<a href="{% url 'list_imaging_hosts' %}">
 					Sources
 				</a>
 			</li>
 
 			<li class="breadcrumb-item active">
-				<a href="{% url 'matrices:webgallery_show_wordpress' server.id 1 %}">	            	
+				<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">	            	
 					{{ dataset.name }}
 				</a>
 			</li>	
 	
 			<li class="breadcrumb-item active">
-				<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
+				<a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
 	            	Prev
 				</a>
 			</li>	
 	
 			<li class="breadcrumb-item active">
-				<a href="{% url 'matrices:webgallery_show_wordpress' server.id dataset.next_page %}">	            	
+				<a href="{% url 'webgallery_show_wordpress' server.id dataset.next_page %}">	            	
 	            	Next
 				</a>
 			</li>	
@@ -66,7 +66,7 @@
 
 {% for image in images %}
 
-			<a href="{% url 'matrices:webgallery_show_wordpress_image' server.id image.id %}">
+			<a href="{% url 'webgallery_show_wordpress_image' server.id image.id %}">
 				<img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
 			</a>
 

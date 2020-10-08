@@ -326,7 +326,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             cell_blogpost = "0"
 
-            image_data = cell_data.pop('image')
+            image_data = cell_data.get('image')
 
             image = None
         
@@ -439,7 +439,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         self.validate_cells(cells_data)
         
         self.update_existing_cells(instance, cells_data)
-
+        
         self.delete_missing_cells(instance, cells_data)
 
         self.add_new_cells(instance, cells_data)
@@ -954,6 +954,14 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             message = 'ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than 10 Rows allowed!'
             raise serializers.ValidationError(message)
 
+        if maxX < 3:
+            message = 'ERROR! Too few Columns in Bench (' + str(maxX) + '); At least 3 Columns required!'
+            raise serializers.ValidationError(message)
+
+        if maxY < 3:
+            message = 'ERROR! Too few Rows in Bench (' + str(maxY) + '); At least 3 Rows required!'
+            raise serializers.ValidationError(message)
+
         bench_cells=[[0 for cc in range(maxY)] for rc in range(maxX)]
         
         i = 0
@@ -1003,6 +1011,22 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 j += 1
             
             i += 1
+
+
+        for cell_data in cells_data:
+
+            image_data = cell_data.get('image')
+            
+            if image_data is not None:
+        
+                active = False
+                server = image_data.get('server')
+                owner = image_data.get('owner')
+                image_id = image_data.get('image_id')
+                roi_id = image_data.get('roi')
+
+                server = self.validate_image_json(server, owner, image_id, roi_id)
+
 
         return True
 

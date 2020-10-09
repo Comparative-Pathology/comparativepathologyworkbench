@@ -943,6 +943,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if currY > maxY:
                 maxY = currY
 
+        max_column_index = maxX
+        max_row_index = maxY
+        
         maxX += 1
         maxY += 1
         
@@ -1017,6 +1020,25 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             image_data = cell_data.get('image')
             
+            xcoordinate = cell_data.get('xcoordinate', 0)
+            ycoordinate = cell_data.get('ycoordinate', 0)
+            
+            if xcoordinate == 0 and image_data is not None:
+                message = 'ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate)
+                raise serializers.ValidationError(message)
+
+            if xcoordinate == max_column_index and image_data is not None:
+                message = 'ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate)
+                raise serializers.ValidationError(message)
+
+            if ycoordinate == 0 and image_data is not None:
+                message = 'ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate)
+                raise serializers.ValidationError(message)
+
+            if ycoordinate == max_row_index and image_data is not None:
+                message = 'ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate)
+                raise serializers.ValidationError(message)
+
             if image_data is not None:
         
                 active = False

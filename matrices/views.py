@@ -90,7 +90,8 @@ from rest_framework import permissions, renderers, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-#from matrices.permissions import IsRequestAdmin
+from matrices.permissions import MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor
+from matrices.permissions import ImageIsReadOnlyOrIsAdminOrIsOwner
 
 from matrices.serializers import MatrixSerializer
 from matrices.serializers import CellSerializer
@@ -110,7 +111,8 @@ class MatrixViewSet(viewsets.ModelViewSet):
     
     serializer_class = MatrixSerializer
 
-    permission_classes = ( permissions.IsAdminUser, )
+    permission_classes = ( permissions.IsAuthenticated,
+                           MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor )
 
 
     def destroy(self, request, *args, **kwargs):
@@ -147,7 +149,7 @@ class CellViewSet(viewsets.ModelViewSet):
     
     serializer_class = CellSerializer
 
-    permission_classes = ( permissions.IsAdminUser, )
+    permission_classes = ( permissions.IsAuthenticated, )
     
 
     def list(self, request, *args, **kwargs):
@@ -200,7 +202,8 @@ class ImageViewSet(viewsets.ModelViewSet):
     
     serializer_class = ImageSerializer
 
-    permission_classes = ( permissions.IsAdminUser, )
+    permission_classes = ( permissions.IsAuthenticated,
+                           ImageIsReadOnlyOrIsAdminOrIsOwner )
 
 
 #

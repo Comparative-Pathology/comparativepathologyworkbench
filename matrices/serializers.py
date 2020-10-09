@@ -37,11 +37,26 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     
         #print("Image Serializer, Create")
 
+        request_user = None
+
+        request = self.context.get("request")
+
+        if request and hasattr(request, "user"):
+
+            request_user = request.user
+
         image_active = True
         image_server = validated_data.get('server')
         image_owner = validated_data.get('owner')
         image_id = validated_data.get('image_id')
         image_roi_id = validated_data.get('roi')
+        
+        if request_user != image_owner:
+            
+            if request_user.is_superuser == False:
+            
+                message = 'ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner)
+                raise serializers.ValidationError(message)
         
         server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
         
@@ -299,19 +314,36 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     
         #print("Bench Serializer, Create")
 
+        request_user = None
+
+        request = self.context.get("request")
+
+        if request and hasattr(request, "user"):
+
+            request_user = request.user
+
         matrix_title = validated_data.get('title')
         matrix_description = validated_data.get('description')
         matrix_height = validated_data.get('height')
         matrix_width = validated_data.get('width')
         matrix_owner = validated_data.get('owner')
         
+        if request_user != matrix_owner:
+            
+            if request_user.is_superuser == False:
+            
+                message = 'ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner)
+                raise serializers.ValidationError(message)
+
         matrix_blogpost = 0
 
         self.validate_matrix_json_fields(matrix_title, matrix_description, matrix_height, matrix_width)
 
         cells_data = validated_data.pop('bench_cells')
 
-        self.validate_cells(cells_data)
+        create_flag = True
+        
+        self.validate_cells(cells_data, request_user, create_flag)
 
         matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
         
@@ -427,16 +459,34 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
         #print("Bench Serializer, Update")
 
+        request_user = None
+
+        request = self.context.get("request")
+
+        if request and hasattr(request, "user"):
+
+            request_user = request.user
+
         bench_title = validated_data.get('title', instance.title)
         bench_description = validated_data.get('description', instance.description)
         bench_height = validated_data.get('height', instance.height)
         bench_width = validated_data.get('width', instance.width)
-        
+        bench_owner = validated_data.get('owner', instance.owner)
+
+        if request_user != bench_owner:
+            
+            if request_user.is_superuser == False:
+            
+                message = 'ERROR! Attempting to Update an existing Bench for a different Owner: ' + str(bench_owner)
+                raise serializers.ValidationError(message)
+
         self.validate_matrix_json_fields(bench_title, bench_description, bench_height, bench_width)
 
         cells_data = validated_data.pop('bench_cells')
         
-        self.validate_cells(cells_data)
+        create_flag = False
+        
+        self.validate_cells(cells_data, request_user, create_flag)
         
         self.update_existing_cells(instance, cells_data)
         
@@ -918,7 +968,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     """
         Matrix Serializer, For a Matrix, Validate the supplied Cells
     """
-    def validate_cells(self, cells_data):
+    def validate_cells(self, cells_data, request_user, mode_flag):
 
         maxX = 0
         maxY = 0
@@ -1043,11 +1093,20 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         
                 active = False
                 server = image_data.get('server')
-                owner = image_data.get('owner')
+                image_owner = image_data.get('owner')
                 image_id = image_data.get('image_id')
                 roi_id = image_data.get('roi')
+                
+                if mode_flag == True:
 
-                server = self.validate_image_json(server, owner, image_id, roi_id)
+                    if request_user != image_owner:
+            
+                        if request_user.is_superuser == False:
+            
+                            message = 'ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(image_owner)
+                            raise serializers.ValidationError(message)
+
+                server = self.validate_image_json(server, image_owner, image_id, roi_id)
 
 
         return True

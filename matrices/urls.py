@@ -17,17 +17,9 @@ router = DefaultRouter()
 router.register(r'benches', matrices_views.MatrixViewSet)
 router.register(r'cells', matrices_views.CellViewSet)
 router.register(r'images', matrices_views.ImageViewSet)
-#router.register(r'servers', matrices_views.ServerViewSet)
-
-#schema_view = get_schema_view(title='Comparative Pathology Workbench API', description='An API to Add or Update Workbenches.')
 
 urlpatterns = [
-
-# The API URLs are now determined automatically by the router.
-#    path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-#    path('schema/', schema_view),
-#    path('docs/', include_docs_urls(title='Matrices API')),
 
 	url(r'^$', matrices_views.home, name='home'),
 
@@ -176,5 +168,4 @@ urlpatterns = [
 	url(r'^edit_authorisation/(?P<authorisation_id>[0-9]+)/$', matrices_views.edit_authorisation, name='edit_authorisation'),
 	url(r'^edit_authorisation/(?P<matrix_id>[0-9]+)/(?P<authorisation_id>[0-9]+)/$', matrices_views.edit_matrix_authorisation, name='edit_matrix_authorisation'),
 	url(r'^delete_authorisation/(?P<authorisation_id>[0-9]+)/$', matrices_views.delete_authorisation, name='delete_authorisation'),
-
 ]

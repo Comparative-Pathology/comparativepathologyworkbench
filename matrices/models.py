@@ -95,13 +95,13 @@ class Matrix(models.Model):
         self.blogpost = a_blogpost
 
     def has_no_blogpost(self):
-        if self.blogpost == '':
+        if self.blogpost == '' or self.blogpost == '0':
             return True
         else:
             return False
             
     def has_blogpost(self):
-        if self.blogpost == '':
+        if self.blogpost == '' or self.blogpost == '0':
             return False
         else:
             return True
@@ -848,7 +848,7 @@ class Server(models.Model):
         
         images_url = commandWordpressImages.protocol.name + '://' + self.url_server + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + page_id + commandWordpressImages.postamble + str(credential.wordpress)
     
-        print("images_url : " +  images_url)
+        #print("images_url : " +  images_url)
             
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -1117,7 +1117,7 @@ class Server(models.Model):
                 })
     
                 #print image
-                print("image : " + str(image))
+                #print("image : " + str(image))
     
                 group = ''
                 project_list = []
@@ -1158,7 +1158,7 @@ class Server(models.Model):
                     'thumbnail_url': ''
                 })
     
-                print("image : " + image)
+                #print("image : " + image)
 
                 group = ''
                 project_list = []
@@ -2644,7 +2644,7 @@ class Server(models.Model):
         
         image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + str(image_id)
         
-        print("image_url : " + image_url)
+        #print("image_url : " + image_url)
         
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -3131,13 +3131,13 @@ class Cell(models.Model):
         self.blogpost = a_blogpost
 
     def has_no_blogpost(self):
-        if self.blogpost == '':
+        if self.blogpost == '' or self.blogpost == '0':
             return True
         else:
             return False
             
     def has_blogpost(self):
-        if self.blogpost == '':
+        if self.blogpost == '' or self.blogpost == '0':
             return False
         else:
             return True
@@ -3718,6 +3718,11 @@ def get_authority_for_matrix_and_user_and_requester(a_matrix, a_user):
 def credential_exists(a_user):
 
 	return Credential.objects.filter(username=a_user.username).values('username').exists()
+
+
+def credential_apppwd(a_user):
+
+	return Credential.objects.filter(username=a_user.username).values('apppwd')
 
 
 def authorisation_exits_for_matrix_and_permitted(a_matrix, a_user):

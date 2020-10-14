@@ -2,14 +2,18 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
+from django.db import models
+from django.db.models import Q 
+
 from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Image
 from matrices.models import Server
-from matrices.models import Type
+from matrices.models import Credential
 
-from django.db import models
-from django.db.models import Q 
+from matrices.models import get_primary_wordpress_server
+
+WORDPRESS_SUCCESS = 'Success!'
 
 
 """
@@ -76,7 +80,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             image_name = json_image['name']
             image_viewer_url = json_image['viewer_url']
             image_birdseye_url = json_image['birdseye_url']
-	        
+            
         else:
         
             data = server.check_imaging_server_image(image_owner, image_id)
@@ -132,7 +136,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             image_name = json_image['name']
             image_viewer_url = json_image['viewer_url']
             image_birdseye_url = json_image['birdseye_url']
-	        
+            
         else:
         
             data = server.check_imaging_server_image(image_owner.id, image_id)
@@ -335,7 +339,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 message = 'ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner)
                 raise serializers.ValidationError(message)
 
-        matrix_blogpost = 0
+        matrix_blogpost = ''
 
         self.validate_matrix_json_fields(matrix_title, matrix_description, matrix_height, matrix_width)
 
@@ -356,7 +360,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             cell_xcoordinate = cell_data.get('xcoordinate')
             cell_ycoordinate = cell_data.get('ycoordinate')
 
-            cell_blogpost = "0"
+            cell_blogpost = ''
 
             image_data = cell_data.get('image')
 
@@ -392,7 +396,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     image_name = json_image['name']
                     image_viewer_url = json_image['viewer_url']
                     image_birdseye_url = json_image['birdseye_url']
-	        
+            
                 else:
         
                     data = server.check_imaging_server_image(image_owner, image_id)
@@ -439,13 +443,67 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             cell_in = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, image)
             
             cell_list.append(cell_in)
+
+
+        credential = Credential.objects.get(username=request.user.username)
+        
+        post_id = ''
+            
+        if credential.has_apppwd() == True:
+        
+            serverWordpress = get_primary_wordpress_server()
+        
+            returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, matrix.title, matrix.description)
+            
+            #print("POST for Matrix")
+            #print("returned_blogpost : " + str(returned_blogpost))
+            
+            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+            
+                post_id = returned_blogpost['id']
+                
+            else:
+            
+                message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                raise serializers.ValidationError(message)
+                
+        
+        matrix.set_blogpost(post_id)
         
         matrix.save()
+        
         
         for cell_out in cell_list:
             
             cell_out.matrix = matrix
+            
+            post_id = ''
+            
+            #credential = Credential.objects.get(username=request.user.username)
+            
+            if cell_out.image is not None:
+            
+                if credential.has_apppwd() == True:
+            
+                    serverWordpress = get_primary_wordpress_server()
+            
+                    returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, cell_out.title, cell_out.description)
+                
+                    #print("POST for Cell")
+                    #print("returned_blogpost : " + str(returned_blogpost))
+    
+                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                
+                        post_id = returned_blogpost['id']
+                    
+                    else:
+                
+                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                        raise serializers.ValidationError(message)
+                    
 
+            cell_out.set_blogpost(post_id)
+        
             cell_out.save()
 
 
@@ -488,16 +546,39 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         
         self.validate_cells(cells_data, request_user, create_flag)
         
-        self.update_existing_cells(instance, cells_data)
+        self.update_existing_cells(instance, request_user, cells_data)
         
-        self.delete_missing_cells(instance, cells_data)
+        self.delete_missing_cells(instance, request_user, cells_data)
 
-        self.add_new_cells(instance, cells_data)
+        self.add_new_cells(instance, request_user, cells_data)
 
         instance.title = bench_title
         instance.description = bench_description
         instance.height = bench_height
         instance.width = bench_width
+        
+        post_id = ''
+                
+        if instance.blogpost == '' or instance.blogpost == '0':
+        
+            credential = Credential.objects.get(username=request_user.username)
+            
+            if credential.has_apppwd() == True:
+            
+                serverWordpress = get_primary_wordpress_server()
+            
+                returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, instance.title, instance.description)
+                
+                if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                    
+                    post_id = returned_blogpost['id']
+                    
+                else:
+                
+                    message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                    raise serializers.ValidationError(message)
+                            
+        instance.blogpost = post_id
 
         instance.save()
 
@@ -507,7 +588,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     """
         Matrix Serializer, For a Matrix, Update any Existing Cells from Input Grid
     """
-    def update_existing_cells(self, instance, cells_data):
+    def update_existing_cells(self, instance, request_user, cells_data):
 
         update_cell_list = list()    
         
@@ -594,7 +675,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 image_name = json_image['name']
                                 image_viewer_url = json_image['viewer_url']
                                 image_birdseye_url = json_image['birdseye_url']
-	        
+            
                             else:
         
                                 data = server.check_imaging_server_image(image_owner, image_id)
@@ -641,6 +722,30 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 image.save()
                                 
                                 bench_cell.image = image
+                            
+                            
+                            post_id = ''
+                            
+                            if bench_cell.has_blogpost() == False:
+                            
+                                credential = Credential.objects.get(username=request_user.username)
+                                
+                                if credential.has_apppwd() == True:
+                                
+                                    serverWordpress = get_primary_wordpress_server()
+                                
+                                    returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, bench_cell.title, bench_cell.description)
+                                    
+                                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                                    
+                                        post_id = returned_blogpost['id']
+                                        
+                                    else:
+                                    
+                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                        raise serializers.ValidationError(message)
+                                        
+                            bench_cell.set_blogpost(post_id)
                                 
 
                         if image_data is not None and bench_cell.image is not None:
@@ -675,7 +780,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     image_name = json_image['name']
                                     image_viewer_url = json_image['viewer_url']
                                     image_birdseye_url = json_image['birdseye_url']
-	        
+            
                                 else:
         
                                     data = server.check_imaging_server_image(image_owner, image_id)
@@ -734,6 +839,37 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     old_image.save()
                                     
                                     bench_cell.image = image
+                                
+                                
+                                post_id = ''
+                                
+                                if bench_cell.has_blogpost() == True:
+                                
+                                    credential = Credential.objects.get(username=request_user.username)
+                                    
+                                    if credential.has_apppwd() == True:
+                                    
+                                        serverWordpress = get_primary_wordpress_server()
+                                    
+                                        response = serverWordpress.delete_wordpress_post(request_user.username, bench_cell.blogpost)
+                                        
+                                        if response != WORDPRESS_SUCCESS:
+                                        
+                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                            raise serializers.ValidationError(message)
+                                            
+                                        returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, bench_cell.title, bench_cell.description)
+                                        
+                                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                                        
+                                            post_id = returned_blogpost['id']
+                                            
+                                        else:
+                                        
+                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                            raise serializers.ValidationError(message)
+                                
+                                bench_cell.set_blogpost(post_id)
 
 
                         if image_data is None and bench_cell.image is not None:
@@ -749,6 +885,23 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 image.save()
                             
                             bench_cell.image = None
+                            
+                            if bench_cell.has_blogpost() == True:
+
+                                credential = Credential.objects.get(username=request_user.username)
+    
+                                if credential.has_apppwd() == True:
+                                    
+                                    serverWordpress = get_primary_wordpress_server()
+            
+                                    response = serverWordpress.delete_wordpress_post(request_user.username, bench_cell.blogpost)
+    
+                                    if response != WORDPRESS_SUCCESS:
+                    
+                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                        raise serializers.ValidationError(message)
+                            
+                            bench_cell.set_blogpost('')
 
 
                         update_cell_list.append(bench_cell)
@@ -762,7 +915,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     """
         Matrix Serializer, For a Matrix, Delete any Missing Cells from Input Grid
     """
-    def delete_missing_cells(self, instance, cells_data):
+    def delete_missing_cells(self, instance, request_user, cells_data):
 
         delete_cell_list = list()    
         
@@ -798,6 +951,22 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             
                     image.active = True
                     image.save()
+            
+            if delete_cell.has_blogpost() == True:
+
+                credential = Credential.objects.get(username=request_user.username)
+    
+                if credential.has_apppwd() == True:
+                
+                    serverWordpress = get_primary_wordpress_server()
+            
+                    response = serverWordpress.delete_wordpress_post(request_user.username, delete_cell.blogpost)
+    
+                    if response != WORDPRESS_SUCCESS:
+                    
+                        message = "WordPress Error - Contact System Administrator"
+                        raise serializers.ValidationError(message)
+
 
             delete_cell.delete()
 
@@ -805,7 +974,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     """
         Matrix Serializer, For a Matrix, Add New Cells
     """
-    def add_new_cells(self, instance, cells_data):
+    def add_new_cells(self, instance, request_user, cells_data):
     
         for cell_data in cells_data:
 
@@ -856,7 +1025,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         image_name = json_image['name']
                         image_viewer_url = json_image['viewer_url']
                         image_birdseye_url = json_image['birdseye_url']
-	        
+            
                     else:
         
                         data = server.check_imaging_server_image(owner, image_id)
@@ -916,6 +1085,29 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, active, image_roi, owner)
                         
                             cell_image.save()
+                            
+
+                    post_id = ''
+                    
+                    credential = Credential.objects.get(username=request_user.username)
+    
+                    if credential.has_apppwd() == True:
+                    
+                        serverWordpress = get_primary_wordpress_server()
+            
+                        returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, cell_title, cell_description)
+                                
+                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                                
+                            post_id = returned_blogpost['id']
+
+                        else:
+                                
+                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                            raise serializers.ValidationError(message)
+                    
+                    cell_blogpost = post_id
+
 
                 cell = Cell.create(instance, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
                 

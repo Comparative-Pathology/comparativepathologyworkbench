@@ -227,7 +227,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     
         data = server.check_wordpress_image(user, image_id)
         
-        image_name = data['name']
+        json_image = data['image']
+        image_name = json_image['name']
 
         if image_name == "":
             return False
@@ -372,6 +373,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             else:
         
+                if cell_title == '' and cell_description == '':
+            
+                    message = 'ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                    raise serializers.ValidationError(message)
+
                 image_active = False
                 image_server = image_data.get('server')
                 image_owner = image_data.get('owner')
@@ -437,7 +443,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     active = False
                 
                     image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_active, image_roi, image_owner)
-
+                    
                     image.save()
             
             cell_in = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, image)
@@ -503,9 +509,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     
 
             cell_out.set_blogpost(post_id)
-        
-            cell_out.save()
 
+            cell_out.save()
 
         return matrix
 
@@ -557,7 +562,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         instance.height = bench_height
         instance.width = bench_width
         
-        post_id = ''
+        post_id = instance.blogpost
                 
         if instance.blogpost == '' or instance.blogpost == '0':
         
@@ -1264,6 +1269,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             
             xcoordinate = cell_data.get('xcoordinate', 0)
             ycoordinate = cell_data.get('ycoordinate', 0)
+            cell_title = cell_data.get('title')
+            cell_description = cell_data.get('description')
             
             if xcoordinate == 0 and image_data is not None:
                 message = 'ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate)
@@ -1297,6 +1304,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             
                             message = 'ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(image_owner)
                             raise serializers.ValidationError(message)
+
+                if cell_title == '' or cell_description == '':
+            
+                    message = 'ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                    raise serializers.ValidationError(message)
+
 
                 server = self.validate_image_json(server, image_owner, image_id, roi_id)
 
@@ -1385,7 +1398,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     
         data = server.check_wordpress_image(user, image_id)
         
-        image_name = data['name']
+        json_image = data['image']
+        image_name = json_image['name']
 
         if image_name == "":
             return False

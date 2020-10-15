@@ -1189,7 +1189,7 @@ class Server(models.Model):
     
         except Exception as e:
     
-            print('Exception!', e)
+            #print('Exception!', e)
     
             image = ({
                 'id': image_id,
@@ -2662,6 +2662,8 @@ class Server(models.Model):
             
                 media_data = response.json()
                 
+                #print("media_data : " + str(media_data))
+                
                 caption = media_data['caption']
                 caption_rendered = caption['rendered']
                 
@@ -2706,7 +2708,7 @@ class Server(models.Model):
     
         except Exception as e:
     
-            print('Exception!', e)
+            #print('Exception!', e)
     
             image = ({
                 'id': str(image_id),
@@ -2720,6 +2722,10 @@ class Server(models.Model):
     
             data = image
     
+        data = { 'image': image }
+
+        #print("data : " + str(data))
+        
         return data
 
 
@@ -3058,16 +3064,7 @@ class Image(models.Model):
     
     def image_id(self):
 
-        str_id = ""
-
-        if "iviewer" in self.viewer_url:
-            str_array = self.viewer_url.split("=")
-            str_id = str_array[1]
-        else:
-            str_array = self.viewer_url.split("/")
-            str_id = str_array[len(str_array) - 1]
-        
-        return str_id
+        return self.identifier
 
 
 class Cell(models.Model):
@@ -3596,7 +3593,7 @@ def authorisation_list_select_related_matrix_by_user(a_user):
 
 def matrix_list_by_user(a_user):
 
-	queryset = Matrix.objects.filter(owner=a_user)
+	queryset = Matrix.objects.filter(owner=a_user).order_by('id')
 	
 	matrices = list()
 	
@@ -3624,7 +3621,7 @@ def matrix_list_by_user(a_user):
 
 def matrix_list_not_by_user(a_user):
 
-	queryset = Matrix.objects.filter(~Q(owner=a_user))
+	queryset = Matrix.objects.filter(~Q(owner=a_user)).order_by('id')
 	
 	matrices = list()
 	
@@ -3653,7 +3650,7 @@ def matrix_list_not_by_user(a_user):
 
 def matrix_list_all():
 
-	queryset = Matrix.objects.all()
+	queryset = Matrix.objects.all().order_by('id')
 	
 	matrices = list()
 	

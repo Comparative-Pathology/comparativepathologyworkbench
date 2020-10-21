@@ -94,6 +94,10 @@ celerybeat-schedule
 local_docker.env
 local_no_docker.env
 server_docker.env
+.env_canada
+.env_coeliac
+.env_czi
+.env_local
 *.env
 .env
 .venv

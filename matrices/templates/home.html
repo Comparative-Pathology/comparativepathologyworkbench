@@ -166,6 +166,30 @@
 
 	<div class="col-md-3">
     	
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Login</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Login to use the Workbench</p>
+		
+				<a href="{% url 'login' %}">
+					<button class="save btn btn-success">Login &raquo;</button>
+				</a>
+	
+			</div>
+
+		</div>
+
 	</div>
 	    
 
@@ -235,6 +259,8 @@
 
 {% endif %}
 	    
+{% if credential_flag == '' %}
+
 	<div class="col-md-3">
 
 		<div class="card text-center">
@@ -262,7 +288,15 @@
 		</div>
 
 	</div>
+
+{% else %}
+
+	<div class="col-md-3">
+
+	</div>
 	    
+{% endif %}
+
 	<div class="col-md-2">
 
 	</div>

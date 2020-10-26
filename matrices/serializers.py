@@ -15,6 +15,10 @@ from matrices.models import get_primary_wordpress_server
 
 WORDPRESS_SUCCESS = 'Success!'
 
+MAX_COLUMNS = 10000
+MAX_ROWS = 10000
+MIN_COLUMNS = 3
+MIN_ROWS = 3
 
 """
 
@@ -59,7 +63,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             
             if request_user.is_superuser == False:
             
-                message = 'ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner)
+                message = 'CPW0040: ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
                 raise serializers.ValidationError(message)
         
         server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
@@ -187,7 +191,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 
                 if self.validate_wordpress_image_id(server, user, image_id) == False:
 
-                    message = 'ERROR! Image NOT Present on : ' + server_str
+                    message = 'CPW0260: ERROR! Image NOT Present on : ' + server_str + '!'
                     raise serializers.ValidationError(message)
             else:
 
@@ -199,22 +203,22 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                     
                             if self.validate_roi_id(server, user, image_id, roi_id) == False:
                             
-                                message = 'ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str
+                                message = 'CPW0200: ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
                                 raise serializers.ValidationError(message)
                     else:
 
-                        message = 'ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str
+                        message = 'CPW0170: ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
                         raise serializers.ValidationError(message)
                 else:
 
-                    message = 'ERROR! Server Type Unknown : ' + server_str
+                    message = 'CPW0270: ERROR! Server Type Unknown : ' + server_str + '!'
                     raise serializers.ValidationError(message)
 
             return server
 
         else:
 
-            message = 'ERROR! Server Unknown : ' + server_str
+            message = 'CPW0210: ERROR! Server Unknown : ' + server_str + '!'
             raise serializers.ValidationError(message)
 
             return None
@@ -337,7 +341,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             
             if request_user.is_superuser == False:
             
-                message = 'ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner)
+                message = 'CPW0030: ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner) + '!'
                 raise serializers.ValidationError(message)
 
         matrix_blogpost = ''
@@ -375,7 +379,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         
                 if cell_title == '' and cell_description == '':
             
-                    message = 'ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                    message = 'CPW0050: ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
                     raise serializers.ValidationError(message)
 
                 image_active = False
@@ -470,7 +474,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 
             else:
             
-                message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                 raise serializers.ValidationError(message)
                 
         
@@ -504,7 +508,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     
                     else:
                 
-                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                         raise serializers.ValidationError(message)
                     
 
@@ -540,7 +544,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             
             if request_user.is_superuser == False:
             
-                message = 'ERROR! Attempting to Update an existing Bench for a different Owner: ' + str(bench_owner)
+                message = 'CPW0070: ERROR! Attempting to Update an existing Bench for a different Owner: ' + str(bench_owner) + '!'
                 raise serializers.ValidationError(message)
 
         self.validate_matrix_json_fields(bench_title, bench_description, bench_height, bench_width)
@@ -580,7 +584,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     
                 else:
                 
-                    message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                    message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                     raise serializers.ValidationError(message)
                             
         instance.blogpost = post_id
@@ -747,7 +751,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                         
                                     else:
                                     
-                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                                         raise serializers.ValidationError(message)
                                         
                             bench_cell.set_blogpost(post_id)
@@ -860,7 +864,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                         
                                         if response != WORDPRESS_SUCCESS:
                                         
-                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                                             raise serializers.ValidationError(message)
                                             
                                         returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, bench_cell.title, bench_cell.description)
@@ -871,7 +875,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                             
                                         else:
                                         
-                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                                             raise serializers.ValidationError(message)
                                 
                                 bench_cell.set_blogpost(post_id)
@@ -903,7 +907,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     
                                     if response != WORDPRESS_SUCCESS:
                     
-                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                                         raise serializers.ValidationError(message)
                             
                             bench_cell.set_blogpost('')
@@ -969,7 +973,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     
                     if response != WORDPRESS_SUCCESS:
                     
-                        message = "WordPress Error - Contact System Administrator"
+                        message = "WordPress Error - Contact System Administrator!"
                         raise serializers.ValidationError(message)
 
 
@@ -1108,7 +1112,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                         else:
                                 
-                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost)
+                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
                             raise serializers.ValidationError(message)
                     
                     cell_blogpost = post_id
@@ -1133,32 +1137,32 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         """
         if len_title > 255:
                 
-            message = 'ERROR! Bench Title Length (' + str(len_title) + ') is greater than 255!'
+            message = 'CPW0130: ERROR! Bench Title Length (' + str(len_title) + ') is greater than 255!'
             raise serializers.ValidationError(message)
 
         if len_description > 4095:
                 
-            message = 'ERROR! Bench Description Length (' + str(len_title) + ') is greater than 4095!'
+            message = 'CPW0120: ERROR! Bench Description Length (' + str(len_title) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         if height > 450:
                 
-            message = 'ERROR! Bench Cell Height (' + str(height) + ') is greater than 450!'
+            message = 'CPW0080: ERROR! Bench Cell Height (' + str(height) + ') is greater than 450!'
             raise serializers.ValidationError(message)
 
         if height < 75:
                 
-            message = 'ERROR! Bench Cell Height (' + str(height) + ') is less than 75!'
+            message = 'CPW0090: ERROR! Bench Cell Height (' + str(height) + ') is less than 75!'
             raise serializers.ValidationError(message)
             
         if width > 450:
                 
-            message = 'ERROR! Bench Cell Width (' + str(width) + ') is greater than 450!'
+            message = 'CPW0100: ERROR! Bench Cell Width (' + str(width) + ') is greater than 450!'
             raise serializers.ValidationError(message)
 
         if width < 75:
                 
-            message = 'ERROR! Bench Cell Width (' + str(width) + ') is less than 75!'
+            message = 'CPW0110: ERROR! Bench Cell Width (' + str(width) + ') is less than 75!'
             raise serializers.ValidationError(message)
             
 
@@ -1171,7 +1175,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         maxY = 0
         
         if not cells_data:
-            message = 'ERROR! NO Cells supplied with Bench!'
+            message = 'CPW0190: ERROR! NO Cells supplied with Bench!'
             raise serializers.ValidationError(message)
 
         for cell_data in cells_data:
@@ -1196,20 +1200,20 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         maxX += 1
         maxY += 1
         
-        if maxX > 10:
-            message = 'ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than 10 Columns allowed!'
+        if maxX > MAX_COLUMNS:
+            message = 'CPW0240: ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than 10,000 Columns allowed!'
             raise serializers.ValidationError(message)
 
-        if maxY > 10:
-            message = 'ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than 10 Rows allowed!'
+        if maxY > MAX_ROWS:
+            message = 'CPW0250: ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than 10,000 Rows allowed!'
             raise serializers.ValidationError(message)
 
-        if maxX < 3:
-            message = 'ERROR! Too few Columns in Bench (' + str(maxX) + '); At least 3 Columns required!'
+        if maxX < MIN_COLUMNS:
+            message = 'CPW0220: ERROR! Too few Columns in Bench (' + str(maxX) + '); At least 3 Columns required!'
             raise serializers.ValidationError(message)
 
-        if maxY < 3:
-            message = 'ERROR! Too few Rows in Bench (' + str(maxY) + '); At least 3 Rows required!'
+        if maxY < MIN_ROWS:
+            message = 'CPW0230: ERROR! Too few Rows in Bench (' + str(maxY) + '); At least 3 Rows required!'
             raise serializers.ValidationError(message)
 
         bench_cells=[[0 for cc in range(maxY)] for rc in range(maxX)]
@@ -1237,7 +1241,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             j = cell_data.get('ycoordinate', 0)
             
             if bench_cells[i][j] == True:
-                message = 'ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j)
+                message = 'CPW0160: ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
                 raise serializers.ValidationError(message)
 
             bench_cells[i][j] = True
@@ -1255,7 +1259,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 cnt += 1
 
                 if bench_cells[i][j] == False:
-                    message = 'ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j)
+                    message = 'CPW0180: ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
                     raise serializers.ValidationError(message)
 
                 j += 1
@@ -1273,19 +1277,19 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             cell_description = cell_data.get('description')
             
             if xcoordinate == 0 and image_data is not None:
-                message = 'ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate)
+                message = 'CPW0010: ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
                 raise serializers.ValidationError(message)
 
             if xcoordinate == max_column_index and image_data is not None:
-                message = 'ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate)
+                message = 'CPW0015: ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
                 raise serializers.ValidationError(message)
 
             if ycoordinate == 0 and image_data is not None:
-                message = 'ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate)
+                message = 'CPW0020: ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
                 raise serializers.ValidationError(message)
 
             if ycoordinate == max_row_index and image_data is not None:
-                message = 'ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate)
+                message = 'CPW0025: ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
                 raise serializers.ValidationError(message)
 
             if image_data is not None:
@@ -1302,12 +1306,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             
                         if request_user.is_superuser == False:
             
-                            message = 'ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(image_owner)
+                            message = 'CPW0060: ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(image_owner) + '!'
                             raise serializers.ValidationError(message)
 
                 if cell_title == '' or cell_description == '':
             
-                    message = 'ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                    message = 'CPW0055: ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
                     raise serializers.ValidationError(message)
 
 
@@ -1331,12 +1335,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         """
         if len_title > 255:
                 
-            message = 'ERROR! Cell Title Length (' + str(len_title) + ') is greater than 255!'
+            message = 'CPW0150: ERROR! Cell Title Length (' + str(len_title) + ') is greater than 255!'
             raise serializers.ValidationError(message)
 
         if len_description > 4095:
                 
-            message = 'ERROR! Cell Description Length (' + str(len_title) + ') is greater than 4095!'
+            message = 'CPW0140: ERROR! Cell Description Length (' + str(len_title) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
 
@@ -1358,7 +1362,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 
                 if self.validate_wordpress_image_id(server, user, image_id) == False:
 
-                    message = 'ERROR! Image NOT Present on : ' + server_str
+                    message = 'CPW0265: ERROR! Image NOT Present on : ' + server_str + '!'
                     raise serializers.ValidationError(message)
             else:
 
@@ -1370,22 +1374,22 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     
                             if self.validate_roi_id(server, user, image_id, roi_id) == False:
                             
-                                message = 'ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str
+                                message = 'CPW0205: ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
                                 raise serializers.ValidationError(message)
                     else:
 
-                        message = 'ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str
+                        message = 'CPW0175: ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
                         raise serializers.ValidationError(message)
                 else:
 
-                    message = 'ERROR! Server Type Unknown : ' + server_str
+                    message = 'CPW0275: ERROR! Server Type Unknown : ' + server_str + '!'
                     raise serializers.ValidationError(message)
             
             return server
 
         else:
 
-            message = 'ERROR! Server Unknown : ' + server_str
+            message = 'CPW0215: ERROR! Server Unknown : ' + server_str + '!'
             raise serializers.ValidationError(message)
             
             return None

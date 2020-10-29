@@ -42,6 +42,7 @@ urlpatterns = [
 	url(r'^about/$', matrices_views.about, name='about'),
 	url(r'^people/$', matrices_views.people, name='people'),
 	url(r'^howto/$', matrices_views.howto, name='howto'),
+	#url(r'^mailer/$', matrices_views.mailer, name='mailer'),
 
 	url(r'^list_matrix/$', matrices_views.index_matrix, name='list_matrix'),
 

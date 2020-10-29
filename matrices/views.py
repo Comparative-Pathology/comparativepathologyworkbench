@@ -2,6 +2,9 @@ from __future__ import unicode_literals
 
 import os
 
+from django.core.mail import send_mail
+from django.utils import timezone
+
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -262,6 +265,56 @@ def home(request):
     data = { 'credential_flag': credential_flag, 'my_matrix_list': my_matrix_list, 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
 
     return render(request, 'home.html', data)
+
+
+#
+# MAILER VIEW
+#
+def mailer(request):
+
+    now = timezone.now()
+
+    subject = 'A Time Check'
+    message = 'Here is the time : ' + str(now)
+    email_from = config('DEFAULT_FROM_EMAIL')
+    recipient_list = ['mike.wicks@gmail.com',]
+
+    print("message : " + message)
+
+    send_mail( subject, message, email_from, recipient_list, fail_silently=False )
+    
+    if request.user.is_anonymous == True:
+
+        matrix_list = list()
+        my_matrix_list = list()
+
+        image_list = []
+        server_list = []
+    
+    else:
+    
+        matrix_list = list()
+        my_matrix_list = list()
+
+        if request.user.is_superuser == True:
+
+            matrix_list = matrix_list_not_by_user(request.user)
+            my_matrix_list = matrix_list_by_user(request.user)
+    
+        else:
+
+            matrix_list_1 = matrix_list_by_user(request.user)
+            matrix_list_2 = authorisation_list_select_related_matrix_by_user(request.user)
+        
+            matrix_list = matrix_list_1 + matrix_list_2
+            my_matrix_list = matrix_list_by_user(request.user)
+
+        image_list = Image.objects.filter(owner=request.user).filter(active=True)
+        server_list = Server.objects.all()
+
+    data = { 'matrix_list': matrix_list, 'my_matrix_list': my_matrix_list, 'image_list': image_list, 'server_list': server_list }
+
+    return render(request, 'about/mailer.html', data)
 
 
 #
@@ -1761,7 +1814,7 @@ def new_server(request):
 
                 server.set_owner(request.user)
 
-                cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+                cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
                 
                 encryptedPwd = cipher.encrypt(server.pwd).decode()
 
@@ -1795,7 +1848,7 @@ def view_server(request, server_id):
 
     server = get_object_or_404(Server, pk=server_id)
     
-    cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+    cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
     
     decryptedPwd = cipher.decrypt(server.pwd)
 
@@ -1871,7 +1924,7 @@ def edit_server(request, server_id):
             
                     server = form.save(commit=False)
 
-                    cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+                    cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
                     
                     encryptedPwd = cipher.encrypt(server.pwd).decode()
 

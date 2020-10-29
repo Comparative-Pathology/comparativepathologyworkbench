@@ -191,7 +191,34 @@
 		</div>
 
 	</div>
-	    
+
+	<div class="col-md-3">
+
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Registration</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Register to use the Workbench</p>
+		
+				<a href="{% url 'signup' %}">
+					<button class="save btn btn-danger">Register &raquo;</button>
+				</a>
+	
+			</div>
+
+		</div>
+
+	</div>
 
 {% else %}
 	    
@@ -259,44 +286,6 @@
 
 {% endif %}
 	    
-{% if credential_flag == '' %}
-
-	<div class="col-md-3">
-
-		<div class="card text-center">
-
-			<div class="card-header">
-				Comparative Pathology Workbench
-			</div>
-
-			<div class="card-body">
-
-				<h5 class="card-title">Registration</h5>
-		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
-	
-				<p>Register to use the Workbench</p>
-		
-				<a href="{% url 'signup' %}">
-					<button class="save btn btn-danger">Register &raquo;</button>
-				</a>
-	
-			</div>
-
-		</div>
-
-	</div>
-
-{% else %}
-
-	<div class="col-md-3">
-
-	</div>
-	    
-{% endif %}
-
 	<div class="col-md-2">
 
 	</div>

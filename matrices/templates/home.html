@@ -283,6 +283,35 @@
 	</div>
 	    
 	{% endif %}
+	
+	<div class="col-md-3">
+
+		<div class="card text-center">
+
+			<div class="card-header">
+				Comparative Pathology Workbench
+			</div>
+
+			<div class="card-body">
+
+				<h5 class="card-title">Logout</h5>
+		
+				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
+					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
+				</a>
+	
+				<p>Logout of the Workbench</p>
+		
+				<a href="{% url 'logout' %}">
+					<button class="save btn btn-danger">Logout &raquo;</button>
+				</a>
+	
+			</div>
+
+		</div>
+
+	</div>
+
 
 {% endif %}
 	    

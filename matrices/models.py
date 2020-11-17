@@ -126,7 +126,7 @@ class Matrix(models.Model):
     
         columnCount = self.get_column_count()
         rowCount = self.get_row_count()
-    
+
         cells = Cell.objects.filter(matrix=self.id)
         
         matrix_cells=[[0 for cc in range(columnCount)] for rc in range(rowCount)]

@@ -20,9 +20,8 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
         return_flag = False
         
         # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
         # Write permissions are allowed if the user is a SuperUser.
-        if request.method in permissions.SAFE_METHODS or request.user.is_superuser == True:
+        if request.user.is_superuser == True:
         
             return_flag = True
         
@@ -63,8 +62,8 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
         return_flag = False
         
         # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS or request.user.is_superuser == True:
+        # Write permissions are allowed if the user is a SuperUser.
+        if request.user.is_superuser == True:
         
             return_flag = True
         
@@ -90,11 +89,6 @@ class ImageIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
 
         return_flag = False
         
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:
-            return_flag = True
-
         # Write permissions are allowed for the owner of the image.
         if obj.owner == request.user:
             return_flag = True

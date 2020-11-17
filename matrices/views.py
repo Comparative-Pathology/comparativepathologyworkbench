@@ -117,6 +117,12 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
     serializer_class = MatrixSerializer
 
+
+    def list(self, request, *args, **kwargs):
+
+        return Response(data='Bench LIST Not Available')
+
+
     def destroy(self, request, *args, **kwargs):
 
         matrix = self.get_object()
@@ -220,6 +226,11 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     permission_classes = ( permissions.IsAuthenticated,
                            ImageIsReadOnlyOrIsAdminOrIsOwner )
+
+
+    def list(self, request, *args, **kwargs):
+
+        return Response(data='Image LIST Not Available')
 
 
 #

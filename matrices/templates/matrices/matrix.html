@@ -6,32 +6,64 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
+<div>
 
-			<ol class="breadcrumb subheading">
-	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+	<ul class="my-breadcrumb">
+
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 		
-				<li class="breadcrumb-item">
-					<a href="{% url 'index' %}">
-						Workbenches
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'index' %}">Workbenches</a>
+		</li>
+		
+		<li>
+			CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} :
+
+			<!-- <a href="#my_popup_info"> -->
+				<!-- <i class="fa fa-info fa-lg" title="Bench Details 3"></i> -->
+				<!-- <span class="sr-only">Bench Details</span> -->
+			<!-- </a> -->
+			
+			<button type="button" class="collapsible">
+				<a href="#"><i class="fa fa-info fa-lg" title="Bench Details"></i></a>
+			</button>
+
+			<div class="collapsible-content">
+  
+				<dl>
+
+					<dt>Id:</dt>
+					<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
+
+					<dt>Title:</dt>
+					<dd>{{ matrix.title }}</dd>
+
+					<dt>Description:</dt>
+					<dd>{{ matrix.description|truncatechars:100 }}</dd>
+
+					<dt>Owner:</dt>
+					<dd>{{ matrix.owner.username }}</dd>
+			
+					<dt>Cell Height:</dt>
+					<dd>{{ matrix.height }}</dd>
+			
+					<dt>Cell Width:</dt>
+					<dd>{{ matrix.width }}</dd>
 	
-				<li class="breadcrumb-item active">
-					CPW:{{ matrix.id|stringformat:"06d" }} : 
-					<a class="btn-expand toggle-info" data-toggle="collapse" href="#matrix_info" role="button" aria-expanded="false" aria-controls="matrix_info">
-						<i class="fa fa-info fa-lg" title="Bench Details"></i>
-						<span class="sr-only">Bench Details</span>
-					</a>
+					<dt>Created:</dt>
+					<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+			
+					<dt>Last Modified:</dt>
+					<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
+
+				</dl>
+			
+			</div>
 
 {% if authority.is_viewer %}
 
@@ -41,11 +73,7 @@
 
 		{% if image_list %}
 
-					
-					<a class="btn-expand toggle-sidebar" href="#matrix_sidebar" role="button" aria-expanded="false" aria-controls="matrix_sidebar">
-						<i aria-hidden="true" id="indicator-2" class="fa fa-cart-arrow-down fa-lg" title="Image Basket"></i>
-						<span class="sr-only">Image Basket</span>
-					</a>
+			<a class="toggle-sidebar" href="#matrix_sidebar" role="button"><i id="indicator-2" class="fa fa-cart-arrow-down fa-lg" title="Image Basket"></i><span class="sr-only">Image Basket</span></a>
 
 		{% endif %}
 
@@ -53,55 +81,177 @@
 
 {% endif %}
 
-				</li>
 
-			</ol>
+		</li>
 
-		</div>
-
-		<div class="collapse subheading" id="matrix_info">
-
-			<div class="card bg-custom card-body">
-  
-				<dl class="row">
-
-					<dt class="col-sm-2">Id:</dt>
-					<dd class="col-sm-2">CPW:{{ matrix.id|stringformat:"06d" }}</dd>
-
-					<dt class="col-sm-2">Title:</dt>
-					<dd class="col-sm-6">{{ matrix.title }}</dd>
-
-					<dt class="col-sm-2">Owner:</dt>
-					<dd class="col-sm-2">{{ matrix.owner.username }}</dd>
-			
-					<dt class="col-sm-2">Cell Height:</dt>
-					<dd class="col-sm-2">{{ matrix.height }}</dd>
-			
-					<dt class="col-sm-2">Cell Width:</dt>
-					<dd class="col-sm-2">{{ matrix.width }}</dd>
-	
-					<dt class="col-sm-2">Description:</dt>
-					<dd class="col-sm-10">{{ matrix.description|truncatechars:100 }}</dd>
-
-					<dt class="col-sm-2">Created:</dt>
-					<dd class="col-sm-2">{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
-			
-					<dt class="col-sm-2">Last Modified:</dt>
-					<dd class="col-sm-6">{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
-
-				</dl>
-			
-			</div>
-
-		</div>
-	
-	</div>
+	</ul>
 
 </div>
 
-<div class="row">
 
-	<div class="col-md-1 invisible" id="matrix_sidebar">
+<!-- Pop-ups -->
+
+<!-- The Bench Information Pop-up -->
+
+<a id="my_popup_info" href="#" class="my-test-popup"></a>
+			
+<div style="width: 500px; height: 400px; margin-left: -250px; margin-top: -200px;" class="my-test-popup">
+	<h3>Bench Details</h3>
+	<dl>
+		<dt>Id:</dt>
+		<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
+
+		<dt>Title:</dt>
+		<dd>{{ matrix.title }}</dd>
+
+		<dt>Owner:</dt>
+		<dd>{{ matrix.owner.username }}</dd>
+			
+		<dt>Cell Height:</dt>
+		<dd>{{ matrix.height }}</dd>
+			
+		<dt>Cell Width:</dt>
+		<dd>{{ matrix.width }}</dd>
+	
+		<dt>Description:</dt>
+		<dd>{{ matrix.description|truncatechars:100 }}</dd>
+
+		<dt>Created:</dt>
+		<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+			
+		<dt>Last Modified:</dt>
+		<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
+	</dl>
+	<a class="close x" href="#">x</a>
+	<a class="close word" href="#">Close</a>
+</div>  
+
+
+<!-- The Bench Commentary Pop-up -->
+
+<a id="my_popup_bench" href="#" class="my-test-popup"></a>
+										
+<div style="width: 900px; height: 700px; margin-left: -450px; margin-top: -350px;" class="my-test-popup">
+	<h3>Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h3>
+	<dl>
+		<dt>Bench Title</dt>
+		<dd>{{ matrix_comments.title }}</dd>
+
+		<dt>Description</dt>
+		<dd>{{ matrix_comments.description|truncatechars:20 }}</dd>
+	</dl>
+
+		{% if matrix_comments.comment_list %}
+		
+	<table>
+		<tr>
+			<th width="100px">Date</th>
+			<th width="100px">Time</th>
+			<th width="100px">Author</th>
+			<th>Comment</th>
+		</tr>
+
+			{% for comment in matrix_comments.comment_list %}
+
+		<tr>
+			<td>
+				{{ comment.date }} 
+			</td>
+			<td>
+				{{ comment.time }}
+			</td>
+			<td>
+				{{ comment.author_name }}
+			</td>
+			<td>
+				{{ comment.content|safe|truncatechars:50 }}
+			</td>
+		</tr>
+			
+			{% endfor %}
+	</table>
+
+		{% endif %}
+
+	<a class="close x" href="#">x</a>
+	<a class="close word" href="#">Close</a>
+</div>
+
+
+<!-- The Cell Modal Pop-ups -->
+
+{% if matrix_cells_comments %}
+
+	{% for cell in matrix_cells_comments %}
+
+<a id="my_popup_{{ cell.id }}" href="#" class="my-test-popup"></a>
+										
+<!-- Modal -->
+<div style="width: 900px; height: 700px; margin-left: -450px; margin-top: -350px;" class="my-test-popup">
+	<h3>Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.title }}"</h5>
+	<dl>
+		<dt>Cell Title</dt>
+		<dd>{{ cell.title }}</dd>
+
+		<dt>Description</dt>
+		<dd>{{ cell.description|truncatechars:20 }}</dd>
+	</dl>
+		
+		{% if cell.viewer_url != '' %}
+
+	<p>	
+		<a href="{{ cell.viewer_url }}" target="_blank"><img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width: 250px; height: 250px;" src="{{ cell.birdseye_url }}" ></a>
+	</p>
+
+		{% endif %}
+
+		{% if cell.comment_list %}
+		
+	<table>
+		<tr>
+			<th width="100px">Date</th>
+			<th width="100px">Time</th>
+			<th width="100px">Author</th>
+			<th>Comment</th>
+		</tr>
+
+			{% for comment in cell.comment_list %}
+
+		<tr>
+			<td>
+				{{ comment.date }} 
+			</td>
+			<td>
+				{{ comment.time }}
+			</td>
+			<td>
+				{{ comment.author_name }}
+			</td>
+			<td>
+				{{ comment.content|safe|truncatechars:50 }}
+			</td>
+		</tr>
+			
+			{% endfor %}
+
+	</table>
+		
+		{% endif %}
+
+	<a class="close x" href="#">x</a>
+	<a class="close word" href="#">Close</a>
+</div>
+					
+	{% endfor %}
+
+{% endif %}
+
+
+<!-- Main Data Panel -->
+
+<div class="grid-container">
+
+	<div class="grid-item invisible" id="matrix_sidebar">
 
 {% if authority.is_viewer %}
 
@@ -114,12 +264,15 @@
 			{% for image in image_list %}
 	
 				{% if forloop.first %}
+
 	
-    	<table border="0" class="basket">
+<!-- Image Basket -->
+
+		<table border="0" class="basket">
 
 				{% endif %}
 	
-        	<tr>
+			<tr>
 
 				<td id="image_{{ image.id }}">
 
@@ -133,67 +286,63 @@
 		
 				{% endif %}
 
-						<div style="width:115px; height:115px;" class="image" align="right"> 
+						<div class="image" align="right">
 				
-							<a href="{{ image.viewer_url  }}" target="_blank">
-				
-								<img alt="{{ image.name }}" title="{{ image.name }}" style="width:95px; height:95px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}"> 
-				
-							</a>
+							<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" title="{{ image.name }}" src="{{ image.birdseye_url }}"> </a>
 				
 						</div>
 				
 					</div>							
 
-	            </td>
+				</td>
 
 			</tr>
 
 				{% if forloop.last %}
 	
-	        <tr>
+			<tr>
 
-    	        <td>&nbsp;</td>
-
-			</tr>
-
-	        <tr>
-
-	            <td>&nbsp;</td>
+				<td>&nbsp;</td>
 
 			</tr>
 
-	    </table>
+			<tr>
+
+				<td>&nbsp;</td>
+
+			</tr>
+
+		</table>
 
 				{% endif %}
 	
-		    {% endfor %}
+			{% endfor %}
 
 		{% else %}
 
-    	<table border="0" class="basket">
-        	<tr>
+		<table border="0" class="basket">
+			<tr>
 				<td>
-					<div style="width:115px; height:115px;" class="image" align="right"> 
+					<div class="image" style="font-size: x-small;" align="right"> 
 						No Images are available!
 					</div>
-	            </td>
+				</td>
 			</tr>
-	    </table>
+		</table>
 
 		{% endif %}
 
 	{% else %}
 
-    	<table border="0" class="basket">
-        	<tr>
+		<table border="0" class="basket">
+			<tr>
 				<td>
-					<div style="width:115px; height:115px;" class="image" align="right"> 
+					<div class="image" style="font-size: x-small;" align="right"> 
 						No Images are allowed yet!
 					</div>
-	            </td>
+				</td>
 			</tr>
-	    </table>
+		</table>
 
 	{% endif %}
 
@@ -201,203 +350,15 @@
 
 	</div>
 
-	<div class="col-md-11" id="content">
 
-		<!-- Modal -->
-		<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ matrix_comments.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			
-			<div class="modal-dialog modal-lg" role="document">
-			
-			    <div class="modal-content">
-				
-					<div class="modal-header">
-
-				    	<h5 class="modal-title" id="exampleModalLongTitle">Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h5>
-				
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				        	<span aria-hidden="true">&times;</span>
-				        </button>
-				    
-				    </div>
-				    
-				    <div class="modal-body">
-        
-						<dl class="row">
-
-							<dt class="col-sm-2">Matrix Title</dt>
-							<dd class="col-sm-2">{{ matrix_comments.title }}</dd>
-
-							<dt class="col-sm-2">Description</dt>
-							<dd class="col-sm-2">{{ matrix_comments.description|truncatechars:20 }}</dd>
-
-						</dl>
-
-		{% if matrix_comments.comment_list %}
-		
-						<table>
-
-				        	<tr>
-	            				<th width="100px">Date</th>
-					    	    <th width="100px">Time</th>
-				        	    <th width="100px">Author</th>
-            					<th>Comment</th>
-							</tr>
-
-			{% for comment in matrix_comments.comment_list %}
-
-				    	    <tr>
-            					<td>
-				
-					{{ comment.date }} 
-				
-								</td>
-    	        				<td>
-
-					{{ comment.time }}
-				
-								</td>
-    	        				<td>
-
-				{{ comment.author_name }}
-
-								</td>
-	            				<td>
-
-				{{ comment.content|safe|truncatechars:50 }}
-				
-								</td>
-				
-				    	    </tr>
-			
-			{% endfor %}
-
-						</table>
-		
-		{% endif %}
-
-					</div>
-				    
-				    <div class="modal-footer">
-				    
-				    	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				    
-				    </div>
-				
-				</div>
-				
-			</div>
-		
-		</div>
-					
-	
-{% if matrix_cells_comments %}
-
-	{% for cell in matrix_cells_comments %}
-
-		<!-- Modal -->
-		<div class="modal bd-example-modal-lg" id="exampleModalCenter_{{ cell.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		
-			<div class="modal-dialog modal-lg" role="document">
-		    	
-		    	<div class="modal-content">
-			    	
-			    	<div class="modal-header">
-				    	
-				    	<h5 class="modal-title" id="exampleModalLongTitle">Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.matrix.title }}"</h5>
-				
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				        	<span aria-hidden="true">&times;</span>
-				        </button>
-					
-					</div>
-				    
-				    <div class="modal-body">
-        
-						<dl class="row">
-
-							<dt class="col-sm-2">Cell Title</dt>
-							<dd class="col-sm-2">{{ cell.title }}</dd>
-
-							<dt class="col-sm-2">Description</dt>
-							<dd class="col-sm-2">{{ cell.description|truncatechars:20 }}</dd>
-
-						</dl>
-		
-		{% if cell.viewer_url != '' %}
-
-						<p>	
-							<a href="{{ cell.viewer_url }}" target="_blank">
-								<img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width:450px; height:450px;" src="{{ cell.birdseye_url }}" >
-							</a>
-						</p>
-
-		{% endif %}
-
-		{% if cell.comment_list %}
-		
-						<table>
-
-				        	<tr>
-	            				<th width="100px">Date</th>
-				    	        <th width="100px">Time</th>
-        	    				<th width="100px">Author</th>
-				            	<th>Comment</th>
-							</tr>
-
-			{% for comment in cell.comment_list %}
-
-				    	    <tr>
-            					<td>
-
-				{{ comment.date }} 
-
-								</td>
-				    	        <td>
-				
-				{{ comment.time }}
-				
-								</td>
-				    	        <td>
-
-				{{ comment.author_name }}
-				
-								</td>
-					            <td>
-				
-				{{ comment.content|safe|truncatechars:50 }}
-				
-								</td>
-					    	</tr>
-			
-			{% endfor %}
-
-						</table>
-		
-		{% endif %}
-
-					</div>
-				    
-				    <div class="modal-footer">
-				    
-				    	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-					
-	{% endfor %}
-
-{% endif %}
+<!-- The Bench -->
 
 {% if rows %}
 
-		<div id="responsive-table" class="table-responsive">
+	<div class="grid-item">
+		<div>
 	
-			<table id="myTable" class="bench">
+			<table id="myTable" class="bench" border="0">
 		
 				<tbody>
 		
@@ -407,37 +368,38 @@
 			
 		{% for column in columns %}
 
-	    	{% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
+			{% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
+
+
+<!-- The Master Cell -->
 
 				{% if matrix_cell.is_master %}
 
 						<td id="{{ matrix_cell.id }}">
 				
-							<div class="master">
-				
-								<div class="dropdown">
-	
-									<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropmaster">
-										<i class="fa fa-bars"></i>
-									</a>
+							<div class="master-cell">
 
-  									<div class="dropdown-content dropdown-menu" aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
+								<table border="0">
+
+									<tr>
+
+										<td align="center" width={{ matrix.width }}px>
+										
+											<div class="my-dropdown">
+											
+												<a id="dropdown_{{ matrix_cell.id }}_link" class="my-dropbtn"><i class="fa fa-bars"></i></a>
+
+  												<div class="my-dropdown-btn-content">
 
 					{% if authority.is_viewer %}
 					
-										<a class="dropdown-item" href="{% url 'detail_matrix' matrix.id %}">
-											<i class="fa fa-eye"></i> View Bench Details
-										</a>
+													<a href="{% url 'detail_matrix' matrix.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span>View Bench Details</a>
 					
 					{% else %}
 
-										<a class="dropdown-item" href="{% url 'detail_matrix' matrix.id %}">
-											<i class="fa fa-eye"></i> View Bench Details
-										</a>
+													<a href="{% url 'detail_matrix' matrix.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span>View Bench Details</a>
 					
-										<a class="dropdown-item" href="{% url 'edit_matrix' matrix.id %}">
-											<i class="fa fa-pencil-alt"></i> Edit Bench Details
-										</a>
+													<a href="{% url 'edit_matrix' matrix.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Bench Details</a>
 
 					{% endif %}
 
@@ -445,13 +407,9 @@
 
 						{% if matrix.blogpost != '' %}
 
-										<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix.id }}">
-											<i class="fa fa-eye"></i> <em>View Bench Commentary</em>
-										</a>
+													<a href="#my_popup_bench"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Bench Commentary</em></a>
 
-										<a class="dropdown-item" href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank">
-											<i class="fa fa-edit"></i> Edit Bench Commentary
-										</a>
+													<a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
 					
 						{% endif %}
 
@@ -461,40 +419,41 @@
 					
 					{% else %}
 
-										<div class="dropdown-divider"></div>
+													<a href="{% url 'delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>DELETE Bench </a>
 
-										<a class="dropdown-item" href="{% url 'delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')">
-											<i class="fa fa-trash-alt"></i> DELETE Bench 
-										</a>
+													<a href="{% url 'add_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
 
-										<a class="dropdown-item" href="{% url 'add_column' matrix.id %}">
-											<i class="fa fa-angle-double-right"></i> APPEND Column
-										</a>
+													<a href="{% url 'delete_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
 
-										<a class="dropdown-item" href="{% url 'delete_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')">
-											<i class="fa fa-angle-double-left"></i> Delete LAST Column
-										</a>
+													<a href="{% url 'add_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
 
-										<a class="dropdown-item" href="{% url 'add_row' matrix.id %}">
-											<i class="fa fa-angle-double-down"></i> APPEND Row
-										</a>
-
-										<a class="dropdown-item" href="{% url 'delete_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')">
-											<i class="fa fa-angle-double-up"></i> Delete LAST Row
-										</a>
+													<a href="{% url 'delete_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
 
 					{% endif %}
-									</div>
 
-								</div>
-		
+  												</div>
+					
+											</div>
+
+										</td>
+
+									</tr>
+
+								</table>
+
 							</div>
 
 						</td>
 
 				{% endif %}
 
+
+<!-- Row Header Cells -->
+
 				{% if matrix_cell.is_column_header and not matrix_cell.is_row_header %}
+
+
+<!-- The Bottom-Most Row Header Cell -->
 
 					{% if matrix.get_max_row == matrix_cell.ycoordinate %}
 
@@ -510,20 +469,8 @@
 		
 						{% endif %}
 
-								<div style="width:34px; height:34px;" class="bottomrow">
+								<div class="row-header-bottom-cell">
 
-									<table border="0">
-
-										<tr>
-
-											<td align="center">
-
-											</td>
-
-										</tr>
-
-									</table>
-				
 								</div>
 
 							</div>
@@ -531,6 +478,9 @@
 						</td>
 
 					{% endif %}
+
+
+<!-- The Other Row Header Cells -->
 
 					{% if matrix.get_max_row != matrix_cell.ycoordinate %}
 
@@ -546,17 +496,17 @@
 		
 						{% endif %}
 
-								<div style="height:{{ matrix.height }}px;" class="headrow">
+								<div class="row-header-cell" style="height:{{ matrix.height|add:"10" }}px;">
 
 									<table border="0">
 
 										<tr>
 
-											<td align="center" height={{ matrix.height|add:"-40" }}px>
+											<td align="center">
 
-												<div class="dropdown">
+												<div class="my-dropdown">
 
-													<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
+													<a id="dropdown_{{ matrix_cell.id }}_link" class="my-dropbtn">
 
 						{% if matrix_cell.title == '' %}
 
@@ -564,43 +514,31 @@
 												
 						{% else %}
 
-														<p class="vertical_text">{{ matrix_cell.title|truncatechars:20 }}</p>
+														<p class="vertical_text">
+														{{ matrix_cell.title|truncatechars:20 }}
+														</p>
 
 						{% endif %}
 	
 													</a>
 
-													<div class="dropdown-content dropdown-menu"  aria-labelledby="dropdown_{{ matrix_cell.id }}_link">
+													<div class="my-dropdown-btn-content">
 
 						{% if authority.is_viewer %}
 
-														<a class="dropdown-item" href="{% url 'view_cell' matrix.id matrix_cell.id %}">
-															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-														</a>
+														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:20 }}</em></a>
 								
 						{% else %}
 
-														<a class="dropdown-item" href="{% url 'view_cell' matrix.id matrix_cell.id %}">
-															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-														</a>
+														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:20 }}</em></a>
 								
-														<a class="dropdown-item" href="{% url 'edit_cell' matrix.id matrix_cell.id %}">
-															<i class="fa fa-pencil-alt"></i> Edit Row Header
-														</a>
+														<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Row Header</a>
 
-														<div class="dropdown-divider"></div>
+														<a href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}"><i class="fa fa-angle-up"></i><span class="menu-item">&#9;</span>Add Row Above</a>
 
-														<a class="dropdown-item" href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}">
-															<i class="fa fa-angle-up"></i> Add Row Above
-														</a>
+														<a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Row</a>
 
-														<a class="dropdown-item" href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')">
-															<i class="fa fa-trash-alt"></i> Delete This Row
-														</a>
-
-														<a class="dropdown-item" href="{% url 'add_row_below' matrix.id forloop.parentloop.counter0 %}">
-															<i class="fa fa-angle-down"></i> Add Row Below
-														</a>
+														<a href="{% url 'add_row_below' matrix.id forloop.parentloop.counter0 %}"><i class="fa fa-angle-down"></i><span class="menu-item">&#9;</span>Add Row Below</a>
 
 						{% endif %}
 
@@ -624,7 +562,13 @@
 
 				{% endif %}
 				
+				
+<!-- Column Header Cells -->
+
 				{% if not matrix_cell.is_column_header and matrix_cell.is_row_header %}
+
+
+<!-- The Right-Most Column Header Cell -->
 
 					{% if matrix.get_max_column == matrix_cell.xcoordinate %}
 
@@ -640,7 +584,7 @@
 		
 						{% endif %}
 
-								<div style="width:34px; height:34px;" class="bottomcol">
+								<div class="column-header-rightmost-cell">
 
 									<table border="0">
 
@@ -662,6 +606,9 @@
 
 					{% endif %}
 
+
+<!-- The Other Row Header Cells -->
+
 					{% if matrix.get_max_column != matrix_cell.xcoordinate %}
 
 						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
@@ -676,17 +623,24 @@
 
 						{% endif %}
 
-								<div style="width:{{ matrix.width }}px;" class="headcol">
+								<div class="column-header-cell"> 
 
 									<table border="0">
 
 										<tr>
 
-											<td align="center" width={{ matrix.width|add:"-40" }}px>
+						{% if matrix_cell.title == '' %}
 
-												<div class="dropdown">
+											<td align="right" width={{ matrix.width }}px>
+
+						{% else %}
+											<td align="left" width={{ matrix.width }}px>
+
+						{% endif %}
+
+												<div class="my-dropdown">
 										
-													<a id="dropdown_{{ matrix_cell.id }}" data-toggle="dropdown" aria-haspopup="true" class="dropbtn">
+													<a id="dropdown_{{ matrix_cell.id }}" class="my-dropbtn">
 
 						{% if matrix_cell.title == '' %}
 
@@ -700,37 +654,23 @@
 
 													</a>
 									
-													<div class="dropdown-content dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<div class="my-dropdown-btn-content">
 
 						{% if authority.is_viewer %}
 
-														<a class="dropdown-item" href="{% url 'view_cell' matrix.id matrix_cell.id %}">
-															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-														</a>
+														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:20 }}</em></a>
 
 						{% else %}
 
-														<a class="dropdown-item" href="{% url 'view_cell' matrix.id matrix_cell.id %}">
-															<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-														</a>
+														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:20 }}</em></a>
 
-														<a class="dropdown-item" href="{% url 'edit_cell' matrix.id matrix_cell.id %}">
-															<i class="fa fa-pencil-alt"></i> Edit Column Header
-														</a>
+														<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Column Header</a>
 
-														<div class="dropdown-divider"></div>
+														<a href="{% url 'add_column_left' matrix.id forloop.counter0	%}"><i class="fa fa-angle-left"></i><span class="menu-item">&#9;</span>Add Column Left</a>
 
-														<a class="dropdown-item" href="{% url 'add_column_left' matrix.id forloop.counter0	%}">
-															<i class="fa fa-angle-left"></i> Add Column Left
-														</a>
-
-														<a class="dropdown-item" href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')">
-															<i class="fa fa-trash-alt"></i> Delete This Column
-														</a>
+														<a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Column</a>
 	
-														<a class="dropdown-item" href="{% url 'add_column_right' matrix.id forloop.counter0 %}">
-															<i class="fa fa-angle-right"></i> Add Column Right
-														</a>
+														<a href="{% url 'add_column_right' matrix.id forloop.counter0 %}"><i class="fa fa-angle-right"></i><span class="menu-item">&#9;</span>Add Column Right</a>
 
 						{% endif %}
 
@@ -754,7 +694,13 @@
 
 				{% endif %}
 
+
+<!-- Non Header Cells -->
+
 				{% if not matrix_cell.is_column_header and not matrix_cell.is_row_header %}
+
+
+<!-- Ordinary Cells -->
 
 					{% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
 				
@@ -772,93 +718,63 @@
 				
 						{% endif %}
 
+
 								<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
-
-									<div class="dropdown dropleft">
-
-										<a id="dropdown_{{ matrix_cell.id }}_link" data-toggle="dropdown" aria-haspopup="true" class="dropcell">
-											<i class="fa fa-bars"></i>
-										</a>
 								
-								        <ul class="dropdown-content dropdown-menu">
+									<div class="cell-title" style="width:{{ matrix.width|add:"-20" }}px;">{{ matrix_cell.title|truncatechars:20 }}
+									</div>
+	
+									<div class="my-dropdown">
+
+										<a id="dropdown_{{ matrix_cell.id }}_link" class="my-dropcell"><i class="fa fa-bars"></i></a>
+								
+										<div class="my-dropdown-cell-content">
 
 						{% if authority.is_viewer %}
 
-											<li>								
-												<a class="dropdown-item" href="{% url 'view_cell' matrix.id matrix_cell.id %}">
-													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-												</a>
-											</li>								
+											<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:20 }}</em></a>
 
 						{% else %}
 
-											<li>								
-												<a class="dropdown-item" href="{% url 'view_cell' matrix.id matrix_cell.id %}">
-													<i class="fa fa-eye"></i> <em>{{ matrix_cell.title|truncatechars:20 }}</em>
-												</a>
-											</li>								
+											<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:20 }}</em></a>
 
-											<li>								
-												<a class="dropdown-item" href="{% url 'edit_cell' matrix.id matrix_cell.id %}">
-													<i class="fa fa-pencil-alt"></i> Edit Cell
-												</a>
-											</li>								
+											<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 
 						{% endif %}
 
-											<li>								
-												<a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter_{{ matrix_cell.id }}">
-													<i class="fa fa-eye"></i> <em>View Commentary</em>
-												</a>
-											</li>								
+											<a href="#my_popup_{{ matrix_cell.id }}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Commentary</em></a>
 
 						{% if matrix_link != '' %}
 
 							{% if matrix_cell.blogpost != '' %}
 
-											<li>								
-												<a class="dropdown-item" href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank">
-													<i class="fa fa-edit"></i> Edit Commentary
-												</a>
-											</li>								
+											<a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Commentary</a>
 					
 							{% endif %}
 		
 						{% endif %}
 
-										</ul> 
+										</div> 
 
 									</div>
 
 									<div align="left">
 
 						{% if matrix_cell.image %}
-	
+						
 							{% if matrix_cell.image.roi == 0 %}
 						
-										<p>	
-											<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-												<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
-											</a>
-										</p>
+										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank"><img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-20" }}px; height:{{ matrix.height|add:"-20" }}px;" src="{{ matrix_cell.image.birdseye_url }}" ></a>
 
 							{% else %}
 	
-										<p>	
-											<a href="{{ matrix_cell.image.viewer_url }}" target="_blank">
-												<img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="{{ matrix_cell.image.birdseye_url }}" >
-											</a>
-										</p>
+										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank"><img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-20" }}px; height:{{ matrix.height|add:"-20" }}px;" src="{{ matrix_cell.image.birdseye_url }}" ></a>
 
 							{% endif %}
 	
 						{% else %}
 
-										<p class="text-left">
-											<a href="#">
-												<img alt="Comparative Pathology Workbench Logo" title="Comparative Pathology Workbench Logo" style="width:{{ matrix.width|add:"-40" }}px; height:{{ matrix.height|add:"-40" }}px;" src="/static/ccp-logo.png">
-											</a>
-										</p>
+										<a href="#"><img alt="Comparative Pathology Workbench Logo" title="Comparative Pathology Workbench Logo" style="width:{{ matrix.width|add:"-20" }}px; height:{{ matrix.height|add:"-20" }}px;" src="/static/ccp-logo.png"></a>
 							
 						{% endif %}
 	
@@ -871,6 +787,9 @@
 						</td>
 
 					{% endif %}
+
+
+<!-- Right-Most Footer Cells -->
 
 					{% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
 				
@@ -888,7 +807,7 @@
 				
 						{% endif %}
 
-								<div style="width:34px; height:{{ matrix.height }}px;" class="bottom" align="right">
+								<div class="footer-cell-right" style="height: {{ matrix.height|add:"10" }}px;">
 
 									<div align="left">
 
@@ -905,6 +824,9 @@
 						</td>
 
 					{% endif %}
+
+
+<!-- Bottom-Most Footer Cells -->
 
 					{% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
 				
@@ -922,7 +844,7 @@
 				
 						{% endif %}
 
-								<div style="width:{{ matrix.width }}px; height:34px;" class="bottom" align="right">
+								<div class="footer-cell-bottom">
 
 									<div align="left">
 
@@ -940,6 +862,9 @@
 
 					{% endif %}
 
+
+<!-- Bottom-Most and Right-Most Footer Cell -->
+
 					{% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
 				
 						{% csrf_token %}
@@ -956,7 +881,7 @@
 				
 						{% endif %}
 
-								<div style="width:34px; height:34px;" class="bottom" align="right">
+								<div class="footer-cell-right-bottom" align="right">
 
 									<div align="left">
 
@@ -990,7 +915,10 @@
 			</table>
 	
 		</div>
-		
+
+
+<!-- There are NO Cells - This should not happen! -->
+
 {% else %}
 
 		<h1>CPW:{{ matrix.id }}, "{{ matrix.title }}" has NO Cells</h1>
@@ -1009,57 +937,81 @@
 
 					</form>
 
-					<a href="{% url 'index' %}">
-						<button class="save btn btn-success">Back</button>
-					</a>
+					<a href="{% url 'index' %}"><button class="save btn btn-success">Back</button></a>
 			
 				</td>
 
 			</tr>
 
 		</table>
-
+		
 {% endif %}
 
 	</div>
 
 </div>
 
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />
+
 <script type="text/javascript">
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+	coll[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var content = this.nextElementSibling;
+		if (content.style.display === "block") {
+			content.style.display = "none";
+		} else {
+			content.style.display = "block";
+		}
+	});
+}
+
 
 function confirmation_cell(question) {
 
 	var defer = $.Deferred();
 	
 	$('<div></div>')
-    	.html(question)
-	    .dialog({
-    	    autoOpen: true,
-        	modal: true,
-	        title: 'Confirmation',
-    	    buttons: {
-        	    "SWAP": function () {
-            	    defer.resolve("swap");
-                	$(this).dialog("close");
-            	},
-	            "MOVE": function () {
-    	            defer.resolve("overwrite");
-        	        $(this).dialog("close");
-	            },
-	            "COPY": function () {
-    	            defer.resolve("overwrite_leave");
-        	        $(this).dialog("close");
-	            },
-	            "CLOSE": function () {
-	    	        $(this).dialog('destroy').remove();
-    		        window.location.reload();
-        		}
-    	    },
-        	close: function () {
-    	        $(this).dialog('destroy').remove();
-    	        window.location.reload();
-        	}
-	    });
+		.html(question)
+		.dialog({
+			autoOpen: true,
+			modal: true,
+			title: 'Confirmation',
+			buttons: {
+				"SWAP": function () {
+					defer.resolve("swap");
+					$(this).dialog("close");
+				},
+				"MOVE": function () {
+					defer.resolve("overwrite");
+					$(this).dialog("close");
+				},
+				"COPY": function () {
+					defer.resolve("overwrite_leave");
+					$(this).dialog("close");
+				},
+				"CLOSE": function () {
+					$(this).dialog('destroy').remove();
+					window.location.reload();
+				}
+			},
+			close: function () {
+				$(this).dialog('destroy').remove();
+				window.location.reload();
+			}
+		});
 	
 	return defer.promise();
 	
@@ -1070,26 +1022,26 @@ function confirmation_image(question) {
 	var defer = $.Deferred();
 	
 	$('<div></div>')
-    	.html(question)
-	    .dialog({
-    	    autoOpen: true,
-        	modal: true,
-	        title: 'Confirmation',
-    	    buttons: {
-	            "MOVE": function () {
-    	            defer.resolve("move");
-        	        $(this).dialog("close");
-	            },
-	            "CLOSE": function () {
-	    	        $(this).dialog('destroy').remove();
-    		        window.location.reload();
-        		}
-    	    },
-        	close: function () {
-    	        $(this).dialog('destroy').remove();
-    	        window.location.reload();
-        	}
-	    });
+		.html(question)
+		.dialog({
+			autoOpen: true,
+			modal: true,
+			title: 'Confirmation',
+			buttons: {
+				"MOVE": function () {
+					defer.resolve("move");
+					$(this).dialog("close");
+				},
+				"CLOSE": function () {
+					$(this).dialog('destroy').remove();
+					window.location.reload();
+				}
+			},
+			close: function () {
+				$(this).dialog('destroy').remove();
+				window.location.reload();
+			}
+		});
 	
 	return defer.promise();
 	
@@ -1102,70 +1054,70 @@ function onclick(source, target, source_type){
 		var question = "Do you want to SWAP Cells, MOVE or COPY the Source Cell to the Target Cell?";
 
 		confirmation_cell(question).then(function (answer) {
-    
-	    	if (answer == "swap"){
-        	
-			    $.ajax({
-    	    		url: '{% url 'swap_cells' %}',
-			        data: {
-        				'source': source,
-		        		'target': target,
-        				'source_type': source_type,
-	        			csrfmiddlewaretoken: '{{ csrf_token }}'
-			        },
-			        dataType: 'json',
-		    	    type: 'post',
-        			success: function (data) {
-        				if (data.failure) {
-        					alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
-	        			}
+	
+			if (answer == "swap"){
+			
+				$.ajax({
+					url: '{% url 'swap_cells' %}',
+					data: {
+						'source': source,
+						'target': target,
+						'source_type': source_type,
+						csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+					dataType: 'json',
+					type: 'post',
+					success: function (data) {
+						if (data.failure) {
+							alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
+						}
 						window.location.reload();
-        			}
-        		});
+					}
+				});
 			}
 
-	    	if (answer == "overwrite"){
-        
-			    $.ajax({
-        			url: '{% url 'overwrite_cell' %}',
-		        	data: {
-        				'source': source,
-			        	'target': target,
-    	    			'source_type': source_type,
-        				csrfmiddlewaretoken: '{{ csrf_token }}'
-		    	    },
-		        	dataType: 'json',
-			        type: 'post',
-    	    		success: function (data) {
-        				if (data.failure) {
-        					alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
-        				}
-        				window.location.reload();
-	        		}
-    	    	});
-    		}
-    	
-	    	if (answer == "overwrite_leave"){
-        
-			    $.ajax({
-    	    		url: '{% url 'overwrite_cell_leave' %}',
-			        data: {
-        				'source': source,
-		        		'target': target,
-        				'source_type': source_type,
-	        			csrfmiddlewaretoken: '{{ csrf_token }}'
-			        },
-			        dataType: 'json',
-		    	    type: 'post',
-        			success: function (data) {
-        				if (data.failure) {
-        					alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
-	        			}
-    	    			window.location.reload();
-        			}
-        		});
-	    	}
-    	
+			if (answer == "overwrite"){
+		
+				$.ajax({
+					url: '{% url 'overwrite_cell' %}',
+					data: {
+						'source': source,
+						'target': target,
+						'source_type': source_type,
+						csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+					dataType: 'json',
+					type: 'post',
+					success: function (data) {
+						if (data.failure) {
+							alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
+						}
+						window.location.reload();
+					}
+				});
+			}
+		
+			if (answer == "overwrite_leave"){
+		
+				$.ajax({
+					url: '{% url 'overwrite_cell_leave' %}',
+					data: {
+						'source': source,
+						'target': target,
+						'source_type': source_type,
+						csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+					dataType: 'json',
+					type: 'post',
+					success: function (data) {
+						if (data.failure) {
+							alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
+						}
+						window.location.reload();
+					}
+				});
+			}
+		
 			//window.location.reload();
 
 		});
@@ -1177,26 +1129,26 @@ function onclick(source, target, source_type){
 		var question = "Do you want to MOVE this Image to this CELL?";
 
 		confirmation_image(question).then(function (answer) {
-    
-	    	if (answer == "move"){
-        	
-			    $.ajax({
-    	    		url: '{% url 'import_image' %}',
-			        data: {
-        				'source': source,
-		        		'target': target,
-        				'source_type': source_type,
-	        			csrfmiddlewaretoken: '{{ csrf_token }}'
-			        },
-			        dataType: 'json',
-		    	    type: 'post',
-        			success: function (data) {
-        				if (data.failure) {
-        					alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
-	        			}
+	
+			if (answer == "move"){
+			
+				$.ajax({
+					url: '{% url 'import_image' %}',
+					data: {
+						'source': source,
+						'target': target,
+						'source_type': source_type,
+						csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+					dataType: 'json',
+					type: 'post',
+					success: function (data) {
+						if (data.failure) {
+							alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
+						}
 						window.location.reload();
-        			}
-        		});
+					}
+				});
 			}
 
 		});
@@ -1218,20 +1170,20 @@ function drop(ev){
 
 	ev.preventDefault();
 
-    var src = document.getElementById(ev.dataTransfer.getData("Text"));
+	var src = document.getElementById(ev.dataTransfer.getData("Text"));
 	var srcParent = src.parentNode;
 
 	var source_array = src.id.split("_",2);
 	var source_id = source_array[1];
 	var source_type = source_array[0];
 
-    var tgt = ev.currentTarget.firstElementChild;
+	var tgt = ev.currentTarget.firstElementChild;
 	var target_array = tgt.id.split("_",2);
 	var target_id = target_array[1];
 	var target_type = target_array[0];
 
 	//ev.currentTarget.replaceChild(src, tgt);
-    //srcParent.appendChild(tgt);
+	//srcParent.appendChild(tgt);
 
 	onclick(source_id, target_id, source_type);
 }
@@ -1248,35 +1200,35 @@ function dragCol(ev){
 function dropCol(ev){
 
 	ev.preventDefault();
-    var src = document.getElementById(ev.dataTransfer.getData("Text"));
-    var srcParent = src.parentNode;
+	var src = document.getElementById(ev.dataTransfer.getData("Text"));
+	var srcParent = src.parentNode;
 
 	var source_array = src.id.split("_",2);
 	var source = source_array[1];
-    
-    var tgt = ev.currentTarget.firstElementChild;
+	
+	var tgt = ev.currentTarget.firstElementChild;
 	var target_array = tgt.id.split("_",2);
 	var target = target_array[1];
 
-    //ev.currentTarget.replaceChild(src, tgt);
-    //srcParent.appendChild(tgt);
+	//ev.currentTarget.replaceChild(src, tgt);
+	//srcParent.appendChild(tgt);
 
-    $.ajax({
-        url: '{% url 'shuffle_columns' %}',
-        data: {
-        	'source': source,
-        	'target': target,
-        	csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-        dataType: 'json',
-        type: 'post',
-        success: function (data) {
-        	if (data.failure) {
-            	alert("Column Swap Failed! Source: " + data.source + "  Target: " + data.target);
-	        }
+	$.ajax({
+		url: '{% url 'shuffle_columns' %}',
+		data: {
+			'source': source,
+			'target': target,
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+		dataType: 'json',
+		type: 'post',
+		success: function (data) {
+			if (data.failure) {
+				alert("Column Swap Failed! Source: " + data.source + "  Target: " + data.target);
+			}
 			window.location.reload();
-        }
-    });
+		}
+	});
 }
 
 function allowRowDrop(ev){
@@ -1290,38 +1242,37 @@ function dragRow(ev){
 function dropRow(ev){
 
 	ev.preventDefault();
-    var src = document.getElementById(ev.dataTransfer.getData("Text"));
-    var srcParent = src.parentNode;
+	var src = document.getElementById(ev.dataTransfer.getData("Text"));
+	var srcParent = src.parentNode;
 
 	var source_array = src.id.split("_",2);
 	var source = source_array[1];
 
-    var tgt = ev.currentTarget.firstElementChild;
+	var tgt = ev.currentTarget.firstElementChild;
 	var target_array = tgt.id.split("_",2);
 	var target = target_array[1];
 
-    //ev.currentTarget.replaceChild(src, tgt);
-    //srcParent.appendChild(tgt);
+	//ev.currentTarget.replaceChild(src, tgt);
+	//srcParent.appendChild(tgt);
 
-    $.ajax({
-    	url: '{% url 'shuffle_rows' %}',
-        data: {
-        	'source': source,
-	        'target': target,
-          	csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-        dataType: 'json',
-        type: 'post',
-        success: function (data) {
-        	if (data.failure) {
-            	alert("Row Swap Failed! Source: " + data.source + "  Target: " + data.target);
-        	}
+	$.ajax({
+		url: '{% url 'shuffle_rows' %}',
+		data: {
+			'source': source,
+			'target': target,
+		  	csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+		dataType: 'json',
+		type: 'post',
+		success: function (data) {
+			if (data.failure) {
+				alert("Row Swap Failed! Source: " + data.source + "  Target: " + data.target);
+			}
 			window.location.reload();
-        }
-    });
+		}
+	});
 }
 
 </script>
-
 
 {% endblock %}

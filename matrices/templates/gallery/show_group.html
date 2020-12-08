@@ -6,102 +6,95 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'list_imaging_hosts' %}">
-					Sources
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_imaging_server' server.id %}">
-					{{ server.name }}
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
+		</li>
 	
-			<li class="breadcrumb-item active">
-				{{ group.name|truncatechars:20 }}
-			</li>	
-	
-		</ol>
-		
-	</div>
-			
+		<li>
+			{{ group.name|truncatechars:20 }}
+		</li>	
+
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>{{ group.name|truncatechars:20 }}</h1>
+
 		<br />
 
 {% if project_list %}
 
 	    <p>Group contains {{ project_count }} Projects:</p>
-    	<hr>
-    
-		<div class="row">
+
+		<hr>
+
+		<ul class="image-list">
 
     {% for project in project_list %}
 
-			<div class="col-md-4">
+	    	<li>
+
+				<div class="card-image-gallery">
 	
-				<h5>{{ project.name|truncatechars:20 }}</h5>
+					<div class="card-container-gallery">
 
-			    <p class="pull-left">
+						<h5>{{ project.name|truncatechars:20 }}</h5>
 
+        	    		<dl>
+        	    	    	<dt>Datasets</dt>
+        		        	<dd>{{ project.datasetCount }}</dd>
+		            	    <dt>Images</dt>
+		                	<dd>{{ project.imageCount }}</dd>
+		    	        </dl>
+
+						<br />
+					
+						<a href="{% url 'webgallery_show_project' server.id project.id %}"><button class="button button-view">View Project &raquo;</button></a>
+
+		        	</div>
+    
+					<br />
+					
 		{% if project.randomImageName != 'NONE'  %}
 		
-					<a href="{% url 'webgallery_show_image' server.id project.randomImageID %}">
-						<img class="img-thumbnail" alt="{{ project.randomImageName }}" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/>
-					</a>
+					<a href="{% url 'webgallery_show_image' server.id project.randomImageID %}"><img class="img-thumbnail" alt="{{ project.randomImageName }}" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/></a>
 
 		{% endif %}
 
-				</p>
-
-	        	<div class="pull-left">
-    
-            		<ul>
-        	        	<li>Datasets: {{ project.datasetCount }}</li>
-		                <li>Images: {{ project.imageCount }}</li>
-	    	        </ul>
-
-		    	</div>
-    
-    		    <div class="clearfix">
+					<br />
+					
     	    	</div>
-
-				<p style="margin-left:20px">
-					<a class="btn btn-default" href="{% url 'webgallery_show_project' server.id project.id %}" role="button">
-						<button class="save btn btn-info">View Project &raquo;</button>
-					</a>
-				</p>
-
-	    	    <div class="clearfix">
-	        	</div>
-    
-        	</div>
+    	    
+    	    </li>
 	
     {% endfor %}
 
-		</div>
+		</ul>
 
 {% else %}
 
@@ -109,13 +102,19 @@
 
 {% endif %}
 
+
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
-	
+		
+<br />
+<br />
+<br />
+<br />
+<br />
+
 {% endblock %}
 

@@ -2,55 +2,51 @@
 
 {% block content %}
 
-<div class="row">
+<!-- Breadcrumb Menu -->
 
-	<div class="col-md-12">
+<div>
 
-		<div>
-
-		<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 
-			<li class="breadcrumb-item active">
-				Login
-			</li>
+		<li>
+			Login
+		</li>
 	
-		</ol>
+	</ul>
 
-		</div>
-		
-	</div>
-			
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
-		<br />
+	<div class="standard-grid-item">
 	
-		<h2>Comparative Pathology Workbench Authorization</h2>
+		<h1>Comparative Pathology Workbench Authorization</h1>
 	
-		<br />
-
 		<p>Login here to access the Comparative Pathology Workbench.</p>
 
 		<hr>
 
 		<br />
 
+{% load form_tags widget_tweaks %}
+
 {% if form.errors %}
 
-		<p style="color: red">Your username and password didn't match. Please try again.</p>
+	<div class="panel-alert">
+
+		<p >Your username and password didn't match. Please try again.</p>
+	
+	</div>
 
 {% endif %}
 
@@ -62,28 +58,73 @@
 
 {% for field in form %}
 
-			<p>
-		
-				{{ field.label_tag }}<br>
-				{{ field }}<br>
-					
-			</p>
+			<div class="form-container">
 
-	{% for error in field.errors %}
+				<div class="form-row">
+
+					<div class="form-col-25">
+		
+	{{ field.label_tag }}
+					
+					</div>
+
+					<div class="form-col-75">
+
+	{% render_field field %}
+
+					</div>
+
+				</div>
+
+	{% if field.errors %}
+
+				<div class="form-row">
+
+					<div class="form-col-25">
+					</div>
+
+					<div class="form-col-75">
+
+						<ul>
+
+		{% for error in field.errors %}
 				
-			<p style="color: red">{{ error }}</p>
+							<li>{{ error }}</li>
 	
-	{% endfor %}
+		{% endfor %}
+
+						</ul>
+
+					</div>
+
+				</div>
+
+	{% endif %}
 
 	{% if field.help_text %}
+
+				<div class="form-row">
 	
-			<p><small style="color: grey">{{ field.help_text }}</small></p>
+					<div class="form-col-25">
+					</div>
+
+					<div class="form-col-75">
+	
+			{{ field.help_text|safe }}
+
+					</div>
+	
+				</div>
 	
 	{% endif %}
-		
+
+			</div>
+
 {% endfor %}
 
-			<button type="submit">Log in</button>
+			<br />
+
+			<button class="button button-add" type="submit">Log in</button>
 
 		</form>
 	
@@ -91,10 +132,10 @@
 
 		<p>If you have forgotten your password, <a href="{% url 'password_reset' %}">Click Here</a></p>
 
+
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>

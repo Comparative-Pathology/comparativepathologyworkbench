@@ -6,185 +6,238 @@
 
 {% block content %}
 
-<div class="row">
+<!-- Breadcrumb Menu -->
 
-	<div class="col-md-12">
+<div>
 
-		<div>
+{% if settings.LOCATION == 'CZI' %}
+
+<!-- #E3F2FD - Light Blue -->
+	<ul class="my-breadcrumb" style="background-color: #E3F2FD">
+
+{% elif settings.LOCATION == 'CANADA' %}
+
+<!-- F5776E - Salmon Pink-->
+	<ul class="my-breadcrumb" style="background-color: #F5776E;">
 		
-			<ol class="breadcrumb subheading">
-	
-				<li class="breadcrumb-item active">
-					Home
-				</li>
-	
-			</ol>
+{% elif settings.LOCATION == 'COELIAC' %}
 
-		</div>
-
-	</div>
+<!-- FCBA03 - Orangey Yellow -->
+	<ul class="my-breadcrumb" style="background-color: #FCBA03">
+		
+{% endif %}
+	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+	
+	</ul>
 
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="home-grid-container">
+
+	<div class="home-grid-item">
 	</div>
 
-	<div class="col-md-3">
+	<div class="home-grid-item">
 
-		<div class="card text-center">
+		<div class="card">
 
-			<div class="card-header">
-				Comparative Workbench for Atlas Data
-			</div>
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
 
-			<div class="card-body">
-
-				<h5 class="card-title">About</h5>
-		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
-
-				<p>Learn more about the Project</p>
+			<div class="card-container">
+			
+				<h3>About</h3>
 		
 				<br />
 
-				<a href="{% url 'about' %}">
-					<button class="save btn btn-info">About &raquo;</button>
-				</a>
+				<p>Learn more about the Project</p>
+				
+				<br />
+				<br />
+		
+				<a href="{% url 'about' %}"><button class="button button-view">About &raquo;</button></a>
 
 			</div>
-
+			
 		</div>
 
 	</div>
+	
+	<div class="home-grid-item">
+	</div>
 
-	<div class="col-md-3">
-    	
-		<div class="card text-center">
+	<div class="home-grid-item">
 
-			<div class="card-header">
-				Comparative Workbench for Atlas Data
-			</div>
+		<div class="card">
 
-			<div class="card-body">
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
 
-				<h5 class="card-title">Contributors</h5>
+			<div class="card-container">
+
+				<h3>Contributors</h3>
 		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
+				<br />
 
 				<p>Learn more about the Project Contributors</p>
 
 				<br />
 
-				<a href="{% url 'people' %}">
-					<button class="save btn btn-info">Contributors &raquo;</button>
-				</a>
+				<a href="{% url 'people' %}"><button class="button button-view">Contributors &raquo;</button></a>
 
 			</div>
 
 		</div>
 
 	</div>
-	    
-	<div class="col-md-3">
-    	
-		<div class="card text-center">
-
-			<div class="card-header">
-				The Centre for Comparative Pathology
-			</div>
-
-			<div class="card-body">
-
-				<h5 class="card-title">Centre for Comparative Pathology</h5>
-		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
 	
+	<div class="home-grid-item">
+	</div>
+
+	<div class="home-grid-item">
+
+		<div class="card">
+
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
+
+			<div class="card-container">
+
+				<h3>Centre for Comparative Pathology</h3>
+		
 				<p>Learn more about the Centre for Comparative Pathology</p>
 	
-				<a href="https://www.ed.ac.uk/comparative-pathology">
-					<button class="save btn btn-info">About &raquo;</button>
-				</a>
+				<br />
+
+				<a href="https://www.ed.ac.uk/comparative-pathology"><button class="button button-view">About &raquo;</button></a>
 
 			</div>
 
 		</div>
 
 	</div>
-	    
-	<div class="col-md-2">
-
+	
+	<div class="home-grid-item">
 	</div>
 
 </div>
 
+
 <br />
 
-<div class="row">
 
-	<div class="col-md-1">
+<div class="home-grid-container">
 
+	<div class="home-grid-item">
 	</div>
 
-	<div class="col-md-3">
-    	
-		<div class="card text-center">
+	<div class="home-grid-item">
 
-			<div class="card-header">
-				Comparative Pathology Workbench
-			</div>
+		<div class="card">
 
-			<div class="card-body">
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
 
-				<h5 class="card-title">How To</h5>
+			<div class="card-container">
+
+				<h3>How To</h3>
 			
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
-	
 				<p>Learn more about how to use the Workbench</p>
 
-				<a href="{% url 'howto' %}">
-					<button class="save btn btn-info">How To &raquo;</button>
-				</a>
+				<br />
+				<br />
+
+				<a href="{% url 'howto' %}"><button class="button button-view">How To &raquo;</button></a>
 
 			</div>
 
 		</div>
 
 	</div>
+
 
 {% if credential_flag == '' %}
 
-	<div class="col-md-3">
-    	
-		<div class="card text-center">
+	<div class="home-grid-item">
+	</div>
 
-			<div class="card-header">
-				Comparative Pathology Workbench
+	{% if request.user.username == '' %}
+
+	<div class="home-grid-item">
+
+		<div class="card">
+
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
+
+			<div class="card-container">
+
+				<h3>Login</h3>
+		
+				<p>Login to the Workbench</p>
+		
+				<br />
+				<br />
+				<br />
+
+				<a href="{% url 'login' %}"><button class="button button-add">Login &raquo;</button></a>
+	
 			</div>
 
-			<div class="card-body">
+		</div>
 
-				<h5 class="card-title">Login</h5>
-		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
+	</div>
 	
-				<p>Login to use the Workbench</p>
+	{% else %}
+	
+	<div class="home-grid-item">
+
+		<div class="card">
+
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
+
+			<div class="card-container">
+
+				<h3>WARNING!</h3>
 		
-				<a href="{% url 'login' %}">
-					<button class="save btn btn-success">Login &raquo;</button>
-				</a>
+				<br />
+				<br />
+
+				<div class="panel-alert">
+					<strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
+				</div>
+		
+			</div>
+	
+		</div>
+
+	</div>
+
+	{% endif %}
+
+	<div class="home-grid-item">
+	</div>
+
+	{% if request.user.username == '' %}
+
+	<div class="home-grid-item">
+
+		<div class="card">
+
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
+
+			<div class="card-container">
+
+				<h3>Registration</h3>
+		
+				<p>Register to use the Workbench</p>
+		
+				<br />
+				<br />
+				<br />
+
+				<a href="{% url 'signup' %}"><button class="button button-delete">Register &raquo;</button></a>
 	
 			</div>
 
@@ -192,59 +245,40 @@
 
 	</div>
 
-	<div class="col-md-3">
-
-		<div class="card text-center">
-
-			<div class="card-header">
-				Comparative Pathology Workbench
-			</div>
-
-			<div class="card-body">
-
-				<h5 class="card-title">Registration</h5>
-		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
+	{% else %}
 	
-				<p>Register to use the Workbench</p>
-		
-				<a href="{% url 'signup' %}">
-					<button class="save btn btn-danger">Register &raquo;</button>
-				</a>
-	
-			</div>
+	<div class="home-grid-item">
 
-		</div>
+	</div>
 
+	{% endif %}
+
+	<div class="home-grid-item">
 	</div>
 
 {% else %}
 	    
 	{% if matrix_list %}
 
-	<div class="col-md-3">
-    	
-		<div class="card text-center">
+	<div class="home-grid-item">
+	</div>
 
-			<div class="card-header">
-				Comparative Pathology Workbench
-			</div>
+	<div class="home-grid-item">
 
-			<div class="card-body">
+		<div class="card">
 
-				<h5 class="card-title">Browse</h5>
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
+
+			<div class="card-container">
+
+				<h3>Browse</h3>
 		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
+				<p>Browse All Permitted Benches in the Workbench ({{ matrix_list|length }})</p>
 
-					<p>Browse All Permitted Benches in the Workbench ({{ matrix_list|length }})</p>
+				<br />
+				<br />
 
-				<a href="{% url 'index' %}">
-					<button class="save btn btn-info">Benches &raquo;</button>
-				</a>
+				<a href="{% url 'index' %}"><button class="button button-view">Benches &raquo;</button></a>
 
 			</div>
 
@@ -252,29 +286,27 @@
 
 	</div>
 	    
+	<div class="home-grid-item">
+	</div>
+
 	{% else %}
 	
-	<div class="col-md-3">
-    	
-		<div class="card text-center">
+	<div class="home-grid-item">
+	</div>
 
-			<div class="card-header">
-				Comparative Pathology Workbench
-			</div>
+	<div class="home-grid-item">
 
-			<div class="card-body">
+		<div class="card">
 
-				<h5 class="card-title">ADD</h5>
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
+
+			<div class="card-container">
+
+				<h3>ADD</h3>
 		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
+				<p>Add a NEW Bench!</p>
 
-					<p>Add a NEW Bench!</p>
-
-				<a href="{% url 'new_matrix' %}">
-					<button class="save btn btn-success">ADD &raquo;</button>
-				</a>
+				<a href="{% url 'new_matrix' %}"><button class="button button-add">ADD &raquo;</button></a>
 
 			</div>
 
@@ -282,29 +314,28 @@
 
 	</div>
 	    
+	<div class="home-grid-item">
+	</div>
+
 	{% endif %}
 	
-	<div class="col-md-3">
+	<div class="home-grid-item">
 
-		<div class="card text-center">
+		<div class="card">
 
-			<div class="card-header">
-				Comparative Pathology Workbench
-			</div>
+			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
 
-			<div class="card-body">
+			<div class="card-container">
 
-				<h5 class="card-title">Logout</h5>
+				<h3>Logout</h3>
 		
-				<a class="navbar-brand" href="http://www.comparativepathology.ed.ac.uk">
-					<img src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px>
-				</a>
-	
 				<p>Logout of the Workbench</p>
 		
-				<a href="{% url 'logout' %}">
-					<button class="save btn btn-danger">Logout &raquo;</button>
-				</a>
+				<br />
+				<br />
+				<br />
+
+				<a href="{% url 'logout' %}"><button class="button button-delete">Logout &raquo;</button></a>
 	
 			</div>
 
@@ -312,13 +343,17 @@
 
 	</div>
 
+	<div class="home-grid-item">
+	</div>
 
 {% endif %}
 	    
-	<div class="col-md-2">
-
-	</div>
-
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

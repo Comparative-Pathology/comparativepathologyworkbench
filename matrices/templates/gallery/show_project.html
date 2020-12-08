@@ -6,59 +6,49 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
+<div>
 
-			<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'list_imaging_hosts' %}">
-						Sources
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'webgallery_show_imaging_server' server.id %}">
-						{{ server.name }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'webgallery_show_group' server.id group.id %}">
-						{{ group.name|truncatechars:20 }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
+		</li>
 	
-				<li class="breadcrumb-item active">
-					{{ project.name|truncatechars:20 }}
-				</li>	
-	
-			</ol>
+		<li>
+			{{ project.name|truncatechars:20 }}
+		</li>	
 
-		</div>
-		
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>{{ project.name }}</h1>
+
 		<br />
 
 {% if dataset_list %}
@@ -67,45 +57,42 @@
 
     	<hr>
     
-		<div class="row">
+		<ul class="image-list">
 
     {% for dataset in dataset_list %}
 
-			<div class="col-md-4">
+	    	<li>
+
+				<div class="card-image-gallery">
 	
-				<h5>{{ dataset.name|truncatechars:20 }}</h5>
+					<div class="card-container-gallery">
+	
+						<h5>{{ dataset.name|truncatechars:20 }}</h5>
 
-		    	<p class="pull-left">
-					<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}">
-						<img class="img-thumbnail" alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/>
-					</a>
-				</p>
-
-        		<div class="pull-left">
+	            		<dl>
+	                		<dt>Images</dt>
+	                		<dd>{{ dataset.imageCount }}</dd>
+		    	        </dl>
     
-            		<ul>
-	                	<li>Images: {{ dataset.imageCount }}</li>
-	    	        </ul>
+						<br />
 
-			    </div>
+						<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}"><button class="button button-view">View Dataset &raquo;</button></a>
+
+					</div>
     
-    		    <div class="clearfix">
-        		</div>
+					<br />
+			
+					<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}"><img alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/></a>
 
-				<p style="margin-left:20px">
-					<a class="btn btn-default" href="{% url 'webgallery_show_dataset' server.id dataset.id %}" role="button">
-						<button class="save btn btn-info">View Dataset &raquo;</button>
-					</a>
-				</p>
+					<br />
+			
+				</div>
 
-    		    <div class="clearfix">
-	    	    </div>
-    
-	        </div>
+	        </li>
 	
     {% endfor %}
 
-    	</div>
+    	</ul>
 
 {% else %}
 
@@ -113,13 +100,17 @@
 
 {% endif %}
 
-
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

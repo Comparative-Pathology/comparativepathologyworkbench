@@ -6,111 +6,107 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'index' %}">
-						Workbenches
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'index' %}">Workbenches</a>
+		</li>
 
-				<li class="breadcrumb-item">
-					<a href="{% url 'matrix' matrix.id %}">
-						CPW:{{ matrix.id|stringformat:"06d" }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
+		</li>
 
-				<li class="breadcrumb-item active">
-					Cell Details
-				</li>
-			</ol>
+		<li>
+			Cell Details
+		</li>
 
-		</div>
+	</ul>
 
-	</div>
-	
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
 
-	<div class="col-md-9" id="content">
-	    
+	<div class="standard-grid-item">
+	
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 
-		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
-		<br />
+		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}</h1>
+
 		<p>Edit a Cell</p>
+
 		<hr>
+
+		<br />
 
 {% endif %}
 
 {% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
 
-		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header, "{{ matrix.title }}" </h1>
-		<br />
+		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header</h1>
+
 		<p>Edit a Row Header Cell</p>
+
 		<hr>
+
+		<br />
 
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
 
-		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header, "{{ matrix.title }}" </h1>
-		<br />
+		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header</h1>
+
 		<p>Edit a Column Header Cell</p>
+
 		<hr>
 
+		<br />
+
 {% endif %}
-	    
+		
 		<form method="POST" class="post-form">
 
 {% csrf_token %}
 
-{{ form.as_p}} 
+{% include 'includes/form.html' %}
 		
-    		<button type="submit" class="save btn btn-danger">Save</button>
+			<br />
+
+			<button type="submit" class="button button-delete">Save</button>
 	
 		</form>
 		
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}">
-			<button class="save btn btn-success">CANCEL</button>
-		</a>
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
 	</div>
 	
-	<div class="col-md-2">
-
+	<div class="standard-grid-item">
 	</div>
 
 </div>
 
-
-<style type="text/css">
-
-ul {
-	list-style-type: none;
-}
-
-</style>
-
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}
 

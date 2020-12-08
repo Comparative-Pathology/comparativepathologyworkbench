@@ -5,44 +5,44 @@
 {% load static %}
 
 {% block content %}
-    
-<div class="row">
 
-	<div class="col-md-12">
 
-		<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
-	
-			<li class="breadcrumb-item">
-				<a href="{{ request.META.HTTP_REFERER }}">
-					Permissions
-				</a>
-			</li>
-	
-			<li class="breadcrumb-item active">
-				NEW Permission {{ text_flag }}
-			</li>
-	
-		</ol>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			<a href="{{ request.META.HTTP_REFERER }}">Permissions</a>
+		</li>
+
+		<li>
+			NEW Permission {{ text_flag }}
+		</li>
 		
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>NEW Permission {{ text_flag }}</h1>
+
+		<hr>
+
 		<br />
 
 		<form method="POST" class="post-form">
@@ -51,22 +51,29 @@
 
 {% include 'includes/form.html' %}
 
+			<br />
+
 			<input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
 
-	    	<button type="submit" class="save btn btn-danger">Save</button>
+	    	<button type="submit" class="button button-delete">Save</button>
 
 		</form>
 
-		<a href="{{ request.META.HTTP_REFERER }}">
-			<button class="save btn btn-success">BACK</button>
-		</a>
+		<br />
+
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">BACK</button></a>
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
-	
+		
+<br />
+<br />
+<br />
+<br />
+<br />
+
 {% endblock %}

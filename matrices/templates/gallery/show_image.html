@@ -6,92 +6,86 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'list_imaging_hosts' %}">
-					Sources
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_imaging_server' server.id %}">
-					{{ server.name }}
-				</a>
-			</li>
-			
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_group' server.id group.id %}">
-					{{ group.name|truncatechars:20 }}
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
+		</li>
+	
+		<li class="breadcrumb-item">
+			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
+		</li>
 	
 {% for project in projects %}
 
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_project' server.id project.id %}">
-					{{ project.name|truncatechars:20 }}
-				</a>
-			</li>	
+		<li class="breadcrumb-item">
+			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
+		</li>	
 
 {% endfor %}
 
 {% for dataset in datasets %}
 
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">
-					{{ dataset.name|truncatechars:20 }}
-				</a>
-			</li>
+		<li class="breadcrumb-item">
+			<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">{{ dataset.name|truncatechars:20 }}</a>
+		</li>
 	
 {% endfor %}
 
-			<li class="breadcrumb-item active">
-				{{ image.name|truncatechars:20 }}
-			</li>	
-	
-		</ol>
-		
-	</div>
-			
+		<li class="breadcrumb-item active">
+			{{ image.name|truncatechars:20 }}
+		</li>	
+
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
+
+	<div class="standard-grid-item">
 
 		<h1>{{ image.name|truncatechars:20 }}</h1>
+
 		<br />
+		
+	    <h3>Image Information</h3>
 
-	    <p>{{ image.description }}</p>
+		<hr>
 
-		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
-			<button class="save btn btn-success">Add Image to Image Collection</button>
-		</a>
+		<dl class="standard">
 
-	    <hr>
+			<dt>Image Name</dt>
+			<dd>{{ image.name }}</dd>
+	    
+	    	<dt>Image Description</dt>
+		    <dd>{{ image.description }}</dd>
+
+		</dl>
 
     	<table>
         	<tr>
             	<th>Image:</th>
 	            <td>
-					<a href="{{ image.viewer_url  }}" target="_blank">
-						<img  style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
-					</a>
+					<a href="{{ image.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
 				</td>
 			</tr>
 
@@ -122,9 +116,19 @@
 
 	    </table>
 
+		<br />
+		<br />
+		
+		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+
+		<br />
+		<br />
+
     	<hr>
 
-	    <p>Image has {{ image.roi_count }} Regions Of Interest (ROIs):</p>
+	    <h3>Regions Of Interest (ROIs)</h3>
+
+	    <p>Image has {{ image.roi_count }} ROIs</p>
 
 {% for roi in rois %}
 
@@ -132,6 +136,11 @@
 
 	{% for shape in roi.shapes %}
 	
+        	<tr>
+            	<th>&nbsp;</th>
+	            <td>&nbsp;</td>
+			</tr>
+
         	<tr>
             	<th>ROI ID:</th>
 	            <td>{{ shape.id }}</td>
@@ -145,18 +154,19 @@
         	<tr>
             	<th>{{ shape.type }}</th>
 	            <td>
-					<a href="{{ shape.viewer_url }}" target="_blank">
-						<img style="width:256px;" alt="{{ shape.type }}" title="{{ shape.type }}" src="{{ shape.shape_url }}" >
-					</a>
+					<a href="{{ shape.viewer_url }}" target="_blank"><img style="width:256px;" alt="{{ shape.type }}" title="{{ shape.type }}" src="{{ shape.shape_url }}" ></a>
 	            </td>
     	    </tr>
 
         	<tr>
             	<th>&nbsp;</th>
+	            <td>&nbsp;</td>
+			</tr>
+
+        	<tr>
+            	<th>&nbsp;</th>
 	            <td>
-					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')">
-						<button class="save btn btn-success">Add ROI to Image Collection</button>
-					</a>
+					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
 	            </td>
 			</tr>
 
@@ -165,6 +175,8 @@
 	            <td>&nbsp;</td>
 			</tr>
 
+	    	<hr>
+
 	{% endfor %}
 	
 	    </table>
@@ -172,11 +184,16 @@
 {% endfor %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

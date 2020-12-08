@@ -5,81 +5,97 @@
 {% load static %}
 
 {% block content %}
-	
-<div class="row">
 
-	<div class="col-md-12">
 
-		<ol class="breadcrumb subheading">
-	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
-	
-			<li class="breadcrumb-item">
-				<a href="{% url 'list_imaging_hosts' %}">
-					Sources
-				</a>
-			</li>
+<!-- Breadcrumb Menu -->
 
-			<li class="breadcrumb-item active">
-				<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">	            	
-					{{ dataset.name }}
-				</a>
-			</li>	
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item active">
-				<a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">	            	
-	            	Prev
-				</a>
-			</li>	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-			<li class="breadcrumb-item active">
-				<a href="{% url 'webgallery_show_wordpress' server.id dataset.next_page %}">	            	
-	            	Next
-				</a>
-			</li>	
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
-		</ol>
-			
-	</div>
-			
+		<li>
+			<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ dataset.name }}</a>
+		</li>	
+	
+		<li>
+			<a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">Prev</a>
+		</li>	
+	
+		<li>
+			<a href="{% url 'webgallery_show_wordpress' server.id dataset.next_page %}">Next</a>
+		</li>	
+	
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
-		<h1>{{ dataset.name|truncatechars:20 }}</h1>
+	<div class="standard-grid-item">
+	
+		<h1>{{ dataset.name }}</h1>
+
 		<br />
 
-	    <p>{{ dataset.name|truncatechars:20 }} contains {{ dataset.imageCount }} images, so far</p>
+	    <p>{{ dataset.name }} contains {{ dataset.imageCount }} images, so far</p>
+
     	<hr>
 
 		<div class="row justify-content-center">
 
+		<ul class="image-list">
+
 {% for image in images %}
 
-			<a href="{% url 'webgallery_show_wordpress_image' server.id image.id %}">
-				<img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
-			</a>
+	    	<li>
+
+				<div class="card-image-gallery">
+	
+					<div class="card-container-gallery">
+
+						<h5>{{ image.name|truncatechars:15 }}</h5>
+						
+		        	</div>
+    
+					<br />
+
+				<a href="{% url 'webgallery_show_wordpress_image' server.id image.id %}"><img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
+
+		        </div>
+		        
+	    	</li>
 
 {% endfor %}
+
+		</ul>
 
 		</div>
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+		
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

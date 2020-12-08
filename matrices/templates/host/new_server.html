@@ -5,44 +5,44 @@
 {% load static %}
 
 {% block content %}
-    
-<div class="row">
 
-	<div class="col-md-12">
 
-		<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li class="breadcrumb-item">
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'list_imaging_hosts' %}">
-					Sources
-				</a>
-			</li>
+		<li class="breadcrumb-item active">
+			NEW Source
+		</li>
 	
-			<li class="breadcrumb-item active">
-				NEW Source
-			</li>
-	
-		</ol>
-	
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>NEW Source</h1>
+
+		<hr>
+
 		<br />
 
 {% if credential_flag %}
@@ -53,22 +53,29 @@
 
 {% include 'includes/form.html' %}
 
-	        <button type="submit" class="save btn btn-danger">Save</button>
+			<br />
+
+	        <button type="submit" class="button button-delete">Save</button>
 
 	    </form>
 
-		<a href="{% url 'list_imaging_hosts' %}">
-			<button class="save btn btn-success">CANCEL</button>
-		</a>
+		<br />
+
+		<a href="{% url 'list_imaging_hosts' %}"><button class="button button-add">CANCEL</button></a>
 
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

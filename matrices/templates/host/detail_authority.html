@@ -6,76 +6,70 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			<a href="{% url 'maintenance' %}">Maintenance</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'maintenance' %}">
-					Maintenance
-				</a>
-			</li>
-	
-			<li class="breadcrumb-item">
-				<a href="{% url 'detail_authority' authority.id %}">
-					Authority {{ authority.id }}
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'detail_authority' authority.id %}">Authority {{ authority.id }}</a>
+		</li>
 		
-			<li class="breadcrumb-item active">
-				Authority Details
-			</li>
+		<li>
+			Authority Details
+		</li>
 	
-		</ol>
-			
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
+
+	<div class="standard-grid-item">
 
 		<h1>Authority {{ authority.id }}</h1>
+
+		<hr>
+		
 		<br />
 
-		<dl class="dl-horizontal">
-			<dt>Name:</dt>
+		<dl class="standard">
+			<dt>Name</dt>
 			<dd>{{ authority.name }}</dd>
 		</dl>
 
 		<br />
 
-		<a href="{% url 'maintenance' %}">
-			<button class="save btn btn-success">BACK</button>
-		</a>
+		<a href="{% url 'maintenance' %}"><button class="button button-add">BACK</button></a>
 
 {% if user.is_superuser %}
             
-		<a href="{% url 'edit_authority' authority.id %}">
-			<button class="save btn btn-warning">Edit</button>
-		</a>
+		<a href="{% url 'edit_authority' authority.id %}"><button class="button button-edit">Edit</button></a>
 
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
 
 {% endblock %}

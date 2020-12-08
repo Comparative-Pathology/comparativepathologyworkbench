@@ -838,7 +838,7 @@ class Server(models.Model):
     
         current_user = request.user
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
         
         user = get_object_or_404(User, pk=request.user.id)
@@ -1062,7 +1062,7 @@ class Server(models.Model):
     
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
         
         user = get_object_or_404(User, pk=request.user.id)
@@ -1359,7 +1359,7 @@ class Server(models.Model):
         
         userid = self.uid
         
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         #print userid
@@ -1670,7 +1670,7 @@ class Server(models.Model):
         
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         memberOfGroup_list = list()
@@ -1952,7 +1952,7 @@ class Server(models.Model):
         
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         if userid != "":
@@ -2082,7 +2082,7 @@ class Server(models.Model):
     
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         if userid == "":
@@ -2257,7 +2257,7 @@ class Server(models.Model):
     
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         commandAPI = Command.objects.filter(type=self.type).get(name='API')
@@ -2738,7 +2738,7 @@ class Server(models.Model):
 
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         commandAPI = Command.objects.filter(type=self.type).get(name='API')
@@ -2889,7 +2889,7 @@ class Server(models.Model):
         
         userid = self.uid
     
-        cipher = AESCipher(config('EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
     
         commandAPI = Command.objects.filter(type=self.type).get(name='API')

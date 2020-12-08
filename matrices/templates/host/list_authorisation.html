@@ -5,52 +5,52 @@
 {% load static %}
 
 {% block content %}
-    
-<div class="row">
 
-	<div class="col-md-12">
 
-		<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
-	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
 {% if user.is_superuser %}
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'authorisation' %}">
-					Authorisation
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'authorisation' %}">Authorisation</a>
+		</li>
+	
 	
 {% endif %}
 	
-			<li class="breadcrumb-item active">
-				{{ text_flag }} 
-			</li>
+		<li>
+			{{ text_flag }} 
+		</li>
 	
-		</ol>
-		
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+	
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>Browse {{ text_flag }}</h1>
-		<br />
 
 		<p>Browse the list of {{ text_flag }}</p>
+
 		<hr>
+
+		<br />
 
 {% if authorisation_list %}
 
@@ -84,27 +84,19 @@
 
 	            <td>
 
-					<a href="{% url 'detail_authorisation' authorisation.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_authorisation' authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 		{% if matrix_id == '' %}
 
-					<a href="{% url 'edit_authorisation' authorisation.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
+					<a href="{% url 'edit_authorisation' authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 	
 		{% else %}
 
-					<a href="{% url 'edit_matrix_authorisation' matrix_id authorisation.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
+					<a href="{% url 'edit_matrix_authorisation' matrix_id authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 	
 		{% endif %}
 	
-					<a href="{% url 'delete_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this AUTHORISATION?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'delete_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 	            </td>
 
         	    <td>
@@ -157,17 +149,13 @@
 	{% if matrix_id == '' %}
 
 		<p>
-			<a href="{% url 'new_authorisation' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 	
 	{% else %}
 
 		<p>
-			<a href="{% url 'new_matrix_authorisation' matrix_id%}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_matrix_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 	
 	{% endif %}
@@ -179,17 +167,13 @@
 	{% if matrix_id == '' %}
 
 		<p>
-			<a href="{% url 'new_authorisation' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 	
 	{% else %}
 
 		<p>
-			<a href="{% url 'new_matrix_authorisation' matrix_id%}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_matrix_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 	
 	{% endif %}
@@ -197,11 +181,11 @@
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+		
 
 {% endblock %}

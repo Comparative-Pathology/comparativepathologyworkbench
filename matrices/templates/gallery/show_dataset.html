@@ -7,31 +7,25 @@
 {% block content %}
 	
 
-<div class="row">
+<!-- Breadcrumb Menu -->
 
-	<div class="col-md-12">
+<div>
 
-		<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'list_imaging_hosts' %}">
-					Sources
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
 {% if group %}
 
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_group' server.id group.id %}">
-					{{ group.name|truncatechars:20 }}
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
+		</li>
 	
 {% endif %}
 
@@ -39,11 +33,9 @@
 
 	{% for project in projects %}
 
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_project' server.id project.id %}">
-					{{ project.name|truncatechars:20 }}
-				</a>
-			</li>	
+		<li>
+			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
+		</li>	
 
 	{% endfor %}
 
@@ -51,27 +43,28 @@
 
 {% if group %}
 
-			<li class="breadcrumb-item active">
-				{{ dataset.name|truncatechars:20 }}
-			</li>	
+		<li>
+			{{ dataset.name|truncatechars:20 }}
+		</li>	
 	
 {% endif %}
 
-		</ol>
-		
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
-		<h1>{{ dataset.name|truncatechars:20 }}</h1>
+	<div class="standard-grid-item">
+
+		<h1>{{ dataset.name }}</h1>
+
 		<br />
 
 {% if group %}
@@ -86,21 +79,44 @@
 
     	<hr>
 
+		<ul class="image-list">
+
     {% for image in images %}
 
-			<a href="{% url 'webgallery_show_image' server.id image.id %}">
-				<img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" >
-			</a>
+	    	<li>
+
+				<div class="card-image-gallery">
+	
+					<div class="card-container-gallery">
+
+						<h5>{{ image.name }}</h5>
+						
+		        	</div>
+    
+					<br />
+
+				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
+
+		        </div>
+		        
+	    	</li>
 
     {% endfor %}
 
+		</ul>
+
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}
 

@@ -6,43 +6,44 @@
 
 {% block content %}
     
-<div class="row">
+    
+<!-- Breadcrumb Menu -->
 
-	<div class="col-md-12">
+<div>
 
-		<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			Authorization
+		</li>
 	
-			<li class="breadcrumb-item active">
-				Authorization
-			</li>
-	
-		</ol>
-		
-	</div>
-			
+	</ul>
+
 </div>
+
 		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
+
+	<div class="standard-grid-item">
 
 		<h1>Authorization</h1>
-		<br />
 
 		<p>Authorisation Functions</p>
+		
 		<hr>
 
 		<h2>Users</h2>
+		
 		<br />
 
 {% if user_list %}
@@ -76,26 +77,16 @@
 		{% if user.is_superuser %}
             
         	    <td>
-					<a href="{% url 'detail_user' userlist.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_user' userlist.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
-					<a href="{% url 'list_user_bench_authorisation' userlist.id %}">
-						<button class="save btn btn-info"><i class="fa fa-universal-access"></i></button>
-					</a>
+					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+					<a href="{% url 'list_user_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 	            </td>
 
 		{% else %}
 	
         	    <td>
-					<a href="{% url 'detail_user' userlist.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
         	    </td>
 
 		{% endif %}
@@ -181,23 +172,15 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'detail_blog_credential' credential.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_blog_credential' credential.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 		{% else %}
 	
         	    <td>
-					<a href="{% url 'detail_blog_credential' credential.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
     	        </td>
 	
 		{% endif %}
@@ -241,9 +224,7 @@
 			{% if user.is_superuser %}
     
             	<td>
-					<a href="{% url 'new_blog_credential' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
     	        </td>
 
 			{% else %}
@@ -271,9 +252,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'new_blog_credential' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 
 	{% else %}
@@ -286,11 +265,16 @@
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

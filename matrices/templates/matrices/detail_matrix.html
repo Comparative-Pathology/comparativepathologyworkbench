@@ -5,115 +5,101 @@
 {% load static %}
 
 {% block content %}
-    
-<div class="row">
 
-	<div class="col-md-12">
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'index' %}">
-						Workbenches
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'index' %}">Workbenches</a>
+		</li>
 
-				<li class="breadcrumb-item">
-					<a href="{% url 'matrix' matrix.id %}">
-						CPW:{{ matrix.id|stringformat:"06d" }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
+		</li>
 
-				<li class="breadcrumb-item active">
-					Workbench Details
-				</li>
+		<li class="breadcrumb-item active">
+			Workbench Details
+		</li>
 	
-			</ol>
+	</ul>
 
-		</div>
-
-	</div>
-	
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
 
-	<div class="col-md-9" id="content">
+	<div class="standard-grid-item">
 	
 		<h1>Workbench CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h1>
-		<br />
 
 		<p>Browse the Bench Details</p>
+		
 		<hr>
 
-		<dl class="dl-horizontal">
+		<br />
 
-			<dt>Id:</dt>
+		<dl class="standard">
+
+			<dt>Id</dt>
 			<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
 
-			<dt>Title:</dt>
+			<dt>Title</dt>
 			<dd>{{ matrix.title }}</dd>
 
-			<dt>Description:</dt>
+			<dt>Description</dt>
 			<dd>{{ matrix.description }}</dd>
 
-			<dt>Cell Height:</dt>
+			<dt>Cell Height</dt>
 			<dd>{{ matrix.height }}</dd>
 
-			<dt>Cell Width:</dt>
+			<dt>Cell Width</dt>
 			<dd>{{ matrix.width }}</dd>
 
 {% if matrix.blogpost != '' %}
 	
-			<dt>Blog Post:</dt>
+			<dt>Blog Post</dt>
 			<dd>
-				<a class="btn btn-default" href="{{ matrix_link }}" role="button" target="_blank">
-					<button class="save btn btn-info">View Blog Post {{ matrix.blogpost }} &raquo;</button>
-				</a>
+				<a class="btn btn-default" href="{{ matrix_link }}" role="button" target="_blank"><button class="button button-view">View Blog Post {{ matrix.blogpost }} &raquo;</button></a>
 			</dd>
 			
 {% endif %}
 
-			<dt>Owner:</dt>
+			<dt>Owner</dt>
 			<dd>{{ matrix.owner.username }} ({{ matrix.owner.first_name }} {{ matrix.owner.last_name }})</dd>
 
-			<dt>Created:</dt>
+			<dt>Created</dt>
 			<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
 			
-			<dt>Last Modified:</dt>
+			<dt>Last Modified</dt>
 			<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
 		</dl>
 
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}">
-			<button class="save btn btn-success">Back</button>
-		</a>
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">Back</button></a>
 
 {% if user == matrix.owner or user.is_superuser %}
-            
-		<a href="{% url 'edit_matrix' matrix.id %}">
-			<button class="save btn btn-warning">Edit</button>
-		</a>
+			
+		<a href="{% url 'edit_matrix' matrix.id %}"><button class="button button-edit">Edit</button></a>
 
 {% endif %}
 
 	</div>
 	
-	<div class="col-md-2">
-
+	<div class="standard-grid-item">
 	</div>
 
 </div>

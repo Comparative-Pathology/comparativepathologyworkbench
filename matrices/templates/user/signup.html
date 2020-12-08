@@ -2,83 +2,67 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
-		
-			<li class="breadcrumb-item active">
-				Signup
-			</li>
-	
-		</ol>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 
-	</div>
-			
+		<li>
+			Register
+		</li>
+	
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
-		<br />
-		<h2>Comparative Pathology Workbench Authorization</h2>
-		<br />
+	<div class="standard-grid-item">
+
+		<h1>Comparative Pathology Workbench Authorization</h1>
 
 		<p>Register here for access to the Comparative Pathology Workbench.</p>
 
 		<hr>
+
 		<br />
 
 		<form method="post">
 
 {% csrf_token %}
 
-{% for field in form %}
+{% include 'includes/form.html' %}
 
-			<p>
+			<br />
 
-	{{ field.label_tag }}<br />
-	{{ field }}
-
-	{% if field.help_text %}
-		
-				<small style="color: grey">{{ field.help_text|safe }}</small>
-		
-	{% endif %}
-
-	{% for error in field.errors %}
-		
-				<p style="color: red">{{ error }}</p>
-		
-	{% endfor %}
-
-			</p>
-
-{% endfor %}
-
-			<button type="submit">Sign up</button>
+			<button class="button button-add" type="submit">Sign up</button>
 
 		</form>
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}
 

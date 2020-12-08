@@ -5,42 +5,43 @@
 {% load static %}
 
 {% block content %}
-    
-<div class="row">
 
-	<div class="col-md-12">
 
-		<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			Images
+		</li>
 	
-			<li class="breadcrumb-item active">
-				Images
-			</li>
-	
-		</ol>
-		
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>Browse Images</h1>
-		<br />
 
 		<p>Browse the list of Images you have collected</p>
+
 		<hr>
+
+		<br />
 
 {% if credential_flag %}
 
@@ -74,21 +75,15 @@
 
 				{% if image.server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">	            	
-	        	    	<button class="save btn btn-info"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 				{% else %}
 	
-					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">	            	
-	            		<button class="save btn btn-info"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 				{% endif %}
 
-					<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 	            </td>
 
 			{% if image.roi == 0 %}
@@ -108,9 +103,7 @@
         	    </td>
 
     	        <td>
-					<a href="{{ image.viewer_url  }}" target="_blank">
-						<img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
-					</a>
+					<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
         	    </td>
 			</tr>
 
@@ -149,9 +142,8 @@
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>

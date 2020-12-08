@@ -6,133 +6,131 @@
 
 {% block content %}
 
-<div class="row">
+<!-- Breadcrumb Menu -->
 
-	<div class="col-md-12">
+<div>
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
-		
-				<li class="breadcrumb-item active">
-					How To
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-			</ol>
+		<li>
+			How To
+		</li>
 
-		</div>
-
-	</div>
+	</ul>
 	
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
 
-	<div class="col-md-9" id="content">
+	<div class="standard-grid-item">
 
 		<h1>How To</h1>
-		<br />
 
 		<p>How to use the Comparative Pathology Workbench</p>
 
 		<hr>
 
+		<br />
+
 		<h3>How to use the Comparative Pathology Workbench</h3>
 
-		<p><small>
-			<a href="{% static 'profile/HowToCPW_2019-03-10.pdf' %}">WORKBENCH - INSTRUCTIONS</a>
-		</small></p>
+		<a href="{% static 'profile/HowToCPW_2019-03-10.pdf' %}">WORKBENCH - INSTRUCTIONS</a>
+			
+		<br />
 
-		<p><small>
-			<a href="{% static 'profile/HowToOMERO-CPW_2019-04-20.pdf' %}">OMERO - INSTRUCTIONS</a>
-		</small></p>
+		<a href="{% static 'profile/HowToOMERO-CPW_2019-04-20.pdf' %}">OMERO - INSTRUCTIONS</a>
 
 		<h5>Registration</h5>
 
-		<p><small>From the User Menu on the Right-Hand Side of the Main Menu, click on the Registration Menu Option; Your registration is confirmed by email.</small></p>
+		<p>From the User Menu on the Right-Hand Side of the Main Menu, click on the Registration Menu Option; Your registration is confirmed by email.</p>
 
-		<p><small>You will also need to register on the Comparative Pathology WordPress site to ensure you can use the full functionality of the Workbench.</small></p>
+		<p>You will also need to register on the Comparative Pathology WordPress site to ensure you can use the full functionality of the Workbench.</p>
 
 		<h5>Authorisation</h5>
 
-		<p><small>Once registered your account needs to be confirmed by the Administrators.</small></p>
+		<p>Once registered your account needs to be confirmed by the Administrators.</p>
 
 		<h5>The Workbench Concept</h5>
 
-		<p><small>The Comparative Pathology Workbench is intended to be used by Pathologists to organise related data from disparate Sources.  To this end, we have created the concept of a “bench” which is a user configurable grid of Cells, that can be populated with user selected data.</small></p>
+		<p>The Comparative Pathology Workbench is intended to be used by Pathologists to organise related data from disparate Sources.  To this end, we have created the concept of a “bench” which is a user configurable grid of Cells, that can be populated with user selected data.</p>
 
-		<p><small>The user of the Workbench can create as many benches that they want; at present they cannot update other users’ benches, but can comment on all users benches via an interface in the Workbench to a WordPress blogging engine.</small></p>
+		<p>The user of the Workbench can create as many benches that they want; at present they cannot update other users’ benches, but can comment on all users benches via an interface in the Workbench to a WordPress blogging engine.</p>
 
-		<p><small>The “Benches” main menu option lets the user browse all existing Benches in the Workbench, as well as their own Benches; Listing Benches provides icons to view the Bench, view the details of the Bench, edit the Bench details, as well as delete the Bench.  The Bench list pages provide a icon to add a new Bench, and Bench Menu provides a menu option to add a new Bench as well.</small></p>
+		<p>The “Benches” main menu option lets the user browse all existing Benches in the Workbench, as well as their own Benches; Listing Benches provides icons to view the Bench, view the details of the Bench, edit the Bench details, as well as delete the Bench.  The Bench list pages provide a icon to add a new Bench, and Bench Menu provides a menu option to add a new Bench as well.</p>
 
-		<p><small>Creating a new Bench requires the user to provide a Title and Description for the bench, as well defining the size of the cells, and the starting number of columns and rows in the Bench.  Cell size can be altered at any time via the edit Bench option.</small></p>
+		<p>Creating a new Bench requires the user to provide a Title and Description for the bench, as well defining the size of the cells, and the starting number of columns and rows in the Bench.  Cell size can be altered at any time via the edit Bench option.</p>
 
-		<p><small>When a new Bench is created, a WordPress Blog entry is created too.</small></p>
+		<p>When a new Bench is created, a WordPress Blog entry is created too.</p>
 
 		<h5>The Work Bench View</h5>
 
-		<p><small>From the Bench list options using the View icon, or selecting a specific Bench from the Benches menu, you will see the main viewing page for the Bench.  You will see a “grid” of cells, with a “master” cell in the top left-hand corner, with header cells for the columns and rows in the Bench; data cells are in green.  Every cell has a “caret” which when clicked on provides a menu; header cells can be edited to provide a title and longer description, as well as options to add/delete rows/columns above and below the selected row/column.</small></p>
+		<p>From the Bench list options using the View icon, or selecting a specific Bench from the Benches menu, you will see the main viewing page for the Bench.  You will see a “grid” of cells, with a “master” cell in the top left-hand corner, with header cells for the columns and rows in the Bench; data cells are in green.  Every cell has a “caret” which when clicked on provides a menu; header cells can be edited to provide a title and longer description, as well as options to add/delete rows/columns above and below the selected row/column.</p>
 
-		<p><small>The “master” cell provides additional options to append rows/columns to the overall Bench, as well as options to view and edit the overall Bench details and parameters, including the cell dimensions.  Also provided are options to view and edit the Bench commentary.</small></p>
+		<p>The “master” cell provides additional options to append rows/columns to the overall Bench, as well as options to view and edit the overall Bench details and parameters, including the cell dimensions.  Also provided are options to view and edit the Bench commentary.</p>
 
 		<h5>Finding Data – Sources</h5>
 
-		<p><small>In order to populate a Bench, you must define a data Source, if one doesn’t exist already.  At the moment, the Workbench can access OMERO 5.4.7 servers for Microscopy Images, and WordPress Media Libraries for ad-hoc images.</small></p>
+		<p>In order to populate a Bench, you must define a data Source, if one doesn’t exist already.  At the moment, the Workbench can access OMERO 5.4.7 servers for Microscopy Images, and WordPress Media Libraries for ad-hoc images.</p>
 
-		<p><small>For the main menu, currently defined Sources can be found via the Source menu option – you can select one of the Sources from the drop down, list all the available Sources, or add a new Source.</small></p>
+		<p>For the main menu, currently defined Sources can be found via the Source menu option – you can select one of the Sources from the drop down, list all the available Sources, or add a new Source.</p>
 
-		<p><small>From the List Sources page, you can view the details of the Source, edit the Source details, delete the Source or view the contents of the Source.</small></p>
+		<p>From the List Sources page, you can view the details of the Source, edit the Source details, delete the Source or view the contents of the Source.</p>
 
-		<p><small>Typically for OMERO Sources, you must drill down the source from Group to Project to Dataset, with Datasets containing the images that you may want to add to your Bench.</small></p>
+		<p>Typically for OMERO Sources, you must drill down the source from Group to Project to Dataset, with Datasets containing the images that you may want to add to your Bench.</p>
 
-		<p><small>For WordPress sources, you are taken to a list of images you own on that WordPress server.</small></p>
+		<p>For WordPress sources, you are taken to a list of images you own on that WordPress server.</p>
 
-		<p><small>When you have found an Image you are interested in you can add it to your “Basket” of Images”; if Regions of Interest (ROIs) have been defined on the image, individual ROIs can be added to the “Basket” instead or as well.</small></p>
+		<p>When you have found an Image you are interested in you can add it to your “Basket” of Images”; if Regions of Interest (ROIs) have been defined on the image, individual ROIs can be added to the “Basket” instead or as well.</p>
 
 		<h5>Finding Data – Images</h5>
 
-		<p><small>Having browsed your Sources you may have found Images that you are interested in; these can now be found via the Images main menu option.</small></p>
+		<p>Having browsed your Sources you may have found Images that you are interested in; these can now be found via the Images main menu option.</p>
 
-		<p><small>This menu option allows you to view the whole of your “basket” of Images, or lets you view the Image in the context of its Source.</small></p>
+		<p>This menu option allows you to view the whole of your “basket” of Images, or lets you view the Image in the context of its Source.</p>
 
 		<h5>Adding Images to a Bench</h5>
 
-		<p><small>Once you have some Images in your “basket”, you can now edit a Bench and populate it with images.  Go to a suitable Bench from the Benches main menu option, and select a Cell to update.  Using the Cell menu, choose Edit Cell, and a page prompts you for Title and Description, and to choose an Image from your “basket”.  Saving takes you back to the Bench, with the cell updated with the selected Image.</small></p>
+		<p>Once you have some Images in your “basket”, you can now edit a Bench and populate it with images.  Go to a suitable Bench from the Benches main menu option, and select a Cell to update.  Using the Cell menu, choose Edit Cell, and a page prompts you for Title and Description, and to choose an Image from your “basket”.  Saving takes you back to the Bench, with the cell updated with the selected Image.</p>
 
-		<p><small>A Cell Commentary has been created simultaneously, and this is now available for viewing or editing from the Cell menu.</small></p>
+		<p>A Cell Commentary has been created simultaneously, and this is now available for viewing or editing from the Cell menu.</p>
 
 		<h5>Commentary</h5>
 
-		<p><small>Benches and Cells have a WordPress Commentary, and this is available for viewing and updating by ALL users of the Workbench, regardless of who owns the bench; Benches can only be modified by their owners, but anybody can comment on a Bench in general via the Master bench menu, or a cell in particular via the Cell menu.</small></p>
+		<p>Benches and Cells have a WordPress Commentary, and this is available for viewing and updating by ALL users of the Workbench, regardless of who owns the bench; Benches can only be modified by their owners, but anybody can comment on a Bench in general via the Master bench menu, or a cell in particular via the Cell menu.</p>
 
-		<p><small>Viewing any Commentary produces a pop-up window, with the original post when the Bench was created, or the Image as well when the Cell was first edited; all further comments are listed below.  Adding to the Commentary is achieved via the Edit Commentary menu option.</small></p>
+		<p>Viewing any Commentary produces a pop-up window, with the original post when the Bench was created, or the Image as well when the Cell was first edited; all further comments are listed below.  Adding to the Commentary is achieved via the Edit Commentary menu option.</p>
 
 		<h5>Managing Your Account</h5>
 
-		<p><small>The main menu also includes an option to manage user accounts; this is found on the right-hand side of the main menu.</small></p>
+		<p>The main menu also includes an option to manage user accounts; this is found on the right-hand side of the main menu.</p>
 
 		<h5>Workbench Information</h5>
 
-		<p><small>The About main menu option provides information about the Workbench; including this guide; contributors to the project, and background to the project.</small></p>
+		<p>The About main menu option provides information about the Workbench; including this guide; contributors to the project, and background to the project.</p>
 
-		<p><small>Mike Wicks, 1st March 2019</small></p>
-
+		<p>Mike Wicks, 1st March 2019</p>
+		
 	</div>
-	
-	<div class="col-md-2">
 
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

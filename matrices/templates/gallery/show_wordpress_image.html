@@ -6,68 +6,68 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
+
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'list_imaging_hosts' %}">
-					Sources
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">
-					{{ server.name }}
-				</a>
-			</li>
-	
-			<li class="breadcrumb-item active">
+		<li>
 				{{ image.name }}
-			</li>	
+		</li>	
 	
-		</ol>
+	</ul>
 
-	</div>
-			
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>{{ image.name }}</h1>
+
 		<br />
 
-	    <p>{{ image.caption }}</p>
+	    <h3>Image Information</h3>
 
-    	<p>{{ image.description }}</p>
+		<hr>
 
-		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')">
-			<button class="save btn btn-success">Add Image to Image Collection</button>
-		</a>
-	
-	    <hr>
+		<dl class="standard">
 
-    	<table>
+			<dt>Image Caption</dt>
+			<dd>{{ image.caption }}</dd>
+	    
+	    	<dt>Image Description</dt>
+		    <dd>{{ image.description }}</dd>
+
+		</dl>
+		
+		<br />
+
+		<table>
 	        <tr>
         	    <th>Image:</th>
     	        <td>
-					<a href="{{ image.viewer_url  }}" target="_blank">
-						<img  style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" >
-					</a>
+					<a href="{{ image.viewer_url  }}" target="_blank"><img  style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
 				</td>
 			</tr>
 
@@ -78,14 +78,27 @@
 
     	</table>
 
+		<br />
+		<br />
+		
+		<a href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+
+		<br />
+		<br />
+
 	    <hr>
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

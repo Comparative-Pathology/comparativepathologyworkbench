@@ -6,38 +6,36 @@
 
 {% block content %}
     
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			Maintenance
+		</li>
 	
-			<li class="breadcrumb-item active">
-				Maintenance
-			</li>
-	
-		</ol>
-		
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
+
+	<div class="standard-grid-item">
 
 		<h1>Maintenance</h1>
-		<br />
 
 		<p>Maintenance Functions</p>
 		<hr>
@@ -72,23 +70,15 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'detail_authority' authority.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_authority' authority.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_authority' authority.id %}" onclick="return confirm('Are you sure you want to DELETE this Authority?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_authority' authority.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_authority' authority.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_authority' authority.id %}" onclick="return confirm('Are you sure you want to DELETE this Authority?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'detail_authority' authority.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_authority' authority.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	            </td>
 
 		{% endif %}
@@ -114,9 +104,7 @@
 			{% if user.is_superuser %}
     
 	            <td>
-					<a href="{% url 'new_authority' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_authority' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 	            </td>
 
 			{% else %}
@@ -142,9 +130,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'new_authority' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_authority' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 
 	{% else %}
@@ -188,23 +174,15 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'detail_type' type.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_type' type.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_type' type.id %}" onclick="return confirm('Are you sure you want to DELETE this Type?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_type' type.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_type' type.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_type' type.id %}" onclick="return confirm('Are you sure you want to DELETE this Type?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'detail_type' type.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_type' type.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	            </td>
 
 		{% endif %}
@@ -230,9 +208,7 @@
 			{% if user.is_superuser %}
     
 	            <td>
-					<a href="{% url 'new_type' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_type' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 	            </td>
 
 			{% else %}
@@ -258,9 +234,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'new_type' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_type' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 
 	{% else %}
@@ -304,23 +278,15 @@
 		{% if user.is_superuser %}
             
 	            <td>
-					<a href="{% url 'detail_protocol' protocol.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_protocol' protocol.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_protocol' protocol.id %}" onclick="return confirm('Are you sure you want to DELETE this PROTOCOL?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_protocol' protocol.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_protocol' protocol.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_protocol' protocol.id %}" onclick="return confirm('Are you sure you want to DELETE this PROTOCOL?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 	            </td>
 
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'detail_protocol' protocol.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_protocol' protocol.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	            </td>
 
 		{% endif %}
@@ -346,9 +312,7 @@
 			{% if user.is_superuser %}
     
     	        <td>
-					<a href="{% url 'new_protocol' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_protocol' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
             	</td>
 
 			{% else %}
@@ -374,9 +338,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'new_protocol' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_protocol' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 
 	{% else %}
@@ -430,23 +392,15 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'detail_command' command.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_command' command.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_command' command.id %}" onclick="return confirm('Are you sure you want to DELETE this COMMAND?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_command' command.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_command' command.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_command' command.id %}" onclick="return confirm('Are you sure you want to DELETE this COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'detail_command' command.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_command' command.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	            </td>
 
 		{% endif %}
@@ -492,9 +446,7 @@
 			{% if user.is_superuser %}
     
 	            <td>
-					<a href="{% url 'new_command' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
     	        </td>
 
 			{% else %}
@@ -525,8 +477,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'new_command' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
+			<a href="{% url 'new_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button>
 			</a>
 		</p>
 
@@ -579,23 +530,15 @@
 		{% if user.is_superuser %}
             
     	        <td>
-					<a href="{% url 'detail_blog_command' blog.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_blog_command' blog.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_blog_command' blog.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_blog_command' blog.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_blog_command' blog.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_blog_command' blog.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 		{% else %}
 	
 	            <td>
-					<a href="{% url 'detail_blog_command' blog.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_blog_command' blog.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
     	        </td>
 
 		{% endif %}
@@ -642,9 +585,7 @@
 			{% if user.is_superuser %}
     
     	        <td>
-					<a href="{% url 'new_blog_command' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_blog_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
         	    </td>
 
 			{% else %}
@@ -675,9 +616,7 @@
 	{% if user.is_superuser %}
     
 		<p>
-			<a href="{% url 'new_blog_command' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
+			<a href="{% url 'new_blog_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		</p>
 
 	{% else %}
@@ -693,11 +632,16 @@
 	
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

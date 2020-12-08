@@ -6,46 +6,42 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
+<div>
 
-			<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
+		
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			{{ text_flag }} Benches
+		</li>
 	
-				<li class="breadcrumb-item active">
-					{{ text_flag }} Benches
-				</li>
-	
-			</ol>
-	
-		</div>
-
-	</div>
+	</ul>
 
 </div>
 
-<div class="row row-no-padding" id="row-main">
+	
+<!-- Main Data Panel -->
 
-	<div class="col-md-1 visible" id="sidebar">
+<div class="standard-grid-container">
 
+	<div class="standard-grid-item">
 	</div>
 
-	<div class="col-md-9">
+	<div class="standard-grid-item">
 
 		<h1>Browse {{ text_flag }} Benches</h1>
-		<br />
 
 		<p>Browse the list of {{ text_flag }} Benches</p>
 
 		<hr>
+
+		<br />
 
 {% if out_matrix_list %}
 
@@ -53,169 +49,143 @@
 	
 		{% if forloop.first %}
 	
-    	<table>
-        	<tr>
-            	<th width="250px">Action</th>
-    	        <th width="150px">Id:</th>
-	            <th width="150px">Owner:</th>
-	            <th width="150px">Authority:</th>
-        	    <th>Title:</th>
+		<table>
+			<tr>
+				<th width="250px">Action</th>
+				<th width="150px">Id:</th>
+				<th width="150px">Owner:</th>
+				<th width="150px">Authority:</th>
+				<th>Title:</th>
 			</tr>
-    
-    	    <tr>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
+	
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 			</tr>
 
 		{% endif %}
 	
-	        <tr>
+			<tr>
 
 		{% if credential_flag == '' %}
 
-	            <td>&nbsp;</td>
+				<td>&nbsp;</td>
 
 		{% else %}
 
-    	        <td>
+				<td>
 
 			{% if out_matrix.authorisation_authority == 'VIEWER' %}
 
-					<a href="{% url 'matrix' out_matrix.matrix_id %}">	            	
-	        	    	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
-					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'matrix' out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 	
 			{% if out_matrix.authorisation_authority == 'EDITOR' %}
 
-					<a href="{% url 'matrix' out_matrix.matrix_id %}">	            	
-	        	    	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
-					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_matrix' out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'matrix' out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+
+					<a href="{% url 'edit_matrix' out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+
+					<a href="{% url 'delete_matrix' out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 			{% endif %}
 	
 			{% if out_matrix.authorisation_authority == 'OWNER' %}
 
-					<a href="{% url 'matrix' out_matrix.matrix_id %}">	            	
-	        	    	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
-					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_matrix' out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
-					<a href="{% url 'list_bench_authorisation' out_matrix.matrix_id %}">
-						<button class="save btn btn-info"><i class="fa fa-universal-access"></i></button>
-					</a>
+					<a href="{% url 'matrix' out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+
+					<a href="{% url 'edit_matrix' out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+
+					<a href="{% url 'delete_matrix' out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+
+					<a href="{% url 'list_bench_authorisation' out_matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 
 			{% endif %}
 	
 			{% if out_matrix.authorisation_authority == 'ADMIN' %}
 
-					<a href="{% url 'matrix' out_matrix.matrix_id %}">	            	
-	        	    	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
-					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_matrix' out_matrix.matrix_id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_matrix' out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
-					
-					<a href="{% url 'list_bench_authorisation' out_matrix.matrix_id %}">
-						<button class="save btn btn-info"><i class="fa fa-universal-access"></i></button>
-					</a>
+					<a href="{% url 'matrix' out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+					<a href="{% url 'detail_matrix' out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+
+					<a href="{% url 'edit_matrix' out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+
+					<a href="{% url 'delete_matrix' out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+
+					<a href="{% url 'list_bench_authorisation' out_matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 	
 			{% endif %}
 	
-	            </td>
+				</td>
 
 		{% endif %}
 
-        	    <td>CPW:{{ out_matrix.matrix_id|stringformat:"06d" }}</td>
-    	        <td>{{ out_matrix.matrix_owner }}</td>
-    	        <td>{{ out_matrix.authorisation_authority }}</td>
-            	<td>{{ out_matrix.matrix_title }}</td>
+				<td>CPW:{{ out_matrix.matrix_id|stringformat:"06d" }}</td>
+				<td>{{ out_matrix.matrix_owner }}</td>
+				<td>{{ out_matrix.authorisation_authority }}</td>
+				<td>{{ out_matrix.matrix_title }}</td>
 
 			</tr>
 
 		{% if forloop.last %}
 	
-    	    <tr>
+			<tr>
 
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 
 			</tr>
 
-    	    <tr>
+			<tr>
 
 			{% if credential_flag %}
-    
-        	    <td>
-					<a href="{% url 'new_matrix' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
-    	        </td>
+	
+				<td>
+					<a href="{% url 'new_matrix' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+				</td>
 
 			{% else %}
 
-	            <td>&nbsp;</td>
+				<td>&nbsp;</td>
 
 			{% endif %}
 
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 
 			</tr>
 
-	    </table>
+		</table>
 
 		{% endif %}
 	
-    {% endfor %}
+	{% endfor %}
 
 {% else %}
 
 		<p>No Benches are available.</p>
 
 	{% if credential_flag %}
-    
-	    <p>
-			<a href="{% url 'new_matrix' %}">
-				<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-			</a>
-    	</p>
+	
+		<p>
+			<a href="{% url 'new_matrix' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+		</p>
 
 	{% else %}
 
-	    <p>You are not authorised to add Benches yet!
-    	</p>
+		<p>You are not authorised to add Benches yet!</p>
 
 	{% endif %}
 
@@ -223,8 +193,7 @@
 
 	</div>
 
-	<div class="col-md-2">
-
+	<div class="standard-grid-item">
 	</div>
 
 </div>

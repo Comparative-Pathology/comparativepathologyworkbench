@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 {% load custom %}
 
 {% load static %}
@@ -29,736 +28,376 @@
 	<meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}">
 	<meta name="theme-color" content="#ffffff">
 
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
-
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>	
-	
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-	<title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
-	
-</head>
-
-<body>
-
 {% if settings.LOCATION == 'CZI' %}
 
-	<!-- ><div class="container"> -->
-
-    <header>
-		
-		<nav class="navbar navbar-expand-lg navbar-light">
-        
-            <a class="navbar-brand" href="{% url 'home' %}">
-				<strong>Comparative Pathology Workbench</strong>
-			</a>
+	<link rel="stylesheet" href="{% static 'styles_czi.css' %}">
 
 {% elif settings.LOCATION == 'CANADA' %}
 
-	<!-- <div class="container"> -->
-
-    <header>
+	<link rel="stylesheet" href="{% static 'styles_canada.css' %}">
 		
-		<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f5776e;">
-        
-            <a class="navbar-brand" href="{% url 'home' %}">
-				<strong>Comparative Pathology Workbench in CANADA</strong>
-			</a>
-
 {% elif settings.LOCATION == 'COELIAC' %}
 
-	<!-- <div class="container"> -->
-
-    <header>
-		
-		<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fcba03;">
-        
-            <a class="navbar-brand" href="{% url 'home' %}">
-				<strong>Comparative Pathology Workbench for Coeliac Disease Data</strong>
-			</a>
+	<link rel="stylesheet" href="{% static 'styles_coeliac.css' %}">
 
 {% endif %}
 
-			<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarCollapseWholeMenu" aria-controls="navbarCollapseWholeMenu" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="navbarCollapseWholeMenu">
-
-				<ul class="navbar-nav mr-auto">
-
-					<li class="nav-item dropdown">
+	<link rel="stylesheet" href="{% static 'styles.css' %}">
 	
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="{% static 'base.js' %}"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	<title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
+
+</head>	
+
+<body>
+
+
+<!-- Navigation Bar -->
+
+<div class="nav-grid-container">
+
+	<div class="nav-grid-item">
+	
+		<div class="my-navbar">
+
+			<a href="{% url 'home' %}"><strong>Comparative Pathology Workbench</strong></a>
+
+		</div>
+	</div>
+
+	<div class="nav-grid-item">
+
+		<div class="my-subnav">
+
+<!-- Do you have somebody elses benches and your own benches to look at? -->
 {% if matrix_list and my_matrix_list %}
 
+	<!-- If you have somebody elses benches to look at -->
 	{% if matrix_list %}
 
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches ({{ matrix_list|length }})</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
+			<button class="my-subnavbtn">Benches ({{ matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
 
-			                <li class="dropdown-submenu">
+			<div class="my-subnav-content">
 
 		{% for matrix in matrix_list %}
 
 			{% if forloop.first %}
-		
-			                    <a class="dropdown-item" href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
 
-			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">All Benches</a>
+				<a href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
 
-			                    <ul class="dropdown-menu">	
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">All Benches <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
 
 			{% endif %}
-			
-									<li>
 
-										<a class="dropdown-item" href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
+						<a href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title|truncatechars:25 }}</a>
 
-									</li>
-	
 			{% if forloop.last %}
-		
-			                    </ul>
+
+					</div>
+
+				</div>
 
 			{% endif %}
-			
+
 		{% endfor %}
-
-	{% else %}
-
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches ({{ matrix_list|length }})</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-
-							<li><a class="dropdown-item" href="#">No Benches are available!</a></li>
-
-			            </ul>
-	{% endif %}
-
-
-	{% if my_matrix_list %}
-
-			                <li class="dropdown-submenu">
 
 		{% for my_matrix in my_matrix_list %}
 
 			{% if forloop.first %}
-		
-								<a class="dropdown-item" href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
 
-					            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">My Benches</a>
-
-			                    <ul class="dropdown-menu">	
-
-			{% endif %}
-			
-								<li>
-								
-									<a class="dropdown-item" href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
-								
-								</li>
+				<a href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
 	
-			{% if forloop.last %}
-		
-			                    </ul>
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">My Benches <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
 
 			{% endif %}
-			
+
+						<a href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title|truncatechars:25 }}</a>
+
+			{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+			{% endif %}
+
 		{% endfor %}
-				            </li>
 
 		{% if user.is_authenticated %}
 
-			                <li class="dropdown-submenu">
-
-								<a class="dropdown-item" href="{% url 'new_matrix' %}">Add New Bench</a>
-
-				            </li>
+				<a href="{% url 'new_matrix' %}">Add New Bench</a>
 
 		{% endif %}
-	
-			            </ul>
-
-	{% else %}
-
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches ({{ matrix_list|length }})</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-
-							<li>
-							
-								<a class="dropdown-item" href="#">No Benches are available!</a>
-							
-							</li>
-
-			            </ul>
+		
+			</div>
 
 	{% endif %}
-
 
 {% else %}
 
-	{% if not matrix_list and not my_matrix_list%}
-	
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
+			<button class="my-subnavbtn">Benches <i class="fa fa-caret-down"></i></button>
 
-			{% if user.is_authenticated %}
-
-			                <li class="dropdown-submenu">
-
-								<a class="dropdown-item" href="{% url 'new_matrix' %}">Add New Bench</a>
-
-				            </li>
-
-			{% else %}
+			<div class="my-subnav-content">
 			
-							<li>
+				<a class="dropdown-item" href="#">No Benches are available!</a>
 
-								<a class="dropdown-item" href="#">No Benches are available!</a>
-
-							</li>
-
-			{% endif %}
-	
-			            </ul>
-
-	{% else %}
-
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Benches ({{ matrix_list|length }})</a>
-
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-
-		{% if matrix_list %}
-
-			                <li class="dropdown-submenu">
-
-			{% for matrix in matrix_list %}
-
-				{% if forloop.first %}
-		
-			                    <a class="dropdown-item" href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
-
-			                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">All Benches</a>
-
-			                    <ul class="dropdown-menu">	
-
-				{% endif %}
-			
-									<li>
-									
-										<a class="dropdown-item" href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title }}</a>
-									
-									</li>
-	
-				{% if forloop.last %}
-		
-			                    </ul>
-
-				{% endif %}
-			
-			{% endfor %}
-
-		{% endif %}
-
-
-		{% if my_matrix_list %}
-
-			                <li class="dropdown-submenu">
-
-			{% for my_matrix in my_matrix_list %}
-
-				{% if forloop.first %}
-		
-								<a class="dropdown-item" href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
-
-					            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">My Benches</a>
-
-			                    <ul class="dropdown-menu">	
-
-				{% endif %}
-			
-									<li>
-
-										<a class="dropdown-item" href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title }}</a>
-
-									</li>
-	
-				{% if forloop.last %}
-		
-			                    </ul>
-
-				{% endif %}
-			
-			{% endfor %}
-				            </li>
-
-			            </ul>
-
-		{% else %}
-
-			{% if user.is_authenticated %}
-
-			                <li class="dropdown-submenu">
-
-								<a class="dropdown-item" href="{% url 'new_matrix' %}">Add New Bench</a>
-
-				            </li>
-
-			{% endif %}
-	
-			            </ul>
-
-		{% endif %}
-
-	{% endif %}
+			</div>
 
 {% endif %}
 
-					</li>
+		</div>
 
-					<li class="nav-item dropdown">
-	
+		<div class="my-subnav">
+
+<!-- Do you have some Servers to look at? -->
 {% if server_list %}
 
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources ({{ server_list.count }})</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-					
+			<button class="my-subnavbtn">Sources ({{ server_list.count }}) <i class="fa fa-caret-down"></i></button>
 
-		{% for server in server_list %}
+			<div class="my-subnav-content">
 
-			{% if forloop.first %}
+	{% for server in server_list %}
+
+		{% if forloop.first %}
 		
-							<li><a class="dropdown-item" href="{% url 'list_imaging_hosts' %}">All Sources</a></li>
+				<a href="{% url 'list_imaging_hosts' %}">All Sources</a>
+
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">All Sources <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+						<a href="{% url 'list_imaging_hosts' %}">All Sources</a>
+
+		{% endif %}
 			
-			{% endif %}
-			
-			{% if server.type.name == 'WORDPRESS' %}
+		{% if server.type.name == 'WORDPRESS' %}
 	
-							<li><a class="dropdown-item" href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a></li>
+						<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a>
 
-			{% else %}
+		{% else %}
 	
-							<li><a class="dropdown-item" href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
+						<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
 
-			{% endif %}
-
+		{% endif %}
 	
-		{% endfor %}
+		{% if forloop.last %}
 
-						</ul>
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+
+			</div>
 
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-					
-							<li><a class="dropdown-item" href="#">No Sources are available!</a>
+			<button class="my-subnavbtn">Sources <i class="fa fa-caret-down"></i>
+			</button>
 
-						</ul>
+			<div class="my-subnav-content">
+			
+				<a class="dropdown-item" href="#">No Sources are available!</a>
+
+			</div>
 
 {% endif %}
 
-					</li>
+		</div>
 
-					<li class="nav-item dropdown">
-	
+		<div class="my-subnav">
+
+<!-- Do you have some Images to look at? -->
 {% if image_list %}
 
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Images ({{ image_list.count }})</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-					
+			<button class="my-subnavbtn">Images ({{ image_list.count }}) <i class="fa fa-caret-down"></i></button>
 
-		{% for image in image_list %}
+			<div class="my-subnav-content">
 
-			{% if forloop.first %}
+	{% for image in image_list %}
+
+		{% if forloop.first %}
 		
-							<li><a class="dropdown-item" href="{% url 'list_image_cart' %}">List Your Image Collection</a></li>
+				<a href="{% url 'list_image_cart' %}">List Your Image Collection</a>
+		
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">Your Images <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+		{% if image.roi == 0 %}
 			
-			{% endif %}
+			{% if image.server.type.name == 'WORDPRESS' %}
 
-			{% if image.roi == 0 %}
-			
-				{% if image.server.type.name == 'WORDPRESS' %}
+						<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
 
-							<li><a class="dropdown-item" href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
-
-				{% else %}
-	
-							<li><a class="dropdown-item" href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a></li>
-	
-				{% endif %}
-	
 			{% else %}
-
-							<li><a class="dropdown-item" href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a></li>
+	
+						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
 	
 			{% endif %}
+	
+		{% else %}
 
-		{% endfor %}
+						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
+	
+		{% endif %}
 
-						</ul>
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+
+			</div>
+
 {% else %}
 
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Images</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
-					
-							<li><a class="dropdown-item" href="#">No Images are available!</a></li>
+			<button class="my-subnavbtn">Images <i class="fa fa-caret-down"></i></button>
 
-						</ul>
+			<div class="my-subnav-content">
+			
+				<a class="dropdown-item" href="#">No Images are available!</a>
+
+			</div>
 
 {% endif %}
 
-					</li>
+		</div>
 
-					<li class="nav-item dropdown">
-	
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
-	
-						<ul class="dropdown-menu" aria-labelledby="dropdown07">
+		<div class="my-subnav">
 
-							<li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
+			<button class="my-subnavbtn">About <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content-nodrop">
+		
+				<a href="{% url 'about' %}">About</a>
 			
-							<li><a class="dropdown-item" href="{% url 'people' %}">People</a></li>
+				<a href="{% url 'people' %}">People</a>
+			
+				<a href="{% url 'howto' %}">How To</a>
 
-							<li><a class="dropdown-item" href="{% url 'howto' %}">How To</a></li>
+			</div>
 
-						</ul>
+		</div>
 
-					</li>
-
-				</ul>
-
-				<ul class="navbar-nav ml-auto">
+		<div class="my-subnav-right">
 
 {% if user.is_authenticated %}
 
-					<li class="nav-item dropdown">
-			            
-			            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			            	{{ user.username }}
-			            </a>
-            			
-            			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+			<button class="my-subnavbtn-right">{{ user.username }} <i class="fa fa-caret-down"></i></button>
 
-							<li><a class="dropdown-item" href="{% url 'detail_user' user.id %}">My Account</a></li>
-        		
-							<li><a class="dropdown-item" href="{% url 'list_my_authorisation' %}">My Permissions</a></li>
-        		
-        		            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
+			<div class="my-subnav-content-right">
+						
+				<a href="{% url 'logout' %}">Logout</a>
+
+				<a href="{% url 'password_change' %}">Change Password</a>
 				
-							<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-
+				<a href="{% url 'list_my_authorisation' %}">My Permissions</a>
+				
+				<a href="{% url 'detail_user' user.id %}">My Account</a>
+				
 	{% if user.is_superuser %}
 
-							<li><a class="dropdown-item" href="{% url 'list_authorisation' %}">All Permissions</a></li>
-        		
-							<li><a class="dropdown-item" href="{% url 'maintenance' %}">Maintenance</a></li>
+				<a href="{% url 'authorisation' %}">Authorisation</a>
 
-							<li><a class="dropdown-item" href="{% url 'authorisation' %}">Authorisation</a></li>
+				<a href="{% url 'maintenance' %}">Maintenance</a>
 
+				<a href="{% url 'list_authorisation' %}">All Permissions</a>
+				
 	{% endif %}
 
-						</ul>
+			</div>
 
-            		</li>
-            		
 {% else %}
 
-					<li class="nav-item dropdown">
-			            
-			            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			            	User
-			            </a>
-            			
-            			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+			<button class="my-subnavbtn-right">User <i class="fa fa-caret-down"></i></button>
 
-							<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+			<div class="my-subnav-content-right">
+		
+				<a href="{% url 'login' %}">Login</a>
 
-							<li><a class="dropdown-item" href="{% url 'signup' %}">Register</a></li>
+				<a href="{% url 'signup' %}">Register</a>
 
-						</ul>
+			</div>
 
-            		</li>
-            		
 {% endif %}
 
-				</ul>
+		</div>
 
-            </div>
+	</div>
 
-    	</nav>
+</div>
 
-	</header>
-    
-
-    <!-- <main role="main" class="container"> -->
-    
-    <main role="main">
-    
+<!-- <main role="main"> -->
+	
 	{% block content %}
 
 	
 	{% endblock %}
 	
-	</main>
+<!-- </main> -->
 
-<div class="row">
+<div class="my-footer">
+	
+	<div class="footer-grid-container">
+		
+		<div>
+		</div>
 
-	<div class="col-md-1" id="sidebar">
+		<div>
+			<a href="https://helmsleytrust.org/"><img src="{% static 'helmsley.png' %}" style="background-color: #FFFFFF;" width="170"></a>
+		</div>
+
+		<div>
+			<a href="https://www.humancellatlas.org/"><img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" width="170"></a>
+		</div>
+
+		<div>
+			<a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220"></a>
+		</div>
+
+		<div>
+			<a href="https://www.hw.ac.uk/"><img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" width="125"></a>
+		</div>
+
+		<div>
+			<a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125"></a>
+		</div>
+
+		<div>
+		</div>
 
 	</div>
-
-	<div class="col-md-9" id="content">
-
-		<br />
-
-		<hr>
-
-	</div>
-
-	<div class="col-md-2">
-
-	</div>
-
+	
 </div>
 
-
-<div class="row">
-
-	<div class="col-md-1" id="sidebar">
-
-	</div>
-
-	<div class="col-md-1">
-
-		<ul class="list-unstyled">
-			<li>
-				<a href="https://helmsleytrust.org/">
-					<img src="{% static 'helmsley.png' %}" style="background-color: #FFFFFF;" width="170">
-				</a>
-			</li>
-		</ul>
-
-	</div>
-
-	<div class="col-md-1">
-
-	</div>
-					
-	<div class="col-md-1">
-
-		<ul class="list-unstyled">
-			<li>
-				<a href="https://www.humancellatlas.org/">
-					<img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" width="170">
-				</a>
-			</li>
-		</ul>
-
-	</div>
-					
-	<div class="col-md-1">
-						
-	</div>
-					
-	<div class="col-md-1">
-
-		<ul class="list-unstyled">
-			<li>
-				<a href="https://www.ed.ac.uk/pathology">
-					<img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220">
-				</a>
-			</li>
-		</ul>
-
-	</div>
-					
-	<div class="col-md-1">
-
-	</div>
-					
-	<div class="col-md-1">
-
-		<ul class="list-unstyled">
-			<li>
-				<a href="https://www.hw.ac.uk/">
-					<img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" width="125">
-				</a>
-			</li>
-		</ul>
-
-	</div>
-					
-	<div class="col-md-1">
-
-	</div>
-					
-	<div class="col-md-1">
-
-		<ul class="list-unstyled">
-			<li>
-				<a href="https://www.chanzuckerberg.com/">
-					<img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125">
-				</a>
-			</li>
-		</ul>
-
-	</div>
-					
-					
-	<div class="col-md-2">
-
-	</div>
-
-</div>
-
-
-<script>
-
- $(document).ready(function(){
-		$("textarea").attr({"rows": "10",
-							"cols": "50"
-		});
-});
-
-
-$(document).ready(function(){
-	
-	$("#matrix_info").on("hide.bs.collapse", function(){
-		$(".toggle-info").html('<i class="fa fa-info fa-lg"></i>');
-	});
-	
-	$("#matrix_info").on("show.bs.collapse", function(){
-		$(".toggle-info").html('<i class="fa fa-window-minimize fa-lg"></i>');
-	});
-
-});
-
-
-$( document ).ready( function () {
-	$(".toggle-sidebar").click(function () {
-
-		var flag = sessionStorage.getItem("sidebartoggle");
-			
-		//console.log("click BEFORE sessionStorage.sidebartoggle = ", flag)
-	
-		if (flag == "true") {
-	
-			//console.log("click Flag TRUE");
-
-			sessionStorage.setItem("sidebartoggle", "false");
-	
-			$("#matrix_sidebar").removeClass("visible");
-			$("#matrix_sidebar").addClass("invisible");
-			$("#indicator-2").removeClass("fa-window-minimize");
-			$("#indicator-2").addClass("fa-cart-arrow-down");
-		}
-		else {
-	
-			//console.log("click Flag FALSE");
-		
-			sessionStorage.setItem("sidebartoggle", "true");
-	
-			$("#matrix_sidebar").removeClass("invisible");
-			$("#matrix_sidebar").addClass("visible");
-			$("#indicator-2").removeClass("fa-cart-arrow-down");
-			$("#indicator-2").addClass("fa-window-minimize");
-		}
-
-		return false;
-	});
-}); 
-
-$( document ).ready( function () {
-
-    window.onload = function (e) {
-
-		//console.log("window.onload");
-
-		if(sessionStorage) {
-		
-			var flag = sessionStorage.getItem("sidebartoggle");
-			
-			//console.log("onload sessionStorage.sidebartoggle = ", flag)
-
-			if (flag == ""){
-			
-			    sessionStorage.setItem("sidebartoggle", "false");
-
-				$("#matrix_sidebar").removeClass("visible");
-				$("#matrix_sidebar").addClass("invisible");
-				$("#indicator-2").removeClass("fa-window-minimize");
-				$("#indicator-2").addClass("fa-cart-arrow-down");
-			}
-			else {
-			
-				if (flag == "true") {
-	
-					//console.log("Load Flag TRUE")
-
-					$("#matrix_sidebar").removeClass("invisible");
-					$("#matrix_sidebar").addClass("visible");
-					$("#indicator-2").removeClass("fa-cart-arrow-down");
-					$("#indicator-2").addClass("fa-window-minimize");
-				}
-				else {
-	
-					//console.log("Load Flag FALSE")
-		
-					$("#matrix_sidebar").removeClass("visible");
-					$("#matrix_sidebar").addClass("invisible");
-					$("#indicator-2").removeClass("fa-window-minimize");
-					$("#indicator-2").addClass("fa-cart-arrow-down");
-				}
-			}
-		}
-    };
-}); 
-
-
-$( document ).ready( function () {
-    $( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
-        var $el = $( this );
-        $el.toggleClass('active-dropdown');
-        var $parent = $( this ).offsetParent( ".dropdown-menu" );
-        if ( !$( this ).next().hasClass( 'show' ) ) {
-            $( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
-        }
-        var $subMenu = $( this ).next( ".dropdown-menu" );
-        $subMenu.toggleClass( 'show' );
-        
-        $( this ).parent( "li" ).toggleClass( 'show' );
-
-        $( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
-            $( '.dropdown-menu .show' ).removeClass( "show" );
-            $el.removeClass('active-dropdown');
-        } );
-        
-         if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
-            $el.next().css( { "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 } );
-        }
-
-        return false;
-    } );
-} );	
-
-
-</script>
-
-		
 </body>
 
 </html>

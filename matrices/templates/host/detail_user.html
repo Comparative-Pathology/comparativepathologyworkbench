@@ -7,57 +7,54 @@
 {% block content %}
 
 
-<div class="row">
+<!-- Breadcrumb Menu -->
 
-	<div class="col-md-12">
+<div>
 
-		<ol class="breadcrumb subheading">
+	<ul class="my-breadcrumb">
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 
 {% if user.is_superuser %}
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'authorisation' %}">
-					Authorisation
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'authorisation' %}">Authorisation</a>
+		</li>
 	
-			<li class="breadcrumb-item">
-				<a href="{% url 'detail_user' subject.id %}">
-					User {{ subject.id }}
-				</a>
-			</li>
+		<li>
+			<a href="{% url 'detail_user' subject.id %}">User {{ subject.id }}</a>
+		</li>
 	
 {% endif %}
 	
-			<li class="breadcrumb-item active">
-				User Details
-			</li>
+		<li class="breadcrumb-item active">
+			User Details
+		</li>
 	
-		</ol>
-	
-	</div>
-			
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>User {{ subject.id }}</h1>
+
+		<hr>
+		
 		<br />
 
-		<dl class="dl-horizontal">
-			<dt>ID:</dt>
+		<dl class="standard">
+			<dt>ID</dt>
 			<dd>{{ subject.id }}</dd>
 			<dt>User</dt>
 			<dd>{{ subject.username }}</dd>
@@ -77,22 +74,17 @@
 
 		<br />
 
-		<a href="{% url 'authorisation' %}">
-			<button class="save btn btn-success">BACK</button>
-		</a>
+		<a href="{% url 'authorisation' %}"><button class="button button-add">BACK</button></a>
 
 {% if user.is_superuser %}
 
-		<a href="{% url 'edit_user' subject.id %}">
-			<button class="save btn btn-warning">EDIT</button>
-		</a>
+		<a href="{% url 'edit_user' subject.id %}"><button class="button button-edit">EDIT</button></a>
 
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>

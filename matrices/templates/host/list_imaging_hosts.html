@@ -6,42 +6,43 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<ol class="breadcrumb subheading">
-	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
-	
-			<li class="breadcrumb-item active">
-				Sources
-			</li>
-	
-		</ol>
+<div>
 
-	</div>
-			
+	<ul class="my-breadcrumb">
+	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			Sources
+		</li>
+	
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
+	<div class="standard-grid-item">
+	
 		<h1>Browse Sources</h1>
-		<br />
 
 		<p>Browse the list of Sources</p>
+
 		<hr>
 	
+		<br />
+
 {% if server_list %}
 
 	{% for server in server_list %}
@@ -78,27 +79,17 @@
 
 				{% if server.type.name == 'WORDPRESS' %}
 	
-					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">	            	
-	    	        	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
+					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% else %}
 	
-					<a href="{% url 'webgallery_show_imaging_server' server.id %}">	            	
-		            	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
+					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
 	
-					<a href="{% url 'detail_server' server.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
-					<a href="{% url 'edit_server' server.id %}">
-						<button class="save btn btn-warning"><i class="fa fa-edit"></i></button>
-					</a>
-					<a href="{% url 'delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this SERVER?')">
-						<button class="save btn btn-danger"><i class="fa fa-trash"></i></button>
-					</a>
+					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_server' server.id %}"><button class="save button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this SERVER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 			{% else %}
@@ -107,21 +98,15 @@
 
 				{% if server.type.name == 'WORDPRESS' %}
 	
-					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">	            	
-	    	        	<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
+					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% else %}
 	
-					<a href="{% url 'webgallery_show_imaging_server' server.id %}">	            	
-	            		<button class="save btn btn-info"><i class="fa fa-eye"></i></button>
-					</a>
+					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
 	
-					<a href="{% url 'detail_server' server.id %}">
-						<button class="save btn btn-primary"><i class="fa fa-info"></i></button>
-					</a>
+					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	            </td>
 
 			{% endif %}
@@ -153,9 +138,7 @@
 			{% if credential_flag %}
     
     	        <td>
-					<a href="{% url 'new_server' %}">
-						<button class="save btn btn-success"><i class="fa fa-plus"></i></button>
-					</a>
+					<a href="{% url 'new_server' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 	            </td>
 
 			{% else %}
@@ -183,9 +166,8 @@
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>

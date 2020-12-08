@@ -6,112 +6,98 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
+<div>
 
-			<ol class="breadcrumb subheading">
-	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
-	
-				<li class="breadcrumb-item">
-					<a href="{% url 'list_imaging_hosts' %}">
-						Sources
-					</a>
-				</li>
-	
-				<li class="breadcrumb-item active">
-					{{ server.name }}
-				</li>
-	
-			</ol>
+	<ul class="my-breadcrumb">
 
-		</div>
-		
-	</div>
-			
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+	
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
+	
+		<li>
+			{{ server.name }}
+		</li>	
+
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
-	<h1>{{ server.name }}</h1>
+	<div class="standard-grid-item">
+	
+		<h1>{{ server.name }}</h1>
 
-	<br />
+		<br />
 
 {% if group_list %}
 
-	<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
+		<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
 	
-    <hr>
-    
-	<div class="row">
+		<hr>
+
+		<ul class="image-list">
 
     {% for group in group_list %}
-
-    	<div class="col-md-4">
-
-			<h3>{{ group.name }}</h3>
-
-			<br />
-	
-		    <p class="pull-left">
-		
-		{% if group.randomImageName != 'NONE'  %}
-		
-		
-				<a href="{% url 'webgallery_show_image' server.id group.randomImageID %}">
-					<img class="img-thumbnail" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/>
-				</a>
-
-		{% endif %}
-		
-			</p>
-
-		    <div class="pull-left">
     
-    	        <ul>
-        	        <li>Projects: {{ group.projectCount }}</li>
-            	    <li>Datasets: {{ group.datasetCount }}</li>
+	    	<li>
+
+				<div class="card-image-gallery">
+	
+					<div class="card-container-gallery">
+
+						<h5>{{ group.name }}</h5>
+
+	    		        <dl>
+
+    		    	        <dt>Projects</dt>
+    		    	        <dd>{{ group.projectCount }}</dd>
+	        	    	    <dt>Datasets</dt>
+	            		    <dd>{{ group.datasetCount }}</dd>
 
 		{% if group.imageCount != 0  %}
 
-                	<li>Images: {{ group.imageCount }}</li>
+                			<dt>Images</dt>
+                			<dd>{{ group.imageCount }}</dd>
 
 		{% endif %}
 
-	            </ul>
+		        	    </dl>
     
-            </div>
+						<br />
+					
+						<a href="{% url 'webgallery_show_group' server.id group.id %}"><button class="button button-view">View Group &raquo;</button></a>
 
-            <div class="clearfix">
-            </div>
-    
-			<p style="margin-left:20px">
-				<a class="btn btn-default" href="{% url 'webgallery_show_group' server.id group.id %}" role="button">
-					<button class="save btn btn-info">View Group &raquo;</button>
-				</a>
-			</p>
+						<br />
+    	        
+		{% if group.randomImageName != 'NONE'  %}
+		
+						<a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a>
 
-        </div>
+		{% endif %}
 
-        <div class="clearfix">
-        </div>
+    	        	</div>
+
+				</div>
+
+	    	<li>
 
     {% endfor %}
 
-    </div>
+		</ul>
 
 {% else %}
 
@@ -120,11 +106,16 @@
 {% endif %}
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+	
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

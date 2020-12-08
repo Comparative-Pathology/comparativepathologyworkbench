@@ -5,58 +5,52 @@
 {% load static %}
 
 {% block content %}
-    
-<div class="row">
 
-	<div class="col-md-12">
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'index' %}">
-						Workbenches
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'index' %}">Workbenches</a>
+		</li>
 
-				<li class="breadcrumb-item">
-					<a href="{% url 'matrix' matrix.id %}">
-						CPW:{{ matrix.id|stringformat:"06d" }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
+		</li>
 
-				<li class="breadcrumb-item active">
-					Workbench Edit
-				</li>
+		<li>
+			Workbench Edit
+		</li>
 	
-			</ol>
-
-		</div>
-
-	</div>
+	</ul>
 
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 
 	</div>
 
-	<div class="col-md-9" id="content">
-
-		<h1>EDIT Workbench {{ matrix.id|stringformat:"06d" }}</h1>
-		<br />
+	<div class="standard-grid-item">
+	
+		<h1>EDIT Workbench CPW:{{ matrix.id|stringformat:"06d" }}</h1>
 
 		<p>Edit an Existing Bench</p>
+
 		<hr>
+
+		<br />
 
 		<form method="POST" class="post-form">
 
@@ -64,23 +58,29 @@
 
 {% include 'includes/form.html' %}
 
-		    <button type="submit" class="save btn btn-danger">Save</button>
+			<br />
+
+			<button type="submit" class="button button-delete">Save</button>
 
 		</form>
 
 		<br />
 		
-		<a href="{% url 'index' %}">
-			<button class="save btn btn-success">CANCEL</button>
-		</a>
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
 	</div>
 	
-	<div class="col-md-2">
+	<div class="standard-grid-item">
 
 	</div>
 
 </div>
-	
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
 {% endblock %}
 

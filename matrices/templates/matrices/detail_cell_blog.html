@@ -6,114 +6,103 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'index' %}">
-						Workbenches
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'index' %}">Workbenches</a>
+		</li>
 
-				<li class="breadcrumb-item">
-					<a href="{% url 'matrix' matrix.id %}">
-						CPW:{{ matrix.id|stringformat:"06d" }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
+		</li>
 
-				<li class="breadcrumb-item active">
-					Cell Commentary
-				</li>
+		<li class="breadcrumb-item active">
+			Cell Commentary
+		</li>
 	
-			</ol>
+	</ul>
 
-		</div>
-
-	</div>
-	
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 
 	</div>
 
-	<div class="col-md-9" id="content">
-	    
-	<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
-	<br />
+	<div class="standard-grid-item">
+		
+		<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
 
-	<h3>Cell Commentary</h3>
-	<br />
+		<h3>Cell Commentary</h3>
 
-    <table>
-        <tr>
-            <th width="100px">Date</th>
-            <th width="100px">Time</th>
-            <th width="100px">Author</th>
-            <th>Post</th>
-            <th>Action</th>
-		</tr>
-        <tr>
-            <td>
-				{{ blogpost.date }}
-			</td>
-            <td>
-				{{ blogpost.time }}
-			</td>
-            <td>
-				{{ blogpost.author }}
-			</td>
-            <td>
-            	{{ blogpost.content|safe }}
-            </td>
-            <td>
-				<a class="btn btn-default" href="{{ blogpost.url }}" role="button" target="_blank">
-					<button class="save btn btn-info">View &raquo;</button>
-				</a>
-            </td>
-		</tr>
+		<p>Browse the Bench Commentary</p>
+		<hr>
+
+		<table>
+			<tr>
+				<th width="100px">Date</th>
+				<th width="100px">Time</th>
+				<th width="100px">Author</th>
+				<th>Post</th>
+				<th>Action</th>
+			</tr>
+			<tr>
+				<td>
+					{{ blogpost.date }}
+				</td>
+				<td>
+					{{ blogpost.time }}
+				</td>
+				<td>
+					{{ blogpost.author }}
+				</td>
+				<td>
+					{{ blogpost.content|safe }}
+				</td>
+				<td>
+					<a class="btn btn-default" href="{{ blogpost.url }}" role="button" target="_blank"><button class="button button-view">View &raquo;</button></a>
+				</td>
+			</tr>
 		
 {% if cell.image.viewer_url != '' %}
 
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>
-				<a href="{{ cell.image.viewer_url }}" target="_blank">
-					<img alt="{{ cell.image.name }}" title="{{ cell.image.name }}" style="width:450px; height:450px;" src="{{ cell.image.birdseye_url }}" >
-				</a>
-            </td>
-            <td>&nbsp;</td>
-		</tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-		</tr>
-	    
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>
+					<a href="{{ cell.image.viewer_url }}" target="_blank"><img alt="{{ cell.image.name }}" title="{{ cell.image.name }}" style="width:450px; height:450px;" src="{{ cell.image.birdseye_url }}" ></a>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		
 {% endif %}
 
 {% if comment_list %}
@@ -122,79 +111,83 @@
 	
 		{% if forloop.first %}
 	
-        <tr>
-            <th width="100px">Date</th>
-            <th width="100px">Time</th>
-            <th width="100px">Author</th>
-            <th>Post</th>
-            <th>Action</th>
-		</tr>
+			<tr>
+				<th width="100px">Date</th>
+				<th width="100px">Time</th>
+				<th width="100px">Author</th>
+				<th>Post</th>
+				<th>Action</th>
+			</tr>
 		
 		{% endif %}
 
-        <tr>
-            <td>
-				{{ comment.date }}
-			</td>
-            <td>
-				{{ comment.time }}
-			</td>
-            <td>
+			<tr>
+				<td>
+					{{ comment.date }}
+				</td>
+				<td>
+					{{ comment.time }}
+				</td>
+				<td>
 				{{ comment.author_name }}
-			</td>
-            <td>
-            	{{ comment.content|safe }}
-            </td>
-            <td>
-				<a class="btn btn-default" href="{{ comment.url }}" role="button" target="_blank">
-					<button class="save btn btn-info">View &raquo;</button>
-				</a>
-            </td>
-		</tr>
+				</td>
+				<td>
+					{{ comment.content|safe }}
+				</td>
+				<td>
+					<a class="btn btn-default" href="{{ comment.url }}" role="button" target="_blank"><button class="button button-info">View &raquo;</button></a>
+				</td>
+			</tr>
 
-    {% endfor %}
+	{% endfor %}
 		
 {% else %}
 
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>No Comments!</td>
-            <td>&nbsp;</td>
-		</tr>
-	    
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>No Comments!</td>
+				<td>&nbsp;</td>
+			</tr>
+		
 {% endif %}
 
-    </table>
+		</table>
 
-	<br />
+		<br />
 	
-	<h5>Post a Comment:</h5>
+		<h5>Post a Comment:</h5>
 
-	<form method="POST" class="post-form">
+		<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
+			
+			<br />
 
-	    <button type="submit" class="save btn btn-danger">COMMENT</button>
+			<button type="submit" class="button button-delete">COMMENT</button>
 
-	</form>
+		</form>
 	
-	<br />
+		<br />
 
 	<!-- <a href="{% url 'matrix' matrix.id %}"> -->
-	<a href="{{ request.META.HTTP_REFERER }}">
-	<button class="save btn btn-success">Back</button>
-	</a>
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">Back</button></a>
 
 	</div>
 	
-	<div class="col-md-2">
+	<div class="standard-grid-item">
 
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}

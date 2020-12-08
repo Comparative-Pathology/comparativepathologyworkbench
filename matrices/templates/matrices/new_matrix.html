@@ -6,67 +6,72 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
-	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
-	
-				<li class="breadcrumb-item active">
-					Workbenches
-				</li>
-	
-			</ol>
+<div>
 
-		</div>
-
-	</div>
+	<ul class="my-breadcrumb">
 	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+	
+		<li>
+			<a href="{% url 'index' %}">Workbenches</a>
+		</li>
+
+	</ul>
+
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
 
-	<div class="col-md-9" id="content">
+	<div class="standard-grid-item">
+	
+		<h1>NEW Workbench</h1>
 
-	<h1>NEW Workbench</h1>
-	<br />
+		<p>Create a NEW Bench</p>
 
-	<p>Create a NEW Bench</p>
-	<hr>
+		<hr>
 
-	<form method="POST" class="post-form">
+		<br />
+
+		<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-        <button type="submit" class="save btn btn-danger">Save</button>
+			<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}">
-			<button class="save btn btn-success">CANCEL</button>
-		</a>
+			<button type="submit" class="button button-delete">Save</button>
+
+			<br />
+			<br />
+
+			<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 		
-	</form>
+		</form>
 
 	</div>
 	
-	<div class="col-md-2">
-
+	<div class="standard-grid-item">
 	</div>
 
 </div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
 
 {% endblock %}
 

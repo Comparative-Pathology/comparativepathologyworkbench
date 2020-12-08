@@ -6,97 +6,85 @@
 
 {% block content %}
 
-<div class="row">
 
-	<div class="col-md-12">
+<!-- Breadcrumb Menu -->
 
-		<div>
-		
-			<ol class="breadcrumb subheading">
+<div>
+
+	<ul class="my-breadcrumb">
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'home' %}">
-						Home
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
 	
-				<li class="breadcrumb-item">
-					<a href="{% url 'index' %}">
-						Matrices
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'index' %}">Matrices</a>
+		</li>
 
-				<li class="breadcrumb-item">
-					<a href="{% url 'matrix' matrix.id %}">
-						CPW:{{ matrix.id|stringformat:"06d" }}
-					</a>
-				</li>
+		<li>
+			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
+		</li>
 
-				<li class="breadcrumb-item active">
-					Cell Details
-				</li>
+		<li class="breadcrumb-item active">
+			Cell Details
+		</li>
 	
-			</ol>
+	</ul>
 
-		</div>
-
-	</div>
-	
 </div>
 
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
+<!-- Main Data Panel -->
 
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
 
-	<div class="col-md-9" id="content">
+	<div class="standard-grid-item">
 	
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 
 		<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
-		<br />
 
 		<p>Browse the Cell Details</p>
+
 		<hr>
 
-		<dl class="dl-horizontal">
+		<br />
 
-			<dt>Id:</dt>
+		<dl class="standard">
+
+			<dt>Id</dt>
 			<dd>{{ cell.id }}</dd>
 
-			<dt>Title:</dt>
+			<dt>Title</dt>
 			<dd>{{ cell.title }}</dd>
 
-			<dt>Description:</dt>
+			<dt>Description</dt>
 			<dd>{{ cell.description }}</dd>
 
-			<dt>Image:</dt>
+			<dt>Image</dt>
 			<dd>{{ cell.image.name }}</dd>
 
 	{% if cell.image.roi != 0 %}
 
-			<dt>Region Of Interest:</dt>
+			<dt>Region Of Interest</dt>
 			<dd>{{ cell.image.roi }}</dd>
 
 	{% endif %}
 
 	{% if cell.blogpost != '' %}
 	
-			<dt>Blog Post:</dt>
-			<dd>
-				<a class="btn btn-default" href="{{ cell_link }}" role="button" target="_blank">
-					<button class="save btn btn-info">View Blog Post {{ cell.blogpost }} &raquo;</button>
-				</a>
-			</dd>
+			<dt>Blog Post</dt>
+			<dd><a class="btn btn-default" href="{{ cell_link }}" role="button" target="_blank"><button class="button button-view">View Blog Post {{ cell.blogpost }} &raquo;</button></a></dd>
 			
 	{% endif %}
 	
 			<br />
 
-			<dt>
-			</dt>
-			<dd><a href="{{ cell.image.viewer_url }}" target="_blank"><img  style="width:256px;" src="{{ cell.image.birdseye_url }}"></a></dd>
+			<dt>Image</dt>
+			<dd><a href="{{ cell.image.viewer_url }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="width:256px;" src="{{ cell.image.birdseye_url }}"></a></dd>
 
 		</dl>
 
@@ -110,15 +98,15 @@
 		<p>Browse the Row Header Details</p>
 		<hr>
 
-		<dl class="dl-horizontal">
+		<dl class="standard">
 
-			<dt>Id:</dt>
+			<dt>Id</dt>
 			<dd>{{ cell.id }}</dd>
 
-			<dt>Title:</dt>
+			<dt>Title</dt>
 			<dd>{{ cell.title }}</dd>
 
-			<dt>Description:</dt>
+			<dt>Description</dt>
 			<dd>{{ cell.description }}</dd>
 
 		</dl>
@@ -133,15 +121,15 @@
 		<p>Browse the Column Header Details</p>
 		<hr>
 
-		<dl class="dl-horizontal">
+		<dl class="standard">
 
-			<dt>Id:</dt>
+			<dt>Id</dt>
 			<dd>{{ cell.id }}</dd>
 
-			<dt>Title:</dt>
+			<dt>Title</dt>
 			<dd>{{ cell.title }}</dd>
 
-			<dt>Description:</dt>
+			<dt>Description</dt>
 			<dd>{{ cell.description }}</dd>
 
 		</dl>
@@ -151,14 +139,11 @@
 		<br />
 
 		<!-- <a href="{% url 'matrix' matrix.id %}"> -->
-		<a href="{{ request.META.HTTP_REFERER }}">
-			<button class="save btn btn-success">Back</button>
-		</a>
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">Back</button></a>
 
 	</div>
 	
-	<div class="col-md-2">
-
+	<div class="standard-grid-item">
 	</div>
 
 </div>

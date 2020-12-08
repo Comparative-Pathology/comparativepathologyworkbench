@@ -2,53 +2,46 @@
 
 {% block content %}
 
-<div class="row">
-
-	<div class="col-md-12">
-
-		<div>
-
-		<ol class="breadcrumb subheading">
-	
-			<li class="breadcrumb-item">
-				<a href="{% url 'home' %}">
-					Home
-				</a>
-			</li>
-
-			<li class="breadcrumb-item active">
-				Confirm Email Address
-			</li>
-	
-		</ol>
-
-		</div>
 		
-	</div>
-			
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
+	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			Confirm Email Address
+		</li>
+	
+	</ul>
+
 </div>
-		
-<div class="row">
 
-	<div class="col-md-1" id="sidebar">
 
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
 	</div>
-			
-	<div class="col-md-9" id="content">
 
-		<br />
-		<h2>Comparative Pathology Workbench Authorization</h2>
-		<br />
+	<div class="standard-grid-item">
+	
+		<h1>Comparative Pathology Workbench Authorization</h1>
 
 		<p>Please confirm your email address to complete the registration.</p>
 
 		<hr>
+		
 		<br />
 
 	</div>
-
-	<div class="col-md-2">
-
+	
+	<div class="standard-grid-item">
 	</div>
 
 </div>

@@ -28,22 +28,52 @@
 	<meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}">
 	<meta name="theme-color" content="#ffffff">
 
-{% if settings.LOCATION == 'CZI' %}
+
+<!--	DEVELOPMENT -->
+
+{% if settings.DEBUG %}
+
+	{% if settings.LOCATION == 'CZI' %}
 
 	<link rel="stylesheet" href="{% static 'styles_czi.css' %}">
+	<link rel="stylesheet" href="{% static 'styles.css' %}">
 
-{% elif settings.LOCATION == 'CANADA' %}
+	{% elif settings.LOCATION == 'CANADA' %}
 
 	<link rel="stylesheet" href="{% static 'styles_canada.css' %}">
+	<link rel="stylesheet" href="{% static 'styles.css' %}">
 		
-{% elif settings.LOCATION == 'COELIAC' %}
+	{% elif settings.LOCATION == 'COELIAC' %}
 
 	<link rel="stylesheet" href="{% static 'styles_coeliac.css' %}">
+	<link rel="stylesheet" href="{% static 'styles.css' %}">
+
+	{% endif %}
 
 {% endif %}
 
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
-	
+
+<!--	PRODUCTION -->
+
+{% if not settings.DEBUG %}
+
+	{% if settings.LOCATION == 'CZI' %}
+
+	<link rel="stylesheet" href="{% static 'styles_czi_all.css' %}">
+
+	{% elif settings.LOCATION == 'CANADA' %}
+
+	<link rel="stylesheet" href="{% static 'styles_canada_all.css' %}">
+		
+	{% elif settings.LOCATION == 'COELIAC' %}
+
+	<link rel="stylesheet" href="{% static 'styles_coeliac_all.css' %}">
+
+	{% endif %}
+
+{% endif %}
+
+
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">

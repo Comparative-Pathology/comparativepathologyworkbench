@@ -167,6 +167,7 @@ LOCATION = config('LOCATION')
 
 SETTINGS_EXPORT = [
     'LOCATION',
+    'DEBUG',
 ]
 
 # Django REST Framework

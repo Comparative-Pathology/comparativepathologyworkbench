@@ -119,7 +119,6 @@ urlpatterns = [
 	url(r'^(?P<matrix_id>[0-9]+)/view_cell_blog/(?P<cell_id>[0-9]+)/$', matrices_views.view_cell_blog, name='view_cell_blog'),
 
 	url(r'^(?P<matrix_id>[0-9]+)/matrix/$', matrices_views.matrix, name='matrix'),
-	url(r'^(?P<matrix_id>[0-9]+)/test_matrix/$', matrices_views.test_matrix, name='test_matrix'),
 
 	url(r'^(?P<matrix_id>[0-9]+)/detail_matrix/$', matrices_views.view_matrix, name='detail_matrix'), 
 	url(r'^new_matrix/$', matrices_views.new_matrix, name='new_matrix'),

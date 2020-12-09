@@ -28,10 +28,9 @@
 	<meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}">
 	<meta name="theme-color" content="#ffffff">
 
+{% if settings.DEBUG %}
 
 <!--	DEVELOPMENT -->
-
-{% if settings.DEBUG %}
 
 	{% if settings.LOCATION == 'CZI' %}
 
@@ -52,10 +51,9 @@
 
 {% endif %}
 
+{% if not settings.DEBUG %}
 
 <!--	PRODUCTION -->
-
-{% if not settings.DEBUG %}
 
 	{% if settings.LOCATION == 'CZI' %}
 
@@ -72,7 +70,6 @@
 	{% endif %}
 
 {% endif %}
-
 
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
@@ -106,19 +103,16 @@
 
 		<div class="my-subnav">
 
-<!-- Do you have somebody elses benches and your own benches to look at? -->
+<!-- Do you have somebody elses benches AND your own benches to look at? -->
 {% if matrix_list and my_matrix_list %}
-
-	<!-- If you have somebody elses benches to look at -->
-	{% if matrix_list %}
 
 			<button class="my-subnavbtn">Benches ({{ matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
 
 			<div class="my-subnav-content">
 
-		{% for matrix in matrix_list %}
+	{% for matrix in matrix_list %}
 
-			{% if forloop.first %}
+		{% if forloop.first %}
 
 				<a href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
 
@@ -128,23 +122,23 @@
 
 					<div class="my-nav-dropdown-content">
 
-			{% endif %}
+		{% endif %}
 
 						<a href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title|truncatechars:25 }}</a>
 
-			{% if forloop.last %}
+		{% if forloop.last %}
 
 					</div>
 
 				</div>
 
-			{% endif %}
+		{% endif %}
 
-		{% endfor %}
+	{% endfor %}
 
-		{% for my_matrix in my_matrix_list %}
+	{% for my_matrix in my_matrix_list %}
 
-			{% if forloop.first %}
+		{% if forloop.first %}
 
 				<a href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
 	
@@ -154,31 +148,33 @@
 
 					<div class="my-nav-dropdown-content">
 
-			{% endif %}
+		{% endif %}
 
 						<a href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title|truncatechars:25 }}</a>
 
-			{% if forloop.last %}
+		{% if forloop.last %}
 
 					</div>
 
 				</div>
 
-			{% endif %}
+		{% endif %}
 
-		{% endfor %}
+	{% endfor %}
 
-		{% if user.is_authenticated %}
+	{% if user.is_authenticated %}
 
 				<a href="{% url 'new_matrix' %}">Add New Bench</a>
 
-		{% endif %}
+	{% endif %}
 		
 			</div>
 
-	{% endif %}
+{% endif %}
 
-{% else %}
+
+<!-- If you have NO other peoples benches to look at AND NONE of your OWN benches -->
+{% if not matrix_list and not my_matrix_list %}
 
 			<button class="my-subnavbtn">Benches <i class="fa fa-caret-down"></i></button>
 
@@ -189,6 +185,98 @@
 			</div>
 
 {% endif %}
+
+
+<!-- If you ONLY have other peoples benches to look at -->
+{% if matrix_list and not my_matrix_list %}
+
+			<button class="my-subnavbtn">Benches ({{ matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+
+	{% for matrix in matrix_list %}
+
+		{% if forloop.first %}
+
+				<a href="{% url 'index' %}">List All Other Benches ({{ matrix_list|length }})</a>
+
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">All Other Benches <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+						<a href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title|truncatechars:25 }}</a>
+
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+			
+				<a class="dropdown-item" href="#">No My Benches are available!</a>
+
+	{% if user.is_authenticated %}
+
+				<a href="{% url 'new_matrix' %}">Add New Bench</a>
+
+	{% endif %}
+		
+			</div>
+
+{% endif %}
+
+<!-- If you ONLY have your own benches to look at -->
+{% if not matrix_list and my_matrix_list %}
+
+			<button class="my-subnavbtn">Benches ({{ my_matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+
+	{% for matrix in my_matrix_list %}
+
+		{% if forloop.first %}
+
+				<a href="{% url 'list_matrix' %}">List All My Benches ({{ my_matrix_list|length }})</a>
+
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">All My Benches <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+						<a href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title|truncatechars:25 }}</a>
+
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+			
+				<a class="dropdown-item" href="#">No Other Benches are available!</a>
+
+	{% if user.is_authenticated %}
+
+				<a href="{% url 'new_matrix' %}">Add New Bench</a>
+
+	{% endif %}
+		
+			</div>
+
+{% endif %}
+
 
 		</div>
 

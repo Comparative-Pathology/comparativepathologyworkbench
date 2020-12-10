@@ -11,7 +11,7 @@
 .my-navbar a {
 	float					: left;
 	font-size				: 25px;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	text-align				: left;
 	padding					: 10px 10px 10px 10px;
 	text-decoration			: none;
@@ -27,7 +27,7 @@
 	font-size				: 14px;	
 	border					: none;
 	outline					: none;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding					: 32px 16px 21.5px 16px;
 	background-color		: inherit;
 	font-family				: inherit;
@@ -44,7 +44,7 @@
 	font-size				: 14px;	
 	border					: none;
 	outline					: none;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding					: 32px 16px 21.5px 16px;
 	background-color		: inherit;
 	font-family				: inherit;
@@ -91,7 +91,7 @@ ul.my-breadcrumb li {
 
 ul.my-breadcrumb li+li:before {
 	padding					: 8px;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	content					: "/\00a0";
 }
 
@@ -274,7 +274,7 @@ hr {
 }
 
 .home-grid-item {
-	border-color			: #17A2B8; /* Blue-Green */
+	border-color			: #17A2B8;				/* Blue-Green */
 	padding					: 0px 0px 0px 0px;
 	text-align				: left;
 }
@@ -290,113 +290,118 @@ hr {
 }
 
 .button-view {
-	color					: #FFFFFF; /* White */
-	background-color		: #17A2B8; /* Blue-Green */
-	border-color			: #17A2B8; /* Blue-Green */
+	color					: #FFFFFF;				/* White */
+	background-color		: #17A2B8;				/* Blue-Green */
+	border-color			: #17A2B8;				/* Blue-Green */
 	border-radius			: 5px;
 }
 
 .button-view:hover {
-	color					: #FFFFFF; /* White */
-	background-color		: #138496; /* Darkened Blue-Green */
-	border-color			: #117A8B;
+	color					: #FFFFFF;				/* White */
+	background-color		: #138496;				/* Darkened Blue-Green */
+	border-color			: #117A8B;				/* Grey-Green */
 	border-radius			: 5px;
 }
 
 .button-info {
-	color					: #FFFFFF; /* White */
-	background-color		: #007BFF; /* Bright Blue */
-	border-color			: #007BFF; /* Bright Blue */
+	color					: #FFFFFF;				/* White */
+	background-color		: #007BFF;				/* Bright Blue */
+	border-color			: #007BFF;				/* Bright Blue */
 	border-radius			: 5px;
 }
 
 .button-info:hover {
-	color					: #FFFFFF; /* White */
-	background-color		: #0069d9; /* Darkened Bright Blue */
-	border-color			: #0062cc;
+	color					: #FFFFFF;				/* White */
+	background-color		: #0069d9;				/* Darkened Bright Blue */
+	border-color			: #0062CC;				/* Blue */;
 	border-radius			: 5px;
 }
 
 .button-edit {
-	color					: #212529;
-	background-color		: #FFC107; /* Orange-Yellow */
-	border-color			: #FFC107; /* Orange-Yellow */
+	color					: #212529;				/* Very Dark Grey */
+	background-color		: #FFC107;				/* Orange-Yellow */
+	border-color			: #FFC107;				/* Orange-Yellow */
 	border-radius			: 5px;
 }
 
 .button-edit:hover {
-	color					: #FFFFFF; /* White */
-	background-color		: #E0A800; /* Darkened Orange-Yellow */
-	border-color			: #D39E00;
+	color					: #FFFFFF;				/* White */
+	background-color		: #E0A800;				/* Darkened Orange-Yellow */
+	border-color			: #D39E00;				/* Dark Yellow */
 	border-radius			: 5px;
 }
 
 .button-delete {
-	color					: #FFFFFF; /* White */
-	background-color		: #DC3545; /* Red */
-	border-color			: #DC3545; /* Red */
+	color					: #FFFFFF;				/* White */
+	background-color		: #DC3545;				/* Red */
+	border-color			: #DC3545;				/* Red */
 	border-radius			: 5px;
 }
 
 .button-delete:hover {
-	color					: #FFFFFF; /* White */
-	background-color		: #C82333; /* Darkened Red */
-	border-color			: #BD2130;
+	color					: #FFFFFF;				/* White */
+	background-color		: #C82333;				/* Darkened Red */
+	border-color			: #BD2130;				/* Warning Red */
 	border-radius			: 5px;
 }
 
 .button-auth {
-	color					: #FFFFFF; /* White */
-	background-color		: #17A2B8; /* Blue-Green */
-	border-color			: #17A2B8; /* Blue-Green */
+	color					: #FFFFFF;				/* White */
+	background-color		: #17A2B8;				/* Blue-Green */
+	border-color			: #17A2B8;				/* Blue-Green */
 	border-radius			: 5px;
 }
 
 .button-auth:hover {
-	color					: #FFFFFF; /* White */
-	background-color		: #138496; /* Darkened Blue-Green */
-	border-color			: #117A8B;
+	color					: #FFFFFF;				/* White */
+	background-color		: #138496;				/* Darkened Blue-Green */
+	border-color			: #117A8B;				/* Grey-Green */
 	border-radius			: 5px;
 }
 
 .button-add {
-	color					: #FFFFFF; /* White */
-	background-color		: #28A745; /* Bright-Green */
-	border-color			: #28A745; /* Bright-Green */
+	color					: #FFFFFF;				/* White */
+	background-color		: #28A745;				/* Bright-Green */
+	border-color			: #28A745;				/* Bright-Green */
 	border-radius			: 5px;
 }
 
 .button-add:hover {
-	color					: #FFFFFF; /* White */
-	background-color		: #218838; /* Darkened Blue-Bright */
-	border-color			: #1E7E34;
+	color					: #FFFFFF;				/* White */
+	background-color		: #218838;				/* Darkened Blue-Bright */
+	border-color			: #1E7E34;				/* Darker Green */
 	border-radius			: 5px;
 }
 
 
 .panel-alert {
 	padding					: 20px;
-	background-color		: #DC3545; /* Red */
-	color					: #FFFFFF; /* White */}
+	background-color		: #DC3545;				/* Red */
+	color					: #FFFFFF;				/* White */
+}
 
 .panel-success {
 	padding					: 20px;
-	background-color		: #28A745; /* Bright-Green */
-	color					: #FFFFFF; /* White */}
+	background-color		: #28A745;				/* Bright-Green */
+	color					: #FFFFFF;				/* White */
+}
 
 .panel-info {
 	padding					: 20px;
-	background-color		: #17A2B8; /* Blue-Green */
-	color					: #FFFFFF; /* White */}
+	background-color		: #17A2B8;				/* Blue-Green */
+	color					: #FFFFFF;				/* White */
+}
 
 .panel-warning {
 	padding					: 20px;
-	background-color		: #FFC107; /* Orange-Yellow */
-	color					: #FFFFFF; /* White */}
+	background-color		: #FFC107;				/* Orange-Yellow */
+	color					: #FFFFFF;				/* White */
+}
 
 .panel-close-btn {
 	margin-left				: 15px;
-	color					: #FFFFFF; /* White */	font-weight				: bold;
+	color					: #FFFFFF;				/* White */
+	font-weight				: bold;
 	float					: right;
 	font-size				: 22px;
 	line-height				: 20px;
@@ -405,7 +410,7 @@ hr {
 }
 
 .panel-close-btn:hover {
-	color: black;
+	color					: #000000;				/* Black */
 }
 
 .card {
@@ -443,22 +448,23 @@ hr {
 	border-bottom			: 1px solid #FFFFFF;
 	flex					: 1 0 25%;
 	padding					: 10px 10px 10px 10px;
-	color					: #000000; /* Black */}
+	color					: #000000;				/* Black */
+}
 
 .gallery-list li:nth-child(3n + 1) {
-	background				: #FFFFFF; /* White */
+	background				: #FFFFFF;				/* White */
 }
 
 .gallery-list li:nth-child(3n + 2) {
-	background				: #FFFFFF; /* White */
+	background				: #FFFFFF;				/* White */
 }
 
 .gallery-list li:nth-child(3n + 3) {
-	background				: #FFFFFF; /* White */
+	background				: #FFFFFF;				/* White */
 }
 
 .image-list {
-	font-size				: 0; /*removes spacing between inline block elements*/
+	font-size				: 0;				/*removes spacing between inline block elements*/
 	list-style				: none;
 	padding					: 0px 0px 0px 0px;
 }
@@ -471,7 +477,7 @@ hr {
 	/*width					: 33.333333%;*/ /* 33.333333% - 3 per Row */
 	/*width					: 25%;*/ /* 25% - 4 per Row */
 	/*width					: 20%;*/ /* 20% - 5 per Row */
-	width					: 16.666667%; /* 16.666667% - 6 per Row */
+	width					: 16.666667%;				/* 16.666667% - 6 per Row */
 	/*width					: 14.285714%;*/ /* 14.285714% - 7 per Row */
 	/*width					: 12.5%;*/ /* 12.5% - 8 per Row */
 	/*width					: 11.111111%;*/ /* 11.111111% - 9 per Row */
@@ -496,19 +502,19 @@ hr {
 	border-bottom			: 1px solid #FFFFFF;
 	flex					: 1 0 25%;
 	padding					: 10px 10px 10px 10px;
-	color					: #000000; /* Black */
+	color					: #000000;				/* Black */
 }
 
 .gallery-image-list li:nth-child(3n + 1) {
-	background				: #FFFFFF; /* White */
+	background				: #FFFFFF;				/* White */
 }
 
 .gallery-image-list li:nth-child(3n + 2) {
-	background				: #FFFFFF; /* White */
+	background				: #FFFFFF;				/* White */
 }
 
 .gallery-image-list li:nth-child(3n + 3) {
-	background				: #FFFFFF; /* White */
+	background				: #FFFFFF;				/* White */
 }
 
 
@@ -662,7 +668,7 @@ hr {
 .my-subnav-content a {
 	font-size				: 14px;
 	/*float					: left;*/
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	text-decoration			: none;
 	/*padding					: 10px 0px 0px px;*/
 	/*padding					: 0px 10px 0px 10px;*/
@@ -672,7 +678,7 @@ hr {
 .my-subnav-content-nodrop a {
 	font-size				: 14px;
 	/*float					: left;*/
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	text-decoration			: none;
 	/*padding					: 10px 0px 0px px;*/
 	/*padding					: 0px 10px 0px 10px;*/
@@ -682,26 +688,26 @@ hr {
 .my-subnav-content-right a {
 	font-size				: 14px;
 	float					: right;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	text-decoration			: none;
 	padding					: 10px 10px 13px 10px;
 }
 
 .my-subnav-content a:hover {
 	background-color		: #C6C6C6;				/* Medium Grey */ 
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 }
 
 .my-subnav-content-nodrop a:hover {
 	background-color		: #C6C6C6;				/* Medium Grey */ 
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	text-align				: right;
 
 }
 
 .my-subnav-content-right a:hover {
 	background-color		: #C6C6C6;				/* Medium Grey */ 
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 }
 
 .my-subnav:hover .my-subnav-content {
@@ -721,7 +727,7 @@ hr {
 
 .my-nav-dropbtn {
 	background-color		: inherit;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding					: 0px 10px 0px 10px;
 	border					: none;
 	font-size				: 14px;
@@ -730,7 +736,7 @@ hr {
 
 .my-subnav-dropbtn {
 	background-color		: inherit;
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding					: 0px 10px 0px 10px;
 	/*padding					: 10px 10px 13px 10px;*/
 	border					: none;
@@ -756,7 +762,7 @@ hr {
 }
 
 .my-nav-dropdown-content a {
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding					: 10px 10px 10px 10px;
 	text-decoration			: none;
 	display					: block;
@@ -774,12 +780,12 @@ hr {
 
 .my-nav-dropdown:hover .my-nav-dropbtn {
 	background-color		: #F5F3F2;				/* Extremely Light Grey */
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 }
 
 .my-nav-dropdown:hover .my-subnav-dropbtn {
 	background-color		: #F5F3F2;				/* Extremely Light Grey */
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 }
 
 
@@ -790,8 +796,8 @@ hr {
 	left					: 0;
 	bottom					: 0;
 	width					: 100%;
-	background-color		: #FFFFFF;				/* White */ 
-	color					: #FFFFFF;				/* White */ 
+	background-color		: #FFFFFF;				/* White */
+	color					: #FFFFFF;				/* White */
 	text-align				: center;
 }
 
@@ -840,8 +846,8 @@ div.my-test-popup {
 	border-radius			: 5px 5px 5px 5px;
 	/* popup window is initially hidden */
 	display 				: none;
-												/* choose your color; */
-	background				: #FFFFFF;				/* White */ 
+													/* choose your colour */
+	background				: #FFFFFF;				/* White */
 	width					: 800px; 				/* width */
 	height					: 600px;				/* height */
 	position				: fixed;
@@ -859,7 +865,7 @@ div.my-test-popup {
 
 /* links to close popup */
 div.my-test-popup > a.close {
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	position				: absolute;
 	font-weight				: bold;
 	right					: 10px;
@@ -998,7 +1004,7 @@ div.collapsible-content > dd {
 	-webkit-border-radius	: 5px 5px 5px 5px;
 	-moz-border-radius		: 5px 5px 5px 5px;
 	border-radius			: 5px 5px 5px 5px;
-	background-color		: #F5F3F2;				/* Extremely Light Grey */ 
+	background-color		: #F5F3F2;				/* Extremely Light Grey */
 	-webkit-box-shadow		: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	-moz-box-shadow			: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	box-shadow				: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
@@ -1011,7 +1017,7 @@ div.collapsible-content > dd {
 	-webkit-border-radius	: 5px 5px 5px 5px;
 	-moz-border-radius		: 5px 5px 5px 5px;
 	border-radius			: 5px 5px 5px 5px;
-	background-color		: #F5F3F2;				/* Extremely Light Grey */ 
+	background-color		: #F5F3F2;				/* Extremely Light Grey */
 	-webkit-box-shadow		: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	-moz-box-shadow			: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	box-shadow				: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
@@ -1024,7 +1030,7 @@ div.collapsible-content > dd {
 	-webkit-border-radius	: 5px 5px 5px 5px;
 	-moz-border-radius		: 5px 5px 5px 5px;
 	border-radius			: 5px 5px 5px 5px;
-	background-color		: #F5F3F2;				/* Extremely Light Grey */ 
+	background-color		: #F5F3F2;				/* Extremely Light Grey */
 	-webkit-box-shadow		: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	-moz-box-shadow			: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	box-shadow				: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
@@ -1036,7 +1042,7 @@ div.collapsible-content > dd {
 	-webkit-border-radius	: 5px 5px 5px 5px;
 	-moz-border-radius		: 5px 5px 5px 5px;
 	border-radius			: 5px 5px 5px 5px;
-	background-color		: #F5F3F2;				/* Extremely Light Grey */ 
+	background-color		: #F5F3F2;				/* Extremely Light Grey */
 	-webkit-box-shadow		: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	-moz-box-shadow			: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	box-shadow				: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
@@ -1048,7 +1054,7 @@ div.collapsible-content > dd {
 	-webkit-border-radius	: 5px 5px 5px 5px;
 	-moz-border-radius		: 5px 5px 5px 5px;
 	border-radius			: 5px 5px 5px 5px;
-	background-color		: #F5F3F2;				/* Extremely Light Grey */ 
+	background-color		: #F5F3F2;				/* Extremely Light Grey */
 	-webkit-box-shadow		: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	-moz-box-shadow			: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
 	box-shadow				: #B3B3B3 2px 2px 2px;	/* Shadow - Dark Grey */
@@ -1107,7 +1113,7 @@ div.collapsible-content > dd {
 
 .my-dropbtn {
 	background-color		: #F9E79F;				/* Pale Yellow */ 
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding				: 0px 0px 0px 00px;
 	font-size				: 16px;
 	border					: none;
@@ -1116,7 +1122,7 @@ div.collapsible-content > dd {
 
 .my-dropcell {
 	background-color		: #CCFFCC;				/* Light Green */ 
-	color					: #000000;				/* White */ 
+	color					: #000000;				/* Black */
 	padding				: 0px 0px 0px 0px;
 	font-size				: 16px;
 	border					: none;
@@ -1139,7 +1145,7 @@ div.collapsible-content > dd {
 }
 
 .my-dropdown-btn-content a {
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding				: 12px 16px 12px 16px;
 	font-size				: 16px;
 	text-decoration		: none;
@@ -1158,7 +1164,7 @@ div.collapsible-content > dd {
 }
 
 .my-dropdown-cell-content a {
-	color					: #000000;				/* Black */ 
+	color					: #000000;				/* Black */
 	padding				: 12px 16px 12px 16px;
 	font-size				: 16px;
 	text-decoration		: none;

@@ -10,23 +10,8 @@
 
 <div>
 
-{% if settings.LOCATION == 'CZI' %}
+	<ul class="my-breadcrumb">
 
-<!-- #E3F2FD - Light Blue -->
-	<ul class="my-breadcrumb" style="background-color: #E3F2FD">
-
-{% elif settings.LOCATION == 'CANADA' %}
-
-<!-- F5776E - Salmon Pink-->
-	<ul class="my-breadcrumb" style="background-color: #F5776E;">
-		
-{% elif settings.LOCATION == 'COELIAC' %}
-
-<!-- FCBA03 - Orangey Yellow -->
-	<ul class="my-breadcrumb" style="background-color: #FCBA03">
-		
-{% endif %}
-	
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>

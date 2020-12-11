@@ -123,6 +123,11 @@ class MatrixViewSet(viewsets.ModelViewSet):
         return Response(data='Bench LIST Not Available')
 
 
+    def partial_update(self, request, *args, **kwargs):
+
+        return Response(data='Bench PARTIAL UPDATE Not Available')
+
+
     def destroy(self, request, *args, **kwargs):
 
         matrix = self.get_object()
@@ -227,6 +232,10 @@ class ImageViewSet(viewsets.ModelViewSet):
     permission_classes = ( permissions.IsAuthenticated,
                            ImageIsReadOnlyOrIsAdminOrIsOwner )
 
+
+    def partial_update(self, request, *args, **kwargs):
+
+        return Response(data='Image PARTIAL UPDATE Not Available')
 
     def list(self, request, *args, **kwargs):
 

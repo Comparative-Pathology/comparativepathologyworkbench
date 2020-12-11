@@ -34,18 +34,15 @@
 
 	{% if settings.LOCATION == 'CZI' %}
 
-	<link rel="stylesheet" href="{% static 'styles_czi.css' %}">
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
+	<link rel="stylesheet" href="{% static 'styles_czi_less.css' %}">
 
 	{% elif settings.LOCATION == 'CANADA' %}
 
-	<link rel="stylesheet" href="{% static 'styles_canada.css' %}">
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
+	<link rel="stylesheet" href="{% static 'styles_canada_less.css' %}">
 		
 	{% elif settings.LOCATION == 'COELIAC' %}
 
-	<link rel="stylesheet" href="{% static 'styles_coeliac.css' %}">
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
+	<link rel="stylesheet" href="{% static 'styles_coeliac_less.css' %}">
 
 	{% endif %}
 

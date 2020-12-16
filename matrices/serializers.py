@@ -332,6 +332,13 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 			request_user = request.user
 			
+
+		if validated_data.get('title', None) == None and validated_data.get('description', None) == None and validated_data.get('bench_cells', None) == None:
+		
+			message = 'CPW0290: NO data supplied for Bench Creation!'
+			raise serializers.ValidationError(message)
+
+
 		matrix_title = ""
 		matrix_description = ""
 		
@@ -601,7 +608,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 
 		self.validate_matrix_json_fields(bench_title, bench_description, bench_height, bench_width)
-		
+
 		
 		if validated_data.get('bench_cells', None) == None:
 

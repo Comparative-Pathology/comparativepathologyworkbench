@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+import time
 
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -299,7 +300,7 @@ def mailer(request):
     email_from = config('DEFAULT_FROM_EMAIL')
     recipient_list = ['mike.wicks@gmail.com',]
 
-    print("message : " + message)
+    #print("message : " + message)
 
     send_mail( subject, message, email_from, recipient_list, fail_silently=False )
     
@@ -1983,6 +1984,8 @@ def edit_server(request, server_id):
 @login_required
 def delete_server(request, server_id):
 
+    user = get_object_or_404(User, pk=request.user.id)
+    
     server = get_object_or_404(Server, pk=server_id)
     
     if credential_exists(user) == True:
@@ -2195,7 +2198,13 @@ def show_imaging_server(request, server_id):
         
         if server.is_omero547() == True or server.is_omero56() == True:
         
+            #start_time = time.time()
+
             data = server.get_imaging_server_json(request)
+
+            #elapsed_time = time.time() - start_time
+            
+            #print('Execution time max: ' + str(elapsed_time))
         
             return render(request, 'gallery/show_server.html', data)
         
@@ -2237,8 +2246,14 @@ def show_group(request, server_id, group_id):
     
     if credential_exists(user) == True:
 
+        #start_time = time.time()
+        
         data = server.get_imaging_server_group_json(request, group_id)
     
+        #elapsed_time = time.time() - start_time
+            
+        #print('Execution time max: ' + str(elapsed_time))
+
         return render(request, 'gallery/show_group.html', data)
 
     else:

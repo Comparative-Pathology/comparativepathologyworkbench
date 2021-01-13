@@ -1357,6 +1357,8 @@ class Server(models.Model):
         token = session.get(token_url).json()['data']
         session.headers.update({'X-CSRFToken': token, 'Referer': login_url})
         
+        #print("Got Token")
+
         userid = self.uid
         
         cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
@@ -1378,6 +1380,7 @@ class Server(models.Model):
     
             payload = {'limit': 50}
             project_rsp = session.get(project_url, params=payload)
+            #print("Got Projects")
             project_data = project_rsp.json()
             
             #print 'project_rsp.status_code', project_rsp.status_code
@@ -1420,6 +1423,7 @@ class Server(models.Model):
             payload = {'username': userid, 'password': password, 'server': 1}
         
             r = session.post(login_url, data=payload)
+            #print("Post Login")
             login_rsp = r.json()
             try:
                 assert r.status_code == 200
@@ -1456,6 +1460,7 @@ class Server(models.Model):
         
             payload = {'limit': 50}
             group_project_rsp = session.get(group_project_url, params=payload)
+            #print("Got Projects")
             group_project_data = group_project_rsp.json()
             
             #print 'group_project_rsp.status_code', group_project_rsp.status_code
@@ -1479,6 +1484,7 @@ class Server(models.Model):
     
                     payload = {'limit': 100}
                     dataset_rsp = session.get(dataset_url, params=payload)
+                    #print("Got Datasets")
                     dataset_data = dataset_rsp.json()
             
                     #print 'dataset_rsp.status_code', dataset_rsp.status_code
@@ -1506,53 +1512,58 @@ class Server(models.Model):
                             
                         else:
                             
+                            randImageID = '999999'
+                            randImageName = 'NONE'
+                            randomImageBEURL = 'NONE'
+                            
                             for d in dataset_data['data']:
-                            
-                                datasetId = d['@id']
+
+                                if randImageID == '999999' and randImageName == 'NONE' and randomImageBEURL == 'NONE':
                                 
-                                dataset_image_url = dataset_images_url + '/' + str(datasetId) + '/' + commandDatasetImages.postamble
+                                    datasetId = d['@id']
+                                
+                                    dataset_image_url = dataset_images_url + '/' + str(datasetId) + '/' + commandDatasetImages.postamble
     
-                                #print 'dataset_image_url', dataset_image_url
+                                    #print('dataset_image_url', dataset_image_url)
     
-                                payload = {'limit': 100}
-                                dataset_image_rsp = session.get(dataset_image_url, params=payload)
-                                dataset_image_data = dataset_image_rsp.json()
+                                    payload = {'limit': 100}
+                                    dataset_image_rsp = session.get(dataset_image_url, params=payload)
+                                    #print("Got Images")
+                                    dataset_image_data = dataset_image_rsp.json()
             
-                                #print 'dataset_image_rsp.status_code', dataset_image_rsp.status_code
+                                    #print 'dataset_image_rsp.status_code', dataset_image_rsp.status_code
                                     
-                                if dataset_image_rsp.status_code == 200:
+                                    if dataset_image_rsp.status_code == 200:
     
-                                    dataset_image_meta = dataset_image_data['meta']
-                                    imageCount = dataset_image_meta['totalCount']
+                                        dataset_image_meta = dataset_image_data['meta']
+                                        imageCount = dataset_image_meta['totalCount']
                                         
-                                    groupImageCount = groupImageCount + imageCount
+                                        groupImageCount = groupImageCount + imageCount
                                     
-                                    #print 'imageCount', imageCount
+                                        #print 'imageCount', imageCount
                                     
-                                    if imageCount > 0:
+                                        if imageCount > 0:
                                     
-                                        randImageIndex = randint(0, (imageCount - 1))
-                                        #randImageIndex = 0
-                                        #print 'Random Image Index: ', randImageIndex
+                                            randImageIndex = randint(0, (imageCount - 1))
+                                            #randImageIndex = 0
+                                            #print 'Random Image Index: ', randImageIndex
                 
-                                        count = 0
+                                            count = 0
                     
-                                        for i in dataset_image_data['data']:
+                                            for i in dataset_image_data['data']:
                     
-                                            if count == randImageIndex:
-                                                randImageID = i['@id']
-                                                randImageName = i['Name']
-                                                break
+                                                if count == randImageIndex:
+                                                    randImageID = i['@id']
+                                                    randImageName = i['Name']
+                                                    break
                             
-                                            count = count + 1
-                                        
+                                                count = count + 1
                         
-                                        #print 'Random Image ID: ', randImageID
-                                        #print 'Random Image Name: ', randImageName
-    
                                         randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + '/' + commandBirdsEye.postamble
     
-                                        #print 'Random Birds Eye URL: ', randomImageBEURL
+                                        #print('Random Image ID: ', randImageID)
+                                        #print('Random Image Name: ', randImageName)
+                                        #print('Random Birds Eye URL: ', randomImageBEURL)
     
     
                     group = ({

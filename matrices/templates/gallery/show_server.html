@@ -70,8 +70,8 @@
 
 		{% if group.imageCount != 0  %}
 
-                			<dt>Images</dt>
-                			<dd>{{ group.imageCount }}</dd>
+                			<!-- <dt>Images</dt> -->
+                			<!-- <dd>{{ group.imageCount }}</dd> -->
 
 		{% endif %}
 
@@ -85,7 +85,7 @@
     	        
 		{% if group.randomImageName != 'NONE'  %}
 		
-						<a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a>
+						<!-- <a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a> -->
 
 		{% endif %}
 

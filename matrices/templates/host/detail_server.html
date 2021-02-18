@@ -62,11 +62,7 @@
 
 		<a href="{% url 'list_imaging_hosts' %}"><button class="button button-add">BACK</button></a>
 
-{% if user == server.owner or user.is_superuser %}
-            
 		<a href="{% url 'edit_server' server.id %}"><button class="button button-edit">Edit</button></a>
-
-{% endif %}
 
 	</div>
 	

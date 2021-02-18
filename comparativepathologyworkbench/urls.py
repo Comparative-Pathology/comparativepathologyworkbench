@@ -9,5 +9,7 @@ from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
-    url(r'^', include('matrices.urls')),
+    path('', include('matrices.urls')),
+    
+    path('admin/', admin.site.urls),
 ]

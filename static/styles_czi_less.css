@@ -8,7 +8,7 @@ html {
 	 margin-bottom: 60px;
 	 margin: 0px;
 	 font-weight: 400;
-	 color: #000000;
+	 color: Black;
 }
  .invisible {
 	 display: none;
@@ -16,7 +16,7 @@ html {
  input[type=text] {
 	 width: 100%;
 	 padding: 12px 12px 12px 12px;
-	 border: 1px solid #CCCCCC;
+	 border: 1px solid DarkGray;
 	 border-radius: 4px;
 	 box-sizing: border-box;
 	 margin-top: 6px;
@@ -27,7 +27,7 @@ html {
  input[type=email] {
 	 width: 100%;
 	 padding: 12px 12px 12px 12px;
-	 border: 1px solid #CCCCCC;
+	 border: 1px solid DarkGray;
 	 border-radius: 4px;
 	 box-sizing: border-box;
 	 margin-top: 6px;
@@ -38,7 +38,7 @@ html {
  input[type=number] {
 	 width: 100%;
 	 padding: 12px 12px 12px 12px;
-	 border: 1px solid #CCCCCC;
+	 border: 1px solid DarkGray;
 	 border-radius: 4px;
 	 box-sizing: border-box;
 	 margin-top: 6px;
@@ -49,7 +49,7 @@ html {
  input[type=password] {
 	 width: 100%;
 	 padding: 12px 12px 12px 12px;
-	 border: 1px solid #CCCCCC;
+	 border: 1px solid DarkGray;
 	 border-radius: 4px;
 	 box-sizing: border-box;
 	 margin-top: 6px;
@@ -60,7 +60,7 @@ html {
  select {
 	 width: 100%;
 	 padding: 12px 12px 12px 12px;
-	 border: 1px solid #CCCCCC;
+	 border: 1px solid DarkGray;
 	 border-radius: 4px;
 	 box-sizing: border-box;
 	 margin-top: 6px;
@@ -71,7 +71,7 @@ html {
  textarea {
 	 width: 100%;
 	 padding: 12px 12px 12px 12px;
-	 border: 1px solid #CCCCCC;
+	 border: 1px solid DarkGray;
 	 border-radius: 4px;
 	 box-sizing: border-box;
 	 margin-top: 6px;
@@ -93,7 +93,7 @@ html {
 }
  .form-container {
 	 border-radius: 5px;
-	 background-color: #F2F2F2;
+	 background-color: LightGray;
 	 padding: 20px 20px 20px 20px;
 }
  .form-row:after {
@@ -122,18 +122,18 @@ html {
 }
  h1 {
 	 font-family: Verdana, Geneva, sans-serif;
-	 color: #000000;
+	 color: Black;
 }
  h2 {
 	 font-family: Verdana, Geneva, sans-serif;
-	 color: #000000;
+	 color: Black;
 }
  h3 {
 	 font-family: Verdana, Geneva, sans-serif;
-	 color: #000000;
+	 color: Black;
 }
  hr {
-	 border-top: 1px solid #000000;
+	 border-top: 1px solid Black;
 }
  .standard dl {
 	 padding: 0px 0px 0px 0px;
@@ -182,73 +182,73 @@ html {
 	 cursor: pointer;
 }
  .button-view {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #17A2B8;
 	 border-color: #17A2B8;
 	 border-radius: 5px;
 }
  .button-view:hover {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #107180;
 	 border-color: #107180;
 	 border-radius: 5px;
 }
  .button-info {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #007BFF;
 	 border-color: #007BFF;
 	 border-radius: 5px;
 }
  .button-info:hover {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #0056B2;
 	 border-color: #0056B2;
 	 border-radius: 5px;
 }
  .button-edit {
-	 color: #000000;
+	 color: Black;
 	 background-color: #FFC107;
 	 border-color: #FFC107;
 	 border-radius: 5px;
 }
  .button-edit:hover {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #B28704;
 	 border-color: #B28704;
 	 border-radius: 5px;
 }
  .button-delete {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #DC3545;
 	 border-color: #DC3545;
 	 border-radius: 5px;
 }
  .button-delete:hover {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #9A2530;
 	 border-color: #9A2530;
 	 border-radius: 5px;
 }
  .button-auth {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #17A2B8;
 	 border-color: #17A2B8;
 	 border-radius: 5px;
 }
  .button-auth:hover {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #107180;
 	 border-color: #107180;
 	 border-radius: 5px;
 }
  .button-add {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #28A745;
 	 border-color: #28A745;
 	 border-radius: 5px;
 }
  .button-add:hover {
-	 color: #FFFFFF;
+	 color: White;
 	 background-color: #1C7430;
 	 border-color: #1C7430;
 	 border-radius: 5px;
@@ -256,26 +256,26 @@ html {
  .panel-alert {
 	 padding: 20px;
 	 background-color: #DC3545;
-	 color: #FFFFFF;
+	 color: White;
 }
  .panel-success {
 	 padding: 20px;
 	 background-color: #28A745;
-	 color: #FFFFFF;
+	 color: White;
 }
  .panel-info {
 	 padding: 20px;
 	 background-color: #17A2B8;
-	 color: #FFFFFF;
+	 color: White;
 }
  .panel-warning {
 	 padding: 20px;
 	 background-color: #FFC107;
-	 color: #FFFFFF;
+	 color: White;
 }
  .panel-close-btn {
 	 margin-left: 15px;
-	 color: #FFFFFF;
+	 color: White;
 	 font-weight: bold;
 	 float: right;
 	 font-size: 22px;
@@ -284,7 +284,7 @@ html {
 	 transition: 0.3s;
 }
  .panel-close-btn:hover {
-	 color: #000000;
+	 color: Black;
 }
  .card {
 	 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -312,19 +312,19 @@ html {
 	 margin: 0px 0px 0px 0px;
 }
  .gallery-list li {
-	 border-bottom: 1px solid #FFFFFF;
+	 border-bottom: 1px solid White;
 	 flex: 1 0 25%;
 	 padding: 10px 10px 10px 10px;
-	 color: #000000;
+	 color: Black;
 }
  .gallery-list li:nth-child(3n + 1) {
-	 background: #FFFFFF;
+	 background: White;
 }
  .gallery-list li:nth-child(3n + 2) {
-	 background: #FFFFFF;
+	 background: White;
 }
  .gallery-list li:nth-child(3n + 3) {
-	 background: #FFFFFF;
+	 background: White;
 }
  .image-list {
 	 font-size: 0;
@@ -348,19 +348,19 @@ html {
 	 margin: 0px 0px 0px 0px;
 }
  .gallery-image-list li {
-	 border-bottom: 1px solid #FFFFFF;
+	 border-bottom: 1px solid White;
 	 flex: 1 0 25%;
 	 padding: 10px 10px 10px 10px;
-	 color: #000000;
+	 color: Black;
 }
  .gallery-image-list li:nth-child(3n + 1) {
-	 background: #FFFFFF;
+	 background: White;
 }
  .gallery-image-list li:nth-child(3n + 2) {
-	 background: #FFFFFF;
+	 background: White;
 }
  .gallery-image-list li:nth-child(3n + 3) {
-	 background: #FFFFFF;
+	 background: White;
 }
  .card-gallery {
 	 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -459,39 +459,39 @@ html {
 }
  .my-subnav-content a {
 	 font-size: 14px;
-	 color: #000000;
+	 color: Black;
 	 text-decoration: none;
 	 padding: 10px 10px 13px 10px;
 }
  .my-subnav-content a:hover {
-	 background-color: #C6C6C6;
-	 color: #000000;
+	 background-color: Gray;
+	 color: Black;
 }
  .my-subnav-content-nodrop {
 	 display: none;
 	 position: absolute;
 	 left: 0;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 width: 63%;
 	 z-index: 1;
 	 padding: 10.5px 0px 13px 540px;
 }
  .my-subnav-content-nodrop a {
 	 font-size: 14px;
-	 color: #000000;
+	 color: Black;
 	 text-decoration: none;
 	 padding: 10px 10px 13px 10px;
 }
  .my-subnav-content-nodrop a:hover {
-	 background-color: #C6C6C6;
-	 color: #000000;
+	 background-color: Gray;
+	 color: Black;
 	 text-align: right;
 }
  .my-subnav-content-right {
 	 display: none;
 	 position: absolute;
 	 right: 0;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 width: 100%;
 	 z-index: 1;
 	 padding: 0px 0px 0px 0px;
@@ -499,13 +499,13 @@ html {
  .my-subnav-content-right a {
 	 font-size: 14px;
 	 float: right;
-	 color: #000000;
+	 color: Black;
 	 text-decoration: none;
 	 padding: 10px 10px 13px 10px;
 }
  .my-subnav-content-right a:hover {
-	 background-color: #C6C6C6;
-	 color: #000000;
+	 background-color: Gray;
+	 color: Black;
 }
  .my-subnav {
 	 float: left;
@@ -519,14 +519,14 @@ html {
 	 display: block;
 }
  .my-subnav:hover .my-subnavbtn {
-	 background-color: #C6C6C6;
-	 background-color: #F5F3F2;
+	 background-color: Gray;
+	 background-color: LightGray;
 }
  .my-subnav .my-subnavbtn {
 	 font-size: 14px;
 	 border: none;
 	 outline: none;
-	 color: #000000;
+	 color: Black;
 	 padding: 32px 16px 21.5px 16px;
 	 background-color: inherit;
 	 font-family: inherit;
@@ -541,13 +541,13 @@ html {
 	 display: block;
 }
  .my-subnav-right:hover .my-subnavbtn-right {
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 }
  .my-subnav-right .my-subnavbtn-right {
 	 font-size: 14px;
 	 border: none;
 	 outline: none;
-	 color: #000000;
+	 color: Black;
 	 padding: 32px 16px 21.5px 16px;
 	 background-color: inherit;
 	 font-family: inherit;
@@ -555,7 +555,7 @@ html {
 }
  .my-nav-dropbtn {
 	 background-color: inherit;
-	 color: #000000;
+	 color: Black;
 	 padding: 0px 10px 0px 10px;
 	 border: none;
 	 font-size: 14px;
@@ -563,7 +563,7 @@ html {
 }
  .my-subnav-dropbtn {
 	 background-color: inherit;
-	 color: #000000;
+	 color: Black;
 	 padding: 0px 10px 0px 10px;
 	 border: none;
 	 font-size: 14px;
@@ -577,17 +577,17 @@ html {
 	 display: block;
 }
  .my-nav-dropdown:hover .my-nav-dropbtn {
-	 background-color: #F5F3F2;
-	 color: #000000;
+	 background-color: LightGray;
+	 color: Black;
 }
  .my-nav-dropdown:hover .my-subnav-dropbtn {
-	 background-color: #F5F3F2;
-	 color: #000000;
+	 background-color: LightGray;
+	 color: Black;
 }
  .my-nav-dropdown-content {
 	 display: none;
 	 position: absolute;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 min-width: 340px;
 	 width: 100%;
 	 overflow: auto;
@@ -596,7 +596,7 @@ html {
 	 border-radius: 5px 5px 5px 5px;
 }
  .my-nav-dropdown-content a {
-	 color: #000000;
+	 color: Black;
 	 padding: 10px 10px 10px 10px;
 	 text-decoration: none;
 	 display: block;
@@ -604,15 +604,15 @@ html {
 	 float: none;
 }
  .my-nav-dropdown-content a:hover {
-	 background-color: #C6C6C6;
+	 background-color: Gray;
 }
  .my-footer {
 	 position: fixed;
 	 left: 0;
 	 bottom: 0;
 	 width: 100%;
-	 background-color: #FFFFFF;
-	 color: #FFFFFF;
+	 background-color: White;
+	 color: White;
 	 text-align: center;
 }
  .footer-grid-container {
@@ -646,7 +646,7 @@ html {
 	 border-width: 2px;
 	 border-radius: 5px 5px 5px 5px;
 	 display: none;
-	 background: #FFFFFF;
+	 background: White;
 	 width: 800px;
 	 height: 600px;
 	 position: fixed;
@@ -662,7 +662,7 @@ html {
 	 box-sizing: border-box;
 }
  div.my-test-popup >a.close {
-	 color: #000000;
+	 color: Black;
 	 position: absolute;
 	 font-weight: bold;
 	 right: 10px;
@@ -772,7 +772,7 @@ html {
 	 -webkit-border-radius: 5px 5px 5px 5px;
 	 -moz-border-radius: 5px 5px 5px 5px;
 	 border-radius: 5px 5px 5px 5px;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 -webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	 -moz-box-shadow: #B3B3B3 2px 2px 2px;
 	 box-shadow: #B3B3B3 2px 2px 2px;
@@ -784,7 +784,7 @@ html {
 	 -webkit-border-radius: 5px 5px 5px 5px;
 	 -moz-border-radius: 5px 5px 5px 5px;
 	 border-radius: 5px 5px 5px 5px;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 -webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	 -moz-box-shadow: #B3B3B3 2px 2px 2px;
 	 box-shadow: #B3B3B3 2px 2px 2px;
@@ -796,7 +796,7 @@ html {
 	 -webkit-border-radius: 5px 5px 5px 5px;
 	 -moz-border-radius: 5px 5px 5px 5px;
 	 border-radius: 5px 5px 5px 5px;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 -webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	 -moz-box-shadow: #B3B3B3 2px 2px 2px;
 	 box-shadow: #B3B3B3 2px 2px 2px;
@@ -807,7 +807,7 @@ html {
 	 -webkit-border-radius: 5px 5px 5px 5px;
 	 -moz-border-radius: 5px 5px 5px 5px;
 	 border-radius: 5px 5px 5px 5px;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 -webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	 -moz-box-shadow: #B3B3B3 2px 2px 2px;
 	 box-shadow: #B3B3B3 2px 2px 2px;
@@ -818,7 +818,7 @@ html {
 	 -webkit-border-radius: 5px 5px 5px 5px;
 	 -moz-border-radius: 5px 5px 5px 5px;
 	 border-radius: 5px 5px 5px 5px;
-	 background-color: #F5F3F2;
+	 background-color: LightGray;
 	 -webkit-box-shadow: #B3B3B3 2px 2px 2px;
 	 -moz-box-shadow: #B3B3B3 2px 2px 2px;
 	 box-shadow: #B3B3B3 2px 2px 2px;
@@ -866,7 +866,7 @@ html {
 }
  .my-dropbtn {
 	 background-color: #F9E79F;
-	 color: #000000;
+	 color: Black;
 	 padding: 0px 0px 0px 00px;
 	 font-size: 16px;
 	 border: none;
@@ -874,7 +874,7 @@ html {
 }
  .my-dropcell {
 	 background-color: #CCFFCC;
-	 color: #000000;
+	 color: Black;
 	 padding: 0px 0px 0px 0px;
 	 font-size: 16px;
 	 border: none;
@@ -894,19 +894,19 @@ html {
 	 background-color: #F9E79F;
 }
  .my-dropdown:hover .my-dropcell {
-	 background-color: #F1F1F1;
+	 background-color: LightGray;
 }
  .my-dropdown-btn-content {
 	 display: none;
 	 position: absolute;
-	 background-color: #F9F9F9;
-	 min-width: 300px;
+	 background-color: Gainsboro;
+	 min-width: 400px;
 	 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	 z-index: 1;
 	 left: 0;
 }
  .my-dropdown-btn-content a {
-	 color: #000000;
+	 color: Black;
 	 padding: 12px 16px 12px 16px;
 	 font-size: 16px;
 	 text-decoration: none;
@@ -914,19 +914,19 @@ html {
 	 text-align: left;
 }
  .my-dropdown-btn-content a:hover {
-	 background-color: #F1F1F1;
+	 background-color: LightGray;
 }
  .my-dropdown-cell-content {
 	 display: none;
 	 position: absolute;
-	 background-color: #F9F9F9;
+	 background-color: Gainsboro;
 	 min-width: 300px;
 	 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	 z-index: 1;
 	 left: 0;
 }
  .my-dropdown-cell-content a {
-	 color: #000000;
+	 color: Black;
 	 padding: 12px 16px 12px 16px;
 	 font-size: 16px;
 	 text-decoration: none;
@@ -934,7 +934,7 @@ html {
 	 text-align: left;
 }
  .my-dropdown-cell-content a:hover {
-	 background-color: #F1F1F1;
+	 background-color: LightGray;
 }
  .my-navbar {
 	 overflow: hidden;
@@ -944,13 +944,13 @@ html {
  .my-navbar a {
 	 float: left;
 	 font-size: 25px;
-	 color: #000000;
+	 color: Black;
 	 text-align: left;
 	 padding: 10px 10px 10px 10px;
 	 text-decoration: none;
 }
  .my-navbar a:hover {
-	 background-color: #C6C6C6;
+	 background-color: Gray;
 }
  .nav-grid-item {
 	 padding: 0px 0px 0px 0px;
@@ -969,16 +969,16 @@ html {
 	 font-size: 14px;
 }
  ul.my-breadcrumb li a {
-	 color: ;
+	 color: #0275D8;
 	 text-decoration: none;
 }
  ul.my-breadcrumb li a:hover {
-	 color: ul-my-breadcrumb-li-a-hover;
+	 color: #01447E;
 	 text-decoration: underline;
 }
  ul.my-breadcrumb li+li:before {
 	 padding: 8px;
-	 color: #000000;
+	 color: Black;
 	 content: "/\00a0";
 }
  @media (min-width: 1140px) {
@@ -1001,3 +1001,40 @@ html {
 		 margin-top: 0;
 	}
 }
+ .tab {
+	 background-color: LightGray;
+	 overflow: hidden;
+}
+ .tab button {
+	 background-color: inherit;
+	 border: none;
+	 cursor: pointer;
+	 float: left;
+	 font-family: Verdana, Geneva, sans-serif;
+	 font-size: 14px;
+	 outline: none;
+	 padding: 14px 16px;
+	 transition: 0.3s;
+}
+ .tab button:hover {
+	 background-color: Silver;
+}
+ .tab button.active {
+	 background-color: DarkGray;
+}
+ .tabcontent {
+	 display: none;
+	 padding: 6px 12px;
+}
+ .basket-button {
+	 border: 1px solid;
+	 cursor: pointer;
+	 display: inline-block;
+	 font-size: 16px;
+	 height: 60px;
+	 padding: 6px 12px 6px 12px;
+	 text-align: center;
+	 text-decoration: none;
+	 width: 60px;
+}
+ 

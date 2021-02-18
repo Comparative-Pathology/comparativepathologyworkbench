@@ -51,6 +51,7 @@
 
 {% endif %}
 
+
 {% if not settings.DEBUG %}
 
 <!--	PRODUCTION -->
@@ -104,9 +105,13 @@
 
 	<div class="nav-grid-item">
 
+
+<!-- BENCHES -->
+
 		<div class="my-subnav">
 
 <!-- Do you have somebody elses benches AND your own benches to look at? -->
+
 {% if matrix_list and my_matrix_list %}
 
 			<button class="my-subnavbtn">Benches ({{ matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
@@ -117,43 +122,17 @@
 
 		{% if forloop.first %}
 
-				<a href="{% url 'index' %}">List All Benches ({{ matrix_list|length }})</a>
+				<a href="{% url 'index' %}">List Benches ({{ matrix_list|length }})</a>
 
 				<div class="my-nav-dropdown">
 
-					<button class="my-subnav-dropbtn">All Benches <i class="fa fa-caret-down"></i></button>
+					<button class="my-subnav-dropbtn">Benches <i class="fa fa-caret-down"></i></button>
 
 					<div class="my-nav-dropdown-content">
 
 		{% endif %}
 
 						<a href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title|truncatechars:25 }}</a>
-
-		{% if forloop.last %}
-
-					</div>
-
-				</div>
-
-		{% endif %}
-
-	{% endfor %}
-
-	{% for my_matrix in my_matrix_list %}
-
-		{% if forloop.first %}
-
-				<a href="{% url 'list_matrix' %}">List My Benches ({{ my_matrix_list|length }})</a>
-	
-				<div class="my-nav-dropdown">
-
-					<button class="my-subnav-dropbtn">My Benches <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-nav-dropdown-content">
-
-		{% endif %}
-
-						<a href="{% url 'matrix' my_matrix.matrix_id %}">CPW:{{ my_matrix.matrix_id|stringformat:"06d" }}, {{ my_matrix.matrix_title|truncatechars:25 }}</a>
 
 		{% if forloop.last %}
 
@@ -175,8 +154,8 @@
 
 {% endif %}
 
-
 <!-- If you have NO other peoples benches to look at AND NONE of your OWN benches -->
+
 {% if not matrix_list and not my_matrix_list %}
 
 			<button class="my-subnavbtn">Benches <i class="fa fa-caret-down"></i></button>
@@ -189,8 +168,8 @@
 
 {% endif %}
 
-
 <!-- If you ONLY have other peoples benches to look at -->
+
 {% if matrix_list and not my_matrix_list %}
 
 			<button class="my-subnavbtn">Benches ({{ matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
@@ -223,8 +202,6 @@
 
 	{% endfor %}
 			
-				<a class="dropdown-item" href="#">No My Benches are available!</a>
-
 	{% if user.is_authenticated %}
 
 				<a href="{% url 'new_matrix' %}">Add New Bench</a>
@@ -236,6 +213,7 @@
 {% endif %}
 
 <!-- If you ONLY have your own benches to look at -->
+
 {% if not matrix_list and my_matrix_list %}
 
 			<button class="my-subnavbtn">Benches ({{ my_matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
@@ -268,8 +246,6 @@
 
 	{% endfor %}
 			
-				<a class="dropdown-item" href="#">No Other Benches are available!</a>
-
 	{% if user.is_authenticated %}
 
 				<a href="{% url 'new_matrix' %}">Add New Bench</a>
@@ -283,9 +259,241 @@
 
 		</div>
 
+
+<!-- COLLECTIONS -->
+
+		<div class="my-subnav">
+
+<!-- Do you have somebody elses collections AND your own collections to look at? -->
+
+{% if collection_list and my_collection_list %}
+
+			<button class="my-subnavbtn">Collections ({{ collection_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+
+	{% for collection in collection_list %}
+
+		{% if forloop.first %}
+
+				<a href="{% url 'list_collection' %}">List Collections ({{ collection_list|length }})</a>
+
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">Collections <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+						<a href="{% url 'view_collection' collection.collection_id %}">{{ collection.collection_id|stringformat:"06d" }}, {{ collection.collection_title|truncatechars:25 }}, ({{ collection.collection_owner }})</a>
+
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+
+	{% if user.is_authenticated %}
+
+				<a href="{% url 'new_collection' %}">Add New Collection</a>
+
+	{% endif %}
+		
+			</div>
+
+{% endif %}
+
+<!-- If you have NO other peoples collections to look at AND NONE of your OWN collections -->
+
+{% if not collection_list and not my_collection_list %}
+
+			<button class="my-subnavbtn">Collections <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+			
+				<a class="dropdown-item" href="#">No Collections are available!</a>
+
+			</div>
+
+{% endif %}
+
+<!-- If you ONLY have other peoples collections to look at -->
+
+{% if collection_list and not my_collection_list %}
+
+			<button class="my-subnavbtn">Collections ({{ collection_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+
+	{% for matrix in collection_list %}
+
+		{% if forloop.first %}
+
+				<a href="{% url 'index' %}">List All Other Collections ({{ collection_list|length }})</a>
+
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">All Other Collections <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+						<a href="{% url 'view_collection' collection.collection_id %}">Collection: {{ collection.collection_id|stringformat:"06d" }}, {{ collection.collection_title|truncatechars:25 }}</a>
+
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+			
+				<a class="dropdown-item" href="#">No My Collections are available!</a>
+
+	{% if user.is_authenticated %}
+
+				<a href="{% url 'new_collection' %}">Add New Collection</a>
+
+	{% endif %}
+		
+			</div>
+
+{% endif %}
+
+<!-- If you ONLY have your own collections to look at -->
+
+{% if not collection_list and my_collection_list %}
+
+			<button class="my-subnavbtn">Collections ({{ my_collection_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+
+	{% for matrix in my_collection_list %}
+
+		{% if forloop.first %}
+
+				<a href="{% url 'list_matrix' %}">List All My Collections ({{ my_collection_list|length }})</a>
+
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">All My Collections <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+						<a href="{% url 'view_collection' collection.collection_id %}">Collection: {{ collection.collection_id|stringformat:"06d" }}, {{ collection.collection_title|truncatechars:25 }}</a>
+
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+			
+				<a class="dropdown-item" href="#">No Other Collections are available!</a>
+
+	{% if user.is_authenticated %}
+
+				<a href="{% url 'new_collection' %}">Add New Collection</a>
+
+	{% endif %}
+		
+			</div>
+
+{% endif %}
+
+		</div>
+
+
+<!-- IMAGES -->
+
+		<div class="my-subnav">
+
+<!-- Do you have some Images to look at? -->
+
+{% if image_list %}
+
+			<button class="my-subnavbtn">Images ({{ image_list.count }}) <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+
+	{% for image in image_list %}
+
+		{% if forloop.first %}
+		
+				<a href="{% url 'view_active_collection' %}">List Your ACTIVE Image Collection</a>
+		
+				<div class="my-nav-dropdown">
+
+					<button class="my-subnav-dropbtn">Your Images <i class="fa fa-caret-down"></i></button>
+
+					<div class="my-nav-dropdown-content">
+
+		{% endif %}
+
+		{% if image.roi == 0 %}
+			
+			{% if image.server.type.name == 'WORDPRESS' %}
+
+						<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
+
+			{% else %}
+	
+						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
+	
+			{% endif %}
+	
+		{% else %}
+
+						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
+	
+		{% endif %}
+
+		{% if forloop.last %}
+
+					</div>
+
+				</div>
+
+		{% endif %}
+
+	{% endfor %}
+
+			</div>
+
+{% else %}
+
+			<button class="my-subnavbtn">Images <i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content">
+			
+				<a class="dropdown-item" href="#">No Images are available in Active Collection!</a>
+
+			</div>
+
+{% endif %}
+
+		</div>
+
+
+<!-- SERVERS -->
+
 		<div class="my-subnav">
 
 <!-- Do you have some Servers to look at? -->
+
 {% if server_list %}
 
 			<button class="my-subnavbtn">Sources ({{ server_list.count }}) <i class="fa fa-caret-down"></i></button>
@@ -345,72 +553,8 @@
 
 		</div>
 
-		<div class="my-subnav">
 
-<!-- Do you have some Images to look at? -->
-{% if image_list %}
-
-			<button class="my-subnavbtn">Images ({{ image_list.count }}) <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content">
-
-	{% for image in image_list %}
-
-		{% if forloop.first %}
-		
-				<a href="{% url 'list_image_cart' %}">List Your Image Collection</a>
-		
-				<div class="my-nav-dropdown">
-
-					<button class="my-subnav-dropbtn">Your Images <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-nav-dropdown-content">
-
-		{% endif %}
-
-		{% if image.roi == 0 %}
-			
-			{% if image.server.type.name == 'WORDPRESS' %}
-
-						<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
-
-			{% else %}
-	
-						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
-	
-			{% endif %}
-	
-		{% else %}
-
-						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
-	
-		{% endif %}
-
-		{% if forloop.last %}
-
-					</div>
-
-				</div>
-
-		{% endif %}
-
-	{% endfor %}
-
-			</div>
-
-{% else %}
-
-			<button class="my-subnavbtn">Images <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content">
-			
-				<a class="dropdown-item" href="#">No Images are available!</a>
-
-			</div>
-
-{% endif %}
-
-		</div>
+<!-- ABOUT -->
 
 		<div class="my-subnav">
 
@@ -428,6 +572,35 @@
 
 		</div>
 
+
+<!-- PROFILE RIGHT -->
+
+{% if user.is_superuser %}
+
+		<div class="my-subnav-right">
+
+			<button class="my-subnavbtn-right">ADMIN<i class="fa fa-caret-down"></i></button>
+
+			<div class="my-subnav-content-right">
+
+				<a href="{% url 'authorisation' %}">Authorisation</a>
+
+				<a href="{% url 'maintenance' %}">Maintenance</a>
+
+				<a href="{% url 'admin:index' %}">ADMIN</a>
+				
+				<a href="{% url 'api-root' %}">API</a>
+				
+				<a href="{% url 'collectivization' %}">Setup Default Collections</a>
+
+				<a href="{% url 'mailer' %}">Send Test Email</a>
+
+			</div>
+		
+		</div>
+		
+{% endif %}
+
 		<div class="my-subnav-right">
 
 {% if user.is_authenticated %}
@@ -438,21 +611,27 @@
 						
 				<a href="{% url 'logout' %}">Logout</a>
 
-				<a href="{% url 'password_change' %}">Change Password</a>
-				
-				<a href="{% url 'list_my_authorisation' %}">My Permissions</a>
-				
-				<a href="{% url 'detail_user' user.id %}">My Account</a>
-				
 	{% if user.is_superuser %}
+	
+				<a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
+				
+				<a href="{% url 'list_bench_authorisation' %}">All Bench Permissions</a>
+				
+				<a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
+				
+				<a href="{% url 'list_collection_authorisation' %}">All Collection Permissions</a>
+				
+	{% else %}
 
-				<a href="{% url 'authorisation' %}">Authorisation</a>
-
-				<a href="{% url 'maintenance' %}">Maintenance</a>
-
-				<a href="{% url 'list_authorisation' %}">All Permissions</a>
+				<a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
+				
+				<a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
 				
 	{% endif %}
+
+				<a href="{% url 'password_change' %}">Change Password</a>
+				
+				<a href="{% url 'detail_user' user.id %}">My Account</a>
 
 			</div>
 

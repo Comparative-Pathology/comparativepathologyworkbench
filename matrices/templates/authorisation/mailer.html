@@ -1,0 +1,70 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+<div>
+
+	<ul class="my-breadcrumb">
+	
+	
+	    <li class="breadcrumb-item">
+		    <a href="{% url 'home' %}">Home</a>
+		</li>
+		
+		<li class="breadcrumb-item active">
+		    Mailer Test Page
+		</li>
+	
+	</ul>
+	
+</div>
+
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
+	</div>
+
+	<div class="standard-grid-item">
+
+		<h1>The Mailer Test Page</h1>
+
+		<p>The Mailer Test Page</p>
+
+		<hr>
+
+		<br />
+
+		<h3>The Mailer Test Page</h3>
+
+		<p>An email has been sent!</p>
+		
+	    <dl class="standard">
+			<dt>To</dt>
+			<dd>{{ email_to }}</dd>
+			<dt>From</dt>
+			<dd>{{ email_from }}</dd>
+			<dt>Subject</dt>
+			<dd>{{ subject }}</dd>
+			<dt>Message</dt>
+			<dd>{{ message }}</dd>
+		</dl>
+
+	</div>
+	
+	<div class="standard-grid-item">
+	</div>
+
+</div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+{% endblock %}

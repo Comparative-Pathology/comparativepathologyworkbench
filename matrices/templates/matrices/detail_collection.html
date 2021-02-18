@@ -1,0 +1,81 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
+	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			<a href="{% url 'list_collection' %}">List Collections</a>
+		</li>
+	
+		<li>
+			<a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a>
+		</li>
+		
+		<li>
+			Collection Details
+		</li>
+	
+	</ul>
+
+</div>
+
+
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
+	</div>
+
+	<div class="standard-grid-item">
+
+		<h1>Collection {{ collection.id }}</h1>
+
+		<hr>
+		
+		<br />
+
+		<dl class="standard">
+			<dt>Title</dt>
+			<dd>{{ collection.title }}</dd>
+			<dt>Description</dt>
+			<dd>{{ collection.description }}</dd>
+			<dt>Owner</dt>
+			<dd>{{ collection.owner.username }}</dd>
+			<dt>Active?</dt>
+			<dd>{{ collection.active }}</dd>
+		</dl>
+
+		<br />
+
+		<a href="{% url 'list_collection' %}"><button class="button button-add">BACK</button></a>
+
+{% if user.is_superuser %}
+            
+		<a href="{% url 'edit_collection' collection.id %}"><button class="button button-edit">Edit</button></a>
+
+{% endif %}
+
+	</div>
+	
+	<div class="standard-grid-item">
+	</div>
+
+</div>
+
+
+{% endblock %}

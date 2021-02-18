@@ -1,0 +1,85 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+<div>
+
+	<ul class="my-breadcrumb">
+	
+	
+	    <li class="breadcrumb-item">
+		    <a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li class="breadcrumb-item active">
+			Create Default Collections
+		</li>
+	
+	</ul>
+	
+</div>
+
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
+	</div>
+
+	<div class="standard-grid-item">
+
+		<h1>Create Default Collections</h1>
+
+		<p>Create Default Collections for ALL Users</p>
+
+		<hr>
+
+		<br />
+
+		<h3>Messages</h3>
+
+{% if out_message_list %}
+
+    {% for out_message in out_message_list %}
+	
+		{% if forloop.first %}
+	
+	    	<ol>
+
+		{% endif %}
+	
+    	    	<li>
+					{{ out_message }}
+				</li>
+
+		{% if forloop.last %}
+	
+			</ol>
+
+		{% endif %}
+	
+    {% endfor %}
+
+{% else %}
+
+	<p>No Messages are available.</p>
+	
+{% endif %}
+
+	</div>
+	
+	<div class="standard-grid-item">
+	</div>
+
+</div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+{% endblock %}

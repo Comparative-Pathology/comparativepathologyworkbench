@@ -1,0 +1,83 @@
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
+	
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			<a href="{{ request.META.HTTP_REFERER }}">Bench Permissions</a>
+		</li>
+
+		<li>
+			Bench Permission {{ authorisation.id }}
+		</li>
+		
+		<li>
+			EDIT Bench Permission {{ text_flag }}
+		</li>
+	
+	</ul>
+
+</div>
+
+
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
+	</div>
+
+	<div class="standard-grid-item">
+	
+		<h1>EDIT Bench Permission {{ authorisation.id }} {{ text_flag }}</h1>
+
+		<hr>
+		
+		<br />
+
+		<form method="POST" class="post-form">
+		
+{% csrf_token %}
+
+{% include 'includes/form_authorisation.html' %}
+
+			<br />
+	
+			<input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+			
+	    	<button type="submit" class="button button-delete">Save</button>
+
+		</form>
+
+		<br />
+
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
+
+	</div>
+	
+	<div class="standard-grid-item">
+	</div>
+
+</div>
+		
+<br />
+<br />
+<br />
+<br />
+<br />
+
+{% endblock %}

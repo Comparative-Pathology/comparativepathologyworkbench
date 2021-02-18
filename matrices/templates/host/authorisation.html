@@ -18,14 +18,24 @@
 		</li>
 
 		<li>
-			Authorization
+			Authorisation
 		</li>
 	
 	</ul>
 
 </div>
 
-		
+
+<!-- Tab links -->
+
+<div class="tab">
+
+    <button class="tablinks" onclick="openTab(event, 'users')" id="defaultOpen">Users</button>
+
+    <button class="tablinks" onclick="openTab(event, 'blog_credentials')">Blog Credentials</server_types>
+
+</div>
+
 
 <!-- Main Data Panel -->
 
@@ -36,15 +46,11 @@
 
 	<div class="standard-grid-item">
 
-		<h1>Authorization</h1>
+		<div id="users" class="tabcontent">
 
-		<p>Authorisation Functions</p>
+			<h2>Users</h2>
 		
-		<hr>
-
-		<h2>Users</h2>
-		
-		<br />
+			<br />
 
 {% if user_list %}
 
@@ -52,69 +58,69 @@
 	
 		{% if forloop.first %}
 	
-	    <table>
+	    	<table>
 
-    	    <tr>
-        	    <th width="250px">Action</th>
-				<th width="200px">User Name</th>
-				<th width="200px">Full Name</th>
-				<th width="250px">Email</th>
-				<th>Is Super User?</th>
-			</tr>
+    	    	<tr>
+        	    	<th width="250px">Action</th>
+					<th width="200px">User Name</th>
+					<th width="200px">Full Name</th>
+					<th width="250px">Email</th>
+					<th>Is Super User?</th>
+				</tr>
 
-    	    <tr>
-    	    	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
+    		    <tr>
+    		    	<td>&nbsp;</td>
+	        	    <td>&nbsp;</td>
+    	        	<td>&nbsp;</td>
+	        	    <td>&nbsp;</td>
+    	        	<td>&nbsp;</td>
+				</tr>
 
 		{% endif %}
 	
-    	    <tr>
+    	    	<tr>
 
 		{% if user.is_superuser %}
             
-        	    <td>
-					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-					<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-					<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-					<a href="{% url 'list_user_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-	            </td>
+        	    	<td>
+						<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+						<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+						<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+						<a href="{% url 'list_user_bench_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
+	        	    </td>
 
 		{% else %}
 	
-        	    <td>
-					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-        	    </td>
+        	    	<td>
+						<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+	        	    </td>
 
 		{% endif %}
 
-	            <td>
-					{{ userlist.username }}
-        	    </td>
-            	<td>
-					{{ userlist.get_full_name }}
-	            </td>
-    	        <td>
-					{{ userlist.email }}
-            	</td>
-	            <td>	
-					{{ userlist.is_superuser }}
-        	    </td>
-			</tr>
+		            <td>
+						{{ userlist.username }}
+        		    </td>
+            		<td>
+						{{ userlist.get_full_name }}
+		            </td>
+    		        <td>
+						{{ userlist.email }}
+            		</td>
+	            	<td>	
+						{{ userlist.is_superuser }}
+	        	    </td>
+				</tr>
 
 		{% if forloop.last %}
 	
-    	    <tr>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-			</tr>
-		</table>
+    		    <tr>
+        		    <td>&nbsp;</td>
+            		<td>&nbsp;</td>
+		            <td>&nbsp;</td>
+    		        <td>&nbsp;</td>
+	    	        <td>&nbsp;</td>
+				</tr>
+			</table>
 
 		{% endif %}
 	
@@ -122,14 +128,16 @@
 
 {% else %}
 
-		<p>No users are available.</p>
+			<p>No users are available.</p>
 	
 {% endif %}
 
-		<hr>
+		</div>
+
+		<div id="blog_credentials" class="tabcontent">
 	
-		<h2>Blog Credentials</h2>
-		<br />
+			<h2>Blog Credentials</h2>
+			<br />
 
 {% if credential_list %}
 
@@ -137,109 +145,109 @@
 	
 		{% if forloop.first %}
 	
-	    <table>
+	    	<table>
 
-    	    <tr>
-	            <th width="150px">Action</th>
-        	    <th width="100px">Owner</th>
-            	<th width="200px">User Name</th>
-	            <th width="200px">Wordpress Id</th>
+    	    	<tr>
+	            	<th width="150px">Action</th>
+	        	    <th width="100px">Owner</th>
+    	        	<th width="200px">User Name</th>
+	    	        <th width="200px">Wordpress Id</th>
 
 		{% if user.is_superuser %}
 
-    	        <th width="350px">Application Password</th>
+    	    	    <th width="350px">Application Password</th>
 
 		{% else %}
 
-        	    <th width="350px">&nbsp;</td>
+        	    	<th width="350px">&nbsp;</td>
 
 		{% endif %}
             
-			</tr>
+				</tr>
 
-    	    <tr>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-			</tr>
+    		    <tr>
+        		    <td>&nbsp;</td>
+            		<td>&nbsp;</td>
+	            	<td>&nbsp;</td>
+	    	        <td>&nbsp;</td>
+		            <td>&nbsp;</td>
+				</tr>
 
 		{% endif %}
 	
-	        <tr>
+	        	<tr>
 
 		{% if user.is_superuser %}
             
-    	        <td>
-					<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-					<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-    	        </td>
+    	        	<td>
+						<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+						<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+						<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+    		        </td>
 
 		{% else %}
 	
-        	    <td>
-					<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-    	        </td>
+        		    <td>
+						<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+	    	        </td>
 	
 		{% endif %}
 
-    	        <td>
-        	    	{{ credential.owner.username }}
-	            </td>
-		        <td>
-					{{ credential.username }}
-            	</td>
-	            <td>
-    	        	{{ credential.wordpress }}
-        	    </td>
+    		        <td>
+        		    	{{ credential.owner.username }}
+	        	    </td>
+		        	<td>
+						{{ credential.username }}
+	            	</td>
+		            <td>
+    		        	{{ credential.wordpress }}
+        		    </td>
 
 		{% if user.is_superuser %}
 
-	            <td>
-    	        	{{ credential.apppwd }}
-        	    </td>
+	            	<td>
+    	        		{{ credential.apppwd }}
+	        	    </td>
 
 		{% else %}
 
-            	<td>&nbsp;</td>
+    	        	<td>&nbsp;</td>
 
 		{% endif %}
 
-			</tr>
+				</tr>
 
 		{% if forloop.last %}
 	
-    	    <tr>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-			</tr>
+    	    	<tr>
+	            	<td>&nbsp;</td>
+	    	        <td>&nbsp;</td>
+    	    	    <td>&nbsp;</td>
+        	    	<td>&nbsp;</td>
+	        	    <td>&nbsp;</td>
+				</tr>
 
-        	<tr>
+    	    	<tr>
 
 			{% if user.is_superuser %}
     
-            	<td>
-					<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-    	        </td>
+        	    	<td>
+						<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+    	        	</td>
 
 			{% else %}
 
-        	    <td>&nbsp;</td>
+	        	    <td>&nbsp;</td>
 
 			{% endif %}
 	
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-			</tr>
+    	        	<td>&nbsp;</td>
+	    	        <td>&nbsp;</td>
+    	    	    <td>&nbsp;</td>
+        	    	<td>&nbsp;</td>
+				</tr>
 
-	    </table>
+		    </table>
 
 		{% endif %}
 	
@@ -247,22 +255,24 @@
 
 {% else %}
 
-		<p>No Blog Credentials are available.</p>
+			<p>No Blog Credentials are available.</p>
 	    
 	{% if user.is_superuser %}
     
-		<p>
-			<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+			<p>
+				<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+			</p>
 
 	{% else %}
 
-		<p>&nbsp;
-		</p>
+			<p>&nbsp;
+			</p>
 
 	{% endif %}
 	
 {% endif %}
+
+		</div>
 
 	</div>
 	
@@ -276,5 +286,39 @@
 <br />
 <br />
 <br />
+
+<script type="text/javascript">
+
+function openTab(evt, tabName) {
+
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+
+    for (i = 0; i < tabcontent.length; i++) {
+
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+
+    for (i = 0; i < tablinks.length; i++) {
+
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();   
+
+</script>
+
 
 {% endblock %}

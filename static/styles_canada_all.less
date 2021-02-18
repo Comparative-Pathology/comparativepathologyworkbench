@@ -1,13 +1,32 @@
 /* COLOURS used in this Stylesheet: */
 
-@black: #000000;
-@white: #FFFFFF;
+/* Black          #000000 */
+/* DarkSlateGray  #2F4F4F */
+/* DimGray        #696969 */
+/* SlateGray      #708090 */
+/* Gray           #808080 */
+/* LightSlateGray #778899 */
+/* DarkGray       #A9A9A9 */
+/* Silver         #C0C0C0 */
+/* LightGray      #D3D3D3 */
+/* Gainsboro      #DCDCDC */
+
+@Black: Black;         /* @black: #000000; */
+@White: White;         /* @white: #FFFFFF; */
+@Gray: Gray;           /* @gray60: #999999; */
+@DarkGray: DarkGray;   /* @gray80: #CCCCCC; */
+@Silver: Silver;       /* @gray85: #D9D9D9; */
+@LightGray: LightGray; /* @gray90: #E5E5E5; */
+@Gainsboro: Gainsboro; /* @gray99: #FCFCFC; */
+
+@cell-row-header-bottom: LightGray;       /* @gray90: #E5E5E5; */
+@cell-column-header-rightmost: LightGray; /* @gray90: #E5E5E5; */
+@cell-footer-right-bottom: LightGray;     /* @gray90: #E5E5E5; */
+@cell-footer-right: LightGray;            /* @gray90: #E5E5E5; */
+@cell-footer-bottom: LightGray;           /* @gray90: #E5E5E5; */
+@form-container: LightGray;               /* @gray90: #E5E5E5; */
+
 @shadow: #B3B3B3;
-@extremely-light-grey: #F5F3F2;
-@extremely-light-grey-2: #F9F9F9;
-@extremely-light-grey-3: #F1F1F1;
-@medium-grey: #C6C6C6;
-@medium-grey-2: #CCCCCC;
 @pale-yellow: #F9E79F;
 
 @btn-view: #17A2B8; /* #17A2B8 - Blue-Green */
@@ -25,11 +44,6 @@
 @cell-master: #F9E79F; /* #F9E79F - Pale Yellow */
 @cell-row-header: #F9E79F; /* #F9E79F - Pale Yellow */
 @cell-column-header: #F9E79F; /* #F9E79F - Pale Yellow */
-@cell-row-header-bottom: #F5F3F2; /* #F5F3F2 - Extremely Light Grey */
-@cell-column-header-rightmost: #F5F3F2; /* #F5F3F2 - Extremely Light Grey */
-@cell-footer-right-bottom: #F5F3F2; /* #F5F3F2 - Extremely Light Grey */
-@cell-footer-right: #F5F3F2; /* #F5F3F2 - Extremely Light Grey */
-@cell-footer-bottom: #F5F3F2; /* #F5F3F2 - Extremely Light Grey */
 @cell-ordinary: #CCFFCC; /* #CCFFCC - Light Green */
 @ul-my-breadcrumb: #F5776E; /* Salmon Pink */
 @ul-my-breadcrumb-li-a: #0275D8; /* #0275D8 - Bright Blue */
@@ -45,7 +59,6 @@
 @my-navbar: #F5776E; /* Salmon Pink */
 @my-dropbtn: #F9E79F; /* #F9E79F - Pale Yellow */
 @my-dropcell: #CCFFCC; /* #CCFFCC - Light Green */
-@form-container: #F2F2F2; /* #F2F2F2 - Grey */
 @home-grid-item: #17A2B8; /* #17A2B8 - Blue-Green */
 
 html {
@@ -58,7 +71,7 @@ body {
 	margin-bottom: 60px;
 	margin: 0px;
 	font-weight: 400;
-	color: @black;
+	color: @Black;
 }
 .invisible {
 	display: none;
@@ -66,7 +79,7 @@ body {
 input[type=text] {
 	width: 100%;
 	padding: 12px 12px 12px 12px;
-	border: 1px solid @medium-grey-2;
+	border: 1px solid @Gainsboro;
 	border-radius: 4px;
 	box-sizing: border-box;
 	margin-top: 6px;
@@ -77,7 +90,7 @@ input[type=text] {
 input[type=email] {
 	width: 100%;
 	padding: 12px 12px 12px 12px;
-	border: 1px solid @medium-grey-2;
+	border: 1px solid @Gainsboro;
 	border-radius: 4px;
 	box-sizing: border-box;
 	margin-top: 6px;
@@ -88,7 +101,7 @@ input[type=email] {
 input[type=number] {
 	width: 100%;
 	padding: 12px 12px 12px 12px;
-	border: 1px solid @medium-grey-2;
+	border: 1px solid @Gainsboro;
 	border-radius: 4px;
 	box-sizing: border-box;
 	margin-top: 6px;
@@ -99,7 +112,7 @@ input[type=number] {
 input[type=password] {
 	width: 100%;
 	padding: 12px 12px 12px 12px;
-	border: 1px solid @medium-grey-2;
+	border: 1px solid @Gainsboro;
 	border-radius: 4px;
 	box-sizing: border-box;
 	margin-top: 6px;
@@ -110,7 +123,7 @@ input[type=password] {
 select {
 	width: 100%;
 	padding: 12px 12px 12px 12px;
-	border: 1px solid @medium-grey-2;
+	border: 1px solid @Gainsboro;
 	border-radius: 4px;
 	box-sizing: border-box;
 	margin-top: 6px;
@@ -121,7 +134,7 @@ select {
 textarea {
 	width: 100%;
 	padding: 12px 12px 12px 12px;
-	border: 1px solid @medium-grey-2;
+	border: 1px solid @Gainsboro;
 	border-radius: 4px;
 	box-sizing: border-box;
 	margin-top: 6px;
@@ -174,18 +187,18 @@ label {
 }
 h1 {
 	font-family: Verdana, Geneva, sans-serif;
-	color: @black;
+	color: @Black;
 }
 h2 {
 	font-family: Verdana, Geneva, sans-serif;
-	color: @black;
+	color: @Black;
 }
 h3 {
 	font-family: Verdana, Geneva, sans-serif;
-	color: @black;
+	color: @Black;
 }
 hr {
-	border-top: 1px solid @black;
+	border-top: 1px solid @Black;
 }
 .standard {
 	dl {
@@ -236,72 +249,72 @@ hr {
 	cursor: pointer;
 }
 .button-view {
-	color: @white;
+	color: @White;
 	background-color: @btn-view;
 	border-color: @btn-view;
 	border-radius: 5px;
 	&:hover {
-		color: @white;
+		color: @White;
 		background-color: @btn-view-hover;
 		border-color: @btn-view-hover;
 		border-radius: 5px;
 	}
 }
 .button-info {
-	color: @white;
+	color: @White;
 	background-color: @btn-info;
 	border-color: @btn-info;
 	border-radius: 5px;
 	&:hover {
-		color: @white;
+		color: @White;
 		background-color: @btn-info-hover;
 		border-color: @btn-info-hover;
 		border-radius: 5px;
 	}
 }
 .button-edit {
-	color: @black;
+	color: @Black;
 	background-color: @btn-edit;
 	border-color: @btn-edit;
 	border-radius: 5px;
 	&:hover {
-		color: @white;
+		color: @White;
 		background-color: @btn-edit-hover;
 		border-color: @btn-edit-hover;
 		border-radius: 5px;
 	}
 }
 .button-delete {
-	color: @white;
+	color: @White;
 	background-color: @btn-delete;
 	border-color: @btn-delete;
 	border-radius: 5px;
 	&:hover {
-		color: @white;
+		color: @White;
 		background-color: @btn-delete-hover;
 		border-color: @btn-delete-hover;
 		border-radius: 5px;
 	}
 }
 .button-auth {
-	color: @white;
+	color: @White;
 	background-color: @btn-auth;
 	border-color: @btn-auth;
 	border-radius: 5px;
 	&:hover {
-		color: @white;
+		color: @White;
 		background-color: @btn-auth-hover;
 		border-color: @btn-auth-hover;
 		border-radius: 5px;
 	}
 }
 .button-add {
-	color: @white;
+	color: @White;
 	background-color: @btn-add;
 	border-color: @btn-add;
 	border-radius: 5px;
 	&:hover {
-		color: @white;
+		color: @White;
 		background-color: @btn-add-hover;
 		border-color: @btn-add-hover;
 		border-radius: 5px;
@@ -310,26 +323,26 @@ hr {
 .panel-alert {
 	padding: 20px;
 	background-color: @panel-alert;
-	color: @white;
+	color: @White;
 }
 .panel-success {
 	padding: 20px;
 	background-color: @panel-success;
-	color: @white;
+	color: @White;
 }
 .panel-info {
 	padding: 20px;
 	background-color: @panel-info;
-	color: @white;
+	color: @White;
 }
 .panel-warning {
 	padding: 20px;
 	background-color: @panel-warning;
-	color: @white;
+	color: @White;
 }
 .panel-close-btn {
 	margin-left: 15px;
-	color: @white;
+	color: @White;
 	font-weight: bold;
 	float: right;
 	font-size: 22px;
@@ -337,7 +350,7 @@ hr {
 	cursor: pointer;
 	transition: 0.3s;
 	&:hover {
-		color: @black;
+		color: @Black;
 	}
 }
 .card {
@@ -365,20 +378,20 @@ hr {
 	padding: 0px 0px 0px 0px;
 	margin: 0px 0px 0px 0px;
 	li {
-		border-bottom: 1px solid @white;
+		border-bottom: 1px solid @White;
 		flex: 1 0 25%;
 		padding: 10px 10px 10px 10px;
-		color: @black;
+		color: @Black;
 		&:nth-child(3n {
 			+ {
 				1) {
-					background: @white;
+					background: @White;
 				}
 				2) {
-					background: @white;
+					background: @White;
 				}
 				3) {
-					background: @white;
+					background: @White;
 				}
 			}
 		}
@@ -405,20 +418,20 @@ hr {
 	padding: 0px 0px 0px 0px;
 	margin: 0px 0px 0px 0px;
 	li {
-		border-bottom: 1px solid @white;
+		border-bottom: 1px solid @White;
 		flex: 1 0 25%;
 		padding: 10px 10px 10px 10px;
-		color: @black;
+		color: @Black;
 		&:nth-child(3n {
 			+ {
 				1) {
-					background: @white;
+					background: @White;
 				}
 				2) {
-					background: @white;
+					background: @White;
 				}
 				3) {
-					background: @white;
+					background: @White;
 				}
 			}
 		}
@@ -523,12 +536,12 @@ hr {
 	padding: 10.5px 0px 13px 540px;
 	a {
 		font-size: 14px;
-		color: @black;
+		color: @Black;
 		text-decoration: none;
 		padding: 10px 10px 13px 10px;
 		&:hover {
-			background-color: @medium-grey;
-			color: @black;
+			background-color: @LightGray;
+			color: @Black;
 		}
 	}
 }
@@ -536,18 +549,18 @@ hr {
 	display: none;
 	position: absolute;
 	left: 0;
-	background-color: @extremely-light-grey;
+	background-color: @Gray;
 	width: 63%;
 	z-index: 1;
 	padding: 10.5px 0px 13px 540px;
 	a {
 		font-size: 14px;
-		color: @black;
+		color: @Black;
 		text-decoration: none;
 		padding: 10px 10px 13px 10px;
 		&:hover {
-			background-color: @medium-grey;
-			color: @black;
+			background-color: @LightGray;
+			color: @Black;
 			text-align: right;
 		}
 	}
@@ -556,19 +569,19 @@ hr {
 	display: none;
 	position: absolute;
 	right: 0;
-	background-color: @extremely-light-grey;
+	background-color: @Gray;
 	width: 100%;
 	z-index: 1;
 	padding: 0px 0px 0px 0px;
 	a {
 		font-size: 14px;
 		float: right;
-		color: @black;
+		color: @Black;
 		text-decoration: none;
 		padding: 10px 10px 13px 10px;
 		&:hover {
-			background-color: @medium-grey;
-			color: @black;
+			background-color: @LightGray;
+			color: @Black;
 		}
 	}
 }
@@ -581,8 +594,8 @@ hr {
 			display: block;
 		}
 		.my-subnavbtn {
-			background-color: @medium-grey;
-			background-color: @extremely-light-grey;
+			background-color: @LightGray;
+			background-color: @Gray;
 		}
 	}
 	float: left;
@@ -592,7 +605,7 @@ hr {
 		font-size: 14px;
 		border: none;
 		outline: none;
-		color: @black;
+		color: @Black;
 		padding: 32px 16px 21.5px 16px;
 		background-color: inherit;
 		font-family: inherit;
@@ -605,7 +618,7 @@ hr {
 			display: block;
 		}
 		.my-subnavbtn-right {
-			background-color: @extremely-light-grey;
+			background-color: @Gray;
 		}
 	}
 	float: right;
@@ -615,7 +628,7 @@ hr {
 		font-size: 14px;
 		border: none;
 		outline: none;
-		color: @black;
+		color: @Black;
 		padding: 32px 16px 21.5px 16px;
 		background-color: inherit;
 		font-family: inherit;
@@ -624,7 +637,7 @@ hr {
 }
 .my-nav-dropbtn {
 	background-color: inherit;
-	color: @black;
+	color: @Black;
 	padding: 0px 10px 0px 10px;
 	border: none;
 	font-size: 14px;
@@ -632,7 +645,7 @@ hr {
 }
 .my-subnav-dropbtn {
 	background-color: inherit;
-	color: @black;
+	color: @Black;
 	padding: 0px 10px 0px 10px;
 	border: none;
 	font-size: 14px;
@@ -646,19 +659,19 @@ hr {
 			display: block;
 		}
 		.my-nav-dropbtn {
-			background-color: @extremely-light-grey;
-			color: @black;
+			background-color: @Gray;
+			color: @Black;
 		}
 		.my-subnav-dropbtn {
-			background-color: @extremely-light-grey;
-			color: @black;
+			background-color: @Gray;
+			color: @Black;
 		}
 	}
 }
 .my-nav-dropdown-content {
 	display: none;
 	position: absolute;
-	background-color: @extremely-light-grey;
+	background-color: @Gray;
 	min-width: 340px;
 	width: 100%;
 	overflow: auto;
@@ -666,14 +679,14 @@ hr {
 	z-index: 1;
 	border-radius: 5px 5px 5px 5px;
 	a {
-		color: @black;
+		color: @Black;
 		padding: 10px 10px 10px 10px;
 		text-decoration: none;
 		display: block;
 		text-align: left;
 		float: none;
 		&:hover {
-			background-color: @medium-grey;
+			background-color: @LightGray;
 		}
 	}
 }
@@ -682,8 +695,8 @@ hr {
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: @white;
-	color: @white;
+	background-color: @White;
+	color: @White;
 	text-align: center;
 }
 .footer-grid-container {
@@ -719,7 +732,7 @@ div.my-test-popup {
 	border-width: 2px;
 	border-radius: 5px 5px 5px 5px;
 	display: none;
-	background: @white;
+	background: @White;
 	width: 800px;
 	height: 600px;
 	position: fixed;
@@ -734,7 +747,7 @@ div.my-test-popup {
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 	>a.close {
-		color: @black;
+		color: @Black;
 		position: absolute;
 		font-weight: bold;
 		right: 10px;
@@ -941,7 +954,7 @@ div.collapsible-content {
 }
 .my-dropbtn {
 	background-color: @my-dropbtn;
-	color: @black;
+	color: @Black;
 	padding: 0px 0px 0px 00px;
 	font-size: 16px;
 	border: none;
@@ -949,7 +962,7 @@ div.collapsible-content {
 }
 .my-dropcell {
 	background-color: @my-dropcell;
-	color: @black;
+	color: @Black;
 	padding: 0px 0px 0px 0px;
 	font-size: 16px;
 	border: none;
@@ -969,47 +982,47 @@ div.collapsible-content {
 			background-color: @pale-yellow;
 		}
 		.my-dropcell {
-			background-color: @extremely-light-grey-3;
+			background-color: @Silver;
 		}
 	}
 }
 .my-dropdown-btn-content {
 	display: none;
 	position: absolute;
-	background-color: @extremely-light-grey-2;
-	min-width: 300px;
+	background-color: @DarkGray;
+	min-width: 400px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
 	left: 0;
 	a {
-		color: @black;
+		color: @Black;
 		padding: 12px 16px 12px 16px;
 		font-size: 16px;
 		text-decoration: none;
 		display: block;
 		text-align: left;
 		&:hover {
-			background-color: @extremely-light-grey-3;
+			background-color: @Silver;
 		}
 	}
 }
 .my-dropdown-cell-content {
 	display: none;
 	position: absolute;
-	background-color: @extremely-light-grey-2;
+	background-color: @DarkGray;
 	min-width: 300px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
 	left: 0;
 	a {
-		color: @black;
+		color: @Black;
 		padding: 12px 16px 12px 16px;
 		font-size: 16px;
 		text-decoration: none;
 		display: block;
 		text-align: left;
 		&:hover {
-			background-color: @extremely-light-grey-3;
+			background-color: @Silver;
 		}
 	}
 }
@@ -1020,12 +1033,12 @@ div.collapsible-content {
 	a {
 		float: left;
 		font-size: 25px;
-		color: @black;
+		color: @Black;
 		text-align: left;
 		padding: 10px 10px 10px 10px;
 		text-decoration: none;
 		&:hover {
-			background-color: @medium-grey;
+			background-color: @LightGray;
 		}
 	}
 }
@@ -1044,10 +1057,10 @@ ul.my-breadcrumb {
 		display: inline;
 		font-size: 14px;
 		a {
-			color: @@ul-my-breadcrumb-li-a;
+			color: @ul-my-breadcrumb-li-a;
 			text-decoration: none;
 			&:hover {
-				color: ul-my-breadcrumb-li-a-hover;
+				color: @ul-my-breadcrumb-li-a-hover;
 				text-decoration: underline;
 			}
 		}
@@ -1055,7 +1068,7 @@ ul.my-breadcrumb {
 	li+li {
 		&:before {
 			padding: 8px;
-			color: @black;
+			color: @Black;
 			content: "/\00a0";
 		}
 	}
@@ -1079,4 +1092,40 @@ ul.my-breadcrumb {
 		width: 100%;
 		margin-top: 0;
 	}
+}
+.tab {
+	background-color: @LightGray;
+	overflow: hidden;
+	button {
+		background-color: inherit;
+		border: none;
+		cursor: pointer;
+		float: left;
+		font-family: Verdana, Geneva, sans-serif;
+		font-size: 14px;
+		outline: none;
+		padding: 14px 16px;
+		transition: 0.3s;
+		&:hover {
+			background-color: @Silver;
+		}
+	}
+	button.active {
+		background-color: @DarkGray;
+	}
+}
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+}
+.basket-button {
+	border: 1px solid;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 16px;
+	height: 60px;
+	padding: 6px 12px 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	width: 60px;
 }

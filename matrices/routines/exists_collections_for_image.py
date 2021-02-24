@@ -18,7 +18,5 @@ def exists_collections_for_image(a_image):
     
         collections_exist = False
 
-    print("collections_exist : " + str(collections_exist))
-    
     return collections_exist
 

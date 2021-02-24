@@ -125,7 +125,7 @@ def overwrite_cell(request):
     
                 for i, row in enumerate(rows):
 
-                    cell = Cell.create(matrix, "", "", next_column, i, "", None)
+                    cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
 
                     cell.save()
 
@@ -525,7 +525,7 @@ def import_image(request):
 
 
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
+            
             return JsonResponse(data)
 
     else:

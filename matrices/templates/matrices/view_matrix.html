@@ -503,15 +503,15 @@
 					
 					{% else %}
 
-													<a href="{% url 'delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this MATRIX?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>DELETE Bench </a>
+													<a href="{% url 'delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>DELETE Bench </a>
 
-													<a href="{% url 'add_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
+													<a href="{% url 'append_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
 
-													<a href="{% url 'delete_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
+													<a href="{% url 'delete_last_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
 
-													<a href="{% url 'add_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
+													<a href="{% url 'append_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
 
-													<a href="{% url 'delete_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
+													<a href="{% url 'delete_last_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
 
 					{% endif %}
 

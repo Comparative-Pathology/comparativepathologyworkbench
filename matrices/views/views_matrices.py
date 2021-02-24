@@ -105,16 +105,16 @@ NO_CREDENTIALS = ''
 # def add_cell(request, matrix_id):
 # def edit_cell(request, matrix_id, cell_id):
 # def view_cell(request, matrix_id, cell_id):
-# def add_column(request, matrix_id):
+# def append_column(request, matrix_id):
 # def add_column_left(request, matrix_id, column_id):
 # def add_column_right(request, matrix_id, column_id):
 # def delete_this_column(request, matrix_id, column_id):
-# def delete_column(request, matrix_id):
-# def add_row(request, matrix_id):
+# def delete_last_column(request, matrix_id):
+# def append_row(request, matrix_id):
 # def add_row_above(request, matrix_id, row_id):
 # def add_row_below(request, matrix_id, row_id):
 # def delete_this_row(request, matrix_id, row_id):
-# def delete_row(request, matrix_id):
+# def delete_last_row(request, matrix_id):
 #
 
 #
@@ -915,13 +915,9 @@ def delete_matrix(request, matrix_id):
                 
                 if oldCell.has_image():
                 
-                    print("oldCell.image.id : " + str(oldCell.image.id))
-                
                     if not exists_collections_for_image(oldCell.image):
                     
                         cell_list = get_cells_for_image(oldCell.image)
-                        
-                        print("cell_list : " + str(cell_list))
                         
                         delete_flag = True
                         
@@ -930,8 +926,6 @@ def delete_matrix(request, matrix_id):
                             if otherCell.matrix.id != matrix_id:
                             
                                 delete_flag = False
-                        
-                        print("delete_flag : " + str(delete_flag))
                         
                         if delete_flag == True:
                         
@@ -1193,7 +1187,7 @@ def view_cell(request, matrix_id, cell_id):
 # APPEND A COLUMN OF CELLS TO THE BENCH
 #
 @login_required
-def add_column(request, matrix_id):
+def append_column(request, matrix_id):
 
     data = get_header_data(request.user)
 
@@ -1434,7 +1428,7 @@ def delete_this_column(request, matrix_id, column_id):
 # DELETE THE LAST COLUMN IN THE BENCH
 #
 @login_required
-def delete_column(request, matrix_id):
+def delete_last_column(request, matrix_id):
 
     serverWordpress = get_primary_wordpress_server()
 
@@ -1454,29 +1448,30 @@ def delete_column(request, matrix_id):
         
             return HttpResponseRedirect(reverse('home', args=()))                        
 
+        else:
+        
             matrix = Matrix.objects.get(id=matrix_id)
     
-            #deleteColumn = Cell.objects.filter(matrix=matrix_id).values('xcoordinate').distinct().count()
             deleteColumn = matrix.get_column_count()
-            deleteColumn = deleteColumn - 1
+            deleteColumn = deleteColumn - 2
 
             oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
-        
+    
             for oldCell in oldCells:
-        
-                if oldCell.has_blogpost() == True:
             
+                if oldCell.has_blogpost() == True:
+
                     credential = Credential.objects.get(username=request.user.username)
     
                     if credential.has_apppwd():
             
                         response = serverWordpress.delete_wordpress_post(request.user.username, oldCell.blogpost)
-
+    
                         if response != WORDPRESS_SUCCESS:
                     
                             messages.error(request, "WordPress Error - Contact System Administrator")
                             
-                
+
                 if oldCell.has_image():
                 
                     if not exists_collections_for_image(oldCell.image):
@@ -1500,30 +1495,34 @@ def delete_column(request, matrix_id):
                             oldCell.save()
                             
                             image.delete()
-
+                
 
             Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
+    
+            moveCells = Cell.objects.filter(matrix=matrix_id, xcoordinate__gt=deleteColumn)
 
+            for moveCell in moveCells:
+        
+                moveCell.decrement_x()
+
+                moveCell.save()
+            
             matrix.save()
 
             matrix_cells = matrix.get_matrix()
             columns = matrix.get_columns()
             rows = matrix.get_rows()
-
+        
             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
-    
-        else:
-    
-            return HttpResponseRedirect(reverse('home', args=()))                        
-
+        
 
 #
 # APPEND A ROW OF CELLS TO THE BENCH
 #
 @login_required
-def add_row(request, matrix_id):
+def append_row(request, matrix_id):
 
     data = get_header_data(request.user)
 
@@ -1764,10 +1763,10 @@ def delete_this_row(request, matrix_id, row_id):
 
 
 #
-# DELETE THE LAST ROW IN THE BENCH
+# DELETE THE GIVEN ROW IN THE BENCH
 #
 @login_required
-def delete_row(request, matrix_id):
+def delete_last_row(request, matrix_id):
 
     serverWordpress = get_primary_wordpress_server()
 
@@ -1791,12 +1790,11 @@ def delete_row(request, matrix_id):
         
             matrix = Matrix.objects.get(id=matrix_id)
     
-            #deleteRow = Cell.objects.filter(matrix=matrix_id).values('ycoordinate').distinct().count()
-            deleteRow = get_row_count()
-            deleteRow = deleteRow -1
+            deleteRow = matrix.get_row_count()
+            deleteRow = deleteRow - 2
 
             oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
-
+    
             for oldCell in oldCells:
         
                 if oldCell.has_blogpost() == True:
@@ -1811,7 +1809,7 @@ def delete_row(request, matrix_id):
                     
                             messages.error(request, "WordPress Error - Contact System Administrator")
                             
-                
+                            
                 if oldCell.has_image():
                 
                     if not exists_collections_for_image(oldCell.image):
@@ -1835,17 +1833,28 @@ def delete_row(request, matrix_id):
                             oldCell.save()
                             
                             image.delete()
+                
 
 
             Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
-
+    
             matrix.save()
 
+
+            moveCells = Cell.objects.filter(matrix=matrix_id, ycoordinate__gt=deleteRow)
+
+            for moveCell in moveCells:
+        
+                moveCell.decrement_y()
+
+                moveCell.save()
+            
             matrix_cells = matrix.get_matrix()
             columns = matrix.get_columns()
             rows = matrix.get_rows()
-
+    
             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
-        
+
+

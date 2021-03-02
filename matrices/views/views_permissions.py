@@ -68,6 +68,7 @@ HTTP_POST = 'POST'
 # def edit_bench_authorisation(request, bench_authorisation_id):
 # def edit_bench_bench_authorisation(request, matrix_id, bench_authorisation_id):
 # def delete_bench_authorisation(request, bench_authorisation_id):
+#
 # def view_collection_authorisation(request, collection_authorisation_id):
 # def new_collection_authorisation(request):
 # def new_collection_collection_authorisation(request, collection_id):

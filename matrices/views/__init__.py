@@ -11,3 +11,5 @@ from .views_rest_matrix import MatrixViewSet
 from .views_rest_cell import CellViewSet
 from .views_rest_image import ImageViewSet
 from .views_user import *
+from .views_list_matrix import *
+from .views_list_collection import *

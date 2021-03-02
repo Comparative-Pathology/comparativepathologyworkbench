@@ -13,3 +13,5 @@ from .authority import Authority
 from .authorisation import Authorisation
 from .collectionauthority import CollectionAuthority
 from .collectionauthorisation import CollectionAuthorisation
+from .matrixsummary import MatrixSummary
+from .collectionsummary import CollectionSummary

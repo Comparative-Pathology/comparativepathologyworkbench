@@ -90,10 +90,12 @@ urlpatterns = [
 	path('authorisation/', matrices_views.authorisation, name='authorisation'),
 	path('maintenance/', matrices_views.maintenance, name='maintenance'),
 	path('index/', matrices_views.index_matrix, name='index'),
+    path('list_benches/', matrices_views.MatrixListView.as_view(), name='list_benches'),
 	path('list_matrix/', matrices_views.index_matrix, name='list_matrix'),
-	path('list_imaging_hosts/', matrices_views.list_imaging_hosts, name='list_imaging_hosts'),
+    path('list_imaging_hosts/', matrices_views.list_imaging_hosts, name='list_imaging_hosts'),
 	path('list_image_cart/', matrices_views.list_image_cart, name='list_image_cart'),
 	path('list_collection/', matrices_views.index_collection, name='list_collection'),
+    path('list_collections/', matrices_views.CollectionListView.as_view(), name='list_collections'),
 	path('index_collection/', matrices_views.index_collection, name='index_collection'),
 	path('list_bench_authorisation/', matrices_views.list_bench_authorisation, name='list_bench_authorisation'),
 	path('list_my_bench_authorisation/', matrices_views.list_my_bench_authorisation, name='list_my_bench_authorisation'),
@@ -181,5 +183,5 @@ urlpatterns = [
 	path('signup/', matrices_views.signup, name='signup'),
 	path('account_activation_sent/', matrices_views.account_activation_sent, name='account_activation_sent'),
 	path('activate/<str:uidb64>/<str:token>', matrices_views.activate, name='activate'),
-	
+
 ]

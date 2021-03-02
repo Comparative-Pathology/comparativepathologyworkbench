@@ -49,6 +49,7 @@ from matrices.serializers import MatrixSerializer
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
+from matrices.routines import get_credential_for_user
 
 
 WORDPRESS_SUCCESS = 'Success!'
@@ -86,7 +87,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
         cell_list = Cell.objects.filter(Q(matrix=matrix))
         
-        credential = Credential.objects.get(username=request.user.username)
+        credential = get_credential_for_user(request.user)
         
         serverWordpress = get_primary_wordpress_server()
         
@@ -114,22 +115,20 @@ class MatrixViewSet(viewsets.ModelViewSet):
                         
                     for otherCell in cell_list:
                         
-                        if otherCell.matrix.id != matrix_id:
+                        if otherCell.matrix.id != matrix.id:
                             
                             delete_flag = False
                         
-                        if delete_flag == True:
+                    if delete_flag == True:
                         
-                            image = cell.image
+                        image = cell.image
                             
-                            cell.image = None
+                        cell.image = None
                             
-                            cell.save()
+                        cell.save()
                             
-                            image.delete()
+                        image.delete()
 
-            cell.delete()
-        
         if matrix.has_blogpost():
 
             if credential.has_apppwd():

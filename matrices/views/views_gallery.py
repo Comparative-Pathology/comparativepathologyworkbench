@@ -86,6 +86,10 @@ def show_imaging_server(request, server_id):
 
             return render(request, 'gallery/show_server.html', data)
         
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))                        
+        
 
 #
 # SHOW THE AVAILABLE PROJECTS 
@@ -108,12 +112,18 @@ def show_group(request, server_id, group_id):
 
         server = get_object_or_404(Server, pk=server_id)
 
-        server_data = server.get_imaging_server_group_json(request, group_id)
-    
-        data.update(server_data)
-
-        return render(request, 'gallery/show_group.html', data)
-
+        if server.is_omero547() or server.is_omero56():
+        
+            server_data = server.get_imaging_server_group_json(request, group_id)
+            
+            data.update(server_data)
+            
+            return render(request, 'gallery/show_group.html', data)
+        
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))
+            
 
 #
 # SHOW THE AVAILABLE DATASETS 
@@ -137,11 +147,17 @@ def show_project(request, server_id, project_id):
 
         server = get_object_or_404(Server, pk=server_id)
     
-        server_data = server.get_imaging_server_project_json(request, project_id)
-
-        data.update(server_data)
-
-        return render(request, 'gallery/show_project.html', data)
+        if server.is_omero547() or server.is_omero56():
+        
+            server_data = server.get_imaging_server_project_json(request, project_id)
+            
+            data.update(server_data)
+            
+            return render(request, 'gallery/show_project.html', data)
+        
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))
 
 
 #
@@ -167,11 +183,17 @@ def show_dataset(request, server_id, dataset_id):
 
         server = get_object_or_404(Server, pk=server_id)
     
-        server_data = server.get_imaging_server_dataset_json(request, dataset_id)
-    
-        data.update(server_data)
-
-        return render(request, 'gallery/show_dataset.html', data)
+        if server.is_omero547() or server.is_omero56():
+        
+            server_data = server.get_imaging_server_dataset_json(request, dataset_id)
+            
+            data.update(server_data)
+            
+            return render(request, 'gallery/show_dataset.html', data)
+        
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))
 
     
 #
@@ -210,11 +232,17 @@ def show_image(request, server_id, image_id):
 
         server = get_object_or_404(Server, pk=server_id)
     
-        server_data = server.get_imaging_server_image_json(request, image_id)
-
-        data.update(server_data)
-
-        return render(request, 'gallery/show_image.html', data)
+        if server.is_omero547() or server.is_omero56():
+        
+            server_data = server.get_imaging_server_image_json(request, image_id)
+            
+            data.update(server_data)
+            
+            return render(request, 'gallery/show_image.html', data)
+        
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))
 
 
 #
@@ -244,6 +272,10 @@ def show_wordpress(request, server_id, page_id):
             data.update(server_data)
 
             return render(request, 'gallery/show_wordpress.html', data)
+        
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))
 
 
 #
@@ -266,11 +298,18 @@ def show_wordpress_image(request, server_id, image_id):
     
         server = get_object_or_404(Server, pk=server_id)
     
-        server_data = server.get_wordpress_image_json(request, image_id)
+        if server.is_wordpress():
+        
+            server_data = server.get_wordpress_image_json(request, image_id)
+        
+            data.update(server_data)
 
-        data.update(server_data)
+            return render(request, 'gallery/show_wordpress_image.html', data)
+        
+        else:
+        
+            return HttpResponseRedirect(reverse('home', args=()))
 
-        return render(request, 'gallery/show_wordpress_image.html', data)
 
 
 #
@@ -284,7 +323,8 @@ def add_image(request, server_id, image_id, roi_id):
     if not exists_active_collection_for_user(request.user):
     
         return HttpResponseRedirect(reverse('home', args=()))                        
-    
+
+
     if data["credential_flag"] == NO_CREDENTIALS:
 
         return HttpResponseRedirect(reverse('home', args=()))                        

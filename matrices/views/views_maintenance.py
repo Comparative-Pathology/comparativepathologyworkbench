@@ -39,20 +39,12 @@ from matrices.forms import TypeForm
 from matrices.forms import AuthorityForm
 from matrices.forms import CollectionAuthorityForm
 
-from matrices.models import Matrix
-from matrices.models import Cell
 from matrices.models import Type
 from matrices.models import Protocol
-from matrices.models import Server
 from matrices.models import Command
-from matrices.models import Image
 from matrices.models import Blog
-from matrices.models import Credential
-from matrices.models import Collection
 from matrices.models import Authority
 from matrices.models import CollectionAuthority
-from matrices.models import Authorisation
-from matrices.models import CollectionAuthorisation
 
 from matrices.routines import get_header_data
 
@@ -67,22 +59,27 @@ HTTP_POST = 'POST'
 # def new_blog_command(request):
 # def edit_blog_command(request, blog_id):
 # def delete_blog_command(request, blog_id):
+#
 # def view_command(request, command_id):
 # def new_command(request):
 # def edit_command(request, command_id):
 # def delete_command(request, command_id):
+#
 # def view_protocol(request, protocol_id):
 # def new_protocol(request):
 # def edit_protocol(request, protocol_id):
 # def delete_protocol(request, protocol_id):
+#
 # def view_type(request, type_id):
 # def new_type(request):
 # def edit_type(request, type_id):
 # def delete_type(request, type_id):
+#
 # def view_bench_authority(request, bench_authority_id):
 # def new_bench_authority(request):
 # def edit_bench_authority(request, bench_authority_id):
 # def delete_bench_authority(request, bench_authority_id):
+#
 # def view_collection_authority(request, collection_authority_id):
 # def new_collection_authority(request):
 # def edit_collection_authority(request, collection_authority_id):

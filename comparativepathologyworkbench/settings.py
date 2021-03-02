@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 	'widget_tweaks',
     'rest_framework',
     'matrices.apps.MatricesConfig',
+    'sortable_listview',
 ]
 
 MIDDLEWARE = [

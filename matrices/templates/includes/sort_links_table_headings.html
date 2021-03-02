@@ -1,0 +1,29 @@
+{% load i18n %}
+
+{% for sort_link in sort_link_list %}
+
+<th>
+	<span class="sort-link {{ sort_link.attrs }}">
+
+    	<a href="{{ sort_link.path }}">
+    	
+    	    <button class="button button-add">
+    		
+    			<span class="{{ sort_link.indicator }}">{{ sort_link.title }}
+
+	{% if sort_link.indicator == 'sort-asc' %}▲
+    {% endif %}
+    
+    {% if sort_link.indicator == 'sort-desc' %}▼
+    {% endif %}
+
+	    		</span>
+	    	
+	    	</button>
+    	
+    	</a>
+    
+    </span>
+</th>
+
+{% endfor %}

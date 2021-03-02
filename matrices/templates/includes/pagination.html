@@ -1,0 +1,82 @@
+{% if is_paginated %}
+  			
+		<ul class="pagination">
+	
+	{% if page_obj.has_previous %}
+			
+   			<li>
+   				<a href="?page=1&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&lsaquo;&lsaquo;</a>
+   			</li>
+			<li>
+				<a href="?page={{ page_obj.previous_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&lsaquo;</a>
+			</li>
+		
+	{% else %}
+	  			
+   			<li class="disabled">
+   				<span>&lsaquo;&lsaquo;</span>
+   			</li>
+   			<li class="disabled">
+   				<span>&lsaquo;</span>
+   			</li>
+
+	{% endif %}
+		
+	{% if not page_obj.has_next and page_obj.number >= 3 %}
+		
+			<li>
+				<a href="?page={{ page_obj.number|add:"-2" }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.number|add:"-2" }}</a>
+			</li>
+		
+	{% endif %}
+
+	{% if page_obj.has_previous %}
+				
+   			<li>
+   				<a href="?page={{ page_obj.previous_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.previous_page_number }}</a>
+   			</li>
+		
+	{% endif %}
+	  			
+   			<li class="active">
+   				<a href="#">{{ page_obj.number }}</a>
+	  		</li>
+	  			
+	{% if page_obj.has_next %}
+	  			
+	  		<li>
+	  			<a href="?page={{ page_obj.next_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.next_page_number }}</a>
+	  		</li>
+	
+	{% endif %}
+	
+   	{% if not page_obj.has_previous and page_obj.paginator.num_pages >= 3 %}
+				
+			<li>
+				<a href="?page={{ page_obj.number|add:"2" }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.number|add:"2" }}</a>
+			</li>
+				
+	{% endif %}
+		
+   	{% if page_obj.has_next %}
+	  			
+   			<li>
+   				<a href="?page={{ page_obj.next_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&rsaquo;</a>
+   			</li>
+			<li>
+				<a href="?page={{ page_obj.paginator.num_pages }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&rsaquo;&rsaquo;</a>
+			</li>
+				
+	{% else %}
+				
+			<li class="disabled"><span>&rsaquo;</span>
+			</li>
+			<li class="disabled"><span>&rsaquo;&rsaquo;</span>
+			</li>
+		
+	{% endif %}
+  				
+  		</ul>
+	
+{% endif %}
+	

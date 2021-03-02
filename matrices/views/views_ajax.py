@@ -32,26 +32,15 @@ from django.db.models import Q
 from decouple import config
 
 
-from matrices.models import Matrix
 from matrices.models import Cell
-from matrices.models import Type
-from matrices.models import Protocol
-from matrices.models import Server
-from matrices.models import Command
 from matrices.models import Image
-from matrices.models import Blog
-from matrices.models import Credential
-from matrices.models import Collection
-from matrices.models import Authority
-from matrices.models import CollectionAuthority
-from matrices.models import Authorisation
-from matrices.models import CollectionAuthorisation
 
 from matrices.routines import credential_exists
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
+from matrices.routines import get_credential_for_user
 
 
 WORDPRESS_SUCCESS = 'Success!'
@@ -61,17 +50,25 @@ WORDPRESS_SUCCESS = 'Success!'
 # AJAX INTERFACE ROUTINES
 #
 # def overwrite_cell(request) - MOVE
+#      (Overwrites Target Cell with Source Cell, Source Cell is emptied)
 # def overwrite_cell_leave(request) - COPY
+#      (Overwrites Target Cell with Source Cell, Source Cell is left in place)
 # def swap_cells(request) - SWAP
+#      (Target Cell becomes Source Cell, Source Cell becomes Target Cell)
+#
 # def import_image(request)
+#
 # def swap_rows(request) - SWAP ROW A WITH ROW B
 # def swap_columns(request) - SWAP COLUMN A WITH COLUMN B
+#
 # def shuffle_columns(request) - MOVE COLUMN AND PUSH EXISTING COLUMNS TO LEFT OR RIGHT
 # def shuffle_rows(request) - MOVE ROW AND PUSH EXISTING ROWS TO LEFT OR RIGHT
 #
 
 #
 # OVERWRITE A CELL - MOVE
+#
+#  Overwrites Target Cell with Source Cell, Source Cell is emptied
 #
 @login_required()
 def overwrite_cell(request):
@@ -133,7 +130,7 @@ def overwrite_cell(request):
 
             if target_cell.has_blogpost():
 
-                credential = Credential.objects.get(username=request.user.username)
+                credential = get_credential_for_user(request.user)
     
                 if credential.has_apppwd():
             
@@ -203,6 +200,8 @@ def overwrite_cell(request):
 #
 # OVERWRITE A TARGET CELL AND LEAVE SOURCE IN PLACE - COPY
 #
+#  Overwrites Target Cell with Source Cell, Source Cell is left in place
+#
 @login_required()
 def overwrite_cell_leave(request):
     """
@@ -263,7 +262,7 @@ def overwrite_cell_leave(request):
 
             if target_cell.has_blogpost():
 
-                credential = Credential.objects.get(username=request.user.username)
+                credential = get_credential_for_user(request.user)
     
                 if credential.has_apppwd():
             
@@ -315,7 +314,7 @@ def overwrite_cell_leave(request):
 
             if source_cell.has_blogpost():
                 
-                credential = Credential.objects.get(username=request.user.username)
+                credential = get_credential_for_user(request.user)
     
                 post_id = ''
 
@@ -350,6 +349,8 @@ def overwrite_cell_leave(request):
 
 #
 # SWAP TARGET AND SOURCE CELLS - SWAP
+#
+#  Target Cell becomes Source Cell, Source Cell becomes Target Cell
 #
 @login_required()
 def swap_cells(request):
@@ -505,7 +506,7 @@ def import_image(request):
             
             if target_cell.has_no_blogpost():
                 
-                credential = Credential.objects.get(username=request.user.username)
+                credential = get_credential_for_user(request.user)
     
                 if credential.has_apppwd():
 

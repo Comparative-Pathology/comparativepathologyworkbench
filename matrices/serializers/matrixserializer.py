@@ -5,6 +5,8 @@ from rest_framework import serializers
 from django.db import models
 
 from matrices.models import Matrix
+from matrices.models import Cell
+from matrices.models import Image
 from matrices.models import Server
 from matrices.models import Credential
 
@@ -13,7 +15,7 @@ from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import exists_image_for_id_server_owner_roi
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import get_servers_for_uid_url
-
+from matrices.routines import get_credential_for_user
 
 from matrices.serializers import CellSerializer
 
@@ -234,7 +236,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 				cell_list.append(cell_in)
 
 
-		credential = Credential.objects.get(username=request.user.username)
+		credential = get_credential_for_user(request.user)
 		
 		post_id = ''
 			
@@ -346,7 +348,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 				
 		if instance.blogpost == '' or instance.blogpost == '0':
 		
-			credential = Credential.objects.get(username=request_user.username)
+			credential = get_credential_for_user(request.user)
 			
 			if credential.has_apppwd():
 			
@@ -500,7 +502,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 							
 							if not bench_cell.has_blogpost():
 							
-								credential = Credential.objects.get(username=request_user.username)
+								credential = get_credential_for_user(request.user)
 								
 								if credential.has_apppwd():
 								
@@ -594,7 +596,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 								
 								if bench_cell.has_blogpost():
 								
-									credential = Credential.objects.get(username=request_user.username)
+									credential = get_credential_for_user(request.user)
 									
 									if credential.has_apppwd():
 									
@@ -627,7 +629,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 							
 							if bench_cell.has_blogpost():
 
-								credential = Credential.objects.get(username=request_user.username)
+								credential = get_credential_for_user(request.user)
 	
 								if credential.has_apppwd():
 									
@@ -684,7 +686,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 		
 			if delete_cell.has_blogpost():
 
-				credential = Credential.objects.get(username=request_user.username)
+				credential = get_credential_for_user(request.user)
 	
 				if credential.has_apppwd():
 				
@@ -790,7 +792,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 					post_id = ''
 					
-					credential = Credential.objects.get(username=request_user.username)
+					credential = get_credential_for_user(request.user)
 	
 					if credential.has_apppwd():
 					
@@ -1008,7 +1010,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 				server = self.validate_image_json(server, image_owner, image_id, roi_id)
 
-
 		return True
 
 
@@ -1047,9 +1048,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 		
 		if exists_server_for_uid_url(server_uid, server_url):
 
-			server_list = get_servers_for_uid_url(server_uid, server_url)
+			server = get_servers_for_uid_url(server_uid, server_url)
 			
-			server = server_list[0]
+			print("server : " + str(server))
 			
 			if server.is_wordpress():
 				

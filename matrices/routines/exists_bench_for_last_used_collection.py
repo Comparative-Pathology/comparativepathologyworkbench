@@ -15,4 +15,3 @@ def exists_bench_for_last_used_collection(a_collection):
     Matrix = apps.get_model('matrices', 'Matrix')
 
     return Matrix.objects.filter(last_used_collection=a_collection).exists()
-

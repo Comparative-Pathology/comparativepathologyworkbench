@@ -26,17 +26,6 @@
 </div>
 
 	
-<!-- Tab links -->
-
-<div class="tab">
-
-    <button class="tablinks" onclick="openTab(event, 'all_benches')" id="defaultOpen">All Benches</button>
-
-    <button class="tablinks" onclick="openTab(event, 'my_benches')">My Benches</button>
-
-</div>
-
-	
 <!-- Main Data Panel -->
 
 <div class="standard-grid-container">
@@ -46,19 +35,19 @@
 
 	<div class="standard-grid-item">
 
-		<div id="my_benches" class="tabcontent">
+		<div>
 
-    		<h1>Browse MY Benches</h1>
+    		<h1>Browse Benches</h1>
 
-	    	<p>Browse the list of MY Benches</p>
+	    	<p>Browse the list of Benches</p>
 
 		    <hr>
 
     		<br />
 
-{% if my_out_matrix_list %}
+{% if matrix_list %}
 
-	{% for my_out_matrix in my_out_matrix_list %}
+	{% for matrix in matrix_list %}
 	
 		{% if forloop.first %}
 	
@@ -90,211 +79,51 @@
 
 				    <td>
 
-			{% if my_out_matrix.authorisation_authority == 'VIEWER' %}
+			{% if matrix.matrix_authorisation_authority == 'VIEWER' %}
 
-					    <a href="{% url 'matrix' my_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+					    <a href="{% url 'matrix' matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-    					<a href="{% url 'detail_matrix' my_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-			{% endif %}
-	
-			{% if my_out_matrix.authorisation_authority == 'EDITOR' %}
-
-	    				<a href="{% url 'matrix' my_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
-
-		    			<a href="{% url 'detail_matrix' my_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-			    		<a href="{% url 'edit_matrix' my_out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-
-				    	<a href="{% url 'delete_matrix' my_out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+    					<a href="{% url 'detail_matrix' matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 	
-			{% if my_out_matrix.authorisation_authority == 'OWNER' %}
+			{% if matrix.matrix_authorisation_authority == 'EDITOR' %}
 
-					    <a href="{% url 'matrix' my_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+	    				<a href="{% url 'matrix' matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-    					<a href="{% url 'detail_matrix' my_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		    			<a href="{% url 'detail_matrix' matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-	    				<a href="{% url 'edit_matrix' my_out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+			    		<a href="{% url 'edit_matrix' matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
-		    			<a href="{% url 'delete_matrix' my_out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-
-			    		<a href="{% url 'list_bench_bench_authorisation' my_out_matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
+				    	<a href="{% url 'delete_matrix' matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 			{% endif %}
 	
-			{% if my_out_matrix.authorisation_authority == 'ADMIN' %}
+			{% if matrix.matrix_authorisation_authority == 'OWNER' %}
 
-				    	<a href="{% url 'matrix' my_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+					    <a href="{% url 'matrix' matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-					    <a href="{% url 'detail_matrix' my_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+    					<a href="{% url 'detail_matrix' matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-    					<a href="{% url 'edit_matrix' my_out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+	    				<a href="{% url 'edit_matrix' matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
-	    				<a href="{% url 'delete_matrix' my_out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+		    			<a href="{% url 'delete_matrix' matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
-		    			<a href="{% url 'list_bench_bench_authorisation' my_out_matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-	
-			{% endif %}
-	
-			    	</td>
-
-		{% endif %}
-
-				    <td>CPW:{{ my_out_matrix.matrix_id|stringformat:"06d" }}</td>
-    				<td>{{ my_out_matrix.matrix_owner }}</td>
-	    			<td>{{ my_out_matrix.authorisation_authority }}</td>
-		    		<td>{{ my_out_matrix.matrix_title }}</td>
-
-			    </tr>
-
-		{% if forloop.last %}
-	
-    			<tr>
-
-	    			<td>&nbsp;</td>
-		    		<td>&nbsp;</td>
-			    	<td>&nbsp;</td>
-				    <td>&nbsp;</td>
-
-    			</tr>
-
-	    		<tr>
-
-			{% if credential_flag %}
-	
-		    		<td>
-			    		<a href="{% url 'new_matrix' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-				    </td>
-
-			{% else %}
-
-    				<td>&nbsp;</td>
-
-			{% endif %}
-
-	    			<td>&nbsp;</td>
-		    		<td>&nbsp;</td>
-			    	<td>&nbsp;</td>
-
-    			</tr>
-
-	    	</table>
-
-		{% endif %}
-	
-	{% endfor %}
-
-{% else %}
-
-		    <p>No Benches are available.</p>
-
-	{% if credential_flag %}
-	
-		    <p>
-			    <a href="{% url 'new_matrix' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-    		</p>
-
-	{% else %}
-
-    		<p>You are not authorised to add Benches yet!</p>
-
-	{% endif %}
-
-{% endif %}
-
-    	</div>
-
-		<div id="all_benches" class="tabcontent">
-
-    		<h1>Browse ALL Benches</h1>
-
-	    	<p>Browse the list of ALL Benches</p>
-
-		    <hr>
-
-    		<br />
-
-{% if all_out_matrix_list %}
-
-	{% for all_out_matrix in all_out_matrix_list %}
-	
-		{% if forloop.first %}
-	
-	        <table>
-			    <tr>
-				    <th width="250px">Action</th>
-    				<th width="150px">Id:</th>
-	    			<th width="150px">Owner:</th>
-		    		<th width="150px">Authority:</th>
-			    	<th>Title:</th>
-    			</tr>
-	
-	    		<tr>
-		    		<td>&nbsp;</td>
-			    	<td>&nbsp;</td>
-				    <td>&nbsp;</td>
-    				<td>&nbsp;</td>
-	    		</tr>
-
-		{% endif %}
-	
-		    	<tr>
-
-		{% if credential_flag == '' %}
-
-			    	<td>&nbsp;</td>
-
-		{% else %}
-
-				    <td>
-
-			{% if all_out_matrix.authorisation_authority == 'VIEWER' %}
-
-					    <a href="{% url 'matrix' all_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
-
-    					<a href="{% url 'detail_matrix' all_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+			    		<a href="{% url 'list_bench_bench_authorisation' matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 
 			{% endif %}
 	
-			{% if all_out_matrix.authorisation_authority == 'EDITOR' %}
+			{% if matrix.matrix_authorisation_authority == 'ADMIN' %}
 
-	    				<a href="{% url 'matrix' all_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				    	<a href="{% url 'matrix' matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-		    			<a href="{% url 'detail_matrix' all_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					    <a href="{% url 'detail_matrix' matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-			    		<a href="{% url 'edit_matrix' all_out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+    					<a href="{% url 'edit_matrix' matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
-				    	<a href="{% url 'delete_matrix' all_out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+	    				<a href="{% url 'delete_matrix' matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
-			{% endif %}
-	
-			{% if all_out_matrix.authorisation_authority == 'OWNER' %}
-
-					    <a href="{% url 'matrix' all_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
-
-    					<a href="{% url 'detail_matrix' all_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-	    				<a href="{% url 'edit_matrix' all_out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-
-		    			<a href="{% url 'delete_matrix' all_out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-
-			    		<a href="{% url 'list_bench_bench_authorisation' all_out_matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-
-			{% endif %}
-	
-			{% if all_out_matrix.authorisation_authority == 'ADMIN' %}
-
-				    	<a href="{% url 'matrix' all_out_matrix.matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
-
-					    <a href="{% url 'detail_matrix' all_out_matrix.matrix_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-    					<a href="{% url 'edit_matrix' all_out_matrix.matrix_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-
-	    				<a href="{% url 'delete_matrix' all_out_matrix.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-
-		    			<a href="{% url 'list_bench_bench_authorisation' all_out_matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
+		    			<a href="{% url 'list_bench_bench_authorisation' matrix.matrix_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 	
 			{% endif %}
 	
@@ -302,10 +131,10 @@
 
 		{% endif %}
 
-				    <td>CPW:{{ all_out_matrix.matrix_id|stringformat:"06d" }}</td>
-    				<td>{{ all_out_matrix.matrix_owner }}</td>
-	    			<td>{{ all_out_matrix.authorisation_authority }}</td>
-		    		<td>{{ all_out_matrix.matrix_title }}</td>
+				    <td>CPW:{{ matrix.matrix_id|stringformat:"06d" }}</td>
+    				<td>{{ matrix.matrix_owner }}</td>
+	    			<td>{{ matrix.matrix_authorisation_authority }}</td>
+		    		<td>{{ matrix.matrix_title }}</td>
 
 			    </tr>
 
@@ -378,38 +207,5 @@
 <br />
 <br />
 <br />
-
-<script type="text/javascript">
-
-function openTab(evt, tabName) {
-
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-
-    for (i = 0; i < tabcontent.length; i++) {
-
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-
-    for (i = 0; i < tablinks.length; i++) {
-
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();   
-
-</script>
 
 {% endblock %}

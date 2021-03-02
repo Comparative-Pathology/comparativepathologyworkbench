@@ -35,7 +35,6 @@ from decouple import config
 from matrices.forms import CredentialForm
 from matrices.forms import EditUserForm
 
-from matrices.models import Matrix
 from matrices.models import Credential
 from matrices.models import Collection
 

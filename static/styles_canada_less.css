@@ -1037,4 +1037,61 @@ html {
 	 text-decoration: none;
 	 width: 60px;
 }
+ .pagination {
+	 border-radius: 0.25rem;
+	 display: -ms-flexbox;
+	 display: flex;
+	 list-style: none;
+	 padding-left: 0;
+}
+ .pagination>li:first-child>a {
+	 border-bottom-left-radius: 4px;
+	 border-left-width: 1px;
+	 border-top-left-radius: 4px;
+}
+ .pagination>li:first-child>span {
+	 border-bottom-left-radius: 4px;
+	 border-left-width: 1px;
+	 border-top-left-radius: 4px;
+}
+ .pagination>.disabled>span {
+	 background-color: White;
+	 color: Gray;
+	 cursor: not-allowed;
+}
+ .pagination>.disabled>a {
+	 background-color: White;
+	 color: Gray;
+	 cursor: not-allowed;
+}
+ .pagination>.disabled>a:hover {
+	 background-color: White;
+	 color: Gray;
+	 cursor: not-allowed;
+}
+ .pagination>.disabled>a:focus {
+	 background-color: White;
+	 color: Gray;
+	 cursor: not-allowed;
+}
+ .pagination>li>a {
+	 background-color: White;
+	 border-left-width: 0;
+	 border-left-width: 1px;
+	 border: 1px solid #DDDDDD;
+	 float: left;
+	 line-height: 1.428571429;
+	 padding: 4px 12px;
+	 text-decoration: none;
+}
+ .pagination>li>span {
+	 background-color: White;
+	 border-left-width: 0;
+	 border-left-width: 1px;
+	 border: 1px solid #DDDDDD;
+	 float: left;
+	 line-height: 1.428571429;
+	 padding: 4px 12px;
+	 text-decoration: none;
+}
  

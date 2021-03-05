@@ -11,6 +11,8 @@ from rest_framework.schemas import get_schema_view
 from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
 
+from django_filters.views import FilterView
+
 
 router = DefaultRouter()
 
@@ -30,8 +32,8 @@ urlpatterns = [
 
 #   auth_views
     path('login/', auth_views.LoginView.as_view(template_name="user/login.html"), name="login"),
-    path('logout/', auth_views.LogoutView.as_view(template_name="user/login.html"), name='logout'),	       
-    
+    path('logout/', auth_views.LogoutView.as_view(template_name="user/login.html"), name='logout'),
+
 #   auth_views
     path('reset/', auth_views.PasswordResetView.as_view(template_name='user/password_reset.html', email_template_name='user/password_reset_email.html', subject_template_name='user/password_reset_subject.txt'), name='password_reset'),
     path('reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='user/password_reset_done.html'), name='password_reset_done'),
@@ -39,7 +41,7 @@ urlpatterns = [
     path('reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user/password_reset_complete.html'), name='password_reset_complete'),
     path('settings/password/', auth_views.PasswordChangeView.as_view(template_name='user/password_change.html'), name='password_change'),
     path('settings/password/done/', auth_views.PasswordChangeDoneView.as_view(template_name='user/password_change_done.html'), name='password_change_done'),
-					        
+
 #   views_about.py
 	path('about/', matrices_views.about, name='about'),
 	path('people/', matrices_views.people, name='people'),
@@ -58,10 +60,10 @@ urlpatterns = [
 #   views_authorisation.py
 	path('mailer/', matrices_views.mailer, name='mailer'),
 	path('collectivization/', matrices_views.collectivization, name='collectivization'),
-	path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'), 
+	path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'),
 	path('edit_user/<int:user_id>/', matrices_views.edit_user, name='edit_user'),
 	path('delete_user/<int:user_id>/', matrices_views.delete_user, name='delete_user'),
-	path('detail_blog_credential/<int:credential_id>/', matrices_views.view_blog_credential, name='detail_blog_credential'), 
+	path('detail_blog_credential/<int:credential_id>/', matrices_views.view_blog_credential, name='detail_blog_credential'),
 	path('new_blog_credential/', matrices_views.new_blog_credential, name='new_blog_credential'),
 	path('edit_blog_credential/<int:credential_id>/', matrices_views.edit_blog_credential, name='edit_blog_credential'),
 	path('delete_blog_credential/<int:credential_id>/', matrices_views.delete_blog_credential, name='delete_blog_credential'),
@@ -83,19 +85,23 @@ urlpatterns = [
 #   views_host.py
 	path('', matrices_views.home, name='home'),
 	path('home/', matrices_views.home, name='home'),
-	path('detail_server/<int:server_id>/', matrices_views.view_server, name='detail_server'), 
+	path('detail_server/<int:server_id>/', matrices_views.view_server, name='detail_server'),
 	path('new_server/', matrices_views.new_server, name='new_server'),
 	path('edit_server/<int:server_id>/', matrices_views.edit_server, name='edit_server'),
 	path('delete_server/<int:server_id>/', matrices_views.delete_server, name='delete_server'),
 	path('authorisation/', matrices_views.authorisation, name='authorisation'),
 	path('maintenance/', matrices_views.maintenance, name='maintenance'),
 	path('index/', matrices_views.index_matrix, name='index'),
+
     path('list_benches/', matrices_views.MatrixListView.as_view(), name='list_benches'),
+
 	path('list_matrix/', matrices_views.index_matrix, name='list_matrix'),
     path('list_imaging_hosts/', matrices_views.list_imaging_hosts, name='list_imaging_hosts'),
 	path('list_image_cart/', matrices_views.list_image_cart, name='list_image_cart'),
 	path('list_collection/', matrices_views.index_collection, name='list_collection'),
+
     path('list_collections/', matrices_views.CollectionListView.as_view(), name='list_collections'),
+
 	path('index_collection/', matrices_views.index_collection, name='index_collection'),
 	path('list_bench_authorisation/', matrices_views.list_bench_authorisation, name='list_bench_authorisation'),
 	path('list_my_bench_authorisation/', matrices_views.list_my_bench_authorisation, name='list_my_bench_authorisation'),
@@ -109,15 +115,15 @@ urlpatterns = [
 	path('list_user_collection_collection_authorisation/<int:user_id>/', matrices_views.list_user_collection_collection_authorisation, name='list_user_collection_collection_authorisation'),
 
 #   views_maintenance.py
-	path('detail_blog_command/<int:blog_id>/', matrices_views.view_blog_command, name='detail_blog_command'), 
+	path('detail_blog_command/<int:blog_id>/', matrices_views.view_blog_command, name='detail_blog_command'),
 	path('new_blog_command/', matrices_views.new_blog_command, name='new_blog_command'),
 	path('edit_blog_command/<int:blog_id>/', matrices_views.edit_blog_command, name='edit_blog_command'),
 	path('delete_blog_command/<int:blog_id>/', matrices_views.delete_blog_command, name='delete_blog_command'),
-	path('detail_command/<int:command_id>/', matrices_views.view_command, name='detail_command'), 
+	path('detail_command/<int:command_id>/', matrices_views.view_command, name='detail_command'),
 	path('new_command/', matrices_views.new_command, name='new_command'),
 	path('edit_command/<int:command_id>/', matrices_views.edit_command, name='edit_command'),
 	path('delete_command/<int:command_id>/', matrices_views.delete_command, name='delete_command'),
-	path('detail_protocol/<int:protocol_id>/', matrices_views.view_protocol, name='detail_protocol'), 
+	path('detail_protocol/<int:protocol_id>/', matrices_views.view_protocol, name='detail_protocol'),
 	path('new_protocol/', matrices_views.new_protocol, name='new_protocol'),
 	path('edit_protocol/<int:protocol_id>/', matrices_views.edit_protocol, name='edit_protocol'),
 	path('delete_protocol/<int:protocol_id>/', matrices_views.delete_protocol, name='delete_protocol'),
@@ -144,10 +150,10 @@ urlpatterns = [
 	path('delete_collection/<int:collection_id>/', matrices_views.delete_collection, name='delete_collection'),
 	path('choose_collection/<int:matrix_id>/<int:collection_id>/', matrices_views.choose_collection, name='choose_collection'),
 	path('activate_collection/<int:collection_id>/', matrices_views.activate_collection, name='activate_collection'),
-	path('<int:matrix_id>/detail_matrix_blog/', matrices_views.view_matrix_blog, name='detail_matrix_blog'), 
+	path('<int:matrix_id>/detail_matrix_blog/', matrices_views.view_matrix_blog, name='detail_matrix_blog'),
 	path('<int:matrix_id>/view_cell_blog/<int:cell_id>/', matrices_views.view_cell_blog, name='view_cell_blog'),
 	path('<int:matrix_id>/matrix/', matrices_views.view_matrix, name='matrix'),
-	path('<int:matrix_id>/detail_matrix/', matrices_views.detail_matrix, name='detail_matrix'), 
+	path('<int:matrix_id>/detail_matrix/', matrices_views.detail_matrix, name='detail_matrix'),
 	path('new_matrix/', matrices_views.new_matrix, name='new_matrix'),
 	path('<int:matrix_id>/edit_matrix/', matrices_views.edit_matrix, name='edit_matrix'),
 	path('<int:matrix_id>/delete_matrix/', matrices_views.delete_matrix, name='delete_matrix'),
@@ -164,7 +170,7 @@ urlpatterns = [
 	path('<int:matrix_id>/add_row_below/<int:row_id>/', matrices_views.add_row_below, name='add_row_below'),
 	path('<int:matrix_id>/delete_this_row/<int:row_id>/', matrices_views.delete_this_row, name='delete_this_row'),
 	path('<int:matrix_id>/delete_last_row/', matrices_views.delete_last_row, name='delete_last_row'),
-	
+
 #   views_permissions.py
 	path('detail_bench_authorisation/<int:bench_authorisation_id>/', matrices_views.view_bench_authorisation, name='detail_bench_authorisation'),
 	path('new_bench_authorisation/', matrices_views.new_bench_authorisation, name='new_bench_authorisation'),

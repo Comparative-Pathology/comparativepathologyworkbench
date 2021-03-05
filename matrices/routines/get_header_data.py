@@ -44,9 +44,9 @@ def get_header_data(a_user):
             credential_flag = a_user.username
 
 
-        matrix_list = bench_list_by_user_and_direction(a_user, direction)
+        matrix_list = bench_list_by_user_and_direction(a_user, direction, '', '', '', '', '', '', '', '')
 
-        collection_list = collection_list_by_user_and_direction(a_user, direction)
+        collection_list = collection_list_by_user_and_direction(a_user, direction, '', '', '', '')
 
 
     data = { 'credential_flag': credential_flag, 'collection_list': collection_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }

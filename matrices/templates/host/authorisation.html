@@ -5,14 +5,14 @@
 {% load static %}
 
 {% block content %}
-    
-    
+
+
 <!-- Breadcrumb Menu -->
 
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -20,7 +20,7 @@
 		<li>
 			Authorisation
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -49,15 +49,15 @@
 		<div id="users" class="tabcontent">
 
 			<h2>Users</h2>
-		
+
 			<br />
 
 {% if user_list %}
 
     {% for userlist in user_list %}
-	
+
 		{% if forloop.first %}
-	
+
 	    	<table>
 
     	    	<tr>
@@ -77,11 +77,11 @@
 				</tr>
 
 		{% endif %}
-	
+
     	    	<tr>
 
 		{% if user.is_superuser %}
-            
+
         	    	<td>
 						<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -90,7 +90,7 @@
 	        	    </td>
 
 		{% else %}
-	
+
         	    	<td>
 						<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	        	    </td>
@@ -106,13 +106,13 @@
     		        <td>
 						{{ userlist.email }}
             		</td>
-	            	<td>	
+	            	<td>
 						{{ userlist.is_superuser }}
 	        	    </td>
 				</tr>
 
 		{% if forloop.last %}
-	
+
     		    <tr>
         		    <td>&nbsp;</td>
             		<td>&nbsp;</td>
@@ -123,28 +123,28 @@
 			</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No users are available.</p>
-	
+
 {% endif %}
 
 		</div>
 
 		<div id="blog_credentials" class="tabcontent">
-	
+
 			<h2>Blog Credentials</h2>
 			<br />
 
 {% if credential_list %}
 
 	{% for credential in credential_list %}
-	
+
 		{% if forloop.first %}
-	
+
 	    	<table>
 
     	    	<tr>
@@ -159,10 +159,10 @@
 
 		{% else %}
 
-        	    	<th width="350px">&nbsp;</td>
+        	    	<th width="350px">&nbsp;</th>
 
 		{% endif %}
-            
+
 				</tr>
 
     		    <tr>
@@ -174,11 +174,11 @@
 				</tr>
 
 		{% endif %}
-	
+
 	        	<tr>
 
 		{% if user.is_superuser %}
-            
+
     	        	<td>
 						<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -186,11 +186,11 @@
     		        </td>
 
 		{% else %}
-	
+
         		    <td>
 						<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	    	        </td>
-	
+
 		{% endif %}
 
     		        <td>
@@ -218,7 +218,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
     	    	<tr>
 	            	<td>&nbsp;</td>
 	    	        <td>&nbsp;</td>
@@ -230,7 +230,7 @@
     	    	<tr>
 
 			{% if user.is_superuser %}
-    
+
         	    	<td>
 						<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
     	        	</td>
@@ -240,7 +240,7 @@
 	        	    <td>&nbsp;</td>
 
 			{% endif %}
-	
+
     	        	<td>&nbsp;</td>
 	    	        <td>&nbsp;</td>
     	    	    <td>&nbsp;</td>
@@ -250,15 +250,15 @@
 		    </table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No Blog Credentials are available.</p>
-	    
+
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -269,13 +269,13 @@
 			</p>
 
 	{% endif %}
-	
+
 {% endif %}
 
 		</div>
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 
@@ -316,7 +316,7 @@ function openTab(evt, tabName) {
 }
 
 // Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();   
+document.getElementById("defaultOpen").click();
 
 </script>
 

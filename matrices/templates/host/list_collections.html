@@ -12,22 +12,76 @@
 <div>
 
 	<ul class="my-breadcrumb">
-		
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			Collections
 		</li>
-	
+
+		<li>
+			<i onclick="toggleCollapse()" class="fa fa-search" title="Search Collections"></i>
+		</li>
+
 	</ul>
 
 </div>
 
-
-	
 <!-- Main Data Panel -->
+
+<div id="search-container" class="standard-grid-container" style="display: none">
+
+	<div id="search-left" class="standard-grid-item">
+	</div>
+
+	<div id="search-middle" class="standard-grid-item">
+
+		<h1>Search Collections</h1>
+
+		<p>Search the list of Collections</p>
+
+		<form action="{% url 'list_collections' %}" method="get">
+
+			{% include 'includes/formsearch.html' %}
+
+			<button class="button button-add" type="submit">Search</button>
+			<button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
+
+		</form>
+
+		<br />
+		<hr>
+		<br />
+
+	</div>
+
+	<div id="search-right" class="standard-grid-item">
+	</div>
+
+</div>
+
+<div id="browse-container" class="standard-grid-container">
+
+	<div id="browse-left" class="standard-grid-item">
+	</div>
+
+	<div id="browse-middle" class="standard-grid-item">
+
+		<h1>Browse Collections</h1>
+
+		<p>Browse the list of Collections</p>
+
+		<hr>
+		<br />
+
+	</div>
+
+	<div id="browse-right" class="standard-grid-item">
+	</div>
+
+</div>
 
 <div class="standard-grid-container">
 
@@ -38,20 +92,12 @@
 
 		<div id="collection_summarys">
 
-		    <h1>Browse Collections</h1>
-
-    		<p>Browse the list of Collections</p>
-
-	    	<hr>
-
-		    <br />
-
 {% if collection_summary_list %}
 
 	{% for collection_summary in collection_summary_list %}
-	
+
 		{% if forloop.first %}
-	
+
     		<table>
 	    		<tr>
 		    		<th width="300px">Action</th>
@@ -59,7 +105,7 @@
 {% include 'includes/sort_links_table_headings.html' %}
 
     			</tr>
-	
+
 	    		<tr>
 		    		<td>&nbsp;</td>
 			    	<td>&nbsp;</td>
@@ -70,7 +116,7 @@
     			</tr>
 
 		{% endif %}
-	
+
 	    		<tr>
 
 		{% if credential_flag == '' %}
@@ -84,11 +130,11 @@
 			{% if collection_summary.collection_authorisation_authority == 'VIEWER' %}
 
 				    	<a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
-				    	
+
 				    	<a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
-	
+
 			{% if collection_summary.collection_authorisation_authority == 'OWNER' %}
 
 					    <a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
@@ -104,29 +150,29 @@
 		        {% if collection_summary.is_active %}
 
 			        {% if collection_summary.collection_owner == credential_flag %}
-		        
+
 					    <button class="button button-delete"><i class="fa fa-bell"></i></button>
 
 					{% else %}
-	
+
 					{% endif %}
-				
+
 				{% else %}
-	
+
 			        {% if collection_summary.collection_owner == credential_flag %}
-		        
+
 					    <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
 
 					{% else %}
-	
+
 					{% endif %}
 
 				{% endif %}
-				
+
 			{% endif %}
-	
+
 			{% if collection_summary.collection_authorisation_authority == 'ADMIN' %}
-			
+
 			            <a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 					    <a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
@@ -136,31 +182,31 @@
 					    <a href="{% url 'delete_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 					    <a href="{% url 'list_collection_collection_authorisation' collection_summary.collection_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-	
+
 		        {% if collection_summary.is_active %}
 
 			        {% if collection_summary.collection_owner == credential_flag %}
-		        
+
 					    <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
 
 					{% else %}
-	
+
 					{% endif %}
-				
+
 				{% else %}
-	
+
 			        {% if collection_summary.collection_owner == credential_flag %}
-		        
+
 					    <button class="button button-delete"><i class="fa fa-bell"></i></button>
 
 					{% else %}
-	
+
 					{% endif %}
 
 				{% endif %}
-				
+
 			{% endif %}
-	
+
 				    </td>
 
 		{% endif %}
@@ -175,7 +221,7 @@
     			</tr>
 
 		{% if forloop.last %}
-	
+
 	    		<tr>
 
 		    		<td>&nbsp;</td>
@@ -190,7 +236,7 @@
     			<tr>
 
 			{% if credential_flag %}
-	
+
 	    			<td>
 		    			<a href="{% url 'new_collection' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			    	</td>
@@ -211,7 +257,7 @@
 	    	</table>
 
 		{% endif %}
-	
+
 	{% endfor %}
 
 {% include 'includes/pagination.html' %}
@@ -221,7 +267,7 @@
     		<p>No Collections are available.</p>
 
 	{% if credential_flag %}
-	
+
 	    	<p>
 		    	<a href="{% url 'new_collection' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
     		</p>
@@ -248,5 +294,51 @@
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<script>
+
+	function clearForm(oForm) {
+
+		var elements = oForm.elements;
+
+		oForm.reset();
+
+		for(i=0; i<elements.length; i++) {
+
+			field_type = elements[i].type.toLowerCase();
+
+			switch(field_type) {
+
+				case "text":
+				case "password":
+				case "textarea":
+		    	case "hidden":
+					elements[i].value = "";
+					break;
+
+				case "radio":
+				case "checkbox":
+	  				if (elements[i].checked) {
+	   					elements[i].checked = false;
+					}
+					break;
+
+				case "select-one":
+				case "select-multi":
+	            	elements[i].selectedIndex = -1;
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
+
+</script>
 
 {% endblock %}

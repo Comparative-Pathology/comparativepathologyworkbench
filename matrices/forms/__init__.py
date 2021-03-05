@@ -16,3 +16,5 @@ from .protocolform import ProtocolForm
 from .serverform import ServerForm
 from .signupform import SignUpForm
 from .typeform import TypeForm
+from .matrixsummarysearchform import MatrixSummarySearchForm
+from .collectionsummarysearchform import CollectionSummarySearchForm

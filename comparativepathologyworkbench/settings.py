@@ -16,6 +16,7 @@ from decouple import config, Csv
 
 import dj_database_url
 
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,10 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 	'widget_tweaks',
     'rest_framework',
-    'matrices.apps.MatricesConfig',
     'sortable_listview',
+    'ckeditor',
+    'inlineedit',
+
+    'matrices.apps.MatricesConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,7 +131,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-# These lines ensure all static files - CSS, images etc - come from a SINGLE base level 
+# These lines ensure all static files - CSS, images etc - come from a SINGLE base level
 #  folder in the application
 
 STATIC_URL = '/static/'
@@ -179,3 +184,30 @@ REST_FRAMEWORK = {
 }
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', cast=int)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = config('SESSION_EXPIRE_AT_BROWSER_CLOSE', cast=bool)
+
+
+# CKEditor settings
+#
+
+import ckeditor.configs
+
+CKEDITOR_CONFIGS = {
+    "default": ckeditor.configs.DEFAULT_CONFIG,
+    "empty_toolbar": {
+        "toolbar": "Empty",
+        "toolbar_Empty": []
+    }
+}
+
+
+# Django Inlineedit settings
+#
+
+# This setting controls default editing access within Django-inlineedit
+# In this case we are enabling editing to anyone using the example
+INLINEEDIT_EDIT_ACCESS = lambda user, model, field: True
+
+# Two custom adaptors are being registered below
+INLINEEDIT_ADAPTORS = {
+    "blocked": "matrices.adaptors.BlockedAdaptor",
+}

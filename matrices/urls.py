@@ -27,6 +27,9 @@ router.register(r'images', matrices_views.ImageViewSet)
 
 
 urlpatterns = [
+
+    path('inlineedit/', include('inlineedit.urls')),
+
 #   REST API
     path('api/', include(router.urls)),
 

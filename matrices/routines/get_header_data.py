@@ -44,7 +44,7 @@ def get_header_data(a_user):
             credential_flag = a_user.username
 
 
-        matrix_list = bench_list_by_user_and_direction(a_user, direction, '', '', '', '', '', '', '', '')
+        matrix_list = bench_list_by_user_and_direction(a_user, direction, '', '', '', '', '', '', '', '', '')
 
         collection_list = collection_list_by_user_and_direction(a_user, direction, '', '', '', '')
 

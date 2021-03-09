@@ -109,7 +109,6 @@
 
 	<div class="nav-grid-item">
 
-
 <!-- BENCHES -->
 
 		<div class="my-subnav">
@@ -452,6 +451,26 @@
 {% endif %}
 
 		</div>
+
+{% if user.is_authenticated %}
+
+		<div class="my-subnav">
+
+			<div class="search-container">
+
+				<form action="{% url 'list_benches' %}" method="get">
+
+					<input id="id_search" type="text" placeholder="Search ..." name="search">
+
+					<button type="submit"><i class="fa fa-search"></i></button>
+
+				</form>
+
+		    </div>
+
+		</div>
+
+{% endif %}
 
 	</div>
 

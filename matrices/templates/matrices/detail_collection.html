@@ -4,6 +4,8 @@
 
 {% load static %}
 
+{% load inlineedit %}
+
 {% block content %}
 
 
@@ -12,7 +14,7 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -20,15 +22,15 @@
 		<li>
 			<a href="{% url 'list_collections' %}">List Collections</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a>
 		</li>
-		
+
 		<li>
 			Collection Details
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -46,14 +48,18 @@
 		<h1>Collection {{ collection.id }}</h1>
 
 		<hr>
-		
+
 		<br />
 
 		<dl class="standard">
 			<dt>Title</dt>
-			<dd>{{ collection.title }}</dd>
+			<dd>
+				{% inlineedit "collection.title" "blocked" %}
+			</dd>
 			<dt>Description</dt>
-			<dd>{{ collection.description }}</dd>
+			<dd>
+				{% inlineedit "collection.description" "blocked" %}
+			</dd>
 			<dt>Owner</dt>
 			<dd>{{ collection.owner.username }}</dd>
 			<dt>Active?</dt>
@@ -65,17 +71,18 @@
 		<a href="{% url 'list_collection' %}"><button class="button button-add">BACK</button></a>
 
 {% if user.is_superuser %}
-            
+
 		<a href="{% url 'edit_collection' collection.id %}"><button class="button button-edit">Edit</button></a>
 
 {% endif %}
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 
 </div>
 
+{% inlineedit_script %}
 
 {% endblock %}

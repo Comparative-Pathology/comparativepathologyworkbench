@@ -15,7 +15,7 @@
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -37,7 +37,7 @@
 			<div class="card-container">
 
 				<h3>How To</h3>
-			
+
 				<p>Learn more about how to use the Workbench</p>
 
 				<br />
@@ -68,23 +68,23 @@
 			<div class="card-container">
 
 				<h3>Login</h3>
-		
+
 				<p>Login to the Workbench</p>
-		
+
 				<br />
 				<br />
 				<br />
 
 				<a href="{% url 'login' %}"><button class="button button-add">Login &raquo;</button></a>
-	
+
 			</div>
 
 		</div>
 
 	</div>
-	
+
 	{% else %}
-	
+
 	<div class="home-grid-item">
 
 		<div class="card">
@@ -94,16 +94,16 @@
 			<div class="card-container">
 
 				<h3>WARNING!</h3>
-		
+
 				<br />
 				<br />
 
 				<div class="panel-alert">
 					<strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
 				</div>
-		
+
 			</div>
-	
+
 		</div>
 
 	</div>
@@ -124,15 +124,15 @@
 			<div class="card-container">
 
 				<h3>Registration</h3>
-		
+
 				<p>Register to use the Workbench</p>
-		
+
 				<br />
 				<br />
 				<br />
 
 				<a href="{% url 'signup' %}"><button class="button button-delete">Register &raquo;</button></a>
-	
+
 			</div>
 
 		</div>
@@ -140,7 +140,7 @@
 	</div>
 
 	{% else %}
-	
+
 	<div class="home-grid-item">
 
 	</div>
@@ -151,7 +151,7 @@
 	</div>
 
 {% else %}
-	    
+
 	{% if matrix_list %}
 
 	<div class="home-grid-item">
@@ -166,7 +166,7 @@
 			<div class="card-container">
 
 				<h3>Browse</h3>
-		
+
 				<p>Browse All Permitted Benches in the Workbench ({{ matrix_list|length }})</p>
 
 				<br />
@@ -179,12 +179,12 @@
 		</div>
 
 	</div>
-	    
+
 	<div class="home-grid-item">
 	</div>
 
 	{% else %}
-	
+
 	<div class="home-grid-item">
 	</div>
 
@@ -197,7 +197,7 @@
 			<div class="card-container">
 
 				<h3>ADD</h3>
-		
+
 				<p>Add a NEW Bench!</p>
 
 				<a href="{% url 'new_matrix' %}"><button class="button button-add">ADD &raquo;</button></a>
@@ -207,12 +207,12 @@
 		</div>
 
 	</div>
-	    
+
 	<div class="home-grid-item">
 	</div>
 
 	{% endif %}
-	
+
 	<div class="home-grid-item">
 
 		<div class="card">
@@ -222,15 +222,15 @@
 			<div class="card-container">
 
 				<h3>Logout</h3>
-		
+
 				<p>Logout of the Workbench</p>
-		
+
 				<br />
 				<br />
 				<br />
 
 				<a href="{% url 'logout' %}"><button class="button button-delete">Logout &raquo;</button></a>
-	
+
 			</div>
 
 		</div>
@@ -241,7 +241,7 @@
 	</div>
 
 {% endif %}
-	    
+
 </div>
 
 <br />
@@ -258,24 +258,24 @@
 			<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
 
 			<div class="card-container">
-			
+
 				<h3>About</h3>
-		
+
 				<br />
 
 				<p>Learn more about the Project</p>
-				
+
 				<br />
 				<br />
-		
+
 				<a href="{% url 'about' %}"><button class="button button-view">About &raquo;</button></a>
 
 			</div>
-			
+
 		</div>
 
 	</div>
-	
+
 	<div class="home-grid-item">
 	</div>
 
@@ -288,7 +288,7 @@
 			<div class="card-container">
 
 				<h3>Contributors</h3>
-		
+
 				<br />
 
 				<p>Learn more about the Project Contributors</p>
@@ -302,7 +302,7 @@
 		</div>
 
 	</div>
-	
+
 	<div class="home-grid-item">
 	</div>
 
@@ -315,9 +315,9 @@
 			<div class="card-container">
 
 				<h3>Centre for Comparative Pathology</h3>
-		
+
 				<p>Learn more about the Centre for Comparative Pathology</p>
-	
+
 				<br />
 
 				<a href="https://www.ed.ac.uk/comparative-pathology"><button class="button button-view">About &raquo;</button></a>
@@ -327,7 +327,7 @@
 		</div>
 
 	</div>
-	
+
 	<div class="home-grid-item">
 	</div>
 

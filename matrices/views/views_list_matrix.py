@@ -28,6 +28,8 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
     query_owner = forms.CharField(max_length=10)
     query_authority = forms.CharField(max_length=12)
 
+    query_search = forms.CharField(max_length=25)
+
     allowed_sort_fields = {'matrix_id': {'default_direction': '', 'verbose_name': 'Bench Id'},
                            'matrix_title': {'default_direction': '', 'verbose_name': 'Title'},
                            'matrix_created': {'default_direction': '', 'verbose_name': 'Created On'},
@@ -50,6 +52,33 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
     def get_queryset(self):
 
+        if self.request.GET.get('search', None) == None:
+
+            self.query_search = ''
+
+            self.query_title = self.request.GET.get('title', '')
+            self.query_description = self.request.GET.get('description', '')
+            self.query_owner = self.request.GET.get('owner', '')
+            self.query_authority = self.request.GET.get('authority', '')
+            self.query_created_before = self.request.GET.get('created_before', '')
+            self.query_created_after = self.request.GET.get('created_after', '')
+            self.query_modified_before = self.request.GET.get('modified_before', '')
+            self.query_modified_after = self.request.GET.get('modified_after', '')
+
+        else:
+
+            self.query_search = self.request.GET.get('search', '')
+
+            self.query_title = ''
+            self.query_description = ''
+            self.query_owner = ''
+            self.query_authority = ''
+            self.query_created_before = ''
+            self.query_created_after = ''
+            self.query_modified_before = ''
+            self.query_modified_after = ''
+
+
         sort_parameter = ''
 
         if self.request.GET.get('sort', None) == None:
@@ -60,16 +89,8 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
             sort_parameter = self.request.GET.get('sort', None)
 
-        self.query_title = self.request.GET.get('title', '')
-        self.query_description = self.request.GET.get('description', '')
-        self.query_owner = self.request.GET.get('owner', '')
-        self.query_authority = self.request.GET.get('authority', '')
-        self.query_created_before = self.request.GET.get('created_before', '')
-        self.query_created_after = self.request.GET.get('created_after', '')
-        self.query_modified_before = self.request.GET.get('modified_before', '')
-        self.query_modified_after = self.request.GET.get('modified_after', '')
 
-        return bench_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority, self.query_created_after, self.query_created_before, self.query_modified_after, self.query_modified_before)
+        return bench_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority, self.query_created_after, self.query_created_before, self.query_modified_after, self.query_modified_before, self.query_search)
 
 
     def get_context_data(self, **kwargs):

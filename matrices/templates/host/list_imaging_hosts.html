@@ -1,3 +1,31 @@
+<!--
+\file         list_imaging_hosts.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The list imaging hosts (Servers) template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -12,7 +40,7 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -20,7 +48,7 @@
 		<li>
 			Sources
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -34,21 +62,21 @@
 	</div>
 
 	<div class="standard-grid-item">
-	
+
 		<h1>Browse Sources</h1>
 
 		<p>Browse the list of Sources</p>
 
 		<hr>
-	
+
 		<br />
 
 {% if server_list %}
 
 	{% for server in server_list %}
-	
+
 		{% if forloop.first %}
-	
+
 	    <table border="0">
 
     	    <tr>
@@ -68,44 +96,44 @@
 			</tr>
 
 		{% endif %}
-	
+
 	        <tr>
-        
+
 		{% if credential_flag %}
-		
+
 			{% if user.id == server.owner.id or user.is_superuser %}
-            
+
 	            <td>
 
 				{% if server.type.name == 'WORDPRESS' %}
-	
+
 					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% else %}
-	
+
 					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
-	
+
 					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 					<a href="{% url 'edit_server' server.id %}"><button class="save button button-edit"><i class="fa fa-edit"></i></button></a>
 					<a href="{% url 'delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this Image Server?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
     	        </td>
 
 			{% else %}
-	
+
 	            <td>
 
 				{% if server.type.name == 'WORDPRESS' %}
-	
+
 					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% else %}
-	
+
 					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
-	
+
 					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	            </td>
 
@@ -124,7 +152,7 @@
 			</tr>
 
 		{% if forloop.last %}
-	
+
 	        <tr>
     	        <td>&nbsp;</td>
         	    <td>&nbsp;</td>
@@ -136,7 +164,7 @@
 	        <tr>
 
 			{% if credential_flag %}
-    
+
     	        <td>
 					<a href="{% url 'new_server' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 	            </td>
@@ -146,7 +174,7 @@
     	        <td>&nbsp;</td>
 
 			{% endif %}
-	
+
         	    <td>&nbsp;</td>
             	<td>&nbsp;</td>
 	            <td>&nbsp;</td>
@@ -156,7 +184,7 @@
     	</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
@@ -166,7 +194,7 @@
 {% endif %}
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 

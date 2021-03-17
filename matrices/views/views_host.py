@@ -1,3 +1,38 @@
+#!/usr/bin/python3
+###!
+# \file         views_host.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# This contains the home, view_server, new_server, edit_server, delete_server,
+# authorisation, maintenance, index_matrix, list_imaging_hosts, list_image_cart,
+# index_collection, list_bench_authorisation, list_my_bench_authorisation,
+# list_my_bench_bench_authorisation, list_bench_bench_authorisation,
+# list_user_bench_bench_authorisation, list_collection_authorisation,
+# list_my_collection_authorisation, list_my_collection_collection_authorisation,
+# list_collection_collection_authorisation and
+# list_user_collection_collection_authorisation views
+###
 from __future__ import unicode_literals
 
 import os

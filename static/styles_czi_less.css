@@ -1094,46 +1094,39 @@ html {
 	 padding: 4px 12px;
 	 text-decoration: none;
 }
-
-/* Style the search box inside the navigation bar */
-.my-subnav input[type=text] {
-  float: left;
-  width: 200px;
-  padding: 6px;
-  border: none;
-  margin-top: 24px;
-  margin-right: 8px;
-  font-size: 17px;
+ .my-subnav input[type=text] {
+	 border: 1px solid DarkGray;
+	 border: none;
+	 display: block;
+	 float: left;
+	 float: none;
+	 font-size: 17px;
+	 margin-right: 8px;
+	 margin-top: 24px;
+	 margin: 0;
+	 padding: 14px;
+	 padding: 6px;
+	 text-align: left;
+	 width: 200px;
+	 width: 100%;
 }
-
-.my-subnav .search-container button {
-  float: left;
-  padding: 6px 10px;
-  margin-top: 24px;
-  margin-right: 8px;
-  background: #DDDDDD;
-  font-size: 17px;
-  border: none;
-  cursor: pointer;
+ .my-subnav .search-container button {
+	 background: #DDDDDD;
+	 border: none;
+	 cursor: pointer;
+	 display: block;
+	 float: left;
+	 float: none;
+	 font-size: 17px;
+	 margin-right: 8px;
+	 margin-top: 24px;
+	 margin: 0;
+	 padding: 14px;
+	 padding: 6px 10px;
+	 text-align: left;
+	 width: 100%;
 }
-
-.my-subnav .search-container button:hover {
-  background: #ccc;
+ .my-subnav .search-container button:hover {
+	 background: DarkGray;
 }
-
-@media screen and (max-width: 600px) {
-  .my-subnav .search-container {
-    float: none;
-  }
-  .my-subnav input[type=text], .my-subnav .search-container button {
-    float: none;
-    display: block;
-    text-align: left;
-    width: 100%;
-    margin: 0;
-    padding: 14px;
-  }
-  .my-subnav input[type=text] {
-    border: 1px solid #ccc;  
-  }
-}
+ 

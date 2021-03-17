@@ -1,9 +1,37 @@
+#!/usr/bin/python3
+###!
+# \file         authority.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# The Bench Authority Model.
+###
 from __future__ import unicode_literals
 
 import json, urllib, requests, base64, hashlib, requests
 
 from django.db import models
-from django.db.models import Q 
+from django.db.models import Q
 from django.db.models import Count
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -39,7 +67,7 @@ class Authority(models.Model):
             return True
         else:
             return False
-            
+
     def set_owner(self, a_user):
         self.owner = a_user
 
@@ -63,25 +91,25 @@ class Authority(models.Model):
             return True
         else:
             return False
-            
+
     def is_not_none(self):
         if self.name == 'NONE':
             return False
         else:
             return True
-            
+
     def is_editor(self):
         if self.name == 'EDITOR':
             return True
         else:
             return False
-            
+
     def is_not_editor(self):
         if self.name == 'EDITOR':
             return False
         else:
             return True
-            
+
     def is_viewer(self):
         if self.name == 'VIEWER':
             return True
@@ -105,7 +133,7 @@ class Authority(models.Model):
             return False
         else:
             return True
-        
+
     def is_admin(self):
         if self.name == 'ADMIN':
             return True
@@ -117,4 +145,3 @@ class Authority(models.Model):
             return False
         else:
             return True
-

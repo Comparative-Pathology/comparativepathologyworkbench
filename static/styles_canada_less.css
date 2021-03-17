@@ -22,7 +22,7 @@ html {
 	 margin-top: 6px;
 	 margin-bottom: 16px;
 	 resize: vertical;
-	 font-size: 16px;
+	 font-size: 12px;
 }
  input[type=email] {
 	 width: 100%;
@@ -33,7 +33,7 @@ html {
 	 margin-top: 6px;
 	 margin-bottom: 16px;
 	 resize: vertical;
-	 font-size: 16px;
+	 font-size: 12px;
 }
  input[type=number] {
 	 width: 100%;
@@ -44,7 +44,7 @@ html {
 	 margin-top: 6px;
 	 margin-bottom: 16px;
 	 resize: vertical;
-	 font-size: 16px;
+	 font-size: 12px;
 }
  input[type=password] {
 	 width: 100%;
@@ -55,7 +55,7 @@ html {
 	 margin-top: 6px;
 	 margin-bottom: 16px;
 	 resize: vertical;
-	 font-size: 16px;
+	 font-size: 12px;
 }
  select {
 	 width: 100%;
@@ -66,7 +66,7 @@ html {
 	 margin-top: 6px;
 	 margin-bottom: 16px;
 	 resize: vertical;
-	 font-size: 16px;
+	 font-size: 12px;
 }
  textarea {
 	 width: 100%;
@@ -77,7 +77,7 @@ html {
 	 margin-top: 6px;
 	 margin-bottom: 16px;
 	 resize: vertical;
-	 font-size: 16px;
+	 font-size: 12px;
 }
  input[type=submit] {
 	 padding: 12px 20px 12px 20px;
@@ -1093,5 +1093,40 @@ html {
 	 line-height: 1.428571429;
 	 padding: 4px 12px;
 	 text-decoration: none;
+}
+ .my-subnav input[type=text] {
+	 border: 1px solid DarkGray;
+	 border: none;
+	 display: block;
+	 float: left;
+	 float: none;
+	 font-size: 17px;
+	 margin-right: 8px;
+	 margin-top: 24px;
+	 margin: 0;
+	 padding: 14px;
+	 padding: 6px;
+	 text-align: left;
+	 width: 200px;
+	 width: 100%;
+}
+ .my-subnav .search-container button {
+	 background: #DDDDDD;
+	 border: none;
+	 cursor: pointer;
+	 display: block;
+	 float: left;
+	 float: none;
+	 font-size: 17px;
+	 margin-right: 8px;
+	 margin-top: 24px;
+	 margin: 0;
+	 padding: 14px;
+	 padding: 6px 10px;
+	 text-align: left;
+	 width: 100%;
+}
+ .my-subnav .search-container button:hover {
+	 background: DarkGray;
 }
  

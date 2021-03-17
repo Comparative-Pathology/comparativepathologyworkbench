@@ -1,3 +1,31 @@
+#!/usr/bin/python3
+###!
+# \file         test_models.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# This test tests the Matrix, Profile, Type, Protocol, Server, Command, Image, Cell, Blog and Credential models
+###
 from __future__ import unicode_literals
 
 from django.test import TestCase
@@ -22,7 +50,7 @@ from matrices.models import Profile
 class MatrixTest(TestCase):
 
     def setUp(self):
-        
+
         self.matrix_owner = User.objects.create(username="fbloggs69", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
         self.matrix_not_owner = User.objects.create(username="fbloggs96", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
 
@@ -68,7 +96,7 @@ class MatrixTest(TestCase):
         ordinary_matrix_no_blogpost = Matrix(id=1, title="ordinary_matrix", description="matrix_description", blogpost="", created=timezone.now(), modified=timezone.now(), height=100, width=100, owner=self.matrix_owner )
         ordinary_matrix_too_small = Matrix(id=1, title="ordinary_matrix_too_small", description="matrix_description", blogpost="matrix_blogpost", created=timezone.now(), modified=timezone.now(), height=70, width=70, owner=self.matrix_owner )
         ordinary_matrix_too_big = Matrix(id=1, title="ordinary_matrix_too_big", description="matrix_description", blogpost="matrix_blogpost", created=timezone.now(), modified=timezone.now(), height=460, width=460, owner=self.matrix_owner )
-        
+
         self.assertTrue(isinstance(ordinary_matrix, Matrix))
 
         self.assertEqual(ordinary_matrix.__str__(), str(ordinary_matrix.id) + ", " + ordinary_matrix.title + ", " + ordinary_matrix.description + ", " + ordinary_matrix.blogpost + ", " + str(ordinary_matrix.owner.id))
@@ -94,31 +122,31 @@ class MatrixTest(TestCase):
 
         self.assertEqual(ordinary_matrix.is_owned_by(self.matrix_owner),True)
         self.assertEqual(ordinary_matrix.is_owned_by(self.matrix_not_owner),False)
-        
+
         ordinary_matrix.set_owner(self.matrix_not_owner)
-        
+
         self.assertEqual(ordinary_matrix.is_owned_by(self.matrix_owner),False)
         self.assertEqual(ordinary_matrix.is_owned_by(self.matrix_not_owner),True)
-        
+
         ordinary_matrix.set_blogpost("")
-        
+
         self.assertEqual(ordinary_matrix.has_no_blogpost(),True)
-        
+
         ordinary_matrix.set_blogpost("87654321")
 
         self.assertEqual(ordinary_matrix.blogpost, "87654321")
 
         self.assertEqual(ordinary_matrix.has_no_blogpost(),False)
-        
+
         ordinary_matrix.set_minimum_width()
         self.assertEqual(ordinary_matrix.width, 75)
-        
+
         ordinary_matrix.set_minimum_height()
         self.assertEqual(ordinary_matrix.height, 75)
-        
+
         ordinary_matrix.set_maximum_width()
         self.assertEqual(ordinary_matrix.width, 450)
-        
+
         ordinary_matrix.set_maximum_height()
         self.assertEqual(ordinary_matrix.height, 450)
 
@@ -138,125 +166,125 @@ class MatrixTest(TestCase):
 
         self.assertEqual(self.matrix_C.get_matrix(), [[self.cell_1_1_C, self.cell_2_1_C], [self.cell_1_2_C, self.cell_2_2_C]])
 
-        comment1 = {'id': '22', 
-            'date': '2019-02-20', 
-            'time': '10:22:50', 
-            'author': '1', 
-            'author_name': 'admin', 
-            'content': 'Yeah, but your scientists were so preoccupied with whether or not they could, they didn&#8217;t stop to think if they should. My dad once told me, laugh and the world laughs with you, Cry, and I&#8217;ll give you something to cry about you little bastard! Do you have any idea how long it takes those cups to decompose.', 
+        comment1 = {'id': '22',
+            'date': '2019-02-20',
+            'time': '10:22:50',
+            'author': '1',
+            'author_name': 'admin',
+            'content': 'Yeah, but your scientists were so preoccupied with whether or not they could, they didn&#8217;t stop to think if they should. My dad once told me, laugh and the world laughs with you, Cry, and I&#8217;ll give you something to cry about you little bastard! Do you have any idea how long it takes those cups to decompose.',
             'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/15#comment-22',
             'status': 'Success!'
-        } 
+        }
 
-        comment2 = {'id': '23', 
-            'date': '2019-02-20', 
-            'time': '10:23:08', 
-            'author': '1', 
-            'author_name': 'admin', 
-            'content': 'Is this my espresso machine? Wh-what is-h-how did you get my espresso machine? This thing comes fully loaded. AM/FM radio, reclining bucket seats, and&#8230; power windows. Hey, you know how I&#8217;m, like, always trying to save the planet? Here&#8217;s my chance. So you two dig up, dig up dinosaurs?', 
+        comment2 = {'id': '23',
+            'date': '2019-02-20',
+            'time': '10:23:08',
+            'author': '1',
+            'author_name': 'admin',
+            'content': 'Is this my espresso machine? Wh-what is-h-how did you get my espresso machine? This thing comes fully loaded. AM/FM radio, reclining bucket seats, and&#8230; power windows. Hey, you know how I&#8217;m, like, always trying to save the planet? Here&#8217;s my chance. So you two dig up, dig up dinosaurs?',
             'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/15#comment-23',
             'status': 'Success!'
         }
-        
+
         commentA = {
-            'id': '1', 
-            'date': '2018-12-03', 
-            'time': '15:41:35', 
-            'author': '0', 
-            'author_name': 'fbloggs69', 
-            'content': 'Hi, this is a comment.<br />\nTo get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.<br />\nCommenter avatars come from <a href="https://gravatar.com">Gravatar</a>.', 
-            'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/1#comment-1', 
+            'id': '1',
+            'date': '2018-12-03',
+            'time': '15:41:35',
+            'author': '0',
+            'author_name': 'fbloggs69',
+            'content': 'Hi, this is a comment.<br />\nTo get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.<br />\nCommenter avatars come from <a href="https://gravatar.com">Gravatar</a>.',
+            'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/1#comment-1',
             'status': 'Success!'
         }
 
-        
-        matrix_comments = {'id': 5, 
-            'title': 'matrix_title', 
-            'description': 'matrix_description', 
-            'blogpost': '15', 
+
+        matrix_comments = {'id': 5,
+            'title': 'matrix_title',
+            'description': 'matrix_description',
+            'blogpost': '15',
             'comment_list': [comment1, comment2]}
-        
-        cell_1_comments = {'id': 8, 
-            'matrix_id': 97, 
+
+        cell_1_comments = {'id': 8,
+            'matrix_id': 97,
             'matrix_title': 'matrix_title',
-            'title': 'cell_2_2', 
-            'description': 'Row_2_Column_2', 
-            'xcoordinate': 1, 
-            'ycoordinate': 1, 
-            'blogpost': '1', 
-            'image_id': 1, 
-            'viewer_url': 'image_viewer_url', 
-            'birdseye_url': 'image_birdseye_url', 
-            'image_name': 'image_name', 
+            'title': 'cell_2_2',
+            'description': 'Row_2_Column_2',
+            'xcoordinate': 1,
+            'ycoordinate': 1,
+            'blogpost': '1',
+            'image_id': 1,
+            'viewer_url': 'image_viewer_url',
+            'birdseye_url': 'image_birdseye_url',
+            'image_name': 'image_name',
             'comment_list': [commentA]
         }
-        
-        cell_2_comments = {'id': 7, 
-            'matrix_id': 97, 
+
+        cell_2_comments = {'id': 7,
+            'matrix_id': 97,
             'matrix_title': 'matrix_title',
-            'title': 'cell_2_1', 
-            'description': 'Row_2_Column_1', 
-            'xcoordinate': 1, 
-            'ycoordinate': 0, 
-            'blogpost': '1', 
-            'image_id': 1, 
-            'viewer_url': 'image_viewer_url', 
-            'birdseye_url': 'image_birdseye_url', 
-            'image_name': 'image_name', 
+            'title': 'cell_2_1',
+            'description': 'Row_2_Column_1',
+            'xcoordinate': 1,
+            'ycoordinate': 0,
+            'blogpost': '1',
+            'image_id': 1,
+            'viewer_url': 'image_viewer_url',
+            'birdseye_url': 'image_birdseye_url',
+            'image_name': 'image_name',
             'comment_list': [commentA]
         }
-        
-        cell_3_comments = {'id': 6, 
-            'matrix_id': 97, 
+
+        cell_3_comments = {'id': 6,
+            'matrix_id': 97,
             'matrix_title': 'matrix_title',
-            'title': 'cell_1_2', 
-            'description': 'Row_1_Column_2', 
-            'xcoordinate': 0, 
-            'ycoordinate': 1, 
-            'blogpost': '1', 
-            'image_id': 1, 
-            'viewer_url': 'image_viewer_url', 
-            'birdseye_url': 'image_birdseye_url', 
-            'image_name': 'image_name', 
+            'title': 'cell_1_2',
+            'description': 'Row_1_Column_2',
+            'xcoordinate': 0,
+            'ycoordinate': 1,
+            'blogpost': '1',
+            'image_id': 1,
+            'viewer_url': 'image_viewer_url',
+            'birdseye_url': 'image_birdseye_url',
+            'image_name': 'image_name',
             'comment_list': [commentA]
         }
-        
-        cell_4_comments = {'id': 5, 
-            'matrix_id': 97, 
+
+        cell_4_comments = {'id': 5,
+            'matrix_id': 97,
             'matrix_title': 'matrix_title',
-            'title': 'cell_1_1', 
-            'description': 'Row_1_Column_1', 
-            'xcoordinate': 0, 
-            'ycoordinate': 0, 
-            'blogpost': '1', 
-            'image_id': 1, 
-            'viewer_url': 'image_viewer_url', 
-            'birdseye_url': 'image_birdseye_url', 
-            'image_name': 'image_name', 
+            'title': 'cell_1_1',
+            'description': 'Row_1_Column_1',
+            'xcoordinate': 0,
+            'ycoordinate': 0,
+            'blogpost': '1',
+            'image_id': 1,
+            'viewer_url': 'image_viewer_url',
+            'birdseye_url': 'image_birdseye_url',
+            'image_name': 'image_name',
             'comment_list': [commentA]
         }
-        
+
         ordinary_matrix.set_blogpost("15")
 
         matrix_comments = ordinary_matrix.get_matrix_comments()
-        
+
         comment_list = matrix_comments['comment_list']
-        
+
         self.assertEqual(comment_list, [comment1, comment2])
-        
+
         for comment in comment_list:
-        
+
             self.assertEqual(comment['status'], 'Success!')
-        
+
         self.cell_1_1_C.set_blogpost("15")
         self.cell_1_2_C.set_blogpost("15")
         self.cell_2_1_C.set_blogpost("15")
         self.cell_2_2_C.set_blogpost("15")
-        
+
         matrix_cell_comments = self.matrix_C.get_matrix_cell_comments()
-        
+
         #print("matrix_cell_comments : ", matrix_cell_comments)
-        
+
         my_matrix_cell_comments = [cell_1_comments, cell_2_comments, cell_3_comments, cell_4_comments]
 
         #print("my_matrix_cell_comments : ", my_matrix_cell_comments)
@@ -265,7 +293,7 @@ class MatrixTest(TestCase):
 
 
     def tearDown(self):
-    
+
         self.get_blog.delete()
         self.post_blog.delete()
         self.blog_comments.delete()
@@ -306,27 +334,27 @@ class MatrixTest(TestCase):
 class ProfileTest(TestCase):
 
     def setUp(self):
-    
+
         self.user = User.objects.create(username="fbloggs69", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
 
     def test_profile_creation(self):
-    
+
         w = Profile(self, bio="profile_bio", location="profile_location", birth_date=timezone.now(), email_confirmed=True, user=self.user )
-    
+
         self.assertTrue(isinstance(w, Profile))
-    
+
         self.assertEqual(w.__str__(), str(w.id) + ", " + w.bio + ", " + w.location + ", " + str(w.birth_date) + ", " + str(w.email_confirmed))
         self.assertEqual(w.__unicode__(), str(w.id) + ", " + str(w.user.id) + ", " + w.bio + ", " + w.location + ", " + str(w.birth_date) + ", " + str(w.email_confirmed))
 
     def tearDown(self):
-    
+
         self.user.delete()
 
 
 class TypeTest(TestCase):
 
     def setUp(self):
-    
+
         self.type_owner = User.objects.create(username="fbloggs69", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
         self.type_not_owner = User.objects.create(username="fbloggs96", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
 
@@ -341,14 +369,14 @@ class TypeTest(TestCase):
 
         self.assertEqual(ordinary_type.is_owned_by(self.type_owner),True)
         self.assertEqual(ordinary_type.is_owned_by(self.type_not_owner),False)
-        
+
         ordinary_type.set_owner(self.type_not_owner)
-        
+
         self.assertEqual(ordinary_type.is_owned_by(self.type_owner),False)
         self.assertEqual(ordinary_type.is_owned_by(self.type_not_owner),True)
-        
+
     def tearDown(self):
-    
+
         self.type_owner.delete()
         self.type_not_owner.delete()
 
@@ -371,12 +399,12 @@ class ProtocolTest(TestCase):
 
         self.assertEqual(ordinary_type.is_owned_by(self.protocol_owner),True)
         self.assertEqual(ordinary_type.is_owned_by(self.protocol_not_owner),False)
-        
+
         ordinary_type.set_owner(self.protocol_not_owner)
-        
+
         self.assertEqual(ordinary_type.is_owned_by(self.protocol_owner),False)
         self.assertEqual(ordinary_type.is_owned_by(self.protocol_not_owner),True)
-        
+
     def tearDown(self):
 
         self.protocol_owner.delete()
@@ -399,15 +427,15 @@ class ServerTest(TestCase):
 
         self.assertEqual(ordinary_server.__str__(), str(ordinary_server.id) + ", " + ordinary_server.name + ", " + ordinary_server.url + ", " + ordinary_server.uid + ", " + ordinary_server.pwd + ", " + str(ordinary_server.type.id) + ", " + str(ordinary_server.owner.id))
         self.assertEqual(ordinary_server.__unicode__(), str(ordinary_server.id) + ", " + ordinary_server.name + ", " + ordinary_server.url + ", " + ordinary_server.uid + ", " + ordinary_server.pwd + ", " + str(ordinary_server.type.id) + ", " + str(ordinary_server.owner.id))
-        
+
         self.assertEqual(ordinary_server.is_owned_by(self.server_owner),True)
         self.assertEqual(ordinary_server.is_owned_by(self.server_not_owner),False)
-        
+
         ordinary_server.set_owner(self.server_not_owner)
-        
+
         self.assertEqual(ordinary_server.is_owned_by(self.server_owner),False)
         self.assertEqual(ordinary_server.is_owned_by(self.server_not_owner),True)
-        
+
         ordinary_server.set_pwd("87654321")
 
         self.assertEqual(ordinary_server.pwd, "87654321")
@@ -416,7 +444,7 @@ class ServerTest(TestCase):
         self.server_owner.delete()
         self.server_not_owner.delete()
         self.server_type.delete()
-        
+
 
 class CommandTest(TestCase):
 
@@ -432,18 +460,18 @@ class CommandTest(TestCase):
         ordinary_command = Command(name="ordinary_command", application="command_application", preamble="command_preamble", postamble="command_postamble", protocol=self.command_protocol, type=self.command_type, owner=self.command_owner)
 
         self.assertTrue(isinstance(ordinary_command, Command))
-        
+
         self.assertEqual(ordinary_command.__str__(), str(ordinary_command.id) + ", " +  ordinary_command.name + ", " +  ordinary_command.application + ", " +  ordinary_command.preamble + ", " +  ordinary_command.postamble + ", " +  str(ordinary_command.protocol.id) + ", " +  str(ordinary_command.type.id) + ", " +  str(ordinary_command.owner.id))
         self.assertEqual(ordinary_command.__unicode__(), str(ordinary_command.id) + ", " +  ordinary_command.name + ", " +  ordinary_command.application + ", " +  ordinary_command.preamble + ", " +  ordinary_command.postamble + ", " +  str(ordinary_command.protocol.id) + ", " +  str(ordinary_command.type.id) + ", " +  str(ordinary_command.owner.id))
 
         self.assertEqual(ordinary_command.is_owned_by(self.command_owner),True)
         self.assertEqual(ordinary_command.is_owned_by(self.command_not_owner),False)
-        
+
         ordinary_command.set_owner(self.command_not_owner)
-        
+
         self.assertEqual(ordinary_command.is_owned_by(self.command_owner),False)
         self.assertEqual(ordinary_command.is_owned_by(self.command_not_owner),True)
-        
+
     def tearDown(self):
 
         self.command_owner.delete()
@@ -452,10 +480,10 @@ class CommandTest(TestCase):
         self.command_protocol.delete()
 
 
-class ImageTest(TestCase):	
+class ImageTest(TestCase):
 
     def setUp(self):
-    
+
         self.image_owner = User.objects.create(username="fbloggs69", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
         self.image_not_owner = User.objects.create(username="fbloggs96", first_name="Fred", last_name="Bloggs", email="fred.bloggs@gmail.com", password="12345678", is_staff=False, is_active=False, is_superuser=False, last_login=timezone.now(), date_joined=timezone.now())
         self.image_type = Type.objects.create(name="type_name", owner=self.image_owner)
@@ -472,14 +500,14 @@ class ImageTest(TestCase):
 
         self.assertEqual(ordinary_image.is_owned_by(self.image_owner),True)
         self.assertEqual(ordinary_image.is_owned_by(self.image_not_owner),False)
-        
+
         ordinary_image.set_owner(self.image_not_owner)
-        
+
         self.assertEqual(ordinary_image.is_owned_by(self.image_owner),False)
         self.assertEqual(ordinary_image.is_owned_by(self.image_not_owner),True)
-        
+
         ordinary_image.set_inactive()
-        
+
         self.assertEqual(ordinary_image.is_active(),False)
         self.assertEqual(ordinary_image.is_inactive(),True)
 
@@ -489,7 +517,7 @@ class ImageTest(TestCase):
         self.assertEqual(ordinary_image.is_inactive(),False)
 
     def tearDown(self):
-    
+
         self.image_owner.delete()
         self.image_not_owner.delete()
         self.image_type.delete()
@@ -603,18 +631,18 @@ class BlogTest(TestCase):
         ordinary_blog = Blog(name="ordinary_blog", application="blog_application", preamble="blog_preamble", postamble="blog_postamble", protocol=self.blog_protocol, url="blog_url", owner=self.blog_owner)
 
         self.assertTrue(isinstance(ordinary_blog, Blog))
-        
+
         self.assertEqual(ordinary_blog.__str__(), str(ordinary_blog.id) + ", " +  ordinary_blog.name + ", " +  str(ordinary_blog.protocol.id) + ", " +  str(ordinary_blog.url) + ", " +  ordinary_blog.application + ", " +  ordinary_blog.preamble + ", " +  ordinary_blog.postamble + ", " +  str(ordinary_blog.owner.id))
         self.assertEqual(ordinary_blog.__unicode__(), str(ordinary_blog.id) + ", " +  ordinary_blog.name + ", " +  str(ordinary_blog.protocol.id) + ", " +  str(ordinary_blog.url) + ", " +  ordinary_blog.application + ", " +  ordinary_blog.preamble + ", " +  ordinary_blog.postamble + ", " +  str(ordinary_blog.owner.id))
 
         self.assertEqual(ordinary_blog.is_owned_by(self.blog_owner),True)
         self.assertEqual(ordinary_blog.is_owned_by(self.blog_not_owner),False)
-        
+
         ordinary_blog.set_owner(self.blog_not_owner)
-        
+
         self.assertEqual(ordinary_blog.is_owned_by(self.blog_owner),False)
         self.assertEqual(ordinary_blog.is_owned_by(self.blog_not_owner),True)
-        
+
     def tearDown(self):
 
         self.blog_owner.delete()
@@ -647,12 +675,12 @@ class CredentialTest(TestCase):
 
         self.assertEqual(ordinary_credential.is_owned_by(self.credential_owner),True)
         self.assertEqual(ordinary_credential.is_owned_by(self.credential_not_owner),False)
-        
+
         ordinary_credential.set_owner(self.credential_not_owner)
-        
+
         self.assertEqual(ordinary_credential.is_owned_by(self.credential_owner),False)
         self.assertEqual(ordinary_credential.is_owned_by(self.credential_not_owner),True)
-        
+
     def tearDown(self):
 
         self.credential_owner.delete()

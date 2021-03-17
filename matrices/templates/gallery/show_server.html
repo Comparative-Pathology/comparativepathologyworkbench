@@ -1,3 +1,31 @@
+<!--
+\file         show_server.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The show (imaging) server template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -16,14 +44,14 @@
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
 		</li>
-	
+
 		<li>
 			{{ server.name }}
-		</li>	
+		</li>
 
 	</ul>
 
@@ -38,7 +66,7 @@
 	</div>
 
 	<div class="standard-grid-item">
-	
+
 		<h1>{{ server.name }}</h1>
 
 		<br />
@@ -46,17 +74,17 @@
 {% if group_list %}
 
 		<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
-	
+
 		<hr>
 
 		<ul class="image-list">
 
     {% for group in group_list %}
-    
+
 	    	<li>
 
 				<div class="card-image-gallery">
-	
+
 					<div class="card-container-gallery">
 
 						<h5>{{ group.name }}</h5>
@@ -76,15 +104,15 @@
 		{% endif %}
 
 		        	    </dl>
-    
+
 						<br />
-					
+
 						<a href="{% url 'webgallery_show_group' server.id group.id %}"><button class="button button-view">View Group &raquo;</button></a>
 
 						<br />
-    	        
+
 		{% if group.randomImageName != 'NONE'  %}
-		
+
 						<!-- <a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a> -->
 
 		{% endif %}
@@ -106,12 +134,12 @@
 {% endif %}
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 
 </div>
-	
+
 <br />
 <br />
 <br />

@@ -1,9 +1,37 @@
+#!/usr/bin/python3
+###!
+# \file         collection.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# The (Image) Collection Model.
+###
 from __future__ import unicode_literals
 
 import json, urllib, requests, base64, hashlib, requests
 
 from django.db import models
-from django.db.models import Q 
+from django.db.models import Q
 from django.db.models import Count
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -29,19 +57,19 @@ class Collection(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     active = models.BooleanField(default=True)
     images = models.ManyToManyField(Image, related_name='collections')
-    
+
     @classmethod
     def create(cls, title, description, active, owner):
         return cls(title=title, description=description, active=active, owner=owner)
-    
+
     @classmethod
     def assign_image(cls, current_image, new_collection):
         new_collection.images.add(current_image)
-    
+
     @classmethod
     def unassign_image(cls, current_image, cancel_collection):
         cancel_collection.images.remove(current_image)
-    
+
     def __str__(self):
         return f"{self.id}, {self.title}, {self.description}, {self.active}, {self.owner.id}"
 
@@ -68,10 +96,10 @@ class Collection(models.Model):
 
     def set_active(self):
         self.active = True
-        
+
     def set_inactive(self):
         self.active = False
-        
+
     def is_active(self):
         if self.active == True:
             return True
@@ -83,4 +111,3 @@ class Collection(models.Model):
             return True
         else:
             return False
-            

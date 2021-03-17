@@ -1,3 +1,31 @@
+#!/usr/bin/python3
+###!
+# \file         test_forms.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# This test tests the CellForm
+###
 from __future__ import unicode_literals
 
 from django.test import TestCase
@@ -35,20 +63,19 @@ class CellFormTest(TestCase):
     def test_cell_init(self):
 
         ordinary_cell = Cell(matrix=self.matrix, title="ordinary_cell", description="cell_description", xcoordinate=99, ycoordinate=99, blogpost="cell_blogpost", image=self.image)
-        
+
         cell_form = CellForm(self.owner.id, ordinary_cell.image.id, "POST", instance=ordinary_cell)
 
         self.assertTrue(isinstance(cell_form, CellForm))
-        
+
         self.assertEqual(cell_form.label_from_instance(self.image), "image_name<a href=\"image_viewer_url\" target=\"_blank\"><img  style=\"width:256px; height:256px; float: left\" title=\"image_name\" src=\"image_birdseye_url\" ></a>")
 
 
     def tearDown(self):
-    
+
         self.image.delete()
         self.matrix.delete()
         self.matrix_other.delete()
         self.type.delete()
         self.server.delete()
         self.owner.delete()
-

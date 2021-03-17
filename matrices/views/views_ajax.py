@@ -1,3 +1,32 @@
+#!/usr/bin/python3
+###!
+# \file         views_ajax.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# This contains the overwrite_cell, overwrite_cell_leave, swap_cells,
+# import_image, swap_rows, swap_columns, shuffle_columns and shuffle_rows views
+###
 from __future__ import unicode_literals
 
 import os
@@ -21,13 +50,13 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib import messages 
+from django.contrib import messages
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import urlsafe_base64_decode
 from django.template.loader import render_to_string
-from django.db.models import Q 
+from django.db.models import Q
 
 from decouple import config
 
@@ -82,9 +111,9 @@ def overwrite_cell(request):
 
     source_cell = get_object_or_404(Cell, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
-    
+
     matrix = source_cell.matrix
-    
+
     owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
@@ -95,11 +124,11 @@ def overwrite_cell(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             if matrix.get_max_row() == target_cell.ycoordinate:
@@ -108,18 +137,18 @@ def overwrite_cell(request):
                 columns = matrix.get_columns()
 
                 for i, column in enumerate(columns):
-                
+
                     cell = Cell.create(matrix, "", "", i, nextRow, "", None)
-                    
+
                     cell.save()
 
                 matrix.save()
 
             if matrix.get_max_column() == target_cell.xcoordinate:
-    
+
                 nextColumn = matrix.get_column_count()
                 rows = matrix.get_rows()
-    
+
                 for i, row in enumerate(rows):
 
                     cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
@@ -131,37 +160,37 @@ def overwrite_cell(request):
             if target_cell.has_blogpost():
 
                 credential = get_credential_for_user(request.user)
-    
+
                 if credential.has_apppwd():
-            
+
                     response = serverWordpress.delete_wordpress_post(request.user.username, target_cell.blogpost)
 
                     if response != WORDPRESS_SUCCESS:
-                    
+
                         messages.error(request, "WordPress Error - Contact System Administrator")
-                        
+
             if target_cell.has_image():
-            
+
                 if not exists_collections_for_image(target_cell.image):
-                    
+
                     cell_list = get_cells_for_image(target_cell.image)
-                        
+
                     delete_flag = True
-                        
+
                     for otherCell in cell_list:
-                        
+
                         if otherCell.matrix.id != matrix_id:
-                            
+
                             delete_flag = False
-                        
+
                     if delete_flag == True:
-                        
+
                         image = target_cell.image
-                            
+
                         target_cell.image = None
-                            
+
                         target_cell.save()
-                            
+
                         image.delete()
 
 
@@ -170,7 +199,7 @@ def overwrite_cell(request):
 
             target_xcoordinate = target_cell.xcoordinate
             target_ycoordinate = target_cell.ycoordinate
-    
+
             source_cell.xcoordinate = target_xcoordinate
             source_cell.ycoordinate = target_ycoordinate
 
@@ -182,18 +211,18 @@ def overwrite_cell(request):
 
             target_cell.blogpost = ""
             target_cell.image = None
-            
+
             source_cell.save()
             target_cell.save()
 
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -211,12 +240,12 @@ def overwrite_cell_leave(request):
     source = request.POST['source']
     target = request.POST['target']
     source_type = request.POST['source_type']
-    
+
     source_cell = get_object_or_404(Cell, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
-    
+
     matrix = source_cell.matrix
-    
+
     owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
@@ -227,11 +256,11 @@ def overwrite_cell_leave(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             if matrix.get_max_row() == target_cell.ycoordinate:
@@ -248,10 +277,10 @@ def overwrite_cell_leave(request):
                 matrix.save()
 
             if matrix.get_max_column() == target_cell.xcoordinate:
-    
+
                 nextColumn = matrix.get_column_count()
                 rows = matrix.get_rows()
-    
+
                 for i, row in enumerate(rows):
 
                     cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
@@ -263,73 +292,73 @@ def overwrite_cell_leave(request):
             if target_cell.has_blogpost():
 
                 credential = get_credential_for_user(request.user)
-    
+
                 if credential.has_apppwd():
-            
+
                     response = serverWordpress.delete_wordpress_post(request.user.username, target_cell.blogpost)
 
                     if response != WORDPRESS_SUCCESS:
-                    
+
                         messages.error(request, "WordPress Error - Contact System Administrator")
 
             if target_cell.has_image():
-            
+
                 if not exists_collections_for_image(target_cell.image):
-                    
+
                     cell_list = get_cells_for_image(target_cell.image)
-                        
+
                     delete_flag = True
-                        
+
                     for otherCell in cell_list:
-                        
+
                         if otherCell.matrix.id != matrix_id:
-                            
+
                             delete_flag = False
-                        
+
                     if delete_flag == True:
-                        
+
                         image = target_cell.image
-                            
+
                         target_cell.image = None
-                            
+
                         target_cell.save()
-                            
+
                         image.delete()
 
             target_cell.title = source_cell.title
             target_cell.description = source_cell.description
-            
+
             if source_cell.has_image():
-            
+
                 imageOld = Image.objects.get(pk=source_cell.image.id)
 
                 imageNew = Image.create(imageOld.identifier, imageOld.name, imageOld.server, imageOld.viewer_url, imageOld.birdseye_url, imageOld.roi, imageOld.owner)
 
                 imageNew.save()
-                
+
                 target_cell.image = imageNew
 
-            
+
             target_cell.blogpost = source_cell.blogpost
 
             if source_cell.has_blogpost():
-                
+
                 credential = get_credential_for_user(request.user)
-    
+
                 post_id = ''
 
                 if credential.has_apppwd():
 
                     returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, source_cell.title, source_cell.description)
-                                
+
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-                                
+
                         post_id = returned_blogpost['id']
 
                     else:
-                                
+
                         messages.error(request, "WordPress Error - Contact System Administrator")
-                            
+
                 source_cell.set_blogpost(post_id)
 
 
@@ -337,13 +366,13 @@ def overwrite_cell_leave(request):
             target_cell.save()
 
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -361,12 +390,12 @@ def swap_cells(request):
     source = request.POST['source']
     target = request.POST['target']
     source_type = request.POST['source_type']
-    
+
     source_cell = get_object_or_404(Cell, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
-    
+
     matrix = source_cell.matrix
-    
+
     owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
@@ -375,11 +404,11 @@ def swap_cells(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             if matrix.get_max_row() == target_cell.ycoordinate:
@@ -396,10 +425,10 @@ def swap_cells(request):
                 matrix.save()
 
             if matrix.get_max_column() == target_cell.xcoordinate:
-    
+
                 nextColumn = matrix.get_column_count()
                 rows = matrix.get_rows()
-    
+
                 for i, row in enumerate(rows):
 
                     cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
@@ -414,7 +443,7 @@ def swap_cells(request):
 
             target_xcoordinate = target_cell.xcoordinate
             target_ycoordinate = target_cell.ycoordinate
-    
+
             source_cell.xcoordinate = target_xcoordinate
             source_cell.ycoordinate = target_ycoordinate
 
@@ -426,13 +455,13 @@ def swap_cells(request):
 
 
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -448,12 +477,12 @@ def import_image(request):
     source = request.POST['source']
     target = request.POST['target']
     source_type = request.POST['source_type']
-    
+
     source_image = get_object_or_404(Image, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
-    
+
     matrix = target_cell.matrix
-    
+
     owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
@@ -464,11 +493,11 @@ def import_image(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             if matrix.get_max_row() == target_cell.ycoordinate:
@@ -485,10 +514,10 @@ def import_image(request):
                 matrix.save()
 
             if matrix.get_max_column() == target_cell.xcoordinate:
-    
+
                 nextColumn = matrix.get_column_count()
                 rows = matrix.get_rows()
-    
+
                 for i, row in enumerate(rows):
 
                     cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
@@ -498,41 +527,41 @@ def import_image(request):
                 matrix.save()
 
             post_id = ''
-                
+
             target_cell.title = source_image.name
             target_cell.description = source_image.name
-            
+
             target_cell.image = source_image
-            
+
             if target_cell.has_no_blogpost():
-                
+
                 credential = get_credential_for_user(request.user)
-    
+
                 if credential.has_apppwd():
 
                     returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, target_cell.title, target_cell.description)
-                                
+
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-                                
+
                         post_id = returned_blogpost['id']
 
                     else:
-                                
+
                         messages.error(request, "WordPress Error - Contact System Administrator")
-                                
+
                 target_cell.set_blogpost(post_id)
 
             target_cell.save()
 
 
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-            
+
             return JsonResponse(data)
 
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -547,10 +576,10 @@ def swap_rows(request):
 
     source = request.POST['source']
     target = request.POST['target']
-        
+
     in_source_cell = get_object_or_404(Cell, pk=source)
     in_target_cell = get_object_or_404(Cell, pk=target)
-    
+
     matrix = in_source_cell.matrix
 
     owner = get_object_or_404(User, pk=matrix.owner_id)
@@ -561,37 +590,37 @@ def swap_rows(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             source_row_cells = matrix.get_row(in_source_cell.ycoordinate)
             target_row_cells = matrix.get_row(in_target_cell.ycoordinate)
-    
+
             source_ycoordinate = in_source_cell.ycoordinate
             target_ycoordinate = in_target_cell.ycoordinate
-    
+
             output_cells = list()
-    
+
             for target_cell in target_row_cells:
-    
+
                 target_cell.set_ycoordinate(source_ycoordinate)
-    
+
                 output_cells.append(target_cell)
-    
+
             for source_cell in source_row_cells:
-    
+
                 source_cell.set_ycoordinate(target_ycoordinate)
-    
+
                 output_cells.append(source_cell)
 
             for output_cell in output_cells:
 
                 output_cell.save()
-        
+
 
             if matrix.get_max_row() == in_target_cell.ycoordinate:
 
@@ -606,15 +635,15 @@ def swap_rows(request):
 
                 matrix.save()
 
-    
+
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -629,10 +658,10 @@ def swap_columns(request):
 
     source = request.POST['source']
     target = request.POST['target']
-        
+
     in_source_cell = get_object_or_404(Cell, pk=source)
     in_target_cell = get_object_or_404(Cell, pk=target)
-    
+
     matrix = in_source_cell.matrix
 
     owner = get_object_or_404(User, pk=matrix.owner_id)
@@ -643,43 +672,43 @@ def swap_columns(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             source_column_cells = matrix.get_column(in_source_cell.xcoordinate)
             target_column_cells = matrix.get_column(in_target_cell.xcoordinate)
-    
+
             source_xcoordinate = in_source_cell.xcoordinate
             target_xcoordinate = in_target_cell.xcoordinate
-    
+
             output_cells = list()
-    
+
             for target_cell in target_column_cells:
-    
+
                 target_cell.set_xcoordinate(source_xcoordinate)
-    
+
                 output_cells.append(target_cell)
-    
+
             for source_cell in source_column_cells:
-    
+
                 source_cell.set_xcoordinate(target_xcoordinate)
-    
+
                 output_cells.append(source_cell)
 
             for output_cell in output_cells:
 
                 output_cell.save()
-    
+
 
             if matrix.get_max_column() == in_target_cell.xcoordinate:
-    
+
                 nextColumn = matrix.get_column_count()
                 rows = matrix.get_rows()
-    
+
                 for i, row in enumerate(rows):
 
                     cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
@@ -688,15 +717,15 @@ def swap_columns(request):
 
                 matrix.save()
 
-    
+
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
-            return JsonResponse(data)    
+
+            return JsonResponse(data)
 
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -711,13 +740,13 @@ def shuffle_columns(request):
 
     source = request.POST['source']
     target = request.POST['target']
-        
+
     in_source_cell = get_object_or_404(Cell, pk=source)
     in_target_cell = get_object_or_404(Cell, pk=target)
-    
+
     source_xcoordinate = in_source_cell.xcoordinate
     target_xcoordinate = in_target_cell.xcoordinate
-    
+
     matrix = in_source_cell.matrix
 
     owner = get_object_or_404(User, pk=matrix.owner_id)
@@ -728,35 +757,35 @@ def shuffle_columns(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             source_column_cells = matrix.get_column(source_xcoordinate)
 
             if source_xcoordinate < target_xcoordinate:
-            
+
                 oldCells = Cell.objects.filter(matrix=matrix.id).filter(xcoordinate__gt=source_xcoordinate).filter(xcoordinate__lte=target_xcoordinate)
 
                 output_cells = list()
-    
+
                 for oldcell in oldCells:
-        
+
                     oldcell.decrement_x()
-                
+
                     output_cells.append(oldcell)
-                
+
                 for source_cell in source_column_cells:
-    
+
                     source_cell.set_xcoordinate(target_xcoordinate)
-    
+
                     output_cells.append(source_cell)
-            
+
                 for output_cell in output_cells:
-            
+
                     output_cell.save()
 
 
@@ -765,29 +794,29 @@ def shuffle_columns(request):
                 oldCells = Cell.objects.filter(matrix=matrix.id).filter(xcoordinate__gte=target_xcoordinate).filter(xcoordinate__lt=source_xcoordinate)
 
                 output_cells = list()
-    
+
                 for oldcell in oldCells:
-        
+
                     oldcell.increment_x()
-                
+
                     output_cells.append(oldcell)
-                
+
                 for source_cell in source_column_cells:
-    
+
                     source_cell.set_xcoordinate(target_xcoordinate)
-    
+
                     output_cells.append(source_cell)
-            
+
                 for output_cell in output_cells:
-            
+
                     output_cell.save()
 
 
             if matrix.get_max_column() == target_xcoordinate:
-    
+
                 nextColumn = matrix.get_column_count()
                 rows = matrix.get_rows()
-    
+
                 for i, row in enumerate(rows):
 
                     cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
@@ -796,15 +825,15 @@ def shuffle_columns(request):
 
                 matrix.save()
 
-    
+
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
-            return JsonResponse(data)    
-    
+
+            return JsonResponse(data)
+
     else:
-    
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
 
@@ -819,10 +848,10 @@ def shuffle_rows(request):
 
     source = request.POST['source']
     target = request.POST['target']
-        
+
     in_source_cell = get_object_or_404(Cell, pk=source)
     in_target_cell = get_object_or_404(Cell, pk=target)
-    
+
     source_ycoordinate = in_source_cell.ycoordinate
     target_ycoordinate = in_target_cell.ycoordinate
 
@@ -836,35 +865,35 @@ def shuffle_rows(request):
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
         if authority.is_viewer() or authority.is_none():
-        
+
             data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
-    
+
         else:
 
             source_row_cells = matrix.get_row(source_ycoordinate)
-            
+
             if source_ycoordinate < target_ycoordinate:
-            
+
                 oldCells = Cell.objects.filter(matrix=matrix.id).filter(ycoordinate__gt=source_ycoordinate).filter(ycoordinate__lte=target_ycoordinate)
 
                 output_cells = list()
-    
+
                 for oldcell in oldCells:
-        
+
                     oldcell.decrement_y()
-                
+
                     output_cells.append(oldcell)
-                
+
                 for source_cell in source_row_cells:
-    
+
                     source_cell.set_ycoordinate(target_ycoordinate)
-    
+
                     output_cells.append(source_cell)
-            
+
                 for output_cell in output_cells:
-            
+
                     output_cell.save()
 
 
@@ -873,21 +902,21 @@ def shuffle_rows(request):
                 oldCells = Cell.objects.filter(matrix=matrix.id).filter(ycoordinate__gte=target_ycoordinate).filter(ycoordinate__lt=source_ycoordinate)
 
                 output_cells = list()
-    
+
                 for oldcell in oldCells:
-        
+
                     oldcell.increment_y()
-                
+
                     output_cells.append(oldcell)
-                
+
                 for source_cell in source_row_cells:
-    
+
                     source_cell.set_ycoordinate(target_ycoordinate)
-    
+
                     output_cells.append(source_cell)
-            
+
                 for output_cell in output_cells:
-            
+
                     output_cell.save()
 
 
@@ -904,14 +933,13 @@ def shuffle_rows(request):
 
                 matrix.save()
 
-    
+
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
-    
-            return JsonResponse(data)
-    
-    else:
-    
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
-    
+
             return JsonResponse(data)
 
+    else:
+
+            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+
+            return JsonResponse(data)

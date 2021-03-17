@@ -1,18 +1,46 @@
+<!--
+\file         pagination.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The pagination navigation include template
+-->
+
 {% if is_paginated %}
-  			
+
 		<ul class="pagination">
-	
+
 	{% if page_obj.has_previous %}
-			
+
    			<li>
    				<a href="?page=1&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&lsaquo;&lsaquo;</a>
    			</li>
 			<li>
 				<a href="?page={{ page_obj.previous_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&lsaquo;</a>
 			</li>
-		
+
 	{% else %}
-	  			
+
    			<li class="disabled">
    				<span>&lsaquo;&lsaquo;</span>
    			</li>
@@ -21,62 +49,61 @@
    			</li>
 
 	{% endif %}
-		
+
 	{% if not page_obj.has_next and page_obj.number >= 3 %}
-		
+
 			<li>
 				<a href="?page={{ page_obj.number|add:"-2" }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.number|add:"-2" }}</a>
 			</li>
-		
+
 	{% endif %}
 
 	{% if page_obj.has_previous %}
-				
+
    			<li>
    				<a href="?page={{ page_obj.previous_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.previous_page_number }}</a>
    			</li>
-		
+
 	{% endif %}
-	  			
+
    			<li class="active">
    				<a href="#">{{ page_obj.number }}</a>
 	  		</li>
-	  			
+
 	{% if page_obj.has_next %}
-	  			
+
 	  		<li>
 	  			<a href="?page={{ page_obj.next_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.next_page_number }}</a>
 	  		</li>
-	
+
 	{% endif %}
-	
+
    	{% if not page_obj.has_previous and page_obj.paginator.num_pages >= 3 %}
-				
+
 			<li>
 				<a href="?page={{ page_obj.number|add:"2" }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">{{ page_obj.number|add:"2" }}</a>
 			</li>
-				
+
 	{% endif %}
-		
+
    	{% if page_obj.has_next %}
-	  			
+
    			<li>
    				<a href="?page={{ page_obj.next_page_number }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&rsaquo;</a>
    			</li>
 			<li>
 				<a href="?page={{ page_obj.paginator.num_pages }}&amp;{{ current_sort_query }}&amp;{{ current_querystring }}">&rsaquo;&rsaquo;</a>
 			</li>
-				
+
 	{% else %}
-				
+
 			<li class="disabled"><span>&rsaquo;</span>
 			</li>
 			<li class="disabled"><span>&rsaquo;&rsaquo;</span>
 			</li>
-		
+
 	{% endif %}
-  				
+
   		</ul>
-	
+
 {% endif %}
-	

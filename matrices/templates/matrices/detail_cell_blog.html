@@ -1,3 +1,31 @@
+<!--
+\file         detail_cell_blog.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The detail cell blog template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -12,11 +40,11 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'index' %}">Workbenches</a>
 		</li>
@@ -28,7 +56,7 @@
 		<li class="breadcrumb-item active">
 			Cell Commentary
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -43,7 +71,7 @@
 	</div>
 
 	<div class="standard-grid-item">
-		
+
 		<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
 
 		<h3>Cell Commentary</h3>
@@ -76,7 +104,7 @@
 					<a class="btn btn-default" href="{{ blogpost.url }}" role="button" target="_blank"><button class="button button-view">View &raquo;</button></a>
 				</td>
 			</tr>
-		
+
 {% if cell.image.viewer_url != '' %}
 
 			<tr>
@@ -102,15 +130,15 @@
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			</tr>
-		
+
 {% endif %}
 
 {% if comment_list %}
 
 	{% for comment in comment_list %}
-	
+
 		{% if forloop.first %}
-	
+
 			<tr>
 				<th width="100px">Date</th>
 				<th width="100px">Time</th>
@@ -118,7 +146,7 @@
 				<th>Post</th>
 				<th>Action</th>
 			</tr>
-		
+
 		{% endif %}
 
 			<tr>
@@ -140,7 +168,7 @@
 			</tr>
 
 	{% endfor %}
-		
+
 {% else %}
 
 			<tr>
@@ -150,13 +178,13 @@
 				<td>No Comments!</td>
 				<td>&nbsp;</td>
 			</tr>
-		
+
 {% endif %}
 
 		</table>
 
 		<br />
-	
+
 		<h5>Post a Comment:</h5>
 
 		<form method="POST" class="post-form">
@@ -164,20 +192,20 @@
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
-			
+
 			<br />
 
 			<button type="submit" class="button button-delete">COMMENT</button>
 
 		</form>
-	
+
 		<br />
 
 	<!-- <a href="{% url 'matrix' matrix.id %}"> -->
 		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">Back</button></a>
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 
 	</div>

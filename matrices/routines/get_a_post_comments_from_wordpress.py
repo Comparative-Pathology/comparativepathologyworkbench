@@ -1,3 +1,31 @@
+#!/usr/bin/python3
+###!
+# \file         get_a_post_comments_from_wordpress.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# Post a Blog Post to Wordpress
+###
 from __future__ import unicode_literals
 
 import base64, hashlib
@@ -20,20 +48,20 @@ def get_a_post_comments_from_wordpress(post_id):
     Credential = apps.get_model('matrices', 'Credential')
 
     Blog = apps.get_model('matrices', 'Blog')
-    
+
     blogGetPostComments = Blog.objects.get(name=CMD_BLOG_GET_POST_COMMENTS)
 
     get_post_comments_url = blogGetPostComments.protocol.name + '://' + blogGetPostComments.url_blog + '/' + blogGetPostComments.application + '/' + blogGetPostComments.preamble + post_id
-    
+
     comment_list = list()
 
     try:
         response = requests.get(get_post_comments_url)
 
         response.raise_for_status()
-                
+
     except HTTPError as http_err:
-        
+
         comment = {'id': '',
                 'date': '',
                 'time': '',
@@ -43,9 +71,9 @@ def get_a_post_comments_from_wordpress(post_id):
                 'url': '',
                 'status': f'HTTP error occurred: {http_err}'
         }
-                
+
         comment_list.append(comment)
-        
+
         return comment_list
 
     except Exception as err:
@@ -59,9 +87,9 @@ def get_a_post_comments_from_wordpress(post_id):
                 'url': '',
                 'status': f'Other error occurred: {err}'
         }
-                
+
         comment_list.append(comment)
-        
+
         return comment_list
 
     else:
@@ -74,7 +102,7 @@ def get_a_post_comments_from_wordpress(post_id):
 
             datetime = c['date']
             splitdatetime = datetime.split("T")
-        
+
             date = splitdatetime[0]
             time = splitdatetime[1]
 
@@ -95,11 +123,9 @@ def get_a_post_comments_from_wordpress(post_id):
                 'url': link,
                 'status': 'Success!'
             }
-                
+
             comment_list.append(comment)
-            
+
         comment_list.reverse()
-        
+
     return comment_list
-
-

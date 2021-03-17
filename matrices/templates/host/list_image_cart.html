@@ -1,3 +1,31 @@
+<!--
+\file         list_image_cart.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The list image cart template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -12,7 +40,7 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -20,7 +48,7 @@
 		<li>
 			Images
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -34,7 +62,7 @@
 	</div>
 
 	<div class="standard-grid-item">
-	
+
 		<h1>Browse Images</h1>
 
 		<p>Browse the list of Images you have collected</p>
@@ -48,9 +76,9 @@
 	{% if image_list %}
 
 		{% for image in image_list %}
-	
+
 			{% if forloop.first %}
-	
+
 	    <table border="0">
 
         	<tr>
@@ -68,7 +96,7 @@
 			</tr>
 
 			{% endif %}
-	
+
     	    <tr>
 
 	            <td>
@@ -78,7 +106,7 @@
 					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 				{% else %}
-	
+
 					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 				{% endif %}
@@ -108,7 +136,7 @@
 			</tr>
 
 			{% if forloop.last %}
-	
+
 	        <tr>
 	            <td>&nbsp;</td>
             	<td>&nbsp;</td>
@@ -126,7 +154,7 @@
 	    </table>
 
 			{% endif %}
-	
+
 	    {% endfor %}
 
 	{% else %}
@@ -142,7 +170,7 @@
 {% endif %}
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 

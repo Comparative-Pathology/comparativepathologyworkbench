@@ -1,3 +1,31 @@
+<!--
+\file         show_dataset.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The show dataset template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -5,14 +33,14 @@
 {% load static %}
 
 {% block content %}
-	
+
 
 <!-- Breadcrumb Menu -->
 
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -20,13 +48,13 @@
 		<li>
 			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
 		</li>
-	
+
 {% if group %}
 
 		<li>
 			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
 		</li>
-	
+
 {% endif %}
 
 {% if projects %}
@@ -35,7 +63,7 @@
 
 		<li>
 			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
-		</li>	
+		</li>
 
 	{% endfor %}
 
@@ -45,8 +73,8 @@
 
 		<li>
 			{{ dataset.name|truncatechars:20 }}
-		</li>	
-	
+		</li>
+
 {% endif %}
 
 	</ul>
@@ -86,19 +114,19 @@
 	    	<li>
 
 				<div class="card-image-gallery">
-	
+
 					<div class="card-container-gallery">
 
 						<h5>{{ image.name }}</h5>
-						
+
 		        	</div>
-    
+
 					<br />
 
 				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
 
 		        </div>
-		        
+
 	    	</li>
 
     {% endfor %}
@@ -106,7 +134,7 @@
 		</ul>
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 
@@ -119,4 +147,3 @@
 <br />
 
 {% endblock %}
-

@@ -1,3 +1,31 @@
+<!--
+\file         show_image.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The show image template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -12,28 +40,28 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
 		</li>
-	
+
 		<li class="breadcrumb-item">
 			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
 		</li>
-	
+
 {% for project in projects %}
 
 		<li class="breadcrumb-item">
 			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
-		</li>	
+		</li>
 
 {% endfor %}
 
@@ -42,12 +70,12 @@
 		<li class="breadcrumb-item">
 			<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">{{ dataset.name|truncatechars:20 }}</a>
 		</li>
-	
+
 {% endfor %}
 
 		<li class="breadcrumb-item active">
 			{{ image.name|truncatechars:20 }}
-		</li>	
+		</li>
 
 	</ul>
 
@@ -66,7 +94,7 @@
 		<h1>{{ image.name|truncatechars:20 }}</h1>
 
 		<br />
-		
+
 	    <h3>Image Information</h3>
 
 		<hr>
@@ -75,7 +103,7 @@
 
 			<dt>Image Name</dt>
 			<dd>{{ image.name }}</dd>
-	    
+
 	    	<dt>Image Description</dt>
 		    <dd>{{ image.description }}</dd>
 
@@ -118,7 +146,7 @@
 
 		<br />
 		<br />
-		
+
 {% if image_flag == 'DISALLOW' %}
 
         <div class="panel-alert">
@@ -150,7 +178,7 @@
     	<table>
 
 	{% for shape in roi.shapes %}
-	
+
         	<tr>
             	<th>&nbsp;</th>
 	            <td>&nbsp;</td>
@@ -181,7 +209,7 @@
         	<tr>
             	<th>&nbsp;</th>
 	            <td>
-	    
+
 	    {% if image_flag == 'DISALLOW' %}
 
                     <div class="panel-alert">
@@ -193,14 +221,14 @@
 					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
 
         {% endif %}
-        
+
 	            </td>
 			</tr>
 
         	<tr>
             	<th>&nbsp;</th>
 	            <td>
-	    
+
 	    {% if image_flag == 'DISALLOW' %}
 
                     <div class="panel-alert">
@@ -212,7 +240,7 @@
 					<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-add">View Active Image Collection</button></a>
 
         {% endif %}
-        
+
 	            </td>
 			</tr>
 
@@ -224,13 +252,13 @@
 	    	<hr>
 
 	{% endfor %}
-	
+
 	    </table>
 
 {% endfor %}
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 

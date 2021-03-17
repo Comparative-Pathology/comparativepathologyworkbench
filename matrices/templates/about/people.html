@@ -1,3 +1,31 @@
+<!--
+\file         people.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The people template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -15,13 +43,13 @@
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			People
 		</li>
 
 	</ul>
-	
+
 </div>
 
 <!-- Main Data Panel -->
@@ -58,7 +86,7 @@
 		<div class="home-grid-item">
 
 			<div class="card-people">
-    	
+
 			<img class="card-image" src="{% static 'profile/prof_mark_arends.jpg' %}" alt="Prof Mark Arends" height=150px>
 
 				<div class="card-container-people">
@@ -72,25 +100,25 @@ pathology using well-characterised mouse3, rat4 and pig5 mutant-APC models and h
 FAP for cross-species comparison.</p>
 
 				</div>
-		
+
 			</div>
 
 		</div>
-	
+
 		<div class="home-grid-item">
 		</div>
 
 		<div class="home-grid-item">
-		
+
 			<div class="card-people">
 
 			<img class="card-image" src="{% static 'profile/prof_richard_baldock.jpg' %}" alt="Prof Richard Baldock" height=150px>
-			
+
 				<div class="card-container-people">
 
 				<h3>Prof. Richard Baldock</h3>
 
-				<p><a href="https://www.ed.ac.uk/mrc-human-genetics-unit/research/baldock-group">Professor Baldock</a> has led 
+				<p><a href="https://www.ed.ac.uk/mrc-human-genetics-unit/research/baldock-group">Professor Baldock</a> has led
 the <a href="http://www.emouseatlas.org/emap/home.html">Mouse Atlas programme6</a> at the
 <a href="https://www.ed.ac.uk/igmm">IGMM</a> and developed the core concepts used by many spatial atlas resources
 internationally, anatomy ontologies and the 3D spatial frameworks and techniques for spatial
@@ -106,28 +134,28 @@ data mapping7 and visualisation8.</p>
 		</div>
 
 		<div class="home-grid-item">
-		
+
 			<div class="card-people">
-		
+
 			<img class="card-image" src="{% static 'profile/prof_albert_burger.jpg' %}" alt="Prof Albert Burger" height=150px>
 
 				<div class="card-container-people">
 
 				<h3>Prof. Albert Burger</h3>
 
-				<p><a href="https://researchportal.hw.ac.uk/en/persons/albert-georg-burger">Professor Albert Burger</a> leads 
-the <a href="http://www.macs.hw.ac.uk/bisel/index.shtml">Biomedical Informatics Systems Engineering Lab(BISEL)</a> 
-at <a href="https://www.hw.ac.uk/">Heriot- Watt University</a>. He has closely worked with 
-the Mouse Atlas program forover 15 years. His research expertise focuses on distributed 
-bioinformatics systems, including integration of distributed, heterogeneous databases and 
+				<p><a href="https://researchportal.hw.ac.uk/en/persons/albert-georg-burger">Professor Albert Burger</a> leads
+the <a href="http://www.macs.hw.ac.uk/bisel/index.shtml">Biomedical Informatics Systems Engineering Lab(BISEL)</a>
+at <a href="https://www.hw.ac.uk/">Heriot- Watt University</a>. He has closely worked with
+the Mouse Atlas program forover 15 years. His research expertise focuses on distributed
+bioinformatics systems, including integration of distributed, heterogeneous databases and
 web service infrastructures.</p>
 
 				</div>
-	
+
 			</div>
-	    
+
 		</div>
-	
+
 		<div class="home-grid-item">
 		</div>
 
@@ -139,46 +167,46 @@ web service infrastructures.</p>
 		</div>
 
 		<div class="home-grid-item">
-		
+
 			<div class="card-people">
-		
+
 			<img class="card-image" src="{% static 'profile/dr_ken_mcleod.jpg' %}" alt="Dr Ken McLeod" height=150px>
 
 				<div class="card-container-people">
 
-				<h3>Dr. Ken McLeod</h3> 
+				<h3>Dr. Ken McLeod</h3>
 
-				<p><a href="https://researchportal.hw.ac.uk/en/persons/kenneth-mcleod">Dr Ken McLeod</a> works 
-as a Research Associate with Prof. Burger, in the <a href="http://www.macs.hw.ac.uk/bisel/index.shtml">Biomedical 
+				<p><a href="https://researchportal.hw.ac.uk/en/persons/kenneth-mcleod">Dr Ken McLeod</a> works
+as a Research Associate with Prof. Burger, in the <a href="http://www.macs.hw.ac.uk/bisel/index.shtml">Biomedical
 Informatics Systems Engineering Lab(BISEL)</a> at <a href="https://www.hw.ac.uk/">Heriot- Watt University</a>, and has developed the conceptual models in this project.</p>
 
 				</div>
-			
+
 			</div>
-		
+
 		</div>
 
 		<div class="home-grid-item">
 		</div>
 
 		<div class="home-grid-item">
-		
+
 			<div class="card-people">
-		
+
 			<img class="card-image" src="{% static 'profile/mr_mike_wicks.jpg' %}" alt="Mr Mike Wicks" height=150px>
 
 				<div class="card-container-people">
 
 				<h3>Mr Mike Wicks</h3>
 
-				<p><a href="https://www.ed.ac.uk/pathology/people/staff-students/mike-wicks">Mr Mike Wicks</a> is 
-the Workbench Programmer for Prof. Arends in the <a href="https://www.ed.ac.uk/comparative-pathology">Centre for Comparative 
+				<p><a href="https://www.ed.ac.uk/pathology/people/staff-students/mike-wicks">Mr Mike Wicks</a> is
+the Workbench Programmer for Prof. Arends in the <a href="https://www.ed.ac.uk/comparative-pathology">Centre for Comparative
 Pathology</a>, and has built the Comparative Workbench system in this project.</p>
 
 				</div>
-	
+
 			</div>
-	
+
 		</div>
 
 		<div class="home-grid-item">
@@ -186,7 +214,7 @@ Pathology</a>, and has built the Comparative Workbench system in this project.</
 
 		<div class="home-grid-item">
 		</div>
-	
+
 		<div class="home-grid-item">
 		</div>
 
@@ -211,7 +239,7 @@ Pathology</a>, and has built the Comparative Workbench system in this project.</
 
 		<div class="home-grid-item">
 		</div>
-	
+
 		<div class="home-grid-item">
 		</div>
 

@@ -1,3 +1,31 @@
+<!--
+\file         mailer.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The mailer template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -9,18 +37,18 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
-	
+
+
 	    <li class="breadcrumb-item">
 		    <a href="{% url 'home' %}">Home</a>
 		</li>
-		
+
 		<li class="breadcrumb-item active">
 		    Mailer Test Page
 		</li>
-	
+
 	</ul>
-	
+
 </div>
 
 
@@ -42,7 +70,7 @@
 		<h3>The Mailer Test Page</h3>
 
 		<p>An email has been sent!</p>
-		
+
 	    <dl class="standard">
 			<dt>To</dt>
 			<dd>{{ email_to }}</dd>
@@ -55,7 +83,7 @@
 		</dl>
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 

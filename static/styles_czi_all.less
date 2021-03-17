@@ -62,6 +62,10 @@
 @home-grid-item: #17A2B8; /* #17A2B8 - Blue-Green */
 @pagination-border: #DDDDDD;  /* #DDDDDD - Another Shade of Grey! */
 
+// Width variables (appears count calculates by raw css)
+@Width100: 100%;
+@Width75: 75%;
+@Width25: 25%;
 
 html {
 	position: relative;
@@ -79,7 +83,7 @@ body {
 	display: none;
 }
 input[type=text] {
-	width: 100%;
+	width: @Width100;
 	padding: 12px 12px 12px 12px;
 	border: 1px solid @DarkGray;
 	border-radius: 4px;
@@ -87,10 +91,10 @@ input[type=text] {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
-	font-size: 16px;
+	font-size: 12px;
 }
 input[type=email] {
-	width: 100%;
+	width: @Width100;
 	padding: 12px 12px 12px 12px;
 	border: 1px solid @DarkGray;
 	border-radius: 4px;
@@ -98,10 +102,10 @@ input[type=email] {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
-	font-size: 16px;
+	font-size: 12px;
 }
 input[type=number] {
-	width: 100%;
+	width: @Width100;
 	padding: 12px 12px 12px 12px;
 	border: 1px solid @DarkGray;
 	border-radius: 4px;
@@ -109,10 +113,10 @@ input[type=number] {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
-	font-size: 16px;
+	font-size: 12px;
 }
 input[type=password] {
-	width: 100%;
+	width: @Width100;
 	padding: 12px 12px 12px 12px;
 	border: 1px solid @DarkGray;
 	border-radius: 4px;
@@ -120,10 +124,10 @@ input[type=password] {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
-	font-size: 16px;
+	font-size: 12px;
 }
 select {
-	width: 100%;
+	width: @Width100;
 	padding: 12px 12px 12px 12px;
 	border: 1px solid @DarkGray;
 	border-radius: 4px;
@@ -131,10 +135,10 @@ select {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
-	font-size: 16px;
+	font-size: 12px;
 }
 textarea {
-	width: 100%;
+	width: @Width100;
 	padding: 12px 12px 12px 12px;
 	border: 1px solid @DarkGray;
 	border-radius: 4px;
@@ -142,7 +146,7 @@ textarea {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
-	font-size: 16px;
+	font-size: 12px;
 }
 input[type=submit] {
 	padding: 12px 20px 12px 20px;
@@ -170,12 +174,12 @@ label {
 }
 .form-col-25 {
 	float: left;
-	width: 25%;
+	width: @Width25;
 	margin-top: 6px;
 }
 .form-col-75 {
 	float: left;
-	width: 75%;
+	width: @Width75;
 	margin-top: 6px;
 }
 .menu-item {
@@ -225,7 +229,7 @@ hr {
 .standard-grid-container {
 	display: grid;
 	grid-template-columns: 78px auto 78px;
-	padding: 25px 0px 25px 0px;
+	padding: 25px 0px 0px 0px;
 }
 .standard-grid-item {
 	padding: 0px 0px 0px 0px;
@@ -572,7 +576,7 @@ hr {
 	position: absolute;
 	right: 0;
 	background-color: @LightGray;
-	width: 100%;
+	width: @Width100;
 	z-index: 1;
 	padding: 0px 0px 0px 0px;
 	a {
@@ -675,7 +679,7 @@ hr {
 	position: absolute;
 	background-color: @LightGray;
 	min-width: 340px;
-	width: 100%;
+	width: @Width100;
 	overflow: auto;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
@@ -696,7 +700,7 @@ hr {
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	width: 100%;
+	width: @Width100;
 	background-color: @White;
 	color: @White;
 	text-align: center;
@@ -724,7 +728,7 @@ a.my-test-popup {
 	top: 0;
 	left: 0;
 	z-index: 3;
-	width: 100%;
+	width: @Width100;
 	height: 100%;
 	background: rgba(198, 198, 198, 0.8);
 	cursor: default;
@@ -1083,15 +1087,15 @@ ul.my-breadcrumb {
 }
 @media screen and (max-width: 600px) {
 	.col-25 {
-		width: 100%;
+		width: @Width100;
 		margin-top: 0;
 	}
 	.col-75 {
-		width: 100%;
+		width: @Width100;
 		margin-top: 0;
 	}
 	input[type=submit] {
-		width: 100%;
+		width: @Width100;
 		margin-top: 0;
 	}
 }
@@ -1190,4 +1194,43 @@ ul.my-breadcrumb {
 	line-height: 1.428571429;
 	padding: 4px 12px;
 	text-decoration: none;
+}
+.my-subnav {
+	input[type=text] {
+		border: 1px solid @DarkGray;
+		border: none;
+		display: block;
+		float: left;
+		float: none;
+		font-size: 17px;
+		margin-right: 8px;
+		margin-top: 24px;
+		margin: 0;
+		padding: 14px;
+		padding: 6px;
+		text-align: left;
+		width: 200px;
+		width: @Width100;
+	}
+	.search-container {
+		button {
+			background: @pagination-border;
+			border: none;
+			cursor: pointer;
+			display: block;
+			float: left;
+			float: none;
+			font-size: 17px;
+			margin-right: 8px;
+			margin-top: 24px;
+			margin: 0;
+			padding: 14px;
+			padding: 6px 10px;
+			text-align: left;
+			width: @Width100;
+			&:hover {
+				background: @DarkGray;
+			}
+		}
+	}
 }

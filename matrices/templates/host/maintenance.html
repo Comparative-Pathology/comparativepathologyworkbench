@@ -1,3 +1,31 @@
+<!--
+\file         maintenance.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The maintenance template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -11,7 +39,7 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -19,7 +47,7 @@
 		<li>
 			Maintenance
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -59,9 +87,9 @@
 {% if collection_authority_list %}
 
     {% for collection_authority in collection_authority_list %}
-	
+
 		{% if forloop.first %}
-	
+
     		<table>
 
 	        	<tr>
@@ -77,11 +105,11 @@
 				</tr>
 
 		{% endif %}
-	
+
 	        	<tr>
 
 		{% if user.is_superuser %}
-            
+
     	        	<td>
 						<a href="{% url 'detail_collection_authority' collection_authority.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_collection_authority' collection_authority.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -89,7 +117,7 @@
     		        </td>
 
 		{% else %}
-	
+
 	        	    <td>
 						<a href="{% url 'detail_collection_authority' collection_authority.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 		            </td>
@@ -105,7 +133,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
 	    	    <tr>
             		<td>&nbsp;</td>
         	    	<td>&nbsp;</td>
@@ -115,7 +143,7 @@
 	    	    <tr>
 
 			{% if user.is_superuser %}
-    
+
 	        	    <td>
 						<a href="{% url 'new_collection_authority' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		            </td>
@@ -125,7 +153,7 @@
     	        	<td>&nbsp;</td>
 
 			{% endif %}
-	
+
         		    <td>&nbsp;</td>
     	    	    <td>&nbsp;</td>
 				</tr>
@@ -133,15 +161,15 @@
 			</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No Collection Authorities are available.</p>
-	
+
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_collection_authority' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -151,7 +179,7 @@
 			<p>&nbsp;
 			</p>
 
-	{% endif %}	
+	{% endif %}
 
 {% endif %}
 
@@ -165,9 +193,9 @@
 {% if authority_list %}
 
     {% for authority in authority_list %}
-	
+
 		{% if forloop.first %}
-	
+
     		<table>
 
 	        	<tr>
@@ -183,11 +211,11 @@
 				</tr>
 
 		{% endif %}
-	
+
 	        	<tr>
 
 		{% if user.is_superuser %}
-            
+
     	        	<td>
 						<a href="{% url 'detail_bench_authority' authority.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_bench_authority' authority.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -195,7 +223,7 @@
     		        </td>
 
 		{% else %}
-	
+
 	        	    <td>
 						<a href="{% url 'detail_bench_authority' authority.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 		            </td>
@@ -211,7 +239,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
 	    	    <tr>
             		<td>&nbsp;</td>
         	    	<td>&nbsp;</td>
@@ -221,7 +249,7 @@
 	    	    <tr>
 
 			{% if user.is_superuser %}
-    
+
 	        	    <td>
 						<a href="{% url 'new_bench_authority' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		            </td>
@@ -231,7 +259,7 @@
     	        	<td>&nbsp;</td>
 
 			{% endif %}
-	
+
         		    <td>&nbsp;</td>
     	    	    <td>&nbsp;</td>
 				</tr>
@@ -239,15 +267,15 @@
 			</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No Bench Authorities are available.</p>
-	
+
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_bench_authority' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -257,7 +285,7 @@
 			<p>&nbsp;
 			</p>
 
-	{% endif %}	
+	{% endif %}
 
 {% endif %}
 
@@ -271,9 +299,9 @@
 {% if type_list %}
 
     {% for type in type_list %}
-	
+
 		{% if forloop.first %}
-	
+
     		<table>
 
 	    	    <tr>
@@ -289,11 +317,11 @@
 				</tr>
 
 		{% endif %}
-	
+
 	        	<tr>
 
 		{% if user.is_superuser %}
-            
+
     	        	<td>
 						<a href="{% url 'detail_type' type.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_type' type.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -301,7 +329,7 @@
     		        </td>
 
 		{% else %}
-	
+
 	        	    <td>
 						<a href="{% url 'detail_type' type.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 		            </td>
@@ -317,7 +345,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
 	    	    <tr>
             		<td>&nbsp;</td>
         	    	<td>&nbsp;</td>
@@ -327,7 +355,7 @@
 	    	    <tr>
 
 			{% if user.is_superuser %}
-    
+
 	        	    <td>
 						<a href="{% url 'new_type' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 		            </td>
@@ -337,7 +365,7 @@
     	        	<td>&nbsp;</td>
 
 			{% endif %}
-	
+
         		    <td>&nbsp;</td>
     	    	    <td>&nbsp;</td>
 				</tr>
@@ -345,15 +373,15 @@
 			</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No types are available.</p>
-	
+
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_type' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -363,7 +391,7 @@
 			<p>&nbsp;
 			</p>
 
-	{% endif %}	
+	{% endif %}
 
 {% endif %}
 
@@ -377,9 +405,9 @@
 {% if protocol_list %}
 
     {% for protocol in protocol_list %}
-	
+
 		{% if forloop.first %}
-	
+
 		    <table>
 
 		        <tr>
@@ -395,11 +423,11 @@
 				</tr>
 
 		{% endif %}
-	
+
     		    <tr>
 
 		{% if user.is_superuser %}
-            
+
 	    	        <td>
 						<a href="{% url 'detail_protocol' protocol.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_protocol' protocol.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -407,7 +435,7 @@
 		            </td>
 
 		{% else %}
-	
+
 		            <td>
 						<a href="{% url 'detail_protocol' protocol.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 	        	    </td>
@@ -423,7 +451,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
 		        <tr>
         	    	<td>&nbsp;</td>
         		    <td>&nbsp;</td>
@@ -433,7 +461,7 @@
     	    	<tr>
 
 			{% if user.is_superuser %}
-    
+
     		        <td>
 						<a href="{% url 'new_protocol' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 	            	</td>
@@ -443,7 +471,7 @@
     	    	    <td>&nbsp;</td>
 
 			{% endif %}
-	
+
     		        <td>&nbsp;</td>
 	        	    <td>&nbsp;</td>
 				</tr>
@@ -451,7 +479,7 @@
     		</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
@@ -459,7 +487,7 @@
 			<p>No protocols are available.</p>
 
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_protocol' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -469,7 +497,7 @@
 			<p>&nbsp;
 			</p>
 
-	{% endif %}	
+	{% endif %}
 
 {% endif %}
 
@@ -483,9 +511,9 @@
 {% if command_list %}
 
 	{% for command in command_list %}
-	
+
 		{% if forloop.first %}
-	
+
 		    <table>
 
     		    <tr>
@@ -511,11 +539,11 @@
 				</tr>
 
 		{% endif %}
-	
+
         		<tr>
 
 		{% if user.is_superuser %}
-            
+
     	        	<td>
 						<a href="{% url 'detail_command' command.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_command' command.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -523,7 +551,7 @@
     		        </td>
 
 		{% else %}
-	
+
 	        	    <td>
 						<a href="{% url 'detail_command' command.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 		            </td>
@@ -554,7 +582,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
 		        <tr>
 	    	        <td>&nbsp;</td>
             		<td>&nbsp;</td>
@@ -565,11 +593,11 @@
         		    <td>&nbsp;</td>
     	        	<td>&nbsp;</td>
 				</tr>
-		
+
     		    <tr>
 
 			{% if user.is_superuser %}
-    
+
 	    	        <td>
 						<a href="{% url 'new_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
     	        	</td>
@@ -579,7 +607,7 @@
 		            <td>&nbsp;</td>
 
 			{% endif %}
-	
+
     	        	<td>&nbsp;</td>
         		    <td>&nbsp;</td>
     	    	    <td>&nbsp;</td>
@@ -592,15 +620,15 @@
 	    	</table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No Commands are available.</p>
-	    
+
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -610,7 +638,7 @@
 			<p>&nbsp;
 			</p>
 
-	{% endif %}	
+	{% endif %}
 
 {% endif %}
 
@@ -624,9 +652,9 @@
 {% if blog_list %}
 
 	{% for blog in blog_list %}
-	
+
 		{% if forloop.first %}
-	
+
     		<table>
 	    	    <tr>
         		    <th width="150px">Action</th>
@@ -650,11 +678,11 @@
 				</tr>
 
 		{% endif %}
-	
+
         		<tr>
 
 		{% if user.is_superuser %}
-            
+
     	    	    <td>
 						<a href="{% url 'detail_blog_command' blog.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 						<a href="{% url 'edit_blog_command' blog.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
@@ -662,7 +690,7 @@
     		        </td>
 
 		{% else %}
-	
+
 	    	        <td>
 						<a href="{% url 'detail_blog_command' blog.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
     	        	</td>
@@ -679,7 +707,7 @@
 						{{ blog.protocol.name }}
 					</td>
 	            	<td>
-            			{{ blog.url }}
+            			{{ blog.url_blog }}
 	            	</td>
     	    	    <td>
     		        	{{ blog.application }}
@@ -694,7 +722,7 @@
 				</tr>
 
 		{% if forloop.last %}
-	
+
 		        <tr>
 	    	        <td>&nbsp;</td>
             		<td>&nbsp;</td>
@@ -709,7 +737,7 @@
     	    	<tr>
 
 			{% if user.is_superuser %}
-    
+
     		        <td>
 						<a href="{% url 'new_blog_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
         	    	</td>
@@ -719,7 +747,7 @@
 	    	        <td>&nbsp;</td>
 
 			{% endif %}
-	
+
 		            <td>&nbsp;</td>
         	    	<td>&nbsp;</td>
         		    <td>&nbsp;</td>
@@ -732,15 +760,15 @@
 		    </table>
 
 		{% endif %}
-	
+
     {% endfor %}
 
 {% else %}
 
 			<p>No Blog Commands are available.</p>
-	    
+
 	{% if user.is_superuser %}
-    
+
 			<p>
 				<a href="{% url 'new_blog_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 			</p>
@@ -750,14 +778,14 @@
 			<p>&nbsp;
 			</p>
 
-	{% endif %}	
+	{% endif %}
 
 {% endif %}
 
 		</div>
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 
@@ -798,7 +826,7 @@ function openTab(evt, tabName) {
 }
 
 // Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();   
+document.getElementById("defaultOpen").click();
 
 </script>
 

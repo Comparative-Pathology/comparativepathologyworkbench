@@ -1,3 +1,37 @@
+#!/usr/bin/python3
+###!
+# \file         views_permissions.py
+# \author       Mike Wicks
+# \date         March 2021
+# \version      $Id$
+# \par
+# (C) University of Edinburgh, Edinburgh, UK
+# (C) Heriot-Watt University, Edinburgh, UK
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be
+# useful but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA  02110-1301, USA.
+# \brief
+# This contains the view_bench_authorisation, new_bench_authorisation,
+# new_bench_bench_authorisation, edit_bench_authorisation,
+# edit_bench_bench_authorisation, delete_bench_authorisation,
+# view_collection_authorisation, new_collection_authorisation,
+# new_collection_collection_authorisation, edit_collection_authorisation,
+# edit_collection_collection_authorisation and
+# delete_collection_authorisation views
+###
 from __future__ import unicode_literals
 
 import os
@@ -21,13 +55,13 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib import messages 
+from django.contrib import messages
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import urlsafe_base64_decode
 from django.template.loader import render_to_string
-from django.db.models import Q 
+from django.db.models import Q
 
 from decouple import config
 
@@ -84,7 +118,7 @@ HTTP_POST = 'POST'
 def view_bench_authorisation(request, bench_authorisation_id):
 
     data = get_header_data(request.user)
-    
+
     authorisation = get_object_or_404(Authorisation, pk=bench_authorisation_id)
 
     data.update({ 'authorisation_id': bench_authorisation_id, 'authorisation': authorisation })
@@ -101,41 +135,41 @@ def new_bench_authorisation(request):
     data = get_header_data(request.user)
 
     if request.method == HTTP_POST:
-        
+
         next_page = request.POST.get('next', '/')
 
         form = AuthorisationForm(request.POST)
 
         if form.is_valid:
-        
+
             authorisation = form.save(commit=False)
-            
+
             if authorisation_exists_for_bench_and_permitted(authorisation.matrix, authorisation.permitted):
-            
+
                 authorisation_old = Authorisation.objects.get(Q(matrix=authorisation.matrix) & Q(permitted=authorisation.permitted))
-                
+
                 if authorisation_old.authority != authorisation.authority:
-                
+
                     authorisation_old.authority = authorisation.authority
-                    
+
                     authorisation_old.save()
 
             else:
-            
+
                 authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
-        
+            return HttpResponseRedirect(next_page)
+
         else:
-        
+
             text_flag = ''
 
             messages.error(request, "Error")
 
             data.update({ 'text_flag': text_flag, 'form': form })
-            
+
     else:
-    
+
         text_flag = ''
 
         form = AuthorisationForm()
@@ -143,7 +177,7 @@ def new_bench_authorisation(request):
         if request.user.is_superuser:
 
             form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.all())
-        
+
         else:
 
             form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
@@ -154,7 +188,7 @@ def new_bench_authorisation(request):
 
     return render(request, 'permissions/new_bench_authorisation.html', data)
 
-    
+
 #
 # CREATE A NEW BENCH AUTHORISATION FOR A GIVEN BENCH
 #
@@ -164,43 +198,43 @@ def new_bench_bench_authorisation(request, matrix_id):
     data = get_header_data(request.user)
 
     if request.method == HTTP_POST:
-        
+
         next_page = request.POST.get('next', '/')
 
         form = AuthorisationForm(request.POST)
 
         if form.is_valid:
-        
+
             authorisation = form.save(commit=False)
-            
+
             if authorisation_exists_for_bench_and_permitted(authorisation.matrix, authorisation.permitted):
-            
+
                 authorisation_old = Authorisation.objects.get(Q(matrix=authorisation.matrix) & Q(permitted=authorisation.permitted))
-                
+
                 if authorisation_old.authority != authorisation.authority:
-                
+
                     authorisation_old.authority = authorisation.authority
-                    
+
                     authorisation_old.save()
 
             else:
-            
+
                 authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
-        
+            return HttpResponseRedirect(next_page)
+
         else:
-        
+
             messages.error(request, "Error")
 
             text_flag = " for Bench CPW:" + format(int(matrix_id), '06d')
-    
+
             data.update({ 'text_flag': text_flag, 'form': form })
-            
+
     else:
-    
+
         text_flag = " for Bench CPW:" + format(int(matrix_id), '06d')
-    
+
         form = AuthorisationForm()
 
         form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(id=matrix_id))
@@ -221,57 +255,57 @@ def edit_bench_authorisation(request, bench_authorisation_id):
     data = get_header_data(request.user)
 
     authorisation = get_object_or_404(Authorisation, pk=bench_authorisation_id)
-    
+
     if request.method == HTTP_POST:
-    
+
         next_page = request.POST.get('next', '/')
-        
+
         form = AuthorisationForm(request.POST, instance=authorisation)
-            
+
         if form.is_valid:
-            
+
             authorisation = form.save(commit=False)
 
             if authorisation_exists_for_bench_and_permitted(authorisation.matrix, authorisation.permitted):
-            
+
                 authorisation_old = Authorisation.objects.get(Q(matrix=authorisation.matrix) & Q(permitted=authorisation.permitted))
-                
+
                 if authorisation_old.authority != authorisation.authority:
-                
+
                     authorisation_old.authority = authorisation.authority
-                    
+
                     authorisation_old.save()
 
             else:
-            
+
                 authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
+            return HttpResponseRedirect(next_page)
 
         else:
-            
+
             text_flag = ''
-    
+
             messages.error(request, "Error")
-    
+
             data.update({ 'text_flag': text_flag, 'form': form, 'authorisation': authorisation })
-            
+
     else:
-    
+
         text_flag = ''
-        
+
         form = AuthorisationForm(instance=authorisation)
 
         if request.user.is_superuser:
 
             form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.all())
-        
+
         else:
 
             form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
-            
+
         data.update({ 'text_flag': text_flag, 'form': form, 'authorisation': authorisation })
 
     return render(request, 'permissions/edit_bench_authorisation.html', data)
@@ -286,51 +320,51 @@ def edit_bench_bench_authorisation(request, matrix_id, bench_authorisation_id):
     data = get_header_data(request.user)
 
     authorisation = get_object_or_404(Authorisation, pk=bench_authorisation_id)
-    
+
     if request.method == HTTP_POST:
-    
+
         next_page = request.POST.get('next', '/')
-        
+
         form = AuthorisationForm(request.POST, instance=authorisation)
-            
+
         if form.is_valid:
-            
+
             authorisation = form.save(commit=False)
 
             if authorisation_exists_for_bench_and_permitted(authorisation.matrix, authorisation.permitted):
-            
+
                 authorisation_old = Authorisation.objects.get(Q(matrix=authorisation.matrix) & Q(permitted=authorisation.permitted))
-                
+
                 if authorisation_old.authority != authorisation.authority:
-                
+
                     authorisation_old.authority = authorisation.authority
-                    
+
                     authorisation_old.save()
 
             else:
-            
+
                 authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
+            return HttpResponseRedirect(next_page)
 
         else:
-            
+
             text_flag = " for Bench CPW:" + format(int(matrix_id), '06d')
-    
+
             messages.error(request, "Error")
-    
+
             data.update({ 'text_flag': text_flag, 'form': form, 'authorisation': authorisation })
-            
+
     else:
-    
+
         text_flag = " for Bench CPW:" + format(int(matrix_id), '06d')
-    
+
         form = AuthorisationForm(instance=authorisation)
 
         form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(id=matrix_id))
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
-            
+
         data.update({ 'text_flag': text_flag, 'form': form, 'authorisation': authorisation })
 
     return render(request, 'permissions/edit_bench_authorisation.html', data)
@@ -343,10 +377,10 @@ def edit_bench_bench_authorisation(request, matrix_id, bench_authorisation_id):
 def delete_bench_authorisation(request, bench_authorisation_id):
 
     authorisation = get_object_or_404(Authorisation, pk=bench_authorisation_id)
-    
+
     authorisation.delete()
-    
-    return HttpResponseRedirect(reverse('list_bench_authorisation', args=()))                        
+
+    return HttpResponseRedirect(reverse('list_bench_authorisation', args=()))
 
 
 #
@@ -373,41 +407,41 @@ def new_collection_authorisation(request):
     data = get_header_data(request.user)
 
     if request.method == HTTP_POST:
-        
+
         next_page = request.POST.get('next', '/')
 
         form = CollectionAuthorisationForm(request.POST)
-        
+
         if form.is_valid:
-        
+
             collection_authorisation = form.save(commit=False)
-            
+
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
-            
+
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
-                
+
                 if collection_authorisation_old.authority != collection_authorisation.authority:
-                
+
                     collection_authorisation_old.authority = collection_authorisation.authority
-                    
+
                     collection_authorisation_old.save()
 
             else:
-            
+
                 collection_authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
-        
+            return HttpResponseRedirect(next_page)
+
         else:
-        
+
             text_flag = ''
 
             messages.error(request, "Error")
 
             data.update({ 'text_flag': text_flag, 'form': form })
-            
+
     else:
-    
+
         text_flag = ''
 
         form = CollectionAuthorisationForm()
@@ -415,7 +449,7 @@ def new_collection_authorisation(request):
         if request.user.is_superuser:
 
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.all())
-        
+
         else:
 
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(owner=request.user))
@@ -436,43 +470,43 @@ def new_collection_collection_authorisation(request, collection_id):
     data = get_header_data(request.user)
 
     if request.method == HTTP_POST:
-        
+
         next_page = request.POST.get('next', '/')
 
         form = CollectionAuthorisationForm(request.POST)
 
         if form.is_valid:
-        
+
             collection_authorisation = form.save(commit=False)
-            
+
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
-            
+
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
-                
+
                 if collection_authorisation_old.authority != collection_authorisation.authority:
-                
+
                     collection_authorisation_old.authority = collection_authorisation.authority
-                    
+
                     collection_authorisation_old.save()
 
             else:
-            
+
                 collection_authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
-        
+            return HttpResponseRedirect(next_page)
+
         else:
-        
+
             messages.error(request, "Error")
 
             text_flag = " for Collection: " + format(int(collection_id), '06d')
-    
+
             data.update({ 'text_flag': text_flag, 'form': form })
-            
+
     else:
-    
+
         text_flag = " for Collection: " + format(int(collection_id), '06d')
-    
+
         form = CollectionAuthorisationForm()
 
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
@@ -493,57 +527,57 @@ def edit_collection_authorisation(request, collection_authorisation_id):
     data = get_header_data(request.user)
 
     collection_authorisation = get_object_or_404(CollectionAuthorisation, pk=collection_authorisation_id)
-    
+
     if request.method == HTTP_POST:
-    
+
         next_page = request.POST.get('next', '/')
-        
+
         form = CollectionAuthorisationForm(request.POST, instance=collection_authorisation)
-            
+
         if form.is_valid:
-            
+
             collection_authorisation = form.save(commit=False)
 
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
-            
+
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
-                
+
                 if collection_authorisation_old.authority != collection_authorisation.authority:
-                
+
                     collection_authorisation_old.authority = collection_authorisation.authority
-                    
+
                     collection_authorisation_old.save()
 
             else:
-            
+
                 collection_authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
+            return HttpResponseRedirect(next_page)
 
         else:
-            
+
             text_flag = ''
-    
+
             messages.error(request, "Error")
-    
+
             data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
-            
+
     else:
-    
+
         text_flag = ''
-        
+
         form = CollectionAuthorisationForm(instance=collection_authorisation)
 
         if request.user.is_superuser:
 
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.all())
-        
+
         else:
 
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(owner=request.user))
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
-            
+
         data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 
     return render(request, 'permissions/edit_collection_authorisation.html', data)
@@ -558,51 +592,51 @@ def edit_collection_collection_authorisation(request, collection_id, collection_
     data = get_header_data(request.user)
 
     collection_authorisation = get_object_or_404(CollectionAuthorisation, pk=collection_authorisation_id)
-    
+
     if request.method == HTTP_POST:
-    
+
         next_page = request.POST.get('next', '/')
-        
+
         form = CollectionAuthorisationForm(request.POST, instance=collection_authorisation)
-            
+
         if form.is_valid:
-            
+
             collection_authorisation = form.save(commit=False)
 
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
-            
+
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
-                
+
                 if collection_authorisation_old.authority != collection_authorisation.authority:
-                
+
                     collection_authorisation_old.authority = collection_authorisation.authority
-                    
+
                     collection_authorisation_old.save()
 
             else:
-            
+
                 collection_authorisation.save()
 
-            return HttpResponseRedirect(next_page)                        
+            return HttpResponseRedirect(next_page)
 
         else:
-            
+
             text_flag = " for Bench CPW:" + format(int(collection_id), '06d')
-    
+
             messages.error(request, "Error")
-    
+
             data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
-            
+
     else:
-    
+
         text_flag = " for Bench CPW:" + format(int(collection_id), '06d')
-    
+
         form = CollectionAuthorisationForm(instance=collection_authorisation)
 
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
-            
+
         data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 
     return render(request, 'permissions/edit_collection_authorisation.html', data)
@@ -615,8 +649,7 @@ def edit_collection_collection_authorisation(request, collection_id, collection_
 def delete_collection_authorisation(request, collection_authorisation_id):
 
     collection_authorisation = get_object_or_404(CollectionAuthorisation, pk=collection_authorisation_id)
-    
-    collection_authorisation.delete()
-    
-    return HttpResponseRedirect(reverse('list_collection_authorisation', args=()))                        
 
+    collection_authorisation.delete()
+
+    return HttpResponseRedirect(reverse('list_collection_authorisation', args=()))

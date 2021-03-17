@@ -1,3 +1,31 @@
+<!--
+\file         edit_collection_authority.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The edit collection authority template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -12,7 +40,7 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
@@ -20,15 +48,15 @@
 		<li>
 			<a href="{% url 'maintenance' %}">Maintenance</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'detail_collection_authority' collection_authority.id %}">Collection Authority {{ collection_authority.id }}</a>
 		</li>
-		
+
 		<li>
 			EDIT Collection Authority
 		</li>
-	
+
 	</ul>
 
 </div>
@@ -42,31 +70,31 @@
 	</div>
 
 	<div class="standard-grid-item">
-	
+
 		<h1>EDIT Collection Authority {{ collection_authority.id }}</h1>
 
 		<hr>
-		
+
 		<br />
 
 		<form method="POST" class="post-form">
-		
+
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
 			<br />
-	
+
 	    	<button type="submit" class="button button-delete">Save</button>
 
 		</form>
 
 		<br />
-		
+
 		<a href="{% url 'maintenance' %}"><button class="button button-add">CANCEL</button></a>
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 

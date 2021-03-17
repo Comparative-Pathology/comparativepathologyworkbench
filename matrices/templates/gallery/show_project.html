@@ -1,3 +1,31 @@
+<!--
+\file         show_project.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The show project template
+-->
+
 {% extends 'includes/base.html' %}
 
 {% load custom %}
@@ -12,26 +40,26 @@
 <div>
 
 	<ul class="my-breadcrumb">
-	
+
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
 		</li>
-	
+
 		<li>
 			{{ project.name|truncatechars:20 }}
-		</li>	
+		</li>
 
 	</ul>
 
@@ -46,7 +74,7 @@
 	</div>
 
 	<div class="standard-grid-item">
-	
+
 		<h1>{{ project.name }}</h1>
 
 		<br />
@@ -56,7 +84,7 @@
 	    <p>Project contains {{ project.datasetCount }} datasets:</p>
 
     	<hr>
-    
+
 		<ul class="image-list">
 
     {% for dataset in dataset_list %}
@@ -64,32 +92,32 @@
 	    	<li>
 
 				<div class="card-image-gallery">
-	
+
 					<div class="card-container-gallery">
-	
+
 						<h5>{{ dataset.name|truncatechars:20 }}</h5>
 
 	            		<dl>
 	                		<dt>Images</dt>
 	                		<dd>{{ dataset.imageCount }}</dd>
 		    	        </dl>
-    
+
 						<br />
 
 						<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}"><button class="button button-view">View Dataset &raquo;</button></a>
 
 					</div>
-    
+
 					<br />
-			
+
 					<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}"><img alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/></a>
 
 					<br />
-			
+
 				</div>
 
 	        </li>
-	
+
     {% endfor %}
 
     	</ul>
@@ -101,7 +129,7 @@
 {% endif %}
 
 	</div>
-	
+
 	<div class="standard-grid-item">
 	</div>
 

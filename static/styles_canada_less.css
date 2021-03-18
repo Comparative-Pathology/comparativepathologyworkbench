@@ -1,3 +1,31 @@
+/*
+\file         styles_canada_less.css
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The Canada CSS file generated from styles_canada_all.less
+*/
+
 html {
 	 position: relative;
 	 min-height: 100%;
@@ -1094,39 +1122,21 @@ html {
 	 padding: 4px 12px;
 	 text-decoration: none;
 }
- .my-subnav input[type=text] {
-	 border: 1px solid DarkGray;
-	 border: none;
-	 display: block;
-	 float: left;
-	 float: none;
-	 font-size: 17px;
-	 margin-right: 8px;
-	 margin-top: 24px;
-	 margin: 0;
-	 padding: 14px;
-	 padding: 6px;
-	 text-align: left;
-	 width: 200px;
-	 width: 100%;
+.my-subnav input[type=text] {
+	border: none;
+	font-size: 17px;
+	margin: 24px 0px 8px 0px;
+	padding: 6px 6px 6px 6px;
+	width: 200px;
 }
- .my-subnav .search-container button {
-	 background: #DDDDDD;
-	 border: none;
-	 cursor: pointer;
-	 display: block;
-	 float: left;
-	 float: none;
-	 font-size: 17px;
-	 margin-right: 8px;
-	 margin-top: 24px;
-	 margin: 0;
-	 padding: 14px;
-	 padding: 6px 10px;
-	 text-align: left;
-	 width: 100%;
+.my-subnav .search-container button {
+	background: #DDDDDD;
+	border: none;
+	cursor: pointer;
+	font-size: 17px;
+	margin: 24px 0px 8px 0px;
+	padding: 6px 6px 6px 6px;
 }
- .my-subnav .search-container button:hover {
-	 background: DarkGray;
+.my-subnav .search-container button:hover {
+	background: DarkGray;
 }
- 

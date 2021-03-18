@@ -92,7 +92,7 @@ from matrices.routines import get_benches_for_last_used_collection
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_blog_link_post_url
-
+from matrices.routines import get_active_collection_images_for_user
 
 WORDPRESS_SUCCESS = 'Success!'
 

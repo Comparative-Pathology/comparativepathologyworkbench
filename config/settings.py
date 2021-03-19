@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This exposes the WSGI callable as a module-level variable named
-# ``application``. from "comparativepathologyworkbench.settings"
+# ``application``. from "config.settings"
 ###
 """
 Django settings for comparativepathologyworkbench project.
@@ -83,7 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'comparativepathologyworkbench.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -102,7 +102,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'comparativepathologyworkbench.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
@@ -178,9 +178,10 @@ NOT_EMAIL_HOST_PASSWORD = config('NOT_EMAIL_HOST_PASSWORD')
 #
 #EMAIL_HOST = config('EMAIL_HOST')
 #EMAIL_PORT = config('EMAIL_PORT', cast=int)
+#EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
 #EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 #EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-#EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 #
 # UNCOMMENT for DEVELOPMENT Server Mailer to File

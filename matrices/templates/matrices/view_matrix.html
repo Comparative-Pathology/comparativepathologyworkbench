@@ -1097,182 +1097,177 @@ for (i = 0; i < coll.length; i++) {
 }
 
 
-function confirmation_cell(question) {
+function confirmation(question, source_type) {
 
 	var defer = $.Deferred();
 
-	$('<div></div>')
-		.html(question)
-		.dialog({
-			autoOpen: true,
-			modal: true,
-			title: 'Confirmation',
-			buttons: {
-				"SWAP": function () {
-					defer.resolve("swap");
-					$(this).dialog("close");
+	if (source_type == "cell") {
+
+		$('<div></div>')
+			.html(question)
+			.dialog({
+				autoOpen: true,
+				modal: true,
+				title: 'Confirmation',
+				buttons: {
+					"SWAP": function () {
+						defer.resolve("swap");
+						$(this).dialog("close");
+					},
+					"MOVE": function () {
+						defer.resolve("overwrite");
+						$(this).dialog("close");
+					},
+					"COPY": function () {
+						defer.resolve("overwrite_leave");
+						$(this).dialog("close");
+					},
+					"CLOSE": function () {
+						$(this).dialog('destroy').remove();
+						window.location.reload();
+					}
 				},
-				"MOVE": function () {
-					defer.resolve("overwrite");
-					$(this).dialog("close");
-				},
-				"COPY": function () {
-					defer.resolve("overwrite_leave");
-					$(this).dialog("close");
-				},
-				"CLOSE": function () {
+				close: function () {
 					$(this).dialog('destroy').remove();
 					window.location.reload();
 				}
-			},
-			close: function () {
-				$(this).dialog('destroy').remove();
-				window.location.reload();
-			}
-		});
+			});
 
-	return defer.promise();
+	}
 
-	};
+	if (source_type == "image") {
 
-function confirmation_image(question) {
-
-	var defer = $.Deferred();
-
-	$('<div></div>')
-		.html(question)
-		.dialog({
-			autoOpen: true,
-			modal: true,
-			title: 'Confirmation',
-			buttons: {
-				"MOVE": function () {
-					defer.resolve("move");
-					$(this).dialog("close");
+		$('<div></div>')
+			.html(question)
+			.dialog({
+				autoOpen: true,
+				modal: true,
+				title: 'Confirmation',
+				buttons: {
+					"MOVE": function () {
+						defer.resolve("move");
+						$(this).dialog("close");
+					},
+					"CLOSE": function () {
+						$(this).dialog('destroy').remove();
+						window.location.reload();
+					}
 				},
-				"CLOSE": function () {
+				close: function () {
 					$(this).dialog('destroy').remove();
 					window.location.reload();
 				}
-			},
-			close: function () {
-				$(this).dialog('destroy').remove();
-				window.location.reload();
-			}
-		});
+			});
+	}
 
 	return defer.promise();
+}
 
-	};
 
 function onclick(source, target, source_type){
 
+	var question = "";
+
    	if (source_type == "cell") {
 
-		var question = "Do you want to SWAP Cells, MOVE or COPY the Source Cell to the Target Cell?";
+		question = "Do you want to SWAP Cells, MOVE or COPY the Source Cell to the Target Cell?";
+	}
 
-		confirmation_cell(question).then(function (answer) {
+	if (source_type == "image") {
 
-			if (answer == "swap"){
+		question = "Do you want to MOVE this Image to this CELL?";
+	}
 
-				$.ajax({
-					url: '{% url 'swap_cells' %}',
-					data: {
+	console.log("source_type : " + source_type);
+
+	confirmation(question, source_type).then(function (answer) {
+
+		console.log("answer : " + answer);
+
+		if (answer == "swap"){
+
+			$.ajax({
+				url: '{% url 'swap_cells' %}',
+				data: {
 						'source': source,
 						'target': target,
 						'source_type': source_type,
 						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						if (data.failure) {
-							alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
+				},
+				dataType: 'json',
+				type: 'post',
+				success: function (data) {
+					console.log("Cell Swap SUCCESS! Source: " + data.source + "  Target: " + data.target);
+					if (data.failure) {
+						alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
 					}
-				});
-			}
+				}
+			});
+		}
 
-			if (answer == "overwrite"){
+		if (answer == "overwrite"){
 
-				$.ajax({
-					url: '{% url 'overwrite_cell' %}',
-					data: {
-						'source': source,
-						'target': target,
-						'source_type': source_type,
-						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						if (data.failure) {
-							alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
+			$.ajax({
+				url: '{% url 'overwrite_cell' %}',
+				data: {
+					'source': source,
+					'target': target,
+					'source_type': source_type,
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				},
+				dataType: 'json',
+				type: 'post',
+				success: function (data) {
+					if (data.failure) {
+						alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
 					}
-				});
-			}
+				}
+			});
+		}
 
-			if (answer == "overwrite_leave"){
+		if (answer == "move"){
 
-				$.ajax({
-					url: '{% url 'overwrite_cell_leave' %}',
-					data: {
-						'source': source,
-						'target': target,
-						'source_type': source_type,
-						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						if (data.failure) {
-							alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
+			$.ajax({
+				url: '{% url 'import_image' %}',
+				data: {
+					'source': source,
+					'target': target,
+					'source_type': source_type,
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				},
+				dataType: 'json',
+				type: 'post',
+				success: function (data) {
+					console.log("Image Import SUCCESS! Source: " + data.source + "  Target: " + data.target);
+					if (data.failure) {
+						alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
 					}
-				});
-			}
+				}
+			});
 
-			//window.location.reload();
+		}
 
-		});
+		if (answer == "overwrite_leave"){
 
-   	}
-
-   	if (source_type == "image") {
-
-		var question = "Do you want to MOVE this Image to this CELL?";
-
-		confirmation_image(question).then(function (answer) {
-
-			if (answer == "move"){
-
-				$.ajax({
-					url: '{% url 'import_image' %}',
-					data: {
-						'source': source,
-						'target': target,
-						'source_type': source_type,
-						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						if (data.failure) {
-							alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
+			$.ajax({
+				url: '{% url 'overwrite_cell_leave' %}',
+				data: {
+					'source': source,
+					'target': target,
+					'source_type': source_type,
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				},
+				dataType: 'json',
+				type: 'post',
+				success: function (data) {
+					if (data.failure) {
+						alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
 					}
-				});
-			}
+				}
+			});
+		}
 
-		});
-
-   	}
-
+	});
 }
 
 
@@ -1300,12 +1295,17 @@ function drop(ev){
 	var target_id = target_array[1];
 	var target_type = target_array[0];
 
+	//console.log("source_id : " + source_id);
+	//console.log("source_type : " + source_type);
+	//console.log("target_id : " + target_id);
+	//console.log("target_type : " + target_type);
+
 	//ev.currentTarget.replaceChild(src, tgt);
 	//srcParent.appendChild(tgt);
 
 	onclick(source_id, target_id, source_type);
-}
 
+}
 
 function allowColDrop(ev){
 	ev.preventDefault();
@@ -1390,6 +1390,103 @@ function dropRow(ev){
 		}
 	});
 }
+
+</script>
+
+<script>
+
+$(document).ready(function(){
+
+	$("#matrix_info").on("hide.bs.collapse", function(){
+		$(".toggle-info").html('<i class="fa fa-info fa-lg"></i>');
+	});
+
+	$("#matrix_info").on("show.bs.collapse", function(){
+		$(".toggle-info").html('<i class="fa fa-window-minimize fa-lg"></i>');
+	});
+
+});
+
+
+$( document ).ready( function () {
+	$(".toggle-sidebar").click(function () {
+
+		var flag = sessionStorage.getItem("sidebartoggle");
+
+		//console.log("click BEFORE sessionStorage.sidebartoggle = ", flag)
+
+		if (flag == "true") {
+
+			//console.log("click Flag TRUE");
+
+			sessionStorage.setItem("sidebartoggle", "false");
+
+			$("#matrix_sidebar").removeClass("visible");
+			$("#matrix_sidebar").addClass("invisible");
+			$("#indicator-2").removeClass("fa-window-minimize");
+			$("#indicator-2").addClass("fa-cart-arrow-down");
+		}
+		else {
+
+			//console.log("click Flag FALSE");
+
+			sessionStorage.setItem("sidebartoggle", "true");
+
+			$("#matrix_sidebar").removeClass("invisible");
+			$("#matrix_sidebar").addClass("visible");
+			$("#indicator-2").removeClass("fa-cart-arrow-down");
+			$("#indicator-2").addClass("fa-window-minimize");
+		}
+
+		return false;
+	});
+});
+
+$( document ).ready( function () {
+
+    window.onload = function (e) {
+
+		//console.log("window.onload");
+
+		if(sessionStorage) {
+
+			var flag = sessionStorage.getItem("sidebartoggle");
+
+			//console.log("onload sessionStorage.sidebartoggle = ", flag)
+
+			if (flag == ""){
+
+			    sessionStorage.setItem("sidebartoggle", "false");
+
+				$("#matrix_sidebar").removeClass("visible");
+				$("#matrix_sidebar").addClass("invisible");
+				$("#indicator-2").removeClass("fa-window-minimize");
+				$("#indicator-2").addClass("fa-cart-arrow-down");
+			}
+			else {
+
+				if (flag == "true") {
+
+					//console.log("Load Flag TRUE")
+
+					$("#matrix_sidebar").removeClass("invisible");
+					$("#matrix_sidebar").addClass("visible");
+					$("#indicator-2").removeClass("fa-cart-arrow-down");
+					$("#indicator-2").addClass("fa-window-minimize");
+				}
+				else {
+
+					//console.log("Load Flag FALSE")
+
+					$("#matrix_sidebar").removeClass("visible");
+					$("#matrix_sidebar").addClass("invisible");
+					$("#indicator-2").removeClass("fa-window-minimize");
+					$("#indicator-2").addClass("fa-cart-arrow-down");
+				}
+			}
+		}
+    };
+});
 
 </script>
 

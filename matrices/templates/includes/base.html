@@ -37,89 +37,59 @@ The base header and footer include template
 
 	<meta charset="utf-8">
 
-	<link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-icon-57x57.png' %}">
-	<link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-icon-60x60.png' %}">
-	<link rel="apple-touch-icon" sizes="72x72" href="{% static 'apple-icon-72x72.png' %}">
-	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'apple-icon-76x76.png' %}">
-	<link rel="apple-touch-icon" sizes="114x114" href="{% static 'apple-icon-114x114.png' %}">
-	<link rel="apple-touch-icon" sizes="120x120" href="{% static 'apple-icon-120x120.png' %}">
-	<link rel="apple-touch-icon" sizes="144x144" href="{% static 'apple-icon-144x144.png' %}">
-	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}">
-	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}">
-	<link rel="icon" type="image/png" sizes="192x192"  href="{% static 'android-icon-192x192.png' %}">
-	<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
-	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}">
-	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
-	<link rel="manifest" href="{% static 'manifest.json' %}">
-	<meta name="msapplication-TileColor" content="#ffffff">
-	<meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}">
-	<meta name="theme-color" content="#ffffff">
+	<link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-icon-57x57.png' %}" />
+	<link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-icon-60x60.png' %}" />
+	<link rel="apple-touch-icon" sizes="72x72" href="{% static 'apple-icon-72x72.png' %}" />
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'apple-icon-76x76.png' %}" />
+	<link rel="apple-touch-icon" sizes="114x114" href="{% static 'apple-icon-114x114.png' %}" />
+	<link rel="apple-touch-icon" sizes="120x120" href="{% static 'apple-icon-120x120.png' %}" />
+	<link rel="apple-touch-icon" sizes="144x144" href="{% static 'apple-icon-144x144.png' %}" />
+	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}" />
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}" >
+	<link rel="icon" type="image/png" sizes="192x192" href="{% static 'android-icon-192x192.png' %}" />
+	<link rel="shortcut icon" type="image/ico" href="{% static 'favicon.ico' %}" />
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}" />
+	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}" />
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}" />
+	<link rel="manifest" href="{% static 'manifest.json' %}" />
+	<meta name="msapplication-TileColor" content="#ffffff" />
+	<meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}" />
+	<meta name="theme-color" content="#ffffff" />
 
-{% if settings.DEBUG %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
 
-<!--	DEVELOPMENT -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
 	{% if settings.LOCATION == 'CZI' %}
 
 	<!-- CZI -->
-	<link rel="stylesheet" href="{% static 'styles_czi_less.css' %}">
+	<link rel="stylesheet" href="{% static 'styles_czi_less.css' %}" />
 
-	{% elif settings.LOCATION == 'CANADA' %}
+	{% endif %}
+
+	{% if settings.LOCATION == 'CANADA' %}
 
 	<!-- CANADA -->
 	<link rel="stylesheet" href="{% static 'styles_canada_less.css' %}">
 
-	{% elif settings.LOCATION == 'COELIAC' %}
+	{% endif %}
+
+	{% if settings.LOCATION == 'COELIAC' %}
 
 	<!-- COELIAC -->
 	<link rel="stylesheet" href="{% static 'styles_coeliac_less.css' %}">
 
 	{% endif %}
-
-{% endif %}
-
-
-{% if not settings.DEBUG %}
-
-<!--	PRODUCTION -->
-
-	{% if settings.LOCATION == 'CZI' %}
-
-	<!-- CZI -->
-	<link rel="stylesheet" href="{% static 'styles_czi_less.css' %}">
-
-	{% elif settings.LOCATION == 'CANADA' %}
-
-	<!-- CANADA -->
-	<link rel="stylesheet" href="{% static 'styles_canada_less.css' %}">
-
-	{% elif settings.LOCATION == 'COELIAC' %}
-
-	<!-- COELIAC -->
-	<link rel="stylesheet" href="{% static 'styles_coeliac_less.css' %}">
-
-	{% endif %}
-
-{% endif %}
-
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="{% static 'base.js' %}"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-	<!-- XDSoft DateTimePicker -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 
 	<title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
 
 </head>
 
-<body onload="getStatus()">
+<body>
 
 
 <!-- Navigation Bar -->
@@ -531,23 +501,23 @@ The base header and footer include template
 		</div>
 
 		<div>
-			<a href="https://helmsleytrust.org/"><img src="{% static 'helmsley.png' %}" style="background-color: #FFFFFF;" width="170"></a>
+			<a href="https://helmsleytrust.org/"><img src="{% static 'helmsley.png' %}" style="background-color: #FFFFFF;" width="170" /></a>
 		</div>
 
 		<div>
-			<a href="https://www.humancellatlas.org/"><img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" width="170"></a>
+			<a href="https://www.humancellatlas.org/"><img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" width="170" /></a>
 		</div>
 
 		<div>
-			<a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220"></a>
+			<a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
 		</div>
 
 		<div>
-			<a href="https://www.hw.ac.uk/"><img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" width="125"></a>
+			<a href="https://www.hw.ac.uk/"><img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" width="125" /></a>
 		</div>
 
 		<div>
-			<a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125"></a>
+			<a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
 		</div>
 
 		<div>
@@ -556,41 +526,6 @@ The base header and footer include template
 	</div>
 
 </div>
-
-<script>
-
-    function getCollapsed() {
-        const state = localStorage.getItem('collapsed');
-        if(state === 'collapsed'){
-            return true;
-        }
-        return false;
-    }
-
-    function getStatus(){
-        const searchContainerDiv = document.getElementById('search-container');
-		const browseContainerDiv = document.getElementById('browse-container');
-        const isCollapsed = getCollapsed();
-        if(isCollapsed){
-			searchContainerDiv.style.display = "none";
-			browseContainerDiv.style.display = "grid";
-        }else{
-			searchContainerDiv.style.display = "grid";
-			browseContainerDiv.style.display = "none";
-        }
-    }
-
-    function toggleCollapse(){
-        const isCollapsed = getCollapsed();
-        if(isCollapsed){
-            localStorage.setItem('collapsed', 'un-collapsed');
-        }else{
-            localStorage.setItem('collapsed', 'collapsed');
-        }
-        getStatus();
-    }
-
-</script>
 
 </body>
 

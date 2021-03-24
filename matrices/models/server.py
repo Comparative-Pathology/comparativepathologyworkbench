@@ -440,8 +440,6 @@ class Server(models.Model):
 
         else:
 
-            #print('Success!')
-
             comment = {
                 'post': post_id,
                 'content': content,
@@ -1213,8 +1211,6 @@ class Server(models.Model):
                         'name': groupdetails['Name'],
                         'projectCount': projectCount
                         })
-
-                    print("group : " + str(group))
 
                     group_list.append(group)
 

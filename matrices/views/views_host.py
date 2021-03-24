@@ -352,7 +352,7 @@ def index_matrix(request):
 
     else:
 
-        matrix_list = bench_list_by_user_and_direction(request.user, '')
+        matrix_list = bench_list_by_user_and_direction(request.user, '', '', '', '', '', '', '', '', '', '')
 
         data.update({ 'matrix_list': matrix_list })
 

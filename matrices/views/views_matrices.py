@@ -968,7 +968,7 @@ def delete_matrix(request, matrix_id):
 
             matrix.delete()
 
-            return HttpResponseRedirect(reverse('index', args=()))
+            return HttpResponseRedirect(reverse('list_benches', args=()))
 
 
 #

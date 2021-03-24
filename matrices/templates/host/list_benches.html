@@ -373,4 +373,76 @@ The list benches template
 
 </script>
 
+<script>
+
+$( document ).ready( function () {
+
+	//console.log("getStatus()")
+	getStatus();
+});
+
+    function getCollapsed() {
+
+        const state = localStorage.getItem('collapsed');
+
+        if(state === 'collapsed'){
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+    function getStatus(){
+
+        const searchContainerDiv = document.getElementById('search-container');
+		const browseContainerDiv = document.getElementById('browse-container');
+
+        const isCollapsed = getCollapsed();
+
+        if(isCollapsed){
+
+			//console.log("isCollapsed TRUE")
+
+			searchContainerDiv.style.display = "none";
+			browseContainerDiv.style.display = "grid";
+
+        }
+        else{
+
+			//console.log("isCollapsed FALSE")
+
+			searchContainerDiv.style.display = "grid";
+			browseContainerDiv.style.display = "none";
+
+        }
+    }
+
+    function toggleCollapse(){
+
+        const isCollapsed = getCollapsed();
+
+        if(isCollapsed){
+
+			//console.log("isCollapsed TRUE")
+
+            localStorage.setItem('collapsed', 'un-collapsed');
+
+        }
+        else{
+
+			//console.log("isCollapsed FALSE")
+
+            localStorage.setItem('collapsed', 'collapsed');
+
+        }
+
+        getStatus();
+
+    }
+
+</script>
+
 {% endblock %}

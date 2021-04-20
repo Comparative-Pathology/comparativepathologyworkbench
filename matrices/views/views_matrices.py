@@ -25,7 +25,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This contains the delete_image, detail_collection, view_collection,
-# view_active_collection, new_collection, edit_collection, delete_collection,
+# view_active_collection, view_all_collections,
+# new_collection, edit_collection, delete_collection,
 # choose_collection, activate_collection, view_matrix_blog, view_cell_blog,
 # view_matrix, new_matrix, edit_matrix, delete_matrix, add_cell, edit_cell,
 # view_cell, append_column, add_column_left, add_column_right,
@@ -109,6 +110,7 @@ NO_CREDENTIALS = ''
 # def detail_collection(request, collection_id):
 # def view_collection(request, collection_id):
 # def view_active_collection(request):
+# def view_all_collections(request):
 # def new_collection(request):
 # def edit_collection(request, collection_id):
 # def delete_collection(request, collection_id):
@@ -225,6 +227,17 @@ def view_active_collection(request):
     data.update({ 'collection': collection, 'collection_image_list': collection_image_list })
 
     return render(request, 'matrices/view_collection.html', data)
+
+
+#
+# VIEW THE ACTIVE COLLECTION
+#
+@login_required
+def view_all_collections(request):
+
+    data = get_header_data(request.user)
+
+    return render(request, 'matrices/view_all_collections.html', data)
 
 
 #

@@ -1055,12 +1055,12 @@ html {
 	 padding: 6px 12px;
 }
  .basket-button {
-	 border: 1px solid;
+	 border: 0px solid;
 	 cursor: pointer;
 	 display: inline-block;
 	 font-size: 16px;
-	 height: 60px;
-	 padding: 6px 12px 6px 12px;
+	 height: 26px;
+	 padding: 5px 5px 5px 5px;
 	 text-align: center;
 	 text-decoration: none;
 	 width: 60px;
@@ -1139,4 +1139,36 @@ html {
 }
  .my-subnav .search-container button:hover {
 	 background: DarkGray;
+}
+ .button-image {
+	 background-color: #F9E79F;
+	 border-color: #F9E79F;
+	 border-radius: 5px;
+	 color: Black;
+}
+ .button-image:hover {
+	 background-color: #F9E79F;
+	 border-color: #F9E79F;
+	 border-radius: 5px;
+	 color: Black;
+}
+ .collection {
+	 -moz-border-radius: 5px 5px 5px 5px;
+	 -moz-box-shadow: #B3B3B3 2px 2px 2px;
+	 -webkit-border-radius: 5px 5px 5px 5px;
+	 -webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	 background-color: #F9E79F;
+	 border-radius: 5px 5px 5px 5px;
+	 box-shadow: #B3B3B3 2px 2px 2px;
+	 height: 26px;
+	 padding: 5px 5px 5px 5px;
+	 width: 60px;
+}
+ .my-dropimage {
+	 background-color: #FF8C69;
+	 border: none;
+	 color: Black;
+	 cursor: pointer;
+	 font-size: 16px;
+	 padding: 0px 0px 0px 0px;
 }

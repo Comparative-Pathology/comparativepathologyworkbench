@@ -44,8 +44,8 @@ class CollectionAuthorisationForm(forms.ModelForm):
 
     collection = forms.ModelChoiceField(queryset=Collection.objects.all())
     permitted = forms.ModelChoiceField(queryset=User.objects.all())
-    collection_authority = forms.ModelChoiceField(queryset=CollectionAuthority.objects.all())
+    authority = forms.ModelChoiceField(queryset=CollectionAuthority.objects.all())
 
     class Meta:
         model = CollectionAuthorisation
-        fields = ('collection', 'permitted', 'collection_authority', )
+        fields = ('collection', 'permitted', 'authority', )

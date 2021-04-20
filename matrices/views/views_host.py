@@ -25,8 +25,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This contains the home, view_server, new_server, edit_server, delete_server,
-# authorisation, maintenance, index_matrix, list_imaging_hosts, list_image_cart,
-# index_collection, list_bench_authorisation, list_my_bench_authorisation,
+# authorisation, maintenance, list_imaging_hosts, list_image_cart,
+# list_bench_authorisation, list_my_bench_authorisation,
 # list_my_bench_bench_authorisation, list_bench_bench_authorisation,
 # list_user_bench_bench_authorisation, list_collection_authorisation,
 # list_my_collection_authorisation, list_my_collection_collection_authorisation,
@@ -102,10 +102,8 @@ NO_CREDENTIALS = ''
 # def authorisation(request):
 # def maintenance(request):
 #
-# def index_matrix(request):
 # def list_imaging_hosts(request):
 # def list_image_cart(request):
-# def index_collection(request):
 #
 # def list_bench_authorisation(request):
 # def list_my_bench_authorisation(request):
@@ -339,27 +337,6 @@ def maintenance(request):
 
 
 #
-# VIEWS FOR ALL MY MATRICES
-#
-@login_required
-def index_matrix(request):
-
-    data = get_header_data(request.user)
-
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
-
-        matrix_list = bench_list_by_user_and_direction(request.user, '', '', '', '', '', '', '', '', '', '')
-
-        data.update({ 'matrix_list': matrix_list })
-
-        return render(request, 'host/index.html', data)
-
-
-#
 # LIST SERVERS
 #
 @login_required
@@ -379,23 +356,6 @@ def list_image_cart(request):
     data = get_header_data(request.user)
 
     return render(request, 'host/list_image_cart.html', data)
-
-
-#
-# LIST IMAGE COLLECTIONS
-#
-@login_required
-def index_collection(request):
-
-    data = get_header_data(request.user)
-
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
-
-        return render(request, 'host/list_collection.html', data)
 
 
 #

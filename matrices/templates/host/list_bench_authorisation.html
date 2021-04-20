@@ -46,7 +46,7 @@ The list bench authorisation template
 		</li>
 
 		<li>
-			<a href="{% url 'list_matrix' %}">List Benches</a>
+			<a href="{% url 'list_benches' %}">List Benches</a>
 		</li>
 
 		<li>
@@ -85,7 +85,6 @@ The list bench authorisation template
 
         	<tr>
     	        <th width="150px">Action</th>
-	            <th width="100px">ID</th>
             	<th width="200px">Bench</th>
             	<th width="200px">Owner</th>
         	    <th width="200px">Permitted</th>
@@ -93,7 +92,6 @@ The list bench authorisation template
 			</tr>
 
 	        <tr>
-        	    <td>&nbsp;</td>
         	    <td>&nbsp;</td>
         	    <td>&nbsp;</td>
     	        <td>&nbsp;</td>
@@ -122,10 +120,6 @@ The list bench authorisation template
 					<a href="{% url 'delete_bench_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 	            </td>
 
-        	    <td>
-            		{{ authorisation.id }}
-	            </td>
-
             	<td>
             		CPW:{{ authorisation.matrix.id|stringformat:"06d" }}
         	    </td>
@@ -147,7 +141,6 @@ The list bench authorisation template
 
 	        <tr>
 	            <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
             	<td>&nbsp;</td>
         	    <td>&nbsp;</td>
     	        <td>&nbsp;</td>
@@ -155,7 +148,6 @@ The list bench authorisation template
 			</tr>
 
 	        <tr>
-    	        <td>&nbsp;</td>
         	    <td>&nbsp;</td>
 	            <td>&nbsp;</td>
     	        <td>&nbsp;</td>

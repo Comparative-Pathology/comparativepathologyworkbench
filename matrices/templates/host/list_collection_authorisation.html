@@ -46,7 +46,7 @@ The list collection authorisations template
 		</li>
 
 		<li>
-			<a href="{% url 'list_collection' %}">List Collections</a>
+			<a href="{% url 'list_collections' %}">List Collections</a>
 		</li>
 
 		<li>
@@ -85,7 +85,6 @@ The list collection authorisations template
 
         	<tr>
     	        <th width="150px">Action</th>
-	            <th width="100px">ID</th>
             	<th width="200px">Collection</th>
             	<th width="200px">Owner</th>
         	    <th width="200px">Permitted</th>
@@ -107,24 +106,20 @@ The list collection authorisations template
 
 	            <td>
 
-					<a href="{% url 'detail_collection_authorisation' collection_authorisation.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'detail_collection_authorisation' collection_authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 		{% if collection_id == '' %}
 
-					<a href="{% url 'edit_collection_authorisation' collection_authorisation.collection_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'edit_collection_authorisation' collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
 		{% else %}
 
-					<a href="{% url 'edit_collection_collection_authorisation' collection_id collection_authorisation.collection_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'edit_collection_collection_authorisation' collection_id collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
 		{% endif %}
 
-					<a href="{% url 'delete_collection_authorisation' collection_authorisation.collection_id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+					<a href="{% url 'delete_collection_authorisation' collection_authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
-	            </td>
-
-        	    <td>
-            		{{ collection_authorisation.id }}
 	            </td>
 
             	<td>
@@ -150,13 +145,11 @@ The list collection authorisations template
 	            <td>&nbsp;</td>
         	    <td>&nbsp;</td>
             	<td>&nbsp;</td>
-        	    <td>&nbsp;</td>
     	        <td>&nbsp;</td>
     	        <td>&nbsp;</td>
 			</tr>
 
 	        <tr>
-    	        <td>&nbsp;</td>
         	    <td>&nbsp;</td>
 	            <td>&nbsp;</td>
     	        <td>&nbsp;</td>

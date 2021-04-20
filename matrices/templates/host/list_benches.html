@@ -44,24 +44,20 @@ The list benches template
 			Benches
 		</li>
 
-		<li>
-			<i onclick="toggleCollapse()" class="fa fa-search" title="Search Benches"></i>
-		</li>
-
 	</ul>
 
 </div>
 
 <!-- Main Data Panel -->
 
-<div id="search-container" class="standard-grid-container" style="display: none">
+<div id="search-container" class="standard-grid-container">
 
 	<div id="search-left" class="standard-grid-item">
 	</div>
 
 	<div id="search-middle" class="standard-grid-item">
 
-		<h1>Search Benches</h1>
+		<h1>Benches</h1>
 
 		<p>Search the list of Benches</p>
 
@@ -81,28 +77,6 @@ The list benches template
 	</div>
 
 	<div id="search-right" class="standard-grid-item">
-	</div>
-
-</div>
-
-<div id="browse-container" class="standard-grid-container">
-
-	<div id="browse-left" class="standard-grid-item">
-	</div>
-
-	<div id="browse-middle" class="standard-grid-item">
-
-		<h1>Browse Benches</h1>
-
-		<p>Browse the list of Benches</p>
-
-		<hr>
-
-		<br />
-
-	</div>
-
-	<div id="browse-right" class="standard-grid-item">
 	</div>
 
 </div>
@@ -351,97 +325,6 @@ The list benches template
 			}
 		}
 	}
-
-</script>
-
-<script>
-
-	var coll = document.getElementsByClassName("collapsible");
-	var i;
-
-	for (i = 0; i < coll.length; i++) {
-		coll[i].addEventListener("click", function() {
-			this.classList.toggle("active");
-			var content = this.nextElementSibling;
-			if (content.style.display === "block") {
-				content.style.display = "none";
-			} else {
-				content.style.display = "block";
-			}
-		});
-	}
-
-</script>
-
-<script>
-
-$( document ).ready( function () {
-
-	//console.log("getStatus()")
-	getStatus();
-});
-
-    function getCollapsed() {
-
-        const state = localStorage.getItem('collapsed');
-
-        if(state === 'collapsed'){
-
-            return true;
-
-        }
-
-        return false;
-
-    }
-
-    function getStatus(){
-
-        const searchContainerDiv = document.getElementById('search-container');
-		const browseContainerDiv = document.getElementById('browse-container');
-
-        const isCollapsed = getCollapsed();
-
-        if(isCollapsed){
-
-			//console.log("isCollapsed TRUE")
-
-			searchContainerDiv.style.display = "none";
-			browseContainerDiv.style.display = "grid";
-
-        }
-        else{
-
-			//console.log("isCollapsed FALSE")
-
-			searchContainerDiv.style.display = "grid";
-			browseContainerDiv.style.display = "none";
-
-        }
-    }
-
-    function toggleCollapse(){
-
-        const isCollapsed = getCollapsed();
-
-        if(isCollapsed){
-
-			//console.log("isCollapsed TRUE")
-
-            localStorage.setItem('collapsed', 'un-collapsed');
-
-        }
-        else{
-
-			//console.log("isCollapsed FALSE")
-
-            localStorage.setItem('collapsed', 'collapsed');
-
-        }
-
-        getStatus();
-
-    }
 
 </script>
 

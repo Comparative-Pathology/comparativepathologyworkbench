@@ -38,6 +38,8 @@ from django.utils.translation import ugettext_lazy as _
 from matrices.models import MatrixSummary
 from matrices.models import Authority
 
+CHOICES = (('10', '10'), ('5', '5'), ('25', '25'), ('50', '50'), ('100', '100'))
+
 
 class MatrixSummarySearchForm(forms.ModelForm):
     title = forms.CharField(max_length=20, required=False)
@@ -48,6 +50,7 @@ class MatrixSummarySearchForm(forms.ModelForm):
     modified_after = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], required=False)
     owner = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     authority = forms.ModelChoiceField(queryset=Authority.objects.all(), required=False)
+    paginate_by = forms.ChoiceField(widget=forms.Select, choices=CHOICES, required=False)
 
     class Meta:
         model = MatrixSummary
@@ -55,6 +58,7 @@ class MatrixSummarySearchForm(forms.ModelForm):
                 'description',
                 'owner',
                 'authority',
+                'paginate_by',
                 'created_before',
                 'created_after',
                 'modified_before',

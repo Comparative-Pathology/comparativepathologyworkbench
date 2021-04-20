@@ -38,12 +38,15 @@ from django.utils.translation import ugettext_lazy as _
 from matrices.models import CollectionSummary
 from matrices.models import CollectionAuthority
 
+CHOICES = (('10', '10'), ('5', '5'), ('25', '25'), ('50', '50'), ('100', '100'))
+
 
 class CollectionSummarySearchForm(forms.ModelForm):
     title = forms.CharField(max_length=20, required=False)
     description = forms.CharField(max_length=20, required=False)
     owner = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     authority = forms.ModelChoiceField(queryset=CollectionAuthority.objects.all(), required=False)
+    paginate_by = forms.ChoiceField(widget=forms.Select, choices=CHOICES, required=False)
 
     class Meta:
         model = CollectionSummary
@@ -51,4 +54,5 @@ class CollectionSummarySearchForm(forms.ModelForm):
                 'description',
                 'owner',
                 'authority',
+                'paginate_by',
                 )

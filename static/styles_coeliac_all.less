@@ -1153,12 +1153,12 @@ ul.my-breadcrumb {
 	padding: 6px 12px;
 }
 .basket-button {
-	border: 1px solid;
+	border: 0px solid;
 	cursor: pointer;
 	display: inline-block;
 	font-size: 16px;
-	height: 60px;
-	padding: 6px 12px 6px 12px;
+	height: 26px;
+	padding: 5px 5px 5px 5px;
 	text-align: center;
 	text-decoration: none;
 	width: 60px;
@@ -1244,4 +1244,36 @@ ul.my-breadcrumb {
 			}
 		}
 	}
+}
+.button-image {
+	background-color: @pale-yellow;
+	border-color: @pale-yellow;
+	border-radius: 5px;
+	color: @Black;
+	&:hover {
+		background-color: @pale-yellow;
+		border-color: @pale-yellow;
+		border-radius: 5px;
+		color: @Black;
+	}
+}
+.collection {
+	-moz-border-radius: 5px 5px 5px 5px;
+	-moz-box-shadow: @shadow 2px 2px 2px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-webkit-box-shadow: @shadow 2px 2px 2px;
+	background-color: @pale-yellow;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: @shadow 2px 2px 2px;
+	height: 26px;
+	padding: 5px 5px 5px 5px;
+	width: 60px;
+}
+.my-dropimage {
+	background-color: @image;
+	border: none;
+	color: @Black;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 0px 0px 0px 0px;
 }

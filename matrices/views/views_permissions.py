@@ -238,6 +238,7 @@ def new_bench_bench_authorisation(request, matrix_id):
         form = AuthorisationForm()
 
         form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(id=matrix_id))
+        form.fields['matrix'].initial = matrix_id
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 
@@ -303,6 +304,7 @@ def edit_bench_authorisation(request, bench_authorisation_id):
         else:
 
             form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
+        form.fields['matrix'].initial = authorisation.matrix.id
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 
@@ -362,6 +364,7 @@ def edit_bench_bench_authorisation(request, matrix_id, bench_authorisation_id):
         form = AuthorisationForm(instance=authorisation)
 
         form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(id=matrix_id))
+        form.fields['matrix'].initial = matrix_id
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 
@@ -416,13 +419,15 @@ def new_collection_authorisation(request):
 
             collection_authorisation = form.save(commit=False)
 
+            collection_authorisation.set_collection_authority(form.cleaned_data['authority'])
+
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
 
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
 
-                if collection_authorisation_old.authority != collection_authorisation.authority:
+                if collection_authorisation_old.collection_authority != collection_authorisation.collection_authority:
 
-                    collection_authorisation_old.authority = collection_authorisation.authority
+                    collection_authorisation_old.collection_authority = collection_authorisation.collection_authority
 
                     collection_authorisation_old.save()
 
@@ -454,6 +459,8 @@ def new_collection_authorisation(request):
 
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(owner=request.user))
 
+        form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
+
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 
         data.update({ 'text_flag': text_flag, 'form': form })
@@ -479,13 +486,15 @@ def new_collection_collection_authorisation(request, collection_id):
 
             collection_authorisation = form.save(commit=False)
 
+            collection_authorisation.set_collection_authority(form.cleaned_data['authority'])
+
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
 
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
 
-                if collection_authorisation_old.authority != collection_authorisation.authority:
+                if collection_authorisation_old.collection_authority != collection_authorisation.collection_authority:
 
-                    collection_authorisation_old.authority = collection_authorisation.authority
+                    collection_authorisation_old.collection_authority = collection_authorisation.collection_authority
 
                     collection_authorisation_old.save()
 
@@ -510,6 +519,9 @@ def new_collection_collection_authorisation(request, collection_id):
         form = CollectionAuthorisationForm()
 
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
+        form.fields['collection'].initial = collection_id
+
+        form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
 
@@ -538,13 +550,15 @@ def edit_collection_authorisation(request, collection_authorisation_id):
 
             collection_authorisation = form.save(commit=False)
 
+            collection_authorisation.set_collection_authority(form.cleaned_data['authority'])
+
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
 
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
 
-                if collection_authorisation_old.authority != collection_authorisation.authority:
+                if collection_authorisation_old.collection_authority != collection_authorisation.collection_authority:
 
-                    collection_authorisation_old.authority = collection_authorisation.authority
+                    collection_authorisation_old.collection_authority = collection_authorisation.collection_authority
 
                     collection_authorisation_old.save()
 
@@ -576,7 +590,13 @@ def edit_collection_authorisation(request, collection_authorisation_id):
 
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(owner=request.user))
 
+        form.fields['collection'].initial = collection_authorisation.collection.id
+
+        form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
+        form.fields['authority'].initial = collection_authorisation.collection_authority.id
+
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
+        form.fields['permitted'].initial = collection_authorisation.permitted.id
 
         data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 
@@ -603,13 +623,17 @@ def edit_collection_collection_authorisation(request, collection_id, collection_
 
             collection_authorisation = form.save(commit=False)
 
+            collection_authorisation.set_collection_authority(form.cleaned_data['authority'])
+
+            print("collection_authorisation : " + str(collection_authorisation))
+
             if collection_authorisation_exists_for_collection_and_permitted(collection_authorisation.collection, collection_authorisation.permitted):
 
                 collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection_authorisation.collection) & Q(permitted=collection_authorisation.permitted))
 
-                if collection_authorisation_old.authority != collection_authorisation.authority:
+                if collection_authorisation_old.collection_authority != collection_authorisation.collection_authority:
 
-                    collection_authorisation_old.authority = collection_authorisation.authority
+                    collection_authorisation_old.collection_authority = collection_authorisation.collection_authority
 
                     collection_authorisation_old.save()
 
@@ -634,8 +658,13 @@ def edit_collection_collection_authorisation(request, collection_id, collection_
         form = CollectionAuthorisationForm(instance=collection_authorisation)
 
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
+        form.fields['collection'].initial = collection_id
+
+        form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
+        form.fields['authority'].initial = collection_authorisation.collection_authority.id
 
         form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
+        form.fields['permitted'].initial = collection_authorisation.permitted.id
 
         data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 

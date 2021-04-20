@@ -99,23 +99,6 @@ The view matrix (bench) template
 
 			</div>
 
-{% if authority.is_viewer %}
-
-{% else %}
-
-	{% if credential_flag %}
-
-		{% if collection_list %}
-
-			<a class="toggle-sidebar" href="#matrix_sidebar" role="button"><i id="indicator-2" class="fa fa-cart-arrow-down fa-lg" title="Image Basket"></i><span class="sr-only">Image Basket</span></a>
-
-		{% endif %}
-
-	{% endif %}
-
-{% endif %}
-
-
 		</li>
 
 	</ul>
@@ -285,7 +268,7 @@ The view matrix (bench) template
 
 <div class="grid-container">
 
-	<div class="grid-item invisible" id="matrix_sidebar">
+	<div class="grid-item" id="matrix_sidebar">
 
 {% if authority.is_viewer %}
 
@@ -295,172 +278,154 @@ The view matrix (bench) template
 
 <!-- Selected or Active Image Collection -->
 
-		<table border="0" class="basket">
+<table border="0" class="basket">
 
-		{% if collection_list %}
+{% if collection_list %}
 
-			<tr>
+	<tr>
 
-				<td>
+		<td>
 
-					<div class="image" align="right">
+			<div class="collection" align="right">
 
-						<div class="my-dropdown">
+				<div class="my-dropdown">
 
-						    <a id="dropdown_1_link" class="my-dropcell"><button class="basket-button button-edit"><i class="fa fa-question-circle"></i></button></a>
+					<a id="dropdown_1_link" class="my-dropimage"><button class="basket-button button-image"><i class="fa fa-bars"></i></button></a>
 
-							<div class="my-dropdown-cell-content">
+					<div class="my-dropdown-cell-content">
 
-  								<div class="my-dropdown-btn-content">
+						<div class="my-dropdown-btn-content">
 
-			{% for collection in collection_list %}
+	{% for collection in collection_list %}
 
-		       	{% if matrix.has_last_used_collection == True %}
+		{% if matrix.has_last_used_collection == True %}
 
-		        	{% if matrix.last_used_collection.id == collection.collection_id %}
+			{% if matrix.last_used_collection.id == collection.collection_id %}
 
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-edit"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-					{% else %}
-
-			        	{% if collection.collection_owner == credential_flag %}
-
-				        	{% if collection.collection_active == True %}
-
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-							{% else %}
-
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-add"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-							{% endif %}
-
-						{% else %}
-
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-info"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-						{% endif %}
-
-					{% endif %}
-
-				{% else %}
-
-			        {% if collection.collection_owner == credential_flag %}
-
-			        	{% if collection.collection_active == True %}
-
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-						{% else %}
-
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-add"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-						{% endif %}
-
-					{% else %}
-
-					    	<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-info"><i class="fa fa-bell"></i></button><span class="menu-item">&#9;</span>({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-					{% endif %}
-
-				{% endif %}
-
-			{% endfor %}
-
-								</div>
-
-							</div>
-
-						</div>
-
-					</div>
-
-				</td>
-
-			</tr>
-
-		{% endif %}
-
-		{% if collection_image_list %}
-
-		    {% for image in collection_image_list %}
-
-			<tr>
-
-				<td id="image_{{ image.id }}">
-
-				{% if authority.is_viewer %}
-
-					<div id="image_{{ image.id }}">
-
-				{% else %}
-
-					<div draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
-
-				{% endif %}
-
-						<div class="image" align="right">
-
-							<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" title="{{ image.name }}" src="{{ image.birdseye_url }}"> </a>
-
-						</div>
-
-					</div>
-
-				</td>
-
-			</tr>
-
-				{% if forloop.last %}
-
-			<tr>
-
-				<td>
-
-			       	{% if matrix.has_last_used_collection == True %}
-
-					<div class="image" align="right">
-
-						<a href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="basket-button button-view"><i class="fa fa-eye"></i></button></a>
-
-					</div>
-
-					{% endif %}
-
-				</td>
-
-
-			</tr>
-
-				{% endif %}
-
-			{% endfor %}
-
-		{% else %}
-
-			{% if matrix.has_last_used_collection == True %}
-
-			<tr>
-				<td>
-					<div class="image" align="right">
-					    <button class="basket-button button-info"><i class="fa fa-eye-slash"></i></button>
-					</div>
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<div class="image" align="right">
-						<a href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="basket-button button-view"><i class="fa fa-eye"></i></button></a>
-					</div>
-				</td>
-			</tr>
+					<a href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
 			{% endif %}
 
 		{% endif %}
 
-		</table>
+	{% endfor %}
+
+	{% for collection in collection_list %}
+
+		{% if matrix.has_last_used_collection == True %}
+
+			{% if matrix.last_used_collection.id == collection.collection_id %}
+
+			{% else %}
+
+				{% if collection.collection_owner == credential_flag %}
+
+					{% if collection.collection_active == True %}
+
+					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+
+					{% else %}
+
+					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+
+					{% endif %}
+
+				{% else %}
+
+					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+
+				{% endif %}
+
+			{% endif %}
+
+		{% else %}
+
+			{% if collection.collection_owner == credential_flag %}
+
+				{% if collection.collection_active == True %}
+
+					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+
+				{% else %}
+
+					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+
+				{% endif %}
+
+			{% else %}
+
+					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+
+			{% endif %}
+
+		{% endif %}
+
+	{% endfor %}
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</td>
+
+	</tr>
+
+{% endif %}
+
+{% if collection_image_list %}
+
+	{% for image in collection_image_list %}
+
+	<tr>
+
+		<td id="image_{{ image.id }}">
+
+		{% if authority.is_viewer %}
+
+			<div id="image_{{ image.id }}">
+
+		{% else %}
+
+			<div draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
+
+		{% endif %}
+
+				<div class="image" align="right">
+
+					<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" title="{{ image.name }}" src="{{ image.birdseye_url }}"> </a>
+
+				</div>
+
+			</div>
+
+		</td>
+
+	</tr>
+
+	{% endfor %}
+
+{% else %}
+
+	{% if matrix.has_last_used_collection == True %}
+
+	<tr>
+		<td>
+			<div class="image" align="right">
+				<button class="basket-button button-info"><i class="fa fa-eye-slash"></i></button>
+			</div>
+		</td>
+	</tr>
+
+	{% endif %}
+
+{% endif %}
+
+</table>
+
 
 	{% endif %}
 
@@ -1055,7 +1020,7 @@ The view matrix (bench) template
 
 					</form>
 
-					<a href="{% url 'index' %}"><button class="save btn btn-success">Back</button></a>
+					<a href="{% url 'list_benches' %}"><button class="save btn btn-success">Back</button></a>
 
 				</td>
 
@@ -1405,87 +1370,6 @@ $(document).ready(function(){
 		$(".toggle-info").html('<i class="fa fa-window-minimize fa-lg"></i>');
 	});
 
-});
-
-
-$( document ).ready( function () {
-	$(".toggle-sidebar").click(function () {
-
-		var flag = sessionStorage.getItem("sidebartoggle");
-
-		//console.log("click BEFORE sessionStorage.sidebartoggle = ", flag)
-
-		if (flag == "true") {
-
-			//console.log("click Flag TRUE");
-
-			sessionStorage.setItem("sidebartoggle", "false");
-
-			$("#matrix_sidebar").removeClass("visible");
-			$("#matrix_sidebar").addClass("invisible");
-			$("#indicator-2").removeClass("fa-window-minimize");
-			$("#indicator-2").addClass("fa-cart-arrow-down");
-		}
-		else {
-
-			//console.log("click Flag FALSE");
-
-			sessionStorage.setItem("sidebartoggle", "true");
-
-			$("#matrix_sidebar").removeClass("invisible");
-			$("#matrix_sidebar").addClass("visible");
-			$("#indicator-2").removeClass("fa-cart-arrow-down");
-			$("#indicator-2").addClass("fa-window-minimize");
-		}
-
-		return false;
-	});
-});
-
-$( document ).ready( function () {
-
-    window.onload = function (e) {
-
-		//console.log("window.onload");
-
-		if(sessionStorage) {
-
-			var flag = sessionStorage.getItem("sidebartoggle");
-
-			//console.log("onload sessionStorage.sidebartoggle = ", flag)
-
-			if (flag == ""){
-
-			    sessionStorage.setItem("sidebartoggle", "false");
-
-				$("#matrix_sidebar").removeClass("visible");
-				$("#matrix_sidebar").addClass("invisible");
-				$("#indicator-2").removeClass("fa-window-minimize");
-				$("#indicator-2").addClass("fa-cart-arrow-down");
-			}
-			else {
-
-				if (flag == "true") {
-
-					//console.log("Load Flag TRUE")
-
-					$("#matrix_sidebar").removeClass("invisible");
-					$("#matrix_sidebar").addClass("visible");
-					$("#indicator-2").removeClass("fa-cart-arrow-down");
-					$("#indicator-2").addClass("fa-window-minimize");
-				}
-				else {
-
-					//console.log("Load Flag FALSE")
-
-					$("#matrix_sidebar").removeClass("visible");
-					$("#matrix_sidebar").addClass("invisible");
-					$("#indicator-2").removeClass("fa-window-minimize");
-					$("#indicator-2").addClass("fa-cart-arrow-down");
-				}
-			}
-		}
-    };
 });
 
 </script>

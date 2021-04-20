@@ -50,7 +50,7 @@ The view collection template
 		</li>
 
 		<li>
-			<a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a>
+			ALL Collections
 		</li>
 
 		<li>
@@ -71,9 +71,9 @@ The view collection template
 
 	<div class="standard-grid-item">
 
-		<h1>Collection {{ collection.id }}, "{{ collection.title }}"</h1>
+		<h1>All Collections</h1>
 
-		<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
+		<p>You can view {{ image_list|length }} Images from {{ collection_list|length }} Collections</p>
 
 		<hr>
 
@@ -81,19 +81,20 @@ The view collection template
 
 {% if credential_flag %}
 
-	{% if collection_image_list %}
+	{% if image_list %}
 
-		{% for collection_image in collection_image_list %}
+		{% for image in image_list %}
 
 			{% if forloop.first %}
 
 	    <table border="0">
 
         	<tr>
-    	        <th width="150px">Action</th>
-	            <th width="100px">ROI</th>
+    	        <th>Action</th>
+	            <th>ROI</th>
             	<th>Server</th>
         	    <th>Image</th>
+				<th>Collection</th>
 			</tr>
 
 	        <tr>
@@ -101,6 +102,7 @@ The view collection template
     	        <td>&nbsp;</td>
 	            <td>&nbsp;</td>
             	<td>&nbsp;</td>
+				<td>&nbsp;</td>
 			</tr>
 
 			{% endif %}
@@ -109,20 +111,25 @@ The view collection template
 
 	            <td>
 
-			{% if collection_image.server.type.name == 'WORDPRESS' %}
+			{% if image.server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'webgallery_show_wordpress_image' collection_image.server.id collection_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% else %}
 
-					<a href="{% url 'webgallery_show_image' collection_image.server.id collection_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 
-					<a href="{% url 'webgallery_delete_image' collection_image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+			{% if image.owner.username == credential_flag %}
+
+					<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+
+			{% endif %}
+
 	            </td>
 
-			{% if collection_image.roi == 0 %}
+			{% if image.roi == 0 %}
 
             	<td>&nbsp;</td>
 
@@ -135,24 +142,37 @@ The view collection template
 			{% endif %}
 
             	<td>
-            		{{ collection_image.server.name }}<br />( {{ collection_image.server.url_server }} )
+            		{{ image.server.name }}<br />( {{ image.server.url_server }} )
         	    </td>
 
     	        <td>
-					<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
+					<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
         	    </td>
+
+				<td>
+
+			{% for collection in image.collections.all %}
+
+					<a href="{% url 'view_collection' collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ collection.title }}", (Owned By {{ collection.owner.username }})
+
+			{% endfor %}
+
+				</td>
+
 			</tr>
 
 			{% if forloop.last %}
 
 	        <tr>
-	            <td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
             	<td>&nbsp;</td>
         	    <td>&nbsp;</td>
     	        <td>&nbsp;</td>
 			</tr>
 
-        <tr>
+        	<tr>
+				<td>&nbsp;</td>
 	            <td>&nbsp;</td>
     	        <td>&nbsp;</td>
         	    <td>&nbsp;</td>

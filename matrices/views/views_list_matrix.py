@@ -58,6 +58,8 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
     query_search = forms.CharField(max_length=25)
 
+    query_paginate_by = forms.CharField(max_length=12)
+
     allowed_sort_fields = {'matrix_id': {'default_direction': '', 'verbose_name': 'Bench Id'},
                            'matrix_title': {'default_direction': '', 'verbose_name': 'Title'},
                            'matrix_created': {'default_direction': '', 'verbose_name': 'Created On'},
@@ -117,8 +119,9 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
             sort_parameter = self.request.GET.get('sort', None)
 
+        self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
-        return bench_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority, self.query_created_after, self.query_created_before, self.query_modified_after, self.query_modified_before, self.query_search)
+        return bench_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority, self.query_created_after, self.query_created_before, self.query_modified_after, self.query_modified_before, self.query_search )
 
 
     def get_context_data(self, **kwargs):
@@ -127,7 +130,7 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
         data = get_header_data(self.request.user)
 
-        data_dict = {'title': self.query_title, 'description': self.query_description, 'created_before': self.query_created_before, 'created_after': self.query_created_after, 'modified_before': self.query_modified_before, 'modified_after': self.query_modified_after, 'owner': self.query_owner, 'authority': self.query_authority }
+        data_dict = {'title': self.query_title, 'description': self.query_description, 'created_before': self.query_created_before, 'created_after': self.query_created_after, 'modified_before': self.query_modified_before, 'modified_after': self.query_modified_after, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by  }
 
         form = MatrixSummarySearchForm(data_dict)
 
@@ -136,3 +139,8 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
         context.update(data)
 
         return context
+
+
+    def get_paginate_by(self, queryset):
+
+        return self.request.GET.get("paginate_by", self.paginate_by)

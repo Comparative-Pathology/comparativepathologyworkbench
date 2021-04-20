@@ -111,47 +111,12 @@ The base header and footer include template
 
 		<div class="my-subnav">
 
-{% if matrix_list %}
+	{% if matrix_list %}
 
-			<button class="my-subnavbtn">Benches ({{ matrix_list|length }}) <i class="fa fa-caret-down"></i></button>
+			<a href="{% url 'list_benches' %}"><button class="my-subnavbtn">Benches ({{ matrix_list|length }})</button></a>
 
-			<div class="my-subnav-content">
 
-	{% for matrix in matrix_list %}
-
-		{% if forloop.first %}
-
-				<a href="{% url 'list_benches' %}">List Benches ({{ matrix_list|length }})</a>
-
-				<div class="my-nav-dropdown">
-
-					<button class="my-subnav-dropbtn">All Benches <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-nav-dropdown-content">
-
-		{% endif %}
-
-						<a href="{% url 'matrix' matrix.matrix_id %}">CPW:{{ matrix.matrix_id|stringformat:"06d" }}, {{ matrix.matrix_title|truncatechars:25 }}</a>
-
-		{% if forloop.last %}
-
-					</div>
-
-				</div>
-
-		{% endif %}
-
-	{% endfor %}
-
-	{% if user.is_authenticated %}
-
-				<a href="{% url 'new_matrix' %}">Add New Bench</a>
-
-	{% endif %}
-
-			</div>
-
-{% else %}
+	{% else %}
 
 			<button class="my-subnavbtn">Benches <i class="fa fa-caret-down"></i></button>
 
@@ -161,7 +126,7 @@ The base header and footer include template
 
 			</div>
 
-{% endif %}
+	{% endif %}
 
 
 		</div>
@@ -171,47 +136,11 @@ The base header and footer include template
 
 		<div class="my-subnav">
 
-{% if collection_list %}
+	{% if collection_list %}
 
-			<button class="my-subnavbtn">Collections ({{ collection_list|length }}) <i class="fa fa-caret-down"></i></button>
+			<a href="{% url 'list_collections' %}"><button class="my-subnavbtn">Collections ({{ collection_list|length }})</button></a>
 
-			<div class="my-subnav-content">
-
-	{% for collection in collection_list %}
-
-		{% if forloop.first %}
-
-				<a href="{% url 'list_collections' %}">List Collections ({{ collection_list|length }})</a>
-
-				<div class="my-nav-dropdown">
-
-					<button class="my-subnav-dropbtn">Collections <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-nav-dropdown-content">
-
-		{% endif %}
-
-						<a href="{% url 'view_collection' collection.collection_id %}">{{ collection.collection_id|stringformat:"06d" }}, {{ collection.collection_title|truncatechars:25 }}, ({{ collection.collection_owner }})</a>
-
-		{% if forloop.last %}
-
-					</div>
-
-				</div>
-
-		{% endif %}
-
-	{% endfor %}
-
-	{% if user.is_authenticated %}
-
-				<a href="{% url 'new_collection' %}">Add New Collection</a>
-
-	{% endif %}
-
-			</div>
-
-{% else %}
+	{% else %}
 
 			<button class="my-subnavbtn">Collections <i class="fa fa-caret-down"></i></button>
 
@@ -221,7 +150,7 @@ The base header and footer include template
 
 			</div>
 
-{% endif %}
+	{% endif %}
 
 		</div>
 
@@ -232,70 +161,31 @@ The base header and footer include template
 
 <!-- Do you have some Images to look at? -->
 
-{% if image_list %}
+	{% if image_list %}
 
-			<button class="my-subnavbtn">Images ({{ image_list.count }}) <i class="fa fa-caret-down"></i></button>
+			<button class="my-subnavbtn">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
 
-			<div class="my-subnav-content">
+				<div class="my-subnav-content">
 
-	{% for image in image_list %}
+					<a href="{% url 'view_active_collection' %}">Current Collection</a>
 
-		{% if forloop.first %}
-
-				<a href="{% url 'view_active_collection' %}">List Your ACTIVE Image Collection</a>
-
-				<div class="my-nav-dropdown">
-
-					<button class="my-subnav-dropbtn">Your Images <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-nav-dropdown-content">
-
-		{% endif %}
-
-		{% if image.roi == 0 %}
-
-			{% if image.server.type.name == 'WORDPRESS' %}
-
-						<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
-
-			{% else %}
-
-						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}</a>
-
-			{% endif %}
-
-		{% else %}
-
-						<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}">{{ image.identifier }}, {{ image.name }}, (ROI)</a>
-
-		{% endif %}
-
-		{% if forloop.last %}
-
-					</div>
+					<a href="{% url 'view_all_collections' %}">All Images</a>
 
 				</div>
 
-		{% endif %}
-
-	{% endfor %}
-
-			</div>
-
-{% else %}
+	{% else %}
 
 			<button class="my-subnavbtn">Images <i class="fa fa-caret-down"></i></button>
 
-			<div class="my-subnav-content">
+				<div class="my-subnav-content">
 
-				<a class="dropdown-item" href="#">No Images are available!</a>
+					<a class="dropdown-item" href="#">No Images are available!</a>
 
-			</div>
+				</div>
 
-{% endif %}
+	{% endif %}
 
 		</div>
-
 
 <!-- SERVERS -->
 

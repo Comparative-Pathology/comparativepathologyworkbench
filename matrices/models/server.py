@@ -771,7 +771,7 @@ class Server(models.Model):
         session = requests.Session()
         session.timeout = 10
 
-        payload = {'limit': 99}
+        payload = {'limit': 100}
         data = session.get(experiments_url, params=payload).json()
         assert len(data['experiments']) < 1000
 
@@ -869,7 +869,7 @@ class Server(models.Model):
 
             project_url = projects_url + '/' + commandProjects.postamble
 
-            payload = {'limit': 50}
+            payload = {'limit': 100}
             project_rsp = session.get(project_url, params=payload)
             project_data = project_rsp.json()
 
@@ -937,7 +937,7 @@ class Server(models.Model):
             image_url = images_url + str(mog) + commandGroupImages.postamble
             dataset_url = datasets_url + str(mog) + commandGroupDatasets.postamble
 
-            payload = {'limit': 50}
+            payload = {'limit': 100}
             group_project_rsp = session.get(group_project_url, params=payload)
             group_project_data = group_project_rsp.json()
 
@@ -958,7 +958,7 @@ class Server(models.Model):
                     groupName = groupdetails['Name']
                     groupId = groupdetails['@id']
 
-                    payload = {'limit': 100}
+                    payload = {'limit': 200}
                     dataset_rsp = session.get(dataset_url, params=payload)
                     dataset_data = dataset_rsp.json()
 
@@ -995,7 +995,7 @@ class Server(models.Model):
 
                                     dataset_image_url = dataset_images_url + '/' + str(datasetId) + '/' + commandDatasetImages.postamble
 
-                                    payload = {'limit': 100}
+                                    payload = {'limit': 200}
                                     dataset_image_rsp = session.get(dataset_image_url, params=payload)
                                     dataset_image_data = dataset_image_rsp.json()
 
@@ -1123,7 +1123,7 @@ class Server(models.Model):
 
             project_url = groups_url + str(group_id) + commandGroupProjects.postamble
 
-            payload = {'limit': 50}
+            payload = {'limit': 100}
             project_rsp = session.get(project_url, params=payload)
             project_data = project_rsp.json()
 
@@ -1193,7 +1193,7 @@ class Server(models.Model):
 
                 project_url = groups_url + str(group_id) + commandGroupProjects.postamble
 
-                payload = {'limit': 100}
+                payload = {'limit': 200}
                 project_data = session.get(project_url, params=payload).json()
                 assert len(project_data['data']) < 200
 
@@ -1219,7 +1219,7 @@ class Server(models.Model):
 
                     dataset_url = datasets_url + str(project_id) + '/' + commandProjectsDatasets.postamble
 
-                    payload = {'limit': 100}
+                    payload = {'limit': 200}
                     dataset_rsp = session.get(dataset_url, params=payload)
                     dataset_data = dataset_rsp.json()
 
@@ -1256,7 +1256,7 @@ class Server(models.Model):
 
                                 if datasetCount == 1:
 
-                                    payload = {'limit': 100}
+                                    payload = {'limit': 200}
                                     image_data = session.get(image_url, params=payload).json()
                                     assert len(dataset_data['data']) < 1000
 
@@ -1355,11 +1355,11 @@ class Server(models.Model):
         project_url = projects_url + str(project_id) + '/' + commandProjects.postamble
         dataset_url = projects_url + str(project_id) + '/' + commandProjectsDatasets.postamble
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         datasets_data = session.get(dataset_url, params=payload).json()
         assert len(datasets_data['data']) < 1000
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         project_data = session.get(project_url, params=payload).json()
         assert len(project_data['data']) < 1000
 
@@ -1404,7 +1404,7 @@ class Server(models.Model):
 
             count = 0
 
-            payload = {'limit': 100}
+            payload = {'limit': 200}
             image_data = session.get(image_url, params=payload).json()
             assert len(image_data['data']) < 200
 
@@ -1503,15 +1503,15 @@ class Server(models.Model):
         projects_url = projects_url + str(dataset_id) + '/' + commandDatasetProjects.postamble
         images_url = datasets_url + str(dataset_id) + '/'+ commandDatasetImages.postamble
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         images_data = session.get(images_url, params=payload).json()
         assert len(images_data['data']) < 200
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         dataset_data = session.get(dataset_url, params=payload).json()
         assert len(dataset_data['data']) < 200
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         projects_data = session.get(projects_url, params=payload).json()
         assert len(projects_data['data']) < 200
 
@@ -1656,7 +1656,7 @@ class Server(models.Model):
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
         assert len(rois_data['data']) < 200
 
@@ -1834,7 +1834,7 @@ class Server(models.Model):
 
         image_url = images_url + str(image_id)
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         image_data = session.get(image_url, params=payload).json()
         assert len(image_data['data']) < 200
 
@@ -1892,7 +1892,7 @@ class Server(models.Model):
 
         dataset_url = datasets_url + str(image_id) + '/' + commandImageDatasets.postamble
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         dataset_data = session.get(dataset_url, params=payload).json()
         assert len(dataset_data['data']) < 200
 
@@ -1906,7 +1906,7 @@ class Server(models.Model):
 
             projects_url = projects_url + str(p['@id']) + '/' + commandDatasetProjects.postamble
 
-            payload = {'limit': 100}
+            payload = {'limit': 200}
             project_data = session.get(projects_url, params=payload).json()
             assert len(project_data['data']) < 200
 
@@ -2080,7 +2080,7 @@ class Server(models.Model):
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
         assert len(rois_data['data']) < 200
 
@@ -2090,7 +2090,7 @@ class Server(models.Model):
         image_url = images_url + str(image_id)
 
         try:
-            payload = {'limit': 100}
+            payload = {'limit': 200}
             image_data = session.get(image_url, params=payload).json()
             assert len(image_data['data']) < 20
 
@@ -2213,7 +2213,7 @@ class Server(models.Model):
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
-        payload = {'limit': 100}
+        payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
         assert len(rois_data['data']) < 200
 

@@ -37,6 +37,8 @@ from django.db.models import Q
 
 from sortable_listview import SortableListView
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 from matrices.models import CollectionSummary
 from matrices.forms import CollectionSummarySearchForm
@@ -51,6 +53,7 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
     query_description = forms.CharField(max_length=25)
     query_owner = forms.CharField(max_length=10)
     query_authority = forms.CharField(max_length=12)
+    query_paginate_by = forms.CharField(max_length=12)
 
     allowed_sort_fields = {'collection_id': {'default_direction': '', 'verbose_name': 'Bench Id'},
                            'collection_title': {'default_direction': '', 'verbose_name': 'Title'},
@@ -87,6 +90,7 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
         self.query_description = self.request.GET.get('description', '')
         self.query_owner = self.request.GET.get('owner', '')
         self.query_authority = self.request.GET.get('authority', '')
+        self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
         return collection_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority)
 
@@ -97,7 +101,7 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
         data = get_header_data(self.request.user)
 
-        data_dict = {'title': self.query_title, 'description': self.query_description, 'owner': self.query_owner, 'authority': self.query_authority }
+        data_dict = {'title': self.query_title, 'description': self.query_description, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by }
 
         form = CollectionSummarySearchForm(data_dict)
 
@@ -106,3 +110,8 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
         context.update(data)
 
         return context
+
+
+    def get_paginate_by(self, queryset):
+
+        return self.request.GET.get("paginate_by", self.paginate_by)

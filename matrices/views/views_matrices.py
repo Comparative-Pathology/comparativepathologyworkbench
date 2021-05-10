@@ -169,7 +169,7 @@ def delete_image(request, image_id):
             image.delete()
 
 
-        return HttpResponseRedirect(reverse('list_collection', args=()))
+        return HttpResponseRedirect(reverse('list_collections', args=()))
 
 
 #
@@ -273,7 +273,7 @@ def new_collection(request):
 
                 collection.save()
 
-                return HttpResponseRedirect(reverse('list_collection', args=()))
+                return HttpResponseRedirect(reverse('list_collections', args=()))
 
             else:
 
@@ -326,7 +326,7 @@ def edit_collection(request, collection_id):
 
                 collection.save()
 
-                return HttpResponseRedirect(reverse('list_collection', args=()))
+                return HttpResponseRedirect(reverse('list_collections', args=()))
 
             else:
 
@@ -384,7 +384,7 @@ def delete_collection(request, collection_id):
 
         collection.delete()
 
-        return HttpResponseRedirect(reverse('list_collection', args=()))
+        return HttpResponseRedirect(reverse('list_collections', args=()))
 
 
 #

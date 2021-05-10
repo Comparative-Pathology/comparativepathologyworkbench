@@ -190,7 +190,7 @@ The list collections template (with Search)
 
 			        {% if collection_summary.collection_owner == credential_flag %}
 
-					    <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
+						<button class="button button-delete"><i class="fa fa-bell"></i></button>
 
 					{% else %}
 
@@ -200,7 +200,7 @@ The list collections template (with Search)
 
 			        {% if collection_summary.collection_owner == credential_flag %}
 
-					    <button class="button button-delete"><i class="fa fa-bell"></i></button>
+						<a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
 
 					{% else %}
 

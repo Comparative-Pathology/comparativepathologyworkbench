@@ -28,7 +28,7 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
+import json, urllib, requests, base64, hashlib
 
 from django.db import models
 from django.db.models import Q
@@ -206,8 +206,6 @@ class Server(models.Model):
             content_rendered = content['rendered']
             guid_rendered = guid['rendered']
 
-            Credential = apps.get_model('matrices', 'Credential')
-
             credential = Credential.objects.get(wordpress=author)
 
             post = {'id': str(post_id),
@@ -228,6 +226,7 @@ class Server(models.Model):
     """
     def get_wordpress_post_comments(self, post_id):
 
+        Credential = apps.get_model('matrices', 'Credential')
         Blog = apps.get_model('matrices', 'Blog')
 
         blogGetPostComments = Blog.objects.get(name=CMD_BLOG_GET_POST_COMMENTS)
@@ -512,7 +511,7 @@ class Server(models.Model):
 
         commandWordpressImages = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGES)
 
-        images_url = commandWordpressImages.protocol.name + '://' + self.url_server + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + page_id + commandWordpressImages.postamble + str(credential.wordpress)
+        images_url = commandWordpressImages.protocol.name + '://' + self.url_server + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + str(page_id) + commandWordpressImages.postamble + str(credential.wordpress)
 
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -598,7 +597,7 @@ class Server(models.Model):
                     'next_page': next_page
                 })
 
-                data = { 'server': self, 'group': group, 'projects': project_list, 'dataset': dataset }
+                data = { 'server': self, 'group': group, 'projects': project_list, 'dataset': dataset, 'images': images_list }
 
             else:
 
@@ -666,7 +665,7 @@ class Server(models.Model):
 
         commandWordpressImage = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGE)
 
-        image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + image_id
+        image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + str(image_id)
 
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -1655,6 +1654,7 @@ class Server(models.Model):
 
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
+
 
         payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()

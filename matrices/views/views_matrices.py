@@ -258,7 +258,7 @@ def new_collection(request):
 
             form = CollectionForm(request.POST)
 
-            if form.is_valid:
+            if form.is_valid():
 
                 collection = form.save(commit=False)
 
@@ -310,7 +310,7 @@ def edit_collection(request, collection_id):
 
             form = CollectionForm(request.POST, instance=collection)
 
-            if form.is_valid:
+            if form.is_valid():
 
                 collection = form.save(commit=False)
 
@@ -493,7 +493,7 @@ def view_matrix_blog(request, matrix_id):
 
             form = CommentForm(request.POST)
 
-            if form.is_valid:
+            if form.is_valid():
 
                 cd = form.cleaned_data
 
@@ -562,7 +562,7 @@ def view_cell_blog(request, matrix_id, cell_id):
 
             form = CommentForm(request.POST)
 
-            if form.is_valid:
+            if form.is_valid():
 
                 cd = form.cleaned_data
 
@@ -657,6 +657,8 @@ def view_matrix(request, matrix_id):
 
             data.update({ 'collection_image_list': collection_image_list, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments })
 
+            print("matrix_comments : " + str(matrix_comments))
+
             return render(request, 'matrices/view_matrix.html', data)
 
 
@@ -707,7 +709,7 @@ def new_matrix(request):
 
             form = NewMatrixForm(request.POST)
 
-            if form.is_valid:
+            if form.is_valid():
 
                 matrix = form.save(commit=False)
 
@@ -833,7 +835,7 @@ def edit_matrix(request, matrix_id):
 
                 form = MatrixForm(request.POST, instance=matrix)
 
-                if form.is_valid:
+                if form.is_valid():
 
                     matrix = form.save(commit=False)
 
@@ -1082,7 +1084,7 @@ def edit_cell(request, matrix_id, cell_id):
 
                     form = HeaderForm(request.POST, instance=cell)
 
-                    if form.is_valid:
+                    if form.is_valid():
 
                         cell = form.save(commit=False)
 
@@ -1114,7 +1116,7 @@ def edit_cell(request, matrix_id, cell_id):
                         form = CellForm(request.user.id, cell.image.id, matrix.id, request.POST, instance=cell)
 
 
-                    if form.is_valid:
+                    if form.is_valid():
 
                         cell = form.save(commit=False)
 

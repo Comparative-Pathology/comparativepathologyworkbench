@@ -28,7 +28,7 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
+import json, urllib, requests, base64, hashlib
 
 from os import urandom
 

@@ -35,35 +35,76 @@ The show ebi widget template
 
 {% block content %}
 
-	<ol class="breadcrumb subheading">
+<!-- Breadcrumb Menu -->
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'home' %}">
-				Home
-			</a>
+<div>
+
+	<ul class="my-breadcrumb">
+
+		<li>
+			<a href="{% url 'home' %}">Home</a>
 		</li>
 
-		<li class="breadcrumb-item">
+		<li>
 			<a href="{% url 'list_imaging_hosts' %}">
 				Sources
 			</a>
 		</li>
 
-		<li class="breadcrumb-item active">
-			https://www.ebi.ac.uk/gxa/sc/json/experiments/
+		<li>
+			<a href="{% url 'ebi_show_ebi_server' server.id %}">
+				EBI
+			</a>
 		</li>
 
-	</ol>
+		<li>
+			Accession ID: {{ experimentAccession }}
+		</li>
 
-	<h1>https://www.ebi.ac.uk/gxa/sc/json/experiments/</h1>
+	</ul>
 
-	<br />
+</div>
 
-	<p>Server at https://www.ebi.ac.uk/gxa/sc/json/experiments/ contains Experiments:</p>
 
-    <hr>
+<!-- Main Data Panel -->
 
-    <div id="target"></div>
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
+	</div>
+
+	<div class="standard-grid-item">
+
+		<h1>Browse {{ experimentAccession }}</h1>
+
+		<p>This Server contains SC Experiments:</p>
+
+		<hr>
+
+		<br />
+
+    	<div id="target">
+		</div>
+
+	</div>
+
+	<div class="standard-grid-item">
+	</div>
+
+</div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
 
 <script defer src="../../../../static/bundles/vendors.bundle.js"></script>
 <script defer src="../../../../static/bundles/TSnePlotWidgetDemo.bundle.js"></script>

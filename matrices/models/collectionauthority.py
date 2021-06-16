@@ -77,14 +77,56 @@ class CollectionAuthority(models.Model):
     def set_as_viewer(self):
         self.name = 'VIEWER'
 
+    def set_as_owner(self):
+        self.name = 'OWNER'
+
+    def set_as_admin(self):
+        self.name = 'ADMIN'
+
     def is_none(self):
         if self.name == 'NONE':
             return True
         else:
             return False
 
+    def is_not_none(self):
+        if self.name == 'NONE':
+            return False
+        else:
+            return True
+
     def is_viewer(self):
         if self.name == 'VIEWER':
             return True
         else:
             return False
+
+    def is_not_viewer(self):
+        if self.name == 'VIEWER':
+            return False
+        else:
+            return True
+
+    def is_owner(self):
+        if self.name == 'OWNER':
+            return True
+        else:
+            return False
+
+    def is_not_owner(self):
+        if self.name == 'OWNER':
+            return False
+        else:
+            return True
+
+    def is_admin(self):
+        if self.name == 'ADMIN':
+            return True
+        else:
+            return False
+
+    def is_not_admin(self):
+        if self.name == 'ADMIN':
+            return False
+        else:
+            return True

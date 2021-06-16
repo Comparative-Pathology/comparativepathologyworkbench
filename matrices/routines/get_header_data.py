@@ -81,6 +81,8 @@ def get_header_data(a_user):
 
             image_list.extend(collection.images.all())
 
+        image_list = list(set(image_list))
+
 
     data = { 'credential_flag': credential_flag, 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 

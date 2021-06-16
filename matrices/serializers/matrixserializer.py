@@ -29,6 +29,7 @@
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 from django.db import models
 
@@ -94,10 +95,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 			request_user = request.user
 
+		else:
+
+			user_id = Token.objects.get(key=request.auth.key).user_id
+			request_user = User.objects.get(id=user_id)
+
 
 		if validated_data.get('title', None) == None and validated_data.get('description', None) == None and validated_data.get('bench_cells', None) == None:
 
-			message = 'CPW0290: NO data supplied for Bench Creation!'
+			message = 'CPW0290: ERROR! NO data supplied for Bench Creation!'
 			raise serializers.ValidationError(message)
 
 
@@ -332,6 +338,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 		if request and hasattr(request, "user"):
 
 			request_user = request.user
+
+		else:
+
+			user_id = Token.objects.get(key=request.auth.key).user_id
+			request_user = User.objects.get(id=user_id)
+
 
 		bench_title = validated_data.get('title', instance.title)
 		bench_description = validated_data.get('description', instance.description)

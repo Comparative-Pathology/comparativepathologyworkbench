@@ -107,7 +107,7 @@ The view collection template
 
     	    <tr>
 
-	            <td>
+	            <td style="vertical-align: top;">
 
 			{% if collection_image.server.type.name == 'WORDPRESS' %}
 
@@ -128,17 +128,17 @@ The view collection template
 
 			{% else %}
 
-        	    <td>
+        	    <td style="vertical-align: top;">
     	        	<strong>ROI</strong>
 	            </td>
 
 			{% endif %}
 
-            	<td>
+            	<td style="vertical-align: top;">
             		{{ collection_image.server.name }}<br />( {{ collection_image.server.url_server }} )
         	    </td>
 
-    	        <td>
+    	        <td style="vertical-align: top;">
 					<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
         	    </td>
 			</tr>

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         cellserializer.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,22 +24,19 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Package Description.
+# This Serializer provides Read functions for a Collection
 ###
-from .views_about import *
-from .views_ajax import *
-from .views_authorisation import *
-from .views_ebi import *
-from .views_gallery import *
-from .views_host import *
-from .views_maintenance import *
-from .views_matrices import *
-from .views_permissions import *
-from .views_rest_matrix import MatrixViewSet
-from .views_rest_cell import CellViewSet
-from .views_rest_image import ImageViewSet
-from .views_rest_collection import CollectionViewSet
-from .views_rest_user import UserViewSet
-from .views_user import *
-from .views_list_matrix import *
-from .views_list_collection import *
+from django.contrib.auth.models import User
+
+from rest_framework import serializers
+
+
+"""
+	This Serializer provides Create, Read, Update and Delete functions for a USER
+"""
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')

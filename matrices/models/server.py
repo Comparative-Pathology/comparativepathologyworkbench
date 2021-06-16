@@ -1924,6 +1924,353 @@ class Server(models.Model):
 
 
     """
+        Get the JSON Details for the Requested Image ROI
+    """
+    def get_imaging_server_image_roi_json(self, image_id, in_roi):
+
+        Command = apps.get_model('matrices', 'Command')
+
+        userid = self.uid
+
+        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        password = cipher.decrypt(self.pwd)
+
+        commandAPI = Command.objects.filter(type=self.type).get(name=CMD_API_API)
+        commandToken = Command.objects.filter(type=self.type).get(name=CMD_API_TOKEN)
+        commandLogin = Command.objects.filter(type=self.type).get(name=CMD_API_LOGIN)
+
+        commandImages = Command.objects.filter(type=self.type).get(name=CMD_API_IMAGES)
+        commandImageDatasets = Command.objects.filter(type=self.type).get(name=CMD_API_IMAGE_DATASETS)
+        commandImageROIs = Command.objects.filter(type=self.type).get(name=CMD_API_IMAGE_ROIS)
+
+        commandDatasetProjects = Command.objects.filter(type=self.type).get(name=CMD_API_DATASET_PROJECTS)
+
+        commandViewer = ''
+
+        if userid == "":
+            commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+        else:
+            commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
+
+        commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
+        commandRegion = Command.objects.filter(type=self.type).get(name=CMD_API_REGION)
+
+        api_url = commandAPI.protocol.name + '://' + self.url_server + '/' + commandAPI.application
+        token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
+        login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
+
+        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + '/' + commandImages.preamble + '/'
+        datasets_url = commandImageDatasets.protocol.name + '://' + self.url_server + '/' + commandImageDatasets.application + '/' + commandImageDatasets.preamble + '/'
+        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
+
+        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
+
+        if userid == "":
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+        else:
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + str(image_id)
+
+        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + commandBirdsEye.postamble
+
+        image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + commandRegion.postamble
+
+        session = requests.Session()
+
+        try:
+            r = session.get(api_url)
+
+        except Exception as e:
+
+            group_count = 0
+            group_list = []
+
+            data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list }
+
+            return data
+
+        token = session.get(token_url).json()['data']
+        session.headers.update({'X-CSRFToken': token, 'Referer': login_url})
+
+        if userid != "":
+            payload = {'username': userid, 'password': password, 'server': 1}
+
+            r = session.post(login_url, data=payload)
+            login_rsp = r.json()
+            assert r.status_code == 200
+            assert login_rsp['success']
+
+
+        rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
+
+
+        payload = {'limit': 200}
+        rois_data = session.get(rois_url, params=payload).json()
+        assert len(rois_data['data']) < 200
+
+        rmeta = rois_data['meta']
+        roiCount = rmeta['totalCount']
+
+        rdata = rois_data['data']
+
+        for r in rdata:
+
+            shapes = r['shapes']
+            roi_id = r['@id']
+
+            if roi_id == in_roi:
+
+                for s in shapes:
+
+                    shape_id = s['@id']
+
+                    if shape_id == in_roi:
+
+                        shape_type = s['@type']
+
+                        types = shape_type.split('#')
+
+                        type = types[1]
+
+                        coordX = ''
+                        coordY = ''
+                        centreX = ''
+                        centreY = ''
+                        width = '0'
+                        height = '0'
+
+                        if type == 'Point':
+
+                            centreX = s['X']
+                            centreY = s['Y']
+                            intCoordX = int(s['X'])
+                            intCoordY = int(s['Y'])
+                            intHalf = 3192 / 2
+                            intWidth = intHalf
+                            intHeight = intHalf
+
+                            intNewCoordX = intCoordX - intWidth
+                            intNewCoordY = intCoordY - intHeight
+
+                            coordX = str(intNewCoordX)
+                            coordY = str(intNewCoordY)
+                            width = str( 3192 )
+                            height = str( 3192 )
+
+                        if type == 'Rectangle':
+
+                            centreX = s['X']
+                            centreY = s['Y']
+                            intCoordX = int(s['X'])
+                            intCoordY = int(s['Y'])
+                            intWidth = int(s['Width'])
+                            intHeight = int(s['Height'])
+
+                            coordX = str(intCoordX)
+                            coordY = str(intCoordY)
+                            width = str(intWidth)
+                            height = str(intHeight)
+
+                        if type == 'Ellipse':
+
+                            centreX = s['X']
+                            centreY = s['Y']
+                            oldCoordX = s['X']
+                            oldCoordY = s['Y']
+                            radiusX = s['RadiusX']
+                            radiusY = s['RadiusY']
+                            intX = int(oldCoordX)
+                            intY = int(oldCoordY)
+                            intRadiusX = int(radiusX)
+                            intRadiusY = int(radiusY)
+                            intWidth = intRadiusX * 2
+                            intHeight = intRadiusY * 2
+                            intCoordX = intX - intRadiusX
+                            intCoordY = intY - intRadiusY
+
+                            coordX = str(intCoordX)
+                            coordY = str(intCoordY)
+                            width = str(intWidth)
+                            height = str(intHeight)
+
+                        if type == 'Polygon':
+
+                            points = s['Points']
+                            points_array = points.split(' ')
+
+                            x_list = list()
+                            y_list = list()
+
+                            for XandY in points_array:
+
+                                XandYSplit = XandY.split(',')
+                                strX = XandYSplit[0].split('.')
+                                strY = XandYSplit[1].split('.')
+
+                                x_list.append(int(strX[0]))
+                                y_list.append(int(strY[0]))
+
+                            maxX = max(x_list)
+                            minX = min(x_list)
+                            maxY = max(y_list)
+                            minY = min(y_list)
+
+                            coordX = str(minX)
+                            coordY = str(minY)
+                            centreX = coordX
+                            centreY = coordY
+
+                            intWidth = maxX - minX
+                            intHeight = maxY - minY
+
+                            width = str(intWidth)
+                            height = str(intHeight)
+
+                        if type == 'Polyline':
+
+                            points = s['Points']
+                            points_array = points.split(' ')
+
+                            x_list = list()
+                            y_list = list()
+
+                            for XandY in points_array:
+
+                                XandYSplit = XandY.split(',')
+                                strX = XandYSplit[0].split('.')
+                                strY = XandYSplit[1].split('.')
+                                x_list.append(int(strX[0]))
+                                y_list.append(int(strY[0]))
+
+                            maxX = max(x_list)
+                            minX = min(x_list)
+                            maxY = max(y_list)
+                            minY = min(y_list)
+
+                            coordX = str(minX)
+                            coordY = str(minY)
+                            centreX = coordX
+                            centreY = coordY
+
+                            intWidth = maxX - minX
+                            intHeight = maxY - minY
+
+                            width = str(intWidth)
+                            height = str(intHeight)
+
+                        if int(width) > 3192 or int(height) > 3192:
+
+                            middleX = int(coordX) + ( int(width) / 2 )
+                            middleY = int(coordY) + ( int(height) / 2 )
+
+                            intX = middleX - ( 3192 / 2 )
+                            intY = middleY - ( 3192 / 2 )
+
+                            coordX = str(int(intX))
+                            coordY = str(int(intY))
+
+                            width = "3192"
+                            height = "3192"
+
+                        shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
+                        viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
+
+                shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'viewer_url': viewer_url, 'x': coordX, 'y': coordY, 'centre_x': centreX, 'centre_y': centreY, 'width': width, 'height': height })
+
+            roi = ({'id': roi_id, 'shape': shape})
+
+
+        image_url = images_url + str(image_id)
+
+        payload = {'limit': 200}
+        image_data = session.get(image_url, params=payload).json()
+        assert len(image_data['data']) < 200
+
+        data = image_data['data']
+        name = data['Name']
+        description = data.get('Description', '')
+        pixels = data['Pixels']
+        type = pixels['Type']
+        pixeltype = type['value']
+        sizeX = pixels['SizeX']
+        sizeY = pixels['SizeY']
+        sizeZ = pixels['SizeZ']
+        sizeT = pixels['SizeT']
+        physicalsizeX = pixels.get('PhysicalSizeX', '')
+        physicalsizeY = pixels.get('PhysicalSizeY', '')
+
+        if physicalsizeX == '':
+            pixelsizeX = ''
+        else:
+            pixelsizeX = physicalsizeX['Value']
+
+        if physicalsizeY == '':
+            pixelsizeY = ''
+        else:
+            pixelsizeY = physicalsizeY['Value']
+
+        group_id = ''
+        groupname = ''
+
+        omerodetails = data['omero:details']
+        groupdetails = omerodetails['group']
+        groupname = groupdetails['Name']
+        group_id = groupdetails['@id']
+
+        group = ({
+                    'id': group_id,
+                    'name': groupname,
+                    })
+
+        image = ({
+                    'id': image_id,
+                    'name': name,
+                    'description': description,
+                    'sizeX': sizeX,
+                    'sizeY': sizeY,
+                    'pixeltype': pixeltype,
+                    'pixelsizeX': pixelsizeX,
+                    'pixelsizeY': pixelsizeY,
+                    'sizeZ': sizeZ,
+                    'sizeT': sizeT,
+                    'roi_count': roiCount,
+                    'viewer_url': image_viewer_url,
+                    'birdseye_url': image_birdseye_url
+                    })
+
+        dataset_url = datasets_url + str(image_id) + '/' + commandImageDatasets.postamble
+
+        payload = {'limit': 200}
+        dataset_data = session.get(dataset_url, params=payload).json()
+        assert len(dataset_data['data']) < 200
+
+        ddata = dataset_data['data']
+
+        datasets = list()
+        projects = list()
+
+        for p in ddata:
+            dataset = ({'id': p['@id'], 'name': p['Name']})
+
+            projects_url = projects_url + str(p['@id']) + '/' + commandDatasetProjects.postamble
+
+            payload = {'limit': 200}
+            project_data = session.get(projects_url, params=payload).json()
+            assert len(project_data['data']) < 200
+
+            pdata = project_data['data']
+
+            for p in pdata:
+                project = ({'id': p['@id'], 'name': p['Name']})
+                projects.append(project)
+
+            datasets.append(dataset)
+
+        data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'roi': roi }
+
+        return data
+
+
+    """
         Check the JSON Details for the Requested Image on Wordpress
     """
     def check_wordpress_image(self, user, image_id):

@@ -69,7 +69,8 @@ from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_image_count_for_image
-
+from matrices.routines import exists_image_for_id_server_owner_roi
+from matrices.routines import get_images_for_id_server_owner_roi
 
 NO_CREDENTIALS = ''
 
@@ -365,18 +366,18 @@ def add_image(request, server_id, image_id, roi_id):
         image_count = get_image_count_for_image(image_id)
 
         json_image = ''
-        name = ''
-        viewer_url = ''
-        birdseye_url = ''
+        image_name = ''
+        image_viewer_url = ''
+        image_birdseye_url = ''
 
         if server.is_omero547() or server.is_omero56():
 
             wp_data = server.get_imaging_server_image_json(request, image_id)
 
             json_image = wp_data['image']
-            name = json_image['name']
-            viewer_url = json_image['viewer_url']
-            birdseye_url = json_image['birdseye_url']
+            image_name = json_image['name']
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = json_image['birdseye_url']
 
             data.update(wp_data)
 
@@ -385,9 +386,9 @@ def add_image(request, server_id, image_id, roi_id):
             wp_data = server.get_wordpress_image_json(request, image_id)
 
             json_image = wp_data['image']
-            name = json_image['name']
-            viewer_url = json_image['viewer_url']
-            birdseye_url = json_image['thumbnail_url']
+            image_name = json_image['name']
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = json_image['thumbnail_url']
 
             data.update(wp_data)
 
@@ -395,15 +396,26 @@ def add_image(request, server_id, image_id, roi_id):
 
             if exists_active_collection_for_user(request.user):
 
-                image = Image.create(image_id, name, server, viewer_url, birdseye_url, 0, request.user)
+                image_in = None
 
-                image.save()
+                if exists_image_for_id_server_owner_roi(image_id, server, request.user, 0):
+
+                    existing_image_list = get_images_for_id_server_owner_roi(image_id, server, request.user, 0)
+
+                    image_in = existing_image_list[0]
+
+                else:
+
+                    image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, roi_id, request.user)
+
+                    image_in.save()
+
 
                 queryset = get_active_collection_for_user(request.user)
 
                 for collection in queryset:
 
-                    Collection.assign_image(image, collection)
+                    Collection.assign_image(image_in, collection)
 
             else:
 
@@ -419,20 +431,31 @@ def add_image(request, server_id, image_id, roi_id):
 
                     if shape['id'] == int(roi_id):
 
-                        viewer_url = shape['viewer_url']
-                        birdseye_url = shape['shape_url']
+                        image_viewer_url = shape['viewer_url']
+                        image_birdseye_url = shape['shape_url']
 
                         if exists_active_collection_for_user(request.user):
 
-                            image = Image.create(image_id, name, server, viewer_url, birdseye_url, roi_id, request.user)
+                            image_in = None
 
-                            image.save()
+                            if exists_image_for_id_server_owner_roi(image_id, server, request.user, roi_id):
+
+                                existing_image_list = get_images_for_id_server_owner_roi(image_id, server, request.user, roi_id)
+
+                                image_in = existing_image_list[0]
+
+                            else:
+
+                                image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, roi_id, request.user)
+
+                                image_in.save()
+
 
                             queryset = get_active_collection_for_user(request.user)
 
                             for collection in queryset:
 
-                                Collection.assign_image(image, collection)
+                                Collection.assign_image(image_in, collection)
 
                         else:
 

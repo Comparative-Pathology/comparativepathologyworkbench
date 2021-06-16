@@ -42,6 +42,8 @@ from rest_framework.documentation import include_docs_urls
 
 from django_filters.views import FilterView
 
+from rest_framework.authtoken.views import obtain_auth_token
+
 
 router = DefaultRouter()
 
@@ -54,6 +56,12 @@ router.register(r'cells', matrices_views.CellViewSet)
 #   views_rest_image.py
 router.register(r'images', matrices_views.ImageViewSet)
 
+#   views_rest_collection.py
+router.register(r'collections', matrices_views.CollectionViewSet)
+
+#   views_rest_user.py
+router.register(r'users', matrices_views.UserViewSet)
+
 
 urlpatterns = [
 
@@ -61,6 +69,7 @@ urlpatterns = [
 
 #   REST API
     path('api/', include(router.urls)),
+    path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
 
 #   auth_views
     path('login/', auth_views.LoginView.as_view(template_name="user/login.html"), name="login"),
@@ -164,7 +173,7 @@ urlpatterns = [
 	path('edit_collection_authority/<int:collection_authority_id>/', matrices_views.edit_collection_authority, name='edit_collection_authority'),
 	path('delete_collection_authority/<int:collection_authority_id>/', matrices_views.delete_collection_authority, name='delete_collection_authority'),
 
-#   views_matrix.py
+#   views_matrices.py
 	path('delete_image/<int:image_id>/', matrices_views.delete_image, name='webgallery_delete_image'),
 	path('detail_collection/<int:collection_id>/', matrices_views.detail_collection, name='detail_collection'),
 	path('view_collection/<int:collection_id>/', matrices_views.view_collection, name='view_collection'),

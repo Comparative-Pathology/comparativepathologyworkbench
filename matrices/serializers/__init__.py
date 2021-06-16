@@ -29,3 +29,5 @@
 from .imageserializer import ImageSerializer
 from .cellserializer import CellSerializer
 from .matrixserializer import MatrixSerializer
+from .collectionserializer import CollectionSerializer
+from .userserializer import UserSerializer

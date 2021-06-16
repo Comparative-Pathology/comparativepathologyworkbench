@@ -94,6 +94,7 @@ from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_blog_link_post_url
 from matrices.routines import get_active_collection_images_for_user
+from matrices.routines import get_collections_for_image
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -262,7 +263,7 @@ def new_collection(request):
 
                 collection = form.save(commit=False)
 
-                if collection.is_active:
+                if collection.is_active():
 
                     if exists_active_collection_for_user(request.user):
 
@@ -317,7 +318,7 @@ def edit_collection(request, collection_id):
                 collection.set_owner(request.user)
 
 
-                if collection.is_active:
+                if collection.is_active():
 
                     if exists_active_collection_for_user(request.user):
 
@@ -363,11 +364,24 @@ def delete_collection(request, collection_id):
 
         for image in images:
 
-            Collection.unassign_image(image, collection)
+            collection_list = get_collections_for_image(image)
 
-            if not exists_image_in_cells(image):
+            delete_flag = False
 
-                image.delete()
+            for collection_other in collection_list:
+
+                if collection != collection_other:
+
+                    delete_flag = True
+
+            if delete_flag == False:
+
+                if not exists_image_in_cells(image):
+
+                    Collection.unassign_image(image, collection)
+
+                    image.delete()
+
 
         if exists_bench_for_last_used_collection(collection):
 
@@ -380,7 +394,10 @@ def delete_collection(request, collection_id):
                 matrix.save()
 
 
-        set_first_active_collection_for_user(request.user)
+        if collection.is_active():
+
+            set_first_active_collection_for_user(request.user)
+
 
         collection.delete()
 
@@ -409,7 +426,7 @@ def choose_collection(request, matrix_id, collection_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, user)
 
-        if not authority.is_none:
+        if authority.is_none():
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -438,7 +455,7 @@ def activate_collection(request, collection_id):
 
         collection = get_object_or_404(Collection, pk=collection_id)
 
-        if collection.is_inactive:
+        if collection.is_inactive():
 
             collection.set_active()
 
@@ -606,13 +623,11 @@ def view_matrix(request, matrix_id):
     else:
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
-
         owner = get_object_or_404(User, pk=matrix.owner_id)
         user = get_object_or_404(User, pk=request.user.id)
-
         authority = get_authority_for_bench_and_user_and_requester(matrix, user)
 
-        if not authority.is_none:
+        if authority.is_none():
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -656,8 +671,6 @@ def view_matrix(request, matrix_id):
             rows = matrix.get_rows()
 
             data.update({ 'collection_image_list': collection_image_list, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments })
-
-            print("matrix_comments : " + str(matrix_comments))
 
             return render(request, 'matrices/view_matrix.html', data)
 
@@ -819,7 +832,7 @@ def edit_matrix(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             matrix_cells = matrix.get_matrix()
             columns = matrix.get_columns()
@@ -916,7 +929,7 @@ def delete_matrix(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             matrix_cells = matrix.get_matrix()
             columns = matrix.get_columns()
@@ -1004,7 +1017,7 @@ def add_cell(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1066,7 +1079,7 @@ def edit_cell(request, matrix_id, cell_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             matrix_cells = matrix.get_matrix()
             columns = matrix.get_columns()
@@ -1226,7 +1239,7 @@ def append_column(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1272,7 +1285,7 @@ def add_column_left(request, matrix_id, column_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1322,7 +1335,7 @@ def add_column_right(request, matrix_id, column_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1376,7 +1389,7 @@ def delete_this_column(request, matrix_id, column_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1469,7 +1482,7 @@ def delete_last_column(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1561,7 +1574,7 @@ def append_row(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1607,7 +1620,7 @@ def add_row_above(request, matrix_id, row_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1657,7 +1670,7 @@ def add_row_below(request, matrix_id, row_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1712,7 +1725,7 @@ def delete_this_row(request, matrix_id, row_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 
@@ -1807,7 +1820,7 @@ def delete_last_row(request, matrix_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer == True or authority.is_none == True:
+        if authority.is_viewer() == True or authority.is_none() == True:
 
             return HttpResponseRedirect(reverse('home', args=()))
 

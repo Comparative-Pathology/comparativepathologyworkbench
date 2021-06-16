@@ -53,7 +53,7 @@ def get_collection_authority_for_collection_and_user_and_requester(a_collection,
 
     else:
 
-        if a_user == a_matrix.owner:
+        if a_user == a_collection.owner:
 
             collection_authority.set_as_owner()
 

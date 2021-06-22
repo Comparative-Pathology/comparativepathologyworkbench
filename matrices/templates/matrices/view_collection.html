@@ -90,10 +90,12 @@ The view collection template
 	    <table border="0">
 
         	<tr>
-    	        <th width="150px">Action</th>
+				<th width="100px">Action</th>
 	            <th width="100px">ROI</th>
-            	<th>Server</th>
+            	<th width="350px">Server</th>
         	    <th>Image</th>
+				<th width="350px">Collection</th>
+				<th width="350px">Bench</th>
 			</tr>
 
 	        <tr>
@@ -101,6 +103,8 @@ The view collection template
     	        <td>&nbsp;</td>
 	            <td>&nbsp;</td>
             	<td>&nbsp;</td>
+				<td>&nbsp;</td>
+    	        <td>&nbsp;</td>
 			</tr>
 
 			{% endif %}
@@ -139,8 +143,28 @@ The view collection template
         	    </td>
 
     	        <td style="vertical-align: top;">
-					<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
+					<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="width:256px; height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
         	    </td>
+
+				<td style="vertical-align: top;">
+
+			{% for collection in collection_image.collections.all %}
+
+					<a href="{% url 'view_collection' collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ collection.title }}"<br />(Owned By {{ collection.owner.username }})<br />
+
+			{% endfor %}
+
+				</td>
+
+				<td style="vertical-align: top;">
+
+			{% for cell in collection_image.image.all %}
+
+					<a href="{% url 'matrix' cell.matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ cell.matrix.title }}"<br />(Owned By {{ cell.matrix.owner.username }})<br />
+
+			{% endfor %}
+
+				</td>
 			</tr>
 
 			{% if forloop.last %}
@@ -150,13 +174,17 @@ The view collection template
             	<td>&nbsp;</td>
         	    <td>&nbsp;</td>
     	        <td>&nbsp;</td>
+				<td>&nbsp;</td>
+            	<td>&nbsp;</td>
 			</tr>
 
-        <tr>
+        	<tr>
 	            <td>&nbsp;</td>
     	        <td>&nbsp;</td>
         	    <td>&nbsp;</td>
             	<td>&nbsp;</td>
+				<td>&nbsp;</td>
+    	        <td>&nbsp;</td>
 			</tr>
 
 	    </table>

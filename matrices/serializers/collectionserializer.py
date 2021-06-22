@@ -49,6 +49,7 @@ from matrices.routines import exists_active_collection_for_user
 from matrices.routines import set_inactive_collection_for_user
 from matrices.routines import get_collections_for_image
 from matrices.routines import get_images_for_collection
+from matrices.routines import exists_image_in_cells
 
 CONST_255 = 255
 CONST_4095 = 4095
@@ -374,7 +375,9 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 						if delete_flag == True:
 
-							image.delete()
+							if not exists_image_in_cells(image):
+
+								image.delete()
 
 						else:
 

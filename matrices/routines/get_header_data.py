@@ -53,8 +53,8 @@ def get_header_data(a_user):
     image_list = list()
     server_list = list()
     matrix_list = list()
-    collection_list= list()
-    collection_summary_list= list()
+    collection_list = list()
+    collection_summary_list = list()
 
     credential_flag = ''
     direction = ''
@@ -73,7 +73,7 @@ def get_header_data(a_user):
         matrix_list = bench_list_by_user_and_direction(a_user, direction, '', '', '', '', '', '', '', '', '')
 
 
-        collection_summary_list= collection_list_by_user_and_direction(a_user, direction, '', '', '', '')
+        collection_summary_list = collection_list_by_user_and_direction(a_user, direction, '', '', '', '')
 
         for collection_summary in collection_summary_list:
 

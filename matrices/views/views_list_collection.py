@@ -55,7 +55,7 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
     query_authority = forms.CharField(max_length=12)
     query_paginate_by = forms.CharField(max_length=12)
 
-    allowed_sort_fields = {'collection_id': {'default_direction': '', 'verbose_name': 'Bench Id'},
+    allowed_sort_fields = {'collection_id': {'default_direction': '', 'verbose_name': 'Collection Id'},
                            'collection_title': {'default_direction': '', 'verbose_name': 'Title'},
                            'collection_active': {'default_direction': '', 'verbose_name': 'Activity'},
                            'collection_image_count': {'default_direction': '', 'verbose_name': 'Images'},

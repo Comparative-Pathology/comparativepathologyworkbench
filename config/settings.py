@@ -85,6 +85,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+#
+# UNCOMMENT for LIVE Server Configuration Settings
+#
+#ROOT_URLCONF = 'comparativepathologyworkbench.urls'
+
+#
+# UNCOMMENT for DEVELOPMENT Server Configuration Settings
+#
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -209,7 +217,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication', 
+        'rest_framework.authentication.TokenAuthentication',
     ],
 }
 

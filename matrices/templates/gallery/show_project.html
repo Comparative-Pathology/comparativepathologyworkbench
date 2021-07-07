@@ -53,6 +53,8 @@ The show project template
 			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
 		</li>
 
+{% if project.name != 'ERROR' %}
+
 		<li>
 			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
 		</li>
@@ -60,6 +62,8 @@ The show project template
 		<li>
 			{{ project.name|truncatechars:20 }}
 		</li>
+
+{% endif %}
 
 	</ul>
 
@@ -75,9 +79,17 @@ The show project template
 
 	<div class="standard-grid-item">
 
+{% if project.name == 'ERROR' %}
+
+		<p>Project {{ project.id }} Does NOT Exist!</p>
+
+{% else %}
+
 		<h1>{{ project.name }}</h1>
 
 		<br />
+
+{% endif %}
 
 {% if dataset_list %}
 
@@ -121,10 +133,6 @@ The show project template
     {% endfor %}
 
     	</ul>
-
-{% else %}
-
-	    <p>Project contains No Datasets!</p>
 
 {% endif %}
 

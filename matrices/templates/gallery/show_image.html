@@ -53,29 +53,33 @@ The show image template
 			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
 		</li>
 
+{% if image.name != 'ERROR' %}
+
 		<li class="breadcrumb-item">
 			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
 		</li>
 
-{% for project in projects %}
+		{% for project in projects %}
 
 		<li class="breadcrumb-item">
 			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
 		</li>
 
-{% endfor %}
+		{% endfor %}
 
-{% for dataset in datasets %}
+		{% for dataset in datasets %}
 
 		<li class="breadcrumb-item">
 			<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">{{ dataset.name|truncatechars:20 }}</a>
 		</li>
 
-{% endfor %}
+		{% endfor %}
 
 		<li class="breadcrumb-item active">
 			{{ image.name|truncatechars:20 }}
 		</li>
+
+{% endif %}
 
 	</ul>
 
@@ -90,6 +94,12 @@ The show image template
 	</div>
 
 	<div class="standard-grid-item">
+
+{% if image.name == 'ERROR' %}
+
+		<p>Image {{ image.id }} Does NOT Exist!</p>
+
+{% else %}
 
 		<h1>{{ image.name|truncatechars:20 }}</h1>
 
@@ -147,13 +157,13 @@ The show image template
 		<br />
 		<br />
 
-{% if image_flag == 'DISALLOW' %}
+	{% if image_flag == 'DISALLOW' %}
 
         <div class="panel-alert">
             <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
         </div>
 
-{% else %}
+	{% else %}
 
 		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
 
@@ -162,7 +172,7 @@ The show image template
 
 		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
 
-{% endif %}
+	{% endif %}
 
 		<br />
 		<br />
@@ -173,11 +183,11 @@ The show image template
 
 	    <p>Image has {{ image.roi_count }} ROIs</p>
 
-{% for roi in rois %}
+	{% for roi in rois %}
 
     	<table>
 
-	{% for shape in roi.shapes %}
+		{% for shape in roi.shapes %}
 
         	<tr>
             	<th>&nbsp;</th>
@@ -210,17 +220,17 @@ The show image template
             	<th>&nbsp;</th>
 	            <td>
 
-	    {% if image_flag == 'DISALLOW' %}
+	    	{% if image_flag == 'DISALLOW' %}
 
                     <div class="panel-alert">
                         <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
                     </div>
 
-        {% else %}
+        	{% else %}
 
 					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
 
-        {% endif %}
+        	{% endif %}
 
 	            </td>
 			</tr>
@@ -229,19 +239,19 @@ The show image template
             	<th>&nbsp;</th>
 	            <td>
 
-	    {% if image_flag == 'DISALLOW' %}
+	    	{% if image_flag == 'DISALLOW' %}
 
                     <div class="panel-alert">
                         <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
                     </div>
 
-        {% else %}
+        	{% else %}
 
 					<br />
-					
+
 					<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
 
-        {% endif %}
+        	{% endif %}
 
 	            </td>
 			</tr>
@@ -253,11 +263,13 @@ The show image template
 
 	    	<hr>
 
-	{% endfor %}
+		{% endfor %}
 
 	    </table>
 
-{% endfor %}
+	{% endfor %}
+
+{% endif %}
 
 	</div>
 

@@ -26,20 +26,14 @@
 # \brief
 # Package Description.
 ###
-from .views_about import *
-from .views_ajax import *
-from .views_authorisation import *
-from .views_ebi import *
-from .views_gallery import *
-from .views_host import *
-from .views_maintenance import *
-from .views_matrices import *
-from .views_permissions import *
-from .views_rest_matrix import MatrixViewSet
-from .views_rest_cell import CellViewSet
-from .views_rest_image import ImageViewSet
-from .views_rest_collection import CollectionViewSet
-from .views_rest_user import UserViewSet
-from .views_user import *
-from .views_list_matrix import *
-from .views_list_collection import *
+from .about import *
+from .ajax import *
+from .authorisation import *
+from .ebi import *
+from .gallery import *
+from .host import *
+from .maintenance import *
+from .matrices import *
+from .permissions import *
+from .rest import *
+from .user import *

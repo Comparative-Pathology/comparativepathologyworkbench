@@ -49,12 +49,45 @@ The list imaging hosts (Servers) template
 			Sources
 		</li>
 
+		<li>
+			<!-- <i onclick="toggleCollapse()" class="fas fa-search"></i> -->
+		</li>
+
 	</ul>
 
 </div>
 
-
 <!-- Main Data Panel -->
+
+<div id="search-source-container" class="standard-grid-container">
+
+	<div id="search-source-left" class="standard-grid-item">
+	</div>
+
+	<div id="search-source-middle" class="standard-grid-item">
+
+		<h1>Search Sources</h1>
+
+		<p>Search the sources with a URL (OMERO sources ONLY!):</p>
+
+		<form action="{% url 'search_image' search_from 0 %}" method="post">
+
+			{% csrf_token %}
+
+			{% include 'includes/form.html' %}
+
+		</form>
+
+		<br />
+		<hr>
+		<br />
+
+	</div>
+
+	<div id="search-source-right" class="standard-grid-item">
+	</div>
+
+</div>
 
 <div class="standard-grid-container">
 
@@ -63,13 +96,13 @@ The list imaging hosts (Servers) template
 
 	<div class="standard-grid-item">
 
-		<h1>Browse Sources</h1>
+		<!-- <h1>Browse Sources</h1>
 
 		<p>Browse the list of Sources</p>
 
 		<hr>
 
-		<br />
+		<br /> -->
 
 {% if server_list %}
 

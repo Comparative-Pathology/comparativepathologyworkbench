@@ -89,8 +89,7 @@ The base header and footer include template
 
 </head>
 
-<body>
-
+<body onload="getStatus()">
 
 <!-- Navigation Bar -->
 
@@ -187,70 +186,29 @@ The base header and footer include template
 
 		</div>
 
-<!-- SERVERS -->
+		<!-- SERVERS -->
 
-		<div class="my-subnav">
+				<div class="my-subnav">
 
-<!-- Do you have some Servers to look at? -->
+		<!-- Do you have some Servers to look at? -->
 
-{% if server_list %}
+		{% if server_list %}
 
-			<button class="my-subnavbtn">Sources ({{ server_list.count }}) <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content">
-
-	{% for server in server_list %}
-
-		{% if forloop.first %}
-
-				<a href="{% url 'list_imaging_hosts' %}">All Sources</a>
-
-				<div class="my-nav-dropdown">
-
-					<button class="my-subnav-dropbtn">All Sources <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-nav-dropdown-content">
-
-						<a href="{% url 'list_imaging_hosts' %}">All Sources</a>
-
-		{% endif %}
-
-		{% if server.type.name == 'WORDPRESS' %}
-
-						<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ server.name }}</a>
+					<a href="{% url 'list_imaging_hosts' %}"><button class="my-subnavbtn">Sources ({{ server_list.count }})</button></a>
 
 		{% else %}
 
-						<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
+					<button class="my-subnavbtn">Sources <i class="fa fa-caret-down"></i></button>
 
-		{% endif %}
+					<div class="my-subnav-content">
 
-		{% if forloop.last %}
+						<a class="dropdown-item" href="#">No Sources are available!</a>
 
 					</div>
 
-				</div>
-
 		{% endif %}
 
-	{% endfor %}
-
-			</div>
-
-{% else %}
-
-			<button class="my-subnavbtn">Sources <i class="fa fa-caret-down"></i>
-			</button>
-
-			<div class="my-subnav-content">
-
-				<a class="dropdown-item" href="#">No Sources are available!</a>
-
-			</div>
-
-{% endif %}
-
-		</div>
+				</div>
 
 
 <!-- ABOUT -->
@@ -416,6 +374,65 @@ The base header and footer include template
 	</div>
 
 </div>
+
+<script>
+
+    function getCollapsed() {
+
+        const state = localStorage.getItem('collapsed');
+
+        if(state === 'collapsed'){
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+    function getStatus(){
+
+		const searchSourceContainerDiv = document.getElementById('search-source-container');
+        const searchSourceLeftDiv = document.getElementById('search-source-left');
+		const searchSourceMiddleDiv = document.getElementById('search-source-middle');
+		const searchSourceRightDiv = document.getElementById('search-source-right');
+
+        const isCollapsed = getCollapsed();
+
+        if(isCollapsed){
+
+			searchSourceLeftDiv.style.display = "none";
+			searchSourceMiddleDiv.style.display = "none";
+			searchSourceRightDiv.style.display = "none";
+			searchSourceContainerDiv.style.display = "none";
+        }
+        else{
+
+			searchSourceContainerDiv.style.display = "grid";
+			searchSourceLeftDiv.style.display = "grid";
+			searchSourceMiddleDiv.style.display = "grid";
+			searchSourceRightDiv.style.display = "grid";
+        }
+
+    }
+
+    function toggleCollapse(){
+
+        const isCollapsed = getCollapsed();
+
+        if(isCollapsed){
+
+            localStorage.setItem('collapsed', 'un-collapsed');
+        }
+        else{
+
+            localStorage.setItem('collapsed', 'collapsed');
+        }
+
+        getStatus();
+    }
+
+</script>
 
 </body>
 

@@ -53,9 +53,13 @@ The show group template
 			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
 		</li>
 
+{% if group.name != 'ERROR' %}
+
 		<li>
 			{{ group.name|truncatechars:20 }}
 		</li>
+
+{% endif %}
 
 	</ul>
 
@@ -71,9 +75,18 @@ The show group template
 
 	<div class="standard-grid-item">
 
+
+{% if group.name == 'ERROR' %}
+
+		<p>Group {{ group.id }} Does NOT Exist!</p>
+
+{% else %}
+
 		<h1>{{ group.name|truncatechars:20 }}</h1>
 
 		<br />
+
+{% endif %}
 
 {% if project_list %}
 
@@ -124,12 +137,7 @@ The show group template
 
 		</ul>
 
-{% else %}
-
-	    <p>Group contains No Projects!</p>
-
 {% endif %}
-
 
 	</div>
 

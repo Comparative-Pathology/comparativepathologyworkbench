@@ -44,36 +44,36 @@ The show dataset template
 		<li>
 			<a href="{% url 'home' %}">Home</a>
 		</li>
-	
+
 		<li>
 			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
 		</li>
 
-{% if group %}
+		<li>
+			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
+		</li>
+
+{% if project.name != 'ERROR' %}
+
+	{% if group %}
 
 		<li>
 			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
 		</li>
 
-{% endif %}
+	{% endif %}
 
-{% if projects %}
+	{% if projects %}
 
-	{% for project in projects %}
+		{% for project in projects %}
 
 		<li>
 			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
 		</li>
 
-	{% endfor %}
+		{% endfor %}
 
-{% endif %}
-
-{% if group %}
-
-		<li>
-			{{ dataset.name|truncatechars:20 }}
-		</li>
+	{% endif %}
 
 {% endif %}
 
@@ -91,19 +91,22 @@ The show dataset template
 
 	<div class="standard-grid-item">
 
+
+{% if dataset.name == 'ERROR' %}
+
+		<p>Dataset {{ dataset.id }} Does NOT Exist!</p>
+
+{% else %}
+
 		<h1>{{ dataset.name }}</h1>
 
 		<br />
 
-{% if group %}
+{% endif %}
+
+{% if images %}
 
 	    <p>Dataset contains {{ dataset.imageCount }} images</p>
-
-{% else %}
-
-	    <p>{{ dataset.name|truncatechars:20 }} contains {{ dataset.imageCount }} images</p>
-
-{% endif %}
 
     	<hr>
 
@@ -132,6 +135,8 @@ The show dataset template
     {% endfor %}
 
 		</ul>
+
+{% endif %}
 
 	</div>
 

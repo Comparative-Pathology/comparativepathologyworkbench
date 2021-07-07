@@ -498,7 +498,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Server
     """
-    def get_wordpress_json(self, request, page_id):
+    def get_wordpress_json(self, user, page_id):
 
         Credential = apps.get_model('matrices', 'Credential')
         Command = apps.get_model('matrices', 'Command')
@@ -506,8 +506,8 @@ class Server(models.Model):
         cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
 
-        user = get_object_or_404(User, pk=request.user.id)
-        credential = Credential.objects.get(username=request.user.username)
+        user = get_object_or_404(User, pk=user.id)
+        credential = Credential.objects.get(username=user.username)
 
         commandWordpressImages = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGES)
 
@@ -650,7 +650,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Image
     """
-    def get_wordpress_image_json(self, request, image_id):
+    def get_wordpress_image_json(self, user, image_id):
 
         Credential = apps.get_model('matrices', 'Credential')
         Command = apps.get_model('matrices', 'Command')
@@ -660,8 +660,8 @@ class Server(models.Model):
         cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
 
-        user = get_object_or_404(User, pk=request.user.id)
-        credential = Credential.objects.get(username=request.user.username)
+        user = get_object_or_404(User, pk=user.id)
+        credential = Credential.objects.get(username=user.username)
 
         commandWordpressImage = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGE)
 
@@ -758,12 +758,12 @@ class Server(models.Model):
 
 
     """
-        OMERO INTERFACE
+        EBI INTERFACE
     """
     """
         Get the JSON Details for the Requested Server
     """
-    def get_ebi_server_json(self, request):
+    def get_ebi_server_json(self):
 
         experiments_url = 'https://www.ebi.ac.uk/gxa/sc/json/experiments/'
 
@@ -800,7 +800,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Server
     """
-    def get_ebi_widget_json(self, request):
+    def get_ebi_widget_json(self):
 
         data = { 'server': self }
 
@@ -810,7 +810,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Server
     """
-    def get_imaging_server_json(self, request):
+    def get_imaging_server_json(self):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1065,7 +1065,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Group
     """
-    def get_imaging_server_group_json(self, request, group_id):
+    def get_imaging_server_group_json(self, group_id):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1164,6 +1164,7 @@ class Server(models.Model):
 
             r = session.post(login_url, data=payload)
             login_rsp = r.json()
+
             try:
                 assert r.status_code == 200
                 assert login_rsp['success']
@@ -1194,6 +1195,7 @@ class Server(models.Model):
 
                 payload = {'limit': 200}
                 project_data = session.get(project_url, params=payload).json()
+
                 assert len(project_data['data']) < 200
 
                 project_meta = project_data['meta']
@@ -1257,6 +1259,7 @@ class Server(models.Model):
 
                                     payload = {'limit': 200}
                                     image_data = session.get(image_url, params=payload).json()
+
                                     assert len(dataset_data['data']) < 1000
 
                                     for i in image_data['data']:
@@ -1285,7 +1288,17 @@ class Server(models.Model):
         for project in project_list:
             project_count = project_count + 1
 
-        group = group_list[0]
+        if group_list == []:
+
+            group = ({
+                'id': group_id,
+                'name': "ERROR",
+                'projectCount': 0
+            })
+
+        else:
+
+            group = group_list[0]
 
         data = { 'server': self, 'project_count': project_count, 'project_list': project_list, 'group': group }
 
@@ -1295,7 +1308,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Project
     """
-    def get_imaging_server_project_json(self, request, project_id):
+    def get_imaging_server_project_json(self, project_id):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1354,79 +1367,96 @@ class Server(models.Model):
         project_url = projects_url + str(project_id) + '/' + commandProjects.postamble
         dataset_url = projects_url + str(project_id) + '/' + commandProjectsDatasets.postamble
 
+        dataset_list = list()
+
         payload = {'limit': 200}
         datasets_data = session.get(dataset_url, params=payload).json()
         assert len(datasets_data['data']) < 1000
 
         payload = {'limit': 200}
         project_data = session.get(project_url, params=payload).json()
-        assert len(project_data['data']) < 1000
 
-        pdata = project_data['data']
+        if 'message' in project_data:
 
-        name = pdata['Name']
-        dataset_id = pdata['@id']
-        datasetCount = pdata['omero:childCount']
-        omerodetails = pdata['omero:details']
-        group = omerodetails['group']
-        groupname = group['Name']
-        group_id = group['@id']
+            message = project_data['message']
 
-        group = ({
-                    'id': group_id,
-                    'name': groupname,
-                    })
+            group = ({
+                'id': 0,
+                'name': '',
+            })
 
-        project = ({
+            project = ({
+                'id': project_id,
+                'name': "ERROR",
+                'datasetCount': 0,
+            })
+
+        else:
+
+            assert len(project_data['data']) < 1000
+
+            pdata = project_data['data']
+
+            name = pdata['Name']
+            dataset_id = pdata['@id']
+            datasetCount = pdata['omero:childCount']
+            omerodetails = pdata['omero:details']
+            group = omerodetails['group']
+            groupname = group['Name']
+            group_id = group['@id']
+
+            group = ({
+                'id': group_id,
+                'name': groupname,
+            })
+
+            project = ({
+                'id': dataset_id,
+                'name': name,
+                'datasetCount': datasetCount,
+            })
+
+            randImageID = ''
+            randImageName = ''
+            randomImageBEURL = ''
+
+            ddata = datasets_data['data']
+
+            for d in ddata:
+
+                dataset_id = d['@id']
+                datasetName = d['Name']
+                imageCount = d['omero:childCount']
+
+                image_url = images_url + str(dataset_id) + '/' + commandDatasetImages.postamble
+
+                randImageIndex = 0
+                count = 0
+
+                payload = {'limit': 200}
+                image_data = session.get(image_url, params=payload).json()
+                assert len(image_data['data']) < 200
+
+                for i in image_data['data']:
+
+                    if count == randImageIndex:
+                        randImageID = i['@id']
+                        randImageName = i['Name']
+
+                    count = count + 1
+
+                randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + '/' + commandBirdsEye.postamble
+
+                dataset = ({
                     'id': dataset_id,
-                    'name': name,
-                    'datasetCount': datasetCount,
+                    'name': datasetName,
+                    'imageCount': imageCount,
+                    'randomImageID': randImageID,
+                    'randomImageName': randImageName,
+                    'randomImageBEURL': randomImageBEURL
                     })
 
-        dataset_list = list()
-
-        randImageID = ''
-        randImageName = ''
-        randomImageBEURL = ''
-
-        ddata = datasets_data['data']
-
-        for d in ddata:
-
-            dataset_id = d['@id']
-            datasetName = d['Name']
-            imageCount = d['omero:childCount']
-
-            image_url = images_url + str(dataset_id) + '/' + commandDatasetImages.postamble
-
-            randImageIndex = 0
-
-            count = 0
-
-            payload = {'limit': 200}
-            image_data = session.get(image_url, params=payload).json()
-            assert len(image_data['data']) < 200
-
-            for i in image_data['data']:
-
-                if count == randImageIndex:
-                    randImageID = i['@id']
-                    randImageName = i['Name']
-
-                count = count + 1
-
-            randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + '/' + commandBirdsEye.postamble
-
-            dataset = ({
-                        'id': dataset_id,
-                        'name': datasetName,
-                        'imageCount': imageCount,
-                        'randomImageID': randImageID,
-                        'randomImageName': randImageName,
-                        'randomImageBEURL': randomImageBEURL
-                        })
-
-            dataset_list.append(dataset)
+                dataset_list.append(dataset)
 
         data = { 'server': self, 'group': group, 'project': project, 'dataset_list': dataset_list }
 
@@ -1436,7 +1466,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Dataset
     """
-    def get_imaging_server_dataset_json(self, request, dataset_id):
+    def get_imaging_server_dataset_json(self, dataset_id):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1502,74 +1532,97 @@ class Server(models.Model):
         projects_url = projects_url + str(dataset_id) + '/' + commandDatasetProjects.postamble
         images_url = datasets_url + str(dataset_id) + '/'+ commandDatasetImages.postamble
 
+        project_list = list()
+        images_list = list()
+
         payload = {'limit': 200}
         images_data = session.get(images_url, params=payload).json()
-        assert len(images_data['data']) < 200
 
         payload = {'limit': 200}
         dataset_data = session.get(dataset_url, params=payload).json()
-        assert len(dataset_data['data']) < 200
 
         payload = {'limit': 200}
         projects_data = session.get(projects_url, params=payload).json()
-        assert len(projects_data['data']) < 200
 
-        ddata = dataset_data['data']
-        idata = images_data['data']
-        pdata = projects_data['data']
+        if 'message' in dataset_data:
 
-        name = ddata['Name']
-        dataset_id = ddata['@id']
-        imageCount = ddata['omero:childCount']
+            message = dataset_data['message']
 
-        dataset = ({
-                    'id': dataset_id,
-                    'name': name,
-                    'imageCount': imageCount
-                    })
+            group = ({
+                'id': 0,
+                'name': '',
+            })
 
-        project_list = list()
+            project = ({
+                'id': 0,
+                'name': '',
+                'datasetCount': 0,
+            })
 
-        group_id = ''
-        groupname = ''
+            dataset = ({
+                'id': dataset_id,
+                'name': "ERROR",
+                'imageCount': 0
+            })
 
-        for p in pdata:
-            project = ({'id': p['@id'], 'name': p['Name']})
-            project_list.append(project)
-            omerodetails = p['omero:details']
-            groupdetails = omerodetails['group']
-            groupname = groupdetails['Name']
-            group_id = groupdetails['@id']
+        else:
 
-        group = ({
-                    'id': group_id,
-                    'name': groupname,
-                    })
+            assert len(images_data['data']) < 200
+            assert len(dataset_data['data']) < 200
+            assert len(projects_data['data']) < 200
 
-        images_list = list()
+            ddata = dataset_data['data']
+            idata = images_data['data']
+            pdata = projects_data['data']
 
-        for i in idata:
+            name = ddata['Name']
+            dataset_id = ddata['@id']
+            imageCount = ddata['omero:childCount']
 
-            image_id = str(i['@id'])
-            image_name = i['Name']
+            dataset = ({
+                'id': dataset_id,
+                'name': name,
+                'imageCount': imageCount
+            })
 
-            if userid == "":
-                image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
-            else:
-                image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + image_id
+            group_id = ''
+            groupname = ''
 
-            image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
-            image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+            for p in pdata:
+                project = ({'id': p['@id'], 'name': p['Name']})
+                project_list.append(project)
+                omerodetails = p['omero:details']
+                groupdetails = omerodetails['group']
+                groupname = groupdetails['Name']
+                group_id = groupdetails['@id']
 
-            image = ({
-                'id': image_id,
-                'name': image_name,
-                'viewer_url': image_viewer_url,
-                'birdseye_url': image_birdseye_url,
-                'thumbnail_url': image_thumbnail_url
+            group = ({
+                'id': group_id,
+                'name': groupname,
+            })
+
+            for i in idata:
+
+                image_id = str(i['@id'])
+                image_name = i['Name']
+
+                if userid == "":
+                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
+                else:
+                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + image_id
+
+                    image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
+                    image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+
+                image = ({
+                    'id': image_id,
+                    'name': image_name,
+                    'viewer_url': image_viewer_url,
+                    'birdseye_url': image_birdseye_url,
+                    'thumbnail_url': image_thumbnail_url
                 })
 
-            images_list.append(image)
+                images_list.append(image)
 
         data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset }
 
@@ -1579,7 +1632,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Image
     """
-    def get_imaging_server_image_json(self, request, image_id):
+    def get_imaging_server_image_json(self, image_id):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1655,270 +1708,317 @@ class Server(models.Model):
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
+        roi_list = list()
+        datasets_list = list()
+        projects_list = list()
 
         payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
-        assert len(rois_data['data']) < 200
-
-        rmeta = rois_data['meta']
-        roiCount = rmeta['totalCount']
-
-        rdata = rois_data['data']
-
-        roi_list = list()
-
-        for r in rdata:
-            shapes = r['shapes']
-            roi_id = r['@id']
-
-            shape_list = list()
-
-            for s in shapes:
-                shape_id = s['@id']
-                shape_type = s['@type']
-
-                types = shape_type.split('#')
-
-                type = types[1]
-
-                coordX = ''
-                coordY = ''
-                centreX = ''
-                centreY = ''
-                width = '0'
-                height = '0'
-
-                if type == 'Point':
-
-                    centreX = s['X']
-                    centreY = s['Y']
-                    intCoordX = int(s['X'])
-                    intCoordY = int(s['Y'])
-                    intHalf = 3192 / 2
-                    intWidth = intHalf
-                    intHeight = intHalf
-
-                    intNewCoordX = intCoordX - intWidth
-                    intNewCoordY = intCoordY - intHeight
-
-                    coordX = str(intNewCoordX)
-                    coordY = str(intNewCoordY)
-                    width = str( 3192 )
-                    height = str( 3192 )
-
-                if type == 'Rectangle':
-
-                    centreX = s['X']
-                    centreY = s['Y']
-                    intCoordX = int(s['X'])
-                    intCoordY = int(s['Y'])
-                    intWidth = int(s['Width'])
-                    intHeight = int(s['Height'])
-
-                    coordX = str(intCoordX)
-                    coordY = str(intCoordY)
-                    width = str(intWidth)
-                    height = str(intHeight)
-
-                if type == 'Ellipse':
-
-                    centreX = s['X']
-                    centreY = s['Y']
-                    oldCoordX = s['X']
-                    oldCoordY = s['Y']
-                    radiusX = s['RadiusX']
-                    radiusY = s['RadiusY']
-                    intX = int(oldCoordX)
-                    intY = int(oldCoordY)
-                    intRadiusX = int(radiusX)
-                    intRadiusY = int(radiusY)
-                    intWidth = intRadiusX * 2
-                    intHeight = intRadiusY * 2
-                    intCoordX = intX - intRadiusX
-                    intCoordY = intY - intRadiusY
-
-                    coordX = str(intCoordX)
-                    coordY = str(intCoordY)
-                    width = str(intWidth)
-                    height = str(intHeight)
-
-                if type == 'Polygon':
-
-                    points = s['Points']
-                    points_array = points.split(' ')
-
-                    x_list = list()
-                    y_list = list()
-
-                    for XandY in points_array:
-                        XandYSplit = XandY.split(',')
-                        strX = XandYSplit[0].split('.')
-                        strY = XandYSplit[1].split('.')
-
-                        x_list.append(int(strX[0]))
-                        y_list.append(int(strY[0]))
-
-                    maxX = max(x_list)
-                    minX = min(x_list)
-                    maxY = max(y_list)
-                    minY = min(y_list)
-
-                    coordX = str(minX)
-                    coordY = str(minY)
-                    centreX = coordX
-                    centreY = coordY
-
-                    intWidth = maxX - minX
-                    intHeight = maxY - minY
-
-                    width = str(intWidth)
-                    height = str(intHeight)
-
-                if type == 'Polyline':
-
-                    points = s['Points']
-                    points_array = points.split(' ')
-
-                    x_list = list()
-                    y_list = list()
-
-                    for XandY in points_array:
-                        XandYSplit = XandY.split(',')
-                        strX = XandYSplit[0].split('.')
-                        strY = XandYSplit[1].split('.')
-
-                        x_list.append(int(strX[0]))
-                        y_list.append(int(strY[0]))
-
-                    maxX = max(x_list)
-                    minX = min(x_list)
-                    maxY = max(y_list)
-                    minY = min(y_list)
-
-                    coordX = str(minX)
-                    coordY = str(minY)
-                    centreX = coordX
-                    centreY = coordY
-
-                    intWidth = maxX - minX
-                    intHeight = maxY - minY
-
-                    width = str(intWidth)
-                    height = str(intHeight)
-
-                if int(width) > 3192 or int(height) > 3192:
-
-                    middleX = int(coordX) + ( int(width) / 2 )
-                    middleY = int(coordY) + ( int(height) / 2 )
-
-                    intX = middleX - ( 3192 / 2 )
-                    intY = middleY - ( 3192 / 2 )
-
-                    coordX = str(int(intX))
-                    coordY = str(int(intY))
-
-                    width = "3192"
-                    height = "3192"
-
-                shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
-                viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
-
-                shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'viewer_url': viewer_url, 'x': coordX, 'y': coordY, 'centre_x': centreX, 'centre_y': centreY, 'width': width, 'height': height })
-
-                shape_list.append(shape)
-
-            roi = ({'id': roi_id, 'shapes': shape_list})
-
-            roi_list.append(roi)
-
 
         image_url = images_url + str(image_id)
 
         payload = {'limit': 200}
         image_data = session.get(image_url, params=payload).json()
-        assert len(image_data['data']) < 200
 
-        data = image_data['data']
-        name = data['Name']
-        description = data.get('Description', '')
-        pixels = data['Pixels']
-        type = pixels['Type']
-        pixeltype = type['value']
-        sizeX = pixels['SizeX']
-        sizeY = pixels['SizeY']
-        sizeZ = pixels['SizeZ']
-        sizeT = pixels['SizeT']
-        physicalsizeX = pixels.get('PhysicalSizeX', '')
-        physicalsizeY = pixels.get('PhysicalSizeY', '')
+        if 'message' in image_data:
 
-        if physicalsizeX == '':
-            pixelsizeX = ''
+            message = image_data['message']
+
+            group = ({
+                'id': 0,
+                'name': ''
+            })
+
+            image = ({
+                'id': image_id,
+                'name': "ERROR",
+                'description': '',
+                'sizeX': 0,
+                'sizeY': 0,
+                'pixeltype': '',
+                'pixelsizeX': 0,
+                'pixelsizeY': 0,
+                'sizeZ': 0,
+                'sizeT': 0,
+                'roi_count': 0,
+                'viewer_url': '',
+                'birdseye_url': ''
+            })
+
         else:
-            pixelsizeX = physicalsizeX['Value']
 
-        if physicalsizeY == '':
-            pixelsizeY = ''
-        else:
-            pixelsizeY = physicalsizeY['Value']
+            assert len(rois_data['data']) < 200
 
-        group_id = ''
-        groupname = ''
+            rmeta = rois_data['meta']
+            roiCount = rmeta['totalCount']
 
-        omerodetails = data['omero:details']
-        groupdetails = omerodetails['group']
-        groupname = groupdetails['Name']
-        group_id = groupdetails['@id']
+            rdata = rois_data['data']
 
-        group = ({
-                    'id': group_id,
-                    'name': groupname,
-                    })
+            for r in rdata:
 
-        image = ({
-                    'id': image_id,
-                    'name': name,
-                    'description': description,
-                    'sizeX': sizeX,
-                    'sizeY': sizeY,
-                    'pixeltype': pixeltype,
-                    'pixelsizeX': pixelsizeX,
-                    'pixelsizeY': pixelsizeY,
-                    'sizeZ': sizeZ,
-                    'sizeT': sizeT,
-                    'roi_count': roiCount,
-                    'viewer_url': image_viewer_url,
-                    'birdseye_url': image_birdseye_url
-                    })
+                shapes = r['shapes']
+                roi_id = r['@id']
 
-        dataset_url = datasets_url + str(image_id) + '/' + commandImageDatasets.postamble
+                shape_list = list()
 
-        payload = {'limit': 200}
-        dataset_data = session.get(dataset_url, params=payload).json()
-        assert len(dataset_data['data']) < 200
+                for s in shapes:
+                    shape_id = s['@id']
+                    shape_type = s['@type']
 
-        ddata = dataset_data['data']
+                    types = shape_type.split('#')
 
-        datasets = list()
-        projects = list()
+                    type = types[1]
 
-        for p in ddata:
-            dataset = ({'id': p['@id'], 'name': p['Name']})
+                    coordX = ''
+                    coordY = ''
+                    centreX = ''
+                    centreY = ''
+                    width = '0'
+                    height = '0'
 
-            projects_url = projects_url + str(p['@id']) + '/' + commandDatasetProjects.postamble
+                    if type == 'Point':
+
+                        centreX = s['X']
+                        centreY = s['Y']
+                        intCoordX = int(s['X'])
+                        intCoordY = int(s['Y'])
+                        intHalf = 3192 / 2
+                        intWidth = intHalf
+                        intHeight = intHalf
+
+                        intNewCoordX = intCoordX - intWidth
+                        intNewCoordY = intCoordY - intHeight
+
+                        coordX = str(intNewCoordX)
+                        coordY = str(intNewCoordY)
+                        width = str( 3192 )
+                        height = str( 3192 )
+
+                    if type == 'Rectangle':
+
+                        centreX = s['X']
+                        centreY = s['Y']
+                        intCoordX = int(s['X'])
+                        intCoordY = int(s['Y'])
+                        intWidth = int(s['Width'])
+                        intHeight = int(s['Height'])
+
+                        coordX = str(intCoordX)
+                        coordY = str(intCoordY)
+                        width = str(intWidth)
+                        height = str(intHeight)
+
+                    if type == 'Ellipse':
+
+                        centreX = s['X']
+                        centreY = s['Y']
+                        oldCoordX = s['X']
+                        oldCoordY = s['Y']
+                        radiusX = s['RadiusX']
+                        radiusY = s['RadiusY']
+                        intX = int(oldCoordX)
+                        intY = int(oldCoordY)
+                        intRadiusX = int(radiusX)
+                        intRadiusY = int(radiusY)
+                        intWidth = intRadiusX * 2
+                        intHeight = intRadiusY * 2
+                        intCoordX = intX - intRadiusX
+                        intCoordY = intY - intRadiusY
+
+                        coordX = str(intCoordX)
+                        coordY = str(intCoordY)
+                        width = str(intWidth)
+                        height = str(intHeight)
+
+                    if type == 'Polygon':
+
+                        points = s['Points']
+                        points_array = points.split(' ')
+
+                        x_list = list()
+                        y_list = list()
+
+                        for XandY in points_array:
+
+                            XandYSplit = XandY.split(',')
+                            strX = XandYSplit[0].split('.')
+                            strY = XandYSplit[1].split('.')
+
+                            x_list.append(int(strX[0]))
+                            y_list.append(int(strY[0]))
+
+                        maxX = max(x_list)
+                        minX = min(x_list)
+                        maxY = max(y_list)
+                        minY = min(y_list)
+
+                        coordX = str(minX)
+                        coordY = str(minY)
+                        centreX = coordX
+                        centreY = coordY
+
+                        intWidth = maxX - minX
+                        intHeight = maxY - minY
+
+                        width = str(intWidth)
+                        height = str(intHeight)
+
+                    if type == 'Polyline':
+
+                        points = s['Points']
+                        points_array = points.split(' ')
+
+                        x_list = list()
+                        y_list = list()
+
+                        for XandY in points_array:
+
+                            XandYSplit = XandY.split(',')
+                            strX = XandYSplit[0].split('.')
+                            strY = XandYSplit[1].split('.')
+
+                            x_list.append(int(strX[0]))
+                            y_list.append(int(strY[0]))
+
+                        maxX = max(x_list)
+                        minX = min(x_list)
+                        maxY = max(y_list)
+                        minY = min(y_list)
+
+                        coordX = str(minX)
+                        coordY = str(minY)
+                        centreX = coordX
+                        centreY = coordY
+
+                        intWidth = maxX - minX
+                        intHeight = maxY - minY
+
+                        width = str(intWidth)
+                        height = str(intHeight)
+
+                    if int(width) > 3192 or int(height) > 3192:
+
+                        middleX = int(coordX) + ( int(width) / 2 )
+                        middleY = int(coordY) + ( int(height) / 2 )
+
+                        intX = middleX - ( 3192 / 2 )
+                        intY = middleY - ( 3192 / 2 )
+
+                        coordX = str(int(intX))
+                        coordY = str(int(intY))
+
+                        width = "3192"
+                        height = "3192"
+
+                    shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
+                    viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
+
+                    shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'viewer_url': viewer_url, 'x': coordX, 'y': coordY, 'centre_x': centreX, 'centre_y': centreY, 'width': width, 'height': height })
+
+                    shape_list.append(shape)
+
+                roi = ({
+                    'id': roi_id,
+                    'shapes': shape_list
+                })
+
+                roi_list.append(roi)
+
+            assert len(image_data['data']) < 200
+
+            data = image_data['data']
+            name = data['Name']
+            description = data.get('Description', '')
+            pixels = data['Pixels']
+            type = pixels['Type']
+            pixeltype = type['value']
+            sizeX = pixels['SizeX']
+            sizeY = pixels['SizeY']
+            sizeZ = pixels['SizeZ']
+            sizeT = pixels['SizeT']
+            physicalsizeX = pixels.get('PhysicalSizeX', '')
+            physicalsizeY = pixels.get('PhysicalSizeY', '')
+
+            if physicalsizeX == '':
+
+                pixelsizeX = ''
+
+            else:
+
+                pixelsizeX = physicalsizeX['Value']
+
+            if physicalsizeY == '':
+
+                pixelsizeY = ''
+
+            else:
+
+                pixelsizeY = physicalsizeY['Value']
+
+            group_id = ''
+            groupname = ''
+
+            omerodetails = data['omero:details']
+            groupdetails = omerodetails['group']
+            groupname = groupdetails['Name']
+            group_id = groupdetails['@id']
+
+            group = ({
+                'id': group_id,
+                'name': groupname,
+            })
+
+            image = ({
+                'id': image_id,
+                'name': name,
+                'description': description,
+                'sizeX': sizeX,
+                'sizeY': sizeY,
+                'pixeltype': pixeltype,
+                'pixelsizeX': pixelsizeX,
+                'pixelsizeY': pixelsizeY,
+                'sizeZ': sizeZ,
+                'sizeT': sizeT,
+                'roi_count': roiCount,
+                'viewer_url': image_viewer_url,
+                'birdseye_url': image_birdseye_url
+            })
+
+            dataset_url = datasets_url + str(image_id) + '/' + commandImageDatasets.postamble
 
             payload = {'limit': 200}
-            project_data = session.get(projects_url, params=payload).json()
-            assert len(project_data['data']) < 200
+            dataset_data = session.get(dataset_url, params=payload).json()
+            assert len(dataset_data['data']) < 200
 
-            pdata = project_data['data']
+            ddata = dataset_data['data']
 
-            for p in pdata:
-                project = ({'id': p['@id'], 'name': p['Name']})
-                projects.append(project)
+            for p in ddata:
 
-            datasets.append(dataset)
+                dataset = ({
+                    'id': p['@id'],
+                    'name': p['Name']
+                })
 
-        data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list }
+                projects_url = projects_url + str(p['@id']) + '/' + commandDatasetProjects.postamble
+
+                payload = {'limit': 200}
+                project_data = session.get(projects_url, params=payload).json()
+                assert len(project_data['data']) < 200
+
+                pdata = project_data['data']
+
+                for p in pdata:
+
+                    project = ({
+                        'id': p['@id'],
+                        'name': p['Name']
+                    })
+
+                    projects_list.append(project)
+
+                datasets_list.append(dataset)
+
+        data = { 'server': self, 'group': group, 'projects': projects_list, 'datasets': datasets_list, 'image': image, 'rois': roi_list }
 
         return data
 

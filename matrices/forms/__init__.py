@@ -46,3 +46,4 @@ from .signupform import SignUpForm
 from .typeform import TypeForm
 from .matrixsummarysearchform import MatrixSummarySearchForm
 from .collectionsummarysearchform import CollectionSummarySearchForm
+from .searchurlform import SearchUrlForm

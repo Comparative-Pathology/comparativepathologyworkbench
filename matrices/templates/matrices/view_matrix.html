@@ -823,6 +823,8 @@ The view matrix (bench) template
 
 											<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 
+											<a href="{% url 'update_cell' matrix.id matrix_cell.id %}"><i class="fa fa-search"></i><span class="menu-item">&#9;</span>Update Cell</a>
+
 						{% endif %}
 
 											<a href="#my_popup_{{ matrix_cell.id }}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Commentary</em></a>

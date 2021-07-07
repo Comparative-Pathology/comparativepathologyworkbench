@@ -61,6 +61,27 @@ class Cell(models.Model):
     blogpost = models.CharField(max_length=50, blank=True, default='')
     image = models.ForeignKey(Image, null=True, related_name='image', on_delete=models.DO_NOTHING)
 
+    def set_matrix(self, a_matrix):
+        self.matrix = a_matrix
+
+    def set_title(self, a_title):
+        self.title = a_title
+
+    def set_description(self, a_description):
+        self.description = a_description
+
+    def set_xcoordinate(self, a_column):
+        self.xcoordinate = a_column
+
+    def set_ycoordinate(self, a_row):
+        self.ycoordinate = a_row
+
+    def set_blogpost(self, a_blogpost):
+        self.blogpost = a_blogpost
+
+    def set_image(self, an_image):
+        self.image = an_image
+
     @classmethod
     def create(cls, matrix, title, description, xcoordinate, ycoordinate, blogpost, image):
         return cls(matrix=matrix, title=title, description=description, xcoordinate=xcoordinate, ycoordinate=ycoordinate, blogpost=blogpost, image=image)
@@ -109,9 +130,6 @@ class Cell(models.Model):
         else:
             return False
 
-    def set_blogpost(self, a_blogpost):
-        self.blogpost = a_blogpost
-
     def has_no_blogpost(self):
         if self.blogpost == '' or self.blogpost == '0':
             return True
@@ -135,15 +153,6 @@ class Cell(models.Model):
             return False
         else:
             return True
-
-    def set_matrix(self, a_matrix):
-        self.matrix = a_matrix
-
-    def set_xcoordinate(self, a_column):
-        self.xcoordinate = a_column
-
-    def set_ycoordinate(self, a_row):
-        self.ycoordinate = a_row
 
     def increment_x(self):
         self.xcoordinate += 1

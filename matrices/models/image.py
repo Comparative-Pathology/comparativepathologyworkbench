@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# The Image Model - should really be "Thing" ;-) 
+# The Image Model - should really be "Thing" ;-)
 ###
 from __future__ import unicode_literals
 
@@ -61,6 +61,27 @@ class Image(models.Model):
     birdseye_url = models.CharField(max_length=255, blank=False, default='')
     owner = models.ForeignKey(User, related_name='owner', on_delete=models.DO_NOTHING)
     roi = models.IntegerField(default=0)
+
+    def set_identifier(self, an_identifier):
+        self.identifier = an_identifier
+
+    def set_name(self, a_name):
+        self.name = a_name
+
+    def set_server(self, a_server):
+        self.server = a_server
+
+    def set_viewer_url(self, a_viewer_url):
+        self.viewer_url = a_viewer_url
+
+    def set_birdseye_url(self, a_birdseye_url):
+        self.birdseye_url = a_birdseye_url
+
+    def set_owner(self, an_owner):
+        self.owner = an_owner
+
+    def set_roi(self, a_roi):
+        self.roi = a_roi
 
     @classmethod
     def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner):

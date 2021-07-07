@@ -64,6 +64,36 @@ The view collection template
 
 <!-- Main Data Panel -->
 
+<div id="search-source-container" class="standard-grid-container">
+
+	<div id="search-source-left" class="standard-grid-item">
+	</div>
+
+	<div id="search-source-middle" class="standard-grid-item">
+
+		<h1>Search Sources</h1>
+
+		<p>Search the sources with a URL (OMERO sources ONLY!):</p>
+
+		<form action="{% url 'search_image' search_from 0 %}" method="post">
+
+			{% csrf_token %}
+
+			{% include 'includes/form.html' %}
+
+		</form>
+
+		<br />
+		<hr>
+		<br />
+
+	</div>
+
+	<div id="search-source-right" class="standard-grid-item">
+	</div>
+
+</div>
+
 <div class="standard-grid-container">
 
 	<div class="standard-grid-item">

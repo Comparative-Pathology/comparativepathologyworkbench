@@ -106,7 +106,7 @@ def show_image(request, server_id, image_id):
 
             image_flag = 'DISALLOW'
 
-        data.update({ 'image_flag': image_flag })
+        data.update({ 'image_flag': image_flag, 'add_from': "show_image" })
 
         server = get_object_or_404(Server, pk=server_id)
 

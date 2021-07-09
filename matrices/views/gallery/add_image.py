@@ -73,7 +73,7 @@ NO_CREDENTIALS = ''
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
 #
 @login_required
-def add_image(request, server_id, image_id, roi_id):
+def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
     data = get_header_data(request.user)
 
@@ -100,7 +100,13 @@ def add_image(request, server_id, image_id, roi_id):
 
         if server.is_omero547() or server.is_omero56():
 
-            return HttpResponseRedirect(reverse('webgallery_show_image', args=(server_id, image_id)))
+            if path_from == "show_image":
+
+                return HttpResponseRedirect(reverse('webgallery_show_image', args=(server_id, image_id)))
+
+            if path_from == "show_dataset":
+
+                return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, identifier)))
 
         else:
 

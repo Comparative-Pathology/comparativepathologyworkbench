@@ -95,6 +95,18 @@ def show_dataset(request, server_id, dataset_id):
 
     else:
 
+        image_flag = ''
+
+        if exists_active_collection_for_user(request.user):
+
+            image_flag = 'ALLOW'
+
+        else:
+
+            image_flag = 'DISALLOW'
+
+        data.update({ 'image_flag': image_flag, 'add_from': "show_dataset" })
+
         server = get_object_or_404(Server, pk=server_id)
 
         if server.is_omero547() or server.is_omero56():

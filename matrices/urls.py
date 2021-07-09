@@ -121,7 +121,8 @@ urlpatterns = [
 	path('show_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_image, name='webgallery_show_image'),
 	path('show_wordpress/<int:server_id>/<int:page_id>/', matrices_views.gallery.show_wordpress, name='webgallery_show_wordpress'),
 	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),
-	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
+	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
+	#path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
 
 #   views/host
 	path('', matrices_views.host.home, name='home'),

@@ -120,6 +120,12 @@ The show dataset template
 
 					<div class="card-container-gallery">
 
+	    {% if image_flag != 'DISALLOW' %}
+
+						<a href="{% url 'webgallery_add_image' server.id image.id 0 add_from dataset.id %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+
+		{% endif %}
+
 						<h5>{{ image.name }}</h5>
 
 		        	</div>

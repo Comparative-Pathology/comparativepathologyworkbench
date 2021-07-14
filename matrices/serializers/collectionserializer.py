@@ -34,7 +34,6 @@ from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 
 from django.db import models
-from django.db.models import Q
 
 from matrices.models import Collection
 from matrices.models import Image

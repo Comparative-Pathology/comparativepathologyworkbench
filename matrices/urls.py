@@ -176,6 +176,7 @@ urlpatterns = [
 
 #   views/matrices
 	path('delete_image/<int:image_id>/', matrices_views.matrices.delete_image, name='webgallery_delete_image'),
+
 	path('detail_collection/<int:collection_id>/', matrices_views.matrices.detail_collection, name='detail_collection'),
 	path('view_collection/<int:collection_id>/', matrices_views.matrices.view_collection, name='view_collection'),
 	path('view_active_collection/', matrices_views.matrices.view_active_collection, name='view_active_collection'),
@@ -184,7 +185,9 @@ urlpatterns = [
 	path('edit_collection/<int:collection_id>/', matrices_views.matrices.edit_collection, name='edit_collection'),
 	path('delete_collection/<int:collection_id>/', matrices_views.matrices.delete_collection, name='delete_collection'),
 	path('choose_collection/<int:matrix_id>/<int:collection_id>/', matrices_views.matrices.choose_collection, name='choose_collection'),
-	path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
+
+    path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
+
 	path('<int:matrix_id>/detail_matrix_blog/', matrices_views.matrices.view_matrix_blog, name='detail_matrix_blog'),
 	path('<int:matrix_id>/view_cell_blog/<int:cell_id>/', matrices_views.matrices.view_cell_blog, name='view_cell_blog'),
 	path('<int:matrix_id>/matrix/', matrices_views.matrices.view_matrix, name='matrix'),
@@ -206,6 +209,7 @@ urlpatterns = [
 	path('<int:matrix_id>/add_row_below/<int:row_id>/', matrices_views.matrices.add_row_below, name='add_row_below'),
 	path('<int:matrix_id>/delete_this_row/<int:row_id>/', matrices_views.matrices.delete_this_row, name='delete_this_row'),
 	path('<int:matrix_id>/delete_last_row/', matrices_views.matrices.delete_last_row, name='delete_last_row'),
+
 	path('search_image/<str:path_from>/<int:identifier>/', matrices_views.matrices.search_image, name='search_image'),
 
 #   views/permissions

@@ -228,7 +228,7 @@ The show image template
 
         	{% else %}
 
-					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
+					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
 
         	{% endif %}
 

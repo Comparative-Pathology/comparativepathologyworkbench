@@ -1090,8 +1090,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 			server = get_servers_for_uid_url(server_uid, server_url)
 
-			print("server : " + str(server))
-
 			if server.is_wordpress():
 
 				if not self.validate_wordpress_image_id(server, user, image_id):

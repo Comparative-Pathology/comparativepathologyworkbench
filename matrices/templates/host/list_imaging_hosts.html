@@ -196,7 +196,7 @@ The list imaging hosts (Servers) template
 
 	        <tr>
 
-			{% if credential_flag %}
+			{% if user.is_superuser %}
 
     	        <td>
 					<a href="{% url 'new_server' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>

@@ -31,14 +31,9 @@
 from __future__ import unicode_literals
 
 from django import forms
-
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.db.models import Q
-
 from sortable_listview import SortableListView
-
 
 from matrices.models import MatrixSummary
 from matrices.forms import MatrixSummarySearchForm

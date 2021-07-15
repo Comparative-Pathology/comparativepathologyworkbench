@@ -62,8 +62,22 @@ def add_image_to_collection(user, server, image_id, roi_id):
 
         wp_data = server.get_imaging_server_image_json(image_id)
 
+        group = wp_data['group']
+        group_name = group['name']
+
+        projects = wp_data['projects']
+        project = projects[0]
+        project_name = project['name']
+
+        datasets = wp_data['datasets']
+        dataset = datasets[0]
+        dataset_name = dataset['name']
+
         json_image = wp_data['image']
         image_name = json_image['name']
+
+        full_image_name = group_name + "/" + project_name + "/" + dataset_name + "/" + image_name
+
         image_viewer_url = json_image['viewer_url']
         image_birdseye_url = json_image['birdseye_url']
 
@@ -72,7 +86,7 @@ def add_image_to_collection(user, server, image_id, roi_id):
         wp_data = server.get_wordpress_image_json(user, image_id)
 
         json_image = wp_data['image']
-        image_name = json_image['name']
+        full_image_name = json_image['name']
         image_viewer_url = json_image['viewer_url']
         image_birdseye_url = json_image['thumbnail_url']
 
@@ -86,7 +100,7 @@ def add_image_to_collection(user, server, image_id, roi_id):
 
         else:
 
-            image_out = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, roi_id, user)
+            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user)
 
             image_out.save()
 
@@ -98,7 +112,7 @@ def add_image_to_collection(user, server, image_id, roi_id):
 
     else:
 
-        json_rois = data['rois']
+        json_rois = wp_data['rois']
 
         for rois in json_rois:
 
@@ -117,7 +131,7 @@ def add_image_to_collection(user, server, image_id, roi_id):
 
                     else:
 
-                        image_out = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, roi_id, user)
+                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user)
 
                         image_out.save()
 

@@ -40,6 +40,7 @@
 ###
 
 from .collectivization import collectivization
+from .renaming import renaming
 from .mailer import mailer
 from .view_user import view_user
 from .edit_user import edit_user

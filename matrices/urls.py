@@ -100,6 +100,7 @@ urlpatterns = [
 
 #   views/authorisation
 	path('collectivization/', matrices_views.collectivization, name='collectivization'),
+	path('renaming/', matrices_views.renaming, name='renaming'),
 	path('mailer/', matrices_views.mailer, name='mailer'),
 	path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'),
 	path('edit_user/<int:user_id>/', matrices_views.edit_user, name='edit_user'),

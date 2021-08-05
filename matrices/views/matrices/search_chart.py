@@ -45,31 +45,22 @@ from decouple import config
 
 from matrices.forms import SearchUrlForm
 
-from matrices.models import Collection
-
-from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import convert_url_ebi_sca_to_json
-from matrices.routines import convert_url_omero_to_cpw
-from matrices.routines import create_an_ebi_sca_chart
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_an_ebi_sca_experiment_id
+from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
-from matrices.routines import get_server_from_ebi_sca_url
+from matrices.routines import create_an_ebi_sca_chart
+from matrices.routines import convert_url_ebi_sca_to_chart_id
 
 HTTP_POST = 'POST'
 NO_CREDENTIALS = ''
-LIST_IMAGING_HOSTS = "list_imaging_hosts"
-VIEW_ACTIVE_COLLECTION = "view_active_collection"
-VIEW_ALL_COLLECTIONS = "view_all_collections"
-VIEW_COLLECTION = "view_collection"
-
 
 #
 # Search for an Image
 #
 @login_required
-def search_image(request, path_from, identifier):
+def search_chart(request):
 
     data = get_header_data(request.user)
 
@@ -91,24 +82,14 @@ def search_image(request, path_from, identifier):
 
                 url_string = cd.get('url_string')
 
-                url_string_ebi_sca_out = convert_url_ebi_sca_to_json(url_string)
-                url_string_omero_out = convert_url_omero_to_cpw(request, url_string)
+                url_string_out = convert_url_ebi_sca_to_json(url_string)
 
-                if url_string_omero_out != '' and url_string_ebi_sca_out != '':
-
-                    messages.error(request, "URL not found!")
-                    form.add_error(None, "URL not found!")
-
-                if url_string_omero_out == '' and url_string_ebi_sca_out == '':
+                if url_string_out == "":
 
                     messages.error(request, "URL not found!")
                     form.add_error(None, "URL not found!")
 
-                if url_string_omero_out != '' and url_string_ebi_sca_out == '':
-
-                    return redirect(url_string_omero_out)
-
-                if url_string_omero_out == '' and url_string_ebi_sca_out != '':
+                else:
 
                     temp_dir = config('HIGHCHARTS_TEMP_DIR')
                     output_dir = config('HIGHCHARTS_OUTPUT_DIR')
@@ -119,7 +100,7 @@ def search_image(request, path_from, identifier):
 
                     chart_id = convert_url_ebi_sca_to_chart_id(url_string)
 
-                    shell_command = create_an_ebi_sca_chart(url_string_ebi_sca_out, experiment_id, chart_id, highcharts_host, temp_dir, output_dir)
+                    shell_command = create_an_ebi_sca_chart(url_string_out, experiment_id, chart_id, highcharts_host, temp_dir, output_dir)
 
                     success = call(str(shell_command), shell=True)
 
@@ -127,9 +108,9 @@ def search_image(request, path_from, identifier):
                         print("shell_command : FAILED!")
                         print("shell_command : " + str(shell_command))
 
-                    server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
+                    chart_url = highcharts_web + chart_id
 
-                    return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+                    return redirect(chart_url)
 
             else:
 
@@ -140,41 +121,11 @@ def search_image(request, path_from, identifier):
 
             form = SearchUrlForm()
 
+        data.update({ 'form': form })
+
         return_page = ''
 
-        if path_from == LIST_IMAGING_HOSTS:
-
-            data.update({ 'form': form, 'search_from': "list_imaging_hosts" })
-
-            return_page = 'host/list_imaging_hosts.html'
-
-
-        if path_from == VIEW_ACTIVE_COLLECTION:
-
-            collection_list = get_active_collection_for_user(request.user)
-            collection = collection_list[0]
-            collection_image_list = get_images_for_collection(collection)
-
-            data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_active_collection" })
-
-            return_page = 'matrices/view_collection.html'
-
-
-        if path_from == VIEW_ALL_COLLECTIONS:
-
-            data.update({ 'form': form, 'search_from': "view_all_collections" })
-
-            return_page = 'matrices/view_all_collections.html'
-
-
-        if path_from == VIEW_COLLECTION:
-
-            collection = get_object_or_404(Collection, pk=identifier)
-            collection_image_list = get_images_for_collection(collection)
-
-            data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
-
-            return_page = 'matrices/view_collection.html'
+        return_page = 'matrices/search_chart.html'
 
 
         return render(request, return_page, data)

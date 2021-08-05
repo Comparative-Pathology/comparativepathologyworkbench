@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the show_wordpress_image view routine
+# This file contains the show_ebi_sca_image view routine
 #
 ###
 from __future__ import unicode_literals
@@ -38,19 +38,20 @@ from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
 
-from matrices.routines import get_header_data
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import get_header_data
+from matrices.routines import get_an_ebi_sca_experiment_id_from_chart_id
+from matrices.routines import get_an_ebi_sca_parameters_from_chart_id
 
 NO_CREDENTIALS = ''
 
 #
-# SHOW AN IMAGE
-#  FROM A WORDPRESS SERVER
+# SHOW A CHART FROM AN EBI SCA SERVER
 #
 @login_required()
-def show_wordpress_image(request, server_id, image_id):
+def show_ebi_sca_image(request, server_id, image_id):
     """
-    Show an image
+    Show a chart from an EBI SCA Server
     """
 
     data = get_header_data(request.user)
@@ -61,27 +62,29 @@ def show_wordpress_image(request, server_id, image_id):
 
     else:
 
-        image_flag = ''
-
-        if exists_active_collection_for_user(request.user):
-
-            image_flag = 'ALLOW'
-
-        else:
-
-            image_flag = 'DISALLOW'
-
-        data.update({ 'image_flag': image_flag, 'add_from': "show_wordpress_image" })
-
         server = get_object_or_404(Server, pk=server_id)
 
-        if server.is_wordpress():
+        if server.is_ebi_sca():
 
-            server_data = server.get_wordpress_image_json(request.user, image_id)
+            image_flag = ''
 
-            data.update(server_data)
+            if exists_active_collection_for_user(request.user):
 
-            return render(request, 'gallery/show_wordpress_image.html', data)
+                image_flag = 'ALLOW'
+
+            else:
+
+                image_flag = 'DISALLOW'
+
+            experiment_id = get_an_ebi_sca_experiment_id_from_chart_id(image_id)
+
+            metadata = server.get_ebi_server_experiment_metadata(experiment_id)
+
+            chart = get_an_ebi_sca_parameters_from_chart_id(server.url_server, image_id)
+
+            data.update({ 'image_flag': image_flag, 'add_from': "show_image", 'server': server, 'chart': chart, 'metadata': metadata, 'add_from': "show_ebi_sca_image" })
+
+            return render(request, 'gallery/show_ebi_sca_image.html', data)
 
         else:
 

@@ -68,7 +68,7 @@ The list imaging hosts (Servers) template
 
 		<h1>Search Sources</h1>
 
-		<p>Search the sources with a URL (OMERO sources ONLY!):</p>
+		<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
 
 		<form action="{% url 'search_image' search_from 0 %}" method="post">
 
@@ -142,9 +142,17 @@ The list imaging hosts (Servers) template
 
 					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-				{% else %}
+				{% endif %}
+
+				{% if server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
 
 					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+				{% endif %}
+
+				{% if server.type.name == 'EBI_SCA' %}
+
+					<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
 

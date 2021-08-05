@@ -34,7 +34,8 @@ from os import urandom
 
 from django.apps import apps
 
-from . import get_primary_wordpress_server
+from matrices.routines.get_primary_wordpress_server import get_primary_wordpress_server
+
 
 CMD_BLOG_GET_LINK_POST = 'LinkPost'
 

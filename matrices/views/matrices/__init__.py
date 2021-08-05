@@ -65,38 +65,40 @@
 # def delete_last_row(request, matrix_id):
 #
 # def search_image(request, path_from, identifier)):
+# def search_chart(request)):
 #
 ###
 
-from .delete_image import delete_image
-from .detail_collection import detail_collection
-from .view_collection import view_collection
-from .view_active_collection import view_active_collection
-from .view_all_collections import view_all_collections
-from .new_collection import new_collection
-from .edit_collection import edit_collection
-from .delete_collection import delete_collection
-from .choose_collection import choose_collection
 from .activate_collection import activate_collection
-from .view_matrix_blog import view_matrix_blog
-from .view_cell_blog import view_cell_blog
-from .view_matrix import view_matrix
-from .detail_matrix import detail_matrix
-from .new_matrix import new_matrix
-from .edit_matrix import edit_matrix
-from .delete_matrix import delete_matrix
 from .add_cell import add_cell
-from .edit_cell import edit_cell
-from .update_cell import update_cell
-from .view_cell import view_cell
-from .append_column import append_column
 from .add_column_left import add_column_left
 from .add_column_right import add_column_right
-from .delete_this_column import delete_this_column
-from .delete_last_column import delete_last_column
-from .append_row import append_row
 from .add_row_above import add_row_above
 from .add_row_below import add_row_below
-from .delete_this_row import delete_this_row
+from .append_column import append_column
+from .append_row import append_row
+from .choose_collection import choose_collection
+from .delete_collection import delete_collection
+from .delete_image import delete_image
+from .delete_last_column import delete_last_column
 from .delete_last_row import delete_last_row
+from .delete_matrix import delete_matrix
+from .delete_this_column import delete_this_column
+from .delete_this_row import delete_this_row
+from .detail_collection import detail_collection
+from .detail_matrix import detail_matrix
+from .edit_cell import edit_cell
+from .edit_collection import edit_collection
+from .edit_matrix import edit_matrix
+from .new_collection import new_collection
+from .new_matrix import new_matrix
+from .search_chart import search_chart
 from .search_image import search_image
+from .update_cell import update_cell
+from .view_active_collection import view_active_collection
+from .view_all_collections import view_all_collections
+from .view_cell import view_cell
+from .view_cell_blog import view_cell_blog
+from .view_collection import view_collection
+from .view_matrix import view_matrix
+from .view_matrix_blog import view_matrix_blog

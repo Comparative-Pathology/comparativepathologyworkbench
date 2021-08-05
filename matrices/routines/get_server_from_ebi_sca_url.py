@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         get_primary_wordpress_server.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,15 +24,36 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
-# SIGNUP VIEW ROUTINES
-#
-# def signup(request):
-# def account_activation_sent(request):
-# def activate(request, uidb64, token):
-#
+# Get a Server from an EBI SCA JSON URL
 ###
+from __future__ import unicode_literals
 
-from .account_activation_sent import account_activation_sent
-from .activate import activate
-from .signup import signup
+import base64, hashlib
+
+from os import urandom
+
+from urllib.parse import urlparse
+
+from django.apps import apps
+
+
+"""
+    Get a Server from an EBI SCA URL
+"""
+def get_server_from_ebi_sca_url(a_url):
+
+    #https://www.ebi.ac.uk/gxa/sc ...
+
+    result = urlparse(a_url)
+
+    a_server_url = ''
+
+    if all([result.scheme, result.netloc, result.path]):
+
+        path_array = result.path.split("/")
+
+        a_server_url = result.netloc + '/' + path_array[1] + '/' + path_array[2]
+
+    Server = apps.get_model('matrices', 'Server')
+
+    return Server.objects.get(url_server=a_server_url)

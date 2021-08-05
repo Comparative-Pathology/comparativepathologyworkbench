@@ -30,6 +30,9 @@
 ###
 from __future__ import unicode_literals
 
+import subprocess
+from subprocess import call
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -37,7 +40,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
-from urllib.parse import urlparse
+from decouple import config
 
 from matrices.forms import SearchUrlForm
 
@@ -53,6 +56,13 @@ from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_primary_wordpress_server
+from matrices.routines import get_server_from_omero_url
+from matrices.routines.get_id_from_omero_url import get_id_from_omero_url
+from matrices.routines.get_an_ebi_sca_experiment_id import get_an_ebi_sca_experiment_id
+from matrices.routines.convert_url_ebi_sca_to_chart_id import convert_url_ebi_sca_to_chart_id
+from matrices.routines.convert_url_ebi_sca_to_json import convert_url_ebi_sca_to_json
+from matrices.routines.create_an_ebi_sca_chart import create_an_ebi_sca_chart
+from matrices.routines.get_server_from_ebi_sca_url import get_server_from_ebi_sca_url
 
 HTTP_POST = 'POST'
 NO_CREDENTIALS = ''
@@ -103,9 +113,10 @@ def update_cell(request, matrix_id, cell_id):
 
 					url_string = cd.get('url_string')
 
-					url_string_out = convert_url_omero_image_to_cpw(request, url_string)
+					url_string_ebi_sca_out = convert_url_ebi_sca_to_json(url_string)
+					url_string_omero_out = convert_url_omero_image_to_cpw(request, url_string)
 
-					if url_string_out == "":
+					if url_string_omero_out != '' and url_string_ebi_sca_out != '':
 
 						messages.error(request, "URL not found!")
 						form.add_error(None, "URL not found!")
@@ -114,22 +125,25 @@ def update_cell(request, matrix_id, cell_id):
 
 						return render(request, 'matrices/update_cell.html', data)
 
-					else:
 
-						u = urlparse(url_string_out)
+					if url_string_omero_out == '' and url_string_ebi_sca_out == '':
 
-						query_path = u.path
+						messages.error(request, "URL not found!")
+						form.add_error(None, "URL not found!")
 
-						query_array = query_path.split("/")
+						data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
-						query_server = query_array[2]
-						query_id = query_array[3]
+						return render(request, 'matrices/update_cell.html', data)
 
-						server = get_object_or_404(Server, pk=query_server)
+
+					if url_string_omero_out != '' and url_string_ebi_sca_out == '':
+
+						server = get_server_from_omero_url(url_string_omero_out)
+						image_id = get_id_from_omero_url(url_string_omero_out)
 
 						if exists_active_collection_for_user(request.user):
 
-							image = add_image_to_collection(request.user, server, query_id, 0)
+							image = add_image_to_collection(request.user, server, image_id, 0)
 
 							queryset = get_active_collection_for_user(request.user)
 
@@ -147,42 +161,84 @@ def update_cell(request, matrix_id, cell_id):
 							return render(request, 'matrices/update_cell.html', data)
 
 
-						cell.set_title(image.name)
-						cell.set_description(image.name)
+					if url_string_omero_out == '' and url_string_ebi_sca_out != '':
 
-						cell.set_image(image)
+						temp_dir = config('HIGHCHARTS_TEMP_DIR')
+						output_dir = config('HIGHCHARTS_OUTPUT_DIR')
+						highcharts_host = config('HIGHCHARTS_HOST')
+						highcharts_web = config('HIGHCHARTS_OUTPUT_WEB')
 
-						cell.set_matrix(matrix)
+						experiment_id = get_an_ebi_sca_experiment_id(url_string)
 
-						post_id = ''
+						image_id = convert_url_ebi_sca_to_chart_id(url_string)
 
-						if cell.has_no_blogpost() == True:
+						shell_command = create_an_ebi_sca_chart(url_string_ebi_sca_out, experiment_id, image_id, highcharts_host, temp_dir, output_dir)
 
-							credential = get_credential_for_user(request.user)
+						success = call(str(shell_command), shell=True)
 
-							if credential.has_apppwd():
+						if success != 0:
+							print("shell_command : FAILED!")
+							print("shell_command : " + str(shell_command))
 
-								returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, cell.title, cell.description)
-
-								if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-									post_id = returned_blogpost['id']
-
-								else:
-
-									messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-									form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
-
-									data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
-
-									return render(request, 'matrices/update_cell.html', data)
+						server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
 
 
-						cell.set_blogpost(post_id)
+						if exists_active_collection_for_user(request.user):
 
-						cell.save()
+							image = add_image_to_collection(request.user, server, image_id, 0)
 
-						matrix.save()
+							queryset = get_active_collection_for_user(request.user)
+
+							for collection in queryset:
+
+								matrix.set_last_used_collection(collection)
+
+						else:
+
+							messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
+							form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
+
+							data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
+
+							return render(request, 'matrices/update_cell.html', data)
+
+
+					cell.set_title(image.name)
+					cell.set_description(image.name)
+
+					cell.set_image(image)
+
+					cell.set_matrix(matrix)
+
+					post_id = ''
+
+					if cell.has_no_blogpost() == True:
+
+						credential = get_credential_for_user(request.user)
+
+						if credential.has_apppwd():
+
+							returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, cell.title, cell.description)
+
+							if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+								post_id = returned_blogpost['id']
+
+							else:
+
+								messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
+								form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+
+								data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
+
+								return render(request, 'matrices/update_cell.html', data)
+
+
+					cell.set_blogpost(post_id)
+
+					cell.save()
+
+					matrix.save()
 
 				else:
 

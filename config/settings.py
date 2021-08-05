@@ -250,3 +250,16 @@ INLINEEDIT_EDIT_ACCESS = lambda user, model, field: True
 INLINEEDIT_ADAPTORS = {
     "blocked": "matrices.adaptors.BlockedAdaptor",
 }
+
+# HighCharts Settings
+#
+
+HIGHCHARTS_TEMP_DIR = config('HIGHCHARTS_TEMP_DIR')
+HIGHCHARTS_OUTPUT_DIR = config('HIGHCHARTS_OUTPUT_DIR')
+HIGHCHARTS_HOST = config('HIGHCHARTS_HOST')
+HIGHCHARTS_OUTPUT_WEB = config('HIGHCHARTS_OUTPUT_WEB')
+
+# EBI SCA Settings
+#
+
+EBI_SCA_EXPERIMENTS_URL = config('EBI_SCA_EXPERIMENTS_URL')

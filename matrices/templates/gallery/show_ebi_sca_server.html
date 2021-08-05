@@ -1,5 +1,5 @@
 <!--
-\file         detail_cell_blog.html
+\file         show_server.html
 \author       Mike Wicks
 \date         March 2021
 \version      $Id$
@@ -23,7 +23,7 @@ License along with this program; if not, write to the Free
 Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA  02110-1301, USA.
 \brief
-The detail cell blog template
+The show (imaging) server template
 -->
 
 {% extends 'includes/base.html' %}
@@ -45,8 +45,12 @@ The detail cell blog template
 			<a href="{% url 'home' %}">Home</a>
 		</li>
 
-		<li class="breadcrumb-item active">
-			Image Search
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
+
+		<li>
+			{{ server.name }}
 		</li>
 
 	</ul>
@@ -59,14 +63,15 @@ The detail cell blog template
 <div class="standard-grid-container">
 
 	<div class="standard-grid-item">
-
 	</div>
 
 	<div class="standard-grid-item">
 
-		<h1>Search for an Image</h1>
+		<h1>{{ server.name }}</h1>
 
-		<p>Input a URL to find an Image (OMERO and EBI SCA sources ONLY!):</p>
+		<h3>Chart Search</h3>
+
+		<p>Input a URL to find a Chart</p>
 		<hr>
 
 		<br />
@@ -83,27 +88,21 @@ The detail cell blog template
 
 			<br />
 
-			<button type="submit" class="button button-delete">UPDATE</button>
+			<button type="submit" class="button button-delete">SEARCH</button>
 
 		</form>
 
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
+		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CLEAR</button></a>
+
 
 	</div>
 
 	<div class="standard-grid-item">
-
 	</div>
 
 </div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
 
 <br />
 <br />

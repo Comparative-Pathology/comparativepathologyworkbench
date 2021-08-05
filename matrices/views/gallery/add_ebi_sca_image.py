@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_matrices.py
+# \file         views_gallery.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,37 +25,37 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the choose_collection view routine
+# This file contains the add_image view routine
 #
 ###
 from __future__ import unicode_literals
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-from matrices.models import Matrix
-from matrices.models import Cell
-from matrices.models import Collection
+from matrices.models import Server
 
-from matrices.routines import get_authority_for_bench_and_user_and_requester
-
+from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
+from matrices.routines import add_image_to_collection
 
 NO_CREDENTIALS = ''
 
 #
-# CHOOSE AN IMAGE COLLECTION
+# ADD A NEW IMAGE FROM AN EBI SCA SERVER TO THE ACTIVE COLLECTION
 #
 @login_required
-def choose_collection(request, matrix_id, collection_id):
+def add_ebi_sca_image(request, server_id, image_id, path_from):
 
     data = get_header_data(request.user)
 
-    collection_image_list = list()
+    if not exists_active_collection_for_user(request.user):
+
+        return HttpResponseRedirect(reverse('home', args=()))
+
 
     if data["credential_flag"] == NO_CREDENTIALS:
 
@@ -63,20 +63,18 @@ def choose_collection(request, matrix_id, collection_id):
 
     else:
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
-        owner = get_object_or_404(User, pk=matrix.owner_id)
-        user = get_object_or_404(User, pk=request.user.id)
+        server = get_object_or_404(Server, pk=server_id)
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, user)
+        if exists_active_collection_for_user(request.user):
 
-        if authority.is_none():
+            image = add_image_to_collection(request.user, server, image_id, 0)
 
-            return HttpResponseRedirect(reverse('home', args=()))
+        else:
 
-        collection = get_object_or_404(Collection, pk=collection_id)
+            messages.error(request, "You have no Active Image Collection; Please create a Collection!")
 
-        matrix.set_last_used_collection(collection)
+        if server.is_ebi_sca():
 
-        matrix.save()
+            if path_from == "show_ebi_sca_image":
 
-        return redirect('matrix', matrix_id=matrix_id)
+                return HttpResponseRedirect(reverse('webgallery_show_ebi_sca_image', args=(server_id, image_id)))

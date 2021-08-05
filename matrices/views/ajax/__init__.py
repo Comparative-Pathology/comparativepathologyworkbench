@@ -44,11 +44,11 @@
 #
 ###
 
+from .import_image import import_image
 from .overwrite_cell import overwrite_cell
 from .overwrite_cell_leave import overwrite_cell_leave
-from .swap_cells import swap_cells
-from .import_image import import_image
-from .swap_rows import swap_rows
-from .swap_columns import swap_columns
 from .shuffle_columns import shuffle_columns
 from .shuffle_rows import shuffle_rows
+from .swap_cells import swap_cells
+from .swap_columns import swap_columns
+from .swap_rows import swap_rows

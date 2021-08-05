@@ -40,12 +40,12 @@
 ###
 
 from .collectivization import collectivization
-from .renaming import renaming
-from .mailer import mailer
-from .view_user import view_user
-from .edit_user import edit_user
-from .delete_user import delete_user
-from .new_blog_credential import new_blog_credential
-from .view_blog_credential import view_blog_credential
-from .edit_blog_credential import edit_blog_credential
 from .delete_blog_credential import delete_blog_credential
+from .delete_user import delete_user
+from .edit_blog_credential import edit_blog_credential
+from .edit_user import edit_user
+from .mailer import mailer
+from .new_blog_credential import new_blog_credential
+from .renaming import renaming
+from .view_blog_credential import view_blog_credential
+from .view_user import view_user

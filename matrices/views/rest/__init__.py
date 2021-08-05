@@ -26,8 +26,9 @@
 # \brief
 # Package Description.
 ###
+
 from .cell import CellViewSet
-from .image import ImageViewSet
 from .collection import CollectionViewSet
+from .image import ImageViewSet
 from .matrix import MatrixViewSet
 from .user import UserViewSet

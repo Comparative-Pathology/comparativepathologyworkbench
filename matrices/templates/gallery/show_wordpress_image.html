@@ -109,12 +109,22 @@ The show wordpress image template
 		<br />
 		<br />
 
-		<a href="{% url 'webgallery_add_image' server.id image.id 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+		{% if image_flag == 'DISALLOW' %}
 
-		<br />
-		<br />
+	        <div class="panel-alert">
+	            <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+	        </div>
 
-		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+		{% else %}
+
+			<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+
+	    	<br />
+	    	<br />
+
+			<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+
+		{% endif %}
 
 		<br />
 		<br />

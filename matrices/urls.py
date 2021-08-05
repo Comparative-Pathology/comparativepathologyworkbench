@@ -123,7 +123,10 @@ urlpatterns = [
 	path('show_wordpress/<int:server_id>/<int:page_id>/', matrices_views.gallery.show_wordpress, name='webgallery_show_wordpress'),
 	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),
 	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
+	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
 	#path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
+	path('show_ebi_sca_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_server, name='webgallery_show_ebi_sca_server'),
+	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),
 
 #   views/host
 	path('', matrices_views.host.home, name='home'),
@@ -212,6 +215,7 @@ urlpatterns = [
 	path('<int:matrix_id>/delete_last_row/', matrices_views.matrices.delete_last_row, name='delete_last_row'),
 
 	path('search_image/<str:path_from>/<int:identifier>/', matrices_views.matrices.search_image, name='search_image'),
+	path('search_chart/', matrices_views.matrices.search_chart, name='search_chart'),
 
 #   views/permissions
 	path('detail_bench_authorisation/<int:bench_authorisation_id>/', matrices_views.permissions.view_bench_authorisation, name='detail_bench_authorisation'),

@@ -1,0 +1,307 @@
+<!--
+\file         show_image.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The show image template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block content %}
+
+
+<!-- Breadcrumb Menu -->
+
+<div>
+
+	<ul class="my-breadcrumb">
+
+		<li>
+			<a href="{% url 'home' %}">Home</a>
+		</li>
+
+		<li>
+			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
+		</li>
+
+		<li>
+			<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}">{{ server.name }}</a>
+		</li>
+
+{% if image.name != 'ERROR' %}
+
+		<li class="breadcrumb-item active">
+			{{ image.name|truncatechars:20 }}
+		</li>
+
+{% endif %}
+
+	</ul>
+
+</div>
+
+
+<!-- Main Data Panel -->
+
+<div class="standard-grid-container">
+
+	<div class="standard-grid-item">
+	</div>
+
+	<div class="standard-grid-item">
+
+{% if image.name == 'ERROR' %}
+
+		<p>Image {{ image.id }} Does NOT Exist!</p>
+
+{% else %}
+
+		<h1>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</h1>
+
+		<br />
+
+	    <h3>Image Information</h3>
+
+		<hr>
+
+		<dl class="standard">
+
+			<dt>Experiment</dt>
+			<dd>{{ metadata.experimentAccession }}</dd>
+
+			<dt>Chart Name</dt>
+			<dd>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</dd>
+
+		</dl>
+
+		<table>
+        	<tr>
+            	<th width=200px>Image:</th>
+	            <td>
+					<a href="{{ chart.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ chart.chart_id }}" title="{{ chart.chart_id }}" src="{{ chart.birdseye_url }}" ></a>
+				</td>
+			</tr>
+		</table>
+
+	{% if chart.k_value != '' %}
+
+		<dl class="standard">
+
+            <dt>Perplexity</dt>
+			<dd>{{ chart.perplexity }}</dd>
+
+			<dt>Cluster</dt>
+			<dd>{{ chart.k_value }}</dd>
+
+			<dt>Gene</dt>
+			<dd>None</dd>
+
+			<dt>Metadata</dt>
+			<dd>None</dd>
+
+		</dl>
+
+	{% endif %}
+
+	{% if chart.geneId != '' %}
+
+		<dl class="standard">
+
+			<dt>Perplexity</dt>
+			<dd>{{ chart.perplexity }}</dd>
+
+			<dt>Cluster</dt>
+			<dd>None</dd>
+
+			<dt>Gene</dt>
+			<dd>{{ chart.geneId }}</dd>
+
+			<dt>Metadata</dt>
+			<dd>None</dd>
+
+		</dl>
+
+	{% endif %}
+
+	{% if chart.metadata != '' %}
+
+		<dl class="standard">
+
+			<dt>Perplexity</dt>
+			<dd>{{ chart.perplexity }}</dd>
+
+			<dt>Cluster</dt>
+			<dd>None</dd>
+
+			<dt>Gene</dt>
+			<dd>None</dd>
+
+			<dt>Metadata</dt>
+			<dd>{{ chart.metadata|replace:"_| " }}</dd>
+
+		</dl>
+
+	{% endif %}
+
+
+		<br />
+
+	    <h3>Experiment Metadata</h3>
+
+		<hr>
+
+		<dl class="standard">
+
+			<dt>Type</dt>
+			<dd>{{ metadata.experimentType }}</dd>
+
+			<dt>Description</dt>
+			<dd>{{ metadata.experimentDescription }}</dd>
+
+			<dt>Load Date</dt>
+			<dd>{{ metadata.loadDate }}</dd>
+
+			<dt>Last Update</dt>
+			<dd>{{ metadata.lastUpdate }}</dd>
+
+			<dt>Number Of Assays</dt>
+
+	{% if metadata.numberOfAssays == '' %}
+
+			<dd>None</dd>
+
+	{% else %}
+
+			<dd>{{ metadata.numberOfAssays }}</dd>
+
+	{% endif %}
+
+			<dt>Number Of Contrasts</dt>
+
+	{% if metadata.numberOfContrasts == '' %}
+
+			<dd>None</dd>
+
+	{% else %}
+
+			<dd>{{ metadata.numberOfContrasts }}</dd>
+
+	{% endif %}
+
+			<dt>Species</dt>
+			<dd>{{ metadata.species }}</dd>
+
+			<dt>Kingdom</dt>
+			<dd>{{ metadata.kingdom }}</dd>
+
+			<dt>Technology Type</dt>
+
+	{% if metadata.technologyType == '' %}
+
+			<dd>None</dd>
+
+	{% else %}
+
+			<dd>{{ metadata.technologyType }}</dd>
+
+	{% endif %}
+
+			<dt>Experimental Factors</dt>
+
+	{% if metadata.experimentalFactors == '' %}
+
+			<dd>None</dd>
+
+	{% else %}
+
+			<dd>{{ metadata.experimentalFactors }}</dd>
+
+	{% endif %}
+
+			<dt>Project</dt>
+
+	{% if metadata.experimentProject == '' %}
+
+			<dd>None</dd>
+
+	{% else %}
+
+			<dd>{{ metadata.experimentProject }}</dd>
+
+	{% endif %}
+
+		</dl>
+
+		<br />
+		<br />
+
+	{% if image_flag == 'DISALLOW' %}
+
+        <div class="panel-alert">
+            <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+        </div>
+
+	{% else %}
+
+		<a class="dropdown-item" href="{% url 'webgallery_add_ebi_sca_image' server.id chart.chart_id add_from %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+
+
+    	<br />
+    	<br />
+
+		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+
+	{% endif %}
+
+		<br />
+		<br />
+
+    	<hr>
+
+{% endif %}
+
+	</div>
+
+	<div class="standard-grid-item">
+	</div>
+
+</div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+{% endblock %}

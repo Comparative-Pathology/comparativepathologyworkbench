@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         exists_server_for_uid_url.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,15 +24,28 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
-# SIGNUP VIEW ROUTINES
-#
-# def signup(request):
-# def account_activation_sent(request):
-# def activate(request, uidb64, token):
-#
+# Extract the EBI SCA Experiment Id from an EBI SCA URL
 ###
+from __future__ import unicode_literals
 
-from .account_activation_sent import account_activation_sent
-from .activate import activate
-from .signup import signup
+import base64, hashlib
+
+from urllib.parse import urlparse
+
+
+"""
+    Extract the EBI SCA Experiment Id from an EBI SCA URL
+"""
+def get_an_ebi_sca_experiment_id(a_url):
+
+    experiment_id = ''
+
+    result = urlparse(a_url)
+
+    if all([result.scheme, result.netloc, result.path, result.query]):
+
+        path_array = result.path.split("/")
+
+        experiment_id = path_array[4]
+
+    return experiment_id

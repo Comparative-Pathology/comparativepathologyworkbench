@@ -38,10 +38,12 @@ from django.apps import apps
 
 from decouple import config
 
-from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_image_count_for_image
-from matrices.routines import exists_image_for_id_server_owner_roi
-from matrices.routines import get_images_for_id_server_owner_roi
+from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
+from matrices.routines.get_image_count_for_image import get_image_count_for_image
+from matrices.routines.exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi
+from matrices.routines.get_images_for_id_server_owner_roi import get_images_for_id_server_owner_roi
+from matrices.routines.get_an_ebi_sca_experiment_id_from_chart_id import get_an_ebi_sca_experiment_id_from_chart_id
+from matrices.routines.get_an_ebi_sca_parameters_from_chart_id import get_an_ebi_sca_parameters_from_chart_id
 
 #
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
@@ -57,6 +59,20 @@ def add_image_to_collection(user, server, image_id, roi_id):
     image_name = ''
     image_viewer_url = ''
     image_birdseye_url = ''
+
+    if server.is_ebi_sca():
+
+        experiment_id = get_an_ebi_sca_experiment_id_from_chart_id(image_id)
+
+        metadata = server.get_ebi_server_experiment_metadata(experiment_id)
+
+        chart = get_an_ebi_sca_parameters_from_chart_id(server.url_server, image_id)
+
+        image_id = int(chart['chart_key'])
+        full_image_name = chart['chart_id']
+        image_viewer_url = chart['viewer_url']
+        image_birdseye_url = chart['birdseye_url']
+
 
     if server.is_omero547() or server.is_omero56():
 

@@ -132,6 +132,12 @@ class Server(models.Model):
         else:
             return False
 
+    def is_ebi_sca(self):
+        if self.type.name == 'EBI_SCA':
+            return True
+        else:
+            return False
+
     def get_uid_and_url(self):
         return f"{self.uid}@{self.url_server}"
 
@@ -763,9 +769,92 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Server
     """
+    def get_ebi_server_experiment_metadata(self, an_experiment_id):
+
+        experiments_url = config('EBI_SCA_EXPERIMENTS_URL')
+
+        full_experiments_url = 'https://' + self.url_server + '/' + experiments_url + '/'
+
+        session = requests.Session()
+        session.timeout = 10
+
+        payload = {'limit': 100}
+        data = session.get(full_experiments_url, params=payload).json()
+        assert len(data['experiments']) < 1000
+
+        experiment_metadata = ()
+
+        for p in data['experiments']:
+
+            if an_experiment_id == p['experimentAccession']:
+
+                technologyType = ''
+                experimentalFactors = ''
+                experimentProject = ''
+
+                if 'technologyType' in p:
+
+                    for a in p['technologyType']:
+
+                        if technologyType == '':
+
+                            technologyType = a
+
+                        else:
+
+                            technologyType = technologyType + ', ' + a
+
+
+                if 'experimentalFactors' in p:
+
+                    for b in p['experimentalFactors']:
+
+                        if experimentalFactors == '':
+
+                            experimentalFactors = b
+
+                        else:
+
+                            experimentalFactors = experimentalFactors + ', ' + b
+
+
+                if 'experimentProject' in p:
+
+                    for c in p['experimentProject']:
+
+                        if experimentProject == '':
+
+                            experimentProject = c
+
+                        else:
+
+                            experimentProject = experimentProject + ', ' + c
+
+
+                experiment_metadata = ({
+                    'experimentType': p['experimentType'],
+                    'experimentAccession': p['experimentAccession'],
+                    'experimentDescription': p['experimentDescription'],
+                    'loadDate': p['loadDate'],
+                    'lastUpdate': p['lastUpdate'],
+                    'numberOfAssays': p['numberOfAssays'],
+                    'numberOfContrasts': '',
+                    'species': p['species'],
+                    'kingdom': p['kingdom'],
+                    'technologyType': technologyType,
+                    'experimentalFactors': experimentalFactors,
+                    'experimentProject': experimentProject
+                })
+
+        return experiment_metadata
+
+
+    """
+        Get the JSON Details for the Requested Server
+    """
     def get_ebi_server_json(self):
 
-        experiments_url = 'https://www.ebi.ac.uk/gxa/sc/json/experiments/'
+        experiments_url = config('EBI_SCA_EXPERIMENTS_URL')
 
         session = requests.Session()
         session.timeout = 10

@@ -47,6 +47,7 @@ from .exists_collections_for_image import exists_collections_for_image
 from .exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi
 from .exists_image_for_user import exists_image_for_user
 from .exists_image_in_cells import exists_image_in_cells
+from .exists_image_in_table import exists_image_in_table
 from .exists_images_for_collection import exists_images_for_collection
 from .exists_inactive_collection_for_user import exists_inactive_collection_for_user
 from .exists_server_for_uid_url import exists_server_for_uid_url

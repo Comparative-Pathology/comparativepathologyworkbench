@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         exists_image_in_cells.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,29 +24,22 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
-# AUTHORSATION VIEW ROUTINES
-#
-# def collectivization(request):
-# def mailer(request):
-# def view_user(request, user_id):
-# def edit_user(request, user_id):
-# def delete_user(request, user_id):
-# def new_blog_credential(request):
-# def view_blog_credential(request, credential_id):
-# def edit_blog_credential(request, credential_id):
-# def delete_blog_credential(request, credential_id):
-#
+# Is there an Image for a particular Image Name?
 ###
+from __future__ import unicode_literals
 
-from .charttidyup import charttidyup
-from .collectivization import collectivization
-from .delete_blog_credential import delete_blog_credential
-from .delete_user import delete_user
-from .edit_blog_credential import edit_blog_credential
-from .edit_user import edit_user
-from .mailer import mailer
-from .new_blog_credential import new_blog_credential
-from .renaming import renaming
-from .view_blog_credential import view_blog_credential
-from .view_user import view_user
+import base64, hashlib
+
+from os import urandom
+
+from django.apps import apps
+
+
+"""
+    Is there an Image for a particular Image Name?
+"""
+def exists_image_in_table(a_name):
+
+    Image = apps.get_model('matrices', 'Image')
+
+    return Image.objects.filter(name=a_name).exists()

@@ -159,23 +159,33 @@ The list imaging hosts (Servers) template
 					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 					<a href="{% url 'edit_server' server.id %}"><button class="save button button-edit"><i class="fa fa-edit"></i></button></a>
 					<a href="{% url 'delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this Image Server?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+
     	        </td>
 
 			{% else %}
 
 	            <td>
 
-				{% if server.type.name == 'WORDPRESS' %}
+					{% if server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+						<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-				{% else %}
+					{% endif %}
 
-					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+					{% if server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
 
-				{% endif %}
+						<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+					{% endif %}
+
+					{% if server.type.name == 'EBI_SCA' %}
+
+						<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+
+					{% endif %}
 
 					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+
 	            </td>
 
 			{% endif %}

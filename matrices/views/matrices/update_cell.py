@@ -176,28 +176,33 @@ def update_cell(request, matrix_id, cell_id):
 
 						success = call(str(shell_command), shell=True)
 
-						if success != 0:
-							print("shell_command : FAILED!")
-							print("shell_command : " + str(shell_command))
+						if success == 0:
 
-						server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
+							server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
 
+							if exists_active_collection_for_user(request.user):
 
-						if exists_active_collection_for_user(request.user):
+								image = add_image_to_collection(request.user, server, image_id, 0)
 
-							image = add_image_to_collection(request.user, server, image_id, 0)
+								queryset = get_active_collection_for_user(request.user)
 
-							queryset = get_active_collection_for_user(request.user)
+								for collection in queryset:
 
-							for collection in queryset:
+									matrix.set_last_used_collection(collection)
 
-								matrix.set_last_used_collection(collection)
+							else:
+
+								messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
+								form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
+
+								data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
+
+								return render(request, 'matrices/update_cell.html', data)
 
 						else:
 
-							messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
-							form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
-
+							messages.error(request, "Unable to generate Chart - shell_command : FAILED!")
+							form.add_error(None, "Unable to generate Chart - shell_command : FAILED!")
 							data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
 							return render(request, 'matrices/update_cell.html', data)

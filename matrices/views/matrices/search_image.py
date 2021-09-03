@@ -123,13 +123,16 @@ def search_image(request, path_from, identifier):
 
                     success = call(str(shell_command), shell=True)
 
-                    if success != 0:
-                        print("shell_command : FAILED!")
-                        print("shell_command : " + str(shell_command))
+                    if success == 0:
 
-                    server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
+                        server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
 
-                    return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+                        return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+
+                    else:
+
+                        messages.error(request, "Unable to generate Chart - shell_command : FAILED!")
+                        form.add_error(None, "Unable to generate Chart - shell_command : FAILED!")
 
             else:
 

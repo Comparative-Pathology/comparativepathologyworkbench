@@ -181,6 +181,8 @@ class Server(models.Model):
 
         except Exception as err:
 
+            print("Exception err : " + str(err))
+
             post = {'id': '',
                 'date': '',
                 'time': '',
@@ -263,6 +265,8 @@ class Server(models.Model):
             return comment_list
 
         except Exception as err:
+
+            print("Exception err : " + str(err))
 
             comment = {'id': '',
                     'date': '',
@@ -367,6 +371,8 @@ class Server(models.Model):
 
         except Exception as err:
 
+            print("Exception err : " + str(err))
+
             post = {'id': '',
                 'title': title,
                 'content': content,
@@ -435,6 +441,8 @@ class Server(models.Model):
 
         except Exception as err:
 
+            print("Exception err : " + str(err))
+
             comment = {
                 'post': post_id,
                 'content': content,
@@ -490,6 +498,8 @@ class Server(models.Model):
             response = f'HTTP error occurred: {http_err}'
 
         except Exception as err:
+
+            print("Exception err : " + str(err))
 
             response = f'Other error occurred: {err}'
 
@@ -627,6 +637,8 @@ class Server(models.Model):
 
         except Exception as e:
 
+            print("Exception e : " + str(e))
+
             group = ''
             project_list = []
 
@@ -742,6 +754,8 @@ class Server(models.Model):
                 data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image }
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             image = ({
                 'id': image_id,
@@ -915,6 +929,7 @@ class Server(models.Model):
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
 
         api_url = commandAPI.protocol.name + '://' + self.url_server + '/' + commandAPI.application
+
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
@@ -927,10 +942,17 @@ class Server(models.Model):
         session = requests.Session()
         session.timeout = 10
 
+        if self.id == 33:
+            session.verify = False
+        else:
+            session.verify = True
+
         try:
             r = session.get(api_url)
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             group_count = 0
             group_list = []
@@ -1012,7 +1034,6 @@ class Server(models.Model):
                 data = { 'server': self, 'group_list': group_list, 'group_count': group_count }
 
                 return data
-
 
             eventContext = login_rsp['eventContext']
             memberOfGroups = eventContext['memberOfGroups']
@@ -1181,10 +1202,17 @@ class Server(models.Model):
 
         session = requests.Session()
 
+        if self.id == 33:
+            session.verify = False
+        else:
+            session.verify = True
+
         try:
             r = session.get(api_url)
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             group_count = 0
             group_list = []
@@ -1285,7 +1313,7 @@ class Server(models.Model):
                 payload = {'limit': 200}
                 project_data = session.get(project_url, params=payload).json()
 
-                assert len(project_data['data']) < 200
+                assert len(project_data['data']) < 2000
 
                 project_meta = project_data['meta']
                 projectCount = project_meta['totalCount']
@@ -1421,11 +1449,17 @@ class Server(models.Model):
         images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
 
         session = requests.Session()
+        if self.id == 33:
+            session.verify = False
+        else:
+            session.verify = True
 
         try:
             r = session.get(api_url)
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             group = ''
             project = ''
@@ -1524,7 +1558,7 @@ class Server(models.Model):
 
                 payload = {'limit': 200}
                 image_data = session.get(image_url, params=payload).json()
-                assert len(image_data['data']) < 200
+                assert len(image_data['data']) < 2000
 
                 for i in image_data['data']:
 
@@ -1589,11 +1623,17 @@ class Server(models.Model):
         images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
 
         session = requests.Session()
+        if self.id == 33:
+            session.verify = False
+        else:
+            session.verify = True
 
         try:
             r = session.get(api_url)
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             dataset = ''
             group = ''
@@ -1656,9 +1696,9 @@ class Server(models.Model):
 
         else:
 
-            assert len(images_data['data']) < 200
-            assert len(dataset_data['data']) < 200
-            assert len(projects_data['data']) < 200
+            assert len(images_data['data']) < 2000
+            assert len(dataset_data['data']) < 2000
+            assert len(projects_data['data']) < 2000
 
             ddata = dataset_data['data']
             idata = images_data['data']
@@ -1770,11 +1810,17 @@ class Server(models.Model):
         image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + commandRegion.postamble
 
         session = requests.Session()
+        if self.id == 33:
+            session.verify = False
+        else:
+            session.verify = True
 
         try:
             r = session.get(api_url)
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             group_count = 0
             group_list = []
@@ -1836,7 +1882,7 @@ class Server(models.Model):
 
         else:
 
-            assert len(rois_data['data']) < 200
+            assert len(rois_data['data']) < 2000
 
             rmeta = rois_data['meta']
             roiCount = rmeta['totalCount']
@@ -2013,7 +2059,7 @@ class Server(models.Model):
 
                 roi_list.append(roi)
 
-            assert len(image_data['data']) < 200
+            assert len(image_data['data']) < 2000
 
             data = image_data['data']
             name = data['Name']
@@ -2077,7 +2123,7 @@ class Server(models.Model):
 
             payload = {'limit': 200}
             dataset_data = session.get(dataset_url, params=payload).json()
-            assert len(dataset_data['data']) < 200
+            assert len(dataset_data['data']) < 2000
 
             ddata = dataset_data['data']
 
@@ -2092,7 +2138,7 @@ class Server(models.Model):
 
                 payload = {'limit': 200}
                 project_data = session.get(projects_url, params=payload).json()
-                assert len(project_data['data']) < 200
+                assert len(project_data['data']) < 2000
 
                 pdata = project_data['data']
 
@@ -2170,6 +2216,8 @@ class Server(models.Model):
 
         except Exception as e:
 
+            print("Exception e : " + str(e))
+
             group_count = 0
             group_list = []
 
@@ -2194,7 +2242,7 @@ class Server(models.Model):
 
         payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
-        assert len(rois_data['data']) < 200
+        assert len(rois_data['data']) < 2000
 
         rmeta = rois_data['meta']
         roiCount = rmeta['totalCount']
@@ -2372,7 +2420,7 @@ class Server(models.Model):
 
         payload = {'limit': 200}
         image_data = session.get(image_url, params=payload).json()
-        assert len(image_data['data']) < 200
+        assert len(image_data['data']) < 2000
 
         data = image_data['data']
         name = data['Name']
@@ -2430,7 +2478,7 @@ class Server(models.Model):
 
         payload = {'limit': 200}
         dataset_data = session.get(dataset_url, params=payload).json()
-        assert len(dataset_data['data']) < 200
+        assert len(dataset_data['data']) < 2000
 
         ddata = dataset_data['data']
 
@@ -2444,7 +2492,7 @@ class Server(models.Model):
 
             payload = {'limit': 200}
             project_data = session.get(projects_url, params=payload).json()
-            assert len(project_data['data']) < 200
+            assert len(project_data['data']) < 2000
 
             pdata = project_data['data']
 
@@ -2532,6 +2580,8 @@ class Server(models.Model):
 
         except Exception as e:
 
+            print("Exception e : " + str(e))
+
             image = ({
                 'id': str(image_id),
                 'name': '',
@@ -2598,6 +2648,8 @@ class Server(models.Model):
 
         except Exception as e:
 
+            print("Exception e : " + str(e))
+
             data = { 'image': image }
 
             return data
@@ -2618,7 +2670,7 @@ class Server(models.Model):
 
         payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
-        assert len(rois_data['data']) < 200
+        assert len(rois_data['data']) < 2000
 
         rmeta = rois_data['meta']
         roiCount = rmeta['totalCount']
@@ -2628,9 +2680,11 @@ class Server(models.Model):
         try:
             payload = {'limit': 200}
             image_data = session.get(image_url, params=payload).json()
-            assert len(image_data['data']) < 20
+            assert len(image_data['data']) < 2000
 
         except Exception as e:
+
+            print("Exception e : " + str(e))
 
             image = ({
                 'id': "Not Found",
@@ -2730,6 +2784,8 @@ class Server(models.Model):
 
         except Exception as e:
 
+            print("Exception e : " + str(e))
+
             data = { 'roi': roi }
 
             return data
@@ -2751,7 +2807,7 @@ class Server(models.Model):
 
         payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
-        assert len(rois_data['data']) < 200
+        assert len(rois_data['data']) < 2000
 
         rmeta = rois_data['meta']
         roiCount = rmeta['totalCount']

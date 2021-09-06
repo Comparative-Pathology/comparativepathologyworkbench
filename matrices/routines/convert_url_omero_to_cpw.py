@@ -38,8 +38,8 @@ from django.apps import apps
 
 from urllib.parse import urlparse
 
-from matrices.routines import exists_server_for_url
-from matrices.routines import get_server_list_for_url
+from matrices.routines.exists_server_for_url import exists_server_for_url
+from matrices.routines.get_server_list_for_url import get_server_list_for_url
 from matrices.routines.validate_an_omero_url import validate_an_omero_url
 from matrices.routines.validate_an_ebi_sca_url import validate_an_ebi_sca_url
 

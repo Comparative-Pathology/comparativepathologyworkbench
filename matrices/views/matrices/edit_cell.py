@@ -70,6 +70,7 @@ def edit_cell(request, matrix_id, cell_id):
     else:
 
         cell = get_object_or_404(Cell, pk=cell_id)
+
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
@@ -94,8 +95,10 @@ def edit_cell(request, matrix_id, cell_id):
 
                     if form.is_valid():
 
-                        cell = form.save(commit=False)
+                        new_cell = form.save(commit=False)
 
+                        cell.set_title(new_cell.title)
+                        cell.set_description(new_cell.description)
                         cell.set_matrix(matrix)
 
                         cell.save()

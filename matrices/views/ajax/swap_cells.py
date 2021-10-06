@@ -124,6 +124,6 @@ def swap_cells(request):
 
     else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = { 'failure': True, 'source': str(source), 'target': str(target) }
 
-            return JsonResponse(data)
+        return JsonResponse(data)

@@ -34,164 +34,96 @@ The view matrix (bench) template
 
 {% load inlineedit %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+			<li onclick="openGridRow();">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} <i class="fas fa-info-circle"></i></li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_benches' %}">Workbenches</a>
-		</li>
+<div class="collapsible-content">
+<dl>
 
-		<li>
-			CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} :
+	<dt>Id:</dt>
+	<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
 
-			<!-- <a href="#my_popup_info"> -->
-				<!-- <i class="fa fa-info fa-lg" title="Bench Details 3"></i> -->
-				<!-- <span class="sr-only">Bench Details</span> -->
-			<!-- </a> -->
+	<dt>Title:</dt>
+	<dd>
+		{% inlineedit "matrix.title" "blocked" %}
+	</dd>
 
-			<button type="button" class="collapsible">
-				<a href="#"><i class="fa fa-info fa-lg" title="Bench Details"></i></a>
-			</button>
+	<dt>Description:</dt>
+	<dd>
+		{% inlineedit "matrix.description" "blocked" %}
+	</dd>
 
-			<div class="collapsible-content">
+	<dt>Owner:</dt>
+	<dd>{{ matrix.owner.username }}</dd>
 
-				<dl>
+	<dt>Cell Height:</dt>
+	<dd>{{ matrix.height }}</dd>
 
-					<dt>Id:</dt>
-					<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
+	<dt>Cell Width:</dt>
+	<dd>{{ matrix.width }}</dd>
 
-					<dt>Title:</dt>
-					<dd>
-						{% inlineedit "matrix.title" "blocked" %}
-					</dd>
+	<dt>Created:</dt>
+	<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
 
-					<dt>Description:</dt>
-					<dd>
-						{% inlineedit "matrix.description" "blocked" %}
-					</dd>
+	<dt>Last Modified:</dt>
+	<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
 
-					<dt>Owner:</dt>
-					<dd>{{ matrix.owner.username }}</dd>
+</dl>
+</div><!-- End of collapsible-content -->
 
-					<dt>Cell Height:</dt>
-					<dd>{{ matrix.height }}</dd>
+{% endblock %}
 
-					<dt>Cell Width:</dt>
-					<dd>{{ matrix.width }}</dd>
-
-					<dt>Created:</dt>
-					<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
-
-					<dt>Last Modified:</dt>
-					<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
-
-				</dl>
-
-			</div>
-
-		</li>
-
-	</ul>
-
-</div>
-
-
-<!-- Pop-ups -->
-
-<!-- The Bench Information Pop-up -->
-
-<a id="my_popup_info" href="#" class="my-test-popup"></a>
-
-<div style="width: 500px; height: 400px; margin-left: -250px; margin-top: -200px;" class="my-test-popup">
-	<h3>Bench Details</h3>
-	<dl>
-		<dt>Id:</dt>
-		<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
-
-		<dt>Title:</dt>
-		<dd>{{ matrix.title }}</dd>
-
-		<dt>Owner:</dt>
-		<dd>{{ matrix.owner.username }}</dd>
-
-		<dt>Cell Height:</dt>
-		<dd>{{ matrix.height }}</dd>
-
-		<dt>Cell Width:</dt>
-		<dd>{{ matrix.width }}</dd>
-
-		<dt>Description:</dt>
-		<dd>{{ matrix.description|truncatechars:100 }}</dd>
-
-		<dt>Created:</dt>
-		<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
-
-		<dt>Last Modified:</dt>
-		<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
-	</dl>
-	<a class="close x" href="#">x</a>
-	<a class="close word" href="#">Close</a>
-</div>
-
+{% block content %}
 
 <!-- The Bench Commentary Pop-up -->
 
-<a id="my_popup_bench" href="#" class="my-test-popup"></a>
+<a id="popup_bench" href="#" class="bench-popup"></a>
 
-<div style="width: 900px; height: 700px; margin-left: -450px; margin-top: -350px;" class="my-test-popup">
-	<h3>Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h3>
-	<dl>
-		<dt>Bench Title</dt>
-		<dd>{{ matrix_comments.title }}</dd>
+<div style="width: 900px; height: 700px; margin-left: -450px; margin-top: -350px; background: #F9E79F;" class="bench-popup">
+  <h3>Commentary for Bench: CPW:{{ matrix_comments.id|stringformat:"06d" }}, "{{ matrix_comments.title }}"</h3>
+  <dl>
+    <dt>Bench Title</dt>
+	<dd>{{ matrix_comments.title }}</dd>
+    <dt>Description</dt>
+	<dd>{{ matrix_comments.description|truncatechars:20 }}</dd>
+  </dl>
 
-		<dt>Description</dt>
-		<dd>{{ matrix_comments.description|truncatechars:20 }}</dd>
-	</dl>
+{% if matrix_comments.comment_list %}
 
-		{% if matrix_comments.comment_list %}
+  <table>
+    <tr>
+	  <th width="100px">Date</th>
+	  <th width="100px">Time</th>
+	  <th width="100px">Author</th>
+	  <th>Comment</th>
+	</tr>
 
-	<table>
-		<tr>
-			<th width="100px">Date</th>
-			<th width="100px">Time</th>
-			<th width="100px">Author</th>
-			<th>Comment</th>
-		</tr>
+    {% for comment in matrix_comments.comment_list %}
 
-			{% for comment in matrix_comments.comment_list %}
+	<tr>
+	  <td>{{ comment.date }}</td>
+	  <td>{{ comment.time }}</td>
+	  <td>{{ comment.author_name }}</td>
+	  <td>{{ comment.content|safe|truncatechars:50 }}</td>
+	</tr>
 
-		<tr>
-			<td>
-				{{ comment.date }}
-			</td>
-			<td>
-				{{ comment.time }}
-			</td>
-			<td>
-				{{ comment.author_name }}
-			</td>
-			<td>
-				{{ comment.content|safe|truncatechars:50 }}
-			</td>
-		</tr>
+	{% endfor %}
 
-			{% endfor %}
-	</table>
+  </table>
 
-		{% endif %}
+{% endif %}
 
-	<a class="close x" href="#">x</a>
-	<a class="close word" href="#">Close</a>
+  <a class="close x" href="#"><i class="fas fa-times-circle"></i></a>
+  <a class="close word" href="#">Close</a>
 </div>
 
 
@@ -201,868 +133,533 @@ The view matrix (bench) template
 
 	{% for cell in matrix_cells_comments %}
 
-<a id="my_popup_{{ cell.id }}" href="#" class="my-test-popup"></a>
+<a id="popup_{{ cell.id }}" href="#" class="bench-popup"></a>
 
 <!-- Modal -->
-<div style="width: 900px; height: 700px; margin-left: -450px; margin-top: -350px;" class="my-test-popup">
-	<h3>Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.title }}"</h5>
-	<dl>
-		<dt>Cell Title</dt>
-		<dd>{{ cell.title }}</dd>
-
-		<dt>Description</dt>
-		<dd>{{ cell.description|truncatechars:20 }}</dd>
-	</dl>
+<div style="width: 900px; height: 700px; margin-left: -450px; margin-top: -350px; background: #CCFFCC;" class="bench-popup">
+  <h3>Commentary for Cell: CPW:{{ cell.matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ cell.title }}"</h3>
+  <dl>
+	<dt>Cell Title</dt>
+	<dd>{{ cell.title }}</dd>
+ 	<dt>Description</dt>
+ 	<dd>{{ cell.description|truncatechars:20 }}</dd>
+  </dl>
 
 		{% if cell.viewer_url != '' %}
 
-	<p>
-		<a href="{{ cell.viewer_url }}" target="_blank"><img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width: 250px; height: 250px;" src="{{ cell.birdseye_url }}" ></a>
-	</p>
+  <p><a href="{{ cell.viewer_url }}" target="_blank"><img alt="{{ cell.image_name }}" title="{{ cell.image_name }}" style="width: 250px; height: 250px;" src="{{ cell.birdseye_url }}" ></a></p>
 
 		{% endif %}
 
 		{% if cell.comment_list %}
 
-	<table>
-		<tr>
-			<th width="100px">Date</th>
-			<th width="100px">Time</th>
-			<th width="100px">Author</th>
-			<th>Comment</th>
-		</tr>
+  <table>
+    <tr>
+	  <th width="100px">Date</th>
+	  <th width="100px">Time</th>
+	  <th width="100px">Author</th>
+	  <th>Comment</th>
+	</tr>
 
-			{% for comment in cell.comment_list %}
+    		{% for comment in cell.comment_list %}
 
-		<tr>
-			<td>
-				{{ comment.date }}
-			</td>
-			<td>
-				{{ comment.time }}
-			</td>
-			<td>
-				{{ comment.author_name }}
-			</td>
-			<td>
-				{{ comment.content|safe|truncatechars:50 }}
-			</td>
-		</tr>
+	<tr>
+	  <td>{{ comment.date }}</td>
+	  <td>{{ comment.date }}</td>
+	  <td>{{ comment.time }}</td>
+	  <td>{{ comment.author_name }}</td>
+	  <td>{{ comment.content|safe|truncatechars:50 }}</td>
+	</tr>
 
 			{% endfor %}
 
-	</table>
+  </table>
 
 		{% endif %}
 
-	<a class="close x" href="#">x</a>
-	<a class="close word" href="#">Close</a>
+  <a class="close x" href="#"><i class="fas fa-times-circle"></i></a>
+  <a class="close word" href="#">Close</a>
 </div>
 
 	{% endfor %}
 
 {% endif %}
 
-
 <!-- Main Data Panel -->
 
-<div class="grid-container">
-
-	<div class="grid-item" id="matrix_sidebar">
+<div class="page-sidebar">
 
 {% if authority.is_viewer %}
 
-{% else %}
+    {% else %}
 
-	{% if credential_flag %}
+    {% if credential_flag %}
 
 <!-- Selected or Active Image Collection -->
 
-<table border="0" class="basket">
+  <div class="collection-container">
+	<div class="collection-item">
+	  <div class="collection-master">
+		<div class="collection-master-control">
+		  <div class="collection-dropdown">
+			<button class="collection-drop-button"><i class="fas fa-bars"></i></button>
+			<div class="collection-dropdown-content">
 
-{% if collection_list %}
+        {% if collection_list %}
 
-	<tr>
+            {% for collection in collection_list %}
 
-		<td>
+	            {% if matrix.has_last_used_collection == True %}
 
-			<div class="collection" align="right">
+		            {% if matrix.last_used_collection.id == collection.collection_id %}
 
-				<div class="my-dropdown">
+				<a href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-					<a id="dropdown_1_link" class="my-dropimage"><button class="basket-button button-image"><i class="fa fa-bars"></i></button></a>
+    		         {% endif %}
 
-					<div class="my-dropdown-cell-content">
+	            {% endif %}
 
-						<div class="my-dropdown-btn-content">
+            {% endfor %}
 
-	{% for collection in collection_list %}
+            {% for collection in collection_list %}
 
-		{% if matrix.has_last_used_collection == True %}
+	            {% if matrix.has_last_used_collection == True %}
 
-			{% if matrix.last_used_collection.id == collection.collection_id %}
+		            {% if matrix.last_used_collection.id == collection.collection_id %}
 
-					<a href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+    		        {% else %}
 
-			{% endif %}
+	    		        {% if collection.collection_owner == credential_flag %}
 
-		{% endif %}
+		    		        {% if collection.collection_active == True %}
 
-	{% endfor %}
+				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-	{% for collection in collection_list %}
+			    	        {% else %}
 
-		{% if matrix.has_last_used_collection == True %}
+				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-			{% if matrix.last_used_collection.id == collection.collection_id %}
+				            {% endif %}
 
-			{% else %}
+    			        {% else %}
 
-				{% if collection.collection_owner == credential_flag %}
+				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-					{% if collection.collection_active == True %}
+    			        {% endif %}
 
-					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+	    	        {% endif %}
 
-					{% else %}
+	            {% else %}
 
-					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+		            {% if collection.collection_owner == credential_flag %}
 
-					{% endif %}
+			            {% if collection.collection_active == True %}
 
-				{% else %}
+				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+    			        {% else %}
 
-				{% endif %}
+				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-			{% endif %}
+	    		        {% endif %}
 
-		{% else %}
+		            {% else %}
 
-			{% if collection.collection_owner == credential_flag %}
+				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
-				{% if collection.collection_active == True %}
+		            {% endif %}
 
-					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+    	        {% endif %}
 
-				{% else %}
+            {% endfor %}
 
-					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-				{% endif %}
-
-			{% else %}
-
-					<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-
-			{% endif %}
-
-		{% endif %}
-
-	{% endfor %}
-
-						</div>
-
-					</div>
-
-				</div>
+        {% endif %}
 
 			</div>
-
-		</td>
-
-	</tr>
-
-{% endif %}
-
-{% if collection_image_list %}
-
-	{% for image in collection_image_list %}
-
-	<tr>
-
-		<td id="image_{{ image.id }}">
-
-		{% if authority.is_viewer %}
-
-			<div id="image_{{ image.id }}">
-
-		{% else %}
-
-			<div draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
-
-		{% endif %}
-
-				<div class="image" align="right">
-
-					<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" title="{{ image.name }}" src="{{ image.birdseye_url }}"> </a>
-
-				</div>
-
-			</div>
-
-		</td>
-
-	</tr>
-
-	{% endfor %}
-
-{% else %}
-
-	{% if matrix.has_last_used_collection == True %}
-
-	<tr>
-		<td>
-			<div class="image" align="right">
-				<button class="basket-button button-info"><i class="fa fa-eye-slash"></i></button>
-			</div>
-		</td>
-	</tr>
-
-	{% endif %}
-
-{% endif %}
-
-</table>
-
-
-	{% endif %}
-
-{% endif %}
-
+		  </div>
+		</div>
+	  </div>
 	</div>
 
+        {% if collection_image_list %}
+
+            {% for image in collection_image_list %}
+
+	            {% if authority.is_viewer %}
+
+	<div class="collection-item" id="image_{{ image.id }}">
+	  <div class="collection-image">
+
+    	        {% else %}
+
+	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
+	  <div class="collection-image">
+
+		  			{% csrf_token %}
+
+		        {% endif %}
+
+		<a href="{{ image.viewer_url }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}"> </a>
+
+	  </div>
+	</div>
+
+            {% endfor %}
+
+        {% else %}
+
+            {% if matrix.has_last_used_collection == True %}
+
+	<div class="collection-item">
+	  <div class="collection-image">
+		<button class="basket-button button-info"><i class="fa fa-eye-slash"></i></button>
+	  </div>
+	</div>
+
+            {% endif %}
+
+        {% endif %}
+
+  </div>
+</div>
 
 <!-- The Bench -->
 
-{% if rows %}
 
-	<div class="grid-item">
-		<div>
+    {% endif %}
 
-			<table id="myTable" class="bench" border="0">
+{% endif %}
 
-				<tbody>
+<div class="page-content">
 
-	{% for row in rows %}
+        {% if rows %}
 
-					<tr>
+	        {% for row in rows %}
 
-		{% for column in columns %}
+  <div class="flex-bench-container">
 
-			{% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
+		        {% for column in columns %}
+
+    			    {% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
 
 
-<!-- The Master Cell -->
+				        {% if matrix_cell.is_master %}
 
-				{% if matrix_cell.is_master %}
+    <div class="flex-bench-item" id="{{ matrix_cell.id }}">
+      <div class="master-cell">
+        <div class="master-cell-control">
+          <div class="bench-dropdown">
+            <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
+            <div class="bench-dropdown-content">
+					        {% if authority.is_viewer %}
 
-						<td id="{{ matrix_cell.id }}">
+              <a href="{% url 'detail_matrix' matrix.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span>View Bench Details</a>
 
-							<div class="master-cell">
+    					    {% else %}
 
-								<table border="0">
+			  <a href="{% url 'detail_matrix' matrix.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span>View Bench Details</a>
+			  <a href="{% url 'edit_matrix' matrix.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Bench Details</a>
 
-									<tr>
+	    				    {% endif %}
 
-										<td align="center" width={{ matrix.width }}px>
+		    			    {% if matrix_link != '' %}
 
-											<div class="my-dropdown">
+			    			    {% if matrix.blogpost != '' %}
 
-												<a id="dropdown_{{ matrix_cell.id }}_link" class="my-dropbtn"><i class="fa fa-bars"></i></a>
+			  <a href="#popup_bench"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Bench Commentary</em></a>
+			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
 
-  												<div class="my-dropdown-btn-content">
+				    		    {% endif %}
 
-					{% if authority.is_viewer %}
+					        {% endif %}
 
-													<a href="{% url 'detail_matrix' matrix.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span>View Bench Details</a>
+    					    {% if authority.is_viewer %}
 
-					{% else %}
+	    				    {% else %}
 
-													<a href="{% url 'detail_matrix' matrix.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span>View Bench Details</a>
+			  <a href="{% url 'delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>DELETE Bench </a>
+			  <a href="{% url 'append_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
+			  <a href="{% url 'delete_last_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
+			  <a href="{% url 'append_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
+			  <a href="{% url 'delete_last_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
 
-													<a href="{% url 'edit_matrix' matrix.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Bench Details</a>
+		    			    {% endif %}
 
-					{% endif %}
+            </div><!-- End of bench-dropdown-content -->
+          </div><!-- End of bench-dropdown -->
+        </div><!-- End of master-cell-control -->
+      </div><!-- End of master-cell -->
+    </div><!-- End of flex-bench-item -->
 
-					{% if matrix_link != '' %}
-
-						{% if matrix.blogpost != '' %}
-
-													<a href="#my_popup_bench"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Bench Commentary</em></a>
-
-													<a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
-
-						{% endif %}
-
-					{% endif %}
-
-					{% if authority.is_viewer %}
-
-					{% else %}
-
-													<a href="{% url 'delete_matrix' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>DELETE Bench </a>
-
-													<a href="{% url 'append_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
-
-													<a href="{% url 'delete_last_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
-
-													<a href="{% url 'append_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
-
-													<a href="{% url 'delete_last_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
-
-					{% endif %}
-
-  												</div>
-
-											</div>
-
-										</td>
-
-									</tr>
-
-								</table>
-
-							</div>
-
-						</td>
-
-				{% endif %}
-
+			    	    {% endif %}
 
 <!-- Row Header Cells -->
 
-				{% if matrix_cell.is_column_header and not matrix_cell.is_row_header %}
-
+				        {% if matrix_cell.is_column_header and not matrix_cell.is_row_header %}
 
 <!-- The Bottom-Most Row Header Cell -->
 
-					{% if matrix.get_max_row == matrix_cell.ycoordinate %}
+					        {% if matrix.get_max_row == matrix_cell.ycoordinate %}
 
-						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
+    <div class="flex-bench-item" id="BMRHC_{{ matrix_cell.id }}">
 
-						{% if authority.is_viewer %}
+								{% csrf_token %}
 
-							<div id="cell_{{ matrix_cell.id }}">
+      <div class="bottom-right-cell" id="BMRHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 
-						{% else %}
+      </div><!-- End of bottom-right-cell -->
+    </div><!-- End of flex-bench-item -->
 
-							<div draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
-
-						{% endif %}
-
-								<div class="row-header-bottom-cell">
-
-								</div>
-
-							</div>
-
-						</td>
-
-					{% endif %}
-
+		    			    {% endif %}
 
 <!-- The Other Row Header Cells -->
 
-					{% if matrix.get_max_row != matrix_cell.ycoordinate %}
+    					    {% if matrix.get_max_row != matrix_cell.ycoordinate %}
 
-						<td id="{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
+      <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 
-						{% if authority.is_viewer %}
+		  						{% csrf_token %}
 
-							<div id="cell_{{ matrix_cell.id }}">
+      <div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
+        <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">{{ matrix_cell.title|truncatechars:15 }}
+        </div><!-- End of row-header-cell-title -->
+        <div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
+          <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
+            <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
+            <div class="bench-dropdown-content">
 
-						{% else %}
+								{% if authority.is_viewer %}
 
-							<div draggable="true" ondragstart="dragRow(event)" id="cell_{{ matrix_cell.id }}">
+			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
 
-						{% endif %}
+								{% else %}
 
-								<div class="row-header-cell" style="height:{{ matrix.height|add:"10" }}px;">
+			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
+			  <a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Column Header</a>
+			  <a href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}"><i class="fa fa-angle-up"></i><span class="menu-item">&#9;</span>Add Row Above</a>
+			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Row</a>
+		      <a href="{% url 'add_row_below' matrix.id forloop.parentloop.counter0 %}"><i class="fa fa-angle-down"></i><span class="menu-item">&#9;</span>Add Row Below</a>
 
-									<table border="0">
+								{% endif %}
 
-										<tr>
+            </div><!-- End of bench-dropdown-content -->
+          </div><!-- End of bench-dropdown -->
+        </div><!-- End of row-header-cell-control -->
+      </div><!-- End of row-header-cell -->
+    </div><!-- End of flex-bench-item -->
 
-											<td align="center">
+				    	    {% endif %}
 
-												<div class="my-dropdown">
-
-													<a id="dropdown_{{ matrix_cell.id }}_link" class="my-dropbtn">
-
-						{% if matrix_cell.title == '' %}
-
-														<i class="fa fa-bars"></i>
-
-						{% else %}
-
-														<p class="vertical_text">
-														{{ matrix_cell.title|truncatechars:15 }}
-														</p>
-
-						{% endif %}
-
-													</a>
-
-													<div class="my-dropdown-btn-content">
-
-						{% if authority.is_viewer %}
-
-														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-
-						{% else %}
-
-														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-
-														<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Row Header</a>
-
-														<a href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}"><i class="fa fa-angle-up"></i><span class="menu-item">&#9;</span>Add Row Above</a>
-
-														<a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Row</a>
-
-														<a href="{% url 'add_row_below' matrix.id forloop.parentloop.counter0 %}"><i class="fa fa-angle-down"></i><span class="menu-item">&#9;</span>Add Row Below</a>
-
-						{% endif %}
-
-													</div>
-
-												</div>
-
-											</td>
-
-										</tr>
-
-									</table>
-
-								</div>
-
-							</div>
-
-						</td>
-
-					{% endif %}
-
-				{% endif %}
+    				    {% endif %}
 
 
 <!-- Column Header Cells -->
 
-				{% if not matrix_cell.is_column_header and matrix_cell.is_row_header %}
-
+	    			    {% if not matrix_cell.is_column_header and matrix_cell.is_row_header %}
 
 <!-- The Right-Most Column Header Cell -->
 
-					{% if matrix.get_max_column == matrix_cell.xcoordinate %}
+		    			    {% if matrix.get_max_column == matrix_cell.xcoordinate %}
 
-						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+    <div class="flex-bench-item" id="RMCHC_{{ matrix_cell.id }}">
+      <div class="column-header-right-cell" id="RMCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 
-						{% if authority.is_viewer %}
+      </div><!-- End of column-header-right-cell -->
+    </div><!-- End of flex-bench-item -->
 
-							<div id="cell_{{ matrix_cell.id }}">
+    					    {% endif %}
 
-						{% else %}
+<!-- The Other Column Header Cells -->
 
-							<div draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
+	    				    {% if matrix.get_max_column != matrix_cell.xcoordinate %}
 
-						{% endif %}
+    <div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 
-								<div class="column-header-rightmost-cell">
+								{% csrf_token %}
 
-									<table border="0">
+      <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">{{ matrix_cell.title|truncatechars:15 }}
+        </div><!-- End of column-header-cell-title -->
+        <div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+          <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+            <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
+            <div class="bench-dropdown-content">
 
-										<tr>
+								{% if authority.is_viewer %}
 
-											<td align="center">
+			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
 
-											</td>
+								{% else %}
 
-										</tr>
+			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
+			  <a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Column Header</a>
+			  <a href="{% url 'add_column_left' matrix.id forloop.counter0	%}"><i class="fa fa-angle-left"></i><span class="menu-item">&#9;</span>Add Column Left</a>
+			  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Column</a>
+              <a href="{% url 'add_column_right' matrix.id forloop.counter0 %}"><i class="fa fa-angle-right"></i><span class="menu-item">&#9;</span>Add Column Right</a>
 
-									</table>
+								{% endif %}
 
-								</div>
+            </div><!-- End of bench-dropdown-content -->
+          </div><!-- End of bench-dropdown -->
+        </div><!-- End of column-header-cell-control -->
+      </div><!-- End of column-header-cell -->
+    </div><!-- End of flex-bench-item -->
 
-							</div>
+					        {% endif %}
 
-						</td>
-
-					{% endif %}
-
-
-<!-- The Other Row Header Cells -->
-
-					{% if matrix.get_max_column != matrix_cell.xcoordinate %}
-
-						<td id="{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-
-						{% if authority.is_viewer %}
-
-							<div id="cell_{{ matrix_cell.id }}">
-
-						{% else %}
-
-							<div draggable="true" ondragstart="dragCol(event)" id="cell_{{ matrix_cell.id }}">
-
-						{% endif %}
-
-								<div class="column-header-cell">
-
-									<table border="0">
-
-										<tr>
-
-						{% if matrix_cell.title == '' %}
-
-											<td align="right" width={{ matrix.width }}px>
-
-						{% else %}
-											<td align="left" width={{ matrix.width }}px>
-
-						{% endif %}
-
-												<div class="my-dropdown">
-
-													<a id="dropdown_{{ matrix_cell.id }}" class="my-dropbtn">
-
-						{% if matrix_cell.title == '' %}
-
-														<i class="fa fa-bars"></i>
-
-						{% else %}
-
-														<em>{{ matrix_cell.title|truncatechars:15 }}</em>
-
-						{% endif %}
-
-													</a>
-
-													<div class="my-dropdown-btn-content">
-
-						{% if authority.is_viewer %}
-
-														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-
-						{% else %}
-
-														<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-
-														<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Column Header</a>
-
-														<a href="{% url 'add_column_left' matrix.id forloop.counter0	%}"><i class="fa fa-angle-left"></i><span class="menu-item">&#9;</span>Add Column Left</a>
-
-														<a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Column</a>
-
-														<a href="{% url 'add_column_right' matrix.id forloop.counter0 %}"><i class="fa fa-angle-right"></i><span class="menu-item">&#9;</span>Add Column Right</a>
-
-						{% endif %}
-
-													</div>
-
-												</div>
-
-											</td>
-
-										</tr>
-
-									</table>
-
-								</div>
-
-							</div>
-
-						</td>
-
-					{% endif %}
-
-				{% endif %}
-
+    				    {% endif %}
 
 <!-- Non Header Cells -->
 
-				{% if not matrix_cell.is_column_header and not matrix_cell.is_row_header %}
-
+	    			    {% if not matrix_cell.is_column_header and not matrix_cell.is_row_header %}
 
 <!-- Ordinary Cells -->
 
-					{% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
+		    			    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
 
-						{% csrf_token %}
+							{% if authority.is_viewer %}
 
-						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
-
-						{% if authority.is_viewer %}
-
-							<div id="cell_{{ matrix_cell.id }}">
-
-						{% else %}
-
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
-
-						{% endif %}
-
-
-								<div style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" class="cell" align="right">
-
-									<div class="cell-title" style="width:{{ matrix.width|add:"-20" }}px;">{{ matrix_cell.title|truncatechars:15 }}
-									</div>
-
-									<div class="my-dropdown">
-
-										<a id="dropdown_{{ matrix_cell.id }}_link" class="my-dropcell"><i class="fa fa-bars"></i></a>
-
-										<div class="my-dropdown-cell-content">
-
-						{% if authority.is_viewer %}
-
-											<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-
-						{% else %}
-
-											<a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-
-											<a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
-
-											<a href="{% url 'update_cell' matrix.id matrix_cell.id %}"><i class="fa fa-search"></i><span class="menu-item">&#9;</span>Update Cell</a>
-
-						{% endif %}
-
-											<a href="#my_popup_{{ matrix_cell.id }}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Commentary</em></a>
-
-						{% if matrix_link != '' %}
-
-							{% if matrix_cell.blogpost != '' %}
-
-											<a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Commentary</a>
-
-							{% endif %}
-
-						{% endif %}
-
-										</div>
-
-									</div>
-
-									<div align="left">
-
-						{% if matrix_cell.image %}
-
-							{% if matrix_cell.image.roi == 0 %}
-
-										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank"><img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-20" }}px; height:{{ matrix.height|add:"-20" }}px;" src="{{ matrix_cell.image.birdseye_url }}" ></a>
+    <div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 
 							{% else %}
 
-										<a href="{{ matrix_cell.image.viewer_url }}" target="_blank"><img alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" style="width:{{ matrix.width|add:"-20" }}px; height:{{ matrix.height|add:"-20" }}px;" src="{{ matrix_cell.image.birdseye_url }}" ></a>
+	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
+
+								{% csrf_token %}
 
 							{% endif %}
 
-						{% else %}
+	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
+        <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">{{ matrix_cell.title|truncatechars:15 }}
+        </div><!-- End of cell-title -->
+        <div id="cell_{{ matrix_cell.id }}" class="cell-control" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
+            <div class="cell-dropdown-content">
 
-										<a href="#"><img alt="Comparative Pathology Workbench Logo" title="Comparative Pathology Workbench Logo" style="width:{{ matrix.width|add:"-20" }}px; height:{{ matrix.height|add:"-20" }}px;" src="/static/ccp-logo.png"></a>
+    						    {% if authority.is_viewer %}
 
-						{% endif %}
+			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
 
-									</div>
+	    					    {% else %}
 
-								</div>
+  			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
+			  <a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
+			  <a href="{% url 'update_cell' matrix.id matrix_cell.id %}"><i class="fa fa-search"></i><span class="menu-item">&#9;</span>Update Cell</a>
 
-							</div>
+		    				    {% endif %}
 
-						</td>
+			  <a href="#popup_{{ matrix_cell.id }}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Commentary</em></a>
 
-					{% endif %}
+			    			    {% if matrix_link != '' %}
 
+				    			    {% if matrix_cell.blogpost != '' %}
+
+			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Commentary</a>
+
+					    		    {% endif %}
+
+    						    {% endif %}
+
+            </div><!-- End of cell-dropdown-content -->
+          </div><!-- End of cell-dropdown -->
+        </div><!-- End of cell-control -->
+        <div id="cell_{{ matrix_cell.id }}" class="cell-body" style="width:{{ matrix.width|add:"-6" }}px; height:{{ matrix.height|add:"-32" }}px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+	    					    {% if matrix_cell.image %}
+
+		    					    {% if matrix_cell.image.roi == 0 %}
+
+          <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+          </a>
+
+			    				    {% else %}
+
+		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+		    <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+		  </a>
+
+				    			    {% endif %}
+
+					    	    {% else %}
+
+		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" style="top: 10%;" href="https://www.ed.ac.uk/comparative-pathology" ondrop="drop(event)" ondragover="allowDrop(event)">
+		    <img id="cell_{{ matrix_cell.id }}" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" style="width:{{ matrix.width|add:"-20" }}px;" src="/static/ccp-logo.png" ondrop="drop(event)" ondragover="allowDrop(event)">
+		  </a>
+
+						        {% endif %}
+
+        </div><!-- End of cell-body -->
+      </div><!-- End of cell -->
+    </div><!-- End of flex-bench-item -->
+
+
+    					    {% endif %}
 
 <!-- Right-Most Footer Cells -->
 
-					{% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
+	    				    {% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
 
-						{% csrf_token %}
+    <div class="flex-bench-item" id="RMFC_{{ matrix_cell.id }}">
 
-						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+								{% csrf_token %}
 
-						{% if authority.is_viewer %}
+      <div class="row-footer-cell" style="height:{{ matrix.height }}px;" id="RMFC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+      </div><!-- bottom-right-cell -->
+    </div><!-- End of flex-bench-item -->
 
-							<div id="cell_{{ matrix_cell.id }}">
-
-						{% else %}
-
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
-
-						{% endif %}
-
-								<div class="footer-cell-right" style="height: {{ matrix.height|add:"10" }}px;">
-
-									<div align="left">
-
-										<p class="text-left">
-
-										</p>
-
-									</div>
-
-								</div>
-
-							</div>
-
-						</td>
-
-					{% endif %}
-
+    					    {% endif %}
 
 <!-- Bottom-Most Footer Cells -->
 
-					{% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
+	    				    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
 
-						{% csrf_token %}
+    <div class="flex-bench-item" id="BMFC_{{ matrix_cell.id }}">
 
-						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+								{% csrf_token %}
 
-						{% if authority.is_viewer %}
+      <div class="column-footer-cell" style="width:{{ matrix.width }}px;" id="BMFC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
+      </div><!-- column-footer-cell -->
+    </div><!-- End of flex-bench-item -->
 
-							<div id="cell_{{ matrix_cell.id }}">
-
-						{% else %}
-
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
-
-						{% endif %}
-
-								<div class="footer-cell-bottom">
-
-									<div align="left">
-
-										<p class="text-left">
-
-										</p>
-
-									</div>
-
-								</div>
-
-							</div>
-
-						</td>
-
-					{% endif %}
-
+    					    {% endif %}
 
 <!-- Bottom-Most and Right-Most Footer Cell -->
 
-					{% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
+	    				    {% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
 
-						{% csrf_token %}
+    <div class="flex-bench-item" id="BMRMFC_{{ matrix_cell.id }}">
 
-						<td id="cell_{{ matrix_cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+								{% csrf_token %}
 
-						{% if authority.is_viewer %}
+      <div class="bottom-right-cell" id="BMRMFC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
+      </div><!-- bottom-right-cell -->
+    </div><!-- End of flex-bench-item -->
 
-							<div id="cell_{{ matrix_cell.id }}">
+    					    {% endif %}
 
-						{% else %}
+	    			    {% endif %}
 
-							<div draggable="true" ondragstart="drag(event)" id="cell_{{ matrix_cell.id }}">
+    			    {% endwith %}
 
-						{% endif %}
+    		    {% endfor %}
 
-								<div class="footer-cell-right-bottom" align="right">
+  </div><!-- flex-bench-container -->
 
-									<div align="left">
-
-										<p class="text-left">
-
-										</p>
-
-									</div>
-
-								</div>
-
-							</div>
-
-						</td>
-
-					{% endif %}
-
-				{% endif %}
-
-
-			{% endwith %}
-
-		{% endfor %}
-
-					</tr>
-
-	{% endfor %}
-
-				</tbody>
-
-			</table>
-
-		</div>
+    	    {% endfor %}
 
 
 <!-- There are NO Cells - This should not happen! -->
 
-{% else %}
+        {% else %}
 
-		<h1>CPW:{{ matrix.id }}, "{{ matrix.title }}" has NO Cells</h1>
-
-		<br />
-
-		<table>
-
-			<tr>
-
-				<td>
-
-					<form action="{% url 'add_cell' matrix.id %}" method="post">
-{% csrf_token %}
-						<input class="btn btn-danger" type="submit" value="Add Cell" />
-
-					</form>
-
-					<a href="{% url 'list_benches' %}"><button class="save btn btn-success">Back</button></a>
-
-				</td>
-
-			</tr>
-
-		</table>
-
-{% endif %}
-
-	</div>
+        {% endif %}
 
 </div>
 
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
 
 <script type="text/javascript">
-
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-	coll[i].addEventListener("click", function() {
-		this.classList.toggle("active");
-		var content = this.nextElementSibling;
-		if (content.style.display === "block") {
-			content.style.display = "none";
-		} else {
-			content.style.display = "block";
-		}
-	});
-}
-
 
 function confirmation(question, source_type) {
 
@@ -1080,14 +677,17 @@ function confirmation(question, source_type) {
 					"SWAP": function () {
 						defer.resolve("swap");
 						$(this).dialog("close");
+						window.location.reload();
 					},
 					"MOVE": function () {
 						defer.resolve("overwrite");
 						$(this).dialog("close");
+						window.location.reload();
 					},
 					"COPY": function () {
 						defer.resolve("overwrite_leave");
 						$(this).dialog("close");
+						window.location.reload();
 					},
 					"CLOSE": function () {
 						$(this).dialog('destroy').remove();
@@ -1114,6 +714,7 @@ function confirmation(question, source_type) {
 					"MOVE": function () {
 						defer.resolve("move");
 						$(this).dialog("close");
+						window.location.reload();
 					},
 					"CLOSE": function () {
 						$(this).dialog('destroy').remove();
@@ -1145,11 +746,11 @@ function onclick(source, target, source_type){
 		question = "Do you want to MOVE this Image to this CELL?";
 	}
 
-	console.log("source_type : " + source_type);
+	//console.log("source_type : " + source_type);
 
 	confirmation(question, source_type).then(function (answer) {
 
-		console.log("answer : " + answer);
+		//console.log("answer : " + answer);
 
 		if (answer == "swap"){
 
@@ -1164,7 +765,7 @@ function onclick(source, target, source_type){
 				dataType: 'json',
 				type: 'post',
 				success: function (data) {
-					console.log("Cell Swap SUCCESS! Source: " + data.source + "  Target: " + data.target);
+					//console.log("Cell Swap SUCCESS! Source: " + data.source + "  Target: " + data.target);
 					if (data.failure) {
 						alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
 					}
@@ -1205,10 +806,11 @@ function onclick(source, target, source_type){
 				dataType: 'json',
 				type: 'post',
 				success: function (data) {
-					console.log("Image Import SUCCESS! Source: " + data.source + "  Target: " + data.target);
+					//console.log("Image Import SUCCESS! Source: " + data.source + "  Target: " + data.target);
 					if (data.failure) {
 						alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
 					}
+					window.location.reload();
 				}
 			});
 
@@ -1233,7 +835,6 @@ function onclick(source, target, source_type){
 				}
 			});
 		}
-
 	});
 }
 
@@ -1256,14 +857,17 @@ function drop(ev){
 	var source_array = src.id.split("_",2);
 	var source_id = source_array[1];
 	var source_type = source_array[0];
+	//console.log("source_id : " + source_id);
+	//console.log("source_type : " + source_type);
 
-	var tgt = ev.currentTarget.firstElementChild;
+	const data = ev.target;
+	//console.log("data : " + data);
+
+	var tgt = ev.target;
 	var target_array = tgt.id.split("_",2);
 	var target_id = target_array[1];
 	var target_type = target_array[0];
 
-	//console.log("source_id : " + source_id);
-	//console.log("source_type : " + source_type);
 	//console.log("target_id : " + target_id);
 	//console.log("target_type : " + target_type);
 
@@ -1272,6 +876,8 @@ function drop(ev){
 
 	onclick(source_id, target_id, source_type);
 
+
+	window.location.reload();
 }
 
 function allowColDrop(ev){
@@ -1288,32 +894,49 @@ function dropCol(ev){
 	var src = document.getElementById(ev.dataTransfer.getData("Text"));
 	var srcParent = src.parentNode;
 
+	//console.log("dropCol");
+
 	var source_array = src.id.split("_",2);
-	var source = source_array[1];
+	var source_id = source_array[1];
+	var source_type = source_array[0];
+	//console.log("source_id : " + source_id);
+	//console.log("source_type : " + source_type);
 
-	var tgt = ev.currentTarget.firstElementChild;
+	var tgt = ev.target;
 	var target_array = tgt.id.split("_",2);
-	var target = target_array[1];
+	var target_id = target_array[1];
+	var target_type = target_array[0];
 
-	//ev.currentTarget.replaceChild(src, tgt);
-	//srcParent.appendChild(tgt);
+	//console.log("target_id : " + target_id);
+	//console.log("target_type : " + target_type);
 
-	$.ajax({
-		url: '{% url 'shuffle_columns' %}',
-		data: {
-			'source': source,
-			'target': target,
-			csrfmiddlewaretoken: '{{ csrf_token }}'
-		},
-		dataType: 'json',
-		type: 'post',
-		success: function (data) {
-			if (data.failure) {
-				alert("Column Swap Failed! Source: " + data.source + "  Target: " + data.target);
+	if (source_type == "OCHC" && target_type != "BMRMFC"){
+
+		//console.log("source type Allowed : " + source_type);
+		//console.log("target type Allowed : " + target_type);
+
+		$.ajax({
+			url: '{% url 'shuffle_columns' %}',
+			data: {
+				'source': source_id,
+				'target': target_id,
+				csrfmiddlewaretoken: '{{ csrf_token }}'
+			},
+			dataType: 'json',
+			type: 'post',
+			success: function (data) {
+				if (data.failure) {
+					alert("Column Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
+				}
+				window.location.reload();
 			}
-			window.location.reload();
-		}
-	});
+		});
+
+	} else {
+
+		//console.log("source type NOT Allowed : " + source_type);
+		//console.log("target type NOT Allowed : " + target_type);
+	}
 }
 
 function allowRowDrop(ev){
@@ -1330,49 +953,49 @@ function dropRow(ev){
 	var src = document.getElementById(ev.dataTransfer.getData("Text"));
 	var srcParent = src.parentNode;
 
+	//console.log("dropRow");
+
 	var source_array = src.id.split("_",2);
-	var source = source_array[1];
+	var source_id = source_array[1];
+	var source_type = source_array[0];
+	//console.log("source_id : " + source_id);
+	//console.log("source_type : " + source_type);
 
-	var tgt = ev.currentTarget.firstElementChild;
+	var tgt = ev.target;
 	var target_array = tgt.id.split("_",2);
-	var target = target_array[1];
+	var target_id = target_array[1];
+	var target_type = target_array[0];
 
-	//ev.currentTarget.replaceChild(src, tgt);
-	//srcParent.appendChild(tgt);
+	//console.log("target_id : " + target_id);
+	//console.log("target_type : " + target_type);
 
-	$.ajax({
-		url: '{% url 'shuffle_rows' %}',
-		data: {
-			'source': source,
-			'target': target,
-		  	csrfmiddlewaretoken: '{{ csrf_token }}'
-		},
-		dataType: 'json',
-		type: 'post',
-		success: function (data) {
-			if (data.failure) {
-				alert("Row Swap Failed! Source: " + data.source + "  Target: " + data.target);
+	if (source_type == "ORHC" && target_type != "BMRMFC"){
+
+		//console.log("source type Allowed : " + source_type);
+		//console.log("target type Allowed : " + target_type);
+
+		$.ajax({
+			url: '{% url 'shuffle_rows' %}',
+			data: {
+				'source': source_id,
+				'target': target_id,
+			  	csrfmiddlewaretoken: '{{ csrf_token }}'
+			},
+			dataType: 'json',
+			type: 'post',
+			success: function (data) {
+				if (data.failure) {
+					alert("Row Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
+				}
+				window.location.reload();
 			}
-			window.location.reload();
-		}
-	});
+		});
+	} else {
+
+		//console.log("source type NOT Allowed : " + source_type);
+		//console.log("target type NOT Allowed : " + target_type);
+	}
 }
-
-</script>
-
-<script>
-
-$(document).ready(function(){
-
-	$("#matrix_info").on("hide.bs.collapse", function(){
-		$(".toggle-info").html('<i class="fa fa-info fa-lg"></i>');
-	});
-
-	$("#matrix_info").on("show.bs.collapse", function(){
-		$(".toggle-info").html('<i class="fa fa-window-minimize fa-lg"></i>');
-	});
-
-});
 
 </script>
 

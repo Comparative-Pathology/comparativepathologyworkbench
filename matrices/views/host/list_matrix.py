@@ -68,7 +68,7 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
     default_sort_field = 'matrix_id'
 
-    paginate_by = 10
+    paginate_by = 7
 
     template_name = 'host/list_benches.html'
 

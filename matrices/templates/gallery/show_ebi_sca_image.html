@@ -32,276 +32,215 @@ The show image template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'webgallery_show_ebi_sca_server' server.id %}">{{ server.name }}</a></li>
 
-	<ul class="my-breadcrumb">
+	{% if image.name != 'ERROR' %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+			<li>{{ image.name|truncatechars:20 }}</li>
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+	{% endif %}
 
-		<li>
-			<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}">{{ server.name }}</a>
-		</li>
+{% endblock %}
 
-{% if image.name != 'ERROR' %}
+{% block details %}
 
-		<li class="breadcrumb-item active">
-			{{ image.name|truncatechars:20 }}
-		</li>
+{% endblock %}
 
-{% endif %}
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
+<div class="page-content">
 
 {% if image.name == 'ERROR' %}
 
-		<p>Image {{ image.id }} Does NOT Exist!</p>
+	<p>Image {{ image.id }} Does NOT Exist!</p>
 
 {% else %}
 
-		<h1>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</h1>
+	<h1>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</h1>
 
-		<br />
+	<br />
 
-	    <h3>Image Information</h3>
+    <h3>Image Information</h3>
 
-		<hr>
+	<hr>
 
-		<dl class="standard">
+	<dl class="standard">
+		<dt>Experiment</dt>
+		<dd>{{ metadata.experimentAccession }}</dd>
+		<dt>Chart Name</dt>
+		<dd>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</dd>
+	</dl>
 
-			<dt>Experiment</dt>
-			<dd>{{ metadata.experimentAccession }}</dd>
-
-			<dt>Chart Name</dt>
-			<dd>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</dd>
-
-		</dl>
-
-		<table>
-        	<tr>
-            	<th width=200px>Image:</th>
-	            <td>
-					<a href="{{ chart.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ chart.chart_id }}" title="{{ chart.chart_id }}" src="{{ chart.birdseye_url }}" ></a>
-				</td>
-			</tr>
-		</table>
+	<table>
+    	<tr>
+        	<th width=200px>Image:</th>
+            <th>
+				<a href="{{ chart.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ chart.chart_id }}" title="{{ chart.chart_id }}" src="{{ chart.birdseye_url }}" ></a>
+			</th>
+		</tr>
+	</table>
 
 	{% if chart.k_value != '' %}
 
-		<dl class="standard">
-
-            <dt>Perplexity</dt>
-			<dd>{{ chart.perplexity }}</dd>
-
-			<dt>Cluster</dt>
-			<dd>{{ chart.k_value }}</dd>
-
-			<dt>Gene</dt>
-			<dd>None</dd>
-
-			<dt>Metadata</dt>
-			<dd>None</dd>
-
-		</dl>
+	<dl class="standard">
+        <dt>Perplexity</dt>
+		<dd>{{ chart.perplexity }}</dd>
+		<dt>Cluster</dt>
+		<dd>{{ chart.k_value }}</dd>
+		<dt>Gene</dt>
+		<dd>None</dd>
+		<dt>Metadata</dt>
+		<dd>None</dd>
+	</dl>
 
 	{% endif %}
 
 	{% if chart.geneId != '' %}
 
-		<dl class="standard">
-
-			<dt>Perplexity</dt>
-			<dd>{{ chart.perplexity }}</dd>
-
-			<dt>Cluster</dt>
-			<dd>None</dd>
-
-			<dt>Gene</dt>
-			<dd>{{ chart.geneId }}</dd>
-
-			<dt>Metadata</dt>
-			<dd>None</dd>
-
-		</dl>
+	<dl class="standard">
+		<dt>Perplexity</dt>
+		<dd>{{ chart.perplexity }}</dd>
+		<dt>Cluster</dt>
+		<dd>None</dd>
+		<dt>Gene</dt>
+		<dd>{{ chart.geneId }}</dd>
+		<dt>Metadata</dt>
+		<dd>None</dd>
+	</dl>
 
 	{% endif %}
 
 	{% if chart.metadata != '' %}
 
-		<dl class="standard">
-
-			<dt>Perplexity</dt>
-			<dd>{{ chart.perplexity }}</dd>
-
-			<dt>Cluster</dt>
-			<dd>None</dd>
-
-			<dt>Gene</dt>
-			<dd>None</dd>
-
-			<dt>Metadata</dt>
-			<dd>{{ chart.metadata|replace:"_| " }}</dd>
-
-		</dl>
+	<dl class="standard">
+		<dt>Perplexity</dt>
+		<dd>{{ chart.perplexity }}</dd>
+		<dt>Cluster</dt>
+		<dd>None</dd>
+		<dt>Gene</dt>
+		<dd>None</dd>
+		<dt>Metadata</dt>
+		<dd>{{ chart.metadata|replace:"_| " }}</dd>
+	</dl>
 
 	{% endif %}
 
+	<br />
 
-		<br />
+    <h3>Experiment Metadata</h3>
 
-	    <h3>Experiment Metadata</h3>
+	<hr>
 
-		<hr>
-
-		<dl class="standard">
-
-			<dt>Type</dt>
-			<dd>{{ metadata.experimentType }}</dd>
-
-			<dt>Description</dt>
-			<dd>{{ metadata.experimentDescription }}</dd>
-
-			<dt>Load Date</dt>
-			<dd>{{ metadata.loadDate }}</dd>
-
-			<dt>Last Update</dt>
-			<dd>{{ metadata.lastUpdate }}</dd>
-
-			<dt>Number Of Assays</dt>
+	<dl class="standard">
+		<dt>Type</dt>
+		<dd>{{ metadata.experimentType }}</dd>
+		<dt>Description</dt>
+		<dd>{{ metadata.experimentDescription }}</dd>
+		<dt>Load Date</dt>
+		<dd>{{ metadata.loadDate }}</dd>
+		<dt>Last Update</dt>
+		<dd>{{ metadata.lastUpdate }}</dd>
+		<dt>Number Of Assays</dt>
 
 	{% if metadata.numberOfAssays == '' %}
 
-			<dd>None</dd>
+		<dd>None</dd>
 
 	{% else %}
 
-			<dd>{{ metadata.numberOfAssays }}</dd>
+		<dd>{{ metadata.numberOfAssays }}</dd>
 
 	{% endif %}
 
-			<dt>Number Of Contrasts</dt>
+		<dt>Number Of Contrasts</dt>
 
 	{% if metadata.numberOfContrasts == '' %}
 
-			<dd>None</dd>
+		<dd>None</dd>
 
 	{% else %}
 
-			<dd>{{ metadata.numberOfContrasts }}</dd>
+		<dd>{{ metadata.numberOfContrasts }}</dd>
 
 	{% endif %}
 
-			<dt>Species</dt>
-			<dd>{{ metadata.species }}</dd>
-
-			<dt>Kingdom</dt>
-			<dd>{{ metadata.kingdom }}</dd>
-
-			<dt>Technology Type</dt>
+		<dt>Species</dt>
+		<dd>{{ metadata.species }}</dd>
+		<dt>Kingdom</dt>
+		<dd>{{ metadata.kingdom }}</dd>
+		<dt>Technology Type</dt>
 
 	{% if metadata.technologyType == '' %}
 
-			<dd>None</dd>
+		<dd>None</dd>
 
 	{% else %}
 
-			<dd>{{ metadata.technologyType }}</dd>
+		<dd>{{ metadata.technologyType }}</dd>
 
 	{% endif %}
 
-			<dt>Experimental Factors</dt>
+		<dt>Experimental Factors</dt>
 
 	{% if metadata.experimentalFactors == '' %}
 
-			<dd>None</dd>
+		<dd>None</dd>
 
 	{% else %}
 
-			<dd>{{ metadata.experimentalFactors }}</dd>
+		<dd>{{ metadata.experimentalFactors }}</dd>
 
 	{% endif %}
 
-			<dt>Project</dt>
+		<dt>Project</dt>
 
 	{% if metadata.experimentProject == '' %}
 
-			<dd>None</dd>
+		<dd>None</dd>
 
 	{% else %}
 
-			<dd>{{ metadata.experimentProject }}</dd>
+		<dd>{{ metadata.experimentProject }}</dd>
 
 	{% endif %}
 
-		</dl>
+	</dl>
 
-		<br />
-		<br />
+	<br />
+	<br />
 
 	{% if image_flag == 'DISALLOW' %}
 
-        <div class="panel-alert">
-            <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
-        </div>
+    <div class="panel-alert">
+        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+    </div>
 
 	{% else %}
 
-		<a class="dropdown-item" href="{% url 'webgallery_add_ebi_sca_image' server.id chart.chart_id add_from %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+	<a class="dropdown-item" href="{% url 'webgallery_add_ebi_sca_image' server.id chart.chart_id add_from %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
 
+	<br />
+	<br />
 
-    	<br />
-    	<br />
-
-		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+	<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
 
 	{% endif %}
 
-		<br />
-		<br />
+	<br />
+	<br />
 
-    	<hr>
+	<hr>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

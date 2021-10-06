@@ -32,48 +32,33 @@ The list collection authorisations template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
+			<li>{{ text_flag }}</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_collections' %}">List Collections</a>
-		</li>
+{% endblock %}
 
-		<li>
-			{{ text_flag }}
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Browse {{ text_flag }}</h1>
 
-	<div class="standard-grid-item">
+	<p>Browse the list of {{ text_flag }}</p>
 
-		<h1>Browse {{ text_flag }}</h1>
+	<hr>
 
-		<p>Browse the list of {{ text_flag }}</p>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if collection_authorisation_list %}
 
@@ -81,83 +66,54 @@ The list collection authorisations template
 
 		{% if forloop.first %}
 
-	    <table border="0">
-
-        	<tr>
-    	        <th width="150px">Action</th>
-            	<th width="200px">Collection</th>
-            	<th width="200px">Owner</th>
-        	    <th width="200px">Permitted</th>
-        	    <th width="200px">Authority</th>
-			</tr>
-
-	        <tr>
-        	    <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
+	<table border="0">
+		<tr>
+			<th width="150px">Action</th>
+			<th width="200px">Collection</th>
+			<th width="200px">Owner</th>
+			<th width="200px">Permitted</th>
+			<th width="200px">Authority</th>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
 
 		{% endif %}
 
-    	    <tr>
-
-	            <td>
-
-					<a href="{% url 'detail_collection_authorisation' collection_authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		<tr>
+			<td>
+				<a href="{% url 'detail_collection_authorisation' collection_authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 		{% if collection_id == '' %}
 
-					<a href="{% url 'edit_collection_authorisation' collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'edit_collection_authorisation' collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
 		{% else %}
 
-					<a href="{% url 'edit_collection_collection_authorisation' collection_id collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'edit_collection_collection_authorisation' collection_id collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
 		{% endif %}
 
-					<a href="{% url 'delete_collection_authorisation' collection_authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				<a href="{% url 'delete_collection_authorisation' collection_authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+			</td>
 
-	            </td>
+			<td>{{ collection_authorisation.collection.id }}</td>
 
-            	<td>
-            		{{ collection_authorisation.collection.id }}
-        	    </td>
+			<td>{{ collection_authorisation.collection.owner.username }}</td>
 
-            	<td>
-            		{{ collection_authorisation.collection.owner.username }}
-        	    </td>
+			<td>{{ collection_authorisation.permitted.username }}</td>
 
-    	        <td>
-            		{{ collection_authorisation.permitted.username }}
-        	    </td>
-
-    	        <td>
-            		{{ collection_authorisation.collection_authority.name }}
-        	    </td>
-			</tr>
+			<td>{{ collection_authorisation.collection_authority.name }}</td>
+		</tr>
 
 		{% if forloop.last %}
 
-	        <tr>
-	            <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
-
-	        <tr>
-        	    <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
-
-	    </table>
+	</table>
 
 		{% endif %}
 
@@ -166,44 +122,30 @@ The list collection authorisations template
 
 	{% if collection_id == '' %}
 
-		<p>
-			<a href="{% url 'new_collection_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_collection_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% else %}
 
-		<p>
-			<a href="{% url 'new_collection_collection_authorisation' collection_id %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_collection_collection_authorisation' collection_id %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% endif %}
 
 {% else %}
 
-		<p>No Permissions are available.</p>
+	<p>No Permissions are available.</p>
 
 	{% if collection_id == '' %}
 
-		<p>
-			<a href="{% url 'new_collection_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_collection_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% else %}
 
-		<p>
-			<a href="{% url 'new_collection_collection_authorisation' collection_id %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_collection_collection_authorisation' collection_id %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% endif %}
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
+</div><!-- End of page-content -->
 
 {% endblock %}

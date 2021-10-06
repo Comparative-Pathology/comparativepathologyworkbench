@@ -32,118 +32,91 @@ The show (imaging) server template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li>{{ server.name }}</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+{% endblock %}
 
-		<li>
-			{{ server.name }}
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>{{ server.name }}</h1>
 
-	<div class="standard-grid-item">
-
-		<h1>{{ server.name }}</h1>
-
-		<br />
+	<br />
 
 {% if group_list %}
 
-		<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
+	<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
 
-		<hr>
+	<hr>
 
-		<ul class="image-list">
+	<ul class="image-list">
 
-    {% for group in group_list %}
+	{% for group in group_list %}
 
-	    	<li>
+		<li>
 
-				<div class="card-image-gallery">
+			<div class="card-image-gallery">
 
-					<div class="card-container-gallery">
+				<div class="card-container-gallery">
 
-						<h5>{{ group.name }}</h5>
+					<h5>{{ group.name }}</h5>
 
-	    		        <dl>
-
-    		    	        <dt>Projects</dt>
-    		    	        <dd>{{ group.projectCount }}</dd>
-	        	    	    <dt>Datasets</dt>
-	            		    <dd>{{ group.datasetCount }}</dd>
+					<dl>
+						<dt>Projects</dt>
+						<dd>{{ group.projectCount }}</dd>
+						<dt>Datasets</dt>
+						<dd>{{ group.datasetCount }}</dd>
 
 		{% if group.imageCount != 0  %}
 
-                			<!-- <dt>Images</dt> -->
-                			<!-- <dd>{{ group.imageCount }}</dd> -->
+						<!-- <dt>Images</dt> -->
+						<!-- <dd>{{ group.imageCount }}</dd> -->
 
 		{% endif %}
 
-		        	    </dl>
+					</dl>
 
-						<br />
+					<br />
 
-						<a href="{% url 'webgallery_show_group' server.id group.id %}"><button class="button button-view">View Group &raquo;</button></a>
+					<a href="{% url 'webgallery_show_group' server.id group.id %}"><button class="button button-view">View Group &raquo;</button></a>
 
-						<br />
+					<br />
 
 		{% if group.randomImageName != 'NONE'  %}
 
-						<!-- <a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a> -->
+					<!-- <a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a> -->
 
 		{% endif %}
 
-    	        	</div>
-
 				</div>
 
-	    	<li>
+			</div>
 
-    {% endfor %}
+		<li>
 
-		</ul>
+	{% endfor %}
+
+	</ul>
 
 {% else %}
 
-	<p>Unable to Log into the Server</p>
+<p>Unable to Log into the Server</p>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

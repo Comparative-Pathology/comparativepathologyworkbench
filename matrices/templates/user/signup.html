@@ -28,74 +28,45 @@ The signup template
 
 {% extends 'includes/base.html' %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Register</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Register
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Comparative Pathology Workbench Authorization</h1>
 
-	<div class="standard-grid-item">
+	<p>Register here for access to the Comparative Pathology Workbench.</p>
 
-		<h1>Comparative Pathology Workbench Authorization</h1>
+	<hr>
 
-		<p>Register here for access to the Comparative Pathology Workbench.</p>
+	<br />
 
-		<hr>
-
-		<br />
-
-		<form method="post">
+	<form method="post">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
+		<br />
 
-			<button class="button button-add" type="submit">Sign up</button>
+		<button class="button button-add" type="submit">Sign up</button>
 
-		</form>
+	</form>
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -57,7 +57,7 @@ class  CollectionViewSet(viewsets.ModelViewSet):
     """
     queryset = Collection.objects.all()
 
-    permission_classes = [ CollectionIsReadOnlyOrIsAdminOrIsOwner ]
+    #permission_classes = [ CollectionIsReadOnlyOrIsAdminOrIsOwner ]
 
     serializer_class = CollectionSerializer
 

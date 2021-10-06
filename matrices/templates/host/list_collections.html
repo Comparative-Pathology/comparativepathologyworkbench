@@ -32,68 +32,41 @@ The list collections template (with Search)
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Collections</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Collections
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div id="search-container" class="standard-grid-container">
+<div class="page-content">
 
-	<div id="search-left" class="standard-grid-item">
-	</div>
+	<h1>Collections</h1>
 
-	<div id="search-middle" class="standard-grid-item">
+	<p>Search the list of Collections</p>
 
-		<h1>Collections</h1>
+	<form action="{% url 'list_collections' %}" method="get">
 
-		<p>Search the list of Collections</p>
+{% include 'includes/formsearch.html' %}
 
-		<form action="{% url 'list_collections' %}" method="get">
+		<button class="button button-add" type="submit">Search</button>
+		<button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
 
-			{% include 'includes/formsearch.html' %}
+	</form>
 
-			<button class="button button-add" type="submit">Search</button>
-			<button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
-
-		</form>
-
-		<br />
-		<hr>
-		<br />
-
-	</div>
-
-	<div id="search-right" class="standard-grid-item">
-	</div>
-
-</div>
-
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
-
-		<div id="collection_summarys">
+	<br />
+	<hr>
+	<br />
 
 {% if collection_summary_list %}
 
@@ -101,60 +74,54 @@ The list collections template (with Search)
 
 		{% if forloop.first %}
 
-    		<table>
-	    		<tr>
-		    		<th width="300px">Action</th>
+	<table>
+		<tr>
+    		<th width="300px">Action</th>
 
 {% include 'includes/sort_links_table_headings.html' %}
 
-    			</tr>
-
-	    		<tr>
-		    		<td>&nbsp;</td>
-			    	<td>&nbsp;</td>
-				    <td>&nbsp;</td>
-    				<td>&nbsp;</td>
-    				<td>&nbsp;</td>
-		    		<td>&nbsp;</td>
-    			</tr>
+		</tr>
+		<tr>
+    		<td>&nbsp;</td>
+	    	<td>&nbsp;</td>
+		    <td>&nbsp;</td>
+			<td>&nbsp;</td>
+	    	<td>&nbsp;</td>
+			<td>&nbsp;</td>
+	    </tr>
 
 		{% endif %}
 
-	    		<tr>
+		<tr>
 
 		{% if credential_flag == '' %}
 
-		    		<td>&nbsp;</td>
+			<td>&nbsp;</td>
 
 		{% else %}
 
-			    	<td>
+		   	<td>
 
 			{% if collection_summary.collection_authorisation_authority == 'VIEWER' %}
 
-				    	<a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
-
-				    	<a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+		    	<a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 
 			{% if collection_summary.collection_authorisation_authority == 'OWNER' %}
 
-					    <a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'edit_collection' collection_summary.collection_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				<a href="{% url 'list_collection_collection_authorisation' collection_summary.collection_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 
-					    <a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				{% if collection_summary.is_active %}
 
-					    <a href="{% url 'edit_collection' collection_summary.collection_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					{% if collection_summary.collection_owner == credential_flag %}
 
-					    <a href="{% url 'delete_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-
-					    <a href="{% url 'list_collection_collection_authorisation' collection_summary.collection_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-
-		        {% if collection_summary.is_active %}
-
-			        {% if collection_summary.collection_owner == credential_flag %}
-
-					    <button class="button button-delete"><i class="fa fa-bell"></i></button>
+				<button class="button button-delete"><i class="fa fa-bell"></i></button>
 
 					{% else %}
 
@@ -162,9 +129,9 @@ The list collections template (with Search)
 
 				{% else %}
 
-			        {% if collection_summary.collection_owner == credential_flag %}
+					{% if collection_summary.collection_owner == credential_flag %}
 
-					    <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
+				<a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
 
 					{% else %}
 
@@ -176,21 +143,17 @@ The list collections template (with Search)
 
 			{% if collection_summary.collection_authorisation_authority == 'ADMIN' %}
 
-			            <a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'view_collection' collection_summary.collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'edit_collection' collection_summary.collection_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				<a href="{% url 'list_collection_collection_authorisation' collection_summary.collection_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 
-					    <a href="{% url 'detail_collection' collection_summary.collection_id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+			    {% if collection_summary.is_active %}
 
-					    <a href="{% url 'edit_collection' collection_summary.collection_id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				    {% if collection_summary.collection_owner == credential_flag %}
 
-					    <a href="{% url 'delete_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-
-					    <a href="{% url 'list_collection_collection_authorisation' collection_summary.collection_id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-
-		        {% if collection_summary.is_active %}
-
-			        {% if collection_summary.collection_owner == credential_flag %}
-
-						<button class="button button-delete"><i class="fa fa-bell"></i></button>
+				<button class="button button-delete"><i class="fa fa-bell"></i></button>
 
 					{% else %}
 
@@ -200,7 +163,7 @@ The list collections template (with Search)
 
 			        {% if collection_summary.collection_owner == credential_flag %}
 
-						<a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
+				<a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><button class="button button-add"><i class="fa fa-bell"></i></button></a>
 
 					{% else %}
 
@@ -210,54 +173,38 @@ The list collections template (with Search)
 
 			{% endif %}
 
-				    </td>
+		    </td>
 
 		{% endif %}
 
-				    <td>{{ collection_summary.collection_id }}</td>
-    				<td>{{ collection_summary.collection_title }}</td>
-			    	<td>{{ collection_summary.collection_active }}</td>
-	    			<td>{{ collection_summary.collection_image_count }}</td>
-		    		<td>{{ collection_summary.collection_owner }}</td>
-				    <td>{{ collection_summary.collection_authorisation_authority }}</td>
-
-    			</tr>
+		    <td>{{ collection_summary.collection_id }}</td>
+			<td>{{ collection_summary.collection_title }}</td>
+			<td>{{ collection_summary.collection_active }}</td>
+		    <td>{{ collection_summary.collection_image_count }}</td>
+			<td>{{ collection_summary.collection_owner }}</td>
+			<td>{{ collection_summary.collection_authorisation_authority }}</td>
+		</tr>
 
 		{% if forloop.last %}
 
-	    		<tr>
-
-		    		<td>&nbsp;</td>
-			    	<td>&nbsp;</td>
-				    <td>&nbsp;</td>
-    				<td>&nbsp;</td>
-	    			<td>&nbsp;</td>
-		    		<td>&nbsp;</td>
-
-			    </tr>
-
-    			<tr>
+		<tr>
 
 			{% if credential_flag %}
 
-	    			<td>
-		    			<a href="{% url 'new_collection' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-			    	</td>
+			<td><a href="{% url 'new_collection' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></td>
 
 			{% else %}
 
-				    <td>&nbsp;</td>
+			<td>&nbsp;</td>
 
 			{% endif %}
 
-    				<td>&nbsp;</td>
-	    			<td>&nbsp;</td>
-		    		<td>&nbsp;</td>
-			    	<td>&nbsp;</td>
-
-    			</tr>
-
-	    	</table>
+	    	<td>&nbsp;</td>
+		    <td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
 
 		{% endif %}
 
@@ -267,41 +214,21 @@ The list collections template (with Search)
 
 {% else %}
 
-    		<p>No Collections are available.</p>
+	<p>No Collections are available.</p>
 
 	{% if credential_flag %}
 
-	    	<p>
-		    	<a href="{% url 'new_collection' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-    		</p>
+	<p><a href="{% url 'new_collection' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% else %}
 
-	    	<p>You are not authorised to add Collections yet!</p>
+	<p>You are not authorised to add Collections yet!</p>
 
 	{% endif %}
 
 {% endif %}
 
-    	</div>
-
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 <script>
 

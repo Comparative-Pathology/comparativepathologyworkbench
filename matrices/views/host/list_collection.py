@@ -60,7 +60,7 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
     default_sort_field = 'collection_id'
 
-    paginate_by = 10
+    paginate_by = 9
 
     template_name = 'host/list_collections.html'
 

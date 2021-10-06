@@ -32,67 +32,43 @@ The detail protocol template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'maintenance' %}">Maintenance</a></li>
+			<li><a href="{% url 'detail_protocol' protocol.id %}">Server Protocol {{ protocol.id }}</a></li>
+			<li>Server Protocol Details</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'maintenance' %}">Maintenance</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'detail_protocol' protocol.id %}">Server Protocol {{ protocol.id }}</a>
-		</li>
-
-		<li>
-			Server Protocol Details
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Server Protocol {{ protocol.id }}</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>Server Protocol {{ protocol.id }}</h1>
+	<br />
 
-		<hr>
+	<dl class="standard">
+		<dt>Name</dt>
+		<dd>{{ protocol.name }}</dd>
+	</dl>
 
-		<br />
+	<br />
 
-		<dl class="standard">
-			<dt>Name</dt>
-			<dd>{{ protocol.name }}</dd>
-		</dl>
+	<a href="{% url 'maintenance' %}"><button class="button button-add">BACK</button></a>
+	<a href="{% url 'edit_protocol' protocol.id %}"><button class="button button-edit">Edit</button></a>
 
-		<br />
-
-		<a href="{% url 'maintenance' %}"><button class="button button-add">BACK</button></a>
-
-		<a href="{% url 'edit_protocol' protocol.id %}"><button class="button button-edit">Edit</button></a>
-
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% endblock %}

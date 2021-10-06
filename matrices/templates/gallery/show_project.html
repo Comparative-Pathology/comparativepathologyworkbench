@@ -32,121 +32,106 @@ The show project template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
 
-	<ul class="my-breadcrumb">
+	{% if project.name != 'ERROR' %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+			<li><a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a></li>
+			<li>{{ project.name|truncatechars:20 }}</li>
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+	{% endif %}
 
-		<li>
-			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
-		</li>
+{% endblock %}
 
-{% if project.name != 'ERROR' %}
+{% block details %}
 
-		<li>
-			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
-		</li>
+{% endblock %}
 
-		<li>
-			{{ project.name|truncatechars:20 }}
-		</li>
-
-{% endif %}
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<!-- Main Data Panel -->
 
-	<div class="standard-grid-item">
+	<div class="standard-grid-container">
 
-{% if project.name == 'ERROR' %}
+		<div class="standard-grid-item">
+		</div>
 
-		<p>Project {{ project.id }} Does NOT Exist!</p>
+		<div class="standard-grid-item">
 
-{% else %}
+	{% if project.name == 'ERROR' %}
 
-		<h1>{{ project.name }}</h1>
+			<p>Project {{ project.id }} Does NOT Exist!</p>
 
-		<br />
+	{% else %}
 
-{% endif %}
+			<h1>{{ project.name }}</h1>
 
-{% if dataset_list %}
+			<br />
 
-	    <p>Project contains {{ project.datasetCount }} datasets:</p>
+	{% endif %}
 
-    	<hr>
+	{% if dataset_list %}
 
-		<ul class="image-list">
+		    <p>Project contains {{ project.datasetCount }} datasets:</p>
 
-    {% for dataset in dataset_list %}
+	    	<hr>
 
-	    	<li>
+			<ul class="image-list">
 
-				<div class="card-image-gallery">
+	    {% for dataset in dataset_list %}
 
-					<div class="card-container-gallery">
+		    	<li>
 
-						<h5>{{ dataset.name|truncatechars:20 }}</h5>
+					<div class="card-image-gallery">
 
-	            		<dl>
-	                		<dt>Images</dt>
-	                		<dd>{{ dataset.imageCount }}</dd>
-		    	        </dl>
+						<div class="card-container-gallery">
+
+							<h5>{{ dataset.name|truncatechars:20 }}</h5>
+
+		            		<dl>
+		                		<dt>Images</dt>
+		                		<dd>{{ dataset.imageCount }}</dd>
+			    	        </dl>
+
+							<br />
+
+							<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}"><button class="button button-view">View Dataset &raquo;</button></a>
+
+						</div>
 
 						<br />
 
-						<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}"><button class="button button-view">View Dataset &raquo;</button></a>
+						<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}"><img alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/></a>
+
+						<br />
 
 					</div>
 
-					<br />
+		        </li>
 
-					<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}"><img alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/></a>
+	    {% endfor %}
 
-					<br />
+	    	</ul>
 
-				</div>
+	{% endif %}
 
-	        </li>
+		</div>
 
-    {% endfor %}
-
-    	</ul>
-
-{% endif %}
+		<div class="standard-grid-item">
+		</div>
 
 	</div>
 
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

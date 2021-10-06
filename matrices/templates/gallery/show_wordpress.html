@@ -32,98 +32,64 @@ The show wordpress (server) template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ dataset.name }}</a></li>
+			<li><a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">Prev</a></li>
+			<li><a href="{% url 'webgallery_show_wordpress' server.id dataset.next_page %}">Next</a></li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ dataset.name }}</a>
-		</li>
-
-		<li>
-			<a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">Prev</a>
-		</li>
-
-		<li>
-			<a href="{% url 'webgallery_show_wordpress' server.id dataset.next_page %}">Next</a>
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>{{ dataset.name }}</h1>
 
-	<div class="standard-grid-item">
+	<br />
 
-		<h1>{{ dataset.name }}</h1>
+	<p>{{ dataset.name }} contains {{ dataset.imageCount }} images, so far</p>
 
-		<br />
+	<hr>
 
-	    <p>{{ dataset.name }} contains {{ dataset.imageCount }} images, so far</p>
+	<div class="row justify-content-center">
 
-    	<hr>
-
-		<div class="row justify-content-center">
-
-		<ul class="image-list">
+	<ul class="image-list">
 
 {% for image in images %}
 
-	    	<li>
+		<li>
 
-				<div class="card-image-gallery">
+			<div class="card-image-gallery">
 
-					<div class="card-container-gallery">
+				<div class="card-container-gallery">
 
-						<h5>{{ image.name|truncatechars:15 }}</h5>
+					<h5>{{ image.name|truncatechars:15 }}</h5>
 
-		        	</div>
+				</div>
 
-					<br />
+				<br />
 
-				<a href="{% url 'webgallery_show_wordpress_image' server.id image.id %}"><img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
+			<a href="{% url 'webgallery_show_wordpress_image' server.id image.id %}"><img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
 
-		        </div>
+			</div>
 
-	    	</li>
+		</li>
 
 {% endfor %}
 
-		</ul>
+	</ul>
 
-		</div>
-
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

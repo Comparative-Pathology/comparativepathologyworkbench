@@ -34,82 +34,55 @@ The detail collection template
 
 {% load inlineedit %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
+			<li><a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a></li>
+			<li>Collection Details</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_collections' %}">List Collections</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a>
-		</li>
-
-		<li>
-			Collection Details
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Collection {{ collection.id }}</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>Collection {{ collection.id }}</h1>
+	<br />
 
-		<hr>
+	<dl class="standard">
+		<dt>Title</dt>
+		<dd>{% inlineedit "collection.title" "blocked" %}</dd>
+		<dt>Description</dt>
+		<dd>{% inlineedit "collection.description" "blocked" %}</dd>
+		<dt>Owner</dt>
+		<dd>{{ collection.owner.username }}</dd>
+		<dt>Active?</dt>
+		<dd>{{ collection.active }}</dd>
+	</dl>
 
-		<br />
+	<br />
 
-		<dl class="standard">
-			<dt>Title</dt>
-			<dd>
-				{% inlineedit "collection.title" "blocked" %}
-			</dd>
-			<dt>Description</dt>
-			<dd>
-				{% inlineedit "collection.description" "blocked" %}
-			</dd>
-			<dt>Owner</dt>
-			<dd>{{ collection.owner.username }}</dd>
-			<dt>Active?</dt>
-			<dd>{{ collection.active }}</dd>
-		</dl>
-
-		<br />
-
-		<a href="{% url 'list_collections' %}"><button class="button button-add">BACK</button></a>
+	<a href="{% url 'list_collections' %}"><button class="button button-add">BACK</button></a>
 
 {% if user.is_superuser %}
 
-		<a href="{% url 'edit_collection' collection.id %}"><button class="button button-edit">Edit</button></a>
+	<a href="{% url 'edit_collection' collection.id %}"><button class="button button-edit">Edit</button></a>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% inlineedit_script %}
 

@@ -32,76 +32,52 @@ The detail collection authorisation template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{{ request.META.HTTP_REFERER }}">Collection Permissions</a></li>
+			<li>Collection Permission {{ collection_authorisation.id }}</li>
+			<li>Collection Permission Details</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{{ request.META.HTTP_REFERER }}">Collection Permissions</a>
-		</li>
+{% endblock %}
 
-		<li>
-			Collection Permission {{ collection_authorisation.id }}
-		</li>
-
-		<li>
-			Collection Permission Details
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Collection Permission {{ collection_authorisation.id }}</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>Collection Permission {{ collection_authorisation.id }}</h1>
+	<br />
 
-		<hr>
+	<dl class="standard">
+		<dt>Collection Id</dt>
+		<dd>{{ collection_authorisation.id }}</dd>
+		<dt>User</dt>
+		<dd>{{ collection_authorisation.permitted.username }}</dd>
+		<dt>Authority</dt>
+		<dd>{{ collection_authorisation.collection_authority.name }}</dd>
+	</dl>
 
-		<br />
+	<br />
 
-		<dl class="standard">
-			<dt>Collection Id</dt>
-			<dd>{{ collection_authorisation.id }}</dd>
-			<dt>User</dt>
-			<dd>{{ collection_authorisation.permitted.username }}</dd>
-			<dt>Authority</dt>
-			<dd>{{ collection_authorisation.collection_authority.name }}</dd>
-		</dl>
-
-		<br />
-
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">BACK</button></a>
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">BACK</button></a>
 
 {% if user.is_superuser %}
 
-		<a href="{% url 'edit_collection_authorisation' collection_authorisation.id %}"><button class="button button-edit">EDIT</button></a>
+	<a href="{% url 'edit_collection_authorisation' collection_authorisation.id %}"><button class="button button-edit">EDIT</button></a>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
+</div><!-- End of page-content -->
 
 {% endblock %}

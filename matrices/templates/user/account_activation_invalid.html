@@ -28,50 +28,33 @@ The account activation invalid template
 
 {% extends 'includes/base.html' %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Invalid Confirmation Link</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Invalid Confirmation Link
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Comparative Pathology Workbench Authorization</h1>
 
-	<div class="standard-grid-item">
+	<p>The confirmation link was invalid, possibly because it has already been used.</p>
 
-		<h1>Comparative Pathology Workbench Authorization</h1>
+	<hr>
 
-		<p>The confirmation link was invalid, possibly because it has already been used.</p>
+	<br />
 
-		<hr>
-
-		<br />
-
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -32,82 +32,51 @@ The edit matrix (bench) template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li>Workbench Edit</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_benches' %}">Workbenches</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
-		</li>
-
-		<li>
-			Workbench Edit
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
+	<h1>EDIT Workbench CPW:{{ matrix.id|stringformat:"06d" }}</h1>
 
-	</div>
+	<p>Edit an Existing Bench</p>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>EDIT Workbench CPW:{{ matrix.id|stringformat:"06d" }}</h1>
+	<br />
 
-		<p>Edit an Existing Bench</p>
-
-		<hr>
-
-		<br />
-
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-			<button type="submit" class="button button-delete">Save</button>
-
-		</form>
-
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
+		<button type="submit" class="button button-delete">Save</button>
 
-	</div>
+	</form>
 
-	<div class="standard-grid-item">
+	<br />
 
-	</div>
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

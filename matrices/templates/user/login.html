@@ -28,144 +28,138 @@ The login template
 
 {% extends 'includes/base.html' %}
 
-{% block content %}
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Login</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Login
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<!-- Main Data Panel -->
 
-	<div class="standard-grid-item">
+	<h1>Comparative Pathology Workbench Authorization</h1>
 
-		<h1>Comparative Pathology Workbench Authorization</h1>
+	<p>Login here to access the Comparative Pathology Workbench.</p>
 
-		<p>Login here to access the Comparative Pathology Workbench.</p>
+	<hr>
 
-		<hr>
-
-		<br />
+	<br />
 
 {% load form_tags widget_tweaks %}
 
 {% if form.errors %}
 
-	<div class="panel-alert">
+<div class="panel-alert">
 
-		<p >Your username and password didn't match. Please try again.</p>
+	<p >Your username and password didn't match. Please try again.</p>
 
-	</div>
+</div>
 
 {% endif %}
 
-		<form method="post">
+	<form method="post">
 
 {% csrf_token %}
 
-			<input type="hidden" name="next" value="{{ next }}" />
+		<input type="hidden" name="next" value="{{ next }}" />
 
 {% for field in form %}
 
-			<div class="form-container">
+		<div class="form-container">
 
-				<div class="form-row">
+			<div class="form-row">
 
-					<div class="form-col-25">
+				<div class="form-col-25">
 
-	{{ field.label_tag }}
-
-					</div>
-
-					<div class="form-col-75">
-
-	{% render_field field %}
-
-					</div>
+{{ field.label_tag }}
 
 				</div>
 
-	{% if field.errors %}
+				<div class="form-col-25">
 
-				<div class="form-row">
-
-					<div class="form-col-25">
-					</div>
-
-					<div class="form-col-75">
-
-						<ul>
-
-		{% for error in field.errors %}
-
-							<li>{{ error }}</li>
-
-		{% endfor %}
-
-						</ul>
-
-					</div>
+{% render_field field %}
 
 				</div>
 
-	{% endif %}
-
-	{% if field.help_text %}
-
-				<div class="form-row">
-
-					<div class="form-col-25">
-					</div>
-
-					<div class="form-col-75">
-
-			{{ field.help_text|safe }}
-
-					</div>
-
+				<div class="form-col-50">
 				</div>
-
-	{% endif %}
 
 			</div>
 
+{% if field.errors %}
+
+			<div class="form-row">
+
+				<div class="form-col-25">
+				</div>
+
+				<div class="form-col-25">
+
+					<ul>
+
+	{% for error in field.errors %}
+
+						<li>{{ error }}</li>
+
+	{% endfor %}
+
+					</ul>
+
+				</div>
+
+				<div class="form-col-50">
+				</div>
+
+			</div>
+
+{% endif %}
+
+{% if field.help_text %}
+
+			<div class="form-row">
+
+				<div class="form-col-25">
+				</div>
+
+				<div class="form-col-25">
+
+		{{ field.help_text|safe }}
+
+				</div>
+
+				<div class="form-col-50">
+				</div>
+
+			</div>
+
+{% endif %}
+
+		</div>
+
 {% endfor %}
-
-			<br />
-
-			<button class="button button-add" type="submit">Log in</button>
-
-		</form>
 
 		<br />
 
-		<p>If you have forgotten your password, <a href="{% url 'password_reset' %}">Click Here</a></p>
+		<button class="button button-add" type="submit">Log in</button>
 
+	</form>
 
-	</div>
+	<br />
 
-	<div class="standard-grid-item">
-	</div>
+	<p>If you have forgotten your password, <a href="{% url 'password_reset' %}">Click Here</a></p>
 
-</div>
+</div><!-- End of page-content -->
 
 {% endblock %}

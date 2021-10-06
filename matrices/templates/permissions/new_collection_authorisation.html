@@ -32,76 +32,50 @@ The new collection authorisation template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{{ request.META.HTTP_REFERER }}">Collection Permissions</a></li>
+			<li>NEW Collection Permission {{ text_flag }}</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{{ request.META.HTTP_REFERER }}">Collection Permissions</a>
-		</li>
+{% endblock %}
 
-		<li>
-			NEW Collection Permission {{ text_flag }}
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>NEW Collection Permission {{ text_flag }}</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>NEW Collection Permission {{ text_flag }}</h1>
+	<br />
 
-		<hr>
-
-		<br />
-
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-			<input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-
-	    	<button type="submit" class="button button-delete">Save</button>
-
-		</form>
-
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">BACK</button></a>
+		<input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
 
-	</div>
+		<button type="submit" class="button button-delete">Save</button>
 
-	<div class="standard-grid-item">
-	</div>
+	</form>
 
-</div>
+	<br />
 
-<br />
-<br />
-<br />
-<br />
-<br />
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">BACK</button></a>
+
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -32,114 +32,79 @@ The edit cell template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li>Cell Details</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_benches' %}">Workbenches</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
-		</li>
-
-		<li>
-			Cell Details
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
+<div class="page-content">
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 
-		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}</h1>
+	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}</h1>
 
-		<p>Edit a Cell</p>
+	<p>Edit a Cell</p>
 
-		<hr>
+	<hr>
 
-		<br />
+	<br />
 
 {% endif %}
 
 {% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
 
-		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header</h1>
+	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Row Header</h1>
 
-		<p>Edit a Row Header Cell</p>
+	<p>Edit a Row Header Cell</p>
 
-		<hr>
+	<hr>
 
-		<br />
+	<br />
 
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
 
-		<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header</h1>
+	<h1>EDIT Cell, CPW:{{ matrix.id|stringformat:"06d" }} Column Header</h1>
 
-		<p>Edit a Column Header Cell</p>
+	<p>Edit a Column Header Cell</p>
 
-		<hr>
+	<hr>
 
-		<br />
+	<br />
 
 {% endif %}
 
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-			<button type="submit" class="button button-delete">Save</button>
-
-		</form>
-
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
+		<button type="submit" class="button button-delete">Save</button>
 
-	</div>
+	</form>
 
-	<div class="standard-grid-item">
-	</div>
+	<br />
 
-</div>
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

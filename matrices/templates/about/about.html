@@ -32,49 +32,40 @@ The about template
 
 {% load static %}
 
-{% block content %}
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li class="about"><a href="{% url 'home' %}">Home</a></li>
+			<li class="about">About</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			About
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<!-- Main Data Panel -->
 
-	<div class="standard-grid-item">
+	<h1>The Comparative Workbench for Atlas Data</h1>
 
-		<h1>The Comparative Workbench for Atlas Data</h1>
+	<p>A Summary of the Comparative Workbench for Atlas Data Project</p>
 
-		<p>A Summary of the Comparative Workbench for Atlas Data Project</p>
+	<hr>
 
-		<hr>
+	<br />
 
-		<br />
+	<h3>Project Summary</h3>
 
-		<h3>Project Summary</h3>
+	<p class="about"><a href="{% static 'profile/CompWorkbenchAtlas_full_1.pdf' %}">SUMMARY</a></p>
 
-		<p><a href="{% static 'profile/CompWorkbenchAtlas_full_1.pdf' %}">SUMMARY</a></p>
-
-		<p>The <a href="https://www.humancellatlas.org/">Human Cell Atlas</a> resource will deliver single cell transcriptome data spatially organised
+	<p class="about">The <a href="https://www.humancellatlas.org/">Human Cell Atlas</a> resource will deliver single cell transcriptome data spatially organised
 in terms of gross anatomy, tissue location and with images of cellular histology. This will
 enable the application of bioinformatics analysis, machine learning and data-mining
 revealing an atlas of cell types and sub-types and ultimately disease conditions. However, to
@@ -86,13 +77,13 @@ for expert-led collaboration, annotation and analysis. This is particularly impo
 context of the histology of normal and diseased tissues within and across species to fully
 understand animal models of disease and for integration with human data.</p>
 
-		<h3>Project Aims</h3>
+	<h3>Project Aims</h3>
 
-		<p>We propose to extend tools and standards developed in the context of the <a href="http://www.emouseatlas.org/emap/home.html">Edinburgh Mouse Atlas</a> with two specific aims:</p>
+	<p class="about">We propose to extend tools and standards developed in the context of the <a href="http://www.emouseatlas.org/emap/home.html">Edinburgh Mouse Atlas</a> with two specific aims:</p>
 
-		<ol>
+	<ol>
 
-			<li>To implement a focussed data visual-analytics “workbench” (Comparative Workbench for
+		<li class="about">To implement a focussed data visual-analytics “workbench” (Comparative Workbench for
 Atlas data or CWA) to provide the capability for clinical pathologists to analyse, annotate
 and compare complex cell-level imaging in conjunction with sequencing data analysis of
 the same or related tissues. This will provide access to the atlas data in tabular views
@@ -100,7 +91,7 @@ enabling comparison between individuals, time-course data and cross-species coup
 with management of configuration and “state” for tracking, saving and sharing the
 analysis process.</li>
 
-			<li>To develop a conceptual coordinate model of the application domain (small and large
+		<li class="about">To develop a conceptual coordinate model of the application domain (small and large
 intestine) for spatial annotation of data samples and to develop the spatial descriptors for
 data retrieval, analysis and visualisation. The model will encode biologically and clinically
 relevant locations and regions and when a full HCA atlas framework becomes available
@@ -108,9 +99,9 @@ the biological conceptual model will be mapped to the real-space coordinate fram
 mapping from biologically natural coordinates to real-space image coordinates has been
 demonstrated for the mouse embryo and the same techniques will apply here.</li>
 
-		</ol>
+	</ol>
 
-		<p>For specific focus, the CWA context will be normal small intestine and colon and pathology
+	<p class="about">For specific focus, the CWA context will be normal small intestine and colon and pathology
 of Familial Adenomatous Polyposis (FAP) due to inherited APC mutations. For this we have
 tissue and data across four species: Min mice, Pirc rats, APC-mutant pigs and FAP humans.
 We will extend our OMERO-based prototype to provide a configurable tabular viewer of
@@ -125,23 +116,12 @@ spatial annotation and semantic integration needed for all tissues to deliver a 
 atlas framework enabling machine learning to cross the divide from sequence analysis to
 spatial organisation.</p>
 
-		<h4>Conceptual Coordinate Model</h5>
+	<h4>Conceptual Coordinate Model</h5>
 
-		<p>The proposed model:</p>
+	<p class="about">The proposed model:</p>
 
-		<p><img src="{% static 'profile/models.jpg' %}" alt="Conceptual Coordinate Model" height=500px></p>
+	<p class="about"><img src="{% static 'profile/models.jpg' %}" alt="Conceptual Coordinate Model" height=500px></p>
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

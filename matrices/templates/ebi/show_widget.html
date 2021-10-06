@@ -28,83 +28,43 @@ The show ebi widget template
 
 {% extends 'includes/base.html' %}
 
-
 {% load custom %}
 
 {% load static %}
 
-{% block content %}
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'ebi_show_ebi_server' server.id %}">EBI</a></li>
+			<li>Accession ID: {{ experimentAccession }}</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'ebi_show_ebi_server' server.id %}">
-				EBI
-			</a>
-		</li>
-
-		<li>
-			Accession ID: {{ experimentAccession }}
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
+	<h1>Browse {{ experimentAccession }}</h1>
+
+	<p>This Server contains SC Experiments:</p>
+
+	<hr>
+
+	<br />
+
+	<div id="target">
 	</div>
 
-	<div class="standard-grid-item">
-
-		<h1>Browse {{ experimentAccession }}</h1>
-
-		<p>This Server contains SC Experiments:</p>
-
-		<hr>
-
-		<br />
-
-    	<div id="target">
-		</div>
-
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
+</div><!-- End of page-content -->
 
 <script defer src="../../../../static/bundles/vendors.bundle.js"></script>
 <script defer src="../../../../static/bundles/TSnePlotWidgetDemo.bundle.js"></script>

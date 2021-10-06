@@ -32,82 +32,55 @@ The show (imaging) server template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li>{{ server.name }}</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+{% endblock %}
 
-		<li>
-			{{ server.name }}
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>{{ server.name }}</h1>
 
-	<div class="standard-grid-item">
+	<h3>Chart Search</h3>
 
-		<h1>{{ server.name }}</h1>
+	<p>Input a URL to find a Chart</p>
+	<hr>
 
-		<h3>Chart Search</h3>
+	<br />
 
-		<p>Input a URL to find a Chart</p>
-		<hr>
+	<p>{{ url_string_out }}</p>
 
-		<br />
+	<br />
 
-		<p>{{ url_string_out }}</p>
-
-		<br />
-
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-			<button type="submit" class="button button-delete">SEARCH</button>
-
-		</form>
-
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CLEAR</button></a>
+		<button type="submit" class="button button-delete">SEARCH</button>
 
+	</form>
 
-	</div>
+	<br />
 
-	<div class="standard-grid-item">
-	</div>
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CLEAR</button></a>
 
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

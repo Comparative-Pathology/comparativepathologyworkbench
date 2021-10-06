@@ -34,107 +34,72 @@ The detail matrix (bench) template
 
 {% load inlineedit %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li>Workbench Details</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_benches' %}">Workbenches</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a>
-		</li>
-
-		<li class="breadcrumb-item active">
-			Workbench Details
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Workbench CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h1>
 
-	<div class="standard-grid-item">
+	<p>Browse the Bench Details</p>
 
-		<h1>Workbench CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h1>
+	<hr>
 
-		<p>Browse the Bench Details</p>
+	<br />
 
-		<hr>
-
-		<br />
-
-		<dl class="standard">
-
-			<dt>Id</dt>
-			<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
-
-			<dd>
-				{% inlineedit "matrix.title" "blocked" %}
-			</dd>
-			<dt>Description</dt>
-			<dd>
-				{% inlineedit "matrix.description" "blocked" %}
-			</dd>
-
-			<dt>Cell Height</dt>
-			<dd>{{ matrix.height }}</dd>
-
-			<dt>Cell Width</dt>
-			<dd>{{ matrix.width }}</dd>
+	<dl class="standard">
+		<dt>Id</dt>
+		<dd>CPW:{{ matrix.id|stringformat:"06d" }}</dd>
+		<dd>{% inlineedit "matrix.title" "blocked" %}</dd>
+		<dt>Description</dt>
+		<dd>{% inlineedit "matrix.description" "blocked" %}</dd>
+		<dt>Cell Height</dt>
+		<dd>{{ matrix.height }}</dd>
+		<dt>Cell Width</dt>
+		<dd>{{ matrix.width }}</dd>
 
 {% if matrix.blogpost != '' %}
 
-			<dt>Blog Post</dt>
-			<dd>
-				<a class="btn btn-default" href="{{ matrix_link }}" role="button" target="_blank"><button class="button button-view">View Blog Post {{ matrix.blogpost }} &raquo;</button></a>
-			</dd>
+		<dt>Blog Post</dt>
+		<dd><a class="btn btn-default" href="{{ matrix_link }}" role="button" target="_blank"><button class="button button-view">View Blog Post {{ matrix.blogpost }} &raquo;</button></a></dd>
 
 {% endif %}
 
-			<dt>Owner</dt>
-			<dd>{{ matrix.owner.username }} ({{ matrix.owner.first_name }} {{ matrix.owner.last_name }})</dd>
+		<dt>Owner</dt>
+		<dd>{{ matrix.owner.username }} ({{ matrix.owner.first_name }} {{ matrix.owner.last_name }})</dd>
+		<dt>Created</dt>
+		<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+		<dt>Last Modified</dt>
+		<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
+	</dl>
 
-			<dt>Created</dt>
-			<dd>{{ matrix.created|date:"Y-m-d" }} {{ matrix.created|time:"G:i:s" }}</dd>
+	<br />
 
-			<dt>Last Modified</dt>
-			<dd>{{ matrix.modified|date:"Y-m-d" }} {{ matrix.modified|time:"G:i:s" }}</dd>
-		</dl>
-
-		<br />
-
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">Back</button></a>
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">Back</button></a>
 
 {% if user == matrix.owner or user.is_superuser %}
 
-		<a href="{% url 'edit_matrix' matrix.id %}"><button class="button button-edit">Edit</button></a>
+	<a href="{% url 'edit_matrix' matrix.id %}"><button class="button button-edit">Edit</button></a>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% inlineedit_script %}
 

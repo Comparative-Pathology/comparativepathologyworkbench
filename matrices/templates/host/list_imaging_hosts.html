@@ -32,77 +32,40 @@ The list imaging hosts (Servers) template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Sources</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Sources
-		</li>
+{% endblock %}
 
-		<li>
-			<!-- <i onclick="toggleCollapse()" class="fas fa-search"></i> -->
-		</li>
-
-	</ul>
-
-</div>
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div id="search-source-container" class="standard-grid-container">
+<div class="page-content">
 
-	<div id="search-source-left" class="standard-grid-item">
-	</div>
+	<h1>Search Sources</h1>
 
-	<div id="search-source-middle" class="standard-grid-item">
+	<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
 
-		<h1>Search Sources</h1>
+	<form action="{% url 'search_image' search_from 0 %}" method="post">
 
-		<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
+		{% csrf_token %}
 
-		<form action="{% url 'search_image' search_from 0 %}" method="post">
+		{% include 'includes/form.html' %}
 
-			{% csrf_token %}
+	</form>
 
-			{% include 'includes/form.html' %}
-
-		</form>
-
-		<br />
-		<hr>
-		<br />
-
-	</div>
-
-	<div id="search-source-right" class="standard-grid-item">
-	</div>
-
-</div>
-
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
-
-		<!-- <h1>Browse Sources</h1>
-
-		<p>Browse the list of Sources</p>
-
-		<hr>
-
-		<br /> -->
+	<br />
+	<hr>
+	<br />
 
 {% if server_list %}
 
@@ -110,145 +73,127 @@ The list imaging hosts (Servers) template
 
 		{% if forloop.first %}
 
-	    <table border="0">
-
-    	    <tr>
-        	    <th width="200px">Action</th>
-            	<th width="150px">Owner</th>
-	            <th>Name</th>
-    	        <th>URL</th>
-        	    <th>Type</th>
-			</tr>
-
-    	    <tr>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-			</tr>
+    <table border="0">
+	    <tr>
+    	    <th width="200px">Action</th>
+        	<th width="150px">Owner</th>
+            <th>Name</th>
+	        <th>URL</th>
+    	    <th>Type</th>
+		</tr>
+	    <tr>
+    	    <td>&nbsp;</td>
+        	<td>&nbsp;</td>
+            <td>&nbsp;</td>
+	        <td>&nbsp;</td>
+    	    <td>&nbsp;</td>
+		</tr>
 
 		{% endif %}
 
-	        <tr>
+        <tr>
 
 		{% if credential_flag %}
 
 			{% if user.id == server.owner.id or user.is_superuser %}
 
-	            <td>
+            <td>
 
 				{% if server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
 
 				{% if server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
 
-					<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
 
 				{% if server.type.name == 'EBI_SCA' %}
 
-					<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 				{% endif %}
 
-					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-					<a href="{% url 'edit_server' server.id %}"><button class="save button button-edit"><i class="fa fa-edit"></i></button></a>
-					<a href="{% url 'delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this Image Server?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-
-    	        </td>
+				<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'edit_server' server.id %}"><button class="save button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_server' server.id %}" onclick="return confirm('Are you sure you want to DELETE this Image Server?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+	        </td>
 
 			{% else %}
 
-	            <td>
+            <td>
 
-					{% if server.type.name == 'WORDPRESS' %}
+				{% if server.type.name == 'WORDPRESS' %}
 
-						<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
-					{% endif %}
+				{% endif %}
 
 					{% if server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
 
-						<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 					{% endif %}
 
 					{% if server.type.name == 'EBI_SCA' %}
 
-						<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
+				<a href="{% url 'webgallery_show_ebi_sca_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
 					{% endif %}
 
-					<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'detail_server' server.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-	            </td>
+            </td>
 
 			{% endif %}
 
 		{% else %}
 
-    	        <td>&nbsp;</td>
+	        <td>&nbsp;</td>
 
 		{% endif %}
 
-        	    <td>{{ server.owner.username }}</td>
-            	<td>{{ server.name }}</td>
-	            <td>{{ server.url_server }}</td>
-    	        <td>{{ server.type.name }}</td>
-			</tr>
+    	    <td>{{ server.owner.username }}</td>
+        	<td>{{ server.name }}</td>
+            <td>{{ server.url_server }}</td>
+	        <td>{{ server.type.name }}</td>
+		</tr>
 
 		{% if forloop.last %}
 
-	        <tr>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
-
-	        <tr>
+        <tr>
 
 			{% if user.is_superuser %}
 
-    	        <td>
-					<a href="{% url 'new_server' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-	            </td>
+	    	<td><a href="{% url 'new_server' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></td>
 
 			{% else %}
 
-    	        <td>&nbsp;</td>
+	    	<td>&nbsp;</td>
 
 			{% endif %}
 
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
+	        <td>&nbsp;</td>
+	        <td>&nbsp;</td>
+		    <td>&nbsp;</td>
+	    	<td>&nbsp;</td>
+		</tr>
 
-    	</table>
+	</table>
 
 		{% endif %}
 
-    {% endfor %}
+	{% endfor %}
 
 {% else %}
 
-		<p>No Sources are available.</p>
+	<p>No Sources are available.</p>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% endblock %}

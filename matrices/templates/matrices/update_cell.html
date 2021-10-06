@@ -32,83 +32,52 @@ The detail cell blog template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Image Search</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li class="breadcrumb-item active">
-			Image Search
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
+	<h1>Search for an Image</h1>
 
-	</div>
+	<p>Input a URL to find an Image (OMERO and EBI SCA sources ONLY!):</p>
+	<hr>
 
-	<div class="standard-grid-item">
+	<br />
 
-		<h1>Search for an Image</h1>
+	<p>{{ url_string_out }}</p>
 
-		<p>Input a URL to find an Image (OMERO and EBI SCA sources ONLY!):</p>
-		<hr>
+	<br />
 
-		<br />
-
-		<p>{{ url_string_out }}</p>
-
-		<br />
-
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-			<button type="submit" class="button button-delete">UPDATE</button>
-
-		</form>
-
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
+		<button type="submit" class="button button-delete">UPDATE</button>
 
-	</div>
+	</form>
 
-	<div class="standard-grid-item">
+	<br />
 
-	</div>
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

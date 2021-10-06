@@ -138,6 +138,7 @@ urlpatterns = [
 	path('delete_server/<int:server_id>/', matrices_views.host.delete_server, name='delete_server'),
 	path('authorisation/', matrices_views.host.authorisation, name='authorisation'),
     path('maintenance/', matrices_views.host.maintenance, name='maintenance'),
+    path('execute_command/', matrices_views.host.execute_command, name='execute_command'),
     path('list_imaging_hosts/', matrices_views.host.list_imaging_hosts, name='list_imaging_hosts'),
 	path('list_image_cart/', matrices_views.host.list_image_cart, name='list_image_cart'),
 	path('list_bench_authorisation/', matrices_views.host.list_bench_authorisation, name='list_bench_authorisation'),

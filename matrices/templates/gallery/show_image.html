@@ -32,256 +32,207 @@ The show image template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
 
-	<ul class="my-breadcrumb">
+	{% if image.name != 'ERROR' %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+			<li><a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a></li>
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+			{% for project in projects %}
 
-		<li>
-			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
-		</li>
+			<li><a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a></li>
 
-{% if image.name != 'ERROR' %}
+			{% endfor %}
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'webgallery_show_group' server.id group.id %}">{{ group.name|truncatechars:20 }}</a>
-		</li>
+			{% for dataset in datasets %}
 
-		{% for project in projects %}
+			<li><a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">{{ dataset.name|truncatechars:20 }}</a></li>
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a>
-		</li>
+			{% endfor %}
 
-		{% endfor %}
-
-		{% for dataset in datasets %}
-
-		<li class="breadcrumb-item">
-			<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">{{ dataset.name|truncatechars:20 }}</a>
-		</li>
-
-		{% endfor %}
-
-		<li class="breadcrumb-item active">
-			{{ image.name|truncatechars:20 }}
-		</li>
-
-{% endif %}
-
-	</ul>
-
-</div>
-
-
-<!-- Main Data Panel -->
-
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
-
-{% if image.name == 'ERROR' %}
-
-		<p>Image {{ image.id }} Does NOT Exist!</p>
-
-{% else %}
-
-		<h1>{{ image.name|truncatechars:20 }}</h1>
-
-		<br />
-
-	    <h3>Image Information</h3>
-
-		<hr>
-
-		<dl class="standard">
-
-			<dt>Image Name</dt>
-			<dd>{{ image.name }}</dd>
-
-	    	<dt>Image Description</dt>
-		    <dd>{{ image.description }}</dd>
-
-		</dl>
-
-    	<table>
-        	<tr>
-            	<th>Image:</th>
-	            <td>
-					<a href="{{ image.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
-				</td>
-			</tr>
-
-        	<tr>
-            	<th>&nbsp;</th>
-	            <td>&nbsp;</td>
-			</tr>
-
-        	<tr>
-            	<th>Dimensions (XY):</th>
-	            <td>{{ image.sizeX }} x {{ image.sizeY }}</td>
-    	    </tr>
-
-        	<tr>
-            	<th>Pixels Type:</th>
-	            <td>{{ image.pixelstype }}</td>
-    	    </tr>
-
-        	<tr>
-            	<th>Pixels Size (XYZ) (&#181m):</th>
-	            <td>{{ image.pixelsizeX|floatformat:4 }} x {{ image.pixelsizeY|floatformat:4 }}</td>
-    	    </tr>
-
-        	<tr>
-            	<th>Z-sections/Timepoints:</th>
-	            <td>{{ image.sizeZ }} x {{ image.sizeT }}</td>
-    	    </tr>
-
-	    </table>
-
-		<br />
-		<br />
-
-	{% if image_flag == 'DISALLOW' %}
-
-        <div class="panel-alert">
-            <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
-        </div>
-
-	{% else %}
-
-		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
-
-    	<br />
-    	<br />
-
-		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+			<li>{{ image.name|truncatechars:20 }}</li>
 
 	{% endif %}
 
-		<br />
-		<br />
+{% endblock %}
 
-    	<hr>
+{% block details %}
 
-	    <h3>Regions Of Interest (ROIs)</h3>
+{% endblock %}
 
-	    <p>Image has {{ image.roi_count }} ROIs</p>
+{% block content %}
+
+<!-- Main Data Panel -->
+
+<div class="page-content">
+
+{% if image.name == 'ERROR' %}
+
+	<p>Image {{ image.id }} Does NOT Exist!</p>
+
+{% else %}
+
+	<h1>{{ image.name|truncatechars:20 }}</h1>
+
+	<br />
+
+    <h3>Image Information</h3>
+
+	<hr>
+
+	<dl class="standard">
+		<dt>Image Name</dt>
+		<dd>{{ image.name }}</dd>
+    	<dt>Image Description</dt>
+	    <dd>{{ image.description }}</dd>
+	</dl>
+
+	<table>
+    	<tr>
+        	<td>Image:</td>
+            <td>
+				<a href="{{ image.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
+			</td>
+		</tr>
+    	<tr>
+        	<td>&nbsp;</td>
+            <td>&nbsp;</td>
+		</tr>
+		<tr>
+	       	<td>Dimensions (XY):</td>
+		    <td>{{ image.sizeX }} x {{ image.sizeY }}</td>
+	    </tr>
+    	<tr>
+	         <td>Pixels Type:</td>
+		     <td>{{ image.pixelstype }}</td>
+	    </tr>
+		<tr>
+	        <td>Pixels Size (XYZ) (&#181m):</td>
+		    <td>{{ image.pixelsizeX|floatformat:4 }} x {{ image.pixelsizeY|floatformat:4 }}</td>
+	    </tr>
+    	<tr>
+	    	<td>Z-sections/Timepoints:</td>
+		    <td>{{ image.sizeZ }} x {{ image.sizeT }}</td>
+	    </tr>
+    </table>
+
+	<br />
+	<br />
+
+	{% if image_flag == 'DISALLOW' %}
+
+	<div class="panel-alert">
+		<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+	</div>
+
+	{% else %}
+
+	<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+
+	<br />
+	<br />
+
+	<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+
+	{% endif %}
+
+	<br />
+	<br />
+
+	<hr>
+
+	<h3>Regions Of Interest (ROIs)</h3>
+
+	<p>Image has {{ image.roi_count }} ROIs</p>
 
 	{% for roi in rois %}
 
-    	<table>
+	<table>
 
 		{% for shape in roi.shapes %}
 
-        	<tr>
-            	<th>&nbsp;</th>
-	            <td>&nbsp;</td>
-			</tr>
+	   	<tr>
+	       	<td>&nbsp;</td>
+	        <td>&nbsp;</td>
+		</tr>
+    	<tr>
+    		<td>ROI ID:</td>
+		    <td>{{ shape.id }}</td>
+		</tr>
+    	<tr>
+	       	<td>Coordinates:</td>
+		    <td>X: {{ shape.centre_x }}, Y: {{ shape.centre_y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
+		</tr>
+    	<tr>
+	        <td>{{ shape.type }}</td>
+		    <td>
+				<a href="{{ shape.viewer_url }}" target="_blank"><img style="width:256px;" alt="{{ shape.type }}" title="{{ shape.type }}" src="{{ shape.shape_url }}" ></a>
+		    </td>
+	    </tr>
+	    <tr>
+	       	<td>&nbsp;</td>
+		    <td>&nbsp;</td>
+		</tr>
+		<tr>
+	       	<td>&nbsp;</td>
+		    <td>
 
-        	<tr>
-            	<th>ROI ID:</th>
-	            <td>{{ shape.id }}</td>
-			</tr>
+			{% if image_flag == 'DISALLOW' %}
 
-        	<tr>
-            	<th>Coordinates:</th>
-	            <td>X: {{ shape.centre_x }}, Y: {{ shape.centre_y }}, Width: {{ shape.width }}, Height: {{ shape.height }}</td>
-			</tr>
+	        	<div class="panel-alert">
+	        		<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
+	        	</div>
 
-        	<tr>
-            	<th>{{ shape.type }}</th>
-	            <td>
-					<a href="{{ shape.viewer_url }}" target="_blank"><img style="width:256px;" alt="{{ shape.type }}" title="{{ shape.type }}" src="{{ shape.shape_url }}" ></a>
-	            </td>
-    	    </tr>
+	        {% else %}
 
-        	<tr>
-            	<th>&nbsp;</th>
-	            <td>&nbsp;</td>
-			</tr>
+				<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
 
-        	<tr>
-            	<th>&nbsp;</th>
-	            <td>
+	        {% endif %}
 
-	    	{% if image_flag == 'DISALLOW' %}
+		    </td>
+		</tr>
+	    <tr>
+    		<td>&nbsp;</td>
+		    <td>
 
-                    <div class="panel-alert">
-                        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
-                    </div>
+		    {% if image_flag == 'DISALLOW' %}
 
-        	{% else %}
+	        	<div class="panel-alert">
+	            	<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
+	            </div>
 
-					<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
+	        {% else %}
 
-        	{% endif %}
+				<br />
 
-	            </td>
-			</tr>
+				<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
 
-        	<tr>
-            	<th>&nbsp;</th>
-	            <td>
+	        {% endif %}
 
-	    	{% if image_flag == 'DISALLOW' %}
+		    </td>
+		</tr>
+	    <tr>
+	       	<td>&nbsp;</td>
+		    <td>&nbsp;</td>
+		</tr>
 
-                    <div class="panel-alert">
-                        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
-                    </div>
-
-        	{% else %}
-
-					<br />
-
-					<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
-
-        	{% endif %}
-
-	            </td>
-			</tr>
-
-        	<tr>
-            	<th>&nbsp;</th>
-	            <td>&nbsp;</td>
-			</tr>
-
-	    	<hr>
+		<hr>
 
 		{% endfor %}
 
-	    </table>
+    </table>
 
 	{% endfor %}
 
 {% endif %}
 
-	</div>
 
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -35,349 +35,292 @@ The base header and footer include template
 
 <head>
 
-	<meta charset="utf-8">
+  <meta charset="utf-8">
 
-	<link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-icon-57x57.png' %}" />
-	<link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-icon-60x60.png' %}" />
-	<link rel="apple-touch-icon" sizes="72x72" href="{% static 'apple-icon-72x72.png' %}" />
-	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'apple-icon-76x76.png' %}" />
-	<link rel="apple-touch-icon" sizes="114x114" href="{% static 'apple-icon-114x114.png' %}" />
-	<link rel="apple-touch-icon" sizes="120x120" href="{% static 'apple-icon-120x120.png' %}" />
-	<link rel="apple-touch-icon" sizes="144x144" href="{% static 'apple-icon-144x144.png' %}" />
-	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}" />
-	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}" >
-	<link rel="icon" type="image/png" sizes="192x192" href="{% static 'android-icon-192x192.png' %}" />
-	<link rel="shortcut icon" type="image/ico" href="{% static 'favicon.ico' %}" />
-	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}" />
-	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}" />
-	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}" />
-	<link rel="manifest" href="{% static 'manifest.json' %}" />
-	<meta name="msapplication-TileColor" content="#ffffff" />
-	<meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}" />
-	<meta name="theme-color" content="#ffffff" />
+  <link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-icon-57x57.png' %}" />
+  <link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-icon-60x60.png' %}" />
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static 'apple-icon-72x72.png' %}" />
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'apple-icon-76x76.png' %}" />
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static 'apple-icon-114x114.png' %}" />
+  <link rel="apple-touch-icon" sizes="120x120" href="{% static 'apple-icon-120x120.png' %}" />
+  <link rel="apple-touch-icon" sizes="144x144" href="{% static 'apple-icon-144x144.png' %}" />
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}" >
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'android-icon-192x192.png' %}" />
+  <link rel="shortcut icon" type="image/ico" href="{% static 'favicon.ico' %}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}" />
+  <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}" />
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}" />
+  <link rel="manifest" href="{% static 'manifest.json' %}" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}" />
+  <meta name="theme-color" content="#ffffff" />
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
-	{% if settings.LOCATION == 'CZI' %}
+  {% if settings.LOCATION == 'CZI' %}
 
-	<!-- CZI -->
-	<link rel="stylesheet" href="{% static 'styles_czi_less.css' %}" />
+  <!-- CZI -->
+  <link rel="stylesheet" href="{% static 'styles_czi.css' %}" />
 
-	{% endif %}
+  {% endif %}
 
-	{% if settings.LOCATION == 'CANADA' %}
+  {% if settings.LOCATION == 'CANADA' %}
 
-	<!-- CANADA -->
-	<link rel="stylesheet" href="{% static 'styles_canada_less.css' %}">
+  <!-- CANADA -->
+  <link rel="stylesheet" href="{% static 'styles_canada.css' %}">
 
-	{% endif %}
+  {% endif %}
 
-	{% if settings.LOCATION == 'COELIAC' %}
+  {% if settings.LOCATION == 'COELIAC' %}
 
-	<!-- COELIAC -->
-	<link rel="stylesheet" href="{% static 'styles_coeliac_less.css' %}">
+  <!-- COELIAC -->
+  <link rel="stylesheet" href="{% static 'styles_coeliac.css' %}">
 
-	{% endif %}
+  {% endif %}
 
-	<title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
+  <title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
 
 </head>
 
-<body onload="getStatus()">
+<!-- <body onload="getStatus()"> -->
+<body>
 
-<!-- Navigation Bar -->
+  <div class="page-container">
 
-<div class="nav-grid-container">
+    <div class="page-header">
 
-	<div class="nav-grid-item">
+	  <div class="grid-container-header">
 
-		<div class="my-navbar">
+		<div class="grid-item-header-logo">
+          <a href="https://www.ed.ac.uk/comparative-pathology">
+            <img style="width: 125px;" alt="CCP" title="Centre for Comparative Pathology" src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/ccp-logo.png" >
+          </a>
+        </div><!-- End of grid-item-header-logo -->
 
-			<a href="{% url 'home' %}"><strong>Comparative Pathology Workbench</strong></a>
+        <div id="id-grid-item-header-logo-under" class="grid-item-header-logo-under"  style="display:none;">
+          <span onclick="closeGridRow();" class="closebtn"><i class="fas fa-times-circle"></i></span>
+        </div><!-- End of grid-item-header-logo-under -->
 
-		</div>
-	</div>
+        <div class="grid-item-header-title">
+          <a href="{% url 'home' %}"><strong>Comparative Pathology Workbench</strong></a>
+        </div><!-- End of grid-item-header-title -->
 
-	<div class="nav-grid-item">
+		<div class="grid-item-header-search">
+		  <form action="{% url 'list_benches' %}" method="get">
+            <input id="id_search" type="text" placeholder="Search ..." name="search" method="get">
+			<button type="submit"><i class="fa fa-search"></i></button>
+		  </form>
+        </div><!-- End of grid-item-header-search -->
 
-<!-- BENCHES -->
-
-		<div class="my-subnav">
-
-	{% if matrix_list %}
-
-			<a href="{% url 'list_benches' %}"><button class="my-subnavbtn">Benches ({{ matrix_list|length }})</button></a>
-
-
-	{% else %}
-
-			<button class="my-subnavbtn">Benches <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content">
-
-				<a class="dropdown-item" href="#">No Benches are available!</a>
-
-			</div>
-
-	{% endif %}
-
-
-		</div>
-
-
-<!-- COLLECTIONS -->
-
-		<div class="my-subnav">
-
-	{% if collection_list %}
-
-			<a href="{% url 'list_collections' %}"><button class="my-subnavbtn">Collections ({{ collection_list|length }})</button></a>
-
-	{% else %}
-
-			<button class="my-subnavbtn">Collections <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content">
-
-				<a class="dropdown-item" href="#">No Collections are available!</a>
-
-			</div>
-
-	{% endif %}
-
-		</div>
-
-
-<!-- IMAGES -->
-
-		<div class="my-subnav">
-
-<!-- Do you have some Images to look at? -->
-
-	{% if image_list %}
-
-			<button class="my-subnavbtn">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
-
-				<div class="my-subnav-content">
-
-					<a href="{% url 'view_active_collection' %}">Current Collection</a>
-
-					<a href="{% url 'view_all_collections' %}">All Images</a>
-
-				</div>
-
-	{% else %}
-
-			<button class="my-subnavbtn">Images <i class="fa fa-caret-down"></i></button>
-
-				<div class="my-subnav-content">
-
-					<a class="dropdown-item" href="#">No Images are available!</a>
-
-				</div>
-
-	{% endif %}
-
-		</div>
-
-		<!-- SERVERS -->
-
-				<div class="my-subnav">
-
-		<!-- Do you have some Servers to look at? -->
-
-		{% if server_list %}
-
-					<a href="{% url 'list_imaging_hosts' %}"><button class="my-subnavbtn">Sources ({{ server_list.count }})</button></a>
-
-		{% else %}
-
-					<button class="my-subnavbtn">Sources <i class="fa fa-caret-down"></i></button>
-
-					<div class="my-subnav-content">
-
-						<a class="dropdown-item" href="#">No Sources are available!</a>
-
-					</div>
-
-		{% endif %}
-
-				</div>
-
-
-<!-- ABOUT -->
-
-		<div class="my-subnav">
-
-			<button class="my-subnavbtn">About <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content-nodrop">
-
-				<a href="{% url 'about' %}">About</a>
-
-				<a href="{% url 'people' %}">People</a>
-
-				<a href="{% url 'howto' %}">How To</a>
-
-			</div>
-
-		</div>
-
-
-<!-- PROFILE RIGHT -->
-
-{% if user.is_superuser %}
-
-		<div class="my-subnav-right">
-
-			<button class="my-subnavbtn-right">ADMIN<i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content-right">
-
-				<a href="{% url 'authorisation' %}">Authorisation</a>
-
-				<a href="{% url 'maintenance' %}">Maintenance</a>
-
-				<a href="{% url 'admin:index' %}">ADMIN</a>
-
-				<a href="{% url 'api-root' %}">API</a>
-
-				<a href="{% url 'collectivization' %}">Setup Default Collections</a>
-
-				<a href="{% url 'renaming' %}">Rename Images</a>
-
-				<a href="{% url 'mailer' %}">Send Test Email</a>
-
-				<a href="{% url 'charttidyup' %}">Clean Up Charts</a>
-
-			</div>
-
-		</div>
-
-{% endif %}
-
-		<div class="my-subnav-right">
+        <div class="grid-item-header-user">
+          <div class="header-dropdown"  style="float:right;">
 
 {% if user.is_authenticated %}
 
-			<button class="my-subnavbtn-right">{{ user.username }} <i class="fa fa-caret-down"></i></button>
+            <button class="header-drop-button">{{ user.username }} <i class="fa fa-caret-down"></i></button>
+            <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
+              <a href="{% url 'logout' %}">Logout</a>
 
-			<div class="my-subnav-content-right">
+    {% if user.is_superuser %}
 
-				<a href="{% url 'logout' %}">Logout</a>
-
-	{% if user.is_superuser %}
-
-				<a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
-
-				<a href="{% url 'list_bench_authorisation' %}">All Bench Permissions</a>
-
-				<a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
-
-				<a href="{% url 'list_collection_authorisation' %}">All Collection Permissions</a>
+              <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
+              <a href="{% url 'list_bench_authorisation' %}">All Bench Permissions</a>
+              <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
+              <a href="{% url 'list_collection_authorisation' %}">All Collection Permissions</a>
+              <a href="{% url 'authorisation' %}">Authorisation</a>
+              <a href="{% url 'maintenance' %}">Maintenance</a>
+              <a href="{% url 'execute_command' %}">Execute Command</a>
+              <a href="{% url 'admin:index' %}">ADMIN</a>
+              <a href="{% url 'api-root' %}">API</a>
 
 	{% else %}
 
-				<a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
-
-				<a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
+              <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
+              <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
 
 	{% endif %}
 
-				<a href="{% url 'password_change' %}">Change Password</a>
-
-				<a href="{% url 'detail_user' user.id %}">My Account</a>
-
-			</div>
+              <a href="{% url 'password_change' %}">Change Password</a>
+              <a href="{% url 'detail_user' user.id %}">My Account</a>
+            </div><!-- End of header-dropdown-content -->
 
 {% else %}
 
-			<button class="my-subnavbtn-right">User <i class="fa fa-caret-down"></i></button>
-
-			<div class="my-subnav-content-right">
-
-				<a href="{% url 'login' %}">Login</a>
-
-				<a href="{% url 'signup' %}">Register</a>
-
-			</div>
+            <button class="header-drop-button">User <i class="fa fa-caret-down"></i></button>
+            <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
+              <a href="{% url 'login' %}">Login</a>
+              <a href="{% url 'signup' %}">Register</a>
+            </div><!-- End of header-dropdown-content -->
 
 {% endif %}
 
-		</div>
+          </div><!-- End of header-dropdown -->
+        </div><!-- End of grid-item-header-user -->
 
-{% if user.is_authenticated %}
+        <div class="grid-item-header-bench">
+          <div class="header-dropdown">
 
-		<div class="my-subnav">
+{% if matrix_list %}
 
-			<div class="search-container">
+            <button class="header-drop-button"><a href="{% url 'list_benches' %}">Benches ({{ matrix_list|length }})</a></button>
 
-				<form action="{% url 'list_benches' %}" method="get">
+{% else %}
 
-					<input id="id_search" type="text" placeholder="Search ..." name="search">
+            <button class="header-drop-button">Benches <i class="fa fa-caret-down"></i></button>
 
-					<button type="submit"><i class="fa fa-search"></i></button>
-
-				</form>
-
-		    </div>
-
-		</div>
+            <div class="header-dropdown-content">
+              <a href="{% url 'new_matrix' %}">No Benches are available! Create Bench</a>
+            </div><!-- End of header-dropdown-content -->
 
 {% endif %}
 
-	</div>
+          </div><!-- End of header-dropdown -->
+        </div><!-- End of grid-item-header-bench -->
 
-</div>
+        <div class="grid-item-header-collection">
+          <div class="header-dropdown">
+
+{% if collection_list %}
+
+            <button class="header-drop-button"><a href="{% url 'list_collections' %}">Collections ({{ collection_list|length }})</a></button>
+
+{% else %}
+
+            <button class="header-drop-button">Collections <i class="fa fa-caret-down"></i></button>
+
+            <div class="header-dropdown-content">
+              <a href="{% url 'new_collection' %}">No Collections are available! Create Collection</a>
+            </div><!-- End of header-dropdown-content -->
+
+{% endif %}
+          </div><!-- End of header-dropdown -->
+
+        </div><!-- End of grid-item-header-collection -->
+
+        <div class="grid-item-header-image">
+          <div class="header-dropdown">
+
+{% if image_list %}
+
+            <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+            <div class="header-dropdown-content">
+              <a href="{% url 'view_active_collection' %}">Current Collection</a>
+              <a href="{% url 'view_all_collections' %}">All Images</a>
+            </div><!-- End of header-dropdown-content -->
+
+{% else %}
+
+            <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
+
+            <div class="header-dropdown-content">
+              <a class="dropdown-item" href="#">No Images are available!</a>
+            </div><!-- End of header-dropdown-content -->
+
+{% endif %}
+
+          </div><!-- End of header-dropdown -->
+        </div><!-- End of grid-item-header-image -->
+
+        <div class="grid-item-header-source">
+          <div class="header-dropdown">
+
+{% if server_list %}
+
+            <button class="header-drop-button"><a href="{% url 'list_imaging_hosts' %}">Sources ({{ server_list.count }})</a></button>
+
+{% else %}
+
+            <button class="header-drop-button">Sources <i class="fa fa-caret-down"></i></button>
+            <div class="header-dropdown-content">
+              <a href="{% url 'new_server' %}">No Sources are available! Create Source</a>
+            </div><!-- End of header-dropdown-content -->
+
+{% endif %}
+
+          </div><!-- End of header-dropdown -->
+        </div><!-- End of grid-item-header-source -->
+
+        <div class="grid-item-header-about">
+          <div class="header-dropdown">
+            <button class="header-drop-button">About <i class="fa fa-caret-down"></i></button>
+            <div class="header-dropdown-content">
+              <a href="{% url 'about' %}">About</a>
+              <a href="{% url 'people' %}">People</a>
+              <a href="{% url 'howto' %}">How To</a>
+            </div><!-- End of header-dropdown-content -->
+          </div><!-- End of header-dropdown -->
+        </div><!-- End of grid-item-header-about -->
+
+        <div class="grid-item-header-breadcrumb">
+          <ul class="breadcrumb">
+
+{% block breadcrumb %}
+
+
+{% endblock %}
+
+          </ul>
+        </div><!-- End of grid-item-header-breadcrumb -->
+
+        <div id="id-grid-item-header-breadcrumb-under" class="grid-item-header-breadcrumb-under"  style="display:none;">
+
+{% block details %}
+
+
+{% endblock %}
+
+        </div><!-- End of grid-item-header-breadcrumb-under -->
+
+      </div><!-- End of grid-container-header -->
+
+    </div><!-- End of page-header -->
 
 <!-- <main role="main"> -->
 
-	{% block content %}
+{% block content %}
 
 
-	{% endblock %}
+{% endblock %}
 
 <!-- </main> -->
 
-<div class="my-footer">
+    <div class="page-footer">
 
-	<div class="footer-grid-container">
+	  <div class="grid-container-footer">
 
-		<div>
-		</div>
+	    <div class="grid-item-footer">
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://helmsleytrust.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/helmsley.png" style="background-color: #FFFFFF;" width="170" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.humancellatlas.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HCA-logo-1500x500.jpeg" style="background-color: #FFFFFF;" width="170" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.hw.ac.uk/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HW-Logo.jpg" style="background-color: #FFFFFF;" width="125" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+        </div><!-- End of grid-item-footer -->
 
-		<div>
-			<a href="https://helmsleytrust.org/"><img src="{% static 'helmsley.png' %}" style="background-color: #FFFFFF;" width="170" /></a>
-		</div>
+	  </div><!-- End of grid-container-footer -->
 
-		<div>
-			<a href="https://www.humancellatlas.org/"><img src="{% static 'HCA-logo-1500x500.jpeg' %}" style="background-color: #FFFFFF;" width="170" /></a>
-		</div>
+	</div><!-- End of page-footer -->
 
-		<div>
-			<a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
-		</div>
-
-		<div>
-			<a href="https://www.hw.ac.uk/"><img src="{% static 'HW-Logo.jpg' %}" style="background-color: #FFFFFF;" width="125" /></a>
-		</div>
-
-		<div>
-			<a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
-		</div>
-
-		<div>
-		</div>
-
-	</div>
-
-</div>
+  </div><!-- End of page-container -->
 
 <script>
 
@@ -396,26 +339,26 @@ The base header and footer include template
 
     function getStatus(){
 
-		const searchSourceContainerDiv = document.getElementById('search-source-container');
+        const searchSourceContainerDiv = document.getElementById('search-source-container');
         const searchSourceLeftDiv = document.getElementById('search-source-left');
-		const searchSourceMiddleDiv = document.getElementById('search-source-middle');
-		const searchSourceRightDiv = document.getElementById('search-source-right');
+        const searchSourceMiddleDiv = document.getElementById('search-source-middle');
+        const searchSourceRightDiv = document.getElementById('search-source-right');
 
         const isCollapsed = getCollapsed();
 
         if(isCollapsed){
 
-			searchSourceLeftDiv.style.display = "none";
-			searchSourceMiddleDiv.style.display = "none";
-			searchSourceRightDiv.style.display = "none";
-			searchSourceContainerDiv.style.display = "none";
+            searchSourceLeftDiv.style.display = "none";
+            searchSourceMiddleDiv.style.display = "none";
+            searchSourceRightDiv.style.display = "none";
+            searchSourceContainerDiv.style.display = "none";
         }
         else{
 
-			searchSourceContainerDiv.style.display = "grid";
-			searchSourceLeftDiv.style.display = "grid";
-			searchSourceMiddleDiv.style.display = "grid";
-			searchSourceRightDiv.style.display = "grid";
+            searchSourceContainerDiv.style.display = "grid";
+            searchSourceLeftDiv.style.display = "grid";
+            searchSourceMiddleDiv.style.display = "grid";
+            searchSourceRightDiv.style.display = "grid";
         }
 
     }
@@ -434,6 +377,50 @@ The base header and footer include template
         }
 
         getStatus();
+    }
+
+    function openGridRow() {
+
+        var i, x;
+
+        x = document.getElementsByClassName("grid-item-header-breadcrumb-under");
+
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+
+        var i, x;
+
+        x = document.getElementsByClassName("grid-item-header-logo-under");
+
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+
+        document.getElementById("id-grid-item-header-logo-under").style.display = "block";
+        document.getElementById("id-grid-item-header-breadcrumb-under").style.display = "block";
+    }
+
+    function closeGridRow() {
+
+        var i, x;
+
+        x = document.getElementsByClassName("grid-item-header-breadcrumb-under");
+
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "block";
+        }
+
+        var i, x;
+
+        x = document.getElementsByClassName("grid-item-header-logo-under");
+
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "block";
+        }
+
+        document.getElementById("id-grid-item-header-logo-under").style.display = "none";
+        document.getElementById("id-grid-item-header-breadcrumb-under").style.display = "none";
     }
 
 </script>

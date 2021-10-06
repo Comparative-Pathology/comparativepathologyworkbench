@@ -32,51 +32,33 @@ The show ebi server template
 
 {% load static %}
 
-{% block content %}
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'ebi_show_ebi_server' server.id %}">EBI</a></li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">
-				Sources
-			</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'ebi_show_ebi_server' server.id %}">
-				EBI
-			</a>
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Browse https://www.ebi.ac.uk/gxa/sc/json/experiments/</h1>
 
-	<div class="standard-grid-item">
+	<p>This Server contains SC {{ experiment_list|length }} Experiments:</p>
 
-		<h1>Browse https://www.ebi.ac.uk/gxa/sc/json/experiments/</h1>
+	<hr>
 
-		<p>This Server contains SC {{ experiment_list|length }} Experiments:</p>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if experiment_list %}
 
@@ -84,98 +66,68 @@ The show ebi server template
 
 		{% if forloop.first %}
 
-    	<table border="0">
+	<table border="0">
 
-        	<tr>
-            	<th width="200px">Action</th>
-            	<th>Type</th>
-            	<th>Accession</th>
-            	<th>Description</th>
-            	<th>Load Date</th>
-            	<th>Last Update</th>
-            	<th>Number Of Assays</th>
-            	<th>Number Of Contrasts</th>
-            	<th>Species</th>
-            	<th>Kingdom</th>
-			</tr>
+		<tr>
+			<th width="200px">Action</th>
+			<th>Type</th>
+			<th>Accession</th>
+			<th>Description</th>
+			<th>Load Date</th>
+			<th>Last Update</th>
+			<th>Number Of Assays</th>
+			<th>Number Of Contrasts</th>
+			<th>Species</th>
+			<th>Kingdom</th>
+		</tr>
 
-        	<tr>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
 
 		{% endif %}
 
-        	<tr>
-            	<td>
-					<!-- <a href="http://localhost:3000/experiment/{{ experiment.experimentAccession }}">-->
-					<a href="{% url 'ebi_show_ebi_widget' server.id experiment.experimentAccession %}">
-	            		<button class="button button-view"><i class="fa fa-eye"></i></button>
-					</a>
-            	</td>
-            	<td>{{ experiment.experimentType }}</td>
-            	<td>{{ experiment.experimentAccession }}</td>
-            	<td>{{ experiment.experimentDescription }}</td>
-            	<td>{{ experiment.loadDate }}</td>
-            	<td>{{ experiment.lastUpdate }}</td>
-            	<td>{{ experiment.numberOfAssays }}</td>
-            	<td>{{ experiment.numberOfContrasts }}</td>
-            	<td>{{ experiment.species }}</td>
-            	<td>{{ experiment.kingdom }}</td>
-			</tr>
+		<tr>
+			<td>
+				<!-- <a href="http://localhost:3000/experiment/{{ experiment.experimentAccession }}">-->
+				<a href="{% url 'ebi_show_ebi_widget' server.id experiment.experimentAccession %}">
+					<button class="button button-view"><i class="fa fa-eye"></i></button>
+				</a>
+			</td>
+			<td>{{ experiment.experimentType }}</td>
+			<td>{{ experiment.experimentAccession }}</td>
+			<td>{{ experiment.experimentDescription }}</td>
+			<td>{{ experiment.loadDate }}</td>
+			<td>{{ experiment.lastUpdate }}</td>
+			<td>{{ experiment.numberOfAssays }}</td>
+			<td>{{ experiment.numberOfContrasts }}</td>
+			<td>{{ experiment.species }}</td>
+			<td>{{ experiment.kingdom }}</td>
+		</tr>
 
 		{% if forloop.last %}
 
-        	<tr>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
-
-    	</table>
+	</table>
 
 		{% endif %}
 
-    {% endfor %}
+	{% endfor %}
 
 {% else %}
 
-		<p>No Experiments are available.</p>
+	<p>No Experiments are available.</p>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -32,82 +32,50 @@ The view collection template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
+			<li>ALL Collections</li>
+			<li>Images</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_collections' %}">List Collections</a>
-		</li>
+{% endblock %}
 
-		<li>
-			ALL Collections
-		</li>
-
-		<li>
-			Images
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div id="search-source-container" class="standard-grid-container">
+<div class="page-content">
 
-	<div id="search-source-left" class="standard-grid-item">
-	</div>
+	<h1>Search Sources</h1>
 
-	<div id="search-source-middle" class="standard-grid-item">
+	<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
 
-		<h1>Search Sources</h1>
+	<form action="{% url 'search_image' search_from 0 %}" method="post">
 
-		<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
+		{% csrf_token %}
 
-		<form action="{% url 'search_image' search_from 0 %}" method="post">
+		{% include 'includes/form.html' %}
 
-			{% csrf_token %}
+	</form>
 
-			{% include 'includes/form.html' %}
+	<br />
+	<hr>
+	<br />
 
-		</form>
+	<h1>All Collections</h1>
 
-		<br />
-		<hr>
-		<br />
+	<p>You can view {{ image_list|length }} Images from {{ collection_list|length }} Collections</p>
 
-	</div>
+	<hr>
 
-	<div id="search-source-right" class="standard-grid-item">
-	</div>
-
-</div>
-
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
-
-		<h1>All Collections</h1>
-
-		<p>You can view {{ image_list|length }} Images from {{ collection_list|length }} Collections</p>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if credential_flag %}
 
@@ -117,150 +85,122 @@ The view collection template
 
 			{% if forloop.first %}
 
-	    <table border="0">
+	<table border="0">
 
-        	<tr>
-				<th style="width: 100px; position: sticky; top: 0;">Action</th>
-				<th style="width: 100px; position: sticky; top: 0;"">ROI</th>
-				<th style="width: 350px; position: sticky; top: 0;">Server</th>
-				<th style="position: sticky; top: 0;">Image</th>
-				<th style="width: 350px; position: sticky; top: 0;">Collection</th>
-				<th style="width: 350px; position: sticky; top: 0;">Bench</th>
-			</tr>
+		<tr>
+			<th style="width: 100px; position: sticky; top: 0;">Action</th>
+			<th style="width: 100px; position: sticky; top: 0;"">ROI</th>
+			<th style="width: 350px; position: sticky; top: 0;">Server</th>
+			<th style="position: sticky; top: 0;">Image</th>
+			<th style="width: 350px; position: sticky; top: 0;">Collection</th>
+			<th style="width: 350px; position: sticky; top: 0;">Bench</th>
+		</tr>
 
-	        <tr>
-        	    <td>&nbsp;</td>
-				<td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-				<td>&nbsp;</td>
-			</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
 
 			{% endif %}
 
-    	    <tr>
-
-	            <td style="vertical-align: top;">
+		<tr>
+			<td style="vertical-align: top;">
 
 			{% if image.server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 
 			{% if image.server.type.name == 'OMERO_5.4.7' or image.server.type.name == 'OMERO_5.6' %}
 
-					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 
 			{% if image.server.type.name == 'EBI_SCA' %}
 
-					<a href="{% url 'webgallery_show_ebi_sca_image' image.server.id image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'webgallery_show_ebi_sca_image' image.server.id image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 
 			{% if image.owner.username == credential_flag %}
 
-					<br />
-
-					<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 			{% endif %}
 
-	            </td>
+			</td>
 
 			{% if image.roi == 0 %}
 
-            	<td>&nbsp;</td>
+			<td>&nbsp;</td>
 
 			{% else %}
 
-        	    <td style="vertical-align: top;">
-    	        	<strong>ROI</strong>
-	            </td>
+			<td style="vertical-align: top;"><strong>ROI</strong></td>
 
 			{% endif %}
 
-            	<td style="vertical-align: top;">
-            		{{ image.server.name }}<br />({{ image.server.url_server }})
-        	    </td>
+			<td style="vertical-align: top;">{{ image.server.name }}<br />({{ image.server.url_server }})</td>
 
-    	        <td style="vertical-align: top;">
-					<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
-        	    </td>
+			<td style="vertical-align: top;"><a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="width:256px; height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a></td>
 
-				<td style="vertical-align: top;">
+			<td style="vertical-align: top;">
 
 			{% for collection in image.collections.all %}
 
-					<a href="{% url 'view_collection' collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ collection.title }}"<br />(Owned By {{ collection.owner.username }})<br />
+				<table>
+					<tr>
+						<td><a href="{% url 'view_collection' collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+						<td>"{{ collection.title }}"<br />(Owned By {{ collection.owner.username }})</td>
+					</tr>
+				</table>
 
 			{% endfor %}
 
-				</td>
+			</td>
 
-				<td style="vertical-align: top;">
+			<td style="vertical-align: top;">
 
 			{% for cell in image.image.all %}
 
-					<a href="{% url 'matrix' cell.matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ cell.matrix.title }}"<br />(Owned By {{ cell.matrix.owner.username }})<br />
+				<table>
+					<tr>
+						<td><a href="{% url 'matrix' cell.matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+						<td>"{{ cell.matrix.title }}"<br />(Owned By {{ cell.matrix.owner.username }})</td>
+					</tr>
+				</table>
 
 			{% endfor %}
 
-				</td>
-			</tr>
+			</td>
+		</tr>
 
 			{% if forloop.last %}
 
-	        <tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
-
-        	<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
-
-	    </table>
+	</table>
 
 			{% endif %}
 
-	    {% endfor %}
+		{% endfor %}
 
 	{% else %}
 
-		<p>No Images are available.</p>
+	<p>No Images are available.</p>
 
 	{% endif %}
 
 {% else %}
 
-		<p>No Images are allowed yet.</p>
+	<p>No Images are allowed yet.</p>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -32,124 +32,95 @@ The show group template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a></li>
 
-	<ul class="my-breadcrumb">
+	{% if group.name != 'ERROR' %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+			<li>{{ group.name|truncatechars:20 }}</li>
 
-		<li>
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+	{% endif %}
 
-		<li>
-			<a href="{% url 'webgallery_show_imaging_server' server.id %}">{{ server.name }}</a>
-		</li>
+{% endblock %}
 
-{% if group.name != 'ERROR' %}
+{% block details %}
 
-		<li>
-			{{ group.name|truncatechars:20 }}
-		</li>
+{% endblock %}
 
-{% endif %}
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
-
+<div class="page-content">
 
 {% if group.name == 'ERROR' %}
 
-		<p>Group {{ group.id }} Does NOT Exist!</p>
+	<p>Group {{ group.id }} Does NOT Exist!</p>
 
 {% else %}
 
-		<h1>{{ group.name|truncatechars:20 }}</h1>
+	<h1>{{ group.name|truncatechars:20 }}</h1>
 
-		<br />
+	<br />
 
 {% endif %}
 
 {% if project_list %}
 
-	    <p>Group contains {{ project_count }} Projects:</p>
+    <p>Group contains {{ project_count }} Projects:</p>
 
-		<hr>
+	<hr>
 
-		<ul class="image-list">
+	<ul class="image-list">
 
     {% for project in project_list %}
 
-	    	<li>
+		<li>
 
-				<div class="card-image-gallery">
+			<div class="card-image-gallery">
 
-					<div class="card-container-gallery">
+				<div class="card-container-gallery">
 
-						<h5>{{ project.name|truncatechars:20 }}</h5>
+					<h5>{{ project.name|truncatechars:20 }}</h5>
 
-        	    		<dl>
-        	    	    	<dt>Datasets</dt>
-        		        	<dd>{{ project.datasetCount }}</dd>
-		            	    <dt>Images</dt>
-		                	<dd>{{ project.imageCount }}</dd>
-		    	        </dl>
-
-						<br />
-
-						<a href="{% url 'webgallery_show_project' server.id project.id %}"><button class="button button-view">View Project &raquo;</button></a>
-
-		        	</div>
+	        		<dl>
+	        	    	<dt>Datasets</dt>
+	    	        	<dd>{{ project.datasetCount }}</dd>
+		           	    <dt>Images</dt>
+		               	<dd>{{ project.imageCount }}</dd>
+		   	        </dl>
 
 					<br />
+
+					<a href="{% url 'webgallery_show_project' server.id project.id %}"><button class="button button-view">View Project &raquo;</button></a>
+
+		       	</div>
+
+				<br />
 
 		{% if project.randomImageName != 'NONE'  %}
 
-					<a href="{% url 'webgallery_show_image' server.id project.randomImageID %}"><img class="img-thumbnail" alt="{{ project.randomImageName }}" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/></a>
+				<a href="{% url 'webgallery_show_image' server.id project.randomImageID %}"><img class="img-thumbnail" alt="{{ project.randomImageName }}" title="{{ project.randomImageName }}" src="{{ project.randomImageBEURL }}"/></a>
 
 		{% endif %}
 
-					<br />
+				<br />
 
-    	    	</div>
+	    	</div>
 
-    	    </li>
+	    </li>
 
     {% endfor %}
 
-		</ul>
+	</ul>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

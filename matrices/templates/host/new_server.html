@@ -32,78 +32,52 @@ The new server template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li>NEW Source</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li class="breadcrumb-item">
-			<a href="{% url 'list_imaging_hosts' %}">Sources</a>
-		</li>
+{% endblock %}
 
-		<li class="breadcrumb-item active">
-			NEW Source
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>NEW Source</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>NEW Source</h1>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if credential_flag %}
 
-	    <form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-	        <button type="submit" class="button button-delete">Save</button>
-
-	    </form>
-
 		<br />
 
-		<a href="{% url 'list_imaging_hosts' %}"><button class="button button-add">CANCEL</button></a>
+		<button type="submit" class="button button-delete">Save</button>
+
+	</form>
+
+	<br />
+
+	<a href="{% url 'list_imaging_hosts' %}"><button class="button button-add">CANCEL</button></a>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -32,140 +32,114 @@ The authorisation template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Authorisation</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Authorisation
-		</li>
+{% endblock %}
 
-	</ul>
+{% block content %}
 
-</div>
+<!-- Side Bar -->
 
+<div class="page-sidebar">
 
-<!-- Tab links -->
+	<!-- Tab links -->
 
-<div class="tab">
+	<div class="tab">
+	    <button class="tablinks" onclick="openTab(event, 'users')" id="defaultOpen">Users</button>
+	    <button class="tablinks" onclick="openTab(event, 'blog_credentials')">Blog Credentials</server_types>
+	</div>
 
-    <button class="tablinks" onclick="openTab(event, 'users')" id="defaultOpen">Users</button>
-
-    <button class="tablinks" onclick="openTab(event, 'blog_credentials')">Blog Credentials</server_types>
-
-</div>
+</div><!-- End of page-sidebar -->
 
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<div id="users" class="tabcontent">
 
-	<div class="standard-grid-item">
+		<h2>Users</h2>
 
-		<div id="users" class="tabcontent">
-
-			<h2>Users</h2>
-
-			<br />
+		<br />
 
 {% if user_list %}
 
-    {% for userlist in user_list %}
+	{% for userlist in user_list %}
 
 		{% if forloop.first %}
 
-	    	<table>
-
-    	    	<tr>
-        	    	<th width="250px">Action</th>
-					<th width="200px">User Name</th>
-					<th width="200px">Full Name</th>
-					<th width="250px">Email</th>
-					<th>Is Super User?</th>
-				</tr>
-
-    		    <tr>
-    		    	<td>&nbsp;</td>
-	        	    <td>&nbsp;</td>
-    	        	<td>&nbsp;</td>
-	        	    <td>&nbsp;</td>
-    	        	<td>&nbsp;</td>
-				</tr>
+		<table>
+			<tr>
+				<th width="250px">Action</th>
+				<th width="200px">User Name</th>
+				<th width="200px">Full Name</th>
+				<th width="250px">Email</th>
+				<th>Is Super User?</th>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
 
 		{% endif %}
 
-    	    	<tr>
+			<tr>
 
 		{% if user.is_superuser %}
 
-        	    	<td>
-						<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-						<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-						<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-						<a href="{% url 'list_user_bench_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
-	        	    </td>
+				<td>
+					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+					<a href="{% url 'list_user_bench_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
+				</td>
 
 		{% else %}
 
-        	    	<td>
-						<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-	        	    </td>
+				<td>
+					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				</td>
 
 		{% endif %}
 
-		            <td>
-						{{ userlist.username }}
-        		    </td>
-            		<td>
-						{{ userlist.get_full_name }}
-		            </td>
-    		        <td>
-						{{ userlist.email }}
-            		</td>
-	            	<td>
-						{{ userlist.is_superuser }}
-	        	    </td>
-				</tr>
+				<td>{{ userlist.username }}</td>
+				<td>{{ userlist.get_full_name }}</td>
+				<td>{{ userlist.email }}</td>
+				<td>{{ userlist.is_superuser }}</td>
+			</tr>
 
 		{% if forloop.last %}
 
-    		    <tr>
-        		    <td>&nbsp;</td>
-            		<td>&nbsp;</td>
-		            <td>&nbsp;</td>
-    		        <td>&nbsp;</td>
-	    	        <td>&nbsp;</td>
-				</tr>
-			</table>
+		</table>
 
 		{% endif %}
 
-    {% endfor %}
+	{% endfor %}
 
 {% else %}
 
-			<p>No users are available.</p>
+		<p>No users are available.</p>
 
 {% endif %}
 
-		</div>
+	</div>
 
-		<div id="blog_credentials" class="tabcontent">
+	<div id="blog_credentials" class="tabcontent">
 
-			<h2>Blog Credentials</h2>
-			<br />
+		<h2>Blog Credentials</h2>
+		<br />
 
 {% if credential_list %}
 
@@ -173,147 +147,112 @@ The authorisation template
 
 		{% if forloop.first %}
 
-	    	<table>
-
-    	    	<tr>
-	            	<th width="150px">Action</th>
-	        	    <th width="100px">Owner</th>
-    	        	<th width="200px">User Name</th>
-	    	        <th width="200px">Wordpress Id</th>
-
-		{% if user.is_superuser %}
-
-    	    	    <th width="350px">Application Password</th>
-
-		{% else %}
-
-        	    	<th width="350px">&nbsp;</th>
-
-		{% endif %}
-
-				</tr>
-
-    		    <tr>
-        		    <td>&nbsp;</td>
-            		<td>&nbsp;</td>
-	            	<td>&nbsp;</td>
-	    	        <td>&nbsp;</td>
-		            <td>&nbsp;</td>
-				</tr>
-
-		{% endif %}
-
-	        	<tr>
-
-		{% if user.is_superuser %}
-
-    	        	<td>
-						<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-						<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-						<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-    		        </td>
-
-		{% else %}
-
-        		    <td>
-						<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-	    	        </td>
-
-		{% endif %}
-
-    		        <td>
-        		    	{{ credential.owner.username }}
-	        	    </td>
-		        	<td>
-						{{ credential.username }}
-	            	</td>
-		            <td>
-    		        	{{ credential.wordpress }}
-        		    </td>
-
-		{% if user.is_superuser %}
-
-	            	<td>
-    	        		{{ credential.apppwd }}
-	        	    </td>
-
-		{% else %}
-
-    	        	<td>&nbsp;</td>
-
-		{% endif %}
-
-				</tr>
-
-		{% if forloop.last %}
-
-    	    	<tr>
-	            	<td>&nbsp;</td>
-	    	        <td>&nbsp;</td>
-    	    	    <td>&nbsp;</td>
-        	    	<td>&nbsp;</td>
-	        	    <td>&nbsp;</td>
-				</tr>
-
-    	    	<tr>
+		<table>
+			<tr>
+				<th width="150px">Action</th>
+				<th width="100px">Owner</th>
+				<th width="200px">User Name</th>
+				<th width="200px">Wordpress Id</th>
 
 			{% if user.is_superuser %}
 
-        	    	<td>
-						<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-    	        	</td>
+				<th width="350px">Application Password</th>
 
 			{% else %}
 
-	        	    <td>&nbsp;</td>
+				<th width="350px">&nbsp;</th>
 
 			{% endif %}
 
-    	        	<td>&nbsp;</td>
-	    	        <td>&nbsp;</td>
-    	    	    <td>&nbsp;</td>
-        	    	<td>&nbsp;</td>
-				</tr>
-
-		    </table>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
 
 		{% endif %}
 
-    {% endfor %}
+			<tr>
 
-{% else %}
+		{% if user.is_superuser %}
 
-			<p>No Blog Credentials are available.</p>
+				<td>
+					<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				</td>
 
-	{% if user.is_superuser %}
+		{% else %}
 
-			<p>
-				<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-			</p>
+				<td><a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a></td>
+
+		{% endif %}
+
+				<td>{{ credential.owner.username }}</td>
+				<td>{{ credential.username }}</td>
+				<td>{{ credential.wordpress }}</td>
+
+		{% if user.is_superuser %}
+
+				<td>{{ credential.apppwd }}</td>
+
+		{% else %}
+
+				<td>&nbsp;</td>
+
+		{% endif %}
+
+			</tr>
+
+			{% if forloop.last %}
+
+			<tr>
+
+				{% if user.is_superuser %}
+
+				<td><a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></td>
+
+				{% else %}
+
+				<td>&nbsp;</td>
+
+				{% endif %}
+
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+
+		</table>
+
+			{% endif %}
+
+		{% endfor %}
 
 	{% else %}
 
-			<p>&nbsp;
-			</p>
+		<p>No Blog Credentials are available.</p>
+
+		{% if user.is_superuser %}
+
+		<p>
+			<a href="{% url 'new_blog_credential' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+		</p>
+
+		{% else %}
 
 	{% endif %}
 
 {% endif %}
 
-		</div>
-
 	</div>
 
-	<div class="standard-grid-item">
-	</div>
+</div><!-- End of page-content -->
 
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
 
 <script type="text/javascript">
 
@@ -347,6 +286,5 @@ function openTab(evt, tabName) {
 document.getElementById("defaultOpen").click();
 
 </script>
-
 
 {% endblock %}

@@ -73,3 +73,4 @@ from .list_user_collection_collection_authorisation import list_user_collection_
 from .maintenance import maintenance
 from .new_server import new_server
 from .view_server import view_server
+from .execute_command import execute_command

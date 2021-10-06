@@ -32,48 +32,33 @@ The list bench authorisation template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_benches' %}">List Benches</a></li>
+			<li>{{ text_flag }}</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_benches' %}">List Benches</a>
-		</li>
+{% endblock %}
 
-		<li>
-			{{ text_flag }}
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Browse {{ text_flag }}</h1>
 
-	<div class="standard-grid-item">
+	<p>Browse the list of {{ text_flag }}</p>
 
-		<h1>Browse {{ text_flag }}</h1>
+	<hr>
 
-		<p>Browse the list of {{ text_flag }}</p>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if authorisation_list %}
 
@@ -81,81 +66,50 @@ The list bench authorisation template
 
 		{% if forloop.first %}
 
-	    <table border="0">
-
-        	<tr>
-    	        <th width="150px">Action</th>
-            	<th width="200px">Bench</th>
-            	<th width="200px">Owner</th>
-        	    <th width="200px">Permitted</th>
-        	    <th width="200px">Authority</th>
-			</tr>
-
-	        <tr>
-        	    <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
+	<table border="0">
+		<tr>
+			<th width="150px">Action</th>
+			<th width="200px">Bench</th>
+			<th width="200px">Owner</th>
+			<th width="200px">Permitted</th>
+			<th width="200px">Authority</th>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
 
 		{% endif %}
 
-    	    <tr>
-
-	            <td>
-
-					<a href="{% url 'detail_bench_authorisation' authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		<tr>
+			<td>
+				<a href="{% url 'detail_bench_authorisation' authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 		{% if matrix_id == '' %}
 
-					<a href="{% url 'edit_bench_authorisation' authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'edit_bench_authorisation' authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
 		{% else %}
 
-					<a href="{% url 'edit_bench_bench_authorisation' matrix_id authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'edit_bench_bench_authorisation' matrix_id authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 
 		{% endif %}
 
-					<a href="{% url 'delete_bench_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-	            </td>
+				<a href="{% url 'delete_bench_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+			</td>
 
-            	<td>
-            		CPW:{{ authorisation.matrix.id|stringformat:"06d" }}
-        	    </td>
-
-            	<td>
-            		{{ authorisation.matrix.owner.username }}
-        	    </td>
-
-    	        <td>
-            		{{ authorisation.permitted.username }}
-        	    </td>
-
-    	        <td>
-            		{{ authorisation.authority.name }}
-        	    </td>
-			</tr>
+			<td>CPW:{{ authorisation.matrix.id|stringformat:"06d" }}</td>
+			<td>{{ authorisation.matrix.owner.username }}</td>
+			<td>{{ authorisation.permitted.username }}</td>
+			<td>{{ authorisation.authority.name }}</td>
+		</tr>
 
 		{% if forloop.last %}
 
-	        <tr>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
-
-	        <tr>
-        	    <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
-
-	    </table>
+	</table>
 
 		{% endif %}
 
@@ -163,44 +117,30 @@ The list bench authorisation template
 
 	{% if matrix_id == '' %}
 
-		<p>
-			<a href="{% url 'new_bench_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_bench_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% else %}
 
-		<p>
-			<a href="{% url 'new_bench_bench_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_bench_bench_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% endif %}
 
 {% else %}
 
-		<p>No Permissions are available.</p>
+	<p>No Permissions are available.</p>
 
 	{% if matrix_id == '' %}
 
-		<p>
-			<a href="{% url 'new_bench_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_bench_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% else %}
 
-		<p>
-			<a href="{% url 'new_bench_bench_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
-		</p>
+	<p><a href="{% url 'new_bench_bench_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% endif %}
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
-
+</div><!-- End of page-content -->
 
 {% endblock %}

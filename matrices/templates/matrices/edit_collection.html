@@ -32,78 +32,49 @@ The edit collection template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
+			<li><a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a></li>
+			<li>EDIT Collection</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_collections' %}">List Collections</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a>
-		</li>
-
-		<li>
-			EDIT Collection
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>EDIT Collection {{ collection.id }}</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>EDIT Collection {{ collection.id }}</h1>
+	<br />
 
-		<hr>
-
-		<br />
-
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-	    	<button type="submit" class="button button-delete">Save</button>
-
-		</form>
-
 		<br />
 
-		<a href="{% url 'list_collections' %}"><button class="button button-add">CANCEL</button></a>
+		<button type="submit" class="button button-delete">Save</button>
 
-	</div>
+	</form>
 
-	<div class="standard-grid-item">
-	</div>
+	<br />
 
-</div>
+	<a href="{% url 'list_collections' %}"><button class="button button-add">CANCEL</button></a>
 
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

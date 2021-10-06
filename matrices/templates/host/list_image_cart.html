@@ -32,44 +32,32 @@ The list image cart template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li>Images</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			Images
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>Browse Images</h1>
 
-	<div class="standard-grid-item">
+	<p>Browse the list of Images you have collected</p>
 
-		<h1>Browse Images</h1>
+	<hr>
 
-		<p>Browse the list of Images you have collected</p>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if credential_flag %}
 
@@ -79,101 +67,73 @@ The list image cart template
 
 			{% if forloop.first %}
 
-	    <table border="0">
-
-        	<tr>
-    	        <th width="150px">Action</th>
-	            <th width="100px">ROI</th>
-            	<th>Server</th>
-        	    <th>Image</th>
-			</tr>
-
-	        <tr>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
+	<table border="0">
+		<tr>
+			<th width="150px">Action</th>
+			<th width="100px">ROI</th>
+			<th>Server</th>
+			<th>Image</th>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
 
 			{% endif %}
 
-    	    <tr>
+		<tr>
+			<td>
 
-	            <td>
+			{% if image.server.type.name == 'WORDPRESS' %}
 
-				{% if image.server.type.name == 'WORDPRESS' %}
-
-					<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-				{% else %}
-
-					<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-				{% endif %}
-
-					<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-	            </td>
-
-			{% if image.roi == 0 %}
-
-            	<td>&nbsp;</td>
+				<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% else %}
 
-        	    <td>
-    	        	<strong>ROI</strong>
-	            </td>
+				<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
 			{% endif %}
 
-            	<td>
-            		{{ image.server.name }}<br />( {{ image.server.url_server }} )
-        	    </td>
+				<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+			</td>
 
-    	        <td>
-					<a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
-        	    </td>
-			</tr>
+			{% if image.roi == 0 %}
+
+			<td>&nbsp;</td>
+
+			{% else %}
+
+			<td><strong>ROI</strong></td>
+
+			{% endif %}
+
+			<td>{{ image.server.name }}<br />( {{ image.server.url_server }} )</td>
+
+			<td><a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a></td>
+		</tr>
 
 			{% if forloop.last %}
 
-	        <tr>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
-
-        <tr>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
-
-	    </table>
+	</table>
 
 			{% endif %}
 
-	    {% endfor %}
+		{% endfor %}
 
 	{% else %}
 
-		<p>No Images are available.</p>
+	<p>No Images are available.</p>
 
 	{% endif %}
 
 {% else %}
 
-		<p>No Images are allowed yet.</p>
+	<p>No Images are allowed yet.</p>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% endblock %}

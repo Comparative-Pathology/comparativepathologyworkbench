@@ -32,67 +32,63 @@ The mailer template
 
 {% load static %}
 
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'execute_command' %}">Execute Command</a></li>
+			<li>Mailer Test Page</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
 {% block content %}
 
-<div>
+<div class="page-sidebar">
 
-	<ul class="my-breadcrumb">
-
-
-	    <li class="breadcrumb-item">
-		    <a href="{% url 'home' %}">Home</a>
-		</li>
-
-		<li class="breadcrumb-item active">
-		    Mailer Test Page
-		</li>
-
-	</ul>
-
-</div>
-
-
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
+	<!-- Tab links -->
+	<div class="tab">
+		<button class="tablinks"><a href="{% url 'execute_command' %}">Execute Command</a></button>
+		<button class="tablinks"><a href="{% url 'collectivization' %}">Setup Default Collections</a></button>
+		<button class="tablinks"><a href="{% url 'renaming' %}">Rename Images</a></button>
+		<button class="tablinks active"><a href="{% url 'mailer' %}">Send Test Email</a></button>
+		<button class="tablinks"><a href="{% url 'charttidyup' %}">Clean Up Charts</a></button>
 	</div>
 
-	<div class="standard-grid-item">
+</div><!-- End of page-sidebar -->
 
-		<h1>The Mailer Test Page</h1>
 
-		<p>The Mailer Test Page</p>
+<!-- Main Data Panel -->
 
-		<hr>
+<div class="page-content">
 
-		<br />
+	<h1>The Mailer Test Page</h1>
 
-		<h3>The Mailer Test Page</h3>
+	<p>The Mailer Test Page</p>
 
-		<p>An email has been sent!</p>
+	<hr>
 
-	    <dl class="standard">
-			<dt>To</dt>
-			<dd>{{ email_to }}</dd>
-			<dt>From</dt>
-			<dd>{{ email_from }}</dd>
-			<dt>Subject</dt>
-			<dd>{{ subject }}</dd>
-			<dt>Message</dt>
-			<dd>{{ message }}</dd>
-		</dl>
+	<br />
 
-	</div>
+	<h3>The Mailer Test Page</h3>
 
-	<div class="standard-grid-item">
-	</div>
+	<p>An email has been sent!</p>
 
-</div>
+	<dl class="standard">
+		<dt>To</dt>
+		<dd>{{ email_to }}</dd>
+		<dt>From</dt>
+		<dd>{{ email_from }}</dd>
+		<dt>Subject</dt>
+		<dd>{{ subject }}</dd>
+		<dt>Message</dt>
+		<dd>{{ message }}</dd>
+	</dl>
 
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

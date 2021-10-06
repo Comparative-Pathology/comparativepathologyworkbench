@@ -32,93 +32,71 @@ The detail user template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
-
-	<ul class="my-breadcrumb">
-
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
-
+			<li><a href="{% url 'home' %}">Home</a></li>
 {% if user.is_superuser %}
 
-		<li>
-			<a href="{% url 'authorisation' %}">Authorisation</a>
-		</li>
-
-		<li>
-			<a href="{% url 'detail_user' subject.id %}">User {{ subject.id }}</a>
-		</li>
+			<li><a href="{% url 'authorisation' %}">Authorisation</a></li>
+			<li><a href="{% url 'detail_user' subject.id %}">User {{ subject.id }}</a></li>
 
 {% endif %}
 
-		<li class="breadcrumb-item active">
-			User Details
-		</li>
+		<li>User Details</li>
 
-	</ul>
+{% endblock %}
 
-</div>
+{% block details %}
 
+{% endblock %}
+
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>User {{ subject.id }}</h1>
 
-	<div class="standard-grid-item">
+	<hr>
 
-		<h1>User {{ subject.id }}</h1>
+	<br />
 
-		<hr>
+	<dl class="standard">
+		<dt>ID</dt>
+		<dd>{{ subject.id }}</dd>
+		<dt>User</dt>
+		<dd>{{ subject.username }}</dd>
+		<dt>Name</dt>
+		<dd>{{ subject.get_full_name }}</dd>
+		<dt>Email</dt>
+		<dd>{{ subject.email }}</dd>
+		<dt>Is Active?</dt>
+		<dd>{{ subject.is_active }}</dd>
+		<dt>Is Super User?</dt>
+		<dd>{{ subject.is_superuser }}</dd>
+		<dt>Last Login Date</dt>
+		<dd>{{ subject.last_login }}</dd>
+		<dt>Date Joined</dt>
+		<dd>{{ subject.date_joined }}</dd>
+	</dl>
 
-		<br />
-
-		<dl class="standard">
-			<dt>ID</dt>
-			<dd>{{ subject.id }}</dd>
-			<dt>User</dt>
-			<dd>{{ subject.username }}</dd>
-			<dt>Name</dt>
-			<dd>{{ subject.get_full_name }}</dd>
-			<dt>Email</dt>
-			<dd>{{ subject.email }}</dd>
-			<dt>Is Active?</dt>
-			<dd>{{ subject.is_active }}</dd>
-			<dt>Is Super User?</dt>
-			<dd>{{ subject.is_superuser }}</dd>
-			<dt>Last Login Date</dt>
-			<dd>{{ subject.last_login }}</dd>
-			<dt>Date Joined</dt>
-			<dd>{{ subject.date_joined }}</dd>
-		</dl>
-
-		<br />
+	<br />
 
 {% if user.is_superuser %}
 
-		<a href="{% url 'authorisation' %}"><button class="button button-add">BACK</button></a>
+	<a href="{% url 'authorisation' %}"><button class="button button-add">BACK</button></a>
 
-		<a href="{% url 'edit_user' subject.id %}"><button class="button button-edit">EDIT</button></a>
+	<a href="{% url 'edit_user' subject.id %}"><button class="button button-edit">EDIT</button></a>
 
 {% else %}
 
-		<a href="{% url 'home' %}"><button class="button button-add">BACK</button></a>
+	<a href="{% url 'home' %}"><button class="button button-add">BACK</button></a>
 
 {% endif %}
 
-	</div>
-
-	<div class="standard-grid-item">
-	</div>
-
-</div>
+</div><!-- End of page-content -->
 
 {% endblock %}

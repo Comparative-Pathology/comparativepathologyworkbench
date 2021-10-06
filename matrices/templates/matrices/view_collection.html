@@ -32,228 +32,177 @@ The view collection template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
+			<li><a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a></li>
+			<li>Images</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_collections' %}">List Collections</a>
-		</li>
+{% endblock %}
 
-		<li>
-			<a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a>
-		</li>
-
-		<li>
-			Images
-		</li>
-
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div id="search-source-container" class="standard-grid-container">
+<div class="page-content">
 
-	<div id="search-source-left" class="standard-grid-item">
-	</div>
+	<h1>Search Sources</h1>
 
-	<div id="search-source-middle" class="standard-grid-item">
+	<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
 
-		<h1>Search Sources</h1>
+	<form action="{% url 'search_image' search_from collection.id %}" method="post">
 
-		<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
+		{% csrf_token %}
 
-		<form action="{% url 'search_image' search_from collection.id %}" method="post">
+		{% include 'includes/form.html' %}
 
-			{% csrf_token %}
+	</form>
 
-			{% include 'includes/form.html' %}
+	<br />
+	<hr>
+	<br />
 
-		</form>
+	<h1>Collection {{ collection.id }}, "{{ collection.title }}"</h1>
 
-		<br />
-		<hr>
-		<br />
+	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
 
-	</div>
+	<hr>
 
-	<div id="search-source-right" class="standard-grid-item">
-	</div>
-
-</div>
-
-<div class="standard-grid-container">
-
-	<div class="standard-grid-item">
-	</div>
-
-	<div class="standard-grid-item">
-
-		<h1>Collection {{ collection.id }}, "{{ collection.title }}"</h1>
-
-		<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
-
-		<hr>
-
-		<br />
+	<br />
 
 {% if credential_flag %}
 
-	{% if collection_image_list %}
+{% if collection_image_list %}
 
-		{% for collection_image in collection_image_list %}
+	{% for collection_image in collection_image_list %}
 
-			{% if forloop.first %}
+		{% if forloop.first %}
 
-	    <table border="0">
+	<table border="0">
 
-        	<tr>
-				<th style="width: 100px; position: sticky; top: 0;">Action</th>
-	            <th style="width: 100px; position: sticky; top: 0;"">ROI</th>
-            	<th style="width: 350px; position: sticky; top: 0;">Server</th>
-        	    <th style="position: sticky; top: 0;">Image</th>
-				<th style="width: 350px; position: sticky; top: 0;">Collection</th>
-				<th style="width: 350px; position: sticky; top: 0;">Bench</th>
-			</tr>
+		<tr>
+			<th style="width: 100px; position: sticky; top: 0;">Action</th>
+			<th style="width: 100px; position: sticky; top: 0;"">ROI</th>
+			<th style="width: 350px; position: sticky; top: 0;">Server</th>
+			<th style="position: sticky; top: 0;">Image</th>
+			<th style="width: 350px; position: sticky; top: 0;">Collection</th>
+			<th style="width: 350px; position: sticky; top: 0;">Bench</th>
+		</tr>
 
-	        <tr>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-				<td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
 
-			{% endif %}
+		{% endif %}
 
-    	    <tr>
+		<tr>
 
-	            <td style="vertical-align: top;">
+			<td style="vertical-align: top;">
 
-			{% if collection_image.server.type.name == 'WORDPRESS' %}
+		{% if collection_image.server.type.name == 'WORDPRESS' %}
 
-					<a href="{% url 'webgallery_show_wordpress_image' collection_image.server.id collection_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'webgallery_show_wordpress_image' collection_image.server.id collection_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-			{% endif %}
+		{% endif %}
 
-			{% if collection_image.server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
+		{% if collection_image.server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
 
-					<a href="{% url 'webgallery_show_image' collection_image.server.id collection_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+				<a href="{% url 'webgallery_show_image' collection_image.server.id collection_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-			{% endif %}
+		{% endif %}
 
-			{% if collection_image.server.type.name == 'EBI_SCA' %}
+		{% if collection_image.server.type.name == 'EBI_SCA' %}
 
-			<a href="{% url 'webgallery_show_ebi_sca_image' collection_image.server.id collection_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		<a href="{% url 'webgallery_show_ebi_sca_image' collection_image.server.id collection_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 
-			{% endif %}
+		{% endif %}
 
-					<a href="{% url 'webgallery_delete_image' collection_image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-	            </td>
+				<a href="{% url 'webgallery_delete_image' collection_image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+			</td>
 
-			{% if collection_image.roi == 0 %}
+		{% if collection_image.roi == 0 %}
 
-            	<td>&nbsp;</td>
+			<td>&nbsp;</td>
 
-			{% else %}
+		{% else %}
 
-        	    <td style="vertical-align: top;">
-    	        	<strong>ROI</strong>
-	            </td>
+			<td style="vertical-align: top;">
+				<strong>ROI</strong>
+			</td>
 
-			{% endif %}
+		{% endif %}
 
-            	<td style="vertical-align: top;">
-            		{{ collection_image.server.name }}<br />( {{ collection_image.server.url_server }} )
-        	    </td>
+			<td style="vertical-align: top;">
+				{{ collection_image.server.name }}<br />( {{ collection_image.server.url_server }} )
+			</td>
 
-    	        <td style="vertical-align: top;">
-					<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="width:256px; height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
-        	    </td>
+			<td style="vertical-align: top;">
+				<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="width:256px; height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
+			</td>
 
-				<td style="vertical-align: top;">
+			<td style="vertical-align: top;">
 
-			{% for collection in collection_image.collections.all %}
+		{% for collection in collection_image.collections.all %}
 
-					<a href="{% url 'view_collection' collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ collection.title }}"<br />(Owned By {{ collection.owner.username }})<br />
+				<table>
+					<tr>
+						<td><a href="{% url 'view_collection' collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+						<td>"{{ collection.title }}"<br />(Owned By {{ collection.owner.username }})</td>
+					</tr>
+				</table>
 
-			{% endfor %}
+		{% endfor %}
 
-				</td>
+			</td>
 
-				<td style="vertical-align: top;">
+			<td style="vertical-align: top;">
 
-			{% for cell in collection_image.image.all %}
+		{% for cell in collection_image.image.all %}
 
-					<a href="{% url 'matrix' cell.matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>  "{{ cell.matrix.title }}"<br />(Owned By {{ cell.matrix.owner.username }})<br />
+				<table>
+					<tr>
+						<td><a href="{% url 'matrix' cell.matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+						<td>"{{ cell.matrix.title }}"<br />(Owned By {{ cell.matrix.owner.username }})</td>
+					</tr>
+				</table>
 
-			{% endfor %}
+		{% endfor %}
 
-				</td>
-			</tr>
+			</td>
+		</tr>
 
-			{% if forloop.last %}
+		{% if forloop.last %}
 
-	        <tr>
-	            <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-				<td>&nbsp;</td>
-            	<td>&nbsp;</td>
-			</tr>
+	</table>
 
-        	<tr>
-	            <td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-        	    <td>&nbsp;</td>
-            	<td>&nbsp;</td>
-				<td>&nbsp;</td>
-    	        <td>&nbsp;</td>
-			</tr>
+		{% endif %}
 
-	    </table>
-
-			{% endif %}
-
-	    {% endfor %}
-
-	{% else %}
-
-		<p>No Images are available.</p>
-
-	{% endif %}
+	{% endfor %}
 
 {% else %}
 
-		<p>No Images are allowed yet.</p>
+	<p>No Images are available.</p>
 
 {% endif %}
 
-	</div>
+{% else %}
 
-	<div class="standard-grid-item">
-	</div>
+	<p>No Images are allowed yet.</p>
 
-</div>
+{% endif %}
 
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

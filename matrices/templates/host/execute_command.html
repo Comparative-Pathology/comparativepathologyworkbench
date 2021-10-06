@@ -1,5 +1,5 @@
 <!--
-\file         new_collection.html
+\file         maintenance.html
 \author       Mike Wicks
 \date         March 2021
 \version      $Id$
@@ -23,7 +23,7 @@ License along with this program; if not, write to the Free
 Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA  02110-1301, USA.
 \brief
-The new collection template
+The maintenance template
 -->
 
 {% extends 'includes/base.html' %}
@@ -37,8 +37,7 @@ The new collection template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'home' %}">Home</a></li>
-			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
-			<li>NEW Collection</li>
+			<li>Execute Commands</li>
 
 {% endblock %}
 
@@ -48,32 +47,41 @@ The new collection template
 
 {% block content %}
 
+<!-- Side Bar -->
+
+<div class="page-sidebar">
+
+	<!-- Tab links -->
+	<div class="tab">
+		<button class="tablinks active"><a href="{% url 'execute_command' %}">Execute Command</a></button>
+		<button class="tablinks"><a href="{% url 'collectivization' %}">Setup Default Collections</a></button>
+		<button class="tablinks"><a href="{% url 'renaming' %}">Rename Images</a></button>
+		<button class="tablinks"><a href="{% url 'mailer' %}">Send Test Email</a></button>
+		<button class="tablinks"><a href="{% url 'charttidyup' %}">Clean Up Charts</a></button>
+	</div>
+
+</div><!-- End of page-sidebar -->
+
+
 <!-- Main Data Panel -->
 
 <div class="page-content">
 
-	<h1>NEW Collection</h1>
+	<!-- Main Data Panel -->
+
+	<h1>Command Execution</h1>
+
+	<p>Choose a Command to Execute</p>
 
 	<hr>
 
 	<br />
 
-	<form method="POST" class="post-form">
+	<h3>Command Execution</h3>
 
-{% csrf_token %}
-
-{% include 'includes/form.html' %}
-
-		<br />
-
-		<button type="submit" class="button button-delete">Save</button>
-
-	</form>
-
-	<br />
-
-	<a href="{% url 'list_collections' %}"><button class="button button-add">CANCEL</button></a>
+	<p class="about">Choose a Command from the Sidebar on the Left to execute</p>
 
 </div><!-- End of page-content -->
+
 
 {% endblock %}

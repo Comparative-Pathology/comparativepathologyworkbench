@@ -32,81 +32,53 @@ The new matrix (bench) template
 
 {% load static %}
 
-{% block content %}
-
+{% block breadcrumb %}
 
 <!-- Breadcrumb Menu -->
 
-<div>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+			<li>NEW Bench</li>
 
-	<ul class="my-breadcrumb">
+{% endblock %}
 
-		<li>
-			<a href="{% url 'home' %}">Home</a>
-		</li>
+{% block details %}
 
-		<li>
-			<a href="{% url 'list_benches' %}">Workbenches</a>
-		</li>
+{% endblock %}
 
-	</ul>
-
-</div>
-
+{% block content %}
 
 <!-- Main Data Panel -->
 
-<div class="standard-grid-container">
+<div class="page-content">
 
-	<div class="standard-grid-item">
-	</div>
+	<h1>NEW Workbench</h1>
 
-	<div class="standard-grid-item">
+	<p>Create a NEW Bench</p>
 
-		<h1>NEW Workbench</h1>
+	<hr>
 
-		<p>Create a NEW Bench</p>
+	<br />
 
-		<hr>
-
-		<br />
-
-		<form method="POST" class="post-form">
+	<form method="POST" class="post-form">
 
 {% csrf_token %}
 
 {% include 'includes/form.html' %}
 
-			<br />
-
-			<button type="submit" class="button button-delete">ADD</button>
-
-			<br />
-			<br />
-
-	    </form>
-
 		<br />
 
-		<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
+		<button type="submit" class="button button-delete">ADD</button>
 
-	</div>
+		<br />
+		<br />
 
-	<div class="standard-grid-item">
-	</div>
+	</form>
 
-</div>
+	<br />
 
-<br />
-<br />
-<br />
-<br />
-<br />
+	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
-<br />
-<br />
-<br />
-<br />
-<br />
+</div><!-- End of page-content -->
 
 {% endblock %}

@@ -937,6 +937,34 @@ function dropCol(ev){
 		//console.log("source type NOT Allowed : " + source_type);
 		//console.log("target type NOT Allowed : " + target_type);
 	}
+
+	if (source_type == "cell" && target_type != "BMRMFC"){
+
+		//console.log("source type Allowed : " + source_type);
+		//console.log("target type Allowed : " + target_type);
+
+		$.ajax({
+			url: '{% url 'shuffle_columns' %}',
+			data: {
+				'source': source_id,
+				'target': target_id,
+				csrfmiddlewaretoken: '{{ csrf_token }}'
+			},
+			dataType: 'json',
+			type: 'post',
+			success: function (data) {
+				if (data.failure) {
+					alert("Column Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
+				}
+				window.location.reload();
+			}
+		});
+
+	} else {
+
+		//console.log("source type NOT Allowed : " + source_type);
+		//console.log("target type NOT Allowed : " + target_type);
+	}
 }
 
 function allowRowDrop(ev){
@@ -970,6 +998,33 @@ function dropRow(ev){
 	//console.log("target_type : " + target_type);
 
 	if (source_type == "ORHC" && target_type != "BMRMFC"){
+
+		//console.log("source type Allowed : " + source_type);
+		//console.log("target type Allowed : " + target_type);
+
+		$.ajax({
+			url: '{% url 'shuffle_rows' %}',
+			data: {
+				'source': source_id,
+				'target': target_id,
+			  	csrfmiddlewaretoken: '{{ csrf_token }}'
+			},
+			dataType: 'json',
+			type: 'post',
+			success: function (data) {
+				if (data.failure) {
+					alert("Row Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
+				}
+				window.location.reload();
+			}
+		});
+	} else {
+
+		//console.log("source type NOT Allowed : " + source_type);
+		//console.log("target type NOT Allowed : " + target_type);
+	}
+
+	if (source_type == "cell" && target_type != "BMRMFC"){
 
 		//console.log("source type Allowed : " + source_type);
 		//console.log("target type Allowed : " + target_type);

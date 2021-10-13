@@ -49,8 +49,14 @@ The detail command template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 	<h1>API Command {{ command.id }}</h1>
@@ -80,5 +86,7 @@ The detail command template
 	<a href="{% url 'edit_command' command.id %}"><button class="button button-edit">Edit</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

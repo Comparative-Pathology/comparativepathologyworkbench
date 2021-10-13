@@ -47,12 +47,13 @@ The authorisation template
 
 {% block content %}
 
-<!-- Side Bar -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
 <div class="page-sidebar">
 
 	<!-- Tab links -->
-
 	<div class="tab">
 	    <button class="tablinks" onclick="openTab(event, 'users')" id="defaultOpen">Users</button>
 	    <button class="tablinks" onclick="openTab(event, 'blog_credentials')">Blog Credentials</server_types>
@@ -60,9 +61,7 @@ The authorisation template
 
 </div><!-- End of page-sidebar -->
 
-
-<!-- Main Data Panel -->
-
+<!-- Page Content -->
 <div class="page-content">
 
 	<div id="users" class="tabcontent">
@@ -253,6 +252,7 @@ The authorisation template
 
 </div><!-- End of page-content -->
 
+</div><!-- End of page-body -->
 
 <script type="text/javascript">
 

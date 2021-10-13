@@ -96,190 +96,191 @@ The base header and footer include template
 
     <div class="page-header">
 
-	  <div class="grid-container-header">
+        <div class="grid-container-header">
 
-		<div class="grid-item-header-logo">
-          <a href="https://www.ed.ac.uk/comparative-pathology">
-            <img style="width: 125px;" alt="CCP" title="Centre for Comparative Pathology" src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/ccp-logo.png" >
-          </a>
-        </div><!-- End of grid-item-header-logo -->
+  		<div class="grid-item-header-logo">
+            <a href="https://www.ed.ac.uk/comparative-pathology">
+              <img style="width: 125px;" alt="CCP" title="Centre for Comparative Pathology" src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/ccp-logo.png" >
+            </a>
+          </div><!-- End of grid-item-header-logo -->
 
-        <div id="id-grid-item-header-logo-under" class="grid-item-header-logo-under"  style="display:none;">
-          <span onclick="closeGridRow();" class="closebtn"><i class="fas fa-times-circle"></i></span>
-        </div><!-- End of grid-item-header-logo-under -->
+          <div id="id-grid-item-header-logo-under" class="grid-item-header-logo-under"  style="display:none;">
+            <span onclick="closeGridRow();" class="closebtn"><i class="fas fa-times-circle"></i></span>
+          </div><!-- End of grid-item-header-logo-under -->
 
-        <div class="grid-item-header-title">
-          <a href="{% url 'home' %}"><strong>Comparative Pathology Workbench</strong></a>
-        </div><!-- End of grid-item-header-title -->
+          <div class="grid-item-header-title">
+            <a href="{% url 'home' %}"><strong>Comparative Pathology Workbench</strong></a>
+          </div><!-- End of grid-item-header-title -->
 
-		<div class="grid-item-header-search">
-		  <form action="{% url 'list_benches' %}" method="get">
-            <input id="id_search" type="text" placeholder="Search ..." name="search" method="get">
-			<button type="submit"><i class="fa fa-search"></i></button>
-		  </form>
-        </div><!-- End of grid-item-header-search -->
+  		<div class="grid-item-header-search">
+  		  <form action="{% url 'list_benches' %}" method="get">
+              <input id="id_search" type="text" placeholder="Search ..." name="search" method="get">
+  			<button type="submit"><i class="fa fa-search"></i></button>
+  		  </form>
+          </div><!-- End of grid-item-header-search -->
 
-        <div class="grid-item-header-user">
-          <div class="header-dropdown"  style="float:right;">
+          <div class="grid-item-header-user">
+            <div class="header-dropdown"  style="float:right;">
 
-{% if user.is_authenticated %}
+  {% if user.is_authenticated %}
 
-            <button class="header-drop-button">{{ user.username }} <i class="fa fa-caret-down"></i></button>
-            <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
-              <a href="{% url 'logout' %}">Logout</a>
+              <button class="header-drop-button">{{ user.username }} <i class="fa fa-caret-down"></i></button>
+              <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
+                <a href="{% url 'logout' %}">Logout</a>
 
-    {% if user.is_superuser %}
+      {% if user.is_superuser %}
 
-              <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
-              <a href="{% url 'list_bench_authorisation' %}">All Bench Permissions</a>
-              <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
-              <a href="{% url 'list_collection_authorisation' %}">All Collection Permissions</a>
-              <a href="{% url 'authorisation' %}">Authorisation</a>
-              <a href="{% url 'maintenance' %}">Maintenance</a>
-              <a href="{% url 'execute_command' %}">Execute Command</a>
-              <a href="{% url 'admin:index' %}">ADMIN</a>
-              <a href="{% url 'api-root' %}">API</a>
+                <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
+                <a href="{% url 'list_bench_authorisation' %}">All Bench Permissions</a>
+                <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
+                <a href="{% url 'list_collection_authorisation' %}">All Collection Permissions</a>
+                <a href="{% url 'authorisation' %}">Authorisation</a>
+                <a href="{% url 'maintenance' %}">Maintenance</a>
+                <a href="{% url 'execute_command' %}">Execute Command</a>
+                <a href="{% url 'admin:index' %}">ADMIN</a>
+                <a href="{% url 'api-root' %}">API</a>
 
-	{% else %}
+  	{% else %}
 
-              <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
-              <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
+                <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
+                <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
 
-	{% endif %}
+  	{% endif %}
 
-              <a href="{% url 'password_change' %}">Change Password</a>
-              <a href="{% url 'detail_user' user.id %}">My Account</a>
-            </div><!-- End of header-dropdown-content -->
+                <a href="{% url 'password_change' %}">Change Password</a>
+                <a href="{% url 'detail_user' user.id %}">My Account</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% else %}
+  {% else %}
 
-            <button class="header-drop-button">User <i class="fa fa-caret-down"></i></button>
-            <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
-              <a href="{% url 'login' %}">Login</a>
-              <a href="{% url 'signup' %}">Register</a>
-            </div><!-- End of header-dropdown-content -->
+              <button class="header-drop-button">User <i class="fa fa-caret-down"></i></button>
+              <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'signup' %}">Register</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% endif %}
+  {% endif %}
 
-          </div><!-- End of header-dropdown -->
-        </div><!-- End of grid-item-header-user -->
+            </div><!-- End of header-dropdown -->
+          </div><!-- End of grid-item-header-user -->
 
-        <div class="grid-item-header-bench">
-          <div class="header-dropdown">
+          <div class="grid-item-header-bench">
+            <div class="header-dropdown">
 
-{% if matrix_list %}
+  {% if matrix_list %}
 
-            <button class="header-drop-button"><a href="{% url 'list_benches' %}">Benches ({{ matrix_list|length }})</a></button>
+              <button class="header-drop-button"><a href="{% url 'list_benches' %}">Benches ({{ matrix_list|length }})</a></button>
 
-{% else %}
+  {% else %}
 
-            <button class="header-drop-button">Benches <i class="fa fa-caret-down"></i></button>
+              <button class="header-drop-button">Benches <i class="fa fa-caret-down"></i></button>
 
-            <div class="header-dropdown-content">
-              <a href="{% url 'new_matrix' %}">No Benches are available! Create Bench</a>
-            </div><!-- End of header-dropdown-content -->
+              <div class="header-dropdown-content">
+                <a href="{% url 'new_matrix' %}">No Benches are available! Create Bench</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% endif %}
+  {% endif %}
 
-          </div><!-- End of header-dropdown -->
-        </div><!-- End of grid-item-header-bench -->
+            </div><!-- End of header-dropdown -->
+          </div><!-- End of grid-item-header-bench -->
 
-        <div class="grid-item-header-collection">
-          <div class="header-dropdown">
+          <div class="grid-item-header-collection">
+            <div class="header-dropdown">
 
-{% if collection_list %}
+  {% if collection_list %}
 
-            <button class="header-drop-button"><a href="{% url 'list_collections' %}">Collections ({{ collection_list|length }})</a></button>
+              <button class="header-drop-button"><a href="{% url 'list_collections' %}">Collections ({{ collection_list|length }})</a></button>
 
-{% else %}
+  {% else %}
 
-            <button class="header-drop-button">Collections <i class="fa fa-caret-down"></i></button>
+              <button class="header-drop-button">Collections <i class="fa fa-caret-down"></i></button>
 
-            <div class="header-dropdown-content">
-              <a href="{% url 'new_collection' %}">No Collections are available! Create Collection</a>
-            </div><!-- End of header-dropdown-content -->
+              <div class="header-dropdown-content">
+                <a href="{% url 'new_collection' %}">No Collections are available! Create Collection</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% endif %}
-          </div><!-- End of header-dropdown -->
+  {% endif %}
+            </div><!-- End of header-dropdown -->
 
-        </div><!-- End of grid-item-header-collection -->
+          </div><!-- End of grid-item-header-collection -->
 
-        <div class="grid-item-header-image">
-          <div class="header-dropdown">
+          <div class="grid-item-header-image">
+            <div class="header-dropdown">
 
-{% if image_list %}
+  {% if image_list %}
 
-            <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
+              <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
 
-            <div class="header-dropdown-content">
-              <a href="{% url 'view_active_collection' %}">Current Collection</a>
-              <a href="{% url 'view_all_collections' %}">All Images</a>
-            </div><!-- End of header-dropdown-content -->
+              <div class="header-dropdown-content">
+                <a href="{% url 'view_active_collection' %}">Current Collection</a>
+                <a href="{% url 'view_all_collections' %}">All Images</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% else %}
+  {% else %}
 
-            <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
+              <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
 
-            <div class="header-dropdown-content">
-              <a class="dropdown-item" href="#">No Images are available!</a>
-            </div><!-- End of header-dropdown-content -->
+              <div class="header-dropdown-content">
+                <a class="dropdown-item" href="#">No Images are available!</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% endif %}
+  {% endif %}
 
-          </div><!-- End of header-dropdown -->
-        </div><!-- End of grid-item-header-image -->
+            </div><!-- End of header-dropdown -->
+          </div><!-- End of grid-item-header-image -->
 
-        <div class="grid-item-header-source">
-          <div class="header-dropdown">
+          <div class="grid-item-header-source">
+            <div class="header-dropdown">
 
-{% if server_list %}
+  {% if server_list %}
 
-            <button class="header-drop-button"><a href="{% url 'list_imaging_hosts' %}">Sources ({{ server_list.count }})</a></button>
+              <button class="header-drop-button"><a href="{% url 'list_imaging_hosts' %}">Sources ({{ server_list.count }})</a></button>
 
-{% else %}
+  {% else %}
 
-            <button class="header-drop-button">Sources <i class="fa fa-caret-down"></i></button>
-            <div class="header-dropdown-content">
-              <a href="{% url 'new_server' %}">No Sources are available! Create Source</a>
-            </div><!-- End of header-dropdown-content -->
+              <button class="header-drop-button">Sources <i class="fa fa-caret-down"></i></button>
+              <div class="header-dropdown-content">
+                <a href="{% url 'new_server' %}">No Sources are available! Create Source</a>
+              </div><!-- End of header-dropdown-content -->
 
-{% endif %}
+  {% endif %}
 
-          </div><!-- End of header-dropdown -->
-        </div><!-- End of grid-item-header-source -->
+            </div><!-- End of header-dropdown -->
+          </div><!-- End of grid-item-header-source -->
 
-        <div class="grid-item-header-about">
-          <div class="header-dropdown">
-            <button class="header-drop-button">About <i class="fa fa-caret-down"></i></button>
-            <div class="header-dropdown-content">
-              <a href="{% url 'about' %}">About</a>
-              <a href="{% url 'people' %}">People</a>
-              <a href="{% url 'howto' %}">How To</a>
-            </div><!-- End of header-dropdown-content -->
-          </div><!-- End of header-dropdown -->
-        </div><!-- End of grid-item-header-about -->
+          <div class="grid-item-header-about">
+            <div class="header-dropdown">
+              <button class="header-drop-button">About <i class="fa fa-caret-down"></i></button>
+              <div class="header-dropdown-content">
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'people' %}">People</a>
+                <a href="{% url 'howto' %}">How To</a>
+              </div><!-- End of header-dropdown-content -->
+            </div><!-- End of header-dropdown -->
+          </div><!-- End of grid-item-header-about -->
 
-        <div class="grid-item-header-breadcrumb">
-          <ul class="breadcrumb">
+          <div class="grid-item-header-breadcrumb">
+            <ul class="breadcrumb">
 
-{% block breadcrumb %}
-
-
-{% endblock %}
-
-          </ul>
-        </div><!-- End of grid-item-header-breadcrumb -->
-
-        <div id="id-grid-item-header-breadcrumb-under" class="grid-item-header-breadcrumb-under"  style="display:none;">
-
-{% block details %}
+  {% block breadcrumb %}
 
 
-{% endblock %}
+  {% endblock %}
 
-        </div><!-- End of grid-item-header-breadcrumb-under -->
+            </ul>
+          </div><!-- End of grid-item-header-breadcrumb -->
 
-      </div><!-- End of grid-container-header -->
+          <!-- <div id="id-grid-item-header-breadcrumb-under" class="grid-item-header-breadcrumb-under"> -->
+          <div id="id-grid-item-header-breadcrumb-under" class="grid-item-header-breadcrumb-under"  style="display:none;">
+
+  {% block details %}
+
+
+  {% endblock %}
+
+          </div><!-- End of grid-item-header-breadcrumb-under -->
+
+        </div><!-- End of grid-container-header -->
 
     </div><!-- End of page-header -->
 
@@ -292,33 +293,33 @@ The base header and footer include template
 
 <!-- </main> -->
 
-    <div class="page-footer">
+<div class="page-footer">
 
-	  <div class="grid-container-footer">
+<div class="grid-container-footer">
 
-	    <div class="grid-item-footer">
-        </div><!-- End of grid-item-footer -->
-        <div class="grid-item-footer">
-          <a href="https://helmsleytrust.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/helmsley.png" style="background-color: #FFFFFF;" width="170" /></a>
-        </div><!-- End of grid-item-footer -->
-        <div class="grid-item-footer">
-          <a href="https://www.humancellatlas.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HCA-logo-1500x500.jpeg" style="background-color: #FFFFFF;" width="170" /></a>
-        </div><!-- End of grid-item-footer -->
-        <div class="grid-item-footer">
-          <a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
-        </div><!-- End of grid-item-footer -->
-        <div class="grid-item-footer">
-          <a href="https://www.hw.ac.uk/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HW-Logo.jpg" style="background-color: #FFFFFF;" width="125" /></a>
-        </div><!-- End of grid-item-footer -->
-        <div class="grid-item-footer">
-          <a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
-        </div><!-- End of grid-item-footer -->
-        <div class="grid-item-footer">
-        </div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+</div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+  <a href="https://helmsleytrust.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/helmsley.png" style="background-color: #FFFFFF;" width="170" /></a>
+</div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+  <a href="https://www.humancellatlas.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HCA-logo-1500x500.jpeg" style="background-color: #FFFFFF;" width="170" /></a>
+</div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+  <a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
+</div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+  <a href="https://www.hw.ac.uk/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HW-Logo.jpg" style="background-color: #FFFFFF;" width="125" /></a>
+</div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+  <a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
+</div><!-- End of grid-item-footer -->
+<div class="grid-item-footer">
+</div><!-- End of grid-item-footer -->
 
-	  </div><!-- End of grid-container-footer -->
+</div><!-- End of grid-container-footer -->
 
-	</div><!-- End of page-footer -->
+</div><!-- End of page-footer -->
 
   </div><!-- End of page-container -->
 
@@ -383,6 +384,14 @@ The base header and footer include template
 
         var i, x;
 
+        x = document.getElementsByClassName("page-container");
+
+        for (i = 0; i < x.length; i++) {
+            x[i].style.gridTemplateRows = "auto auto 123px";
+        }
+
+        var i, x;
+
         x = document.getElementsByClassName("grid-item-header-breadcrumb-under");
 
         for (i = 0; i < x.length; i++) {
@@ -402,6 +411,14 @@ The base header and footer include template
     }
 
     function closeGridRow() {
+
+        var i, x;
+
+        x = document.getElementsByClassName("page-container");
+
+        for (i = 0; i < x.length; i++) {
+            x[i].style.gridTemplateRows = "165px auto 123px";
+        }
 
         var i, x;
 

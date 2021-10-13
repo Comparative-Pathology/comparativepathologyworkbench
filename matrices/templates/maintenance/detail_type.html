@@ -49,8 +49,14 @@ The detail type template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 	<h1>Server Type {{ type.id }}</h1>
@@ -70,5 +76,7 @@ The detail type template
 	<a href="{% url 'edit_type' type.id %}"><button class="button button-edit">Edit</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

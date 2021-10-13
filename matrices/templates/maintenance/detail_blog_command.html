@@ -49,8 +49,14 @@ The detail blog command template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 	<h1>Blog Command {{ blog.id }}</h1>
@@ -80,5 +86,7 @@ The detail blog command template
 	<a href="{% url 'edit_blog_command' blog.id %}"><button class="button button-edit">Edit</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

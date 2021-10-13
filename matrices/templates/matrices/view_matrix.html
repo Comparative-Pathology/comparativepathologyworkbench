@@ -187,7 +187,9 @@ The view matrix (bench) template
 
 <!-- Main Data Panel -->
 
-<div class="page-sidebar">
+<div class="page-body">
+
+<div class="page-sidebar" style="overflow-y: scroll;">
 
 {% if authority.is_viewer %}
 
@@ -645,7 +647,7 @@ The view matrix (bench) template
 
     		    {% endfor %}
 
-  </div><!-- flex-bench-container -->
+  </div><!-- End of flex-bench-container -->
 
     	    {% endfor %}
 
@@ -656,8 +658,9 @@ The view matrix (bench) template
 
         {% endif %}
 
-</div>
+</div><!-- End of page-content -->
 
+</div><!-- End of page-body -->
 
 <script type="text/javascript">
 

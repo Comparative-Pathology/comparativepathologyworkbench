@@ -15,38 +15,35 @@ body {
   width: 100vw;
   /*    width: 1fr; */
   display: grid;
-  /*    grid-template-columns: 100px 1180px; */
-  grid-template-columns: 125px auto;
-  /*    gap: 10px; */
-  grid-auto-rows: minmax(100px, auto);
+  grid-template-columns: 1fr;
+  grid-template-rows: 165px auto 123px;
   max-width: 1920px;
   max-height: 1080px;
 }
 
 .page-header {
-  grid-column: 1 / 3;
-  grid-row: 1;
-  border-bottom: 1px solid lightgrey;
+  /*border-bottom: 1px solid lightgrey;*/
+}
+
+.page-body {
+  /*  border-right: 1px solid lightgrey; */
+  display: grid;
+  grid-template-columns: 125px auto;
+  overflow: hidden;
 }
 
 .page-sidebar {
-  grid-column: 1;
-  grid-row: 2;
+  /* border-right: 1px solid lightgrey; */
+  /* overflow-y: scroll; */
+}
+
+.page-content {
   /*  border-right: 1px solid lightgrey; */
   overflow-y: scroll;
 }
 
 .page-footer {
-  grid-column: 1 / 3;
-  grid-row: 3;
   /* border-top: 1px solid lightgrey; */
-}
-
-.page-content {
-  grid-column: 2;
-  grid-row: 2;
-  overflow-y: scroll;
-  min-height: 792px;
 }
 
 
@@ -69,20 +66,23 @@ body {
   font-family: Verdana, Geneva, sans-serif;
   display: grid;
   grid-template-columns: 125px 170px 170px 170px 170px 170px auto 180px 170px auto;
-  grid-template-rows: auto auto auto auto;
-  background-color: #F5776E; /* SALMON PINK */
+  grid-template-rows: auto auto auto auto auto;
+  background-color: #F5776E;
+  /* SALMON PINK */
   /*border: 1px solid LightGray;*/
 }
 
 .grid-container-header>div {
   text-align: left;
-  background-color: #F5776E; /* SALMON PINK */
+  background-color: #F5776E;
+  /* SALMON PINK */
   /*border: 1px solid LightGray;*/
 }
 
 .grid-item-header-logo {
   padding: 15px 0px 0px 0px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
   grid-row-start: 1;
   grid-row-end: 4;
 }
@@ -99,7 +99,8 @@ body {
 
 .grid-item-header-title {
   padding: 25px 5px 5px 5px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
   font-size: 40px;
   grid-column-start: 2;
   grid-column-end: 8;
@@ -117,32 +118,37 @@ body {
 .grid-item-header-bench {
   /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
   grid-column-start: 2;
 }
 
 .grid-item-header-collection {
   /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
 }
 
 .grid-item-header-image {
   /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
 }
 
 .grid-item-header-source {
   /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
 }
 
 .grid-item-header-about {
   /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
   grid-column-start: 6;
   grid-column-end: 10;
 }
@@ -151,12 +157,14 @@ body {
   /* padding: 5px 5px 15px 5px; */
   padding: 30px 0px 0px 15px;
   /* padding: 40px; */
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
 }
 
 .grid-item-header-search {
   padding: 30px 15px 0px 15px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
 }
 
 .grid-item-header-search input[type=text] {
@@ -173,7 +181,8 @@ body {
 
 .grid-item-header-breadcrumb {
   padding: 5px 5px 15px 5px;
-  border: 1px solid #F5776E; /* SALMON PINK */
+  border: 1px solid #F5776E;
+  /* SALMON PINK */
   grid-column-start: 2;
   grid-column-end: 10;
 }
@@ -202,16 +211,17 @@ body {
   margin: 0;
 }
 
-
-/* THE HEADER MENUS */
-
 .grid-item-footer {
-  padding: 25px 25px 25px 0px;
+  padding: 25px 25px 0px 0px;
   border: 0px solid LightGray;
 }
 
+
+/* THE HEADER MENUS */
+
 .header-drop-button {
-  background-color: #F5776E; /* SALMON PINK */
+  background-color: #F5776E;
+  /* SALMON PINK */
   padding: 8px 15px 12px 5px;
   font-family: Verdana, Geneva, sans-serif;
   font-size: 16px;
@@ -423,7 +433,8 @@ body {
 
 ul.breadcrumb {
   list-style: none;
-  background-color: #F5776E; /* SALMON PINK */
+  background-color: #F5776E;
+  /* SALMON PINK */
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 0px 0px;
 }
@@ -679,8 +690,6 @@ ul.breadcrumb li+li:before {
   -moz-box-shadow: #B3B3B3 2px 2px 2px;
   box-shadow: #B3B3B3 2px 2px 2px;
   position: relative;
-  /*width: 200px;
-  height: 200px;*/
   border: 3px solid #CCFFCC;
 }
 
@@ -688,7 +697,6 @@ ul.breadcrumb li+li:before {
   position: absolute;
   top: 8px;
   right: 56px;
-  /*width: 138px;*/
   height: 18px;
   border: 3px solid #CCFFCC;
 }
@@ -706,8 +714,6 @@ ul.breadcrumb li+li:before {
   position: absolute;
   top: 30px;
   right: 0px;
-  /*width: 194px;
-  height: 168px;*/
   border: 3px solid #CCFFCC;
 }
 

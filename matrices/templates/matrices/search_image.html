@@ -47,8 +47,14 @@ The detail cell blog template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 	<h1>Search for an Image</h1>
@@ -81,5 +87,7 @@ The detail cell blog template
 	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CLEAR</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

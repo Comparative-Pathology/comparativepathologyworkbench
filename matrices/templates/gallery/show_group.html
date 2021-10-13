@@ -54,8 +54,14 @@ The show group template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 {% if group.name == 'ERROR' %}
@@ -122,5 +128,7 @@ The show group template
 {% endif %}
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

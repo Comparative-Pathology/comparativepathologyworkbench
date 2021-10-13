@@ -48,8 +48,14 @@ The new collection authorisation template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 	<h1>NEW Collection Permission {{ text_flag }}</h1>
@@ -77,5 +83,7 @@ The new collection authorisation template
 	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">BACK</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

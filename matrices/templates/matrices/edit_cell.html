@@ -49,8 +49,14 @@ The edit cell template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
@@ -106,5 +112,7 @@ The edit cell template
 	<a href="{{ request.META.HTTP_REFERER }}"><button class="button button-add">CANCEL</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

@@ -49,8 +49,14 @@ The detail collection authority template
 
 {% block content %}
 
-<!-- Main Data Panel -->
+<!-- Page Body -->
+<div class="page-body">
 
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
 <div class="page-content">
 
 	<h1>Collection Authority {{ collection_authority.id }}</h1>
@@ -70,5 +76,7 @@ The detail collection authority template
 	<a href="{% url 'edit_collection_authority' collection_authority.id %}"><button class="button button-edit">Edit</button></a>
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
 
 {% endblock %}

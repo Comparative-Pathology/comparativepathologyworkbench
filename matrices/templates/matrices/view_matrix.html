@@ -682,7 +682,7 @@ function confirmation(question, source_type) {
 						$(this).dialog("close");
 						window.location.reload();
 					},
-					"MOVE": function () {
+					"CUT": function () {
 						defer.resolve("overwrite");
 						$(this).dialog("close");
 						window.location.reload();
@@ -714,7 +714,7 @@ function confirmation(question, source_type) {
 				modal: true,
 				title: 'Confirmation',
 				buttons: {
-					"MOVE": function () {
+					"IMPORT": function () {
 						defer.resolve("move");
 						$(this).dialog("close");
 						window.location.reload();
@@ -741,12 +741,12 @@ function onclick(source, target, source_type){
 
    	if (source_type == "cell") {
 
-		question = "Do you want to SWAP Cells, MOVE or COPY the Source Cell to the Target Cell?";
+		question = "Do you want to SWAP Cells, CUT or COPY the Source Cell to the Target Cell?";
 	}
 
 	if (source_type == "image") {
 
-		question = "Do you want to MOVE this Image to this CELL?";
+		question = "Do you want to IMPORT this Image to this CELL?";
 	}
 
 	//console.log("source_type : " + source_type);
@@ -772,6 +772,7 @@ function onclick(source, target, source_type){
 					if (data.failure) {
 						alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
 					}
+					window.location.reload();
 				}
 			});
 		}
@@ -792,6 +793,7 @@ function onclick(source, target, source_type){
 					if (data.failure) {
 						alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
 					}
+					window.location.reload();
 				}
 			});
 		}
@@ -835,6 +837,7 @@ function onclick(source, target, source_type){
 					if (data.failure) {
 						alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
 					}
+					window.location.reload();
 				}
 			});
 		}

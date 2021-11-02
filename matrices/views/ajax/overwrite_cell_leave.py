@@ -133,7 +133,7 @@ def overwrite_cell_leave(request):
 
                     for otherCell in cell_list:
 
-                        if otherCell.matrix.id != matrix_id:
+                        if otherCell.matrix.id != matrix.id:
 
                             delete_flag = False
 

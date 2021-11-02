@@ -143,13 +143,13 @@ class Cell(models.Model):
             return True
 
     def has_no_image(self):
-        if self.image is None:
+        if str(self.image) == "None":
             return True
         else:
             return False
 
     def has_image(self):
-        if self.image is None:
+        if str(self.image) == "None":
             return False
         else:
             return True

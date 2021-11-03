@@ -40,6 +40,7 @@ from django.utils.timezone import now
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 
 from random import randint
 from decouple import config
@@ -59,7 +60,7 @@ class Cell(models.Model):
     xcoordinate = models.IntegerField(default=0)
     ycoordinate = models.IntegerField(default=0)
     blogpost = models.CharField(max_length=50, blank=True, default='')
-    image = models.ForeignKey(Image, null=True, related_name='image', on_delete=models.DO_NOTHING)
+    image = models.ForeignKey(Image, null=True, related_name='image', on_delete=models.SET_NULL)
 
     def set_matrix(self, a_matrix):
         self.matrix = a_matrix
@@ -143,16 +144,20 @@ class Cell(models.Model):
             return True
 
     def has_no_image(self):
-        if str(self.image) == "None":
-            return True
-        else:
-            return False
+        imageBool = True
+        try:
+            imageBool = (self.image is None)
+        except ObjectDoesNotExist:
+            pass
+        return imageBool
 
     def has_image(self):
-        if str(self.image) == "None":
-            return False
-        else:
-            return True
+        imageBool = False
+        try:
+            imageBool = (self.image is not None)
+        except ObjectDoesNotExist:
+            pass
+        return imageBool
 
     def increment_x(self):
         self.xcoordinate += 1

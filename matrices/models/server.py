@@ -793,7 +793,31 @@ class Server(models.Model):
         session.timeout = 10
 
         payload = {'limit': 100}
-        data = session.get(full_experiments_url, params=payload).json()
+
+        try:
+            data = session.get(full_experiments_url, params=payload).json()
+
+        except Exception as e:
+
+            print("Exception e : " + str(e))
+
+            experiment_metadata = ({
+                'experimentType': 'ERROR',
+                'experimentAccession': 'ERROR',
+                'experimentDescription': 'ERROR',
+                'loadDate': 'ERROR',
+                'lastUpdate': 'ERROR',
+                'numberOfAssays': 'ERROR',
+                'numberOfContrasts': 'ERROR',
+                'species': 'ERROR',
+                'kingdom': 'ERROR',
+                'technologyType': 'ERROR',
+                'experimentalFactors': 'ERROR',
+                'experimentProject': 'ERROR'
+            })
+
+            return experiment_metadata
+
         assert len(data['experiments']) < 1000
 
         experiment_metadata = ()

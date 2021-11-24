@@ -70,7 +70,7 @@ The show image template
 
 {% else %}
 
-	<h1>{{ chart.chart_id|slice:":-4"|replace:"_| " }}</h1>
+	<h1>Chart: {{ chart.chart_id|slice:":-4"|replace:"_| " }}</h1>
 
 	<br />
 
@@ -94,50 +94,85 @@ The show image template
 		</tr>
 	</table>
 
-	{% if chart.k_value != '' %}
+	{% if chart.type == 'TSNE' %}
+
+		{% if chart.geneId == '' %}
 
 	<dl class="standard">
+		<dt>Plot Type</dt>
+		<dd>{{ chart.type }}</dd>
         <dt>Perplexity</dt>
-		<dd>{{ chart.perplexity }}</dd>
-		<dt>Cluster</dt>
-		<dd>{{ chart.k_value }}</dd>
+		<dd>{{ chart.option }}</dd>
+		<dt>Cluster By</dt>
+		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
-		<dd>None</dd>
-		<dt>Metadata</dt>
 		<dd>None</dd>
 	</dl>
 
-	{% endif %}
-
-	{% if chart.geneId != '' %}
+		{% else %}
 
 	<dl class="standard">
+		<dt>Plot Type</dt>
+		<dd>{{ chart.type }}</dd>
 		<dt>Perplexity</dt>
-		<dd>{{ chart.perplexity }}</dd>
-		<dt>Cluster</dt>
-		<dd>None</dd>
+		<dd>{{ chart.option }}</dd>
+		<dt>Cluster By</dt>
+		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
 		<dd>{{ chart.geneId }}</dd>
-		<dt>Metadata</dt>
-		<dd>None</dd>
 	</dl>
 
-	{% endif %}
+		{% endif %}
 
-	{% if chart.metadata != '' %}
+	{% else %}
+
+		{% if chart.type == 'UMAP' %}
+
+			{% if chart.geneId == '' %}
 
 	<dl class="standard">
-		<dt>Perplexity</dt>
-		<dd>{{ chart.perplexity }}</dd>
-		<dt>Cluster</dt>
-		<dd>None</dd>
+		<dt>Plot Type</dt>
+		<dd>{{ chart.type }}</dd>
+        <dt>Nearest Neighbours</dt>
+		<dd>{{ chart.option }}</dd>
+		<dt>Cluster By</dt>
+		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
 		<dd>None</dd>
-		<dt>Metadata</dt>
-		<dd>{{ chart.metadata|replace:"_| " }}</dd>
 	</dl>
 
+			{% else %}
+
+	<dl class="standard">
+		<dt>Plot Type</dt>
+		<dd>{{ chart.type }}</dd>
+		<dt>Nearest Neighbours</dt>
+		<dd>{{ chart.option }}</dd>
+		<dt>Cluster By</dt>
+		<dd>{{ chart.colourBy }}</dd>
+		<dt>Gene</dt>
+		<dd>{{ chart.geneId }}</dd>
+	</dl>
+
+			{% endif %}
+
+		{% else %}
+
+	<dl class="standard">
+		<dt>Plot Type</dt>
+		<dd>UNKNOWN</dd>
+		<dt>Nearest Neighbours</dt>
+		<dd>UNKNOWN</dd>
+		<dt>Cluster By</dt>
+		<dd>UNKNOWN</dd>
+		<dt>Gene</dt>
+		<dd>UNKNOWN</dd>
+	</dl>
+
+		{% endif %}
+
 	{% endif %}
+
 
 	<br />
 

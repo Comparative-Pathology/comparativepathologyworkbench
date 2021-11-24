@@ -82,11 +82,10 @@ def validate_an_ebi_sca_url(a_url):
 
         query_array = query_url.split("&")
 
-        perplexity = ''
-        k_value = ''
+        option = ''
+        type = ''
         geneId = ''
         colourBy = ''
-        metadata = ''
 
         for array_entry in query_array:
 
@@ -94,13 +93,13 @@ def validate_an_ebi_sca_url(a_url):
             prefix = array_entry_array[0]
             suffix = array_entry_array[1]
 
-            if prefix == 'perplexity':
+            if prefix == 'plotOption':
 
-                perplexity = suffix
+                option = suffix
 
-            if prefix == 'k':
+            if prefix == 'plotType':
 
-                k_value = suffix
+                type = suffix
 
             if prefix == 'geneId':
 
@@ -110,101 +109,91 @@ def validate_an_ebi_sca_url(a_url):
 
                 colourBy = suffix
 
-            if prefix == 'metadata':
-
-                metadata = suffix
-
-        validClusterA = False
-        validClusterB = False
+        validOption = False
+        validType = False
+        validColourBy = False
         validGene = False
+        presentGene = False
 
-        if geneId == '' and colourBy == '' and k_value == '' and perplexity == '' and metadata == '':
+        if geneId == '' and colourBy == '' and type == '' and option == '':
 
-            validClusterA = False
-            validClusterB = False
+            validOption = False
+            validType = False
+            validColourBy = False
             validGene = False
+            presentGene = False
 
         else:
 
-            if geneId != '' and colourBy != '' and k_value != '' and perplexity != '' and metadata != '':
+            if type == 'umap' or type == 'tsne':
 
-                validClusterA = False
-                validClusterB = False
-                validGene = False
+                validType = True
 
             else:
 
-                if colourBy == 'metadata' and perplexity != '' and metadata != '':
+                validType = False
 
-                    validClusterA = False
+            if option.isnumeric():
+
+                validOption = True
+
+            else:
+
+                validOption = False
+
+            if colourBy != '':
+
+                validColourBy = True
+
+            else:
+
+                validColourBy = False
+
+            if geneId != '':
+
+                presentGene = True
+
+                if len(geneId) != 15:
+
                     validGene = False
-
-                    if not perplexity.isnumeric():
-
-                        validClusterB = False
-
-                    else:
-
-                        validClusterB = True
 
                 else:
 
-                    if colourBy == 'clusters' and k_value != '' and perplexity != '':
+                    gene_prefix = geneId[0:4]
+                    gene_suffix = geneId[4:15]
 
-                        validClusterB = False
+                    if gene_prefix != 'ENSG':
+
                         validGene = False
-
-                        if not k_value.isnumeric() or not perplexity.isnumeric():
-
-                            validClusterA = False
-
-                        else:
-
-                            validClusterA = True
 
                     else:
 
-                        if geneId != '' and perplexity != '':
+                        if not gene_suffix.isnumeric():
 
-                            validClusterA = False
-                            validClusterB = False
+                            validGene = False
 
-                            if not perplexity.isnumeric():
+                        else:
 
-                                validGene = False
+                            validGene = True
 
-                            else:
+            else:
 
-                                if len(geneId) != 15:
+                presentGene = False
 
-                                    validGene = False
 
-                                else:
-
-                                    gene_prefix = geneId[0:4]
-                                    gene_suffix = geneId[4:15]
-
-                                    if gene_prefix != 'ENSG':
-
-                                        validGene = False
-
-                                    else:
-
-                                        if not gene_suffix.isnumeric():
-
-                                            validGene = False
-
-                                        else:
-
-                                            validGene = True
-
-        if validClusterA or validClusterB or validGene:
+        if validOption and validType and validColourBy and presentGene and validGene:
 
             return True
 
         else:
 
-            return False
+            if validOption and validType and validColourBy and not presentGene:
+
+                return True
+
+            else:
+
+                return False
 
     else:
 

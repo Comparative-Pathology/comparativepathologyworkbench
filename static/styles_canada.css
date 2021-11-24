@@ -1290,3 +1290,42 @@ label {
   text-align: left;
   grid-column-start: 2;
 }
+
+.panel-alert {
+  padding: 20px;
+  background-color: #DC3545;
+  color: White;
+}
+
+.panel-success {
+  padding: 20px;
+  background-color: #28A745;
+  color: White;
+}
+
+.panel-info {
+  padding: 20px;
+  background-color: #17A2B8;
+  color: White;
+}
+
+.panel-warning {
+  padding: 20px;
+  background-color: #FFC107;
+  color: White;
+}
+
+.panel-close-btn {
+  margin-left: 15px;
+  color: White;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.panel-close-btn:hover {
+  color: Black;
+}

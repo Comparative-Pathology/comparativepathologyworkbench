@@ -44,11 +44,11 @@ def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
 
     chart_key = ''
     experiment_id = ''
-    perplexity = ''
-    k_value = ''
+    type = ''
+    option = ''
     geneId = ''
     colourBy = ''
-    metadata = ''
+    geneId = ''
 
     birdseye_url = highcharts_web + a_chart_id
     viewer_url = convert_chart_id_to_ebi_sca_url(a_url_server, a_chart_id)
@@ -60,30 +60,30 @@ def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
     chart_key = datetime[8:size + 9]
 
     experiment_id = chart_array[1]
-    perplexity = chart_array[2]
-    third_parameter_suffix = chart_array[3]
+    type = chart_array[2]
+    option = chart_array[3]
+    colourBy = chart_array[4]
 
-    size = len(third_parameter_suffix)
-    third_parameter = third_parameter_suffix[:size - 4]
+    fifth_parameter_suffix = chart_array[5]
 
-    if third_parameter.isnumeric():
+    size = len(fifth_parameter_suffix)
+    fifth_parameter = fifth_parameter_suffix[:size - 4]
 
-        k_value = third_parameter
+    if fifth_parameter == "NoGene":
+
+        geneId = ''
 
     else:
 
-        prefix = third_parameter[0:4]
+        prefix = fifth_parameter[0:4]
 
         if prefix == 'ENSG':
 
-            geneId = third_parameter
+            geneId = fifth_parameter
 
         else:
 
-            chart_prefix = datetime + '_' + experiment_id + '_' + perplexity + '_'
-            size_prefix = len(chart_prefix)
-            size_chart_id = len(a_chart_id)
-            metadata = a_chart_id[size_prefix: size_chart_id - 4]
+            geneId = ''
 
     chart_parameters = ({
         'chart_key': chart_key,
@@ -91,10 +91,10 @@ def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
         'chart_id': a_chart_id,
         'viewer_url': viewer_url,
         'birdseye_url': birdseye_url,
-        'perplexity': perplexity,
-        'k_value': k_value,
+        'type': type,
+        'option': option,
         'geneId': geneId,
-        'metadata': metadata
+        'colourBy': colourBy
     })
 
     return chart_parameters

@@ -61,11 +61,10 @@ def convert_url_ebi_sca_to_chart_id(a_url):
 
             query_array = result.query.split("&")
 
-            perplexity = ''
-            k_value = ''
+            option = ''
+            type = ''
             geneId = ''
             colourBy = ''
-            metadata = ''
 
             for array_entry in query_array:
 
@@ -73,13 +72,13 @@ def convert_url_ebi_sca_to_chart_id(a_url):
                 prefix = array_entry_array[0]
                 suffix = array_entry_array[1]
 
-                if prefix == 'perplexity':
+                if prefix == 'plotOption':
 
-                    perplexity = suffix
+                    option = suffix
 
-                if prefix == 'k':
+                if prefix == 'plotType':
 
-                    k_value = suffix
+                    type = suffix
 
                 if prefix == 'geneId':
 
@@ -89,27 +88,15 @@ def convert_url_ebi_sca_to_chart_id(a_url):
 
                     colourBy = suffix
 
-                if prefix == 'metadata':
-
-                    metadata = suffix
-
             now = datetime.now()
-            date_time = now.strftime('%Y%m%d%H%M%S%f')[:-3]
+            date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
-            if geneId != '' and perplexity != 0:
+            if geneId != '':
 
-                chart_string_out = date_time + '_' + experiment_id + '_' + str(perplexity) + '_' + geneId + '.png'
+                chart_string_out = date_time + '_' + experiment_id + '_' + str(type.upper()) + '_' + str(option) + '_' + str(colourBy) + '_' + geneId + '.png'
 
             else:
 
-                if colourBy == 'clusters' and k_value != 0 and perplexity != 0:
-
-                    chart_string_out = date_time + '_' + experiment_id + '_' + str(perplexity) + '_' + str(k_value) + '.png'
-
-                else:
-
-                    if colourBy == 'metadata' and perplexity != '' and metadata != '':
-
-                        chart_string_out = date_time + '_' + experiment_id + '_' + str(perplexity) + '_' + str(metadata) + '.png'
+                chart_string_out = date_time + '_' + experiment_id + '_' + str(type.upper()) + '_' + str(option) + '_' + str(colourBy) + '_NoGene' + '.png'
 
     return chart_string_out

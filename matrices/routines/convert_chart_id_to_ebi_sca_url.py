@@ -42,47 +42,37 @@ from decouple import config
 def convert_chart_id_to_ebi_sca_url(a_url_server, a_chart_id):
 
     experiment_id = ''
-    perplexity = ''
-    k_value = ''
+    option = ''
     geneId = ''
     colourBy = ''
-    metadata = ''
+    type = ''
 
     chart_array = a_chart_id.split("_")
 
     datetime = chart_array[0]
     experiment_id = chart_array[1]
-    perplexity = chart_array[2]
-    third_parameter_suffix = chart_array[3]
+    type = chart_array[2]
+    option = chart_array[3]
+    colourBy = chart_array[4]
+    geneId = chart_array[5]
 
-    size = len(third_parameter_suffix)
-    third_parameter = third_parameter_suffix[:size - 4]
+    query_parameter_type = ''
+    query_parameter_type = 'plotType=' + type.lower()
 
-    query_parameter = ''
-    query_parameter = 'perplexity=' + perplexity
+    query_parameter_option = ''
+    query_parameter_option = '&plotOption=' + option
 
-    if third_parameter.isnumeric():
+    query_parameter_colourBy = ''
+    query_parameter_colourBy = '&colourBy=' + colourBy
 
-        k_value = third_parameter
-        query_parameter = query_parameter + '&colourBy=clusters&k=' + k_value
+    query_parameter_geneId = ''
 
-    else:
+    if geneId != 'NoGene':
+        size = len(geneId)
+        geneId_no_filetype = geneId[:size - 4]
+        query_parameter_geneId = '&geneId=' + geneId_no_filetype
 
-        prefix = third_parameter[0:4]
-
-        if prefix == 'ENSG':
-
-            geneId = third_parameter
-            query_parameter = query_parameter + '&colourBy=clusters&geneId=' + geneId
-
-        else:
-
-            chart_prefix = datetime + '_' + experiment_id + '_' + perplexity + '_'
-            size_prefix = len(chart_prefix)
-            size_chart_id = len(a_chart_id)
-            metadata = a_chart_id[size_prefix: size_chart_id - 4]
-
-            query_parameter = query_parameter + '&colourBy=metadata&metadata=' + metadata
+    query_parameter = query_parameter_type + query_parameter_option + query_parameter_colourBy + query_parameter_geneId
 
     #/json/experiments/
     ebi_sca_web = config('EBI_SCA_EXPERIMENTS_URL')

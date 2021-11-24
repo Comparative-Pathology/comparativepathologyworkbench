@@ -59,13 +59,16 @@ def convert_url_ebi_sca_to_json(a_url):
 
             path_array = result.path.split("/")
 
+            url_out_prefix = result.scheme + '://' + result.netloc + '/' + path_array[1] + '/' + path_array[2] + '/json/cell-plots/'
+
+            experiment_id = path_array[4]
+
             query_array = result.query.split("&")
 
-            perplexity = ''
-            k_value = ''
+            option = ''
+            type = ''
             geneId = ''
             colourBy = ''
-            metadata = ''
 
             for array_entry in query_array:
 
@@ -73,13 +76,13 @@ def convert_url_ebi_sca_to_json(a_url):
                 prefix = array_entry_array[0]
                 suffix = array_entry_array[1]
 
-                if prefix == 'perplexity':
+                if prefix == 'plotOption':
 
-                    perplexity = suffix
+                    option = suffix
 
-                if prefix == 'k':
+                if prefix == 'plotType':
 
-                    k_value = suffix
+                    type = suffix
 
                 if prefix == 'geneId':
 
@@ -89,23 +92,28 @@ def convert_url_ebi_sca_to_json(a_url):
 
                     colourBy = suffix
 
-                if prefix == 'metadata':
+            url_out_suffix = ''
 
-                    metadata = suffix
+            if type == 'tsne':
 
-            if geneId != '' and perplexity != 0:
+                url_out_suffix = '?plotMethod=tsne&perplexity=' + str(option)
 
-                url_string_out = result.scheme + '://' + result.netloc + '/' + path_array[1] + '/' + path_array[2] + '/json/' + path_array[3] + '/' + path_array[4] + '/tsneplot/' + str(perplexity) + '/expression/' + geneId
+            if type == 'umap':
+
+                url_out_suffix = '?plotMethod=umap&n_neighbors=' + str(option)
+
+            if geneId != '':
+
+                url_string_out = url_out_prefix + experiment_id + '/expression/' + geneId + url_out_suffix
 
             else:
 
-                if colourBy == 'clusters' and k_value != 0 and perplexity != 0:
+                if colourBy.isnumeric():
 
-                    url_string_out = result.scheme + '://' + result.netloc + '/' + path_array[1] + '/' + path_array[2] + '/json/' + path_array[3] + '/' + path_array[4] + '/tsneplot/' + str(perplexity) + '/clusters/k/' + str(k_value)
+                    url_string_out = url_out_prefix + experiment_id + '/clusters/k/' + str(colourBy) + url_out_suffix
 
                 else:
 
-                    if colourBy == 'metadata' and perplexity != '' and metadata != '':
-                        url_string_out = result.scheme + '://' + result.netloc + '/' + path_array[1] + '/' + path_array[2] + '/json/' + path_array[3] + '/' + path_array[4] + '/tsneplot/' + str(perplexity) + '/metadata/' + str(metadata)
+                    url_string_out = url_out_prefix + experiment_id + '/clusters/metadata/' + str(colourBy) + url_out_suffix
 
     return url_string_out

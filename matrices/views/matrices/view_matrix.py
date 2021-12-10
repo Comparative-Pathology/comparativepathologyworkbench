@@ -77,6 +77,8 @@ def view_matrix(request, matrix_id):
 
             matrix_link = 'matrix_link'
 
+            view_matrix = 'view_matrix'
+
             credential = get_credential_for_user(request.user)
 
             if not credential.has_apppwd():
@@ -112,6 +114,6 @@ def view_matrix(request, matrix_id):
             columns = matrix.get_columns()
             rows = matrix.get_rows()
 
-            data.update({ 'collection_image_list': collection_image_list, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments })
+            data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments })
 
             return render(request, 'matrices/view_matrix.html', data)

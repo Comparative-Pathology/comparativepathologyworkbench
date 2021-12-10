@@ -49,9 +49,11 @@
 # def delete_matrix(request, matrix_id):
 #
 # def add_cell(request, matrix_id):
+# def clear_cell(request, matrix_id, cell_id):
 # def edit_cell(request, matrix_id, cell_id):
 # def update_cell(request, matrix_id, cell_id):
 # def view_cell(request, matrix_id, cell_id):
+# def amend_cell(request, matrix_id, cell_id):
 #
 # def append_column(request, matrix_id):
 # def add_column_left(request, matrix_id, column_id):
@@ -75,9 +77,11 @@ from .add_column_left import add_column_left
 from .add_column_right import add_column_right
 from .add_row_above import add_row_above
 from .add_row_below import add_row_below
+from .amend_cell import amend_cell
 from .append_column import append_column
 from .append_row import append_row
 from .choose_collection import choose_collection
+from .clear_cell import clear_cell
 from .delete_collection import delete_collection
 from .delete_image import delete_image
 from .delete_last_column import delete_last_column

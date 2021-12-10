@@ -56,8 +56,10 @@ def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
     chart_array = a_chart_id.split("_")
 
     datetime = chart_array[0]
-    size = len(datetime)
-    chart_key = datetime[8:size + 9]
+    new_datetime = datetime.replace('-', '').replace(':', '').replace('.', '')
+
+    size = len(new_datetime)
+    chart_key = new_datetime[8:size + 9]
 
     experiment_id = chart_array[1]
     type = chart_array[2]

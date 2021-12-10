@@ -1329,3 +1329,13 @@ label {
 .panel-close-btn:hover {
   color: Black;
 }
+
+
+.amend-cell-container {
+  display: grid;
+  grid-template-columns: 450px 1000px;
+  grid-template-rows: 1fr;
+  gap: 1px 1px;
+  grid-template-areas:
+    ". .";
+}

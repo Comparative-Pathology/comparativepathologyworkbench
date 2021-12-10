@@ -125,7 +125,6 @@ urlpatterns = [
 	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),
 	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
 	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
-	#path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
 	path('show_ebi_sca_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_server, name='webgallery_show_ebi_sca_server'),
 	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),
 
@@ -190,7 +189,7 @@ urlpatterns = [
 	path('new_collection/', matrices_views.matrices.new_collection, name='new_collection'),
 	path('edit_collection/<int:collection_id>/', matrices_views.matrices.edit_collection, name='edit_collection'),
 	path('delete_collection/<int:collection_id>/', matrices_views.matrices.delete_collection, name='delete_collection'),
-	path('choose_collection/<int:matrix_id>/<int:collection_id>/', matrices_views.matrices.choose_collection, name='choose_collection'),
+	path('choose_collection/<int:matrix_id>/<int:cell_id>/<int:collection_id>/<str:path_from>/', matrices_views.matrices.choose_collection, name='choose_collection'),
 
     path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
 
@@ -202,9 +201,10 @@ urlpatterns = [
 	path('<int:matrix_id>/edit_matrix/', matrices_views.matrices.edit_matrix, name='edit_matrix'),
 	path('<int:matrix_id>/delete_matrix/', matrices_views.matrices.delete_matrix, name='delete_matrix'),
 	path('<int:matrix_id>/add_cell/', matrices_views.matrices.add_cell, name='add_cell'),
-	path('<int:matrix_id>/edit_cell/<int:cell_id>/', matrices_views.matrices.edit_cell, name='edit_cell'),
 	path('<int:matrix_id>/update_cell/<int:cell_id>/', matrices_views.matrices.update_cell, name='update_cell'),
+	path('<int:matrix_id>/clear_cell/<int:cell_id>/<str:path_from>/', matrices_views.matrices.clear_cell, name='clear_cell'),
 	path('<int:matrix_id>/view_cell/<int:cell_id>/', matrices_views.matrices.view_cell, name='view_cell'),
+	path('<int:matrix_id>/amend_cell/<int:cell_id>/', matrices_views.matrices.amend_cell, name='amend_cell'),
 	path('<int:matrix_id>/append_column/', matrices_views.matrices.append_column, name='append_column'),
 	path('<int:matrix_id>/add_column_left/<int:column_id>/', matrices_views.matrices.add_column_left, name='add_column_left'),
 	path('<int:matrix_id>/add_column_right/<int:column_id>/', matrices_views.matrices.add_column_right, name='add_column_right'),

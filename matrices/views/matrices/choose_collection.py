@@ -47,11 +47,14 @@ from matrices.routines import get_header_data
 
 NO_CREDENTIALS = ''
 
+VIEW_MATRIX = "view_matrix"
+AMEND_CELL = "amend_cell"
+
 #
 # CHOOSE AN IMAGE COLLECTION
 #
 @login_required
-def choose_collection(request, matrix_id, collection_id):
+def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
 
     data = get_header_data(request.user)
 
@@ -78,5 +81,13 @@ def choose_collection(request, matrix_id, collection_id):
         matrix.set_last_used_collection(collection)
 
         matrix.save()
+
+        if path_from == VIEW_MATRIX:
+
+            return redirect('matrix', matrix_id=matrix_id)
+
+        if path_from == AMEND_CELL:
+
+            return redirect('amend_cell', matrix_id=matrix_id, cell_id=cell_id)
 
         return redirect('matrix', matrix_id=matrix_id)

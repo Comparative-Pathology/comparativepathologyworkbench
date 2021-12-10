@@ -32,10 +32,21 @@ from inlineedit.adaptors import BasicAdaptor
 
 
 class BlockedAdaptor(BasicAdaptor):
+
     # "Demonstrate adaptor level permission setting"
     def has_edit_perm(self, user):
 
-        owner = self._model.owner
+        model_name = self._model.__class__.__name__
+
+        owner = ''
+
+        if model_name == 'Cell':
+
+            owner = self._model.matrix.owner
+
+        else:
+
+            owner = self._model.owner
 
         allow_flag = False
 

@@ -235,17 +235,17 @@ The view matrix (bench) template
 
 		    		        {% if collection.collection_active == True %}
 
-				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
 			    	        {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
 				            {% endif %}
 
     			        {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
     			        {% endif %}
 
@@ -257,17 +257,17 @@ The view matrix (bench) template
 
 			            {% if collection.collection_active == True %}
 
-				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
     			        {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
 	    		        {% endif %}
 
 		            {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id collection.collection_id %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
 
 		            {% endif %}
 
@@ -301,7 +301,7 @@ The view matrix (bench) template
 
 		        {% endif %}
 
-		<a href="{{ image.viewer_url }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}"> </a>
+		<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 
 	  </div>
 	</div>
@@ -323,14 +323,14 @@ The view matrix (bench) template
         {% endif %}
 
   </div>
+
+  {% endif %}
+
+{% endif %}
+
 </div>
 
 <!-- The Bench -->
-
-
-    {% endif %}
-
-{% endif %}
 
 <div class="page-content">
 
@@ -436,8 +436,7 @@ The view matrix (bench) template
 
 								{% else %}
 
-			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-			  <a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Column Header</a>
+			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Column Header</a>
 			  <a href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}"><i class="fa fa-angle-up"></i><span class="menu-item">&#9;</span>Add Row Above</a>
 			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Row</a>
 		      <a href="{% url 'add_row_below' matrix.id forloop.parentloop.counter0 %}"><i class="fa fa-angle-down"></i><span class="menu-item">&#9;</span>Add Row Below</a>
@@ -493,8 +492,7 @@ The view matrix (bench) template
 
 								{% else %}
 
-			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-			  <a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Column Header</a>
+			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Column Header</a>
 			  <a href="{% url 'add_column_left' matrix.id forloop.counter0	%}"><i class="fa fa-angle-left"></i><span class="menu-item">&#9;</span>Add Column Left</a>
 			  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Column</a>
               <a href="{% url 'add_column_right' matrix.id forloop.counter0 %}"><i class="fa fa-angle-right"></i><span class="menu-item">&#9;</span>Add Column Right</a>
@@ -545,9 +543,13 @@ The view matrix (bench) template
 
 	    					    {% else %}
 
-  			  <a href="{% url 'view_cell' matrix.id matrix_cell.id %}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>{{ matrix_cell.title|truncatechars:15 }}</em></a>
-			  <a href="{% url 'edit_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
-			  <a href="{% url 'update_cell' matrix.id matrix_cell.id %}"><i class="fa fa-search"></i><span class="menu-item">&#9;</span>Update Cell</a>
+			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Cell</a>
+
+			  						{% if matrix_cell.has_image == True %}
+
+			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
+
+			  						{% endif %}
 
 		    				    {% endif %}
 
@@ -680,26 +682,21 @@ function confirmation(question, source_type) {
 					"SWAP": function () {
 						defer.resolve("swap");
 						$(this).dialog("close");
-						window.location.reload();
 					},
 					"CUT": function () {
 						defer.resolve("overwrite");
 						$(this).dialog("close");
-						window.location.reload();
 					},
 					"COPY": function () {
 						defer.resolve("overwrite_leave");
 						$(this).dialog("close");
-						window.location.reload();
 					},
 					"CLOSE": function () {
 						$(this).dialog('destroy').remove();
-						window.location.reload();
 					}
 				},
 				close: function () {
 					$(this).dialog('destroy').remove();
-					window.location.reload();
 				}
 			});
 
@@ -717,16 +714,13 @@ function confirmation(question, source_type) {
 					"IMPORT": function () {
 						defer.resolve("move");
 						$(this).dialog("close");
-						window.location.reload();
 					},
 					"CLOSE": function () {
 						$(this).dialog('destroy').remove();
-						window.location.reload();
 					}
 				},
 				close: function () {
 					$(this).dialog('destroy').remove();
-					window.location.reload();
 				}
 			});
 	}
@@ -857,7 +851,26 @@ function drop(ev){
 
 	ev.preventDefault();
 
-	var src = document.getElementById(ev.dataTransfer.getData("Text"));
+	var image_id = '';
+	var src = '';
+
+	var image = ev.dataTransfer.getData("text/html")
+	var division = ev.dataTransfer.getData("Text")
+
+	if ( image ) {
+
+		var dropContext = $('<div>').append(image);
+		image_id = $(dropContext).find("img").attr('id');
+		src = document.getElementById(image_id);
+	}
+
+	if ( division ) {
+
+		src = document.getElementById(division);
+	}
+
+	//console.log("src.id : " + src.id);
+
 	var srcParent = src.parentNode;
 
 	var source_array = src.id.split("_",2);
@@ -882,8 +895,6 @@ function drop(ev){
 
 	onclick(source_id, target_id, source_type);
 
-
-	window.location.reload();
 }
 
 function allowColDrop(ev){

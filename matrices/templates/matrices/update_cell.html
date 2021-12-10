@@ -37,7 +37,9 @@ The detail cell blog template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'home' %}">Home</a></li>
-			<li>Image Search</li>
+			<li><a href="{% url 'list_benches' %}">Benches</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li>Update Cell</li>
 
 {% endblock %}
 
@@ -57,9 +59,9 @@ The detail cell blog template
 <!-- Page Content -->
 <div class="page-content">
 
-	<h1>Search for an Image</h1>
+	<h1>CELL - CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"; Column {{ cell.xcoordinate }}, Row {{ cell.ycoordinate }}</h1>
 
-	<p>Input a URL to find an Image (OMERO and EBI SCA sources ONLY!):</p>
+	<p>Input a URL to Update a Cell with an Image (OMERO and EBI SCA sources ONLY!):</p>
 	<hr>
 
 	<br />

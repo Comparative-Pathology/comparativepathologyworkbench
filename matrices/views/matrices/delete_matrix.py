@@ -95,7 +95,18 @@ def delete_matrix(request, matrix_id):
 
                         if response != WORDPRESS_SUCCESS:
 
-                            messages.error(request, "WordPress Error - Contact System Administrator")
+                            messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
+                            form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+
+                            matrix_cells = matrix.get_matrix()
+                            columns = matrix.get_columns()
+                            rows = matrix.get_rows()
+
+                            data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+
+                            return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+
 
                 if oldCell.has_image():
 
@@ -132,7 +143,17 @@ def delete_matrix(request, matrix_id):
 
                     if response != WORDPRESS_SUCCESS:
 
-                        messages.error(request, "WordPress Error - Contact System Administrator")
+                        messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
+                        form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+
+                        matrix_cells = matrix.get_matrix()
+                        columns = matrix.get_columns()
+                        rows = matrix.get_rows()
+
+                        data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+
+                        return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
 
             matrix.delete()
 

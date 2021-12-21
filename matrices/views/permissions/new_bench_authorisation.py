@@ -84,7 +84,8 @@ def new_bench_authorisation(request):
 
             text_flag = ''
 
-            messages.error(request, "Error")
+            messages.error(request, "Bench Authorisation Form is Invalid!")
+            form.add_error(None, "Bench Authorisation Form is Invalid!")
 
             data.update({ 'text_flag': text_flag, 'form': form })
 

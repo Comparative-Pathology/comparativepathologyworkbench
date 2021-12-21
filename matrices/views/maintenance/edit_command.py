@@ -73,7 +73,8 @@ def edit_command(request, command_id):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Command Form is Invalid!")
+                form.add_error(None, "Command Form is Invalid!")
 
                 data.update({ 'form': form, 'command': command })
 

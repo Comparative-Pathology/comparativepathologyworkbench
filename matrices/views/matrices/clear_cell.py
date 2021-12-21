@@ -100,7 +100,14 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 					if response != WORDPRESS_SUCCESS:
 
-						messages.error(request, "WordPress Error - Contact System Administrator")
+						matrix_cells = matrix.get_matrix()
+						columns = matrix.get_columns()
+						rows = matrix.get_rows()
+
+						data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+
+						return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
 
 			if cell.has_image():
 

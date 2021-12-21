@@ -49,6 +49,9 @@ HTTP_POST = 'POST'
 NO_CREDENTIALS = ''
 WORDPRESS_SUCCESS = 'Success!'
 
+MAX_INITIAL_COLUMNS = 51
+MAX_INITIAL_ROWS = 51
+
 #
 # CREATE A NEW BENCH
 #
@@ -85,10 +88,10 @@ def new_matrix(request):
                 if columns == 1:
                     columns = 2
 
-                if rows > 10:
+                if rows > MAX_INITIAL_ROWS:
                     rows = 2
 
-                if columns > 10:
+                if columns > MAX_INITIAL_COLUMNS:
                     columns = 2
 
                 if matrix.is_not_high_enough() == True:
@@ -117,7 +120,12 @@ def new_matrix(request):
 
                     else:
 
-                        messages.error(request, "WordPress Error - Contact System Administrator")
+                        messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
+                        form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+
+                        data.update({ 'form': form })
+
+                        return render(request, 'matrices/new_matrix.html', data)
 
 
                 matrix.set_blogpost(post_id)
@@ -146,7 +154,8 @@ def new_matrix(request):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Matrix Form is Invalid!")
+                form.add_error(None, "Matrix Form is Invalid!")
 
                 data.update({ 'form': form })
 

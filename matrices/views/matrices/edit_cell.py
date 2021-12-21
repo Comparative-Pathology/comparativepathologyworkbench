@@ -153,6 +153,11 @@ def edit_cell(request, matrix_id, cell_id):
                                     messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
                                     form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
 
+                                    data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
+
+                                    return render(request, 'matrices/edit_cell.html', data)
+
+
                         cell.set_blogpost(post_id)
 
                         cell.save()

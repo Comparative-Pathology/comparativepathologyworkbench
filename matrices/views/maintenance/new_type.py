@@ -68,7 +68,8 @@ def new_type(request):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Type Form is Invalid!")
+                form.add_error(None, "Type Form is Invalid!")
 
                 data.update({ 'form': form })
 

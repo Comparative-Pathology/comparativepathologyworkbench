@@ -75,7 +75,8 @@ def edit_user(request, user_id):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Edit User Form is Invalid!")
+                form.add_error(None, "Edit User Form is Invalid!")
 
                 data.update({ 'form': form })
 

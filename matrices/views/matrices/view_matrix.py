@@ -87,23 +87,23 @@ def view_matrix(request, matrix_id):
 
             collection_image_list = list()
 
-            if matrix.has_last_used_collection():
+            if exists_active_collection_for_user(request.user):
 
-                collection_image_list = get_images_for_collection(matrix.last_used_collection)
+                collection_image_list = get_active_collection_images_for_user(request.user)
+
+                collection_list = get_active_collection_for_user(request.user)
+
+                collection = collection_list[0]
+
+                matrix.set_last_used_collection(collection)
+
+                matrix.save()
 
             else:
 
-                if exists_active_collection_for_user(request.user):
+                if matrix.has_last_used_collection():
 
-                    collection_image_list = get_active_collection_images_for_user(request.user)
-
-                    collection_list = get_active_collection_for_user(request.user)
-
-                    collection = collection_list[0]
-
-                    matrix.set_last_used_collection(collection)
-
-                    matrix.save()
+                    collection_image_list = get_images_for_collection(matrix.last_used_collection)
 
 
             matrix_cells = matrix.get_matrix()

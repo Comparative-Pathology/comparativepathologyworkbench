@@ -90,7 +90,8 @@ def edit_collection_collection_authorisation(request, collection_id, collection_
 
             text_flag = " for Bench CPW:" + format(int(collection_id), '06d')
 
-            messages.error(request, "Error")
+            messages.error(request, "Collection Authorisation Form is Invalid!")
+            form.add_error(None, "Collection Authorisation Form is Invalid!")
 
             data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 

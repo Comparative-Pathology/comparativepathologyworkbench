@@ -39,6 +39,7 @@
 ###
 
 from .add_image import add_image
+from .add_dataset import add_dataset
 from .add_ebi_sca_image import add_ebi_sca_image
 from .show_dataset import show_dataset
 from .show_ebi_sca_image import show_ebi_sca_image

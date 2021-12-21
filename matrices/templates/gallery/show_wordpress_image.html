@@ -102,12 +102,12 @@ The show wordpress image template
 
 	{% else %}
 
-		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+		<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
 
 		<br />
 		<br />
 
-		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+		<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	{% endif %}
 

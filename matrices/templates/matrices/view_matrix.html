@@ -215,7 +215,7 @@ The view matrix (bench) template
 
 		            {% if matrix.last_used_collection.id == collection.collection_id %}
 
-				<a href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
     		         {% endif %}
 
@@ -235,17 +235,17 @@ The view matrix (bench) template
 
 		    		        {% if collection.collection_active == True %}
 
-				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
 			    	        {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
 				            {% endif %}
 
     			        {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
     			        {% endif %}
 
@@ -257,17 +257,17 @@ The view matrix (bench) template
 
 			            {% if collection.collection_active == True %}
 
-				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
     			        {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
 	    		        {% endif %}
 
 		            {% else %}
 
-				<a href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
 
 		            {% endif %}
 

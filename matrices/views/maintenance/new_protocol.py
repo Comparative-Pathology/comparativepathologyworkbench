@@ -68,7 +68,8 @@ def new_protocol(request):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Protocol Form is Invalid!")
+                form.add_error(None, "Protocol Form is Invalid!")
 
                 data.update({ 'form': form })
 

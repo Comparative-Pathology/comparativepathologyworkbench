@@ -139,12 +139,12 @@ The show image template
 
 	{% else %}
 
-	<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add">Add Image to Image Collection</button></a>
+	<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" title="Add Image to Image Collection" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
 
 	<br />
 	<br />
 
-	<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+	<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	{% endif %}
 
@@ -197,7 +197,7 @@ The show image template
 
 	        {% else %}
 
-				<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add">Add ROI to Image Collection</button></a>
+				<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" title="Add ROI to Image Collection" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
 
 	        {% endif %}
 
@@ -217,7 +217,7 @@ The show image template
 
 				<br />
 
-				<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view">View Active Image Collection</button></a>
+				<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	        {% endif %}
 

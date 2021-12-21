@@ -97,6 +97,10 @@ The show dataset template
 
 	<hr>
 
+<form action="{% url 'webgallery_add_dataset' server.id dataset.id %}" method="post">
+
+	{% csrf_token %}
+
 	<ul class="image-list">
 
     {% for image in images %}
@@ -112,6 +116,10 @@ The show dataset template
 					<a href="{% url 'webgallery_add_image' server.id image.id 0 add_from dataset.id %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
 
 			{% endif %}
+					<br />
+
+					<label for="image_{{image.id}}">Add to Active Collection?</label>
+					<input type="checkbox" id="image_check" value="{{image.id}}" name="checks[]">
 
 					<h5>{{ image.name }}</h5>
 
@@ -121,6 +129,7 @@ The show dataset template
 
 				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
 
+
 			</div>
 
 		</li>
@@ -129,10 +138,34 @@ The show dataset template
 
 	</ul>
 
+	<button type="submit" class="button button-add" title="Add Selected Images to Image Collection"><i class="fas fa-plus"></i></button>
+
+</form>
+
+<br />
+<a href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+
+<br />
+<br />
+<button id="toggle" class="button button-delete" title="Toggle Checkboxes"><i class="fas fa-check"></i></button>
+
+
 {% endif %}
 
 </div><!-- End of page-content -->
 
 </div><!-- End of page-body -->
+
+<script type="text/javascript">
+
+	document.getElementById('toggle').onclick = function() {
+	    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+	    for (var checkbox of checkboxes) {
+	        checkbox.checked = !checkbox.checked;
+	    }
+	}
+
+</script>
+
 
 {% endblock %}

@@ -85,7 +85,8 @@ def new_collection_collection_authorisation(request, collection_id):
 
         else:
 
-            messages.error(request, "Error")
+            messages.error(request, "Collection Authorisation Form is Invalid!")
+            form.add_error(None, "Collection Authorisation Form is Invalid!")
 
             text_flag = " for Collection: " + format(int(collection_id), '06d')
 

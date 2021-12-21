@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -41,6 +42,7 @@ from matrices.forms import CollectionForm
 from matrices.models import Collection
 
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import exists_title_for_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import set_inactive_collection_for_user
 
@@ -71,23 +73,32 @@ def edit_collection(request, collection_id):
 
                 collection = form.save(commit=False)
 
-                collection.set_owner(request.user)
+                if exists_title_for_collection_for_user(request.user, collection.title):
+
+                    messages.error(request, "Collection Title NOT Unique!")
+                    form.add_error(None, "Collection Title NOT Unique!")
+
+                    data.update({ 'form': form, 'collection': collection })
+
+                else:
+
+                    if collection.is_active():
+
+                        if exists_active_collection_for_user(request.user):
+
+                            set_inactive_collection_for_user(request.user)
 
 
-                if collection.is_active():
+                    collection.set_owner(request.user)
 
-                    if exists_active_collection_for_user(request.user):
+                    collection.save()
 
-                        set_inactive_collection_for_user(request.user)
-
-
-                collection.save()
-
-                return HttpResponseRedirect(reverse('list_collections', args=()))
+                    return HttpResponseRedirect(reverse('list_collections', args=()))
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Collection Form is Invalid!")
+                form.add_error(None, "Collection Form is Invalid!")
 
                 data.update({ 'form': form, 'collection': collection })
 

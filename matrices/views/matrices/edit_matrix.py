@@ -118,7 +118,13 @@ def edit_matrix(request, matrix_id):
 
                             else:
 
-                                messages.error(request, "WordPress Error - Contact System Administrator")
+                                messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
+                                form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+
+                                data.update({'form': form, 'matrix': matrix })
+
+                                return render(request, 'matrices/edit_matrix.html', data)
+
 
                         matrix.set_blogpost(post_id)
 
@@ -134,9 +140,10 @@ def edit_matrix(request, matrix_id):
 
                 else:
 
-                    messages.error(request, "Error")
+                    messages.error(request, "Matrix Form is Invalid!")
+                    form.add_error(None, "Matrix Form is Invalid!")
 
-                    data.update({ 'form': form })
+                    data.update({'form': form, 'matrix': matrix })
 
             else:
 

@@ -39,6 +39,7 @@ from django.urls import reverse
 from matrices.forms import CollectionForm
 
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import exists_title_for_collection_for_user
 from matrices.routines import set_inactive_collection_for_user
 from matrices.routines import get_header_data
 
@@ -67,22 +68,32 @@ def new_collection(request):
 
                 collection = form.save(commit=False)
 
-                if collection.is_active():
+                if exists_title_for_collection_for_user(request.user, collection.title):
 
-                    if exists_active_collection_for_user(request.user):
+                    messages.error(request, "Collection Title NOT Unique!")
+                    form.add_error(None, "Collection Title NOT Unique!")
 
-                        set_inactive_collection_for_user(request.user)
+                    data.update({ 'form': form })
+
+                else:
+
+                    if collection.is_active():
+
+                        if exists_active_collection_for_user(request.user):
+
+                            set_inactive_collection_for_user(request.user)
 
 
-                collection.set_owner(request.user)
+                    collection.set_owner(request.user)
 
-                collection.save()
+                    collection.save()
 
-                return HttpResponseRedirect(reverse('list_collections', args=()))
+                    return HttpResponseRedirect(reverse('list_collections', args=()))
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Collection Form is Invalid!")
+                form.add_error(None, "Collection Form is Invalid!")
 
                 data.update({ 'form': form })
 

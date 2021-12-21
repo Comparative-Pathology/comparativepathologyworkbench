@@ -1339,3 +1339,7 @@ label {
   grid-template-areas:
     ". .";
 }
+
+.test-font {
+    font-size: 16px;
+}

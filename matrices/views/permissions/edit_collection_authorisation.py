@@ -90,7 +90,8 @@ def edit_collection_authorisation(request, collection_authorisation_id):
 
             text_flag = ''
 
-            messages.error(request, "Error")
+            messages.error(request, "Collection Authorisation Form is Invalid!")
+            form.add_error(None, "Collection Authorisation Form is Invalid!")
 
             data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 

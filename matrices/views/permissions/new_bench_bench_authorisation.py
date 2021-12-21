@@ -82,7 +82,8 @@ def new_bench_bench_authorisation(request, matrix_id):
 
         else:
 
-            messages.error(request, "Error")
+            messages.error(request, "Bench Authorisation Form is Invalid!")
+            form.add_error(None, "Bench Authorisation Form is Invalid!")
 
             text_flag = " for Bench CPW:" + format(int(matrix_id), '06d')
 

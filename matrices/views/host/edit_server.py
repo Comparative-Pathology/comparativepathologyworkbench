@@ -89,7 +89,8 @@ def edit_server(request, server_id):
 
                 else:
 
-                    messages.error(request, "Error")
+                    messages.error(request, "Server Form is Invalid!")
+                    form.add_error(None, "Server Form is Invalid!")
 
                     data.update({ 'form': form, 'server': server })
 

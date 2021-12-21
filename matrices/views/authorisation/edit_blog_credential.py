@@ -73,7 +73,8 @@ def edit_blog_credential(request, credential_id):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Credential Form is Invalid!")
+                form.add_error(None, "Credential Form is Invalid!")
 
                 data.update({ 'form': form, 'credential': credential })
 

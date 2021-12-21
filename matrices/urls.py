@@ -124,6 +124,7 @@ urlpatterns = [
 	path('show_wordpress/<int:server_id>/<int:page_id>/', matrices_views.gallery.show_wordpress, name='webgallery_show_wordpress'),
 	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),
 	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
+	path('add_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.add_dataset, name='webgallery_add_dataset'),
 	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
 	path('show_ebi_sca_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_server, name='webgallery_show_ebi_sca_server'),
 	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),

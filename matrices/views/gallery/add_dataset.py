@@ -25,38 +25,36 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the show_dataset view routine
+# This file contains the add_image view routine
 #
 ###
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from matrices.models import Server
 
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
+from matrices.routines import add_image_to_collection
 
 NO_CREDENTIALS = ''
 
 #
-# SHOW THE AVAILABLE IMAGES
-#  WITHIN THE AVAILABLE DATASETS
-#  WITHIN THE AVAILABLE PROJECTS
-#  WITHIN THE AVAILABLE GROUPS
-#   FROM AN OMERO IMAGING SERVER
+# ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
 #
-@login_required()
-def show_dataset(request, server_id, dataset_id):
-    """
-    Show a dataset
-    """
+@login_required
+def add_dataset(request, server_id, dataset_id):
 
     data = get_header_data(request.user)
+
+    if not exists_active_collection_for_user(request.user):
+
+        return HttpResponseRedirect(reverse('home', args=()))
 
     if data["credential_flag"] == NO_CREDENTIALS:
 
@@ -64,28 +62,18 @@ def show_dataset(request, server_id, dataset_id):
 
     else:
 
-        image_flag = ''
+        server = get_object_or_404(Server, pk=server_id)
 
         if exists_active_collection_for_user(request.user):
 
-            image_flag = 'ALLOW'
+            image_ids = request.POST.getlist('checks[]')
+
+            for image_id in image_ids:
+
+                image = add_image_to_collection(request.user, server, image_id, 0)
 
         else:
 
-            image_flag = 'DISALLOW'
+            messages.error(request, "You have no Active Image Collection; Please create a Collection!")
 
-        data.update({ 'image_flag': image_flag, 'add_from': "show_dataset" })
-
-        server = get_object_or_404(Server, pk=server_id)
-
-        if server.is_omero547() or server.is_omero56():
-
-            server_data = server.get_imaging_server_dataset_json(dataset_id)
-
-            data.update(server_data)
-
-            return render(request, 'gallery/show_dataset.html', data)
-
-        else:
-
-            return HttpResponseRedirect(reverse('home', args=()))
+        return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, dataset_id)))

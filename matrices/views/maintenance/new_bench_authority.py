@@ -68,7 +68,8 @@ def new_bench_authority(request):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Bench Authority Form is Invalid!")
+                form.add_error(None, "Bench Authority Form is Invalid!")
 
                 data.update({ 'form': form })
 

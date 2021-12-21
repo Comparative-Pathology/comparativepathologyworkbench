@@ -73,7 +73,8 @@ def edit_type(request, type_id):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Type Form is Invalid!")
+                form.add_error(None, "Type Form is Invalid!")
 
                 data.update({ 'form': form, 'type': type })
 

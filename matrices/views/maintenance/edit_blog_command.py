@@ -73,7 +73,8 @@ def edit_blog_command(request, blog_id):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Blog Command Form is Invalid!")
+                form.add_error(None, "Blog Command Form is Invalid!")
 
                 data.update({ 'form': form, 'blog': blog })
 

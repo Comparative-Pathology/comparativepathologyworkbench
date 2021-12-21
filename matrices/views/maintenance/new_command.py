@@ -68,7 +68,8 @@ def new_command(request):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Command Form is Invalid!")
+                form.add_error(None, "Command Form is Invalid!")
 
                 data.update({ 'form': form })
 

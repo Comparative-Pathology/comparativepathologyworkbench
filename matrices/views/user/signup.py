@@ -75,8 +75,17 @@ def signup(request):
 
             return redirect('account_activation_sent')
 
+        else:
+
+            messages.error(request, "Sign Up Form is Invalid!")
+            form.add_error(None, "Sign Up Form is Invalid!")
+
+            data.update({ 'form': form })
+
     else:
 
         form = SignUpForm()
 
-    return render(request, 'user/signup.html', {'form': form})
+        data.update({ 'form': form })
+
+    return render(request, 'user/signup.html', data)

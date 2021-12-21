@@ -73,7 +73,8 @@ def edit_collection_authority(request, collection_authority_id):
 
             else:
 
-                messages.error(request, "Error")
+                messages.error(request, "Collection Authority Form is Invalid!")
+                form.add_error(None, "Collection Authority Form is Invalid!")
 
                 data.update({ 'form': form, 'collection_authority': collection_authority })
 

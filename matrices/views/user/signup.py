@@ -39,6 +39,8 @@ from django.utils.http import urlsafe_base64_encode
 
 from matrices.forms import SignUpForm
 
+from matrices.routines import get_header_data
+
 from matrices.tokens import account_activation_token
 
 HTTP_POST = 'POST'
@@ -47,6 +49,8 @@ HTTP_POST = 'POST'
 # VIEWS FOR SIGNUP
 #
 def signup(request):
+
+    data = get_header_data(request.user)
 
     if request.method == HTTP_POST:
 

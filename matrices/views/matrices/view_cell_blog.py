@@ -42,6 +42,7 @@ from matrices.forms import CommentForm
 from matrices.models import Matrix
 from matrices.models import Cell
 
+from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_primary_wordpress_server
 
@@ -69,21 +70,36 @@ def view_cell_blog(request, matrix_id, cell_id):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
-        blogpost = serverWordpress.get_wordpress_post(cell.blogpost)
-
-        if blogpost['status'] != WORDPRESS_SUCCESS:
-
-            messages.error(request, "WordPress Error - Contact System Administrator")
-
         comment_list = list()
 
-        comment_list = serverWordpress.get_wordpress_post_comments(cell.blogpost)
+        if matrix.blogpost != '':
 
-        for comment in comment_list:
+            blogpost = serverWordpress.get_wordpress_post(cell.blogpost)
 
-            if comment['status'] != WORDPRESS_SUCCESS:
+            if blogpost['status'] != WORDPRESS_SUCCESS:
 
-                messages.error(request, "WordPress Error - Contact System Administrator")
+                if request.user == matrix.owner or request.user.is_superuser:
+
+                    credential = get_credential_for_user(request.user)
+
+                    post_id = ''
+
+                    if credential.has_apppwd():
+
+                        returned_blogpost = serverWordpress.post_wordpress_post(credential, cell.title, cell.description)
+
+                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+                            post_id = returned_blogpost['id']
+
+                    cell.set_blogpost(post_id)
+
+                    cell.save()
+
+                    blogpost = serverWordpress.get_wordpress_post(cell.blogpost)
+
+
+            comment_list = serverWordpress.get_wordpress_post_comments(cell.blogpost)
 
         if request.method == HTTP_POST:
 
@@ -97,11 +113,9 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                 if comment != '':
 
-                    returned_comment = serverWordpress.post_wordpress_comment(request.user.username, cell.blogpost, comment)
+                    credential = get_credential_for_user(request.user)
 
-                    if returned_comment['status'] != WORDPRESS_SUCCESS:
-
-                        messages.error(request, "WordPress Error - Contact System Administrator")
+                    returned_comment = serverWordpress.post_wordpress_comment(credential, cell.blogpost, comment)
 
                 return HttpResponseRedirect(reverse('view_cell_blog', args=(matrix_id, cell_id)))
 

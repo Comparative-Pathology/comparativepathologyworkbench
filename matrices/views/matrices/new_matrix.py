@@ -112,7 +112,7 @@ def new_matrix(request):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, matrix.title, matrix.description)
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

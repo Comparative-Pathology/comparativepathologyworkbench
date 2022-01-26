@@ -45,8 +45,6 @@ from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 
-WORDPRESS_SUCCESS = 'Success!'
-
 #
 # OVERWRITE A CELL - MOVE
 #
@@ -116,11 +114,7 @@ def overwrite_cell(request):
 
                 if credential.has_apppwd():
 
-                    response = serverWordpress.delete_wordpress_post(request.user.username, target_cell.blogpost)
-
-                    if response != WORDPRESS_SUCCESS:
-
-                        messages.error(request, "WordPress Error - Contact System Administrator")
+                    response = serverWordpress.delete_wordpress_post(credential, target_cell.blogpost)
 
             if target_cell.has_image():
 

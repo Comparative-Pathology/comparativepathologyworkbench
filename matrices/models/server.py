@@ -324,13 +324,9 @@ class Server(models.Model):
     """
         Post a Blog Post to WORDPRESS
     """
-    def post_wordpress_post(self, user_name, title, content):
-
-        Credential = apps.get_model('matrices', 'Credential')
+    def post_wordpress_post(self, credential, title, content):
 
         Blog = apps.get_model('matrices', 'Blog')
-
-        credential = Credential.objects.get(username=user_name)
 
         blogPostAPost = Blog.objects.get(name=CMD_BLOG_POST_A_POST)
 
@@ -399,12 +395,10 @@ class Server(models.Model):
     """
         Post a Comment to a Blog Post WORDPRESS
     """
-    def post_wordpress_comment(self, user_name, post_id, content):
+    def post_wordpress_comment(self, credential, post_id, content):
 
-        Credential = apps.get_model('matrices', 'Credential')
         Blog = apps.get_model('matrices', 'Blog')
 
-        credential = Credential.objects.get(username=user_name)
         blogPostAComment = Blog.objects.get(name=CMD_BLOG_POST_A_COMMENT)
 
         post_a_comment_url = blogPostAComment.protocol.name + '://' + self.url_server + '/' + blogPostAComment.application + '/' + blogPostAComment.preamble
@@ -468,12 +462,10 @@ class Server(models.Model):
     """
         Delete a Blog Post from WORDPRESS
     """
-    def delete_wordpress_post(self, user_name, post_id):
+    def delete_wordpress_post(self, credential, post_id):
 
-        Credential = apps.get_model('matrices', 'Credential')
         Blog = apps.get_model('matrices', 'Blog')
 
-        credential = Credential.objects.get(username=user_name)
         blogDeletePost = Blog.objects.get(name=CMD_BLOG_DELETE_POST)
 
         delete_post_url = blogDeletePost.protocol.name + '://' + self.url_server + '/' + blogDeletePost.application + '/' + blogDeletePost.preamble + '/' + post_id
@@ -514,16 +506,14 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Server
     """
-    def get_wordpress_json(self, user, page_id):
+    def get_wordpress_json(self, credential, page_id):
 
-        Credential = apps.get_model('matrices', 'Credential')
         Command = apps.get_model('matrices', 'Command')
 
         cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
 
         user = get_object_or_404(User, pk=user.id)
-        credential = Credential.objects.get(username=user.username)
 
         commandWordpressImages = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGES)
 
@@ -668,9 +658,8 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Image
     """
-    def get_wordpress_image_json(self, user, image_id):
+    def get_wordpress_image_json(self, credential, image_id):
 
-        Credential = apps.get_model('matrices', 'Credential')
         Command = apps.get_model('matrices', 'Command')
 
         userid = self.uid
@@ -678,8 +667,7 @@ class Server(models.Model):
         cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
 
-        user = get_object_or_404(User, pk=user.id)
-        credential = Credential.objects.get(username=user.username)
+        user = User.objects.get(username=credential.username)
 
         commandWordpressImage = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGE)
 
@@ -1764,8 +1752,8 @@ class Server(models.Model):
                 else:
                     image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + image_id
 
-                    image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
-                    image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+                image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
+                image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
 
                 image = ({
                     'id': image_id,

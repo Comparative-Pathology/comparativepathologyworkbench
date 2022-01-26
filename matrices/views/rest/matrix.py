@@ -48,7 +48,6 @@ from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 
-WORDPRESS_SUCCESS = 'Success!'
 
 #
 # BENCH REST INTERFACE ROUTINES
@@ -92,13 +91,8 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                 if credential.has_apppwd():
 
-                    serverWordpress = get_primary_wordpress_server()
+                    response = serverWordpress.delete_wordpress_post(credential, cell.blogpost)
 
-                    response = serverWordpress.delete_wordpress_post(request.user.username, cell.blogpost)
-
-                    if response != WORDPRESS_SUCCESS:
-
-                        messages.error(request, "WordPress Error - Contact System Administrator")
 
             if cell.has_image():
 
@@ -128,11 +122,8 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
             if credential.has_apppwd():
 
-                response = serverWordpress.delete_wordpress_post(request.user.username, matrix.blogpost)
+                response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
 
-                if response != WORDPRESS_SUCCESS:
-
-                    messages.error(request, "WordPress Error - Contact System Administrator")
 
         matrix.delete()
 

@@ -91,12 +91,9 @@ def delete_matrix(request, matrix_id):
 
                     if credential.has_apppwd():
 
-                        response = serverWordpress.delete_wordpress_post(request.user.username, oldCell.blogpost)
+                        response = serverWordpress.delete_wordpress_post(credential, oldCell.blogpost)
 
                         if response != WORDPRESS_SUCCESS:
-
-                            messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-                            form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
 
                             matrix_cells = matrix.get_matrix()
                             columns = matrix.get_columns()
@@ -105,7 +102,6 @@ def delete_matrix(request, matrix_id):
                             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
                             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
-
 
 
                 if oldCell.has_image():
@@ -139,12 +135,9 @@ def delete_matrix(request, matrix_id):
 
                 if credential.has_apppwd():
 
-                    response = serverWordpress.delete_wordpress_post(request.user.username, matrix.blogpost)
+                    response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
 
                     if response != WORDPRESS_SUCCESS:
-
-                        messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-                        form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
 
                         matrix_cells = matrix.get_matrix()
                         columns = matrix.get_columns()

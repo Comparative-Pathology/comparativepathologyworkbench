@@ -120,15 +120,11 @@ def import_image(request):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, target_cell.title, target_cell.description)
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, target_cell.title, target_cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
                         post_id = returned_blogpost['id']
-
-                    else:
-
-                        messages.error(request, "WordPress Error - Contact System Administrator")
 
                 target_cell.set_blogpost(post_id)
 

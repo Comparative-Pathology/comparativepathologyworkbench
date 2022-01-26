@@ -41,9 +41,10 @@ from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Collection
 
+from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-
 from matrices.routines import get_header_data
+from matrices.routines import set_inactive_collection_for_user
 
 NO_CREDENTIALS = ''
 
@@ -77,6 +78,16 @@ def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
             return HttpResponseRedirect(reverse('home', args=()))
 
         collection = get_object_or_404(Collection, pk=collection_id)
+
+        if collection.is_inactive():
+
+            collection.set_active()
+
+            if exists_active_collection_for_user(request.user):
+
+                set_inactive_collection_for_user(request.user)
+
+            collection.save()
 
         matrix.set_last_used_collection(collection)
 

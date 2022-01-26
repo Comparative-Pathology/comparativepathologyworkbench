@@ -38,6 +38,7 @@ from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
 
+from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 
 NO_CREDENTIALS = ''
@@ -62,9 +63,11 @@ def show_wordpress(request, server_id, page_id):
 
         server = get_object_or_404(Server, pk=server_id)
 
+        credential = get_credential_for_user(request.user)
+
         if server.is_wordpress():
 
-            server_data = server.get_wordpress_json(request.user, page_id)
+            server_data = server.get_wordpress_json(credential, page_id)
 
             data.update(server_data)
 

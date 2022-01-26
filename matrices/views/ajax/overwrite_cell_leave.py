@@ -117,11 +117,7 @@ def overwrite_cell_leave(request):
 
                 if credential.has_apppwd():
 
-                    response = serverWordpress.delete_wordpress_post(request.user.username, target_cell.blogpost)
-
-                    if response != WORDPRESS_SUCCESS:
-
-                        messages.error(request, "WordPress Error - Contact System Administrator")
+                    response = serverWordpress.delete_wordpress_post(credential, target_cell.blogpost)
 
             if target_cell.has_image():
 
@@ -171,15 +167,11 @@ def overwrite_cell_leave(request):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, source_cell.title, source_cell.description)
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, source_cell.title, source_cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
                         post_id = returned_blogpost['id']
-
-                    else:
-
-                        messages.error(request, "WordPress Error - Contact System Administrator")
 
                 source_cell.set_blogpost(post_id)
 

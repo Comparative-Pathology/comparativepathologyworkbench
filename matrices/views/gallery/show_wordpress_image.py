@@ -38,6 +38,7 @@ from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
 
+from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import exists_active_collection_for_user
 
@@ -63,7 +64,9 @@ def show_wordpress_image(request, server_id, image_id):
 
         image_flag = ''
 
-        if exists_active_collection_for_user(request.user):
+        credential = get_credential_for_user(request.user)
+
+        if exists_active_collection_for_user(credential):
 
             image_flag = 'ALLOW'
 
@@ -77,7 +80,7 @@ def show_wordpress_image(request, server_id, image_id):
 
         if server.is_wordpress():
 
-            server_data = server.get_wordpress_image_json(request.user, image_id)
+            server_data = server.get_wordpress_image_json(credential, image_id)
 
             data.update(server_data)
 

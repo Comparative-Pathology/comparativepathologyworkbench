@@ -278,7 +278,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 			serverWordpress = get_primary_wordpress_server()
 
-			returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, matrix.title, matrix.description)
+			returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
 
 			if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -307,7 +307,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 					serverWordpress = get_primary_wordpress_server()
 
-					returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, cell_out.title, cell_out.description)
+					returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_out.title, cell_out.description)
 
 					if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -394,7 +394,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 				serverWordpress = get_primary_wordpress_server()
 
-				returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, instance.title, instance.description)
+				returned_blogpost = serverWordpress.post_wordpress_post(credential, instance.title, instance.description)
 
 				if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -548,7 +548,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 									serverWordpress = get_primary_wordpress_server()
 
-									returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, bench_cell.title, bench_cell.description)
+									returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
 
 									if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -642,14 +642,14 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 										serverWordpress = get_primary_wordpress_server()
 
-										response = serverWordpress.delete_wordpress_post(request_user.username, bench_cell.blogpost)
+										response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
 
 										if response != WORDPRESS_SUCCESS:
 
 											message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
 											raise serializers.ValidationError(message)
 
-										returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, bench_cell.title, bench_cell.description)
+										returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
 
 										if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -675,7 +675,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 									serverWordpress = get_primary_wordpress_server()
 
-									response = serverWordpress.delete_wordpress_post(request_user.username, bench_cell.blogpost)
+									response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
 
 									if response != WORDPRESS_SUCCESS:
 
@@ -732,7 +732,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 					serverWordpress = get_primary_wordpress_server()
 
-					response = serverWordpress.delete_wordpress_post(request_user.username, delete_cell.blogpost)
+					response = serverWordpress.delete_wordpress_post(credential, delete_cell.blogpost)
 
 					if response != WORDPRESS_SUCCESS:
 
@@ -838,7 +838,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 						serverWordpress = get_primary_wordpress_server()
 
-						returned_blogpost = serverWordpress.post_wordpress_post(request_user.username, cell_title, cell_description)
+						returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_title, cell_description)
 
 						if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

@@ -96,7 +96,7 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 				if credential.has_apppwd():
 
-					response = serverWordpress.delete_wordpress_post(request.user.username, cell.blogpost)
+					response = serverWordpress.delete_wordpress_post(credential, cell.blogpost)
 
 					if response != WORDPRESS_SUCCESS:
 

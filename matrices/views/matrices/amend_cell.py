@@ -257,7 +257,7 @@ def amend_cell(request, matrix_id, cell_id):
 
 						if credential.has_apppwd():
 
-							returned_blogpost = serverWordpress.post_wordpress_post(request.user.username, cell.title, cell.description)
+							returned_blogpost = serverWordpress.post_wordpress_post(credential, cell.title, cell.description)
 
 							if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

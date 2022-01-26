@@ -46,7 +46,6 @@ from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_header_data
 
-WORDPRESS_SUCCESS = 'Success!'
 NO_CREDENTIALS = ''
 
 #
@@ -89,11 +88,7 @@ def delete_this_row(request, matrix_id, row_id):
 
                     if credential.has_apppwd():
 
-                        response = serverWordpress.delete_wordpress_post(request.user.username, oldCell.blogpost)
-
-                        if response != WORDPRESS_SUCCESS:
-
-                            messages.error(request, "WordPress Error - Contact System Administrator")
+                        response = serverWordpress.delete_wordpress_post(credential, oldCell.blogpost)
 
 
                 if oldCell.has_image():

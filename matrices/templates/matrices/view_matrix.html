@@ -366,9 +366,10 @@ The view matrix (bench) template
 
 		    			    {% if matrix_link != '' %}
 
-			    			    {% if matrix.blogpost != '' %}
-
 			  <a href="#popup_bench"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Bench Commentary</em></a>
+
+								{% if authority.is_viewer or authority.is_editor or authority.is_owner or authority.is_admin %}
+
 			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
 
 				    		    {% endif %}
@@ -557,7 +558,7 @@ The view matrix (bench) template
 
 			    			    {% if matrix_link != '' %}
 
-				    			    {% if matrix_cell.blogpost != '' %}
+									{% if authority.is_viewer or authority.is_editor or authority.is_owner or authority.is_admin %}
 
 			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Commentary</a>
 

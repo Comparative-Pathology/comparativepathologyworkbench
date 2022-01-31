@@ -42,6 +42,7 @@ from matrices.forms import CommentForm
 from matrices.models import Matrix
 from matrices.models import Cell
 
+from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_primary_wordpress_server
@@ -70,15 +71,40 @@ def view_cell_blog(request, matrix_id, cell_id):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
+        blogpost = ''
+
         comment_list = list()
 
-        if matrix.blogpost != '':
+        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-            blogpost = serverWordpress.get_wordpress_post(cell.blogpost)
+        if authority.is_viewer() == True or authority.is_editor() == True or authority.is_owner() == True or authority.is_admin() == True:
 
-            if blogpost['status'] != WORDPRESS_SUCCESS:
+            if cell.blogpost == '' and cell.image.id != 0:
 
-                if request.user == matrix.owner or request.user.is_superuser:
+                credential = get_credential_for_user(request.user)
+
+                post_id = ''
+
+                if credential.has_apppwd():
+
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, cell.title, cell.description)
+
+                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+                        post_id = returned_blogpost['id']
+
+                cell.set_blogpost(post_id)
+
+                cell.save()
+
+                blogpost = serverWordpress.get_wordpress_post(cell.blogpost)
+
+
+            if cell.blogpost != '':
+
+                blogpost = serverWordpress.get_wordpress_post(cell.blogpost)
+
+                if blogpost['status'] != WORDPRESS_SUCCESS:
 
                     credential = get_credential_for_user(request.user)
 

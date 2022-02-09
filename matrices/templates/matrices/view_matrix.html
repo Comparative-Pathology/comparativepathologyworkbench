@@ -301,7 +301,33 @@ The view matrix (bench) template
 
 		        {% endif %}
 
+				{% if image.server.is_accessible %}
+
+					{% if request.get_host == 'localhost:8000' %}
+
+		<div id="I_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_out">
+			<a href="https://{{ server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+		</div>
+		<div id="O_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_in">
+			<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+		</div>
+
+					{% else %}
+
+		<div id="I_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_out">
+			<a href="https://{{ server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+		</div>
+		<div id="O_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_in">
+			<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+		</div>
+
+					{% endif %}
+
+				{% else %}
+
 		<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+
+				{% endif %}
 
 	  </div>
 	</div>
@@ -343,7 +369,6 @@ The view matrix (bench) template
 		        {% for column in columns %}
 
     			    {% with matrix_cell=matrix_cells|index:forloop.parentloop.counter0|index:forloop.counter0 %}
-
 
 				        {% if matrix_cell.is_master %}
 
@@ -571,29 +596,89 @@ The view matrix (bench) template
         </div><!-- End of cell-control -->
         <div id="cell_{{ matrix_cell.id }}" class="cell-body" style="width:{{ matrix.width|add:"-6" }}px; height:{{ matrix.height|add:"-32" }}px;" ondrop="drop(event)" ondragover="allowDrop(event)">
 
-	    					    {% if matrix_cell.image %}
+								{% if matrix_cell.image %}
 
-		    					    {% if matrix_cell.image.roi == 0 %}
+									{% if matrix_cell.image.roi == 0 %}
 
-          <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
-          </a>
+		  								{% if matrix_cell.image.server.is_accessible %}
 
-			    				    {% else %}
+				  							{% if request.get_host == 'localhost:8000' %}
+
+          <div id="I_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_out">
+	  		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+  		  </div>
+  		  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
+	  		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+			  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  		</a>
+  		  </div>
+
+				  							{% else %}
+
+  		  <div id="I_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_out">
+	  		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+  		  </div>
+  		  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
+	  		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+			  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  		</a>
+  		  </div>
+
+				  							{% endif %}
+
+										{% else %}
 
 		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-		    <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+			<img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
 		  </a>
 
-				    			    {% endif %}
+		  								{% endif %}
 
-					    	    {% else %}
+									{% else %}
+
+										{% if matrix_cell.image.server.is_accessible %}
+
+											{% if request.get_host == 'localhost:8000' %}
+
+	  <div id="I_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_out">
+		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+	  </div>
+	  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
+		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+		  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+		</a>
+	  </div>
+
+											{% else %}
+
+	  <div id="I_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_out">
+		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+	  </div>
+	  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
+		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+		  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+		</a>
+	  </div>
+
+											{% endif %}
+
+										{% else %}
+
+	  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
+		<img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  </a>
+
+										{% endif %}
+
+									{% endif %}
+
+								{% else %}
 
 		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" style="top: 10%;" href="https://www.ed.ac.uk/comparative-pathology" ondrop="drop(event)" ondragover="allowDrop(event)">
 		    <img id="cell_{{ matrix_cell.id }}" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" style="width:{{ matrix.width|add:"-20" }}px;" src="/static/ccp-logo.png" ondrop="drop(event)" ondragover="allowDrop(event)">
 		  </a>
 
-						        {% endif %}
+								{% endif %}
 
         </div><!-- End of cell-body -->
       </div><!-- End of cell -->
@@ -1068,6 +1153,207 @@ function dropRow(ev){
 		//console.log("source type NOT Allowed : " + source_type);
 		//console.log("target type NOT Allowed : " + target_type);
 	}
+}
+
+
+// FUNCTION
+async function makeJSONRequest(method, url, data) {
+
+    const options = {
+        method: method, // *GET, POST, PUT, DELETE, etc.
+        credentials: 'include', // include, *same-origin, omit
+    }
+
+    if (method == 'POST') {
+
+        const csrf_token = getCookie('csrftoken');
+
+        options.headers = {
+            'x-csrftoken': csrf_token
+        }
+    }
+
+    if (data) {
+
+        options.body = data;
+    }
+
+    // Do the fetch and check status...
+    const response = await fetch(url, options);
+
+    if (response.status != 200) {
+
+        throw response;
+    }
+
+    // If OK, parse JSON response into native JavaScript objects
+    return response.json();
+}
+
+
+// FUNCTION
+function getCookie(name) {
+
+    var cookieValue = null;
+
+    if (document.cookie && document.cookie != '') {
+
+        var cookies = document.cookie.split(';');
+
+        for (var i = 0; i < cookies.length; i++) {
+
+            var cookie = cookies[i].trim();
+
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+// FUNCTION
+function getParameterByName(name, url = window.location.href) {
+
+    name = name.replace(/[\[\]]/g, '\\$&');
+
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+
+    if (!results) return null;
+
+    if (!results[2]) return '';
+
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
+// FUNCTION
+async function loginStatusPresent(divname) {
+
+    var projects_url = getUrl('url:projects');
+
+    const data = await makeJSONRequest('GET', projects_url).then(rsp => {
+
+	    document.getElementById(divname).style.display = 'display';
+
+		console.log("loginStatusPresent : " + divname + " ; display" )
+
+    }).catch(rsp => {
+
+		console.log("loginStatusPresent : " + divname + " ; none" )
+
+		document.getElementById(divname).style.display = 'none';
+    });
+
+}
+
+
+// FUNCTION
+async function loginStatusAbsent(divname) {
+
+    var projects_url = getUrl('url:projects');
+
+    const data = await makeJSONRequest('GET', projects_url).then(rsp => {
+
+		console.log("loginStatusAbsent : " + divname + " ; none" )
+
+	    document.getElementById(divname).style.display = 'none';
+
+    }).catch(rsp => {
+
+		console.log("loginStatusAbsent : " + divname + " ; display" )
+
+		document.getElementById(divname).style.display = 'display';
+    });
+
+}
+
+
+// FUNCTION
+async function server_present(server_url, divname) {
+
+    // List of supported versions
+    const versions = await makeJSONRequest('GET', server_url + 'api/').then(rsp => rsp.data);
+
+    // Get base_url from last version in the list
+    //latest_base_url = versions[versions.length - 1]["url:base"].replace("http", protocol);
+    latest_base_url = versions[versions.length - 1]["url:base"]
+
+    // Get the list of top-level urls as starting points,
+    base_urls = await makeJSONRequest('GET', latest_base_url);
+
+    // Also get CSRF token needed for any POST requests (login, logout etc)
+    // Header of this response sets a cookie. NB: We can ingore the response JSON
+    await makeJSONRequest('GET', getUrl('url:token'));
+
+    // Try to load Projects (will show Login form if we're not logged in)
+    loginStatusPresent(divname);
+}
+
+
+// FUNCTION
+async function server_absent(server_url, divname) {
+
+    // List of supported versions
+    const versions = await makeJSONRequest('GET', server_url + 'api/').then(rsp => rsp.data);
+
+    // Get base_url from last version in the list
+    //latest_base_url = versions[versions.length - 1]["url:base"].replace("http", protocol);
+    latest_base_url = versions[versions.length - 1]["url:base"]
+
+    // Get the list of top-level urls as starting points,
+    base_urls = await makeJSONRequest('GET', latest_base_url);
+
+    // Also get CSRF token needed for any POST requests (login, logout etc)
+    // Header of this response sets a cookie. NB: We can ingore the response JSON
+    await makeJSONRequest('GET', getUrl('url:token'));
+
+    // Try to load Projects (will show Login form if we're not logged in)
+    loginStatusAbsent(divname);
+}
+
+
+// FUNCTION
+function getUrl(name) {
+
+    return base_urls[name];
+}
+
+
+// MAINLINE
+
+// When page first loads, if we have a server...
+//const server_url = getParameterByName("server");
+
+collection_in = document.getElementsByClassName("loginStatus_in");
+
+for (var i = 0; i < collection_in.length; i++) {
+
+	nodeHTML = collection_in[i];
+	text = nodeHTML.id;
+	//console.log("IN text : " + text);
+	myArray = text.split("@");
+	server_url = 'https://' + myArray[1] + '/';
+
+	server_present(server_url, nodeHTML.id);
+}
+
+collection_out = document.getElementsByClassName("loginStatus_out");
+
+for (var i = 0; i < collection_out.length; i++) {
+
+	nodeHTML = collection_out[i]
+	text = nodeHTML.id;
+	//console.log("OUT text : " + text);
+	myArray = text.split("@");
+	server_url = 'https://' + myArray[1] + '/';
+
+	server_absent(server_url, nodeHTML.id);
 }
 
 </script>

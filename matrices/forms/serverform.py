@@ -43,7 +43,7 @@ class ServerForm(forms.ModelForm):
 
     class Meta:
         model = Server
-        fields = ('name', 'url_server', 'uid', 'pwd', 'type')
+        fields = ('name', 'url_server', 'uid', 'pwd', 'type', 'accessible')
         widgets = {
             'pwd': forms.PasswordInput(),
         }

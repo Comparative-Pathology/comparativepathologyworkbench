@@ -90,16 +90,17 @@ class Server(models.Model):
     pwd = models.CharField(max_length=50, blank=True, default='')
     type = models.ForeignKey(Type, related_name='servers', default=0, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, related_name='servers', on_delete=models.DO_NOTHING)
+    accessible = models.BooleanField(default=False)
 
     @classmethod
-    def create(cls, name, url_server, uid, pwd, type, owner):
-        return cls(name=name, url_server=url_server, uid=uid, pwd=pwd, type=type, owner=owner)
+    def create(cls, name, url_server, uid, pwd, type, owner, accessible):
+        return cls(name=name, url_server=url_server, uid=uid, pwd=pwd, type=type, owner=owner, accessible=accessible)
 
     def __str__(self):
         return f"{self.uid}@{self.url_server}"
 
     def __repr__(self):
-        return f"{self.id}, {self.name}, {self.url_server}, {self.uid}, {self.pwd}, {self.type.id}, {self.owner.id}"
+        return f"{self.id}, {self.name}, {self.url_server}, {self.uid}, {self.pwd}, {self.type.id}, {self.owner.id}, {self.accessible}"
 
 
     def is_owned_by(self, a_user):
@@ -113,6 +114,24 @@ class Server(models.Model):
 
     def set_pwd(self, a_pwd):
         self.pwd = a_pwd
+
+    def set_accessible(self):
+        self.accessible = True
+
+    def set_inaccessible(self):
+        self.accessible = False
+
+    def is_accessible(self):
+        if self.accessible == True:
+            return True
+        else:
+            return False
+
+    def is_not_accessible(self):
+        if self.accessible == False:
+            return True
+        else:
+            return False
 
     def is_wordpress(self):
         if self.type.name == 'WORDPRESS':

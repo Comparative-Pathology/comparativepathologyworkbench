@@ -33,6 +33,7 @@ from __future__ import unicode_literals
 import os
 import time
 
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.apps import apps
 
@@ -48,10 +49,12 @@ from matrices.routines.get_an_ebi_sca_parameters_from_chart_id import get_an_ebi
 #
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
 #
-def add_image_to_collection(user, server, image_id, roi_id):
+def add_image_to_collection(credential, server, image_id, roi_id):
 
     Image = apps.get_model('matrices', 'Image')
     Collection = apps.get_model('matrices', 'Collection')
+
+    user = User.objects.get(username=credential.username)
 
     image_out = None
 
@@ -99,7 +102,7 @@ def add_image_to_collection(user, server, image_id, roi_id):
 
     if server.is_wordpress():
 
-        wp_data = server.get_wordpress_image_json(user, image_id)
+        wp_data = server.get_wordpress_image_json(credential, image_id)
 
         json_image = wp_data['image']
         full_image_name = json_image['name']

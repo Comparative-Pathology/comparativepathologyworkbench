@@ -39,6 +39,7 @@ from django.contrib import messages
 from matrices.models import Server
 
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import add_image_to_collection
 
@@ -51,6 +52,8 @@ NO_CREDENTIALS = ''
 def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
     data = get_header_data(request.user)
+
+    credential = get_credential_for_user(request.user)
 
     if not exists_active_collection_for_user(request.user):
 
@@ -67,7 +70,7 @@ def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
         if exists_active_collection_for_user(request.user):
 
-            image = add_image_to_collection(request.user, server, image_id, roi_id)
+            image = add_image_to_collection(credential, server, image_id, roi_id)
 
         else:
 

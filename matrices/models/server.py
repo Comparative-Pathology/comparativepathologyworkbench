@@ -532,7 +532,7 @@ class Server(models.Model):
         cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
         password = cipher.decrypt(self.pwd)
 
-        user = get_object_or_404(User, pk=user.id)
+        user = User.objects.get(username=credential.username)
 
         commandWordpressImages = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGES)
 

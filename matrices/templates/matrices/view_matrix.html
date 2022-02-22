@@ -306,7 +306,7 @@ The view matrix (bench) template
 					{% if request.get_host == 'localhost:8000' %}
 
 		<div id="I_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_out">
-			<a href="https://{{ server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+			<a href="https://{{ image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 		</div>
 		<div id="O_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_in">
 			<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
@@ -315,7 +315,7 @@ The view matrix (bench) template
 					{% else %}
 
 		<div id="I_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_out">
-			<a href="https://{{ server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+			<a href="https://{{ image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 		</div>
 		<div id="O_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_in">
 			<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
@@ -575,21 +575,21 @@ The view matrix (bench) template
 
 			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
 
-			  						{% endif %}
-
-		    				    {% endif %}
-
 			  <a href="#popup_{{ matrix_cell.id }}"><i class="fa fa-eye"></i><span class="menu-item">&#9;</span><em>View Commentary</em></a>
 
-			    			    {% if matrix_link != '' %}
+			  							{% if matrix_link != '' %}
 
-									{% if authority.is_viewer or authority.is_editor or authority.is_owner or authority.is_admin %}
+				  							{% if authority.is_viewer or authority.is_editor or authority.is_owner or authority.is_admin %}
 
 			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Commentary</a>
 
-					    		    {% endif %}
+				  							{% endif %}
 
-    						    {% endif %}
+			  							{% endif %}
+
+			  						{% endif %}
+
+		    				    {% endif %}
 
             </div><!-- End of cell-dropdown-content -->
           </div><!-- End of cell-dropdown -->
@@ -829,11 +829,11 @@ function onclick(source, target, source_type){
 		question = "Do you want to IMPORT this Image to this CELL?";
 	}
 
-	//console.log("source_type : " + source_type);
+	console.log("source_type : " + source_type);
 
 	confirmation(question, source_type).then(function (answer) {
 
-		//console.log("answer : " + answer);
+		console.log("answer : " + answer);
 
 		if (answer == "swap"){
 

@@ -66,7 +66,7 @@ def show_wordpress_image(request, server_id, image_id):
 
         credential = get_credential_for_user(request.user)
 
-        if exists_active_collection_for_user(credential):
+        if exists_active_collection_for_user(request.user):
 
             image_flag = 'ALLOW'
 

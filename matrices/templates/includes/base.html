@@ -252,9 +252,31 @@ The base header and footer include template
             <div class="header-dropdown">
               <button class="header-drop-button">About <i class="fa fa-caret-down"></i></button>
               <div class="header-dropdown-content">
-                <a href="{% url 'about' %}">About</a>
-                <a href="{% url 'people' %}">People</a>
-                <a href="{% url 'howto' %}">How To</a>
+
+  {% if settings.LOCATION == 'CZI' %}
+
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html">About</a>
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html">People</a>
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">How To</a>
+
+  {% endif %}
+
+  {% if settings.LOCATION == 'CANADA' %}
+
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html">About</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html">People</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html">How To</a>
+
+  {% endif %}
+
+  {% if settings.LOCATION == 'COELIAC' %}
+
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html">About</a>
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html">People</a>
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html">How To</a>
+
+  {% endif %}
+
               </div><!-- End of header-dropdown-content -->
             </div><!-- End of header-dropdown -->
           </div><!-- End of grid-item-header-about -->

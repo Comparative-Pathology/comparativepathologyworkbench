@@ -83,11 +83,6 @@ urlpatterns = [
     path('settings/password/', auth_views.PasswordChangeView.as_view(template_name='user/password_change.html'), name='password_change'),
     path('settings/password/done/', auth_views.PasswordChangeDoneView.as_view(template_name='user/password_change_done.html'), name='password_change_done'),
 
-#   views/about
-	path('about/', matrices_views.about, name='about'),
-	path('people/', matrices_views.people, name='people'),
-	path('howto/', matrices_views.howto, name='howto'),
-
 #   views/ajax
     path('ajax/overwrite_cell_leave/', matrices_views.ajax.overwrite_cell_leave, name='overwrite_cell_leave'),
     path('ajax/overwrite_cell/', matrices_views.ajax.overwrite_cell, name='overwrite_cell'),

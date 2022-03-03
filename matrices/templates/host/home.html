@@ -66,7 +66,25 @@ The home template
 		  <h3>How To</h3>
 		  <p>Learn more about how to use the Workbench</p>
 		  <br />
-		  <a href="{% url 'howto' %}"><button class="button button-view">How To &raquo;</button></a>
+
+{% if settings.LOCATION == 'CZI' %}
+
+		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-view">How To &raquo;</button></a>
+
+{% endif %}
+
+{% if settings.LOCATION == 'CANADA' %}
+
+		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-view">How To &raquo;</button></a>
+
+{% endif %}
+
+{% if settings.LOCATION == 'COELIAC' %}
+
+		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-view">How To &raquo;</button></a>
+
+{% endif %}
+
 		</div>
 	  </div>
 	</div>
@@ -190,7 +208,25 @@ The home template
 		  <p>Learn more about the Project</p>
 		  <br />
 		  <br />
-		  <a href="{% url 'about' %}"><button class="button button-view">About &raquo;</button></a>
+
+{% if settings.LOCATION == 'CZI' %}
+
+		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-view">About &raquo;</button></a>
+
+{% endif %}
+
+{% if settings.LOCATION == 'CANADA' %}
+
+		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-view">About &raquo;</button></a>
+
+{% endif %}
+
+{% if settings.LOCATION == 'COELIAC' %}
+
+		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-view">About &raquo;</button></a>
+
+{% endif %}
+
 	    </div>
 	  </div>
 	</div>
@@ -204,7 +240,25 @@ The home template
 		  <br />
 		  <p>Learn more about the Project Contributors</p>
 		  <br />
-		  <a href="{% url 'people' %}"><button class="button button-view">Contributors &raquo;</button></a>
+
+{% if settings.LOCATION == 'CZI' %}
+
+		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-view">People &raquo;</button></a>
+
+{% endif %}
+
+{% if settings.LOCATION == 'CANADA' %}
+
+		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-view">People &raquo;</button></a>
+
+{% endif %}
+
+{% if settings.LOCATION == 'COELIAC' %}
+
+		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-view">People &raquo;</button></a>
+
+{% endif %}
+
 		</div>
 	  </div>
 	</div>

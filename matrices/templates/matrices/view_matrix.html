@@ -558,8 +558,8 @@ The view matrix (bench) template
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
         <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">{{ matrix_cell.title|truncatechars:15 }}
         </div><!-- End of cell-title -->
-        <div id="cell_{{ matrix_cell.id }}" class="cell-control" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div id="cell_{{ matrix_cell.id }}" class="cell-control">
+          <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
 
@@ -594,7 +594,7 @@ The view matrix (bench) template
             </div><!-- End of cell-dropdown-content -->
           </div><!-- End of cell-dropdown -->
         </div><!-- End of cell-control -->
-        <div id="cell_{{ matrix_cell.id }}" class="cell-body" style="width:{{ matrix.width|add:"-6" }}px; height:{{ matrix.height|add:"-32" }}px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div id="cell_{{ matrix_cell.id }}" class="cell-body" style="width:{{ matrix.width|add:"-6" }}px; height:{{ matrix.height|add:"-32" }}px;">
 
 								{% if matrix_cell.image %}
 
@@ -608,8 +608,8 @@ The view matrix (bench) template
 	  		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
   		  </div>
   		  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
-	  		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-			  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+			  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}">
 	  		</a>
   		  </div>
 
@@ -619,8 +619,8 @@ The view matrix (bench) template
 	  		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
   		  </div>
   		  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
-	  		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-			  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+			  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}">
 	  		</a>
   		  </div>
 
@@ -628,8 +628,8 @@ The view matrix (bench) template
 
 										{% else %}
 
-		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-			<img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+			<img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}">
 		  </a>
 
 		  								{% endif %}
@@ -644,8 +644,8 @@ The view matrix (bench) template
 		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 	  </div>
 	  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
-		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-		  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+		  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}">
 		</a>
 	  </div>
 
@@ -655,8 +655,8 @@ The view matrix (bench) template
 		<a href="https://{{ matrix_cell.image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 	  </div>
 	  <div id="O_{{ matrix_cell.id }}_{{ matrix_cell.image.server.uid }}@{{ matrix_cell.image.server.url_server }}" class="loginStatus_in">
-		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-		  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+		<a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+		  <img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}">
 		</a>
 	  </div>
 
@@ -664,8 +664,8 @@ The view matrix (bench) template
 
 										{% else %}
 
-	  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank" ondrop="drop(event)" ondragover="allowDrop(event)">
-		<img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  <a id="cell_{{ matrix_cell.id }}" class="cell-image" href="{{ matrix_cell.image.viewer_url }}" target="_blank">
+		<img id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width|add:"-32" }}px; height:{{ matrix.height|add:"-32" }}px;" alt="{{ matrix_cell.image.name }}" title="{{ matrix_cell.image.name }}" src="{{ matrix_cell.image.birdseye_url }}">
 	  </a>
 
 										{% endif %}
@@ -674,8 +674,8 @@ The view matrix (bench) template
 
 								{% else %}
 
-		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" style="top: 10%;" href="https://www.ed.ac.uk/comparative-pathology" ondrop="drop(event)" ondragover="allowDrop(event)">
-		    <img id="cell_{{ matrix_cell.id }}" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" style="width:{{ matrix.width|add:"-20" }}px;" src="/static/ccp-logo.png" ondrop="drop(event)" ondragover="allowDrop(event)">
+		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" style="top: 10%;" href="https://www.ed.ac.uk/comparative-pathology">
+		    <img id="cell_{{ matrix_cell.id }}" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" style="width:{{ matrix.width|add:"-20" }}px;" src="/static/ccp-logo.png">
 		  </a>
 
 								{% endif %}
@@ -829,11 +829,11 @@ function onclick(source, target, source_type){
 		question = "Do you want to IMPORT this Image to this CELL?";
 	}
 
-	console.log("source_type : " + source_type);
+	//console.log("source_type : " + source_type);
 
 	confirmation(question, source_type).then(function (answer) {
 
-		console.log("answer : " + answer);
+		//console.log("answer : " + answer);
 
 		if (answer == "swap"){
 
@@ -943,6 +943,9 @@ function drop(ev){
 	var image = ev.dataTransfer.getData("text/html")
 	var division = ev.dataTransfer.getData("Text")
 
+	//console.log("image : " + image);
+	//console.log("division : " + division);
+
 	if ( image ) {
 
 		var dropContext = $('<div>').append(image);
@@ -962,10 +965,12 @@ function drop(ev){
 	var source_array = src.id.split("_",2);
 	var source_id = source_array[1];
 	var source_type = source_array[0];
+
 	//console.log("source_id : " + source_id);
 	//console.log("source_type : " + source_type);
 
 	const data = ev.target;
+
 	//console.log("data : " + data);
 
 	var tgt = ev.target;
@@ -1241,11 +1246,11 @@ async function loginStatusPresent(divname) {
 
 	    document.getElementById(divname).style.display = 'display';
 
-		console.log("loginStatusPresent : " + divname + " ; display" )
+		//console.log("loginStatusPresent : " + divname + " ; display" )
 
     }).catch(rsp => {
 
-		console.log("loginStatusPresent : " + divname + " ; none" )
+		//console.log("loginStatusPresent : " + divname + " ; none" )
 
 		document.getElementById(divname).style.display = 'none';
     });
@@ -1260,13 +1265,13 @@ async function loginStatusAbsent(divname) {
 
     const data = await makeJSONRequest('GET', projects_url).then(rsp => {
 
-		console.log("loginStatusAbsent : " + divname + " ; none" )
+		//console.log("loginStatusAbsent : " + divname + " ; none" )
 
 	    document.getElementById(divname).style.display = 'none';
 
     }).catch(rsp => {
 
-		console.log("loginStatusAbsent : " + divname + " ; display" )
+		//console.log("loginStatusAbsent : " + divname + " ; display" )
 
 		document.getElementById(divname).style.display = 'display';
     });

@@ -30,15 +30,15 @@ The general form include template
 
 {% if form.non_field_errors %}
 
-	<div class="panel-alert">
+<div class="panel-alert">
 
-		{% for error in form.non_field_errors %}
+  {% for error in form.non_field_errors %}
 
-			<p{% if forloop.last %} class="mb-0"{% endif %}>{{ error }}</p>
+  <p{% if forloop.last %} class="mb-0"{% endif %}>{{ error }}</p>
 
-		{% endfor %}
+  {% endfor %}
 
-	</div>
+</div>
 
 {% endif %}
 
@@ -46,68 +46,55 @@ The general form include template
 {% for field in form %}
 
 <div class="form-container">
+  <div class="form-row">
+    <div class="form-col-15">
 
-	<div class="form-row">
+      {{ field.label_tag }}
 
-		<div class="form-col-25">
+	</div>
+	<div class="form-col-5">
+	</div>
+	<div class="form-col-20">
 
-		{{ field.label_tag }}
+	  {% render_field field %}
 
-		</div>
+	</div>
+	<div class="form-col-5">
+	</div>
+	<div class="form-col-20-help">
 
-		<div class="form-col-25">
+  {% if field.help_text %}
 
-	{% render_field field %}
+    <p>{{ field.help_text|safe }}</p>
 
-		</div>
+  {% endif %}
+
+	</div>
+	<div class="form-col-5">
+	</div>
+
+  {% if field.errors %}
+
+	<div class="form-col-20-error">
+
+    {% for error in field.errors %}
+
+  	  <p>{{ error }}</p>
+
+  	{% endfor %}
 
 	</div>
 
-	{% if field.errors %}
+  {% else %}
 
-	<div class="form-row">
-
-		<div class="form-col-25">
-		</div>
-
-		<div class="form-col-25">
-
-			<ul>
-
-		{% for error in field.errors %}
-
-				<li>{{ error }}</li>
-
-		{% endfor %}
-
-			</ul>
-
-		</div>
-
+    <div class="form-col-20">
 	</div>
 
-	{% endif %}
+  {% endif %}
 
-
-	{% if field.help_text %}
-
-	<div class="form-row">
-
-		<div class="form-col-25">
-
-		</div>
-
-		<div class="form-col-25">
-
-			{{ field.help_text|safe }}
-
-		</div>
-
+	<div class="form-col-5">
 	</div>
-
-
-	{% endif %}
-
+  </div>
 </div>
 
 {% endfor %}

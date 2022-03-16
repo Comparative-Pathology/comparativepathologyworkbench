@@ -16,7 +16,8 @@ body {
   /*    width: 1fr; */
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 165px auto 123px;
+  grid-template-rows: 174px auto 123px;
+  /*grid-template-rows: 165px auto 123px;*/
   max-width: 1920px;
   max-height: 1080px;
 }
@@ -944,6 +945,23 @@ div.bench-popup>dd {
   text-align: left;
 }
 
+.card-link {
+  color: black;
+  width: 100%;
+  min-height: 333px;
+  cursor: pointer;
+  position: relative;
+}
+
+.card-link-link {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -1125,6 +1143,18 @@ label {
   clear: both;
 }
 
+.form-col-5 {
+  float: left;
+  width: 5%;
+  margin-top: 6px;
+}
+
+.form-col-15 {
+  float: left;
+  width: 15%;
+  margin-top: 6px;
+}
+
 .form-col-25 {
   float: left;
   width: 25%;
@@ -1135,6 +1165,34 @@ label {
   float: left;
   width: 50%;
   margin-top: 6px;
+}
+
+.form-col-20 {
+  float: left;
+  width: 20%;
+  margin-top: 6px;
+  padding: 12px 12px 12px 0px;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.form-col-20-help {
+  float: left;
+  width: 20%;
+  margin-top: 6px;
+  padding: 12px 12px 12px 0px;
+  display: inline-block;
+  font-size: 12px;
+  color: Black;
+}
+
+.form-col-20-error {
+  float: left;
+  width: 20%;
+  margin-top: 6px;
+  padding: 12px 12px 12px 0px;
+  color: #DC3545;
+  font-size: 14px;
 }
 
 .card-people {
@@ -1182,12 +1240,6 @@ label {
   padding: 5px 5px 5px 5px;
 }
 
-.form-row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
 .tab {
   background-color: LightGray;
   overflow: hidden;
@@ -1224,7 +1276,7 @@ label {
 }
 
 .tablinks {
-  width: 110px;
+  width: 125px;
 }
 
 .image-list {

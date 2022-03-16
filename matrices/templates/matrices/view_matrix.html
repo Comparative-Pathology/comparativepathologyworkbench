@@ -38,9 +38,25 @@ The view matrix (bench) template
 
 <!-- Breadcrumb Menu -->
 
-			<li><a href="{% url 'home' %}">Home</a></li>
 			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
-			<li onclick="openGridRow();">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} <i class="fas fa-info-circle"></i></li>
+
+{% if settings.LOCATION == 'CZI' %}
+
+			<li onclick="openGridRow();">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fas fa-info-circle"></i></button></li>
+
+{% endif %}
+
+{% if settings.LOCATION == 'CANADA' %}
+
+			<li onclick="openGridRow();">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;"><i class="fas fa-info-circle"></i></button></li>
+
+{% endif %}
+
+{% if settings.LOCATION == 'COELIAC' %}
+
+			<li onclick="openGridRow();">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix_comments.title }} <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;"><i class="fas fa-info-circle"></i></button></li>
+
+{% endif %}
 
 {% endblock %}
 
@@ -671,12 +687,6 @@ The view matrix (bench) template
 										{% endif %}
 
 									{% endif %}
-
-								{% else %}
-
-		  <a id="cell_{{ matrix_cell.id }}" class="cell-image" style="top: 10%;" href="https://www.ed.ac.uk/comparative-pathology">
-		    <img id="cell_{{ matrix_cell.id }}" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" style="width:{{ matrix.width|add:"-20" }}px;" src="/static/ccp-logo.png">
-		  </a>
 
 								{% endif %}
 

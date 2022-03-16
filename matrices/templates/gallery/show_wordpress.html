@@ -36,7 +36,6 @@ The show wordpress (server) template
 
 <!-- Breadcrumb Menu -->
 
-			<li><a href="{% url 'home' %}">Home</a></li>
 			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
 			<li><a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ dataset.name }}</a></li>
 			<li><a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">Prev</a></li>

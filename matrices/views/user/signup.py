@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template.loader import render_to_string

@@ -36,7 +36,6 @@ The home template
 
 <!-- Breadcrumb Menu -->
 
-			<li><a href="{% url 'home' %}">Home</a></li>
 
 {% endblock %}
 
@@ -58,36 +57,42 @@ The home template
 
   <div class="home-grid-container">
 
-	<div class="home-grid-item">
-      <div class="card">
-		<br />
-	    <a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>How To</h3>
-		  <p>Learn more about how to use the Workbench</p>
+	  <div class="home-grid-item">
+  	  <div class="card">
+    	<div class="card-link">
 		  <br />
 
-{% if settings.LOCATION == 'CZI' %}
+  {% if settings.LOCATION == 'CZI' %}
 
-		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-view">How To &raquo;</button></a>
+  		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
 
-{% endif %}
+  {% endif %}
 
-{% if settings.LOCATION == 'CANADA' %}
+  {% if settings.LOCATION == 'CANADA' %}
 
-		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-view">How To &raquo;</button></a>
+  		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html">
 
-{% endif %}
+  {% endif %}
 
-{% if settings.LOCATION == 'COELIAC' %}
+  {% if settings.LOCATION == 'COELIAC' %}
 
-		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-view">How To &raquo;</button></a>
+  		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html">
 
-{% endif %}
+  {% endif %}
 
-		</div>
-	  </div>
-	</div>
+      	  <span class="card-link-link"></span></a>
+    	  <br />
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+  		  <div class="card-container">
+  		    <h3>How To</h3>
+  		    <br />
+  		    <br />
+  		    <br />
+  			<button class="button button-info"><i class="fa fa-question-circle fa-3x"></i></button>
+  		  </div>
+  		</div>
+  	  </div>
+  	</div>
 
 {% if credential_flag == '' %}
 
@@ -95,14 +100,20 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-		<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-    	<div class="card-container">
+  		<div class="card-link">
+		  <br />
+		  <a href="{% url 'login' %}">
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
           <h3>Login</h3>
-		  <p>Login to the Workbench</p>
-		  <br />
-		  <br />
-		  <a href="{% url 'login' %}"><button class="button button-add">Login &raquo;</button></a>
+		    <br />
+		    <br />
+		    <br />
+			<button class="button button-add"><i class="fa fa-sign-in-alt fa-3x"></i></button>
+		  </div>
 		</div>
 	  </div>
 	</div>
@@ -111,12 +122,37 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-	    <a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>WARNING!</h3>
-		  <div class="panel-alert">
-			<strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
+  		<div class="card-link">
+  		  <br />
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+ 		    <h3>WARNING!</h3>
+		    <br />
+		    <br />
+		    <br />
+		    <div class="panel-alert">
+			  <strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
+		    </div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<div class="home-grid-item">
+	  <div class="card">
+  		<div class="card-link">
+		  <br />
+		  <a href="{% url 'logout' %}">
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+  		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+          <h3>Logout</h3>
+		    <br />
+		    <br />
+			<br />
+			<button class="button button-delete"><i class="fa fa-sign-out-alt fa-3x"></i></button>
 		  </div>
 		</div>
 	  </div>
@@ -128,19 +164,23 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-	    <a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>Registration</h3>
-		  <p>Register to use the Workbench</p>
+  		<div class="card-link">
 		  <br />
-		  <br />
-		  <a href="{% url 'signup' %}"><button class="button button-delete">Register &raquo;</button></a>
+		  <a href="{% url 'signup' %}">
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+          <h3>Sign Up</h3>
+		    <br />
+		    <br />
+		    <br />
+			<button class="button button-delete"><i class="fa fa-user-plus fa-3x"></i></button>
+		  </div>
 		</div>
 	  </div>
 	</div>
-
-	{% else %}
 
 	{% endif %}
 
@@ -150,13 +190,20 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-	    <a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>Browse</h3>
-		  <p>Browse All Permitted Benches in the Workbench ({{ matrix_list|length }})</p>
+  		<div class="card-link">
 		  <br />
-		  <a href="{% url 'list_benches' %}"><button class="button button-view">Benches &raquo;</button></a>
+		  <a href="{% url 'list_benches' %}">
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+          <h3>Browse</h3>
+		    <br />
+		    <br />
+			<br />
+			<button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1.5em; padding: 14px 12px 17px 12px;">Benches ({{ matrix_list|length }}) &raquo;</button>
+		  </div>
 		</div>
 	  </div>
 	</div>
@@ -165,13 +212,19 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-		<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>ADD</h3>
-		  <p>Add a NEW Bench!</p>
+  		<div class="card-link">
 		  <br />
-		  <a href="{% url 'new_matrix' %}"><button class="button button-add">ADD &raquo;</button></a>
+		  <a href="{% url 'new_matrix' %}">
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+          <h3>ADD</h3>
+		    <br />
+		    <br />
+			<button class="button button-add"><i class="fa fa-sign-out-alt fa-3x"></i></button>
+		  </div>
 		</div>
 	  </div>
 	</div>
@@ -180,14 +233,20 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-	    <a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>Logout</h3>
-		  <p>Logout of the Workbench</p>
+  		<div class="card-link">
 		  <br />
-		  <br />
-		  <a href="{% url 'logout' %}"><button class="button button-delete">Logout &raquo;</button></a>
+		  <a href="{% url 'logout' %}">
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+          <h3>Logout</h3>
+		    <br />
+		    <br />
+			<br />
+			<button class="button button-delete"><i class="fa fa-sign-out-alt fa-3x"></i></button>
+		  </div>
 		</div>
 	  </div>
 	</div>
@@ -200,79 +259,98 @@ The home template
 
 	<div class="home-grid-item">
 	  <div class="card">
-		<br />
-		<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>About</h3>
+  		<div class="card-link">
 		  <br />
-		  <p>Learn more about the Project</p>
-		  <br />
-		  <br />
+
 
 {% if settings.LOCATION == 'CZI' %}
 
-		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-view">About &raquo;</button></a>
+		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html">
 
 {% endif %}
 
 {% if settings.LOCATION == 'CANADA' %}
 
-		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-view">About &raquo;</button></a>
+		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html">
 
 {% endif %}
 
 {% if settings.LOCATION == 'COELIAC' %}
 
-		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-view">About &raquo;</button></a>
+		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html">
 
 {% endif %}
 
-	    </div>
-	  </div>
-	</div>
-
-	<div class="home-grid-item">
-	  <div class="card">
-		<br />
-	    <a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>Contributors</h3>
-		  <br />
-		  <p>Learn more about the Project Contributors</p>
-		  <br />
-
-{% if settings.LOCATION == 'CZI' %}
-
-		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-view">People &raquo;</button></a>
-
-{% endif %}
-
-{% if settings.LOCATION == 'CANADA' %}
-
-		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-view">People &raquo;</button></a>
-
-{% endif %}
-
-{% if settings.LOCATION == 'COELIAC' %}
-
-		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-view">People &raquo;</button></a>
-
-{% endif %}
-
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+		  <img class="card-image" src="{% static 'HGCA_logo_black_whitebkg.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+		    <h3>About</h3>
+		    <br />
+		    <br />
+		    <br />
+			<button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
+		  </div>
 		</div>
 	  </div>
 	</div>
 
 	<div class="home-grid-item">
 	  <div class="card">
-        <br />
-		<a href="http://www.comparativepathology.ed.ac.uk"><img class="card-image" src="{% static 'ccp-logo.png' %}" alt="Logo" height=100px></a>
-		<div class="card-container">
-		  <h3>Centre for Comparative Pathology</h3>
-		  <p>Learn more about the Centre for Comparative Pathology</p>
+  		<div class="card-link">
 		  <br />
-		  <a href="https://www.ed.ac.uk/comparative-pathology"><button class="button button-view">About &raquo;</button></a>
-	    </div>
+
+{% if settings.LOCATION == 'CZI' %}
+
+		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html">
+
+{% endif %}
+
+{% if settings.LOCATION == 'CANADA' %}
+
+		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html">
+
+{% endif %}
+
+{% if settings.LOCATION == 'COELIAC' %}
+
+		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html">
+
+{% endif %}
+
+    	    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+		  <img class="card-image" src="{% static 'HGCA_logo_black_whitebkg.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+		    <h3>Contributors</h3>
+		    <br />
+		    <br />
+		    <br />
+			<button class="button button-info"><i class="fa fa-users fa-3x"></i></button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<div class="home-grid-item">
+	  <div class="card">
+		<div class="card-link">
+		  <br />
+		  <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project">
+  		    <span class="card-link-link"></span>
+		  </a>
+		  <br />
+		  <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="Logo" height=100px>
+		  <div class="card-container">
+		    <h3>The Gut Cell Atlas Project</h3>
+			<br />
+			<br />
+			<br />
+			<button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
+		  </div>
+		</div>
 	  </div>
 	</div>
 
@@ -281,5 +359,6 @@ The home template
 </div><!-- End of page-content -->
 
 </div><!-- End of page-body -->
+
 
 {% endblock %}

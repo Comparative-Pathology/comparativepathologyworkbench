@@ -56,7 +56,7 @@ The base header and footer include template
   <meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}" />
   <meta name="theme-color" content="#ffffff" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
 
@@ -105,7 +105,29 @@ The base header and footer include template
           </div><!-- End of grid-item-header-logo -->
 
           <div id="id-grid-item-header-logo-under" class="grid-item-header-logo-under"  style="display:none;">
-            <span onclick="closeGridRow();" class="closebtn"><i class="fas fa-times-circle"></i></span>
+            <span onclick="closeGridRow();" class="closebtn">
+
+  {% if settings.LOCATION == 'CZI' %}
+
+              <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
+
+  {% endif %}
+
+  {% if settings.LOCATION == 'CANADA' %}
+
+              <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;">
+
+  {% endif %}
+
+  {% if settings.LOCATION == 'COELIAC' %}
+
+              <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;">
+
+  {% endif %}
+
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </span>
           </div><!-- End of grid-item-header-logo-under -->
 
           <div class="grid-item-header-title">
@@ -115,7 +137,7 @@ The base header and footer include template
   		<div class="grid-item-header-search">
   		  <form action="{% url 'list_benches' %}" method="get">
               <input id="id_search" type="text" placeholder="Search ..." name="search" method="get">
-  			<button type="submit"><i class="fa fa-search"></i></button>
+  			<button type="submit" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #28A745; border-radius: 5px; color: White; background-color: #28A745; font-size: 1em;"><i class="fa fa-search"></i></button>
   		  </form>
           </div><!-- End of grid-item-header-search -->
 
@@ -126,37 +148,38 @@ The base header and footer include template
 
               <button class="header-drop-button">{{ user.username }} <i class="fa fa-caret-down"></i></button>
               <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
-                <a href="{% url 'logout' %}">Logout</a>
+                <a href="{% url 'home' %}"><button class="button button-add"><i class="fa fa-home-alt"></i></button> Home</a>
+                <a href="{% url 'logout' %}"><button class="button button-delete"><i class="fa fa-sign-out-alt"></i></button> Logout</a>
 
       {% if user.is_superuser %}
 
-                <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
-                <a href="{% url 'list_bench_authorisation' %}">All Bench Permissions</a>
-                <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
-                <a href="{% url 'list_collection_authorisation' %}">All Collection Permissions</a>
-                <a href="{% url 'authorisation' %}">Authorisation</a>
-                <a href="{% url 'maintenance' %}">Maintenance</a>
-                <a href="{% url 'execute_command' %}">Execute Command</a>
-                <a href="{% url 'admin:index' %}">ADMIN</a>
-                <a href="{% url 'api-root' %}">API</a>
+                <a href="{% url 'list_my_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Bench Permissions</a>
+                <a href="{% url 'list_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> All Bench Permissions</a>
+                <a href="{% url 'list_my_collection_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Collection Permissions</a>
+                <a href="{% url 'list_collection_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> All Collection Permissions</a>
+                <a href="{% url 'authorisation' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> Authorisation</a>
+                <a href="{% url 'maintenance' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> Maintenance</a>
+                <a href="{% url 'execute_command' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> Execute Command</a>
+                <a href="{% url 'admin:index' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> ADMIN</a>
+                <a href="{% url 'api-root' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> API</a>
 
   	{% else %}
 
-                <a href="{% url 'list_my_bench_authorisation' %}">My Bench Permissions</a>
-                <a href="{% url 'list_my_collection_authorisation' %}">My Collection Permissions</a>
+                <a href="{% url 'list_my_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Bench Permissions</a>
+                <a href="{% url 'list_my_collection_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Collection Permissions</a>
 
   	{% endif %}
 
-                <a href="{% url 'password_change' %}">Change Password</a>
-                <a href="{% url 'detail_user' user.id %}">My Account</a>
+                <a href="{% url 'password_change' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> Change Password</a>
+                <a href="{% url 'detail_user' user.id %}"><button class="button button-info"><i class="fa fa-info-circle"></i></button> My Account</a>
               </div><!-- End of header-dropdown-content -->
 
   {% else %}
 
               <button class="header-drop-button">User <i class="fa fa-caret-down"></i></button>
               <div class="header-dropdown-content"  style="right: 0; min-width: 360px;">
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'signup' %}">Register</a>
+                <a href="{% url 'login' %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button> Login</a>
+                <a href="{% url 'signup' %}"><button class="button button-delete"><i class="fa fa-user-plus"></i></button> Sign Up</a>
               </div><!-- End of header-dropdown-content -->
 
   {% endif %}
@@ -212,8 +235,8 @@ The base header and footer include template
               <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
 
               <div class="header-dropdown-content">
-                <a href="{% url 'view_active_collection' %}">Current Collection</a>
-                <a href="{% url 'view_all_collections' %}">All Images</a>
+                <a href="{% url 'view_active_collection' %}"><button class="button button-delete"><i class="fa fa-bell"></i></button> Current Collection</a>
+                <a href="{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images</a>
               </div><!-- End of header-dropdown-content -->
 
   {% else %}
@@ -255,25 +278,25 @@ The base header and footer include template
 
   {% if settings.LOCATION == 'CZI' %}
 
-                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html">About</a>
-                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html">People</a>
-                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">How To</a>
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-info"><i class="fa fa-info-circle"></i></button> About</a>
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-info"><i class="fa fa-users"></i></button> People</a>
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
 
   {% endif %}
 
   {% if settings.LOCATION == 'CANADA' %}
 
-                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html">About</a>
-                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html">People</a>
-                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html">How To</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-info"><i class="fa fa-info-circle"></i></button> About</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-info"><i class="fa fa-users"></i></button> People</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button>How To</a>
 
   {% endif %}
 
   {% if settings.LOCATION == 'COELIAC' %}
 
-                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html">About</a>
-                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html">People</a>
-                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html">How To</a>
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html"><button class="button button-info"><i class="fa fa-info-circle"></i></button> About</a>
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html"><button class="button button-info"><i class="fa fa-users"></i></button> People</a>
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
 
   {% endif %}
 
@@ -283,6 +306,24 @@ The base header and footer include template
 
           <div class="grid-item-header-breadcrumb">
             <ul class="breadcrumb">
+
+  {% if settings.LOCATION == 'CZI' %}
+
+              <li><a href="{% url 'home' %}"><button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-home-alt"></i></button></a></li>
+
+  {% endif %}
+
+  {% if settings.LOCATION == 'CANADA' %}
+
+              <li><a href="{% url 'home' %}"><button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;"><i class="fa fa-home-alt"></i></button></a></li>
+
+  {% endif %}
+
+  {% if settings.LOCATION == 'COELIAC' %}
+
+              <li><a href="{% url 'home' %}"><button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;"><i class="fa fa-home-alt"></i></button></a></li>
+
+  {% endif %}
 
   {% block breadcrumb %}
 
@@ -439,7 +480,7 @@ The base header and footer include template
         x = document.getElementsByClassName("page-container");
 
         for (i = 0; i < x.length; i++) {
-            x[i].style.gridTemplateRows = "165px auto 123px";
+            x[i].style.gridTemplateRows = "174px auto 123px";
         }
 
         var i, x;

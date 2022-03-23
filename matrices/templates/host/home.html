@@ -82,7 +82,7 @@ The home template
 
       	  <span class="card-link-link"></span></a>
     	  <br />
-          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
   		  <div class="card-container">
   		    <h3>How To</h3>
   		    <br />
@@ -106,7 +106,7 @@ The home template
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
-		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
 		  <div class="card-container">
           <h3>Login</h3>
 		    <br />
@@ -124,7 +124,7 @@ The home template
 	  <div class="card">
   		<div class="card-link">
   		  <br />
-          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
 		  <div class="card-container">
  		    <h3>WARNING!</h3>
 		    <br />
@@ -146,7 +146,7 @@ The home template
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
-  		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+  		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
 		  <div class="card-container">
           <h3>Logout</h3>
 		    <br />
@@ -170,7 +170,7 @@ The home template
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
-		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
 		  <div class="card-container">
           <h3>Sign Up</h3>
 		    <br />
@@ -257,34 +257,53 @@ The home template
 
   <div class="home-grid-container">
 
-	<div class="home-grid-item">
+    <div class="home-grid-item">
+  	  <div class="card">
+  		<div class="card-link">
+  		  <br />
+  		  <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project">
+    		    <span class="card-link-link"></span>
+  		  </a>
+  		  <br />
+  		  <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="GCA Logo" height=100px>
+  		  <div class="card-container">
+  		    <h3>The Gut Cell Atlas Project</h3>
+  			<br />
+  			<br />
+  			<br />
+  			<button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
+  		  </div>
+  		</div>
+  	  </div>
+  	</div>
+
+    <div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
 		  <br />
 
-
 {% if settings.LOCATION == 'CZI' %}
 
-		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/about.html">
+          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
 
 {% endif %}
 
 {% if settings.LOCATION == 'CANADA' %}
 
-		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/about.html">
+          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
 
 {% endif %}
 
 {% if settings.LOCATION == 'COELIAC' %}
 
-		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/about.html">
+          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
 
 {% endif %}
 
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
-		  <img class="card-image" src="{% static 'HGCA_logo_black_whitebkg.png' %}" alt="Logo" height=100px>
+          <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="GCA Logo" height=100px>
 		  <div class="card-container">
 		    <h3>About</h3>
 		    <br />
@@ -296,59 +315,39 @@ The home template
 	  </div>
 	</div>
 
-	<div class="home-grid-item">
+    <div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
 		  <br />
 
 {% if settings.LOCATION == 'CZI' %}
 
-		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/people.html">
+          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team">
 
 {% endif %}
 
 {% if settings.LOCATION == 'CANADA' %}
 
-		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/people.html">
+          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team">
 
 {% endif %}
 
 {% if settings.LOCATION == 'COELIAC' %}
 
-		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/people.html">
+          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team">
 
 {% endif %}
 
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
-		  <img class="card-image" src="{% static 'HGCA_logo_black_whitebkg.png' %}" alt="Logo" height=100px>
+          <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="GCA Logo" height=100px>
 		  <div class="card-container">
 		    <h3>Contributors</h3>
 		    <br />
 		    <br />
 		    <br />
 			<button class="button button-info"><i class="fa fa-users fa-3x"></i></button>
-		  </div>
-		</div>
-	  </div>
-	</div>
-
-	<div class="home-grid-item">
-	  <div class="card">
-		<div class="card-link">
-		  <br />
-		  <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project">
-  		    <span class="card-link-link"></span>
-		  </a>
-		  <br />
-		  <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="Logo" height=100px>
-		  <div class="card-container">
-		    <h3>The Gut Cell Atlas Project</h3>
-			<br />
-			<br />
-			<br />
-			<button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
 		  </div>
 		</div>
 	  </div>

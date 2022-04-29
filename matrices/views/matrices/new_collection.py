@@ -70,8 +70,8 @@ def new_collection(request):
 
                 if exists_title_for_collection_for_user(request.user, collection.title):
 
-                    messages.error(request, "Collection Title NOT Unique!")
-                    form.add_error(None, "Collection Title NOT Unique!")
+                    messages.error(request, "CPW_WEB:0350 New Collection - Title NOT Unique!")
+                    form.add_error(None, "CPW_WEB:0350 New Collection - Title NOT Unique!")
 
                     data.update({ 'form': form })
 
@@ -88,12 +88,14 @@ def new_collection(request):
 
                     collection.save()
 
+                    messages.success(request, 'NEW Collection ' + "{:06d}".format(collection.id) + ' Created!')
+
                     return HttpResponseRedirect(reverse('list_collections', args=()))
 
             else:
 
-                messages.error(request, "Collection Form is Invalid!")
-                form.add_error(None, "Collection Form is Invalid!")
+                messages.error(request, "CPW_WEB:0360 New Collection - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0360 New Collection - Form is Invalid!")
 
                 data.update({ 'form': form })
 

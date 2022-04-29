@@ -69,9 +69,11 @@ def add_ebi_sca_image(request, server_id, image_id, path_from):
 
             image = add_image_to_collection(request.user, server, image_id, 0)
 
+            messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+
         else:
 
-            messages.error(request, "You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0680 Add EBI SCA - You have no Active Image Collection; Please create a Collection!")
 
         if server.is_ebi_sca():
 

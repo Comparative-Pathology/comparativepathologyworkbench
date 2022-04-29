@@ -77,6 +77,35 @@ The show dataset template
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+
 {% if dataset.name == 'ERROR' %}
 
 	<p>Dataset {{ dataset.id }} Does NOT Exist!</p>
@@ -111,7 +140,7 @@ The show dataset template
 
 		    {% if image_flag != 'DISALLOW' %}
 
-					<a href="{% url 'webgallery_add_image' server.id image.id 0 add_from dataset.id %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fa fa-plus"></i></button></a>
+					<a href="{% url 'webgallery_add_image' server.id image.id 0 add_from dataset.id %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><i class="button button-add fa fa-plus"></i></a>
 
 			{% endif %}
 					<br />

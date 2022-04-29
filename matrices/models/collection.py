@@ -71,7 +71,7 @@ class Collection(models.Model):
         cancel_collection.images.remove(current_image)
 
     def __str__(self):
-        return f"{self.id}, {self.title}, {self.description}, {self.active}, {self.owner.id}"
+        return f"{self.id:06d}, {self.title}"
 
     def __repr__(self):
         return f"{self.id}, {self.title}, {self.description}, {self.active}, {self.owner.id}"

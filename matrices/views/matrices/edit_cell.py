@@ -107,8 +107,8 @@ def edit_cell(request, matrix_id, cell_id):
 
                     else:
 
-                        messages.error(request, "ERROR: Form is Invalid!")
-                        form.add_error(None, "ERROR: Form is Invalid!")
+                        messages.error(request, "CPW_WEB:0280 Edit Cell - Form is Invalid!")
+                        form.add_error(None, "CPW_WEB:0280 Edit Cell - Form is Invalid!")
 
                         data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -150,8 +150,8 @@ def edit_cell(request, matrix_id, cell_id):
 
                                 else:
 
-                                    messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-                                    form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+                                    messages.error(request, "CPW_WEB:0290 Edit Cell - WordPress Error, Contact System Administrator!")
+                                    form.add_error(None, "CPW_WEB:0290 Edit Cell - WordPress Error, Contact System Administrator!")
 
                                     data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -166,8 +166,8 @@ def edit_cell(request, matrix_id, cell_id):
 
                     else:
 
-                        messages.error(request, "ERROR: Form is Invalid!")
-                        form.add_error(None, "ERROR: Form is Invalid!")
+                        messages.error(request, "CPW_WEB:0300 Edit Cell - Form is Invalid!")
+                        form.add_error(None, "CPW_WEB:0300 Edit Cell - Form is Invalid!")
 
                         data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 

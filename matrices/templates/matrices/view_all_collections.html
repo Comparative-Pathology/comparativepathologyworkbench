@@ -58,6 +58,35 @@ The view collection template
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+
 	<h1>Search Sources</h1>
 
 	<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
@@ -121,7 +150,7 @@ The view collection template
 
 			{% endif %}
 
-			{% if image.server.type.name == 'OMERO_5.4.7' or image.server.type.name == 'OMERO_5.6' %}
+			{% if image.server.type.name == 'OMERO_5.4.7' %}
 
 				<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 

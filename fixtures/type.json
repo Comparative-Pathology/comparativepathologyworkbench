@@ -22,13 +22,5 @@
     "name": "WORDPRESS",
     "owner": 1
   }
-},
-{
-  "model": "matrices.type",
-  "pk": 4,
-  "fields": {
-    "name": "OMERO_5.6",
-    "owner": 1
-  }
 }
 ]

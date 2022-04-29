@@ -120,8 +120,8 @@ def new_matrix(request):
 
                     else:
 
-                        messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-                        form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+                        messages.error(request, "CPW_WEB:0370 New Bench  - WordPress Error, Contact System Administrator!")
+                        form.add_error(None, "CPW_WEB:0370 New Bench  - WordPress Error, Contact System Administrator!")
 
                         data.update({ 'form': form })
 
@@ -150,12 +150,15 @@ def new_matrix(request):
 
                     x = x + 1
 
+                matrix_id_formatted = "CPW:" + "{:06d}".format(matrix.id)
+                messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+
                 return HttpResponseRedirect(reverse('matrix', args=(matrix.id,)))
 
             else:
 
-                messages.error(request, "Matrix Form is Invalid!")
-                form.add_error(None, "Matrix Form is Invalid!")
+                messages.error(request, "CPW_WEB:0380 New Bench  - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0380 New Bench  - Form is Invalid!")
 
                 data.update({ 'form': form })
 

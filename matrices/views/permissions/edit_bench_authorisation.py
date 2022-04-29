@@ -81,14 +81,16 @@ def edit_bench_authorisation(request, bench_authorisation_id):
 
                 authorisation.save()
 
+            messages.success(request, 'Bench Authorisation ' + str(authorisation.id) + ' Updated!')
+
             return HttpResponseRedirect(next_page)
 
         else:
 
             text_flag = ''
 
-            messages.error(request, "Bench Authorisation Form is Invalid!")
-            form.add_error(None, "Bench Authorisation Form is Invalid!")
+            messages.error(request, "CPW_WEB:0520 Edit Bench Authorisation - Form is Invalid!")
+            form.add_error(None, "CPW_WEB:0520 Edit Bench Authorisation - Form is Invalid!")
 
             data.update({ 'text_flag': text_flag, 'form': form, 'authorisation': authorisation })
 

@@ -141,6 +141,10 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 			columns = matrix.get_columns()
 			rows = matrix.get_rows()
 
+			cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
+
+			messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
+
 			if path_from == AMEND_CELL:
 
 				collection_image_list = get_images_for_collection(matrix.last_used_collection)

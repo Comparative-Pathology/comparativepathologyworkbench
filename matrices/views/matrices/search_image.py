@@ -96,13 +96,13 @@ def search_image(request, path_from, identifier):
 
                 if url_string_omero_out != '' and url_string_ebi_sca_out != '':
 
-                    messages.error(request, "URL not found!")
-                    form.add_error(None, "URL not found!")
+                    messages.error(request, "CPW_WEB:0410 Search Image - URL not found!")
+                    form.add_error(None, "CPW_WEB:0410 Search Image - URL not found!")
 
                 if url_string_omero_out == '' and url_string_ebi_sca_out == '':
 
-                    messages.error(request, "URL not found!")
-                    form.add_error(None, "URL not found!")
+                    messages.error(request, "CPW_WEB:0420 Search Image - URL not found!")
+                    form.add_error(None, "CPW_WEB:0420 Search Image - URL not found!")
 
                 if url_string_omero_out != '' and url_string_ebi_sca_out == '':
 
@@ -131,13 +131,13 @@ def search_image(request, path_from, identifier):
 
                     else:
 
-                        messages.error(request, "Unable to generate Chart - shell_command : FAILED!")
-                        form.add_error(None, "Unable to generate Chart - shell_command : FAILED!")
+                        messages.error(request, "CPW_WEB:0430 Search Image - Unable to generate Chart, shell_command FAILED!")
+                        form.add_error(None, "CPW_WEB:0430 Search Image - Unable to generate Chart, shell_command FAILED!")
 
             else:
 
-                messages.error(request, "ERROR: Form is Invalid!")
-                form.add_error(None, "ERROR: Form is Invalid!")
+                messages.error(request, "CPW_WEB:0440 Search Image - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0440 Search Image - Form is Invalid!")
 
         else:
 

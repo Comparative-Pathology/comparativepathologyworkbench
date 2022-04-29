@@ -39,11 +39,14 @@
 # def edit_collection_authorisation(request, collection_authorisation_id):
 # def edit_collection_collection_authorisation(request, collection_id, collection_authorisation_id):
 # def delete_collection_authorisation(request, collection_authorisation_id):
+# def delete_collection_collection_authorisation(request, collection_id, collection_authorisation_id):
 #
 ###
 
 from .delete_bench_authorisation import delete_bench_authorisation
+from .delete_bench_bench_authorisation import delete_bench_bench_authorisation
 from .delete_collection_authorisation import delete_collection_authorisation
+from .delete_collection_collection_authorisation import delete_collection_collection_authorisation
 from .edit_bench_authorisation import edit_bench_authorisation
 from .edit_bench_bench_authorisation import edit_bench_bench_authorisation
 from .edit_collection_authorisation import edit_collection_authorisation

@@ -81,14 +81,16 @@ def new_collection_authorisation(request):
 
                 collection_authorisation.save()
 
+            messages.success(request, 'NEW Collection Authorisation ' + str(collection_authorisation.id) + ' Created!')
+
             return HttpResponseRedirect(next_page)
 
         else:
 
             text_flag = ''
 
-            messages.error(request, "Collection Authorisation Form is Invalid!")
-            form.add_error(None, "Collection Authorisation Form is Invalid!")
+            messages.error(request, "CPW_WEB:0580 New Collection Authorisation - Form is Invalid!")
+            form.add_error(None, "CPW_WEB:0580 New Collection Authorisation - Form is Invalid!")
 
             data.update({ 'text_flag': text_flag, 'form': form })
 

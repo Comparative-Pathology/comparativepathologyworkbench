@@ -29,11 +29,17 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
+from matrices.models import Collection
 from matrices.models import CollectionAuthorisation
+from matrices.models import Matrix
+
+from matrices.routines import exists_benches_for_last_used_collection
+from matrices.routines import get_benches_for_last_used_collection
 
 #
 # DELETE A COLLECTION AUTHORISATION
@@ -42,7 +48,22 @@ from matrices.models import CollectionAuthorisation
 def delete_collection_authorisation(request, collection_authorisation_id):
 
     collection_authorisation = get_object_or_404(CollectionAuthorisation, pk=collection_authorisation_id)
+    collection = get_object_or_404(Collection, pk=collection_authorisation.collection.id)
+
+    if exists_benches_for_last_used_collection(collection):
+
+        matrix_list = get_benches_for_last_used_collection(collection)
+
+        for matrix in matrix_list:
+
+            if matrix.owner == collection_authorisation.permitted:
+
+                matrix.set_no_last_used_collection()
+
+                matrix.save()
+
+    messages.success(request, 'Collection Authorisation ' + str(collection_authorisation.id) + ' Deleted!')
 
     collection_authorisation.delete()
 
-    return HttpResponseRedirect(reverse('list_collection_authorisation', args=()))
+    return HttpResponseRedirect(reverse('list_my_collection_authorisation', args=()))

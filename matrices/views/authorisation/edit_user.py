@@ -71,12 +71,14 @@ def edit_user(request, user_id):
 
                 user.save()
 
+                messages.success(request, 'User ' + user.username + ' Updated!')
+
                 return HttpResponseRedirect(reverse('authorisation', args=()))
 
             else:
 
-                messages.error(request, "Edit User Form is Invalid!")
-                form.add_error(None, "Edit User Form is Invalid!")
+                messages.error(request, "CPW_WEB:0020 Edit User - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0020 Edit User - Form is Invalid!")
 
                 data.update({ 'form': form })
 

@@ -29,6 +29,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -43,6 +44,8 @@ def delete_bench_authorisation(request, bench_authorisation_id):
 
     authorisation = get_object_or_404(Authorisation, pk=bench_authorisation_id)
 
+    messages.success(request, 'Bench Authorisation ' + str(authorisation.id) + ' Deleted!')
+
     authorisation.delete()
 
-    return HttpResponseRedirect(reverse('list_bench_authorisation', args=()))
+    return HttpResponseRedirect(reverse('list_my_bench_authorisation', args=()))

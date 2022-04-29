@@ -118,8 +118,8 @@ def update_cell(request, matrix_id, cell_id):
 
 					if url_string_omero_out != '' and url_string_ebi_sca_out != '':
 
-						messages.error(request, "URL not found!")
-						form.add_error(None, "URL not found!")
+						messages.error(request, "CPW_WEB:0450 Update Cell - URL not found!")
+						form.add_error(None, "CPW_WEB:0450 Update Cell - URL not found!")
 
 						data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -128,8 +128,8 @@ def update_cell(request, matrix_id, cell_id):
 
 					if url_string_omero_out == '' and url_string_ebi_sca_out == '':
 
-						messages.error(request, "URL not found!")
-						form.add_error(None, "URL not found!")
+						messages.error(request, "CPW_WEB:0460 Update Cell - URL not found!")
+						form.add_error(None, "CPW_WEB:0460 Update Cell - URL not found!")
 
 						data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -153,8 +153,8 @@ def update_cell(request, matrix_id, cell_id):
 
 						else:
 
-							messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
-							form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
+							messages.error(request, "CPW_WEB:0470 Update Cell - You have no Active Image Collection, Please create a Collection!")
+							form.add_error(None, "CPW_WEB:0470 Update Cell - You have no Active Image Collection, Please create a Collection!")
 
 							data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -192,8 +192,8 @@ def update_cell(request, matrix_id, cell_id):
 
 							else:
 
-								messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
-								form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
+								messages.error(request, "CPW_WEB:0480 Update Cell - You have no Active Image Collection, Please create a Collection!")
+								form.add_error(None, "CPW_WEB:0480 Update Cell - You have no Active Image Collection, Please create a Collection!")
 
 								data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -201,8 +201,9 @@ def update_cell(request, matrix_id, cell_id):
 
 						else:
 
-							messages.error(request, "Unable to generate Chart - shell_command : FAILED!")
-							form.add_error(None, "Unable to generate Chart - shell_command : FAILED!")
+							messages.error(request, "CPW_WEB:0490 Update Cell - Unable to generate Chart, shell_command FAILED!")
+							form.add_error(None, "CPW_WEB:0490 Update Cell - Unable to generate Chart, shell_command FAILED!")
+
 							data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
 							return render(request, 'matrices/update_cell.html', data)
@@ -231,8 +232,8 @@ def update_cell(request, matrix_id, cell_id):
 
 							else:
 
-								messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-								form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+								messages.error(request, "CPW_WEB:0500 Update Cell - WordPress Error, Contact System Administrator!")
+								form.add_error(None, "CPW_WEB:0500 Update Cell - WordPress Error, Contact System Administrator!")
 
 								data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 
@@ -247,8 +248,8 @@ def update_cell(request, matrix_id, cell_id):
 
 				else:
 
-					messages.error(request, "ERROR: Form is Invalid!")
-					form.add_error(None, "ERROR: Form is Invalid!")
+					messages.error(request, "CPW_WEB:0510 Update Cell - Form is Invalid!")
+					form.add_error(None, "CPW_WEB:0510 Update Cell - Form is Invalid!")
 
 					data.update({ 'form': form, 'matrix': matrix, 'cell': cell })
 

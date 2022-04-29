@@ -31,11 +31,14 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import CollectionAuthority
+
+from matrices.routines import exists_collection_authorisation_viewer
 
 #
 # DELETE A COLLECTION AUTHORITY
@@ -47,7 +50,15 @@ def delete_collection_authority(request, collection_authority_id):
 
         collection_authority = get_object_or_404(CollectionAuthority, pk=collection_authority_id)
 
-        collection_authority.delete()
+        if collection_authority.is_viewer() and exists_collection_authorisation_viewer():
+
+            messages.error(request, 'CPW_WEB:0730 Collection Authority ' + collection_authority.name + ' NOT Deleted - Collection Authorisations still exist!')
+
+        else:
+
+            messages.success(request, 'Collection Authority ' + collection_authority.name + ' Deleted!')
+
+            collection_authority.delete()
 
         return HttpResponseRedirect(reverse('maintenance', args=()))
 

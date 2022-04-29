@@ -32,6 +32,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -100,5 +101,7 @@ def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
         if path_from == AMEND_CELL:
 
             return redirect('amend_cell', matrix_id=matrix_id, cell_id=cell_id)
+
+        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
 
         return redirect('matrix', matrix_id=matrix_id)

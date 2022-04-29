@@ -77,7 +77,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         image_birdseye_url = chart['birdseye_url']
 
 
-    if server.is_omero547() or server.is_omero56():
+    if server.is_omero547():
 
         wp_data = server.get_imaging_server_image_json(image_id)
 
@@ -100,6 +100,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         image_viewer_url = json_image['viewer_url']
         image_birdseye_url = json_image['birdseye_url']
 
+
     if server.is_wordpress():
 
         wp_data = server.get_wordpress_image_json(credential, image_id)
@@ -108,6 +109,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         full_image_name = json_image['name']
         image_viewer_url = json_image['viewer_url']
         image_birdseye_url = json_image['thumbnail_url']
+
 
     if roi_id == 0:
 

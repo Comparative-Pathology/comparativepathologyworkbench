@@ -95,8 +95,8 @@ def show_ebi_sca_server(request, server_id):
 
                     if url_string_out == "":
 
-                        messages.error(request, "URL not found!")
-                        form.add_error(None, "URL not found!")
+                        messages.error(request, "CPW_WEB:0040 Show EBI SCA - URL not found!")
+                        form.add_error(None, "CPW_WEB:0040 Show EBI SCA - URL not found!")
 
                     else:
 
@@ -119,14 +119,14 @@ def show_ebi_sca_server(request, server_id):
 
                         else:
 
-                            messages.error(request, "Unable to generate Chart - shell_command : FAILED!")
-                            form.add_error(None, "Unable to generate Chart - shell_command : FAILED!")
+                            messages.error(request, "CPW_WEB:0050 Show EBI SCA - Unable to generate Chart, shell_command FAILED!")
+                            form.add_error(None, "CPW_WEB:0050 Show EBI SCA - Unable to generate Chart, shell_command FAILED!")
 
 
                 else:
 
-                    messages.error(request, "ERROR: Form is Invalid!")
-                    form.add_error(None, "ERROR: Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0060 Show EBI SCA - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0060 Show EBI SCA - Form is Invalid!")
 
             else:
 

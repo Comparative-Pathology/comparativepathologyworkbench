@@ -118,8 +118,8 @@ def edit_matrix(request, matrix_id):
 
                             else:
 
-                                messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-                                form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+                                messages.error(request, "CPW_WEB:0330 Edit Bench - WordPress Error, Contact System Administrator!")
+                                form.add_error(None, "CPW_WEB:0330 Edit Bench - WordPress Error, Contact System Administrator!")
 
                                 data.update({'form': form, 'matrix': matrix })
 
@@ -136,12 +136,16 @@ def edit_matrix(request, matrix_id):
 
                     data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
+                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix.id)
+
+                    messages.success(request, 'Bench ' + matrix_id_formatted + ' Updated!')
+
                     return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
                 else:
 
-                    messages.error(request, "Matrix Form is Invalid!")
-                    form.add_error(None, "Matrix Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0340 Edit Bench - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0340 Edit Bench - Form is Invalid!")
 
                     data.update({'form': form, 'matrix': matrix })
 

@@ -64,12 +64,14 @@ def new_collection_authority(request):
 
                 collection_authority.save()
 
+                messages.success(request, 'NEW Collection Authority ' + collection_authority.name + ' Created!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Collection Authority Form is Invalid!")
-                form.add_error(None, "Collection Authority Form is Invalid!")
+                messages.error(request, "CPW_WEB:0170 New Collection Authority - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0170 New Collection Authority - Form is Invalid!")
 
                 data.update({ 'form': form })
 

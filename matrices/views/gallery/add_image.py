@@ -72,11 +72,13 @@ def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
             image = add_image_to_collection(credential, server, image_id, roi_id)
 
+            messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+
         else:
 
-            messages.error(request, "You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0690 Add Image - You have no Active Image Collection; Please create a Collection!")
 
-        if server.is_omero547() or server.is_omero56():
+        if server.is_omero547():
 
             if path_from == "show_image":
 

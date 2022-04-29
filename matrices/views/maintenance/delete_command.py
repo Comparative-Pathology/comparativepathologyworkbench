@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -46,6 +47,8 @@ def delete_command(request, command_id):
     if request.user.is_superuser:
 
         command = get_object_or_404(Command, pk=command_id)
+
+        messages.success(request, 'API Command ' + command.name + ' Deleted!')
 
         command.delete()
 

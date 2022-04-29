@@ -67,12 +67,14 @@ def new_blog_credential(request):
 
                 credential.save()
 
+                messages.success(request, 'NEW Credential ' + str(credential.id) + ' Created!')
+
                 return HttpResponseRedirect(reverse('authorisation', args=()))
 
             else:
 
-                messages.error(request, "Credential Form is Invalid!")
-                form.add_error(None, "Credential Form is Invalid!")
+                messages.error(request, "CPW_WEB:0030 New Credential - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0030 New Credential - Form is Invalid!")
 
                 data.update({ 'form': form })
 

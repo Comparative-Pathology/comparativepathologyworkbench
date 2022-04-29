@@ -69,12 +69,14 @@ def edit_bench_authority(request, bench_authority_id):
 
                 authority.save()
 
+                messages.success(request, 'Bench Authority ' + authority.name + ' Updated!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Bench Authority Form is Invalid!")
-                form.add_error(None, "Bench Authority Form is Invalid!")
+                messages.error(request, "CPW_WEB:0090 Edit Bench Authority - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0090 Edit Bench Authority - Form is Invalid!")
 
                 data.update({ 'form': form, 'authority': authority })
 

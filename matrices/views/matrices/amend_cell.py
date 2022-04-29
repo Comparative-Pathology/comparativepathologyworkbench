@@ -151,8 +151,8 @@ def amend_cell(request, matrix_id, cell_id):
 
 					if url_string_omero_out != '' and url_string_ebi_sca_out != '':
 
-						messages.error(request, "URL not found!")
-						form.add_error(None, "URL not found!")
+						messages.error(request, "CPW_WEB:0210 Amend Cell - URL not found!")
+						form.add_error(None, "CPW_WEB:0210 Amend Cell - URL not found!")
 
 						data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
@@ -161,8 +161,8 @@ def amend_cell(request, matrix_id, cell_id):
 
 					if url_string_omero_out == '' and url_string_ebi_sca_out == '':
 
-						messages.error(request, "URL not found!")
-						form.add_error(None, "URL not found!")
+						messages.error(request, "CPW_WEB:0220 Amend Cell - URL not found!")
+						form.add_error(None, "CPW_WEB:0220 Amend Cell - URL not found!")
 
 						data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
@@ -186,8 +186,8 @@ def amend_cell(request, matrix_id, cell_id):
 
 						else:
 
-							messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
-							form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
+							messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+							form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
 
 							data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
@@ -225,8 +225,8 @@ def amend_cell(request, matrix_id, cell_id):
 
 							else:
 
-								messages.error(request, "ERROR: You have no Active Image Collection; Please create a Collection!")
-								form.add_error(None, "ERROR: You have no Active Image Collection; Please create a Collection!")
+								messages.error(request, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+								form.add_error(None, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
 
 								data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
@@ -234,8 +234,8 @@ def amend_cell(request, matrix_id, cell_id):
 
 						else:
 
-							messages.error(request, "Unable to generate Chart - shell_command : FAILED!")
-							form.add_error(None, "Unable to generate Chart - shell_command : FAILED!")
+							messages.error(request, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
+							form.add_error(None, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
 
 							data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
@@ -265,8 +265,8 @@ def amend_cell(request, matrix_id, cell_id):
 
 							else:
 
-								messages.error(request, "ERROR: WordPress Error - Contact System Administrator!")
-								form.add_error(None, "ERROR: WordPress Error - Contact System Administrator!")
+								messages.error(request, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
+								form.add_error(None, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
 
 								data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
@@ -280,10 +280,14 @@ def amend_cell(request, matrix_id, cell_id):
 
 					matrix.save()
 
+					cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
+
+					messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
+
 				else:
 
-					messages.error(request, "ERROR: Form is Invalid!")
-					form.add_error(None, "ERROR: Form is Invalid!")
+					messages.error(request, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
+					form.add_error(None, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
 
 					data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 

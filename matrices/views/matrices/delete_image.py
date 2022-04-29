@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -59,16 +60,20 @@ def delete_image(request, image_id):
 
         image = get_object_or_404(Image, pk=image_id)
 
-        list_collections = image.collections.all()
+        if exists_image_in_cells(image):
 
-        for collection in list_collections:
+            messages.error(request, 'CPW_WEB:0790 Image ' + str(image.id) + ' NOT deleted - Still referenced in Benches!')
 
-            Collection.unassign_image(image, collection)
+        else:
 
+            list_collections = image.collections.all()
 
-        if not exists_image_in_cells(image):
+            for collection in list_collections:
+
+                Collection.unassign_image(image, collection)
+
+            messages.success(request, 'Image ' + str(image.id) + ' DELETED from the Workbench!')
 
             image.delete()
 
-
-        return HttpResponseRedirect(reverse('list_collections', args=()))
+        return HttpResponseRedirect(reverse('view_all_collections', args=()))

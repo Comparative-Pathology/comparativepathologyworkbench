@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -38,6 +39,7 @@ from django.urls import reverse
 from matrices.models import Server
 
 from matrices.routines import get_header_data
+from matrices.routines import exists_image_for_server
 
 NO_CREDENTIALS = ''
 
@@ -59,7 +61,15 @@ def delete_server(request, server_id):
 
         if server.is_owned_by(request.user) or request.user.is_superuser:
 
-            server.delete()
+            if exists_image_for_server(server):
+
+                messages.error(request, 'CPW_WEB:0700 Server NOT Deleted - Outstanding Images Exist!')
+
+            else:
+
+                messages.success(request, 'Server ' + str(server.id) + ' Deleted!')
+
+                server.delete()
 
             return HttpResponseRedirect(reverse('list_imaging_hosts', args=()))
 

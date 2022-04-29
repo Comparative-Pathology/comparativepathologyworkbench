@@ -28,6 +28,7 @@
 # BENCH MANIPULATION ROUTINES
 #
 # def delete_image(request, image_id):
+# def delete_collection_image(request, collection_id, image_id):
 #
 # def detail_collection(request, collection_id):
 # def view_collection(request, collection_id):
@@ -84,6 +85,7 @@ from .choose_collection import choose_collection
 from .clear_cell import clear_cell
 from .delete_collection import delete_collection
 from .delete_image import delete_image
+from .delete_collection_image import delete_collection_image
 from .delete_last_column import delete_last_column
 from .delete_last_row import delete_last_row
 from .delete_matrix import delete_matrix

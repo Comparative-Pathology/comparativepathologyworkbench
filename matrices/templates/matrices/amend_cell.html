@@ -53,6 +53,7 @@ The amend cell template
 <!-- Page Body -->
 <div class="page-body">
 
+
 <!-- Page Side Bar -->
 <div class="page-sidebar" style="overflow-y: scroll;">
 
@@ -197,6 +198,35 @@ The amend cell template
 
 <!-- Page Content -->
 <div class="page-content">
+
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
 

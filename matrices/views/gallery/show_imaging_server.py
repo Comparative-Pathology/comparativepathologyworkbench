@@ -62,7 +62,7 @@ def show_imaging_server(request, server_id):
 
         server = get_object_or_404(Server, pk=server_id)
 
-        if server.is_omero547() or server.is_omero56():
+        if server.is_omero547():
 
             server_data = server.get_imaging_server_json()
 

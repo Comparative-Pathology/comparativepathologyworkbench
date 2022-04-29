@@ -177,6 +177,7 @@ urlpatterns = [
 
 #   views/matrices
 	path('delete_image/<int:image_id>/', matrices_views.matrices.delete_image, name='webgallery_delete_image'),
+	path('delete_collection_image/<int:collection_id>/<int:image_id>/', matrices_views.matrices.delete_collection_image, name='webgallery_delete_collection_image'),
 
 	path('detail_collection/<int:collection_id>/', matrices_views.matrices.detail_collection, name='detail_collection'),
 	path('view_collection/<int:collection_id>/', matrices_views.matrices.view_collection, name='view_collection'),
@@ -222,12 +223,14 @@ urlpatterns = [
 	path('edit_bench_authorisation/<int:bench_authorisation_id>/', matrices_views.permissions.edit_bench_authorisation, name='edit_bench_authorisation'),
 	path('edit_bench_bench_authorisation/<int:matrix_id>/<int:bench_authorisation_id>/', matrices_views.permissions.edit_bench_bench_authorisation, name='edit_bench_bench_authorisation'),
 	path('delete_bench_authorisation/<int:bench_authorisation_id>/', matrices_views.permissions.delete_bench_authorisation, name='delete_bench_authorisation'),
+	path('delete_bench_bench_authorisation/<int:matrix_id>/<int:bench_authorisation_id>/', matrices_views.permissions.delete_bench_bench_authorisation, name='delete_bench_bench_authorisation'),
 	path('detail_collection_authorisation/<int:collection_authorisation_id>/', matrices_views.permissions.view_collection_authorisation, name='detail_collection_authorisation'),
 	path('new_collection_authorisation/', matrices_views.permissions.new_collection_authorisation, name='new_collection_authorisation'),
 	path('new_collection_collection_authorisation/<int:collection_id>/', matrices_views.permissions.new_collection_collection_authorisation, name='new_collection_collection_authorisation'),
 	path('edit_collection_authorisation/<int:collection_authorisation_id>/', matrices_views.permissions.edit_collection_authorisation, name='edit_collection_authorisation'),
 	path('edit_collection_collection_authorisation/<int:collection_id>/<int:collection_authorisation_id>/', matrices_views.permissions.edit_collection_collection_authorisation, name='edit_collection_collection_authorisation'),
 	path('delete_collection_authorisation/<int:collection_authorisation_id>/', matrices_views.permissions.delete_collection_authorisation, name='delete_collection_authorisation'),
+	path('delete_collection_collection_authorisation/<int:collection_id>/<int:collection_authorisation_id>/', matrices_views.permissions.delete_collection_collection_authorisation, name='delete_collection_collection_authorisation'),
 
 #   views/user
 	path('signup/', matrices_views.user.signup, name='signup'),

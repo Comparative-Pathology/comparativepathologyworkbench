@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -46,6 +47,8 @@ def delete_blog_command(request, blog_id):
     if request.user.is_superuser:
 
         blog = get_object_or_404(Blog, pk=blog_id)
+
+        messages.success(request, 'Blog Command ' + blog.name + ' Deleted!')
 
         blog.delete()
 

@@ -56,6 +56,34 @@ The list imaging hosts (Servers) template
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
 	<h1>Search Sources</h1>
 
 	<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
@@ -137,7 +165,7 @@ The list imaging hosts (Servers) template
 
 				{% endif %}
 
-				{% if server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
+				{% if server.type.name == 'OMERO_5.4.7' %}
 
 				<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 
@@ -190,7 +218,7 @@ The list imaging hosts (Servers) template
 
 				{% endif %}
 
-				{% if server.type.name == 'OMERO_5.4.7' or server.type.name == 'OMERO_5.6' %}
+				{% if server.type.name == 'OMERO_5.4.7' %}
 
 				<a href="{% url 'webgallery_show_imaging_server' server.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 

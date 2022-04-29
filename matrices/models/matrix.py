@@ -88,7 +88,7 @@ class Matrix(models.Model):
         else:
             str_last_used_collection = "No Collection"
 
-        return f"{self.id}, {self.title}, {self.description}, {self.blogpost}, {self.owner.id}, {str_last_used_collection}"
+        return f"CPW:{self.id:06d}, {self.title}"
 
     def __repr__(self):
         str_last_used_collection = ""

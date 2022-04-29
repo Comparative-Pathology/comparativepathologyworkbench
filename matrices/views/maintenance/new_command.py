@@ -64,12 +64,14 @@ def new_command(request):
 
                 command.save()
 
+                messages.success(request, 'NEW API Command ' + command.name + ' Created!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Command Form is Invalid!")
-                form.add_error(None, "Command Form is Invalid!")
+                messages.error(request, "CPW_WEB:0180 New API Command - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0180 New API Command - Form is Invalid!")
 
                 data.update({ 'form': form })
 

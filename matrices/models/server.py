@@ -145,12 +145,6 @@ class Server(models.Model):
         else:
             return False
 
-    def is_omero56(self):
-        if self.type.name == 'OMERO_5.6':
-            return True
-        else:
-            return False
-
     def is_ebi_sca(self):
         if self.type.name == 'EBI_SCA':
             return True

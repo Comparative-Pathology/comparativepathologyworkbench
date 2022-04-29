@@ -57,6 +57,34 @@ The list collection authorisations template
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
 	<h1>Browse {{ text_flag }}</h1>
 
 	<p>Browse the list of {{ text_flag }}</p>
@@ -97,17 +125,18 @@ The list collection authorisations template
 		{% if collection_id == '' %}
 
 				<a href="{% url 'edit_collection_authorisation' collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_collection_authorisation' collection_authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 		{% else %}
 
 				<a href="{% url 'edit_collection_collection_authorisation' collection_id collection_authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_collection_collection_authorisation' collection_id collection_authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 		{% endif %}
 
-				<a href="{% url 'delete_collection_authorisation' collection_authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this COLLECTION AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 			</td>
 
-			<td>{{ collection_authorisation.collection.id }}</td>
+			<td>{{ collection_authorisation.collection.id|stringformat:"06d" }}</td>
 
 			<td>{{ collection_authorisation.collection.owner.username }}</td>
 

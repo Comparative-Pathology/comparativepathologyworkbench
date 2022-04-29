@@ -101,6 +101,8 @@ def delete_matrix(request, matrix_id):
 
                             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
+                            messages.error(request, "CPW_WEB:0800 Delete Bench - WordPress Error, Contact System Administrator!")
+
                             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
 
@@ -145,8 +147,12 @@ def delete_matrix(request, matrix_id):
 
                         data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
+                        messages.error(request, "CPW_WEB:0810 Delete Bench - WordPress Error, Contact System Administrator!")
+
                         return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
+            matrix_id_formatted = "CPW:" + "{:06d}".format(matrix.id)
+            messages.success(request, 'Bench ' + matrix_id_formatted + ' DELETED!')
 
             matrix.delete()
 

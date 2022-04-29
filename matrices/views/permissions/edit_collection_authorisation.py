@@ -84,14 +84,16 @@ def edit_collection_authorisation(request, collection_authorisation_id):
 
                 collection_authorisation.save()
 
+            messages.success(request, 'Collection Authorisation ' + str(collection_authorisation.id) + ' Updated!')
+
             return HttpResponseRedirect(next_page)
 
         else:
 
             text_flag = ''
 
-            messages.error(request, "Collection Authorisation Form is Invalid!")
-            form.add_error(None, "Collection Authorisation Form is Invalid!")
+            messages.error(request, "CPW_WEB:0540 Edit Collection Authorisation - Form is Invalid!")
+            form.add_error(None, "CPW_WEB:0540 Edit Collection Authorisation - Form is Invalid!")
 
             data.update({ 'text_flag': text_flag, 'form': form, 'collection_authorisation': collection_authorisation })
 

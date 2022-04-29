@@ -75,8 +75,8 @@ def edit_collection(request, collection_id):
 
                 if exists_title_for_collection_for_user(request.user, collection.title):
 
-                    messages.error(request, "Collection Title NOT Unique!")
-                    form.add_error(None, "Collection Title NOT Unique!")
+                    messages.error(request, "CPW_WEB:0310 Edit Collection - Title NOT Unique!")
+                    form.add_error(None, "CPW_WEB:0310 Edit Collection - Title NOT Unique!")
 
                     data.update({ 'form': form, 'collection': collection })
 
@@ -93,12 +93,14 @@ def edit_collection(request, collection_id):
 
                     collection.save()
 
+                    messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Updated!')
+
                     return HttpResponseRedirect(reverse('list_collections', args=()))
 
             else:
 
-                messages.error(request, "Collection Form is Invalid!")
-                form.add_error(None, "Collection Form is Invalid!")
+                messages.error(request, "CPW_WEB:0320 Edit Collection - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0320 Edit Collection - Form is Invalid!")
 
                 data.update({ 'form': form, 'collection': collection })
 

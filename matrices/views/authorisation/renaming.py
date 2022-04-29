@@ -63,7 +63,7 @@ def renaming(request):
 
             imageTotal = imageTotal + 1
 
-            if image.server.is_omero547() or image.server.is_omero56():
+            if image.server.is_omero547():
 
                 name_array = image.name.split("/")
 

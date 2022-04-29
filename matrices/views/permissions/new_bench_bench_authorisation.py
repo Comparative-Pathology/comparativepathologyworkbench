@@ -78,12 +78,14 @@ def new_bench_bench_authorisation(request, matrix_id):
 
                 authorisation.save()
 
+            messages.success(request, 'NEW Bench Authorisation ' + str(authorisation.id) + ' Created!')
+
             return HttpResponseRedirect(next_page)
 
         else:
 
-            messages.error(request, "Bench Authorisation Form is Invalid!")
-            form.add_error(None, "Bench Authorisation Form is Invalid!")
+            messages.error(request, "CPW_WEB:0570 Edit Bench Authorisation - Form is Invalid!")
+            form.add_error(None, "CPW_WEB:0570 Edit Bench Authorisation - Form is Invalid!")
 
             text_flag = " for Bench CPW:" + format(int(matrix_id), '06d')
 

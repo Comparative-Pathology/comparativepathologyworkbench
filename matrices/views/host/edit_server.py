@@ -85,12 +85,14 @@ def edit_server(request, server_id):
 
                     server.save()
 
+                    messages.success(request, 'Server ' + str(server.id) + ' Updated!')
+
                     return HttpResponseRedirect(reverse('list_imaging_hosts', args=()))
 
                 else:
 
-                    messages.error(request, "Server Form is Invalid!")
-                    form.add_error(None, "Server Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0070 Edit Server - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0070 Edit Server - Form is Invalid!")
 
                     data.update({ 'form': form, 'server': server })
 

@@ -69,12 +69,14 @@ def edit_command(request, command_id):
 
                 command.save()
 
+                messages.success(request, 'API Command ' + command.name + ' Updated!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Command Form is Invalid!")
-                form.add_error(None, "Command Form is Invalid!")
+                messages.error(request, "CPW_WEB:0120 Edit API Command - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0120 Edit API Command - Form is Invalid!")
 
                 data.update({ 'form': form, 'command': command })
 

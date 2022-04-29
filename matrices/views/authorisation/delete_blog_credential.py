@@ -35,6 +35,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 from matrices.models import Credential
 
@@ -47,6 +48,8 @@ def delete_blog_credential(request, credential_id):
     if request.user.is_superuser:
 
         credential = get_object_or_404(Credential, pk=credential_id)
+
+        messages.success(request, 'Credential ' + str(credential.id) + ' Deleted!')
 
         credential.delete()
 

@@ -33,6 +33,7 @@ from __future__ import unicode_literals
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
@@ -69,12 +70,14 @@ def edit_blog_credential(request, credential_id):
 
                 credential.save()
 
+                messages.success(request, 'Credential ' + str(credential.id) + ' Updated!')
+
                 return HttpResponseRedirect(reverse('authorisation', args=()))
 
             else:
 
-                messages.error(request, "Credential Form is Invalid!")
-                form.add_error(None, "Credential Form is Invalid!")
+                messages.error(request, "CPW_WEB:0010 Edit Blog Credential - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0010 Edit Blog Credential - Form is Invalid!")
 
                 data.update({ 'form': form, 'credential': credential })
 

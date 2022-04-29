@@ -37,7 +37,7 @@ The edit collection template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'list_collections' %}">List Collections</a></li>
-			<li><a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id }}</a></li>
+			<li><a href="{% url 'detail_collection' collection.id %}">Collection {{ collection.id|stringformat:"06d" }}</a></li>
 			<li>EDIT Collection</li>
 
 {% endblock %}
@@ -58,7 +58,7 @@ The edit collection template
 <!-- Page Content -->
 <div class="page-content">
 
-	<h1>EDIT Collection {{ collection.id }}</h1>
+	<h1>EDIT Collection {{ collection.id|stringformat:"06d" }}</h1>
 
 	<hr>
 

@@ -57,6 +57,34 @@ The list bench authorisation template
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
 	<h1>Browse {{ text_flag }}</h1>
 
 	<p>Browse the list of {{ text_flag }}</p>
@@ -96,14 +124,15 @@ The list bench authorisation template
 		{% if matrix_id == '' %}
 
 				<a href="{% url 'edit_bench_authorisation' authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_bench_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 		{% else %}
 
 				<a href="{% url 'edit_bench_bench_authorisation' matrix_id authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+				<a href="{% url 'delete_bench_bench_authorisation' matrix_id authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 
 		{% endif %}
 
-				<a href="{% url 'delete_bench_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 			</td>
 
 			<td>CPW:{{ authorisation.matrix.id|stringformat:"06d" }}</td>

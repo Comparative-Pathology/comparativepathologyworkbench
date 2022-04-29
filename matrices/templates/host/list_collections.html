@@ -56,6 +56,35 @@ The list collections template (with Search)
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+
 	<h1>Collections</h1>
 
 	<p>Search the list of Collections</p>
@@ -182,7 +211,7 @@ The list collections template (with Search)
 
 		{% endif %}
 
-		    <td>{{ collection_summary.collection_id }}</td>
+		    <td>{{ collection_summary.collection_id|stringformat:"06d" }}</td>
 			<td>{{ collection_summary.collection_title }}</td>
 			<td>{{ collection_summary.collection_active }}</td>
 		    <td>{{ collection_summary.collection_image_count }}</td>

@@ -63,6 +63,34 @@ The authorisation template
 <!-- Page Content -->
 <div class="page-content">
 
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
 	<div id="users" class="tabcontent">
 
 		<h2>Users</h2>
@@ -180,7 +208,7 @@ The authorisation template
 				<td>
 					<a href="{% url 'detail_blog_credential' credential.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 					<a href="{% url 'edit_blog_credential' credential.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog COMMAND?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+					<a href="{% url 'delete_blog_credential' credential.id %}" onclick="return confirm('Are you sure you want to DELETE this Blog CREDENTIAL?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 				</td>
 
 		{% else %}

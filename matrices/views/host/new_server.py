@@ -82,12 +82,14 @@ def new_server(request):
 
                     server.save()
 
+                    messages.success(request, 'NEW Server ' + str(server.id) + ' Created!')
+
                     return HttpResponseRedirect(reverse('list_imaging_hosts', args=()))
 
                 else:
 
-                    messages.error(request, "Server Form is Invalid!")
-                    form.add_error(None, "Server Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0080 New Server - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0080 New Server - Form is Invalid!")
 
                     data.update({ 'form': form,  })
 

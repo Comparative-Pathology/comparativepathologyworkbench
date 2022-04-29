@@ -64,12 +64,14 @@ def new_bench_authority(request):
 
                 authority.save()
 
+                messages.success(request, 'NEW Bench Authority ' + authority.name + ' Created!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Bench Authority Form is Invalid!")
-                form.add_error(None, "Bench Authority Form is Invalid!")
+                messages.error(request, "CPW_WEB:0150 New Bench Authority - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0150 New Bench Authority - Form is Invalid!")
 
                 data.update({ 'form': form })
 

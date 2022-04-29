@@ -69,12 +69,14 @@ def edit_collection_authority(request, collection_authority_id):
 
                 collection_authority.save()
 
+                messages.success(request, 'Collection Authority ' + collection_authority.name + ' Updated!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Collection Authority Form is Invalid!")
-                form.add_error(None, "Collection Authority Form is Invalid!")
+                messages.error(request, "CPW_WEB:0110 Edit Collection Authority - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0110 Edit Collection Authority - Form is Invalid!")
 
                 data.update({ 'form': form, 'collection_authority': collection_authority })
 

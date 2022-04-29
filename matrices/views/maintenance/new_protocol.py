@@ -64,12 +64,14 @@ def new_protocol(request):
 
                 protocol.save()
 
+                messages.success(request, 'NEW Protocol ' + protocol.name + ' Created!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Protocol Form is Invalid!")
-                form.add_error(None, "Protocol Form is Invalid!")
+                messages.error(request, "CPW_WEB:0190 New Protocol - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0190 New Protocol - Form is Invalid!")
 
                 data.update({ 'form': form })
 

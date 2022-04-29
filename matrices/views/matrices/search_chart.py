@@ -86,8 +86,8 @@ def search_chart(request):
 
                 if url_string_out == "":
 
-                    messages.error(request, "URL not found!")
-                    form.add_error(None, "URL not found!")
+                    messages.error(request, "CPW_WEB:0390 Search Chart - URL not found!")
+                    form.add_error(None, "CPW_WEB:0390 Search Chart - URL not found!")
 
                 else:
 
@@ -105,8 +105,8 @@ def search_chart(request):
                     success = call(str(shell_command), shell=True)
 
                     if success != 0:
-                        print("shell_command : FAILED!")
-                        print("shell_command : " + str(shell_command))
+                        messages.error(request, "CPW_WEB:0850 Search Chart - shell_command : " + str(shell_command) + " : FAILED!")
+                        form.add_error(None, "CPW_WEB:0850 Search Chart - shell_command : " + str(shell_command) + " : FAILED!")
 
                     chart_url = highcharts_web + chart_id
 
@@ -114,8 +114,8 @@ def search_chart(request):
 
             else:
 
-                messages.error(request, "ERROR: Form is Invalid!")
-                form.add_error(None, "ERROR: Form is Invalid!")
+                messages.error(request, "CPW_WEB:0400 Search Chart - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0400 Search Chart - Form is Invalid!")
 
         else:
 

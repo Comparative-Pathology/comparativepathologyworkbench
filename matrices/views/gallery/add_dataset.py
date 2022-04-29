@@ -68,12 +68,24 @@ def add_dataset(request, server_id, dataset_id):
 
             image_ids = request.POST.getlist('checks[]')
 
+            imageCounter = 0
+
             for image_id in image_ids:
 
                 image = add_image_to_collection(request.user, server, image_id, 0)
 
+                imageCounter = imageCounter + 1
+
+            if imageCounter > 1:
+
+                messages.success(request, str(imageCounter) + ' Images ADDED to Active Collection!')
+
+            else:
+
+                messages.success(request, str(imageCounter) + ' Image ADDED to Active Collection!')
+
         else:
 
-            messages.error(request, "You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0670 Add Dataset - You have no Active Image Collection; Please create a Collection!")
 
         return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, dataset_id)))

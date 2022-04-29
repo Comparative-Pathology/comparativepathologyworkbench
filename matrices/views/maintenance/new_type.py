@@ -64,12 +64,14 @@ def new_type(request):
 
                 type.save()
 
+                messages.success(request, 'NEW Server Type ' + type.name + ' Created!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Type Form is Invalid!")
-                form.add_error(None, "Type Form is Invalid!")
+                messages.error(request, "CPW_WEB:0200 New Server Type - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0200 New Server Type - Form is Invalid!")
 
                 data.update({ 'form': form })
 

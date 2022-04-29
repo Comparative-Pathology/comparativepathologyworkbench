@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -101,6 +102,8 @@ def delete_collection(request, collection_id):
 
             set_first_active_collection_for_user(request.user)
 
+
+        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' DELETED!')
 
         collection.delete()
 

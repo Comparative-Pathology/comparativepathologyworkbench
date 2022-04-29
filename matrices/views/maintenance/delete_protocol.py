@@ -31,11 +31,15 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Protocol
+
+from matrices.routines import exists_command_for_protocol
+from matrices.routines import exists_blog_command_for_protocol
 
 #
 # DELETE A TRANSMISSION PROTOCOL
@@ -47,7 +51,21 @@ def delete_protocol(request, protocol_id):
 
         protocol = get_object_or_404(Protocol, pk=protocol_id)
 
-        protocol.delete()
+        if exists_command_for_protocol(protocol):
+
+            messages.error(request, 'CPW_WEB:0740 Protocol ' + protocol.name + ' NOT Deleted - API Commands still exist!')
+
+        else:
+
+            if exists_blog_command_for_protocol(protocol):
+
+                messages.error(request, 'CPW_WEB:0750 Protocol ' + protocol.name + ' NOT Deleted - Blog Commands still exist!')
+
+            else:
+
+                messages.success(request, 'Protocol ' + protocol.name + ' Deleted!')
+
+                protocol.delete()
 
         return HttpResponseRedirect(reverse('maintenance', args=()))
 

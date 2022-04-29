@@ -64,12 +64,14 @@ def new_blog_command(request):
 
                 blog.save()
 
+                messages.success(request, 'NEW Blog Command ' + blog.name + ' Created!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Blog Command Form is Invalid!")
-                form.add_error(None, "Blog Command Form is Invalid!")
+                messages.error(request, "CPW_WEB:0160 New Blog Command - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0160 New Blog Command - Form is Invalid!")
 
                 data.update({ 'form': form })
 

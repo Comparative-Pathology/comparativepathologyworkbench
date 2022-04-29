@@ -69,12 +69,14 @@ def edit_blog_command(request, blog_id):
 
                 blog.save()
 
+                messages.success(request, 'Blog Command ' + blog.name + ' Updated!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Blog Command Form is Invalid!")
-                form.add_error(None, "Blog Command Form is Invalid!")
+                messages.error(request, "CPW_WEB:0100 Edit Blog Command - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0100 Edit Blog Command - Form is Invalid!")
 
                 data.update({ 'form': form, 'blog': blog })
 

@@ -69,12 +69,14 @@ def edit_type(request, type_id):
 
                 type.save()
 
+                messages.success(request, 'Server Type ' + type.name + ' Updated!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Type Form is Invalid!")
-                form.add_error(None, "Type Form is Invalid!")
+                messages.error(request, "CPW_WEB:0140 Edit Server Type - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0140 Edit Server Type - Form is Invalid!")
 
                 data.update({ 'form': form, 'type': type })
 

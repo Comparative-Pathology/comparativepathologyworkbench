@@ -31,11 +31,15 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Authority
+
+from matrices.routines import exists_bench_authorisation_viewer
+from matrices.routines import exists_bench_authorisation_editor
 
 #
 # DELETE A BENCH AUTHORITY
@@ -47,7 +51,20 @@ def delete_bench_authority(request, bench_authority_id):
 
         authority = get_object_or_404(Authority, pk=bench_authority_id)
 
-        authority.delete()
+        if authority.is_viewer() and exists_bench_authorisation_viewer():
+
+            messages.error(request, 'CPW_WEB:0710 Bench Authority ' + authority.name + ' NOT Deleted - VIEWER Bench Authorisations still exist!')
+
+        else:
+
+            if authority.is_editor() and exists_bench_authorisation_editor():
+
+                messages.error(request, 'CPW_WEB:0720 Bench Authority ' + authority.name + ' NOT Deleted - EDITOR Bench Authorisations still exist!')
+
+            else:
+
+                messages.success(request, 'Bench Authority ' + authority.name + ' Deleted!')
+                authority.delete()
 
         return HttpResponseRedirect(reverse('maintenance', args=()))
 

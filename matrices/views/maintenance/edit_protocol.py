@@ -69,12 +69,14 @@ def edit_protocol(request, protocol_id):
 
                 protocol.save()
 
+                messages.success(request, 'Protocol ' + protocol.name + ' Updated!')
+
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "Protocol Form is Invalid!")
-                form.add_error(None, "Protocol Form is Invalid!")
+                messages.error(request, "CPW_WEB:0130 Edit Protocol - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0130 Edit Protocol - Form is Invalid!")
 
                 data.update({ 'form': form, 'protocol': protocol })
 

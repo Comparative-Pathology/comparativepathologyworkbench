@@ -31,11 +31,16 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Type
+
+from matrices.routines import exists_server_for_type
+from matrices.routines import exists_command_for_type
+from matrices.routines import exists_blog_command_for_type
 
 #
 # DELETE A TYPE OF SERVER
@@ -47,7 +52,21 @@ def delete_type(request, type_id):
 
         type = get_object_or_404(Type, pk=type_id)
 
-        type.delete()
+        if exists_server_for_type(type):
+
+            messages.error(request, 'CPW_WEB:0760 Server Type ' + type.name + ' NOT Deleted - Servers still exist!')
+
+        else:
+
+            if exists_command_for_type(type):
+
+                messages.error(request, 'CPW_WEB:0770 Server Type ' + type.name + ' NOT Deleted - API Commands still exist!')
+
+            else:
+
+                messages.success(request, 'Server Type ' + type.name + ' Deleted!')
+
+                type.delete()
 
         return HttpResponseRedirect(reverse('maintenance', args=()))
 

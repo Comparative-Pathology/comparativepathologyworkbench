@@ -77,7 +77,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 			if not request_user.is_superuser:
 
-				message = 'CPW_REST:0040 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
+				message = 'CPW_REST:0060 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
 				raise serializers.ValidationError(message)
 
 		server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
@@ -202,7 +202,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 				if not self.validate_wordpress_image_id(server, user, image_id):
 
-					message = 'CPW_REST:0260 ERROR! Image NOT Present on : ' + server_str + '!'
+					message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + server_str + '!'
 					raise serializers.ValidationError(message)
 			else:
 
@@ -214,22 +214,22 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 							if not self.validate_roi_id(server, user, image_id, roi_id):
 
-								message = 'CPW_REST:0200 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
+								message = 'CPW_REST:0240 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
 								raise serializers.ValidationError(message)
 					else:
 
-						message = 'CPW_REST:0170 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
+						message = 'CPW_REST:0200 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
 						raise serializers.ValidationError(message)
 				else:
 
-					message = 'CPW_REST:0270 ERROR! Server Type Unknown : ' + server_str + '!'
+					message = 'CPW_REST:0340 ERROR! Server Type Unknown : ' + server_str + '!'
 					raise serializers.ValidationError(message)
 
 			return server
 
 		else:
 
-			message = 'CPW_REST:0210 ERROR! Server Unknown : ' + server_str + '!'
+			message = 'CPW_REST:0260 ERROR! Server Unknown : ' + server_str + '!'
 			raise serializers.ValidationError(message)
 
 			return None

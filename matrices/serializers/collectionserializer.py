@@ -94,7 +94,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 		if validated_data.get('title', None) == None and validated_data.get('description', None) == None:
 
-			message = 'CPW_REST:0300 ERROR! NO data supplied for Collection Creation!'
+			message = 'CPW_REST:0380 ERROR! NO data supplied for Collection Creation!'
 			raise serializers.ValidationError(message)
 
 
@@ -135,7 +135,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 			if not request_user.is_superuser:
 
-				message = 'CPW_REST:0310 ERROR! Attempting to Add a new Collection for a different Owner: ' + str(collection_owner) + '!'
+				message = 'CPW_REST:0390 ERROR! Attempting to Add a new Collection for a different Owner: ' + str(collection_owner) + '!'
 				raise serializers.ValidationError(message)
 
 
@@ -272,7 +272,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 			if not request_user.is_superuser:
 
-				message = 'CPW_REST:0320 ERROR! Attempting to Update an existing Collection for a different Owner: ' + str(collection_owner) + '!'
+				message = 'CPW_REST:0400 ERROR! Attempting to Update an existing Collection for a different Owner: ' + str(collection_owner) + '!'
 				raise serializers.ValidationError(message)
 
 
@@ -315,12 +315,12 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 		"""
 		if len_title > CONST_255:
 
-			message = 'CPW_REST:0340 ERROR! Collection Title Length (' + str(len_title) + ') is greater than 255!'
+			message = 'CPW_REST:0410 ERROR! Collection Title Length (' + str(len_title) + ') is greater than 255!'
 			raise serializers.ValidationError(message)
 
 		if len_description > CONST_4095:
 
-			message = 'CPW_REST:0350 ERROR! Collection Description Length (' + str(len_title) + ') is greater than 4095!'
+			message = 'CPW_REST:0420 ERROR! Collection Description Length (' + str(len_title) + ') is greater than 4095!'
 			raise serializers.ValidationError(message)
 
 
@@ -511,7 +511,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 						if not request_user.is_superuser:
 
-							message = 'CPW_REST:0370 ERROR! Attempting to Add an Image to a Collection for a different Owner: ' + str(image_owner) + '!'
+							message = 'CPW_REST:0430 ERROR! Attempting to Add an Image to a Collection for a different Owner: ' + str(image_owner) + '!'
 							raise serializers.ValidationError(message)
 
 		return True
@@ -535,7 +535,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 				if not self.validate_wordpress_image_id(server, user, image_id):
 
-					message = 'CPW_REST:0380 ERROR! Image NOT Present on : ' + server_str + '!'
+					message = 'CPW_REST:0440 ERROR! Image NOT Present on : ' + server_str + '!'
 					raise serializers.ValidationError(message)
 
 			else:
@@ -548,22 +548,22 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 							if not self.validate_roi_id(server, user, image_id, roi_id):
 
-								message = 'CPW_REST:0390 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
+								message = 'CPW_REST:0450 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
 								raise serializers.ValidationError(message)
 					else:
 
-						message = 'CPW_REST:0400 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
+						message = 'CPW_REST:0460 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
 						raise serializers.ValidationError(message)
 				else:
 
-					message = 'CPW_REST:0410 ERROR! Server Type Unknown : ' + server_str + '!'
+					message = 'CPW_REST:0470 ERROR! Server Type Unknown : ' + server_str + '!'
 					raise serializers.ValidationError(message)
 
 			return server
 
 		else:
 
-			message = 'CPW_REST:0420 ERROR! Server Unknown : ' + server_str + '!'
+			message = 'CPW_REST:0480 ERROR! Server Unknown : ' + server_str + '!'
 			raise serializers.ValidationError(message)
 
 			return None

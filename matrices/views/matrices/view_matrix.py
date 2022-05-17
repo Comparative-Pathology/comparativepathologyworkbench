@@ -91,6 +91,11 @@ def view_matrix(request, matrix_id):
 
                 collection_image_list = get_images_for_collection(matrix.last_used_collection)
 
+            else:
+
+                collection_image_list = get_active_collection_images_for_user(request.user)
+
+
             matrix_cells = matrix.get_matrix()
 
             matrix_comments = matrix.get_matrix_comments()

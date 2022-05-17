@@ -27,11 +27,9 @@
 # All the URL Paths used by the CPW.
 ###
 
-from django.conf.urls import url, include
-
 from django.contrib.auth import views as auth_views
 
-from django.urls import path
+from django.urls import path, include
 
 from matrices import views as matrices_views
 

@@ -36,12 +36,10 @@ from decouple import config, Csv
 
 import dj_database_url
 
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -53,7 +51,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -72,6 +69,9 @@ INSTALLED_APPS = [
 
     'matrices.apps.MatricesConfig',
     'rest_framework.authtoken',
+
+    'frontend_forms',
+    'fontawesomefree',
 
 ]
 
@@ -117,7 +117,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+#
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
@@ -131,7 +131,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
+#
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -147,23 +147,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
-
+#
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+#
 # These lines ensure all static files - CSS, images etc - come from a SINGLE base level
 #  folder in the application
-
+#
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -172,9 +170,9 @@ STATICFILES_DIRS = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
+#
 # Other stuff for the CPW
-
+#
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
@@ -199,7 +197,6 @@ NOT_EMAIL_HOST_PASSWORD = config('NOT_EMAIL_HOST_PASSWORD')
 EMAIL_FILE_PATH = config('EMAIL_FILE_PATH')
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 
-
 LOCATION = config('LOCATION')
 
 SETTINGS_EXPORT = [
@@ -207,7 +204,9 @@ SETTINGS_EXPORT = [
     'DEBUG',
 ]
 
+#
 # Django REST Framework
+#
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_PAGINATION_CLASS':
@@ -221,13 +220,15 @@ REST_FRAMEWORK = {
     ],
 }
 
+#
+# Cookies
+#
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', cast=int)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = config('SESSION_EXPIRE_AT_BROWSER_CLOSE', cast=bool)
 
-
+#
 # CKEditor settings
 #
-
 import ckeditor.configs
 
 CKEDITOR_CONFIGS = {
@@ -238,10 +239,9 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-
+#
 # Django Inlineedit settings
 #
-
 # This setting controls default editing access within Django-inlineedit
 # In this case we are enabling editing to anyone using the example
 INLINEEDIT_EDIT_ACCESS = lambda user, model, field: True
@@ -251,17 +251,24 @@ INLINEEDIT_ADAPTORS = {
     "blocked": "matrices.adaptors.BlockedAdaptor",
 }
 
+#
 # HighCharts Settings
 #
-
 HIGHCHARTS_TEMP_DIR = config('HIGHCHARTS_TEMP_DIR')
 HIGHCHARTS_OUTPUT_DIR = config('HIGHCHARTS_OUTPUT_DIR')
 HIGHCHARTS_HOST = config('HIGHCHARTS_HOST')
 HIGHCHARTS_OUTPUT_WEB = config('HIGHCHARTS_OUTPUT_WEB')
 
+#
 # EBI SCA Settings
 #
-
 EBI_SCA_EXPERIMENTS_URL = config('EBI_SCA_EXPERIMENTS_URL')
 
+#
+# Front End Forms Settings
+#
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+FRONTEND_FORMS_FORM_LAYOUT_FLAVOR  = "bs4"
+FRONTEND_FORMS_FORM_LAYOUT_DEFAULT = "vertical"
+FRONTEND_FORMS_MODEL_FORMS_MODULES = ['frontend.forms', ]

@@ -108,18 +108,6 @@ class MatrixTest(TestCase):
         self.assertEqual(ordinary_matrix.has_blogpost(),True)
         self.assertEqual(ordinary_matrix_no_blogpost.has_blogpost(),False)
 
-        self.assertEqual(ordinary_matrix_too_small.is_too_wide(),False)
-        self.assertEqual(ordinary_matrix_too_big.is_too_wide(),True)
-
-        self.assertEqual(ordinary_matrix_too_small.is_too_high(),False)
-        self.assertEqual(ordinary_matrix_too_big.is_too_high(),True)
-
-        self.assertEqual(ordinary_matrix_too_small.is_not_wide_enough(),True)
-        self.assertEqual(ordinary_matrix_too_big.is_not_wide_enough(),False)
-
-        self.assertEqual(ordinary_matrix_too_small.is_not_high_enough(),True)
-        self.assertEqual(ordinary_matrix_too_big.is_not_high_enough(),False)
-
         self.assertEqual(ordinary_matrix.is_owned_by(self.matrix_owner),True)
         self.assertEqual(ordinary_matrix.is_owned_by(self.matrix_not_owner),False)
 
@@ -138,18 +126,6 @@ class MatrixTest(TestCase):
 
         self.assertEqual(ordinary_matrix.has_no_blogpost(),False)
 
-        ordinary_matrix.set_minimum_width()
-        self.assertEqual(ordinary_matrix.width, 75)
-
-        ordinary_matrix.set_minimum_height()
-        self.assertEqual(ordinary_matrix.height, 75)
-
-        ordinary_matrix.set_maximum_width()
-        self.assertEqual(ordinary_matrix.width, 450)
-
-        ordinary_matrix.set_maximum_height()
-        self.assertEqual(ordinary_matrix.height, 450)
-
 
         x_coordinate_1 = {'xcoordinate': 0}
         x_coordinate_2 = {'xcoordinate': 1}
@@ -166,130 +142,7 @@ class MatrixTest(TestCase):
 
         self.assertEqual(self.matrix_C.get_matrix(), [[self.cell_1_1_C, self.cell_2_1_C], [self.cell_1_2_C, self.cell_2_2_C]])
 
-        comment1 = {'id': '22',
-            'date': '2019-02-20',
-            'time': '10:22:50',
-            'author': '1',
-            'author_name': 'admin',
-            'content': 'Yeah, but your scientists were so preoccupied with whether or not they could, they didn&#8217;t stop to think if they should. My dad once told me, laugh and the world laughs with you, Cry, and I&#8217;ll give you something to cry about you little bastard! Do you have any idea how long it takes those cups to decompose.',
-            'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/15#comment-22',
-            'status': 'Success!'
-        }
 
-        comment2 = {'id': '23',
-            'date': '2019-02-20',
-            'time': '10:23:08',
-            'author': '1',
-            'author_name': 'admin',
-            'content': 'Is this my espresso machine? Wh-what is-h-how did you get my espresso machine? This thing comes fully loaded. AM/FM radio, reclining bucket seats, and&#8230; power windows. Hey, you know how I&#8217;m, like, always trying to save the planet? Here&#8217;s my chance. So you two dig up, dig up dinosaurs?',
-            'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/15#comment-23',
-            'status': 'Success!'
-        }
-
-        commentA = {
-            'id': '1',
-            'date': '2018-12-03',
-            'time': '15:41:35',
-            'author': '0',
-            'author_name': 'fbloggs69',
-            'content': 'Hi, this is a comment.<br />\nTo get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.<br />\nCommenter avatars come from <a href="https://gravatar.com">Gravatar</a>.',
-            'url': 'https://workbench-czi-cpw.mvm.ed.ac.uk/wordpress/archives/1#comment-1',
-            'status': 'Success!'
-        }
-
-
-        matrix_comments = {'id': 5,
-            'title': 'matrix_title',
-            'description': 'matrix_description',
-            'blogpost': '15',
-            'comment_list': [comment1, comment2]}
-
-        cell_1_comments = {'id': 8,
-            'matrix_id': 97,
-            'matrix_title': 'matrix_title',
-            'title': 'cell_2_2',
-            'description': 'Row_2_Column_2',
-            'xcoordinate': 1,
-            'ycoordinate': 1,
-            'blogpost': '1',
-            'image_id': 1,
-            'viewer_url': 'image_viewer_url',
-            'birdseye_url': 'image_birdseye_url',
-            'image_name': 'image_name',
-            'comment_list': [commentA]
-        }
-
-        cell_2_comments = {'id': 7,
-            'matrix_id': 97,
-            'matrix_title': 'matrix_title',
-            'title': 'cell_2_1',
-            'description': 'Row_2_Column_1',
-            'xcoordinate': 1,
-            'ycoordinate': 0,
-            'blogpost': '1',
-            'image_id': 1,
-            'viewer_url': 'image_viewer_url',
-            'birdseye_url': 'image_birdseye_url',
-            'image_name': 'image_name',
-            'comment_list': [commentA]
-        }
-
-        cell_3_comments = {'id': 6,
-            'matrix_id': 97,
-            'matrix_title': 'matrix_title',
-            'title': 'cell_1_2',
-            'description': 'Row_1_Column_2',
-            'xcoordinate': 0,
-            'ycoordinate': 1,
-            'blogpost': '1',
-            'image_id': 1,
-            'viewer_url': 'image_viewer_url',
-            'birdseye_url': 'image_birdseye_url',
-            'image_name': 'image_name',
-            'comment_list': [commentA]
-        }
-
-        cell_4_comments = {'id': 5,
-            'matrix_id': 97,
-            'matrix_title': 'matrix_title',
-            'title': 'cell_1_1',
-            'description': 'Row_1_Column_1',
-            'xcoordinate': 0,
-            'ycoordinate': 0,
-            'blogpost': '1',
-            'image_id': 1,
-            'viewer_url': 'image_viewer_url',
-            'birdseye_url': 'image_birdseye_url',
-            'image_name': 'image_name',
-            'comment_list': [commentA]
-        }
-
-        ordinary_matrix.set_blogpost("15")
-
-        matrix_comments = ordinary_matrix.get_matrix_comments()
-
-        comment_list = matrix_comments['comment_list']
-
-        self.assertEqual(comment_list, [comment1, comment2])
-
-        for comment in comment_list:
-
-            self.assertEqual(comment['status'], 'Success!')
-
-        self.cell_1_1_C.set_blogpost("15")
-        self.cell_1_2_C.set_blogpost("15")
-        self.cell_2_1_C.set_blogpost("15")
-        self.cell_2_2_C.set_blogpost("15")
-
-        matrix_cell_comments = self.matrix_C.get_matrix_cell_comments()
-
-        #print("matrix_cell_comments : ", matrix_cell_comments)
-
-        my_matrix_cell_comments = [cell_1_comments, cell_2_comments, cell_3_comments, cell_4_comments]
-
-        #print("my_matrix_cell_comments : ", my_matrix_cell_comments)
-
-        self.assertEqual(matrix_cell_comments, my_matrix_cell_comments)
 
 
     def tearDown(self):

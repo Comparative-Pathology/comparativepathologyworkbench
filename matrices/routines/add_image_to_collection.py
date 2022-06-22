@@ -33,9 +33,9 @@ from __future__ import unicode_literals
 import os
 import time
 
+from django.apps import apps
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.apps import apps
 
 from decouple import config
 

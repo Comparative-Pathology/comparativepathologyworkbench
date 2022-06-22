@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the view_cell view routine
+# This file contains the amend_cell view routine
 #
 ###
 from __future__ import unicode_literals

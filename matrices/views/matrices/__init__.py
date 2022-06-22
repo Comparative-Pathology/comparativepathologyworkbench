@@ -30,13 +30,9 @@
 # def delete_image(request, image_id):
 # def delete_collection_image(request, collection_id, image_id):
 #
-# def detail_collection(request, collection_id):
 # def view_collection(request, collection_id):
 # def view_active_collection(request):
 # def view_all_collections(request):
-# def new_collection(request):
-# def edit_collection(request, collection_id):
-# def delete_collection(request, collection_id):
 # def choose_collection(request, matrix_id, collection_id):
 # def activate_collection(request, collection_id):
 #
@@ -44,16 +40,10 @@
 # def view_cell_blog(request, matrix_id, cell_id):
 #
 # def view_matrix(request, matrix_id):
-# def detail_matrix(request, matrix_id):
-# def new_matrix(request):
-# def edit_matrix(request, matrix_id):
-# def delete_matrix(request, matrix_id):
 #
 # def add_cell(request, matrix_id):
 # def clear_cell(request, matrix_id, cell_id):
 # def edit_cell(request, matrix_id, cell_id):
-# def update_cell(request, matrix_id, cell_id):
-# def view_cell(request, matrix_id, cell_id):
 # def amend_cell(request, matrix_id, cell_id):
 #
 # def append_column(request, matrix_id):
@@ -73,7 +63,6 @@
 ###
 
 from .activate_collection import activate_collection
-from .add_cell import add_cell
 from .add_column_left import add_column_left
 from .add_column_right import add_column_right
 from .add_row_above import add_row_above
@@ -83,27 +72,16 @@ from .append_column import append_column
 from .append_row import append_row
 from .choose_collection import choose_collection
 from .clear_cell import clear_cell
-from .delete_collection import delete_collection
 from .delete_image import delete_image
 from .delete_collection_image import delete_collection_image
 from .delete_last_column import delete_last_column
 from .delete_last_row import delete_last_row
-from .delete_matrix import delete_matrix
 from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
-from .detail_collection import detail_collection
-from .detail_matrix import detail_matrix
-from .edit_cell import edit_cell
-from .edit_collection import edit_collection
-from .edit_matrix import edit_matrix
-from .new_collection import new_collection
-from .new_matrix import new_matrix
 from .search_chart import search_chart
 from .search_image import search_image
-from .update_cell import update_cell
 from .view_active_collection import view_active_collection
 from .view_all_collections import view_all_collections
-from .view_cell import view_cell
 from .view_cell_blog import view_cell_blog
 from .view_collection import view_collection
 from .view_matrix import view_matrix

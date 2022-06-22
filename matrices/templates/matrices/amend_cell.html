@@ -431,6 +431,8 @@ The amend cell template
 </div><!-- End of page-body -->
 
 
+{% block extrajs %}
+
 <script type="text/javascript">
 
 function confirmation(question, source_type) {
@@ -562,6 +564,8 @@ function drop(ev){
 }
 
 </script>
+
+{% endblock extrajs %}
 
 {% inlineedit_script %}
 

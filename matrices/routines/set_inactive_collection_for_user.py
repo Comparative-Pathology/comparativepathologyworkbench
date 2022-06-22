@@ -32,9 +32,7 @@ import base64, hashlib
 
 from os import urandom
 
-
-from . import get_active_collection_for_user
-
+from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 
 """
     Set the Active Collection(s) for a particular User to Inactive

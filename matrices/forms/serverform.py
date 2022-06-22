@@ -31,6 +31,7 @@ from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.utils.html import conditional_escape
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -39,6 +40,9 @@ from matrices.models import Type
 from matrices.models import Server
 
 
+#
+# SERVER FORM
+#
 class ServerForm(forms.ModelForm):
 
     class Meta:
@@ -48,3 +52,19 @@ class ServerForm(forms.ModelForm):
             'pwd': forms.PasswordInput(),
         }
         type = forms.ModelChoiceField(queryset=Type.objects.all())
+
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        name = cleaned_data.get("name")
+        url_server = cleaned_data.get("url_server")
+
+        if not name:
+            msg = "Please Supply a Name!"
+            raise ValidationError(msg)
+
+        if not url_server:
+            msg = "Please Supply a URL!"
+            raise ValidationError(msg)

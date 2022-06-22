@@ -54,9 +54,6 @@ from matrices.routines import get_a_post_comments_from_wordpress
 
 WORDPRESS_SUCCESS = 'Success!'
 
-MINIMUM = 75
-MAXIMUM = 450
-
 
 """
     MATRIX (BENCH)
@@ -100,30 +97,6 @@ class Matrix(models.Model):
 
         return f"{self.id}, {self.title}, {self.description}, {self.blogpost}, {self.created}, {self.modified}, {self.height}, {self.width}, {self.owner.id}, {str_last_used_collection}"
 
-    def is_too_wide(self):
-        if self.width > 450:
-            return True
-        else:
-            return False
-
-    def is_too_high(self):
-        if self.height > 450:
-            return True
-        else:
-            return False
-
-    def is_not_wide_enough(self):
-        if self.width < 75:
-            return True
-        else:
-            return False
-
-    def is_not_high_enough(self):
-        if self.height < 75:
-            return True
-        else:
-            return False
-
     def is_owned_by(self, a_user):
         if self.owner == a_user:
             return True
@@ -147,19 +120,6 @@ class Matrix(models.Model):
             return False
         else:
             return True
-
-    def set_minimum_width(self):
-        self.width = MINIMUM
-
-    def set_minimum_height(self):
-        self.height = MINIMUM
-
-    def set_maximum_width(self):
-        self.width = MAXIMUM
-
-    def set_maximum_height(self):
-        self.height = MAXIMUM
-
 
     def set_last_used_collection(self, a_last_used_collection):
         self.last_used_collection = a_last_used_collection
@@ -289,74 +249,6 @@ class Matrix(models.Model):
         column_count = column_count - 1
 
         return column_count
-
-    """
-        Get Matrix Cell Comments
-    """
-    def get_matrix_cell_comments(self):
-
-        Cell = apps.get_model('matrices', 'Cell')
-
-        cells = Cell.objects.filter(matrix=self.id)
-
-        cell_comment_list = list()
-
-        for cell in cells:
-
-            comment_list = list()
-
-            error_flag = False
-
-            if cell.has_blogpost():
-
-                comment_list = get_a_post_comments_from_wordpress(cell.blogpost)
-
-                for comment in comment_list:
-
-                    if comment['status'] != WORDPRESS_SUCCESS:
-
-                        error_flag = True
-
-            else:
-
-                comment_list = []
-
-            if error_flag == True:
-
-                comment_list = []
-
-
-            viewer_url = ''
-            birdseye_url = ''
-            image_name = ''
-            image_id = ''
-
-            if cell.has_image():
-
-                viewer_url = cell.image.viewer_url
-                birdseye_url = cell.image.birdseye_url
-                image_name = cell.image.name
-                image_id = cell.image.id
-
-            cellComments = ({
-                    'id': cell.id,
-                    'matrix_id': cell.matrix.id,
-                    'matrix_title': cell.matrix.title,
-                    'title': cell.title,
-                    'description': cell.description,
-                    'xcoordinate': cell.xcoordinate,
-                    'ycoordinate': cell.ycoordinate,
-                    'blogpost': cell.blogpost,
-                    'image_id': image_id,
-                    'viewer_url': viewer_url,
-                    'birdseye_url': birdseye_url,
-                    'image_name': image_name,
-                    'comment_list': comment_list
-                    })
-
-            cell_comment_list.append(cellComments)
-
-        return cell_comment_list
 
 
     """

@@ -62,7 +62,7 @@ def get_header_data(a_user):
     if not a_user.is_anonymous:
 
         Server = apps.get_model('matrices', 'Server')
-        server_list = Server.objects.all()
+        server_list = Server.objects.all().order_by('id')
 
 
         if credential_exists(a_user) == True:

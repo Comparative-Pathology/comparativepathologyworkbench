@@ -98,12 +98,9 @@ def view_matrix(request, matrix_id):
 
             matrix_cells = matrix.get_matrix()
 
-            matrix_comments = matrix.get_matrix_comments()
-            matrix_cells_comments = matrix.get_matrix_cell_comments()
-
             columns = matrix.get_columns()
             rows = matrix.get_rows()
 
-            data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'matrix_cells_comments': matrix_cells_comments, 'matrix_comments': matrix_comments })
+            data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return render(request, 'matrices/view_matrix.html', data)

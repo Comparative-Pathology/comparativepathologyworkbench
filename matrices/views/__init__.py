@@ -34,6 +34,5 @@ from .gallery import *
 from .host import *
 from .maintenance import *
 from .matrices import *
-from .permissions import *
 from .rest import *
 from .user import *

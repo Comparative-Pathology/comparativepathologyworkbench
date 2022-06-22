@@ -40,37 +40,24 @@
 #
 # def list_bench_authorisation(request):
 # def list_my_bench_authorisation(request):
-# def list_my_bench_bench_authorisation(request, matrix_id, user_id):
-# def list_bench_bench_authorisation(request, matrix_id):
 # def list_user_bench_bench_authorisation(request, user_id):
 #
 # def list_collection_authorisation(request):
 # def list_my_collection_authorisation(request):
-# def list_my_collection_collection_authorisation(request, collection_id, user_id):
-# def list_collection_collection_authorisation(request, collection_id):
-# def list_user_collection_collection_authorisation(request, user_id):
 #
 ###
 
 from .authorisation import authorisation
-from .delete_server import delete_server
-from .edit_server import edit_server
+from .maintenance import maintenance
+
 from .home import home
-from .list_bench_authorisation import list_bench_authorisation
-from .list_bench_bench_authorisation import list_bench_bench_authorisation
 from .list_collection import *
-from .list_collection_authorisation import list_collection_authorisation
-from .list_collection_collection_authorisation import list_collection_collection_authorisation
 from .list_image_cart import list_image_cart
 from .list_imaging_hosts import list_imaging_hosts
 from .list_matrix import *
+from .list_bench_authorisation import list_bench_authorisation
 from .list_my_bench_authorisation import list_my_bench_authorisation
-from .list_my_bench_bench_authorisation import list_my_bench_bench_authorisation
+from .list_collection_authorisation import list_collection_authorisation
 from .list_my_collection_authorisation import list_my_collection_authorisation
-from .list_my_collection_collection_authorisation import list_my_collection_collection_authorisation
-from .list_user_bench_bench_authorisation import list_user_bench_bench_authorisation
-from .list_user_collection_collection_authorisation import list_user_collection_collection_authorisation
-from .maintenance import maintenance
-from .new_server import new_server
-from .view_server import view_server
+
 from .execute_command import execute_command

@@ -41,14 +41,23 @@ from matrices.routines import get_header_data
 # LIST ALL PERMISSIONS FOR ALL COLLECTIONS
 #
 @login_required
-def list_collection_authorisation(request):
+def list_collection_authorisation(request, collection_id=None):
 
     data = get_header_data(request.user)
 
-    collection_authorisation_list = CollectionAuthorisation.objects.all()
+    if collection_id is None:
 
-    text_flag = ' ALL Collection Permissions, ALL Collections'
-    collection_id = ''
+        collection_authorisation_list = CollectionAuthorisation.objects.all()
+
+        text_flag = ' ALL Collection Permissions, ALL Collections'
+        collection_id = ''
+
+    else:
+
+	    collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__id=collection_id)
+
+	    text_flag = "Permissions for Collection:" + format(int(collection_id), '06d')
+
 
     data.update({ 'collection_id': collection_id, 'text_flag': text_flag, 'collection_authorisation_list': collection_authorisation_list })
 

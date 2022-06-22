@@ -56,13 +56,31 @@ The base header and footer include template
   <meta name="msapplication-TileImage" content="{% static 'ms-icon-144x144.png' %}" />
   <meta name="theme-color" content="#ffffff" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
+  <link rel='stylesheet' href="{% static 'my_frontend_forms.css' %}">
+
+<!-- block extrastyle -->
+{% block extrastyle %}
+
+{% endblock extrastyle %}
+<!-- END block extrastyle -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
+  <script src="{% static 'my_frontend_forms.js' %}"></script>
+
+  <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+
+  {% include 'frontend_forms/dialogs.html' %}
 
   {% if settings.LOCATION == 'CZI' %}
 
@@ -85,11 +103,12 @@ The base header and footer include template
 
   {% endif %}
 
+  <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
+
   <title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
 
 </head>
 
-<!-- <body onload="getStatus()"> -->
 <body>
 
   <div class="page-container">
@@ -98,37 +117,11 @@ The base header and footer include template
 
         <div class="grid-container-header">
 
-  		<div class="grid-item-header-logo">
+  		  <div class="grid-item-header-logo">
             <a href="https://www.ed.ac.uk/comparative-pathology">
               <img style="width: 125px;" alt="CCP" title="Centre for Comparative Pathology" src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/ccp-logo.png" >
             </a>
           </div><!-- End of grid-item-header-logo -->
-
-          <div id="id-grid-item-header-logo-under" class="grid-item-header-logo-under"  style="display:none;">
-            <span onclick="closeGridRow();" class="closebtn">
-
-  {% if settings.LOCATION == 'CZI' %}
-
-              <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
-
-  {% endif %}
-
-  {% if settings.LOCATION == 'CANADA' %}
-
-              <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;">
-
-  {% endif %}
-
-  {% if settings.LOCATION == 'COELIAC' %}
-
-              <button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;">
-
-  {% endif %}
-
-                <i class="fas fa-times-circle"></i>
-              </button>
-            </span>
-          </div><!-- End of grid-item-header-logo-under -->
 
           <div class="grid-item-header-title">
             <a href="{% url 'home' %}"><strong>Comparative Pathology Workbench</strong></a>
@@ -151,7 +144,7 @@ The base header and footer include template
                 <a href="{% url 'home' %}"><button class="button button-add"><i class="fa fa-home-alt"></i></button> Home</a>
                 <a href="{% url 'logout' %}"><button class="button button-delete"><i class="fa fa-sign-out-alt"></i></button> Logout</a>
 
-      {% if user.is_superuser %}
+    {% if user.is_superuser %}
 
                 <a href="{% url 'list_my_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Bench Permissions</a>
                 <a href="{% url 'list_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> All Bench Permissions</a>
@@ -163,12 +156,12 @@ The base header and footer include template
                 <a href="{% url 'admin:index' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> ADMIN</a>
                 <a href="{% url 'api-root' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> API</a>
 
-  	{% else %}
+    {% else %}
 
                 <a href="{% url 'list_my_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Bench Permissions</a>
                 <a href="{% url 'list_my_collection_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Collection Permissions</a>
 
-  	{% endif %}
+    {% endif %}
 
                 <a href="{% url 'password_change' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> Change Password</a>
                 <a href="{% url 'detail_user' user.id %}"><button class="button button-info"><i class="fa fa-info-circle"></i></button> My Account</a>
@@ -199,7 +192,7 @@ The base header and footer include template
               <button class="header-drop-button">Benches <i class="fa fa-caret-down"></i></button>
 
               <div class="header-dropdown-content">
-                <a href="{% url 'new_matrix' %}">No Benches are available! Create Bench</a>
+                <a class="dropdown-item" href="#">No Benches are available!</a>
               </div><!-- End of header-dropdown-content -->
 
   {% endif %}
@@ -219,7 +212,7 @@ The base header and footer include template
               <button class="header-drop-button">Collections <i class="fa fa-caret-down"></i></button>
 
               <div class="header-dropdown-content">
-                <a href="{% url 'new_collection' %}">No Collections are available! Create Collection</a>
+                <a class="dropdown-item" href="#">No Collections are available!</a>
               </div><!-- End of header-dropdown-content -->
 
   {% endif %}
@@ -263,7 +256,7 @@ The base header and footer include template
 
               <button class="header-drop-button">Sources <i class="fa fa-caret-down"></i></button>
               <div class="header-dropdown-content">
-                <a href="{% url 'new_server' %}">No Sources are available! Create Source</a>
+                <a class="dropdown-item" href="#">No Sources are available!</a>
               </div><!-- End of header-dropdown-content -->
 
   {% endif %}
@@ -322,26 +315,14 @@ The base header and footer include template
 
   {% endif %}
 
-  {% block breadcrumb %}
+{% block breadcrumb %}
 
 
-  {% endblock %}
+{% endblock %}
 
             </ul>
           </div><!-- End of grid-item-header-breadcrumb -->
-
-          <!-- <div id="id-grid-item-header-breadcrumb-under" class="grid-item-header-breadcrumb-under"> -->
-          <div id="id-grid-item-header-breadcrumb-under" class="grid-item-header-breadcrumb-under"  style="display:none;">
-
-  {% block details %}
-
-
-  {% endblock %}
-
-          </div><!-- End of grid-item-header-breadcrumb-under -->
-
         </div><!-- End of grid-container-header -->
-
     </div><!-- End of page-header -->
 
 <!-- <main role="main"> -->
@@ -353,154 +334,44 @@ The base header and footer include template
 
 <!-- </main> -->
 
-<div class="page-footer">
-
-<div class="grid-container-footer">
-
-<div class="grid-item-footer">
-</div><!-- End of grid-item-footer -->
-<div class="grid-item-footer">
-  <a href="https://helmsleytrust.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/helmsley.png" style="background-color: #FFFFFF;" width="170" /></a>
-</div><!-- End of grid-item-footer -->
-<div class="grid-item-footer">
-  <a href="https://www.humancellatlas.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HCA-logo-1500x500.jpeg" style="background-color: #FFFFFF;" width="170" /></a>
-</div><!-- End of grid-item-footer -->
-<div class="grid-item-footer">
-  <a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
-</div><!-- End of grid-item-footer -->
-<div class="grid-item-footer">
-  <a href="https://www.hw.ac.uk/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HW-Logo.jpg" style="background-color: #FFFFFF;" width="125" /></a>
-</div><!-- End of grid-item-footer -->
-<div class="grid-item-footer">
-  <a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
-</div><!-- End of grid-item-footer -->
-<div class="grid-item-footer">
-</div><!-- End of grid-item-footer -->
-
-</div><!-- End of grid-container-footer -->
-
-</div><!-- End of page-footer -->
-
+    <div class="page-footer">
+      <div class="grid-container-footer">
+        <div class="grid-item-footer">
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://helmsleytrust.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/helmsley.png" style="background-color: #FFFFFF;" width="170" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.humancellatlas.org/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HCA-logo-1500x500.jpeg" style="background-color: #FFFFFF;" width="170" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.ed.ac.uk/pathology"><img src="https://www.ed.ac.uk/sites/all/themes/uoe/assets/logo.png" style="background-color: #FFFFFF;" width="220" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.hw.ac.uk/"><img src="https://workbench-czi-cpw.mvm.ed.ac.uk/static/HW-Logo.jpg" style="background-color: #FFFFFF;" width="125" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+          <a href="https://www.chanzuckerberg.com/"><img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" style="background-color: #FFFFFF;" width="125" /></a>
+        </div><!-- End of grid-item-footer -->
+        <div class="grid-item-footer">
+        </div><!-- End of grid-item-footer -->
+      </div><!-- End of grid-container-footer -->
+    </div><!-- End of page-footer -->
   </div><!-- End of page-container -->
 
-<script>
+<!-- block modals -->
+{% block modals %}
 
-    function getCollapsed() {
+{% include 'frontend_forms/dialogs.html' %}
 
-        const state = localStorage.getItem('collapsed');
+{% endblock modals %}
+<!-- END block modals -->
 
-        if(state === 'collapsed'){
+<!-- block extrajs -->
+{% block extrajs %}
 
-            return true;
-        }
-
-        return false;
-
-    }
-
-    function getStatus(){
-
-        const searchSourceContainerDiv = document.getElementById('search-source-container');
-        const searchSourceLeftDiv = document.getElementById('search-source-left');
-        const searchSourceMiddleDiv = document.getElementById('search-source-middle');
-        const searchSourceRightDiv = document.getElementById('search-source-right');
-
-        const isCollapsed = getCollapsed();
-
-        if(isCollapsed){
-
-            searchSourceLeftDiv.style.display = "none";
-            searchSourceMiddleDiv.style.display = "none";
-            searchSourceRightDiv.style.display = "none";
-            searchSourceContainerDiv.style.display = "none";
-        }
-        else{
-
-            searchSourceContainerDiv.style.display = "grid";
-            searchSourceLeftDiv.style.display = "grid";
-            searchSourceMiddleDiv.style.display = "grid";
-            searchSourceRightDiv.style.display = "grid";
-        }
-
-    }
-
-    function toggleCollapse(){
-
-        const isCollapsed = getCollapsed();
-
-        if(isCollapsed){
-
-            localStorage.setItem('collapsed', 'un-collapsed');
-        }
-        else{
-
-            localStorage.setItem('collapsed', 'collapsed');
-        }
-
-        getStatus();
-    }
-
-    function openGridRow() {
-
-        var i, x;
-
-        x = document.getElementsByClassName("page-container");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].style.gridTemplateRows = "auto auto 123px";
-        }
-
-        var i, x;
-
-        x = document.getElementsByClassName("grid-item-header-breadcrumb-under");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-
-        var i, x;
-
-        x = document.getElementsByClassName("grid-item-header-logo-under");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-
-        document.getElementById("id-grid-item-header-logo-under").style.display = "block";
-        document.getElementById("id-grid-item-header-breadcrumb-under").style.display = "block";
-    }
-
-    function closeGridRow() {
-
-        var i, x;
-
-        x = document.getElementsByClassName("page-container");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].style.gridTemplateRows = "174px auto 123px";
-        }
-
-        var i, x;
-
-        x = document.getElementsByClassName("grid-item-header-breadcrumb-under");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "block";
-        }
-
-        var i, x;
-
-        x = document.getElementsByClassName("grid-item-header-logo-under");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "block";
-        }
-
-        document.getElementById("id-grid-item-header-logo-under").style.display = "none";
-        document.getElementById("id-grid-item-header-breadcrumb-under").style.display = "none";
-    }
-
-</script>
+{% endblock extrajs %}
+<!-- END hblock extrajs -->
 
 </body>
 

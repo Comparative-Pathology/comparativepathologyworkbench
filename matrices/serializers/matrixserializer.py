@@ -386,7 +386,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 		post_id = instance.blogpost
 
-		if instance.blogpost == '' or instance.blogpost == '0':
+		if instance.has_no_blogpost():
 
 			credential = get_credential_for_user(request.user)
 

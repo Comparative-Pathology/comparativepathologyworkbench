@@ -32,9 +32,8 @@ import base64, hashlib
 
 from os import urandom
 
-
-from . import exists_inactive_collection_for_user
-from . import get_active_collection_for_user
+from matrices.routines.exists_inactive_collection_for_user import exists_inactive_collection_for_user
+from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 
 
 """

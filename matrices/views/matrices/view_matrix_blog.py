@@ -80,28 +80,7 @@ def view_matrix_blog(request, matrix_id):
 
         if authority.is_viewer() == True or authority.is_editor() == True or authority.is_owner() == True or authority.is_admin() == True:
 
-            if matrix.blogpost == '':
-
-                credential = get_credential_for_user(request.user)
-
-                post_id = ''
-
-                if credential.has_apppwd():
-
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
-
-                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-                        post_id = returned_blogpost['id']
-
-                matrix.set_blogpost(post_id)
-
-                matrix.save()
-
-                blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
-
-
-            if matrix.blogpost != '':
+            if matrix.has_blogpost():
 
                 blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
 
@@ -124,6 +103,26 @@ def view_matrix_blog(request, matrix_id):
                     matrix.save()
 
                     blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
+
+            else:
+
+                credential = get_credential_for_user(request.user)
+
+                post_id = ''
+
+                if credential.has_apppwd():
+
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
+
+                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+                        post_id = returned_blogpost['id']
+
+                matrix.set_blogpost(post_id)
+
+                matrix.save()
+
+                blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
 
 
             comment_list = serverWordpress.get_wordpress_post_comments(matrix.blogpost)

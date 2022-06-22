@@ -93,90 +93,214 @@ The list bench authorisation template
 
 	<br />
 
-{% if authorisation_list %}
+	{% if authorisation_list %}
 
-	{% for authorisation in authorisation_list %}
+		{% for authorisation in authorisation_list %}
 
-		{% if forloop.first %}
+			{% if forloop.first %}
 
-	<table border="0">
-		<tr>
-			<th width="150px">Action</th>
-			<th width="200px">Bench</th>
-			<th width="200px">Owner</th>
-			<th width="200px">Permitted</th>
-			<th width="200px">Authority</th>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
+		<table border="0">
+			<tr>
+				<th width="150px">Action</th>
+				<th width="200px">Bench</th>
+				<th width="200px">Owner</th>
+				<th width="200px">Permitted</th>
+				<th width="200px">Authority</th>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
 
-		{% endif %}
+			{% endif %}
 
-		<tr>
-			<td>
-				<a href="{% url 'detail_bench_authorisation' authorisation.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+			<tr id="authorisation-{{authorisation.id}}" class="{% if request.GET.selected_record == authorisation.id|stringformat:'s' %}selected{% endif %}">
+				<td>
+					<div class="generic-dropdown">
+						<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
+						<div class="generic-dropdown-content">
+
+							<a data-value="{{ authorisation.id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+
+			{% if matrix_id == '' %}
+
+							<a href="{% url 'bench_authorisation_update' authorisation.id %}" onclick="open_bench_authorisation_edit_dialog(event, 'Updating Bench Authorisation {{ authorisation.id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+
+			{% else %}
+
+							<a href="{% url 'bench_authorisation_update' authorisation.id matrix_id %}" onclick="open_bench_authorisation_edit_dialog(event, 'Updating Bench Authorisation {{ authorisation.id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+
+			{% endif %}
+
+							<a href="{% url 'bench_authorisation_delete' authorisation.id %}" onclick="delete_bench_authorisation(event, 'Deleting {{ authorisation.id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+
+						</div><!-- End of generic-dropdown-content -->
+					</div><!-- End of generic-dropdown -->
+				</td>
+
+				<td>CPW:{{ authorisation.matrix.id|stringformat:"06d" }}</td>
+				<td>{{ authorisation.matrix.owner.username }}</td>
+				<td>{{ authorisation.permitted.username }}</td>
+				<td>{{ authorisation.authority.name }}</td>
+			</tr>
+
+			{% if forloop.last %}
+
+		</table>
+
+			{% endif %}
+
+		{% endfor %}
 
 		{% if matrix_id == '' %}
 
-				<a href="{% url 'edit_bench_authorisation' authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-				<a href="{% url 'delete_bench_authorisation' authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+		<p>
+	        <a href="{% url 'bench_authorisation_create' %}" class="btn button button-add" onclick="open_bench_authorisation_edit_dialog(event, 'Create a Bench Authorisation ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+	    </p>
 
 		{% else %}
 
-				<a href="{% url 'edit_bench_bench_authorisation' matrix_id authorisation.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
-				<a href="{% url 'delete_bench_bench_authorisation' matrix_id authorisation.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH AUTHORISATION?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+		<p>
+	        <a href="{% url 'bench_authorisation_create' matrix_id %}" class="btn button button-add" onclick="open_bench_authorisation_edit_dialog(event, 'Create a Bench Authorisation ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+	    </p>
 
 		{% endif %}
 
-			</td>
+	{% else %}
 
-			<td>CPW:{{ authorisation.matrix.id|stringformat:"06d" }}</td>
-			<td>{{ authorisation.matrix.owner.username }}</td>
-			<td>{{ authorisation.permitted.username }}</td>
-			<td>{{ authorisation.authority.name }}</td>
-		</tr>
+		<p>No Permissions are available.</p>
 
-		{% if forloop.last %}
+		{% if matrix_id == '' %}
 
-	</table>
+		<p>
+	        <a href="{% url 'bench_authorisation_create' %}" class="btn button button-add" onclick="open_bench_authorisation_edit_dialog(event, 'Create a Bench Authorisation ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+	    </p>
+
+		{% else %}
+
+		<p>
+	        <a href="{% url 'bench_authorisation_create' matrix_id %}" class="btn button button-add" onclick="open_bench_authorisation_edit_dialog(event, 'Create a Bench Authorisation ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+	    </p>
 
 		{% endif %}
 
-	{% endfor %}
-
-	{% if matrix_id == '' %}
-
-	<p><a href="{% url 'new_bench_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
-
-	{% else %}
-
-	<p><a href="{% url 'new_bench_bench_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
-
 	{% endif %}
-
-{% else %}
-
-	<p>No Permissions are available.</p>
-
-	{% if matrix_id == '' %}
-
-	<p><a href="{% url 'new_bench_authorisation' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
-
-	{% else %}
-
-	<p><a href="{% url 'new_bench_bench_authorisation' matrix_id%}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
-
-	{% endif %}
-
-{% endif %}
 
 </div><!-- End of page-content -->
 
 </div><!-- End of page-body -->
 
 {% endblock %}
+
+{% block extrajs %}
+
+<script language="javascript">
+
+	function open_bench_authorisation_edit_dialog(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  dialog_edit.options.url = url;
+	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  dialog_edit.open(event);
+	}
+
+	function delete_bench_authorisation(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  FrontendForms.confirmRemoteAction(
+	    url, {
+	      title: title,
+	      text: 'Are you sure?',
+	      confirmButtonClass: 'btn-danger',
+	      icon: 'question'
+	    },
+	    function (data) {
+
+	      // FrontendForms.reload_page(true);
+	      var row = $('tr#authorisation-' + data.object_id);
+	      row.remove();
+
+	      Swal.fire({
+	        text: 'Authorisation "' + data.object_id + '" has been deleted',
+	        icon: 'warning'
+	      })
+	    },
+	    data = true // set to any value to obtain POST
+	  );
+	}
+
+
+	$(document).ready(function () {
+
+	  dialog_edit = new Dialog({
+	    dialog_selector: '#dialog_generic',
+	    html: '<h1>Loading ...</h1>',
+	    width: '600px',
+	    min_height: '200px',
+	    button_save_initially_hidden: true,
+	    enable_trace: true,
+	    callback: function (event_name, dialog, params) {
+	      switch (event_name) {
+	        case "submitting":
+	          FrontendForms.overlay_show('.dialog-body');
+	          break;
+	        case "loaded":
+	          FrontendForms.overlay_hide('.dialog-body');
+	          break;
+	        case "submitted":
+	          var object_id = dialog.element.find('input[name=object_id]').val();
+	          // Reload page, with last selection enhanced
+	          var url = new URL(document.location.href);
+	          url.searchParams.set('selected_record', object_id);
+	          FrontendForms.gotourl(url, show_layer=true);
+	          break;
+	      }
+	    }
+	  });
+
+	});
+
+    function onLinkButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+    {% if authorisation_list %}
+    	{% for authorisation in authorisation_list %}
+            {% if forloop.first %}
+            var dialogs = [
+            {% endif %}
+            dialog{{ authorisation.id }},
+            {% if forloop.last %}
+                dialog{{ authorisation.id }}
+                ];
+                var target = "dialog" + n.toString();
+                eval(target).open(event);
+            {% endif %}
+        {% endfor %}
+	{% endif %}}
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkButtonClicked);
+
+    {% if authorisation_list %}
+		{% for authorisation in authorisation_list %}
+        dialog{{ authorisation.id }} = new Dialog({
+            url: "{% url 'bench_authorisation_read' authorisation.id %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Bench Authorisation {{ authorisation.id }} ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+        {% endfor %}
+	{% endif %}
+    });
+
+</script>
+
+{% endblock extrajs %}

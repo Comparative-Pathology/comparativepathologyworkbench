@@ -39,4 +39,7 @@ urlpatterns = [
     path('', include('matrices.urls')),
 
     path('admin/', admin.site.urls),
+
+    path('frontend_forms/', include('frontend_forms.urls', namespace='frontend_forms')),
+
 ]

@@ -79,7 +79,7 @@ def view_cell_blog(request, matrix_id, cell_id):
 
         if authority.is_viewer() == True or authority.is_editor() == True or authority.is_owner() == True or authority.is_admin() == True:
 
-            if cell.blogpost == '' and cell.image.id != 0:
+            if cell.has_no_blogpost() and cell.image.id != 0:
 
                 credential = get_credential_for_user(request.user)
 

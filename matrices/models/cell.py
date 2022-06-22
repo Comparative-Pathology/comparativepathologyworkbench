@@ -45,9 +45,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from random import randint
 from decouple import config
 
-
 from matrices.models import Matrix
 from matrices.models import Image
+
+from matrices.routines import get_a_post_comments_from_wordpress
+
+WORDPRESS_SUCCESS = 'Success!'
 
 
 """
@@ -170,3 +173,62 @@ class Cell(models.Model):
 
     def decrement_y(self):
         self.ycoordinate -= 1
+
+
+    """
+        Get Matrix Cell Comments
+    """
+    def get_cell_comments(self):
+
+        comment_list = list()
+
+        error_flag = False
+
+        if self.has_blogpost():
+
+            comment_list = get_a_post_comments_from_wordpress(self.blogpost)
+
+            for comment in comment_list:
+
+                if comment['status'] != WORDPRESS_SUCCESS:
+
+                    error_flag = True
+
+        else:
+
+            comment_list = []
+
+        if error_flag == True:
+
+            comment_list = []
+
+
+        viewer_url = ''
+        birdseye_url = ''
+        image_name = ''
+        image_id = ''
+
+        if self.has_image():
+
+            viewer_url = self.image.viewer_url
+            birdseye_url = self.image.birdseye_url
+            image_name = self.image.name
+            image_id = self.image.id
+
+        cellComments = ({
+                'id': self.id,
+                'matrix_id': self.matrix.id,
+                'matrix_title': self.matrix.title,
+                'title': self.title,
+                'description': self.description,
+                'xcoordinate': self.xcoordinate,
+                'ycoordinate': self.ycoordinate,
+                'blogpost': self.blogpost,
+                'image_id': image_id,
+                'viewer_url': viewer_url,
+                'birdseye_url': birdseye_url,
+                'image_name': image_name,
+                'comment_list': comment_list
+                })
+
+        return cellComments

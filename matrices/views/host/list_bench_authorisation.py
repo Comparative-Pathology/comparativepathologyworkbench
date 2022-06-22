@@ -41,14 +41,22 @@ from matrices.routines import get_header_data
 # LIST ALL PERMISSIONS FOR ALL BENCHES
 #
 @login_required
-def list_bench_authorisation(request):
+def list_bench_authorisation(request, matrix_id=None):
 
     data = get_header_data(request.user)
 
-    authorisation_list = Authorisation.objects.all()
+    if matrix_id is None:
 
-    text_flag = ' ALL Permissions, ALL Benches'
-    matrix_id = ''
+        authorisation_list = Authorisation.objects.all()
+
+        text_flag = ' ALL Permissions, ALL Benches'
+        matrix_id = ''
+
+    else:
+
+        authorisation_list = Authorisation.objects.filter(matrix__id=matrix_id)
+        text_flag = "Permissions for Bench CPW:" + format(int(matrix_id), '06d')
+
 
     data.update({ 'matrix_id': matrix_id, 'text_flag': text_flag, 'authorisation_list': authorisation_list })
 

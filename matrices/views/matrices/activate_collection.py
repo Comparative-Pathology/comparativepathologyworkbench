@@ -38,6 +38,7 @@ from django.urls import reverse
 
 from matrices.models import Collection
 
+from matrices.routines import collection_crud_consequences
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import set_inactive_collection_for_user
 
@@ -65,9 +66,7 @@ def activate_collection(request, collection_id):
 
             collection.set_active()
 
-            if exists_active_collection_for_user(request.user):
-
-                set_inactive_collection_for_user(request.user)
+            collection_crud_consequences(request.user, collection)
 
             messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
 

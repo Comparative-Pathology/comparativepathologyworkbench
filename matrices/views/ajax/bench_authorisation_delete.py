@@ -31,11 +31,16 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Authorisation
+
+from matrices.routines import credential_exists
+from matrices.routines import exists_update_for_bench_and_user
+
 
 #
 # DELETE A BENCH AUTHORISATION
@@ -43,7 +48,27 @@ from matrices.models import Authorisation
 @login_required()
 def bench_authorisation_delete(request, authorisation_id):
 
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
+
     authorisation = get_object_by_uuid_or_404(Authorisation, authorisation_id)
+    bench = get_object_by_uuid_or_404(Matrix, authorisation.matrix.id)
+
+    if not exists_update_for_bench_and_user(bench, request.user):
+
+        raise PermissionDenied
+
+
     authorisation_id = authorisation.id
 
     authorisation.delete()

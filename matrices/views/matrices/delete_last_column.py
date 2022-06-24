@@ -39,6 +39,7 @@ from django.urls import reverse
 from matrices.models import Matrix
 from matrices.models import Cell
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_cells_for_image
@@ -46,7 +47,6 @@ from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # DELETE THE LAST COLUMN IN THE BENCH
@@ -58,11 +58,7 @@ def delete_last_column(request, matrix_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
@@ -136,3 +132,7 @@ def delete_last_column(request, matrix_id):
             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

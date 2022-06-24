@@ -33,7 +33,9 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+
 
 #
 # LIST IMAGE BASKET
@@ -43,4 +45,10 @@ def list_image_cart(request):
 
     data = get_header_data(request.user)
 
-    return render(request, 'host/list_image_cart.html', data)
+    if credential_exists(request.user):
+
+        return render(request, 'host/list_image_cart.html', data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

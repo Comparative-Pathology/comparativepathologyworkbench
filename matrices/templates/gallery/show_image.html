@@ -159,13 +159,7 @@ The show image template
 	<br />
 	<br />
 
-	{% if image_flag == 'DISALLOW' %}
-
-	<div class="panel-alert">
-		<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
-	</div>
-
-	{% else %}
+	{% if image_flag %}
 
 	<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" title="Add Image to Image Collection" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
 
@@ -173,6 +167,12 @@ The show image template
 	<br />
 
 	<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+
+	{% else %}
+
+	<div class="panel-alert">
+		<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+	</div>
 
 	{% endif %}
 
@@ -217,15 +217,15 @@ The show image template
 	       	<td>&nbsp;</td>
 		    <td>
 
-			{% if image_flag == 'DISALLOW' %}
+			{% if image_flag %}
 
-	        	<div class="panel-alert">
-	        		<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
-	        	</div>
+				<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" title="Add ROI to Image Collection" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
 
 	        {% else %}
 
-				<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" title="Add ROI to Image Collection" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
+				<div class="panel-alert">
+					<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
+				</div>
 
 	        {% endif %}
 
@@ -235,17 +235,16 @@ The show image template
     		<td>&nbsp;</td>
 		    <td>
 
-		    {% if image_flag == 'DISALLOW' %}
+		    {% if image_flag %}
 
-	        	<div class="panel-alert">
-	            	<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
-	            </div>
+				<br />
+				<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	        {% else %}
 
-				<br />
-
-				<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+				<div class="panel-alert">
+					<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
+				</div>
 
 	        {% endif %}
 

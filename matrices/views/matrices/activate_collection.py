@@ -38,13 +38,12 @@ from django.urls import reverse
 
 from matrices.models import Collection
 
+from matrices.routines import credential_exists
 from matrices.routines import collection_crud_consequences
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import get_header_data
 from matrices.routines import set_inactive_collection_for_user
 
-from matrices.routines import get_header_data
-
-NO_CREDENTIALS = ''
 
 #
 # ACTIVATE AN IMAGE COLLECTION
@@ -54,11 +53,7 @@ def activate_collection(request, collection_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         collection = get_object_or_404(Collection, pk=collection_id)
 
@@ -72,4 +67,8 @@ def activate_collection(request, collection_id):
 
             collection.save()
 
-    return HttpResponseRedirect(reverse('list_collections', args=()))
+        return HttpResponseRedirect(reverse('list_collections', args=()))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

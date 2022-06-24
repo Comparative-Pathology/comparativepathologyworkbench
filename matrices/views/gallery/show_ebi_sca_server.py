@@ -47,6 +47,7 @@ from matrices.models import Server
 
 from matrices.forms import SearchUrlForm
 
+from matrices.routines import credential_exists
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import get_an_ebi_sca_experiment_id
 from matrices.routines import get_active_collection_for_user
@@ -56,7 +57,7 @@ from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import convert_url_ebi_sca_to_chart_id
 
 HTTP_POST = 'POST'
-NO_CREDENTIALS = ''
+
 
 #
 # SHOW A SEARCH BOX FOR AN EBI SERVER
@@ -69,11 +70,7 @@ def show_ebi_sca_server(request, server_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
@@ -139,3 +136,7 @@ def show_ebi_sca_server(request, server_id):
         else:
 
             return HttpResponseRedirect(reverse('home', args=()))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

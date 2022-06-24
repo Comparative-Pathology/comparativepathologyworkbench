@@ -33,6 +33,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
@@ -44,9 +45,10 @@ from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
-from matrices.routines import get_authority_for_bench_and_user_and_requester
+from matrices.routines import exists_update_for_bench_and_user
 
 WORDPRESS_SUCCESS = 'Success!'
+
 
 #
 # OVERWRITE A TARGET CELL AND LEAVE SOURCE IN PLACE - COPY
@@ -55,9 +57,19 @@ WORDPRESS_SUCCESS = 'Success!'
 #
 @login_required()
 def overwrite_cell_leave(request):
-    """
-    AJAX - Overwrite Cell
-    """
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     source = request.POST['source']
     target = request.POST['target']
@@ -75,15 +87,7 @@ def overwrite_cell_leave(request):
 
     if credential_exists(user):
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
-
-        if authority.is_viewer() or authority.is_none():
-
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
-
-            return JsonResponse(data)
-
-        else:
+        if exists_update_for_bench_and_user(matrix, request.user):
 
             if matrix.get_max_row() == target_cell.ycoordinate:
 
@@ -175,16 +179,18 @@ def overwrite_cell_leave(request):
 
                 source_cell.set_blogpost(post_id)
 
-
             source_cell.save()
             target_cell.save()
 
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            return JsonResponse(data)
 
+        else:
+
+            data = { 'failure': True, 'source': str(source), 'target': str(target) }
             return JsonResponse(data)
 
     else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
-
-            return JsonResponse(data)
+        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        return JsonResponse(data)

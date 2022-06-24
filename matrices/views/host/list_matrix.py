@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# The Matrix List View
+# The list_benches VIEW
 #
 ###
 from __future__ import unicode_literals
@@ -38,10 +38,14 @@ from sortable_listview import SortableListView
 from matrices.models import MatrixSummary
 from matrices.forms import MatrixSummarySearchForm
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import bench_list_by_user_and_direction
 
 
+#
+# The list_benches VIEW
+#
 class MatrixListView(LoginRequiredMixin, SortableListView):
 
     query_title = forms.CharField(max_length=25)
@@ -127,11 +131,17 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
         data = get_header_data(self.request.user)
 
-        data_dict = {'title': self.query_title, 'description': self.query_description, 'created_before': self.query_created_before, 'created_after': self.query_created_after, 'modified_before': self.query_modified_before, 'modified_after': self.query_modified_after, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by  }
+        credential_flag = False
+
+        if credential_exists(self.request.user):
+
+            credential_flag = True
+
+        data_dict = { 'title': self.query_title, 'description': self.query_description, 'created_before': self.query_created_before, 'created_after': self.query_created_after, 'modified_before': self.query_modified_before, 'modified_after': self.query_modified_after, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by  }
 
         form = MatrixSummarySearchForm(data_dict)
 
-        data.update({ 'form': form,  })
+        data.update({ 'form': form, 'credential_flag': credential_flag })
 
         context.update(data)
 

@@ -54,32 +54,20 @@ The home template
 
 <!-- Page Content -->
 <div class="page-content">
-
   <div class="home-grid-container">
-
-	  <div class="home-grid-item">
+    <div class="home-grid-item">
   	  <div class="card">
     	<div class="card-link">
 		  <br />
-
-  {% if settings.LOCATION == 'CZI' %}
-
+{% if settings.LOCATION == 'CZI' %}
   		  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
-
-  {% endif %}
-
-  {% if settings.LOCATION == 'CANADA' %}
-
+{% endif %}
+{% if settings.LOCATION == 'CANADA' %}
   		  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html">
-
-  {% endif %}
-
-  {% if settings.LOCATION == 'COELIAC' %}
-
+{% endif %}
+{% if settings.LOCATION == 'COELIAC' %}
   		  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html">
-
-  {% endif %}
-
+{% endif %}
       	  <span class="card-link-link"></span></a>
     	  <br />
           <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
@@ -94,9 +82,7 @@ The home template
   	  </div>
   	</div>
 
-{% if credential_flag == '' %}
-
-	{% if request.user.username == '' %}
+{% if request.user.username == '' %}
 
 	<div class="home-grid-item">
 	  <div class="card">
@@ -118,50 +104,6 @@ The home template
 	  </div>
 	</div>
 
-	{% else %}
-
-	<div class="home-grid-item">
-	  <div class="card">
-  		<div class="card-link">
-  		  <br />
-          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-		  <div class="card-container">
- 		    <h3>WARNING!</h3>
-		    <br />
-		    <br />
-		    <br />
-		    <div class="panel-alert">
-			  <strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
-		    </div>
-		  </div>
-		</div>
-	  </div>
-	</div>
-
-	<div class="home-grid-item">
-	  <div class="card">
-  		<div class="card-link">
-		  <br />
-		  <a href="{% url 'logout' %}">
-    	    <span class="card-link-link"></span>
-  		  </a>
-  		  <br />
-  		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-		  <div class="card-container">
-          <h3>Logout</h3>
-		    <br />
-		    <br />
-			<br />
-			<button class="button button-delete"><i class="fa fa-sign-out-alt fa-3x"></i></button>
-		  </div>
-		</div>
-	  </div>
-	</div>
-
-	{% endif %}
-
-	{% if request.user.username == '' %}
-
 	<div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -182,11 +124,11 @@ The home template
 	  </div>
 	</div>
 
-	{% endif %}
-
 {% else %}
 
-	{% if matrix_list %}
+    {% if credential_flag %}
+
+	   {% if matrix_list %}
 
 	<div class="home-grid-item">
 	  <div class="card">
@@ -208,7 +150,7 @@ The home template
 	  </div>
 	</div>
 
-	{% else %}
+        {% else %}
 
 	<div class="home-grid-item">
 	  <div class="card">
@@ -229,7 +171,29 @@ The home template
 	  </div>
 	</div>
 
-	{% endif %}
+        {% endif %}
+
+    {% else %}
+
+    <div class="home-grid-item">
+	  <div class="card">
+  		<div class="card-link">
+  		  <br />
+          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+		  <div class="card-container">
+ 		    <h3>WARNING!</h3>
+		    <br />
+		    <br />
+		    <br />
+		    <div class="panel-alert">
+			  <strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
+		    </div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+    {% endif %}
 
 	<div class="home-grid-item">
 	  <div class="card">
@@ -239,7 +203,7 @@ The home template
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
-		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+  		  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
 		  <div class="card-container">
           <h3>Logout</h3>
 		    <br />
@@ -281,25 +245,7 @@ The home template
 	  <div class="card">
   		<div class="card-link">
 		  <br />
-
-{% if settings.LOCATION == 'CZI' %}
-
           <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
-
-{% endif %}
-
-{% if settings.LOCATION == 'CANADA' %}
-
-          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
-
-{% endif %}
-
-{% if settings.LOCATION == 'COELIAC' %}
-
-          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
-
-{% endif %}
-
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
@@ -319,25 +265,7 @@ The home template
 	  <div class="card">
   		<div class="card-link">
 		  <br />
-
-{% if settings.LOCATION == 'CZI' %}
-
           <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team">
-
-{% endif %}
-
-{% if settings.LOCATION == 'CANADA' %}
-
-          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team">
-
-{% endif %}
-
-{% if settings.LOCATION == 'COELIAC' %}
-
-          <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team">
-
-{% endif %}
-
     	    <span class="card-link-link"></span>
   		  </a>
   		  <br />
@@ -358,6 +286,5 @@ The home template
 </div><!-- End of page-content -->
 
 </div><!-- End of page-body -->
-
 
 {% endblock %}

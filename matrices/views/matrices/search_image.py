@@ -47,6 +47,7 @@ from matrices.forms import SearchUrlForm
 
 from matrices.models import Collection
 
+from matrices.routines import credential_exists
 from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import convert_url_omero_to_cpw
@@ -58,7 +59,6 @@ from matrices.routines import get_images_for_collection
 from matrices.routines import get_server_from_ebi_sca_url
 
 HTTP_POST = 'POST'
-NO_CREDENTIALS = ''
 LIST_IMAGING_HOSTS = "list_imaging_hosts"
 VIEW_ACTIVE_COLLECTION = "view_active_collection"
 VIEW_ALL_COLLECTIONS = "view_all_collections"
@@ -73,11 +73,7 @@ def search_image(request, path_from, identifier):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         form = SearchUrlForm()
 
@@ -181,3 +177,7 @@ def search_image(request, path_from, identifier):
 
 
         return render(request, return_page, data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

@@ -42,7 +42,6 @@ from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import add_image_to_collection
 
-NO_CREDENTIALS = ''
 
 #
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
@@ -52,15 +51,7 @@ def add_dataset(request, server_id, dataset_id):
 
     data = get_header_data(request.user)
 
-    if not exists_active_collection_for_user(request.user):
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
@@ -88,4 +79,10 @@ def add_dataset(request, server_id, dataset_id):
 
             messages.error(request, "CPW_WEB:0670 Add Dataset - You have no Active Image Collection; Please create a Collection!")
 
+            return HttpResponseRedirect(reverse('home', args=()))
+
         return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, dataset_id)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

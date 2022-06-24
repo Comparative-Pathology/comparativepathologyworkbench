@@ -32,20 +32,15 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from matrices.models import Collection
 from matrices.models import Matrix
 
-from matrices.routines import get_images_for_collection
-from matrices.routines import get_collections_for_image
-from matrices.routines import exists_image_in_cells
-from matrices.routines import exists_bench_for_last_used_collection
-from matrices.routines import get_benches_for_last_used_collection
-from matrices.routines import set_first_active_collection_for_user
-
 from matrices.routines import collection_delete_consequences
+from matrices.routines import credential_exists
 
 
 #
@@ -53,6 +48,19 @@ from matrices.routines import collection_delete_consequences
 #
 @login_required()
 def collection_delete(request, collection_id):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     collection = get_object_or_404(Collection, pk=collection_id)
 

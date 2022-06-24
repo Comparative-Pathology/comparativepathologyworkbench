@@ -32,6 +32,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
@@ -40,6 +41,8 @@ from matrices.models import CollectionAuthorisation
 from matrices.models import Matrix
 
 from matrices.routines import collection_authorisation_delete_consequences
+from matrices.routines import credential_exists
+from matrices.routines import exists_update_for_collection_and_user
 
 
 #
@@ -48,8 +51,26 @@ from matrices.routines import collection_authorisation_delete_consequences
 @login_required()
 def collection_authorisation_delete(request, collection_authorisation_id):
 
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
+
     collection_authorisation = get_object_or_404(CollectionAuthorisation, pk=collection_authorisation_id)
     collection = get_object_or_404(Collection, pk=collection_authorisation.collection.id)
+
+    if not exists_update_for_collection_and_user(collection, request.user):
+
+        raise PermissionDenied
+
 
     collection_authorisation_delete_consequences(collection_authorisation.permitted, collection)
 

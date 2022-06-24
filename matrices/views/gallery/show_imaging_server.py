@@ -38,9 +38,9 @@ from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # SHOW THE AVAILABLE GROUPS
@@ -54,11 +54,7 @@ def show_imaging_server(request, server_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
@@ -73,3 +69,7 @@ def show_imaging_server(request, server_id):
         else:
 
             return HttpResponseRedirect(reverse('home', args=()))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

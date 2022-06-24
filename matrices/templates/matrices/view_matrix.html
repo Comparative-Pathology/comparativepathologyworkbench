@@ -50,7 +50,6 @@ The view matrix (bench) template
 <div class="page-sidebar" style="overflow-y: scroll;">
 {% if authority.is_viewer %}
 {% else %}
-    {% if credential_flag %}
 <!-- Selected or Active Image Collection -->
   <div class="collection-container">
 	<div class="collection-item">
@@ -59,89 +58,88 @@ The view matrix (bench) template
 		  <div class="collection-dropdown">
 			<button class="collection-drop-button"><i class="fas fa-bars"></i></button>
 			<div class="collection-dropdown-content">
-        {% if collection_list %}
-            {% for collection in collection_list %}
-	            {% if matrix.has_last_used_collection == True %}
-		            {% if matrix.last_used_collection.id == collection.collection_id %}
+    {% if collection_list %}
+        {% for collection in collection_list %}
+            {% if matrix.has_last_used_collection == True %}
+	            {% if matrix.last_used_collection.id == collection.collection_id %}
 				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-    		         {% endif %}
-	            {% endif %}
-            {% endfor %}
-            {% for collection in collection_list %}
-	            {% if matrix.has_last_used_collection == True %}
-		            {% if matrix.last_used_collection.id == collection.collection_id %}
-    		        {% else %}
-	    		        {% if collection.collection_owner == credential_flag %}
-		    		        {% if collection.collection_active == True %}
+		         {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% for collection in collection_list %}
+            {% if matrix.has_last_used_collection == True %}
+	            {% if matrix.last_used_collection.id == collection.collection_id %}
+		        {% else %}
+    		        {% if collection.collection_owner == user.username %}
+	    		        {% if collection.collection_active == True %}
 				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-			    	        {% else %}
+		    	        {% else %}
 				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-				            {% endif %}
-    			        {% else %}
+			            {% endif %}
+			        {% else %}
 				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-    			        {% endif %}
-	    	        {% endif %}
-	            {% else %}
-		            {% if collection.collection_owner == credential_flag %}
-			            {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-    			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-	    		        {% endif %}
-		            {% else %}
-				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
-		            {% endif %}
+			        {% endif %}
     	        {% endif %}
-            {% endfor %}
-        {% endif %}
+            {% else %}
+	            {% if collection.collection_owner == user.username %}
+		            {% if collection.collection_active == True %}
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+			        {% else %}
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+    		        {% endif %}
+	            {% else %}
+				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+	            {% endif %}
+	        {% endif %}
+        {% endfor %}
+    {% endif %}
 			</div>
 		  </div>
 		</div>
 	  </div>
 	</div>
-        {% if collection_image_list %}
-            {% for image in collection_image_list %}
-	            {% if authority.is_viewer %}
+    {% if collection_image_list %}
+        {% for image in collection_image_list %}
+            {% if authority.is_viewer %}
 	<div class="collection-item" id="image_{{ image.id }}">
 	  <div class="collection-image">
-    	        {% else %}
+	        {% else %}
 	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
 	  <div class="collection-image">
-		  			{% csrf_token %}
-		        {% endif %}
-				{% if image.server.is_accessible %}
-					{% if request.get_host == 'localhost:8000' %}
+	  			{% csrf_token %}
+	        {% endif %}
+			{% if image.server.is_accessible %}
+				{% if request.get_host == 'localhost:8000' %}
 		<div id="I_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_out">
 			<a href="https://{{ image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 		</div>
 		<div id="O_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_in">
 			<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 		</div>
-					{% else %}
+				{% else %}
 		<div id="I_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_out">
 			<a href="https://{{ image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'matrix' matrix.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 		</div>
 		<div id="O_{{ image.id }}_{{ image.server.uid }}@{{ image.server.url_server }}" class="loginStatus_in">
 			<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 		</div>
-					{% endif %}
-				{% else %}
-		<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 				{% endif %}
+			{% else %}
+		<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+			{% endif %}
 	  </div>
 	</div>
-            {% endfor %}
-        {% else %}
-            {% if matrix.has_last_used_collection == True %}
+        {% endfor %}
+    {% else %}
+        {% if matrix.has_last_used_collection == True %}
 	<div class="collection-item">
 	  <div class="collection-image">
 		<button class="basket-button button-info"><i class="fa fa-eye-slash"></i></button>
 	  </div>
 	</div>
-            {% endif %}
         {% endif %}
+    {% endif %}
   </div>
-	{% endif %}
 {% endif %}
 </div>
 

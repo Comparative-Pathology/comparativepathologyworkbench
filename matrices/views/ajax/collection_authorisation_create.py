@@ -34,6 +34,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -50,8 +51,10 @@ from matrices.models import Collection
 from matrices.models import CollectionAuthority
 from matrices.models import CollectionAuthorisation
 
-from matrices.routines import simulate_network_latency
 from matrices.routines import collection_authorisation_create_update_consequences
+from matrices.routines import credential_exists
+from matrices.routines import exists_update_for_collection_and_user
+from matrices.routines import simulate_network_latency
 
 
 #
@@ -59,6 +62,19 @@ from matrices.routines import collection_authorisation_create_update_consequence
 #
 @login_required()
 def collection_authorisation_create(request, collection_id=None):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     object = None
 
@@ -77,6 +93,11 @@ def collection_authorisation_create(request, collection_id=None):
             permitted = form.cleaned_data['permitted']
             collection = form.cleaned_data['collection']
             authority = form.cleaned_data['authority']
+
+            if not exists_update_for_collection_and_user(collection, request.user):
+
+                raise PermissionDenied
+
 
             object.set_collection_authority(authority)
 
@@ -102,6 +123,13 @@ def collection_authorisation_create(request, collection_id=None):
             form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(owner=request.user))
 
     else:
+
+        collection = get_object_by_uuid_or_404(Collection, collection_id)
+
+        if not exists_update_for_collection_and_user(collection, request.user):
+
+            raise PermissionDenied
+
 
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
         form.fields['collection'].initial = collection_id

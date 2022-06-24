@@ -42,16 +42,16 @@ from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Collection
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_collection_authority_for_collection_and_user_and_requester
 from matrices.routines import get_header_data
 from matrices.routines import set_inactive_collection_for_user
 
-NO_CREDENTIALS = ''
-
 VIEW_MATRIX = "view_matrix"
 AMEND_CELL = "amend_cell"
+
 
 #
 # CHOOSE AN IMAGE COLLECTION
@@ -63,11 +63,7 @@ def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
 
     collection_image_list = list()
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
         owner = get_object_or_404(User, pk=matrix.owner_id)
@@ -112,3 +108,7 @@ def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
         messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
 
         return redirect('matrix', matrix_id=matrix_id)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

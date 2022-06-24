@@ -38,12 +38,12 @@ from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_an_ebi_sca_experiment_id_from_chart_id
 from matrices.routines import get_an_ebi_sca_parameters_from_chart_id
 
-NO_CREDENTIALS = ''
 
 #
 # SHOW A CHART FROM AN EBI SCA SERVER
@@ -56,25 +56,17 @@ def show_ebi_sca_image(request, server_id, image_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
         if server.is_ebi_sca():
 
-            image_flag = ''
+            image_flag = False
 
             if exists_active_collection_for_user(request.user):
 
-                image_flag = 'ALLOW'
-
-            else:
-
-                image_flag = 'DISALLOW'
+                image_flag = True
 
             experiment_id = get_an_ebi_sca_experiment_id_from_chart_id(image_id)
 
@@ -89,3 +81,7 @@ def show_ebi_sca_image(request, server_id, image_id):
         else:
 
             return HttpResponseRedirect(reverse('home', args=()))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

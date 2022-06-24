@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# The Collection List View
+# The list_collections View
 #
 ###
 from __future__ import unicode_literals
@@ -38,10 +38,14 @@ from sortable_listview import SortableListView
 from matrices.models import CollectionSummary
 from matrices.forms import CollectionSummarySearchForm
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import collection_list_by_user_and_direction
 
 
+#
+# The list_collections VIEW
+#
 class CollectionListView(LoginRequiredMixin, SortableListView):
 
     query_title = forms.CharField(max_length=25)
@@ -96,11 +100,17 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
         data = get_header_data(self.request.user)
 
+        credential_flag = False
+
+        if credential_exists(self.request.user):
+
+            credential_flag = True
+
         data_dict = {'title': self.query_title, 'description': self.query_description, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by }
 
         form = CollectionSummarySearchForm(data_dict)
 
-        data.update({ 'form': form,  })
+        data.update({ 'form': form, 'credential_flag': credential_flag })
 
         context.update(data)
 

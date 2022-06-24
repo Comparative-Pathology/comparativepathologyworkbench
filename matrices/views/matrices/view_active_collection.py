@@ -36,10 +36,12 @@ from django.shortcuts import render
 
 from matrices.forms import SearchUrlForm
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
+
 
 #
 # VIEW THE ACTIVE COLLECTION
@@ -49,24 +51,30 @@ def view_active_collection(request):
 
     data = get_header_data(request.user)
 
-    form = SearchUrlForm()
+    if credential_exists(request.user):
 
-    if exists_active_collection_for_user(request.user):
+        form = SearchUrlForm()
 
-        collection_list = get_active_collection_for_user(request.user)
+        if exists_active_collection_for_user(request.user):
 
-        collection = collection_list[0]
+            collection_list = get_active_collection_for_user(request.user)
 
-        collection_image_list = get_images_for_collection(collection)
+            collection = collection_list[0]
 
-        data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_active_collection" })
+            collection_image_list = get_images_for_collection(collection)
 
-        return render(request, 'matrices/view_collection.html', data)
+            data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_active_collection" })
+
+            return render(request, 'matrices/view_collection.html', data)
+
+        else:
+
+            messages.error(request, "CPW_WEB:0840 View Active Collection - You have no Active Image Collection; Please create a Collection!")
+
+            data.update({ 'form': form, 'search_from': "view_all_collections" })
+
+            return render(request, 'matrices/view_all_collections.html', data)
 
     else:
 
-        messages.error(request, "CPW_WEB:0840 View Active Collection - You have no Active Image Collection; Please create a Collection!")
-
-        data.update({ 'form': form, 'search_from': "view_all_collections" })
-
-        return render(request, 'matrices/view_all_collections.html', data)
+        return HttpResponseRedirect(reverse('home', args=()))

@@ -34,6 +34,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
@@ -44,14 +45,29 @@ from matrices.forms import CollectionForm
 
 from matrices.models import Collection
 
-from matrices.routines import simulate_network_latency
 from matrices.routines import collection_crud_consequences
+from matrices.routines import credential_exists
+from matrices.routines import simulate_network_latency
+
 
 #
 # EDIT A COLLECTION AUTHORISATION
 #
 @login_required()
 def collection_update(request, collection_id):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     object = get_object_by_uuid_or_404(Collection, collection_id)
 

@@ -34,6 +34,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
@@ -47,7 +48,9 @@ from matrices.models import Authorisation
 from matrices.models import Authority
 
 from matrices.routines import authorisation_crud_consequences
+from matrices.routines import credential_exists
 from matrices.routines import simulate_network_latency
+from matrices.routines import exists_update_for_bench_and_user
 
 
 #
@@ -55,6 +58,19 @@ from matrices.routines import simulate_network_latency
 #
 @login_required()
 def bench_authorisation_update(request, authorisation_id, bench_id=None):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     object = get_object_by_uuid_or_404(Authorisation, authorisation_id)
 
@@ -73,6 +89,11 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
             permitted = form.cleaned_data['permitted']
             bench = form.cleaned_data['matrix']
             authority = form.cleaned_data['authority']
+
+            if not exists_update_for_bench_and_user(bench, request.user):
+
+                raise PermissionDenied
+
 
             object.set_authority(authority)
 
@@ -98,6 +119,13 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
             form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
 
     else:
+
+        bench = get_object_by_uuid_or_404(Matrix, bench_id)
+
+        if not exists_update_for_bench_and_user(bench, request.user):
+
+            raise PermissionDenied
+
 
         form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(id=bench_id))
         form.fields['matrix'].initial = bench_id

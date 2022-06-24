@@ -33,6 +33,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
@@ -44,13 +45,32 @@ from matrices.models import Server
 from matrices.forms import ServerForm
 
 from matrices.routines import AESCipher
+from matrices.routines import credential_exists
 from matrices.routines import simulate_network_latency
+
 
 #
 # ADD or EDIT AN IMAGE SERVER
 #
 @login_required()
 def server_create_update(request, server_id=None):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not request.user.is_superuser:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     object = None
 

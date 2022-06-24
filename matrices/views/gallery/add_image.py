@@ -38,12 +38,12 @@ from django.contrib import messages
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import add_image_to_collection
 
-NO_CREDENTIALS = ''
 
 #
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
@@ -53,22 +53,13 @@ def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
     data = get_header_data(request.user)
 
-    credential = get_credential_for_user(request.user)
-
-    if not exists_active_collection_for_user(request.user):
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
         if exists_active_collection_for_user(request.user):
+
+            credential = get_credential_for_user(request.user)
 
             image = add_image_to_collection(credential, server, image_id, roi_id)
 
@@ -77,6 +68,8 @@ def add_image(request, server_id, image_id, roi_id, path_from, identifier):
         else:
 
             messages.error(request, "CPW_WEB:0690 Add Image - You have no Active Image Collection; Please create a Collection!")
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
         if server.is_omero547():
 
@@ -93,3 +86,7 @@ def add_image(request, server_id, image_id, roi_id, path_from, identifier):
             if server.is_wordpress():
 
                 return HttpResponseRedirect(reverse('webgallery_show_wordpress_image', args=(server_id, image_id)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

@@ -45,6 +45,7 @@ from decouple import config
 
 from matrices.forms import SearchUrlForm
 
+from matrices.routines import credential_exists
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import get_an_ebi_sca_experiment_id
 from matrices.routines import get_active_collection_for_user
@@ -54,7 +55,7 @@ from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import convert_url_ebi_sca_to_chart_id
 
 HTTP_POST = 'POST'
-NO_CREDENTIALS = ''
+
 
 #
 # Search for an Image
@@ -64,11 +65,7 @@ def search_chart(request):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         form = SearchUrlForm()
 
@@ -129,3 +126,7 @@ def search_chart(request):
 
 
         return render(request, return_page, data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

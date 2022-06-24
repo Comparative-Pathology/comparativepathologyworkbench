@@ -38,11 +38,10 @@ from django.urls import reverse
 from matrices.models import Matrix
 from matrices.models import Cell
 
+from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # APPEND A ROW OF CELLS TO THE BENCH
@@ -52,11 +51,7 @@ def append_row(request, matrix_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
@@ -88,3 +83,7 @@ def append_row(request, matrix_id):
             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

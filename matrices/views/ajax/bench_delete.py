@@ -32,12 +32,14 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from matrices.models import Matrix
 from matrices.models import Cell
 
+from matrices.routines import credential_exists
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_collections_for_image
@@ -51,6 +53,19 @@ WORDPRESS_SUCCESS = 'Success!'
 #
 @login_required()
 def bench_delete(request, bench_id):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     object_id = ''
 

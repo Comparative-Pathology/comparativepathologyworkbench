@@ -40,9 +40,9 @@ from django.shortcuts import render
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # BROWSE THE EBI SERVER WIDGET
@@ -55,11 +55,7 @@ def show_ebi_widget(request, server_id, experiment_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
@@ -74,3 +70,11 @@ def show_ebi_widget(request, server_id, experiment_id):
             data.update(server_data)
 
             return render(request, 'ebi/show_widget.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

@@ -35,7 +35,9 @@ from django.shortcuts import render
 
 from matrices.models import Authorisation
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+
 
 #
 # LIST ALL PERMISSIONS FOR ALL BENCHES
@@ -45,19 +47,24 @@ def list_bench_authorisation(request, matrix_id=None):
 
     data = get_header_data(request.user)
 
-    if matrix_id is None:
+    if credential_exists(request.user):
 
-        authorisation_list = Authorisation.objects.all()
+        if matrix_id is None:
 
-        text_flag = ' ALL Permissions, ALL Benches'
-        matrix_id = ''
+            authorisation_list = Authorisation.objects.all()
+
+            text_flag = ' ALL Permissions, ALL Benches'
+            matrix_id = ''
+
+        else:
+
+            authorisation_list = Authorisation.objects.filter(matrix__id=matrix_id)
+            text_flag = "Permissions for Bench CPW:" + format(int(matrix_id), '06d')
+
+        data.update({ 'matrix_id': matrix_id, 'text_flag': text_flag, 'authorisation_list': authorisation_list })
+
+        return render(request, 'host/list_bench_authorisation.html', data)
 
     else:
 
-        authorisation_list = Authorisation.objects.filter(matrix__id=matrix_id)
-        text_flag = "Permissions for Bench CPW:" + format(int(matrix_id), '06d')
-
-
-    data.update({ 'matrix_id': matrix_id, 'text_flag': text_flag, 'authorisation_list': authorisation_list })
-
-    return render(request, 'host/list_bench_authorisation.html', data)
+        return HttpResponseRedirect(reverse('home', args=()))

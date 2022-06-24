@@ -32,22 +32,34 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from matrices.models import Cell
 
 from matrices.routines import credential_exists
-from matrices.routines import get_authority_for_bench_and_user_and_requester
+from matrices.routines import exists_update_for_bench_and_user
+
 
 #
 # SWAP ROWS - SWAP ROW A WITH ROW B
 #
 @login_required()
 def swap_rows(request):
-    """
-    AJAX - Swap Rows
-    """
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     source = request.POST['source']
     target = request.POST['target']
@@ -62,15 +74,7 @@ def swap_rows(request):
 
     if credential_exists(user):
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
-
-        if authority.is_viewer() or authority.is_none():
-
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
-
-            return JsonResponse(data)
-
-        else:
+        if exists_update_for_bench_and_user(matrix, request.user):
 
             source_row_cells = matrix.get_row(in_source_cell.ycoordinate)
             target_row_cells = matrix.get_row(in_target_cell.ycoordinate)
@@ -110,13 +114,15 @@ def swap_rows(request):
 
                 matrix.save()
 
-
             data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            return JsonResponse(data)
 
+        else:
+
+            data = { 'failure': True, 'source': str(source), 'target': str(target) }
             return JsonResponse(data)
 
     else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
-
-            return JsonResponse(data)
+        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        return JsonResponse(data)

@@ -40,10 +40,10 @@ from django.urls import reverse
 from matrices.models import Collection
 from matrices.models import Image
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_image_in_cells
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # DELETE AN IMAGE FROM THE COLLECTION SUPPLIED
@@ -53,11 +53,7 @@ def delete_collection_image(request, collection_id, image_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         image = get_object_or_404(Image, pk=image_id)
 
@@ -78,3 +74,7 @@ def delete_collection_image(request, collection_id, image_id):
             image.delete()
 
         return HttpResponseRedirect(reverse('view_collection', args=(collection_id, )))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

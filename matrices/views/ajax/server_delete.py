@@ -32,17 +32,38 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
+
+
 #
 # DELETE AN IMAGE SERVER
 #
 @login_required()
 def server_delete(request, server_id):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not request.user.is_superuser:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     server = get_object_by_uuid_or_404(Server, server_id)
     server.delete()

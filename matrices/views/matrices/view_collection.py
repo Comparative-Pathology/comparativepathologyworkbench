@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
@@ -38,8 +39,10 @@ from matrices.forms import SearchUrlForm
 
 from matrices.models import Collection
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
+
 
 #
 # VIEW A COLLECTION
@@ -47,14 +50,29 @@ from matrices.routines import get_images_for_collection
 @login_required
 def view_collection(request, collection_id):
 
-    data = get_header_data(request.user)
+    if request.is_ajax():
 
-    collection = get_object_or_404(Collection, pk=collection_id)
+        raise PermissionDenied
 
-    collection_image_list = get_images_for_collection(collection)
+    if not request.user.is_authenticated:
 
-    form = SearchUrlForm()
+        raise PermissionDenied
 
-    data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
 
-    return render(request, 'matrices/view_collection.html', data)
+    if credential_exists(request.user):
+
+        data = get_header_data(request.user)
+
+        collection = get_object_or_404(Collection, pk=collection_id)
+
+        collection_image_list = get_images_for_collection(collection)
+
+        form = SearchUrlForm()
+
+        data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
+
+        return render(request, 'matrices/view_collection.html', data)
+
+    else:
+
+        raise PermissionDenied

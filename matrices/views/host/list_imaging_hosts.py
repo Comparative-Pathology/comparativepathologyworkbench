@@ -35,7 +35,9 @@ from django.shortcuts import render
 
 from matrices.forms import SearchUrlForm
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+
 
 #
 # LIST SERVERS
@@ -45,8 +47,14 @@ def list_imaging_hosts(request):
 
     data = get_header_data(request.user)
 
-    form = SearchUrlForm()
+    if credential_exists(request.user):
 
-    data.update({ 'form': form, 'search_from': "list_imaging_hosts" })
+        form = SearchUrlForm()
 
-    return render(request, 'host/list_imaging_hosts.html', data)
+        data.update({ 'form': form, 'search_from': "list_imaging_hosts" })
+
+        return render(request, 'host/list_imaging_hosts.html', data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

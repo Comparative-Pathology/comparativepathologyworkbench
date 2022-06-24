@@ -70,224 +70,132 @@ The list collections template (with Search)
 <div class="page-content">
 
 {% if messages %}
-
 	{% for message in messages %}
-
 		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-
-	<div class="panel-alert">
-
-		<p>{{ message }}</p>
-
-	</div>
-
+  <div class="panel-alert">
+    <p>{{ message }}</p>
+  </div>
 		{% endif %}
-
 		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-
-	<div class="panel-success">
-
-		<p>{{ message }}</p>
-
-	</div>
-
+  <div class="panel-success">
+    <p>{{ message }}</p>
+  </div>
 		{% endif %}
-
     {% endfor %}
-
 {% endif %}
 
-
-	<h1>Collections</h1>
-
-	<p>Search the list of Collections</p>
-
-	<form action="{% url 'list_collections' %}" method="get">
-
+<h1>Collections</h1>
+<p>Search the list of Collections</p>
+<form action="{% url 'list_collections' %}" method="get">
 {% include 'includes/formsearch.html' %}
-
-		<button class="button button-add" type="submit">Search</button>
-		<button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
-
-	</form>
-
-	<br />
-	<hr>
-	<br />
+  <button class="button button-add" type="submit">Search</button>
+  <button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
+</form>
+<br />
+<hr>
+<br />
 
 {% if collection_summary_list %}
-
 	{% for collection_summary in collection_summary_list %}
-
 		{% if forloop.first %}
-
-	<table>
-		<tr>
-    		<th>Action</th>
-
+<table>
+  <tr>
+    <th>Action</th>
 {% include 'includes/sort_links_table_headings.html' %}
-
-		</tr>
-		<tr>
-    		<td>&nbsp;</td>
-	    	<td>&nbsp;</td>
-		    <td>&nbsp;</td>
-			<td>&nbsp;</td>
-	    	<td>&nbsp;</td>
-			<td>&nbsp;</td>
-	    </tr>
-
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+  </tr>
 		{% endif %}
-
-		<tr id="collection_summary-{{collection_summary.collection_id}}" class="{% if request.GET.selected_record == collection_summary.collection_id|stringformat:'s' %}selected{% endif %}">
-
-		{% if credential_flag == '' %}
-
-			<td>&nbsp;</td>
-
-		{% else %}
-
-		   	<td>
-				<div class="generic-dropdown">
-					<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
-					<div class="generic-dropdown-content">
-
+  <tr id="collection_summary-{{collection_summary.collection_id}}" class="{% if request.GET.selected_record == collection_summary.collection_id|stringformat:'s' %}selected{% endif %}">
+		{% if credential_flag %}
+    <td>
+	  <div class="generic-dropdown">
+		<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
+	    <div class="generic-dropdown-content">
 			{% if collection_summary.collection_authorisation_authority == 'VIEWER' %}
-
-						<a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
-						<a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-
+		  <a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
+		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
 			{% endif %}
-
 			{% if collection_summary.collection_authorisation_authority == 'OWNER' %}
-
-						<a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
-						<a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-						<a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-						<a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting {{ collection_summary.collection_id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-
-						<a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-
+		  <a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
+		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting {{ collection_summary.collection_id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
 				{% if collection_summary.is_active %}
-
-					{% if collection_summary.collection_owner == credential_flag %}
-
-					{% else %}
-
-					{% endif %}
-
 				{% else %}
-
-					{% if collection_summary.collection_owner == credential_flag %}
-
-						<a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
-
-					{% else %}
-
+					{% if collection_summary.collection_owner == user.username %}
+		  <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
 					{% endif %}
-
 				{% endif %}
-
 			{% endif %}
-
 			{% if collection_summary.collection_authorisation_authority == 'ADMIN' %}
-
-						<a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
-						<a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-						<a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-						<a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting {{ collection_summary.collection_id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-
-						<a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-
+		  <a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
+		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting {{ collection_summary.collection_id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
 			    {% if collection_summary.is_active %}
-
-				    {% if collection_summary.collection_owner == credential_flag %}
-
-					{% else %}
-
-					{% endif %}
-
 				{% else %}
-
-			        {% if collection_summary.collection_owner == credential_flag %}
-
-						<a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
-
-					{% else %}
-
+			        {% if collection_summary.collection_owner == user.username %}
+		  <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
 					{% endif %}
-
 				{% endif %}
-
 			{% endif %}
-
-					</div><!-- End of generic-dropdown-content -->
-				</div><!-- End of generic-dropdown -->
-		    </td>
-
+		</div><!-- End of generic-dropdown-content -->
+	  </div><!-- End of generic-dropdown -->
+	</td>
+		{% else %}
+    <td>&nbsp;</td>
 		{% endif %}
-
-		    <td>{{ collection_summary.collection_id|stringformat:"06d" }}</td>
-			<td>{{ collection_summary.collection_title }}</td>
-			<td>{{ collection_summary.collection_active }}</td>
-		    <td>{{ collection_summary.collection_image_count }}</td>
-			<td>{{ collection_summary.collection_owner }}</td>
-			<td>{{ collection_summary.collection_authorisation_authority }}</td>
-		</tr>
-
+	<td>{{ collection_summary.collection_id|stringformat:"06d" }}</td>
+	<td>{{ collection_summary.collection_title }}</td>
+	<td>{{ collection_summary.collection_active }}</td>
+	<td>{{ collection_summary.collection_image_count }}</td>
+	<td>{{ collection_summary.collection_owner }}</td>
+	<td>{{ collection_summary.collection_authorisation_authority }}</td>
+  </tr>
 		{% if forloop.last %}
-
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-		<tr>
-
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
 			{% if credential_flag %}
-
-			<td>
-				<a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
-			</td>
-
+    <td>
+	  <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+	</td>
 			{% else %}
-
-			<td>&nbsp;</td>
-
+	<td>&nbsp;</td>
 			{% endif %}
-
-	    	<td>&nbsp;</td>
-		    <td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-	</table>
-
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+  </tr>
+</table>
 		{% endif %}
-
 	{% endfor %}
-
 {% include 'includes/pagination.html' %}
-
 {% else %}
-
-	<p>No Collections are available.</p>
-
+<p>No Collections are available.</p>
 	{% if credential_flag %}
-
-	<p>
-		<a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
-	</p>
-
+<p>
+  <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+</p>
 	{% else %}
-
-	<p>You are not authorised to add Collections yet!</p>
-
+<p>You are not authorised to add Collections yet!</p>
 	{% endif %}
-
 {% endif %}
 
 </div><!-- End of page-content -->

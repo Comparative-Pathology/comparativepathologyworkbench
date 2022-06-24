@@ -35,6 +35,7 @@ from subprocess import call
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -52,6 +53,7 @@ from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import convert_url_omero_image_to_cpw
 from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import create_an_ebi_sca_chart
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_active_collection_images_for_user
@@ -67,7 +69,6 @@ from matrices.routines import get_server_from_ebi_sca_url
 from matrices.routines import get_server_from_omero_url
 
 HTTP_POST = 'POST'
-NO_CREDENTIALS = ''
 WORDPRESS_SUCCESS = 'Success!'
 
 #
@@ -76,225 +77,223 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def amend_cell(request, matrix_id, cell_id):
 
-	serverWordpress = get_primary_wordpress_server()
+    if request.is_ajax():
 
-	data = get_header_data(request.user)
+        raise PermissionDenied
 
-	if data["credential_flag"] == NO_CREDENTIALS:
+    if not request.user.is_authenticated:
 
-		return HttpResponseRedirect(reverse('home', args=()))
+        raise PermissionDenied
 
-	else:
 
-		cell = get_object_or_404(Cell, pk=cell_id)
-		matrix = get_object_or_404(Matrix, pk=matrix_id)
+    if credential_exists(request.user):
 
-		authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
+        data = get_header_data(request.user)
+        serverWordpress = get_primary_wordpress_server()
 
-		if authority.is_viewer() == True or authority.is_none() == True:
+        cell = get_object_or_404(Cell, pk=cell_id)
+        matrix = get_object_or_404(Matrix, pk=matrix_id)
 
-			matrix_cells = matrix.get_matrix()
-			columns = matrix.get_columns()
-			rows = matrix.get_rows()
+        if exists_read_for_bench_and_user(matrix, request.user):
 
-			data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            cell_link = get_blog_link_post_url() + cell.blogpost
 
-			return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+            matrix_link = 'matrix_link'
+            amend_cell = 'amend_cell'
 
-		else:
+            credential = get_credential_for_user(request.user)
 
-			cell_link = get_blog_link_post_url() + cell.blogpost
+            if not credential.has_apppwd():
 
-			matrix_link = 'matrix_link'
-			amend_cell = 'amend_cell'
+                matrix_link = ''
 
-			credential = get_credential_for_user(request.user)
+            collection_image_list = list()
 
-			if not credential.has_apppwd():
+            if matrix.has_last_used_collection():
 
-				matrix_link = ''
+                collection_image_list = get_images_for_collection(matrix.last_used_collection)
 
-			collection_image_list = list()
+            else:
 
-			if matrix.has_last_used_collection():
+                if exists_active_collection_for_user(request.user):
 
-				collection_image_list = get_images_for_collection(matrix.last_used_collection)
+                    collection_image_list = get_active_collection_images_for_user(request.user)
+                    collection_list = get_active_collection_for_user(request.user)
+                    collection = collection_list[0]
 
-			else:
+                    matrix.set_last_used_collection(collection)
+                    matrix.save()
 
-				if exists_active_collection_for_user(request.user):
+            if request.method == HTTP_POST:
 
-					collection_image_list = get_active_collection_images_for_user(request.user)
+                form = SearchUrlForm(request.POST)
 
-					collection_list = get_active_collection_for_user(request.user)
+                image = None
 
-					collection = collection_list[0]
+                if form.is_valid():
 
-					matrix.set_last_used_collection(collection)
+                    cd = form.cleaned_data
 
-					matrix.save()
+                    url_string = cd.get('url_string')
 
-			if request.method == HTTP_POST:
+                    url_string_ebi_sca_out = convert_url_ebi_sca_to_json(url_string)
+                    url_string_omero_out = convert_url_omero_image_to_cpw(request, url_string)
 
-				form = SearchUrlForm(request.POST)
+                    if url_string_omero_out != '' and url_string_ebi_sca_out != '':
 
-				image = None
+                        messages.error(request, "CPW_WEB:0210 Amend Cell - URL not found!")
+                        form.add_error(None, "CPW_WEB:0210 Amend Cell - URL not found!")
 
-				if form.is_valid():
+                        data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-					cd = form.cleaned_data
+                        return render(request, 'matrices/amend_cell.html', data)
 
-					url_string = cd.get('url_string')
 
-					url_string_ebi_sca_out = convert_url_ebi_sca_to_json(url_string)
-					url_string_omero_out = convert_url_omero_image_to_cpw(request, url_string)
+                    if url_string_omero_out == '' and url_string_ebi_sca_out == '':
 
-					if url_string_omero_out != '' and url_string_ebi_sca_out != '':
+                        messages.error(request, "CPW_WEB:0220 Amend Cell - URL not found!")
+                        form.add_error(None, "CPW_WEB:0220 Amend Cell - URL not found!")
 
-						messages.error(request, "CPW_WEB:0210 Amend Cell - URL not found!")
-						form.add_error(None, "CPW_WEB:0210 Amend Cell - URL not found!")
+                        data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-						data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                        return render(request, 'matrices/amend_cell.html', data)
 
-						return render(request, 'matrices/amend_cell.html', data)
 
+                    if url_string_omero_out != '' and url_string_ebi_sca_out == '':
 
-					if url_string_omero_out == '' and url_string_ebi_sca_out == '':
+                        server = get_server_from_omero_url(url_string_omero_out)
+                        image_id = get_id_from_omero_url(url_string_omero_out)
 
-						messages.error(request, "CPW_WEB:0220 Amend Cell - URL not found!")
-						form.add_error(None, "CPW_WEB:0220 Amend Cell - URL not found!")
+                        if exists_active_collection_for_user(request.user):
 
-						data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                            image = add_image_to_collection(request.user, server, image_id, 0)
 
-						return render(request, 'matrices/amend_cell.html', data)
+                            queryset = get_active_collection_for_user(request.user)
 
+                            for collection in queryset:
 
-					if url_string_omero_out != '' and url_string_ebi_sca_out == '':
+                                matrix.set_last_used_collection(collection)
 
-						server = get_server_from_omero_url(url_string_omero_out)
-						image_id = get_id_from_omero_url(url_string_omero_out)
+                        else:
 
-						if exists_active_collection_for_user(request.user):
+                            messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+                            form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
 
-							image = add_image_to_collection(request.user, server, image_id, 0)
+                            data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-							queryset = get_active_collection_for_user(request.user)
+                            return render(request, 'matrices/amend_cell.html', data)
 
-							for collection in queryset:
 
-								matrix.set_last_used_collection(collection)
+                    if url_string_omero_out == '' and url_string_ebi_sca_out != '':
 
-						else:
+                        temp_dir = config('HIGHCHARTS_TEMP_DIR')
+                        output_dir = config('HIGHCHARTS_OUTPUT_DIR')
+                        highcharts_host = config('HIGHCHARTS_HOST')
+                        highcharts_web = config('HIGHCHARTS_OUTPUT_WEB')
 
-							messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
-							form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+                        experiment_id = get_an_ebi_sca_experiment_id(url_string)
 
-							data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                        image_id = convert_url_ebi_sca_to_chart_id(url_string)
 
-							return render(request, 'matrices/amend_cell.html', data)
+                        shell_command = create_an_ebi_sca_chart(url_string_ebi_sca_out, experiment_id, image_id, highcharts_host, temp_dir, output_dir)
 
+                        success = call(str(shell_command), shell=True)
 
-					if url_string_omero_out == '' and url_string_ebi_sca_out != '':
+                        if success == 0:
 
-						temp_dir = config('HIGHCHARTS_TEMP_DIR')
-						output_dir = config('HIGHCHARTS_OUTPUT_DIR')
-						highcharts_host = config('HIGHCHARTS_HOST')
-						highcharts_web = config('HIGHCHARTS_OUTPUT_WEB')
+                            server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
 
-						experiment_id = get_an_ebi_sca_experiment_id(url_string)
+                            if exists_active_collection_for_user(request.user):
 
-						image_id = convert_url_ebi_sca_to_chart_id(url_string)
+                                image = add_image_to_collection(request.user, server, image_id, 0)
 
-						shell_command = create_an_ebi_sca_chart(url_string_ebi_sca_out, experiment_id, image_id, highcharts_host, temp_dir, output_dir)
+                                queryset = get_active_collection_for_user(request.user)
 
-						success = call(str(shell_command), shell=True)
+                                for collection in queryset:
 
-						if success == 0:
+                                    matrix.set_last_used_collection(collection)
 
-							server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
+                            else:
 
-							if exists_active_collection_for_user(request.user):
+                                messages.error(request, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+                                form.add_error(None, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
 
-								image = add_image_to_collection(request.user, server, image_id, 0)
+                                data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-								queryset = get_active_collection_for_user(request.user)
+                                return render(request, 'matrices/amend_cell.html', data)
 
-								for collection in queryset:
+                        else:
 
-									matrix.set_last_used_collection(collection)
+                            messages.error(request, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
+                            form.add_error(None, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
 
-							else:
+                            data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-								messages.error(request, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
-								form.add_error(None, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+                            return render(request, 'matrices/amend_cell.html', data)
 
-								data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-								return render(request, 'matrices/amend_cell.html', data)
+                    cell.set_title(image.name)
+                    cell.set_description(image.name)
+                    cell.set_image(image)
+                    cell.set_matrix(matrix)
 
-						else:
+                    post_id = ''
 
-							messages.error(request, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
-							form.add_error(None, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
+                    if cell.has_no_blogpost():
 
-							data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                        credential = get_credential_for_user(request.user)
 
-							return render(request, 'matrices/amend_cell.html', data)
+                        if credential.has_apppwd():
 
+                            returned_blogpost = serverWordpress.post_wordpress_post(credential, cell.title, cell.description)
 
-					cell.set_title(image.name)
-					cell.set_description(image.name)
+                            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-					cell.set_image(image)
+                                post_id = returned_blogpost['id']
+                                cell.set_blogpost(post_id)
 
-					cell.set_matrix(matrix)
+                            else:
 
-					post_id = ''
+                                messages.error(request, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
+                                form.add_error(None, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
 
-					if cell.has_no_blogpost() == True:
+                                data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-						credential = get_credential_for_user(request.user)
+                                return render(request, 'matrices/amend_cell.html', data)
 
-						if credential.has_apppwd():
+                    cell.save()
 
-							returned_blogpost = serverWordpress.post_wordpress_post(credential, cell.title, cell.description)
+                    matrix.save()
 
-							if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                    cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
 
-								post_id = returned_blogpost['id']
+                    messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
 
-							else:
+                else:
 
-								messages.error(request, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
-								form.add_error(None, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
+                    messages.error(request, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
 
-								data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                    data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-								return render(request, 'matrices/amend_cell.html', data)
+                    return render(request, 'matrices/amend_cell.html', data)
 
-					else:
+            form = SearchUrlForm()
 
-						cell.set_blogpost(post_id)
+            data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
-					cell.save()
+            return render(request, 'matrices/amend_cell.html', data)
 
-					matrix.save()
+        else:
 
-					cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
+            matrix_cells = matrix.get_matrix()
+            columns = matrix.get_columns()
+            rows = matrix.get_rows()
 
-					messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
+            data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
-				else:
+            return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
-					messages.error(request, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
-					form.add_error(None, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
+    else:
 
-					data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
-
-					return render(request, 'matrices/amend_cell.html', data)
-
-			form = SearchUrlForm()
-
-			data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
-
-			return render(request, 'matrices/amend_cell.html', data)
+        raise PermissionDenied

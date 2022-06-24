@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_active_collection_for_user.py
+# \file         exists_unique_title_for_collection_for_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

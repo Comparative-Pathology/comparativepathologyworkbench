@@ -56,7 +56,6 @@ def get_header_data(a_user):
     collection_list = list()
     collection_summary_list = list()
 
-    credential_flag = ''
     direction = ''
 
     if not a_user.is_anonymous:
@@ -64,14 +63,7 @@ def get_header_data(a_user):
         Server = apps.get_model('matrices', 'Server')
         server_list = Server.objects.all().order_by('id')
 
-
-        if credential_exists(a_user) == True:
-
-            credential_flag = a_user.username
-
-
         matrix_list = bench_list_by_user_and_direction(a_user, direction, '', '', '', '', '', '', '', '', '')
-
 
         collection_summary_list = collection_list_by_user_and_direction(a_user, direction, '', '', '', '')
 
@@ -83,7 +75,6 @@ def get_header_data(a_user):
 
         image_list = list(set(image_list))
 
-
-    data = { 'credential_flag': credential_flag, 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+    data = { 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 
     return data

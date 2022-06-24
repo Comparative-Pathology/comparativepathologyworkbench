@@ -51,7 +51,7 @@ class ImageIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
             return_flag = True
 
         # Write permissions are allowed if the user is a SuperUser.
-        if request.user.is_superuser == True:
+        if request.user.is_superuser:
             return_flag = True
 
         return return_flag

@@ -34,6 +34,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
@@ -44,6 +45,7 @@ from matrices.forms import NewMatrixForm
 
 from matrices.models import Matrix
 
+from matrices.routines import credential_exists
 from matrices.routines import bench_creation_consequences
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
@@ -56,7 +58,20 @@ WORDPRESS_SUCCESS = 'Success!'
 # ADD A BENCH
 #
 @login_required()
-def bench_create(request, collection_id=None):
+def bench_create(request):
+
+    if not request.is_ajax():
+
+        raise PermissionDenied
+
+    if not request.user.is_authenticated:
+
+        raise PermissionDenied
+
+    if not credential_exists(request.user):
+
+        raise PermissionDenied
+
 
     serverWordpress = get_primary_wordpress_server()
     credential = get_credential_for_user(request.user)

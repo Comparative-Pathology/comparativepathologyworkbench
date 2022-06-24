@@ -38,10 +38,10 @@ from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # SHOW THE AVAILABLE IMAGES
@@ -58,21 +58,13 @@ def show_dataset(request, server_id, dataset_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
+    if credential_exists(request.user):
 
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
-
-        image_flag = ''
+        image_flag = False
 
         if exists_active_collection_for_user(request.user):
 
-            image_flag = 'ALLOW'
-
-        else:
-
-            image_flag = 'DISALLOW'
+            image_flag = True
 
         data.update({ 'image_flag': image_flag, 'add_from': "show_dataset" })
 
@@ -89,3 +81,7 @@ def show_dataset(request, server_id, dataset_id):
         else:
 
             return HttpResponseRedirect(reverse('home', args=()))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

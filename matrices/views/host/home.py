@@ -30,15 +30,30 @@
 ###
 from __future__ import unicode_literals
 
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+
 
 #
 # HOME VIEW
 #
 def home(request):
 
+    if request.is_ajax():
+
+        raise PermissionDenied
+
+    credential_flag = False
+
+    if credential_exists(request.user):
+
+        credential_flag = True
+
     data = get_header_data(request.user)
+
+    data.update({ 'credential_flag': credential_flag,  })
 
     return render(request, 'host/home.html', data)

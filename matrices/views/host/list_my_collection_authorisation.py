@@ -45,11 +45,17 @@ def list_my_collection_authorisation(request):
 
     data = get_header_data(request.user)
 
-    collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__owner=request.user)
+    if credential_exists(request.user):
 
-    text_flag = ' YOUR Collection Permissions'
-    collection_id = ''
+        collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__owner=request.user)
 
-    data.update({ 'collection_id': collection_id, 'text_flag': text_flag, 'collection_authorisation_list': collection_authorisation_list })
+        text_flag = ' YOUR Collection Permissions'
+        collection_id = ''
 
-    return render(request, 'host/list_collection_authorisation.html', data)
+        data.update({ 'collection_id': collection_id, 'text_flag': text_flag, 'collection_authorisation_list': collection_authorisation_list })
+
+        return render(request, 'host/list_collection_authorisation.html', data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

@@ -38,11 +38,10 @@ from django.urls import reverse
 from matrices.models import Matrix
 from matrices.models import Cell
 
+from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-
 from matrices.routines import get_header_data
 
-NO_CREDENTIALS = ''
 
 #
 # ADD A COLUMN OF CELLS TO THE LEFT OF THE GIVEN COLUMN IN THE BENCH
@@ -52,11 +51,7 @@ def add_column_left(request, matrix_id, column_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
@@ -92,3 +87,7 @@ def add_column_left(request, matrix_id, column_id):
             data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

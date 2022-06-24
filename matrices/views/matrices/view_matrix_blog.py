@@ -41,14 +41,15 @@ from matrices.forms import CommentForm
 
 from matrices.models import Matrix
 
+from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_primary_wordpress_server
 
 HTTP_POST = 'POST'
-NO_CREDENTIALS = ''
 WORDPRESS_SUCCESS = 'Success!'
+
 
 #
 # VIEW THE BENCH BLOG ENTRY
@@ -60,11 +61,7 @@ def view_matrix_blog(request, matrix_id):
 
     data = get_header_data(request.user)
 
-    if data["credential_flag"] == NO_CREDENTIALS:
-
-        return HttpResponseRedirect(reverse('home', args=()))
-
-    else:
+    if credential_exists(request.user):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
@@ -156,3 +153,7 @@ def view_matrix_blog(request, matrix_id):
         data.update({ 'form': form, 'matrix': matrix, 'blogpost': blogpost, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'comment_list': comment_list })
 
         return render(request, 'matrices/detail_matrix_blog.html', data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

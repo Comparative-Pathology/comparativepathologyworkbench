@@ -59,7 +59,7 @@ class CollectionIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
 
         else:
 
-            if request.user.is_superuser == True:
+            if request.user.is_superuser:
 
                 return_flag = True
 
@@ -69,17 +69,17 @@ class CollectionIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
                 if obj.owner == request.user:
 
                     # A Users must have a Credential record and a Password to write to WordPress.
-                    if credential_exists(request.user) == True and credential_apppwd(request.user) != '':
+                    if credential_exists(request.user) and credential_apppwd(request.user) != '':
 
                         return_flag = True
 
                 else:
 
                     # A Users Authority must either be Editor, Owner or Admin for Write permission.
-                    if authority.is_owner() == True or authority.is_admin() == True:
+                    if authority.is_owner() or authority.is_admin():
 
                         # A Users must have a Credential record and a Password to write to WordPress.
-                        if credential_exists(request.user) == True and credential_apppwd(request.user) != '':
+                        if credential_exists(request.user) and credential_apppwd(request.user) != '':
 
                             return_flag = True
 
@@ -98,14 +98,14 @@ class CollectionIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
 
         # Read permissions are allowed to any request,
         # Write permissions are allowed if the user is a SuperUser.
-        if request.user.is_superuser == True:
+        if request.user.is_superuser:
 
             return_flag = True
 
         else:
 
             # A Users must have a Credential record and a Password to write to WordPress.
-            if credential_exists(request.user) == True and credential_apppwd(request.user) != '':
+            if credential_exists(request.user) and credential_apppwd(request.user) != '':
 
                 return_flag = True
 

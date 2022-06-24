@@ -285,20 +285,19 @@ The show image template
 	<br />
 	<br />
 
-	{% if image_flag == 'DISALLOW' %}
-
-    <div class="panel-alert">
-        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
-    </div>
-
-	{% else %}
+	{% if image_flag %}
 
 	<a class="dropdown-item" href="{% url 'webgallery_add_ebi_sca_image' server.id chart.chart_id add_from %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
 
 	<br />
 	<br />
-
 	<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+
+	{% else %}
+
+	<div class="panel-alert">
+        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+    </div>
 
 	{% endif %}
 

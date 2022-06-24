@@ -31,10 +31,12 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from matrices.forms import SearchUrlForm
 
+from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 #
@@ -43,10 +45,25 @@ from matrices.routines import get_header_data
 @login_required
 def view_all_collections(request):
 
-    data = get_header_data(request.user)
+    if request.is_ajax():
 
-    form = SearchUrlForm()
+        raise PermissionDenied
 
-    data.update({ 'form': form, 'search_from': "view_all_collections" })
+    if not request.user.is_authenticated:
 
-    return render(request, 'matrices/view_all_collections.html', data)
+        raise PermissionDenied
+
+
+    if credential_exists(request.user):
+
+        data = get_header_data(request.user)
+
+        form = SearchUrlForm()
+
+        data.update({ 'form': form, 'search_from': "view_all_collections" })
+
+        return render(request, 'matrices/view_all_collections.html', data)
+
+    else:
+
+        raise PermissionDenied

@@ -32,6 +32,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -39,15 +40,13 @@ from django.urls import reverse
 
 from matrices.models import Matrix
 
-from matrices.routines import exists_active_collection_for_user
+from matrices.routines import credential_exists
+from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import get_active_collection_images_for_user
-from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
 
-NO_CREDENTIALS = ''
 
 #
 # DISPLAY THE BENCH!
@@ -55,25 +54,24 @@ NO_CREDENTIALS = ''
 @login_required
 def view_matrix(request, matrix_id):
 
-    data = get_header_data(request.user)
+    if request.is_ajax():
 
-    if data["credential_flag"] == NO_CREDENTIALS:
+        raise PermissionDenied
 
-        return HttpResponseRedirect(reverse('home', args=()))
+    if not request.user.is_authenticated:
 
-    else:
+        raise PermissionDenied
+
+
+    if credential_exists(request.user):
+
+        data = get_header_data(request.user)
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
         owner = get_object_or_404(User, pk=matrix.owner_id)
         user = get_object_or_404(User, pk=request.user.id)
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, user)
-
-        if authority.is_none():
-
-            return HttpResponseRedirect(reverse('home', args=()))
-
-        else:
+        if exists_read_for_bench_and_user(matrix, user):
 
             matrix_link = 'matrix_link'
 
@@ -104,3 +102,11 @@ def view_matrix(request, matrix_id):
             data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return render(request, 'matrices/view_matrix.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
+
+    else:
+
+        raise PermissionDenied

@@ -46,14 +46,14 @@ def home(request):
 
         raise PermissionDenied
 
-    credential_flag = False
+    credentialExists = False
 
     if credential_exists(request.user):
 
-        credential_flag = True
+        credentialExists = True
 
     data = get_header_data(request.user)
 
-    data.update({ 'credential_flag': credential_flag,  })
+    data.update({ 'credentialExists': credentialExists,  })
 
     return render(request, 'host/home.html', data)

@@ -48,8 +48,10 @@ The view matrix (bench) template
 <!-- Main Data Panel -->
 <div class="page-body">
 <div class="page-sidebar" style="overflow-y: scroll;">
-{% if authority.is_viewer %}
+{% if readBoolean %}
 {% else %}
+{% endif %}
+{% if updateBoolean %}
 <!-- Selected or Active Image Collection -->
   <div class="collection-container">
 	<div class="collection-item">
@@ -100,13 +102,13 @@ The view matrix (bench) template
 	</div>
     {% if collection_image_list %}
         {% for image in collection_image_list %}
-            {% if authority.is_viewer %}
-	<div class="collection-item" id="image_{{ image.id }}">
-	  <div class="collection-image">
-	        {% else %}
+		  	{% if updateBoolean %}
 	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
 	  <div class="collection-image">
 	  			{% csrf_token %}
+			{% else %}
+	<div class="collection-item" id="image_{{ image.id }}">
+	  <div class="collection-image">
 	        {% endif %}
 			{% if image.server.is_accessible %}
 				{% if request.get_host == 'localhost:8000' %}
@@ -172,26 +174,19 @@ The view matrix (bench) template
           <div class="bench-dropdown">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-			        {% if authority.is_viewer %}
+					{% if readBoolean %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-				    {% else %}
-			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-			  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench {{ matrix_summary.matrix_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-				    {% endif %}
-    			    {% if matrix_link != '' %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Bench Commentary</a>
-						{% if authority.is_viewer or authority.is_editor or authority.is_owner or authority.is_admin %}
+						{% if updateBoolean %}
+			  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench {{ matrix_summary.matrix_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
-		    		    {% endif %}
-			        {% endif %}
-				    {% if authority.is_viewer %}
-				    {% else %}
 			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting {{ matrix.id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 			  <a href="{% url 'append_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
 			  <a href="{% url 'delete_last_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
 			  <a href="{% url 'append_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
 			  <a href="{% url 'delete_last_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
-    			    {% endif %}
+			        	{% endif %}
+					{% endif %}
             </div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
         </div><!-- End of master-cell-control -->
@@ -219,8 +214,7 @@ The view matrix (bench) template
           <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-						{% if authority.is_viewer %}
-						{% else %}
+						{% if updateBoolean %}
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Column Header</a>
 			  <a href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}"><i class="fa fa-angle-up"></i><span class="menu-item">&#9;</span>Add Row Above</a>
 			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Row</a>
@@ -253,8 +247,7 @@ The view matrix (bench) template
           <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-						{% if authority.is_viewer %}
-						{% else %}
+						{% if updateBoolean %}
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Column Header</a>
 			  <a href="{% url 'add_column_left' matrix.id forloop.counter0	%}"><i class="fa fa-angle-left"></i><span class="menu-item">&#9;</span>Add Column Left</a>
 			  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Column</a>
@@ -271,11 +264,11 @@ The view matrix (bench) template
 			    {% if not matrix_cell.is_column_header and not matrix_cell.is_row_header %}
 <!-- Ordinary Cells -->
     			    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
-						{% if authority.is_viewer %}
-    <div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
-						{% else %}
+						{% if updateBoolean %}
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 							{% csrf_token %}
+						{% else %}
+	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 						{% endif %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
         <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">{{ matrix_cell.title|truncatechars:15 }}
@@ -284,16 +277,15 @@ The view matrix (bench) template
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
-    					{% if authority.is_viewer %}
-	    				{% else %}
-			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Cell</a>
-			  				{% if matrix_cell.has_image == True %}
-			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
-			  					{% if matrix_link != '' %}
-				  					{% if authority.is_viewer or authority.is_editor or authority.is_owner or authority.is_admin %}
+    					{% if readBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Cell Commentary</a>
+			  				{% if updateBoolean %}
+			  					{% if matrix_cell.has_image %}
 			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Cell Commentary</a>
-				  					{% endif %}
+			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Cell</a>
+			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
+								{% else %}
+			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Amend Cell</a>
 			  					{% endif %}
 			  				{% endif %}
 		    			{% endif %}
@@ -893,15 +885,15 @@ The view matrix (bench) template
 
 	    const data = await makeJSONRequest('GET', projects_url).then(rsp => {
 
-		    document.getElementById(divname).style.display = 'display';
+			console.log("loginStatusPresent : " + divname + " ; display" )
 
-			//console.log("loginStatusPresent : " + divname + " ; display" )
+		    document.getElementById(divname).style.display = "display";
 
 	    }).catch(rsp => {
 
-			//console.log("loginStatusPresent : " + divname + " ; none" )
+			console.log("loginStatusPresent : " + divname + " ; none" )
 
-			document.getElementById(divname).style.display = 'none';
+			document.getElementById(divname).style.display = "none";
 	    });
 
 	}
@@ -914,15 +906,15 @@ The view matrix (bench) template
 
 	    const data = await makeJSONRequest('GET', projects_url).then(rsp => {
 
-			//console.log("loginStatusAbsent : " + divname + " ; none" )
+			console.log("loginStatusAbsent : " + divname + " ; none" )
 
-		    document.getElementById(divname).style.display = 'none';
+		    document.getElementById(divname).style.display = "none";
 
 	    }).catch(rsp => {
 
-			//console.log("loginStatusAbsent : " + divname + " ; display" )
+			console.log("loginStatusAbsent : " + divname + " ; display" )
 
-			document.getElementById(divname).style.display = 'display';
+			document.getElementById(divname).style.display = "display";
 	    });
 
 	}

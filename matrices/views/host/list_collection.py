@@ -100,17 +100,17 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
         data = get_header_data(self.request.user)
 
-        credential_flag = False
+        readBoolean = False
 
         if credential_exists(self.request.user):
 
-            credential_flag = True
+            readBoolean = True
 
         data_dict = {'title': self.query_title, 'description': self.query_description, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by }
 
         form = CollectionSummarySearchForm(data_dict)
 
-        data.update({ 'form': form, 'credential_flag': credential_flag })
+        data.update({ 'form': form, 'readBoolean': readBoolean })
 
         context.update(data)
 

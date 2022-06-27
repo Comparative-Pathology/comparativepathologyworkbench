@@ -113,7 +113,7 @@ The list collections template (with Search)
   </tr>
 		{% endif %}
   <tr id="collection_summary-{{collection_summary.collection_id}}" class="{% if request.GET.selected_record == collection_summary.collection_id|stringformat:'s' %}selected{% endif %}">
-		{% if credential_flag %}
+		{% if readBoolean %}
     <td>
 	  <div class="generic-dropdown">
 		<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
@@ -171,7 +171,7 @@ The list collections template (with Search)
     <td>&nbsp;</td>
   </tr>
   <tr>
-			{% if credential_flag %}
+			{% if readBoolean %}
     <td>
 	  <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 	</td>
@@ -189,7 +189,7 @@ The list collections template (with Search)
 {% include 'includes/pagination.html' %}
 {% else %}
 <p>No Collections are available.</p>
-	{% if credential_flag %}
+	{% if readBoolean %}
 <p>
   <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 </p>

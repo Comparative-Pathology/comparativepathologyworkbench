@@ -56,87 +56,51 @@ The list image cart template
 <!-- Page Content -->
 <div class="page-content">
 
-	<h1>Browse Images</h1>
+  <h1>Browse Images</h1>
+  <p>Browse the list of Images you have collected</p>
+  <hr>
+  <br />
 
-	<p>Browse the list of Images you have collected</p>
-
-	<hr>
-
-	<br />
-
-{% if credential_flag %}
-
-	{% if image_list %}
-
-		{% for image in image_list %}
-
-			{% if forloop.first %}
-
-	<table border="0">
-		<tr>
-			<th width="150px">Action</th>
-			<th width="100px">ROI</th>
-			<th>Server</th>
-			<th>Image</th>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-
-			{% endif %}
-
-		<tr>
-			<td>
-
-			{% if image.server.type.name == 'WORDPRESS' %}
-
-				<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-			{% else %}
-
-				<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
-
-			{% endif %}
-
-				<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-			</td>
-
-			{% if image.roi == 0 %}
-
-			<td>&nbsp;</td>
-
-			{% else %}
-
-			<td><strong>ROI</strong></td>
-
-			{% endif %}
-
-			<td>{{ image.server.name }}<br />( {{ image.server.url_server }} )</td>
-
-			<td><a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a></td>
-		</tr>
-
-			{% if forloop.last %}
-
-	</table>
-
-			{% endif %}
-
-		{% endfor %}
-
-	{% else %}
-
-	<p>No Images are available.</p>
-
-	{% endif %}
-
+{% if image_list %}
+	{% for image in image_list %}
+		{% if forloop.first %}
+  <table border="0">
+    <tr>
+	  <th width="150px">Action</th>
+	  <th width="100px">ROI</th>
+	  <th>Server</th>
+	  <th>Image</th>
+	</tr>
+	<tr>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	</tr>
+		{% endif %}
+	<tr>
+	  <td>
+		{% if image.server.type.name == 'WORDPRESS' %}
+		<a href="{% url 'webgallery_show_wordpress_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		{% else %}
+		<a href="{% url 'webgallery_show_image' image.server.id image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		{% endif %}
+		<a href="{% url 'webgallery_delete_image' image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+	  </td>
+		{% if image.roi == 0 %}
+	  <td>&nbsp;</td>
+		{% else %}
+	  <td><strong>ROI</strong></td>
+		{% endif %}
+	  <td>{{ image.server.name }}<br />( {{ image.server.url_server }} )</td>
+	  <td><a href="{{ image.viewer_url  }}" target="_blank"><img alt="{{ image.name }}" title="{{ image.name }}" style="height:256px; float: left" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a></td>
+	</tr>
+		{% if forloop.last %}
+  </table>
+		{% endif %}
+	{% endfor %}
 {% else %}
-
-	<p>No Images are allowed yet.</p>
-
+  <p>No Images are available.</p>
 {% endif %}
 
 </div><!-- End of page-content -->

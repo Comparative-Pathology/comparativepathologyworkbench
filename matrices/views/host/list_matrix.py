@@ -131,17 +131,17 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
         data = get_header_data(self.request.user)
 
-        credential_flag = False
+        readBoolean = False
 
         if credential_exists(self.request.user):
 
-            credential_flag = True
+            readBoolean = True
 
         data_dict = { 'title': self.query_title, 'description': self.query_description, 'created_before': self.query_created_before, 'created_after': self.query_created_after, 'modified_before': self.query_modified_before, 'modified_after': self.query_modified_after, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by  }
 
         form = MatrixSummarySearchForm(data_dict)
 
-        data.update({ 'form': form, 'credential_flag': credential_flag })
+        data.update({ 'form': form, 'readBoolean': readBoolean })
 
         context.update(data)
 

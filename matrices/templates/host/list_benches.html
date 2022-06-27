@@ -109,7 +109,7 @@ The list benches template
 	</tr>
 		{% endif %}
 	<tr id="matrix_summary-{{matrix_summary.matrix_id}}" class="{% if request.GET.selected_record == matrix_summary.matrix_id|stringformat:'s' %}selected{% endif %}">
-		{% if credential_flag %}
+		{% if readBoolean %}
  	  <td>
 		<div class="generic-dropdown">
 		  <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
@@ -162,7 +162,7 @@ The list benches template
 	<td>&nbsp;</td>
   </tr>
   <tr>
-			{% if credential_flag %}
+			{% if readBoolean %}
     <td>
       <a href="{% url 'bench_create' %}" class="btn button button-add" onclick="open_matrix_summary_edit_dialog(event, 'Create a Bench ...'); return false;"><i class="fa fa-plus"></i> Add</a>
     </td>
@@ -182,7 +182,7 @@ The list benches template
 {% include 'includes/pagination.html' %}
 {% else %}
 <p>No Benches are available.</p>
-	{% if credential_flag %}
+	{% if readBoolean %}
 <p>
   <a href="{% url 'bench_create' %}" class="btn button button-add" onclick="open_matrix_summary_edit_dialog(event, 'Create a Bench ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 </p>

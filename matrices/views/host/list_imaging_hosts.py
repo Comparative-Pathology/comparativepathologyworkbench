@@ -47,11 +47,20 @@ def list_imaging_hosts(request):
 
     data = get_header_data(request.user)
 
+    readBoolean = False
+    updateBoolean = False
+
     if credential_exists(request.user):
+
+        readBoolean = True
+
+        if request.user.is_superuser:
+
+            updateBoolean = True
 
         form = SearchUrlForm()
 
-        data.update({ 'form': form, 'search_from': "list_imaging_hosts" })
+        data.update({ 'form': form, 'search_from': "list_imaging_hosts", 'readBoolean': readBoolean, 'updateBoolean': updateBoolean })
 
         return render(request, 'host/list_imaging_hosts.html', data)
 

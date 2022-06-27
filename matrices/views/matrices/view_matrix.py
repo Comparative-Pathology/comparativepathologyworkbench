@@ -42,6 +42,7 @@ from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 from matrices.routines import exists_read_for_bench_and_user
+from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_active_collection_images_for_user
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
@@ -71,9 +72,11 @@ def view_matrix(request, matrix_id):
         owner = get_object_or_404(User, pk=matrix.owner_id)
         user = get_object_or_404(User, pk=request.user.id)
 
+        readBoolean = False
+
         if exists_read_for_bench_and_user(matrix, user):
 
-            matrix_link = 'matrix_link'
+            readBoolean = True
 
             view_matrix = 'view_matrix'
 
@@ -93,13 +96,18 @@ def view_matrix(request, matrix_id):
 
                 collection_image_list = get_active_collection_images_for_user(request.user)
 
+            updateBoolean = False
+
+            if exists_update_for_bench_and_user(matrix, user):
+
+                updateBoolean = True
 
             matrix_cells = matrix.get_matrix()
 
             columns = matrix.get_columns()
             rows = matrix.get_rows()
 
-            data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'matrix_link': matrix_link, 'authority': authority, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'readBoolean': readBoolean, 'updateBoolean': updateBoolean, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return render(request, 'matrices/view_matrix.html', data)
 

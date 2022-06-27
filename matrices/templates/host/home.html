@@ -81,9 +81,7 @@ The home template
   		</div>
   	  </div>
   	</div>
-
 {% if request.user.username == '' %}
-
 	<div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -103,7 +101,6 @@ The home template
 		</div>
 	  </div>
 	</div>
-
 	<div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -123,13 +120,9 @@ The home template
 		</div>
 	  </div>
 	</div>
-
 {% else %}
-
-    {% if credential_flag %}
-
-	   {% if matrix_list %}
-
+    {% if credentialExists %}
+	    {% if matrix_list %}
 	<div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -149,9 +142,7 @@ The home template
 		</div>
 	  </div>
 	</div>
-
         {% else %}
-
 	<div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -170,11 +161,8 @@ The home template
 		</div>
 	  </div>
 	</div>
-
         {% endif %}
-
     {% else %}
-
     <div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -192,9 +180,7 @@ The home template
 		</div>
 	  </div>
 	</div>
-
     {% endif %}
-
 	<div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -214,13 +200,9 @@ The home template
 		</div>
 	  </div>
 	</div>
-
 {% endif %}
-
   </div><!-- End of home-grid-container -->
-
   <div class="home-grid-container">
-
     <div class="home-grid-item">
   	  <div class="card">
   		<div class="card-link">
@@ -240,7 +222,6 @@ The home template
   		</div>
   	  </div>
   	</div>
-
     <div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -260,7 +241,6 @@ The home template
 		</div>
 	  </div>
 	</div>
-
     <div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
@@ -280,7 +260,6 @@ The home template
 		</div>
 	  </div>
 	</div>
-
   </div><!-- End of home-grid-container -->
 
 </div><!-- End of page-content -->

@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'frontend_forms',
-    'fontawesomefree',
 
 ]
 

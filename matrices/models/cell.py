@@ -58,8 +58,8 @@ WORDPRESS_SUCCESS = 'Success!'
 """
 class Cell(models.Model):
     matrix = models.ForeignKey(Matrix, related_name='bench_cells', on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, default='')
-    description = models.TextField(max_length=4095, default='')
+    title = models.CharField(max_length=255, default='', blank=True)
+    description = models.TextField(max_length=4095, default='', blank=True)
     xcoordinate = models.IntegerField(default=0)
     ycoordinate = models.IntegerField(default=0)
     blogpost = models.CharField(max_length=50, blank=True, default='')

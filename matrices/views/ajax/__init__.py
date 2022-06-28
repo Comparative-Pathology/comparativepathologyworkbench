@@ -68,6 +68,9 @@ from .bench_read import bench_read
 from .bench_update import bench_update
 from .bench_delete import bench_delete
 
+from .header_read import header_read
+from .header_update import header_update
+
 from .bench_blog_read import bench_blog_read
 from .bench_cell_blog_read import bench_cell_blog_read
 

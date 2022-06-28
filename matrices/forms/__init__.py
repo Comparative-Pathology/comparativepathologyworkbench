@@ -38,6 +38,7 @@ from .commandform import CommandForm
 from .commentform import CommentForm
 from .credentialform import CredentialForm
 from .edituserform import EditUserForm
+from .headerform import HeaderForm
 from .matrixform import MatrixForm
 from .matrixsummarysearchform import MatrixSummarySearchForm
 from .newmatrixform import NewMatrixForm

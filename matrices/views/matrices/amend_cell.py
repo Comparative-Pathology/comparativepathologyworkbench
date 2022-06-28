@@ -55,6 +55,7 @@ from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_active_collection_images_for_user
 from matrices.routines import get_an_ebi_sca_experiment_id

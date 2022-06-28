@@ -120,6 +120,9 @@ urlpatterns = [
 	path('bench_update/<int:bench_id>/', matrices_views.ajax.bench_update, name='bench_update'),
 	path('bench_delete/<int:bench_id>/', matrices_views.ajax.bench_delete, name='bench_delete'),
 
+	path('header_read/<int:bench_id>/<int:header_id>/', matrices_views.ajax.header_read, name='header_read'),
+	path('header_update/<int:bench_id>/<int:header_id>/', matrices_views.ajax.header_update, name='header_update'),
+
 	path('bench_blog_read/<int:bench_id>/', matrices_views.ajax.bench_blog_read, name='bench_blog_read'),
 	path('bench_cell_blog_read/<int:cell_id>/', matrices_views.ajax.bench_cell_blog_read, name='bench_cell_blog_read'),
 

@@ -78,8 +78,6 @@ def bench_cell_blog_read(request, cell_id):
 
         for comment in cell_comments['comment_list']:
 
-            print("comment : " + str(comment))
-
             commentString = '<tr>'\
                 '<td>' + str(comment['date']) + '</td>'\
 	            '<td>' + str(comment['time']) + '</td>'\

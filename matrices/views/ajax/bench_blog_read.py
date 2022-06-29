@@ -78,8 +78,6 @@ def bench_blog_read(request, bench_id):
 
         for comment in matrix_comments['comment_list']:
 
-            print("comment : " + str(comment))
-
             commentString = '<tr>'\
                 '<td>' + str(comment['date']) + '</td>'\
 	            '<td>' + str(comment['time']) + '</td>'\

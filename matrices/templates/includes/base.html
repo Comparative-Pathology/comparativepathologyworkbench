@@ -96,8 +96,6 @@ The base header and footer include template
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script> -->
 
-  {% include 'frontend_forms/dialogs.html' %}
-
   <title>{% block title %}Comparative Pathology Workbench{% endblock %}</title>
 
 </head>
@@ -105,6 +103,8 @@ The base header and footer include template
 <body>
 
   <div class="page-container">
+
+      {% include 'frontend_forms/dialogs.html' %}
 
     <div class="page-header">
 

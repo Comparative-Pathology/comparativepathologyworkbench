@@ -167,10 +167,12 @@ urlpatterns = [
 	path('list_image_cart/', matrices_views.host.list_image_cart, name='list_image_cart'),
 	path('list_bench_authorisation/', matrices_views.host.list_bench_authorisation, name='list_bench_authorisation'),
 	path('list_bench_authorisation/<int:matrix_id>/', matrices_views.host.list_bench_authorisation, name='list_bench_authorisation'),
-	path('list_my_bench_authorisation/', matrices_views.host.list_my_bench_authorisation, name='list_my_bench_authorisation'),
+    path('list_my_bench_authorisation/', matrices_views.host.list_my_bench_authorisation, name='list_my_bench_authorisation'),
+    path('list_user_bench_authorisation/<int:user_id>/', matrices_views.host.list_user_bench_authorisation, name='list_user_bench_authorisation'),
     path('list_collection_authorisation/', matrices_views.host.list_collection_authorisation, name='list_collection_authorisation'),
 	path('list_collection_authorisation/<int:collection_id>/', matrices_views.host.list_collection_authorisation, name='list_collection_authorisation'),
 	path('list_my_collection_authorisation/', matrices_views.host.list_my_collection_authorisation, name='list_my_collection_authorisation'),
+    path('list_user_collection_authorisation/<int:user_id>/', matrices_views.host.list_user_collection_authorisation, name='list_user_collection_authorisation'),
     path('list_benches/', matrices_views.host.MatrixListView.as_view(), name='list_benches'),
     path('list_collections/', matrices_views.host.CollectionListView.as_view(), name='list_collections'),
 

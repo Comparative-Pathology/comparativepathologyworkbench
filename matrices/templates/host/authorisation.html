@@ -129,7 +129,8 @@ The authorisation template
 					<a href="{% url 'detail_user' userlist.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 					<a href="{% url 'edit_user' userlist.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
 					<a href="{% url 'delete_user' userlist.id %}" onclick="return confirm('Are you sure you want to DELETE this USER?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
-					<a href="{% url 'list_user_bench_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
+					<a href="{% url 'list_user_bench_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
+					<a href="{% url 'list_user_collection_authorisation' userlist.id %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button></a>
 				</td>
 
 		{% else %}

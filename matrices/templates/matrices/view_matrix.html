@@ -64,7 +64,8 @@ The view matrix (bench) template
         {% for collection in collection_list %}
             {% if matrix.has_last_used_collection == True %}
 	            {% if matrix.last_used_collection.id == collection.collection_id %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title }}</a>
 		         {% endif %}
             {% endif %}
         {% endfor %}
@@ -74,23 +75,29 @@ The view matrix (bench) template
 		        {% else %}
     		        {% if collection.collection_owner == user.username %}
 	    		        {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
 		    	        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
 			            {% endif %}
 			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
 			        {% endif %}
     	        {% endif %}
             {% else %}
 	            {% if collection.collection_owner == user.username %}
 		            {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
 			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
     		        {% endif %}
 	            {% else %}
-				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>{{ collection.collection_title|truncatechars:25 }}</a>
+				<!-- <a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:25 }}</a> -->
+				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
 	            {% endif %}
 	        {% endif %}
         {% endfor %}
@@ -208,7 +215,7 @@ The view matrix (bench) template
       <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
   						{% csrf_token %}
       <div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-        <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">{{ matrix_cell.title|truncatechars:15 }}
+        <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">{{ matrix_cell.title|truncatechars:25 }}
         </div><!-- End of row-header-cell-title -->
         <div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
           <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
@@ -242,7 +249,7 @@ The view matrix (bench) template
     <div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 						{% csrf_token %}
       <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">{{ matrix_cell.title|truncatechars:15 }}
+        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">{{ matrix_cell.title|truncatechars:25 }}
         </div><!-- End of column-header-cell-title -->
         <div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
           <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
@@ -273,7 +280,7 @@ The view matrix (bench) template
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 						{% endif %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
-        <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">{{ matrix_cell.title|truncatechars:15 }}
+        <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">{{ matrix_cell.title|truncatechars:25 }}
         </div><!-- End of cell-title -->
         <div id="cell_{{ matrix_cell.id }}" class="cell-control">
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">

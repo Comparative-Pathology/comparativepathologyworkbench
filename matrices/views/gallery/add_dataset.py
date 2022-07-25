@@ -38,6 +38,7 @@ from django.contrib import messages
 
 from matrices.models import Server
 
+from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import add_image_to_collection

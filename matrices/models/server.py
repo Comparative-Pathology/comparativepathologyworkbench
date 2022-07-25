@@ -895,11 +895,13 @@ class Server(models.Model):
 
         experiments_url = config('EBI_SCA_EXPERIMENTS_URL')
 
+        full_experiments_url = 'https://' + self.url_server + '/' + experiments_url + '/'
+
         session = requests.Session()
         session.timeout = 10
 
         payload = {'limit': 100}
-        data = session.get(experiments_url, params=payload).json()
+        data = session.get(full_experiments_url, params=payload).json()
         assert len(data['experiments']) < 1000
 
         experiment_list = list()

@@ -30,13 +30,11 @@
 ###
 from __future__ import unicode_literals
 
-from django.shortcuts import get_object_or_404
-
 from django.contrib.auth.decorators import login_required
-
 from django.http import HttpResponseRedirect
-
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.urls import reverse
 
 from matrices.models import Server
 
@@ -59,7 +57,7 @@ def show_ebi_server(request, server_id):
 
         server = get_object_or_404(Server, pk=server_id)
 
-        if server.is_omero547():
+        if server.is_ebi_sca():
 
             server_data = server.get_ebi_server_json()
 
@@ -70,7 +68,7 @@ def show_ebi_server(request, server_id):
         else:
 
             return HttpResponseRedirect(reverse('home', args=()))
-            
+
     else:
 
         return HttpResponseRedirect(reverse('home', args=()))

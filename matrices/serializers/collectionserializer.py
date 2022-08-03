@@ -167,6 +167,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 				image_owner = image_data.get('owner')
 				image_id = image_data.get('image_id')
 				image_roi_id = image_data.get('roi')
+				image_comment = image_data.get('comment')
 
 				server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
@@ -176,6 +177,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 				image_viewer_url = ''
 				image_birdseye_url = ''
 				image_roi = image_roi_id
+				image_comment = ''
 
 				if server.is_wordpress():
 
@@ -220,7 +222,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 				else:
 
-					image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner)
+					image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
 					image_in.save()
 
@@ -441,6 +443,8 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 					image_birdseye_url = ''
 					image_roi = 0
 
+					image_comment = ''
+
 					if server.is_wordpress():
 
 						data = server.check_wordpress_image(owner, image_id)
@@ -482,7 +486,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 					else:
 
-						new_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner)
+						new_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
 
 						new_image.save()
 

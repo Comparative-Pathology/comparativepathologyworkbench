@@ -61,6 +61,7 @@ class Image(models.Model):
     birdseye_url = models.CharField(max_length=255, blank=False, default='')
     owner = models.ForeignKey(User, related_name='owner', on_delete=models.DO_NOTHING)
     roi = models.IntegerField(default=0)
+    comment = models.TextField(max_length=4095, default='')
 
     def set_identifier(self, an_identifier):
         self.identifier = an_identifier
@@ -83,15 +84,18 @@ class Image(models.Model):
     def set_roi(self, a_roi):
         self.roi = a_roi
 
+    def set_comment(self, a_comment):
+        self.comment = a_comment
+
     @classmethod
-    def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner):
-        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, roi=roi, owner=owner)
+    def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner, comment):
+        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, roi=roi, owner=owner, comment=comment)
 
     def __str__(self):
-        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}"
+        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}"
 
     def __repr__(self):
-        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}"
+        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}"
 
 
     def is_owned_by(self, a_user):

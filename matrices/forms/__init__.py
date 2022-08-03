@@ -37,6 +37,7 @@ from .collectionsummarysearchform import CollectionSummarySearchForm
 from .commandform import CommandForm
 from .commentform import CommentForm
 from .credentialform import CredentialForm
+from .documentform import DocumentForm
 from .edituserform import EditUserForm
 from .headerform import HeaderForm
 from .matrixform import MatrixForm

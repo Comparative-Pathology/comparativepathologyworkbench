@@ -37,6 +37,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from matrices.models import Server
+from matrices.models import Image
+from matrices.models import Document
 
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
@@ -74,7 +76,24 @@ def show_ebi_sca_image(request, server_id, image_id):
 
             chart = get_an_ebi_sca_parameters_from_chart_id(server.url_server, image_id)
 
-            data.update({ 'image_flag': image_flag, 'add_from': "show_image", 'server': server, 'chart': chart, 'metadata': metadata, 'add_from': "show_ebi_sca_image" })
+            image_comment = ''
+
+            document_key = '/' + image_id
+
+            if Document.objects.filter(location=document_key).exists():
+
+                document = Document.objects.get(location=document_key)
+
+                image_comment = document.comment
+
+            if Image.objects.filter(name=image_id).exists():
+
+                image = Image.objects.get(name=image_id)
+
+                image_comment = image.comment
+
+
+            data.update({ 'image_comment': image_comment, 'image_flag': image_flag, 'add_from': "show_image", 'server': server, 'chart': chart, 'metadata': metadata, 'add_from': "show_ebi_sca_image" })
 
             return render(request, 'gallery/show_ebi_sca_image.html', data)
 

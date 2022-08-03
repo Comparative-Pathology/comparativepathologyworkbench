@@ -74,7 +74,7 @@ The view collection template
 {% endif %}
 
 	<h1>Search Sources</h1>
-	<p>Search the sources with a URL (OMERO and EBI SCA sources ONLY!):</p>
+	<p>Search the sources with a URL (OMERO source ONLY!):</p>
 	<form action="{% url 'search_image' search_from 0 %}" method="post">
 		{% csrf_token %}
 		{% include 'includes/form.html' %}

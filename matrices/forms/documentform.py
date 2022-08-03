@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         commentform.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,23 +24,20 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# models Package Description.
+# Form for adding new blog comments.
 ###
-from .type import Type
-from .server import Server
-from .image import Image
-from .collection import Collection
-from .matrix import Matrix
-from .profile import Profile
-from .protocol import Protocol
-from .command import Command
-from .cell import Cell
-from .document import Document
-from .blog import Blog
-from .credential import Credential
-from .authority import Authority
-from .authorisation import Authorisation
-from .collectionauthority import CollectionAuthority
-from .collectionauthorisation import CollectionAuthorisation
-from .matrixsummary import MatrixSummary
-from .collectionsummary import CollectionSummary
+from __future__ import unicode_literals
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.utils.html import conditional_escape
+from django.utils.html import mark_safe
+from django.utils.translation import gettext_lazy as _
+
+from matrices.models import Document
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ('comment', 'source_url', 'location')

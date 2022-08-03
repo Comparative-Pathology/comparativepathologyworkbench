@@ -122,8 +122,7 @@ The home template
 	</div>
 {% else %}
     {% if credentialExists %}
-	    {% if matrix_list %}
-	<div class="home-grid-item">
+    <div class="home-grid-item">
 	  <div class="card">
   		<div class="card-link">
 		  <br />
@@ -142,26 +141,6 @@ The home template
 		</div>
 	  </div>
 	</div>
-        {% else %}
-	<div class="home-grid-item">
-	  <div class="card">
-  		<div class="card-link">
-		  <br />
-		  <a href="{% url 'new_matrix' %}">
-    	    <span class="card-link-link"></span>
-  		  </a>
-  		  <br />
-          <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
-		  <div class="card-container">
-          <h3>ADD</h3>
-		    <br />
-		    <br />
-			<button class="button button-add"><i class="fa fa-sign-out-alt fa-3x"></i></button>
-		  </div>
-		</div>
-	  </div>
-	</div>
-        {% endif %}
     {% else %}
     <div class="home-grid-item">
 	  <div class="card">

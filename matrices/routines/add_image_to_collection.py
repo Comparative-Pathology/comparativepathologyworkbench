@@ -53,15 +53,20 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
     Image = apps.get_model('matrices', 'Image')
     Collection = apps.get_model('matrices', 'Collection')
+    Document = apps.get_model('matrices', 'Document')
 
     user = User.objects.get(username=credential.username)
 
     image_out = None
 
+    comment = ''
+
     json_image = ''
     image_name = ''
     image_viewer_url = ''
     image_birdseye_url = ''
+
+    document_delete_key = ''
 
     if server.is_ebi_sca():
 
@@ -75,6 +80,8 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         full_image_name = chart['chart_id']
         image_viewer_url = chart['viewer_url']
         image_birdseye_url = chart['birdseye_url']
+
+        document_delete_key = '/' + full_image_name
 
 
     if server.is_omero547():
@@ -113,6 +120,16 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
     if roi_id == 0:
 
+        if document_delete_key != '':
+
+            if Document.objects.filter(location=document_delete_key).exists():
+
+                document = Document.objects.get(location=document_delete_key)
+
+                comment = document.comment
+
+                document.delete()
+
         if exists_image_for_id_server_owner_roi(image_id, server, user, 0):
 
             existing_image_list = get_images_for_id_server_owner_roi(image_id, server, user, 0)
@@ -121,7 +138,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
         else:
 
-            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user)
+            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, comment)
 
             image_out.save()
 
@@ -130,6 +147,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         for collection in queryset:
 
             Collection.assign_image(image_out, collection)
+
 
     else:
 
@@ -152,7 +170,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
                     else:
 
-                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user)
+                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, comment)
 
                         image_out.save()
 

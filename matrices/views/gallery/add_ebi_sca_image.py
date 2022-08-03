@@ -75,6 +75,11 @@ def add_ebi_sca_image(request, server_id, image_id, path_from):
 
                 return HttpResponseRedirect(reverse('webgallery_show_ebi_sca_image', args=(server_id, image_id)))
 
+            if path_from == "show_ebi_sca_upload_image":
+
+                return HttpResponseRedirect(reverse('webgallery_show_ebi_sca_upload_image', args=(server_id, image_id)))
+
+
     else:
 
         return HttpResponseRedirect(reverse('home', args=()))

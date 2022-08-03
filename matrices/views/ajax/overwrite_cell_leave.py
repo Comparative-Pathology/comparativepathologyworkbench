@@ -154,7 +154,7 @@ def overwrite_cell_leave(request):
 
                 imageOld = Image.objects.get(pk=source_cell.image.id)
 
-                imageNew = Image.create(imageOld.identifier, imageOld.name, imageOld.server, imageOld.viewer_url, imageOld.birdseye_url, imageOld.roi, imageOld.owner)
+                imageNew = Image.create(imageOld.identifier, imageOld.name, imageOld.server, imageOld.viewer_url, imageOld.birdseye_url, imageOld.roi, imageOld.owner, imageOld.comment)
 
                 imageNew.save()
 

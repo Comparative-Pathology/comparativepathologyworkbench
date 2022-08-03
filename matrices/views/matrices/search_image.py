@@ -106,29 +106,8 @@ def search_image(request, path_from, identifier):
 
                 if url_string_omero_out == '' and url_string_ebi_sca_out != '':
 
-                    temp_dir = config('HIGHCHARTS_TEMP_DIR')
-                    output_dir = config('HIGHCHARTS_OUTPUT_DIR')
-                    highcharts_host = config('HIGHCHARTS_HOST')
-                    highcharts_web = config('HIGHCHARTS_OUTPUT_WEB')
-
-                    experiment_id = get_an_ebi_sca_experiment_id(url_string)
-
-                    chart_id = convert_url_ebi_sca_to_chart_id(url_string)
-
-                    shell_command = create_an_ebi_sca_chart(url_string_ebi_sca_out, experiment_id, chart_id, highcharts_host, temp_dir, output_dir)
-
-                    success = call(str(shell_command), shell=True)
-
-                    if success == 0:
-
-                        server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
-
-                        return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
-
-                    else:
-
-                        messages.error(request, "CPW_WEB:0430 Search Image - Unable to generate Chart, shell_command FAILED!")
-                        form.add_error(None, "CPW_WEB:0430 Search Image - Unable to generate Chart, shell_command FAILED!")
+                    messages.error(request, "CPW_WEB:0XXX Search Image - URL not found!")
+                    form.add_error(None, "CPW_WEB:0XXX Search Image - URL not found!")
 
             else:
 

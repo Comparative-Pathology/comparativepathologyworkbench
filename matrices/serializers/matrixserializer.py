@@ -222,6 +222,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 					image_viewer_url = ''
 					image_birdseye_url = ''
 					image_roi = 0
+					image_comment = ''
 
 					if server.is_wordpress():
 
@@ -260,7 +261,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 					else:
 
-						image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner)
+						image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
 						image.save()
 
@@ -491,6 +492,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 							image_viewer_url = ''
 							image_birdseye_url = ''
 							image_roi = 0
+							image_comment = ''
 
 							if server.is_wordpress():
 
@@ -531,7 +533,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 							else:
 
-								image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner)
+								image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
 								image.save()
 
@@ -583,6 +585,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 								image_viewer_url = ''
 								image_birdseye_url = ''
 								image_roi = 0
+								image_comment = ''
 
 								if server.is_wordpress():
 
@@ -625,7 +628,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 								else:
 
-									image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner)
+									image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
 									image.save()
 
@@ -785,6 +788,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 					image_viewer_url = ''
 					image_birdseye_url = ''
 					image_roi = 0
+					image_comment = ''
 
 					if server.is_wordpress():
 
@@ -825,7 +829,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 					else:
 
-						cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner)
+						cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
 
 						cell_image.save()
 

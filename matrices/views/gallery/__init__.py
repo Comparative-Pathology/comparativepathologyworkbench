@@ -44,6 +44,7 @@ from .add_ebi_sca_image import add_ebi_sca_image
 from .show_dataset import show_dataset
 from .show_ebi_sca_image import show_ebi_sca_image
 from .show_ebi_sca_server import show_ebi_sca_server
+from .show_ebi_sca_upload_server import show_ebi_sca_upload_server
 from .show_group import show_group
 from .show_image import show_image
 from .show_imaging_server import show_imaging_server

@@ -27,20 +27,21 @@
 # All the URL Paths used by the CPW.
 ###
 
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
-
 from django.urls import path, include
-
-from matrices import views as matrices_views
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
-from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
 
 from django_filters.views import FilterView
 
 from rest_framework.authtoken.views import obtain_auth_token
+
+from matrices import views as matrices_views
 
 
 router = DefaultRouter()
@@ -156,6 +157,7 @@ urlpatterns = [
 	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
 	path('show_ebi_sca_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_server, name='webgallery_show_ebi_sca_server'),
 	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),
+	path('show_ebi_sca_upload_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_upload_server, name='webgallery_show_ebi_sca_upload_server'),
 
 #   views/host
 	path('', matrices_views.host.home, name='home'),
@@ -238,3 +240,6 @@ urlpatterns = [
 	path('activate/<str:uidb64>/<str:token>', matrices_views.user.activate, name='activate'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

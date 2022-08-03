@@ -39,6 +39,7 @@ from decouple import config
 
 from matrices.models import Image
 from matrices.models import Server
+from matrices.models import Document
 
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_user
@@ -49,9 +50,14 @@ from matrices.routines import exists_image_in_table
 #
 def charttidyup(request):
 
+
     data = get_header_data(request.user)
 
     if request.user.is_superuser:
+
+        documentDBTotal = Document.objects.count()
+
+        Document.objects.all().delete()
 
         image_list = Image.objects.filter(server__type__name='EBI_SCA')
 
@@ -81,6 +87,9 @@ def charttidyup(request):
         for output in out_list:
 
             imageWebBeforeTotal = imageWebBeforeTotal + 1
+
+        out_message = "Total Number of Documents in Database = {}".format( documentDBTotal )
+        out_message_list.append(out_message)
 
         out_message = "Total Number of Charts in Database = {}".format( imageDBTotal )
         out_message_list.append(out_message)

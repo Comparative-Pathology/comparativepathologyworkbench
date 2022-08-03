@@ -37,7 +37,7 @@ The show image template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
-			<li><a href="{% url 'webgallery_show_ebi_sca_server' server.id %}">{{ server.name }}</a></li>
+			<li><a href="{% url 'webgallery_show_ebi_sca_upload_server' server.id %}">{{ server.name }}</a></li>
 
 	{% if image.name != 'ERROR' %}
 
@@ -134,6 +134,8 @@ The show image template
 		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
 		<dd>None</dd>
+		<dt>Comment</dt>
+		<dd>{{ image_comment }}</dd>
 	</dl>
 
 		{% else %}
@@ -147,6 +149,8 @@ The show image template
 		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
 		<dd>{{ chart.geneId }}</dd>
+		<dt>Comment</dt>
+		<dd>{{ image_comment }}</dd>
 	</dl>
 
 		{% endif %}
@@ -166,6 +170,8 @@ The show image template
 		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
 		<dd>None</dd>
+		<dt>Comment</dt>
+		<dd>{{ image_comment }}</dd>
 	</dl>
 
 			{% else %}
@@ -179,6 +185,8 @@ The show image template
 		<dd>{{ chart.colourBy }}</dd>
 		<dt>Gene</dt>
 		<dd>{{ chart.geneId }}</dd>
+		<dt>Comment</dt>
+		<dd>{{ image_comment }}</dd>
 	</dl>
 
 			{% endif %}

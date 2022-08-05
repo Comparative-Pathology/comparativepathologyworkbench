@@ -40,10 +40,12 @@
 
 from .add_image import add_image
 from .add_dataset import add_dataset
-from .add_ebi_sca_image import add_ebi_sca_image
 from .show_dataset import show_dataset
+from .add_cpw_image import add_cpw_image
+from .show_cpw_image import show_cpw_image
+from .show_cpw_upload_server import show_cpw_upload_server
+from .add_ebi_sca_image import add_ebi_sca_image
 from .show_ebi_sca_image import show_ebi_sca_image
-from .show_ebi_sca_server import show_ebi_sca_server
 from .show_ebi_sca_upload_server import show_ebi_sca_upload_server
 from .show_group import show_group
 from .show_image import show_image

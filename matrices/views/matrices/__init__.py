@@ -58,7 +58,6 @@
 # def delete_last_row(request, matrix_id):
 #
 # def search_image(request, path_from, identifier)):
-# def search_chart(request)):
 #
 ###
 
@@ -78,7 +77,6 @@ from .delete_last_column import delete_last_column
 from .delete_last_row import delete_last_row
 from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
-from .search_chart import search_chart
 from .search_image import search_image
 from .view_active_collection import view_active_collection
 from .view_all_collections import view_all_collections

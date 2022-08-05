@@ -155,9 +155,12 @@ urlpatterns = [
 	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
 	path('add_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.add_dataset, name='webgallery_add_dataset'),
 	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
-	path('show_ebi_sca_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_server, name='webgallery_show_ebi_sca_server'),
 	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),
 	path('show_ebi_sca_upload_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_upload_server, name='webgallery_show_ebi_sca_upload_server'),
+
+	path('add_cpw_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_cpw_image, name='webgallery_add_cpw_image'),
+	path('show_cpw_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_cpw_image, name='webgallery_show_cpw_image'),
+	path('show_cpw_upload_server/<int:server_id>/', matrices_views.gallery.show_cpw_upload_server, name='webgallery_show_cpw_upload_server'),
 
 #   views/host
 	path('', matrices_views.host.home, name='home'),
@@ -232,7 +235,6 @@ urlpatterns = [
 	path('delete_last_row/<int:matrix_id>/', matrices_views.matrices.delete_last_row, name='delete_last_row'),
 
 	path('search_image/<str:path_from>/<int:identifier>/', matrices_views.matrices.search_image, name='search_image'),
-	path('search_chart/', matrices_views.matrices.search_chart, name='search_chart'),
 
 #   views/user
 	path('signup/', matrices_views.user.signup, name='signup'),

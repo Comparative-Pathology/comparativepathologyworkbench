@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         show_ebi_sca_upload.py
+# \file         show_cpw_upload.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the show_ebi_sca_upload_server view routine
+# This file contains the show_cpw_upload_server view routine
 #
 ###
 from __future__ import unicode_literals
@@ -52,24 +52,20 @@ from matrices.models import Document
 from matrices.forms import DocumentForm
 
 from matrices.routines import credential_exists
-from matrices.routines import convert_url_ebi_sca_to_json
-from matrices.routines import get_an_ebi_sca_experiment_id
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
-from matrices.routines import create_an_ebi_sca_chart
-from matrices.routines import convert_url_ebi_sca_to_chart_id
 
 HTTP_POST = 'POST'
 
 
 #
-# SHOW A SEARCH BOX FOR AN EBI SERVER TO UPLOAD A FILE
+# SHOW A SEARCH BOX FOR THE CPW SERVER TO UPLOAD A FILE
 #
 @login_required()
-def show_ebi_sca_upload_server(request, server_id):
+def show_cpw_upload_server(request, server_id):
     """
-    Show the EBI SCA Server
+    Show the CPW Server
     """
 
     data = get_header_data(request.user)
@@ -78,7 +74,7 @@ def show_ebi_sca_upload_server(request, server_id):
 
         server = get_object_or_404(Server, pk=server_id)
 
-        if server.is_ebi_sca():
+        if server.is_cpw():
 
             if request.method == HTTP_POST:
 
@@ -90,47 +86,35 @@ def show_ebi_sca_upload_server(request, server_id):
 
                     url_string = cd.get('source_url')
 
-                    url_string_out = convert_url_ebi_sca_to_json(url_string)
+                    if Document.objects.filter(owner=request.user).exists():
 
-                    if url_string_out == "":
+                        Document.objects.filter(owner=request.user).delete()
 
-                        messages.error(request, "CPW_WEB:0040 Show EBI SCA - URL not found!")
-                        form.add_error(None, "CPW_WEB:0040 Show EBI SCA - URL not found!")
+                    document = form.save(commit=False)
 
-                    else:
+                    document.set_owner(request.user)
 
-                        if Document.objects.filter(owner=request.user).exists():
+                    chart_id = str(document.location)
 
-                            Document.objects.filter(owner=request.user).delete()
+                    document.save()
 
-                        experiment_id = get_an_ebi_sca_experiment_id(url_string)
+                    initial_path = document.location.path
+                    new_path = '/' + chart_id
 
-                        chart_id = convert_url_ebi_sca_to_chart_id(url_string)
+                    new_full_path = settings.MEDIA_ROOT + new_path
 
-                        document = form.save(commit=False)
+                    document.set_location(new_path)
 
-                        document.set_owner(request.user)
+                    os.rename(initial_path, new_full_path)
 
-                        document.save()
+                    document.save()
 
-                        initial_path = document.location.path
-
-                        new_chart_id = '/' + chart_id
-
-                        new_path = settings.MEDIA_ROOT + new_chart_id
-
-                        document.set_location(new_chart_id)
-
-                        os.rename(initial_path, new_path)
-
-                        document.save()
-
-                        return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+                    return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=chart_id)
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0060 Show EBI SCA Upload - Form is Invalid!")
-                    form.add_error(None, "CPW_WEB:0060 Show EBI SCA Upload - Form is Invalid!")
+                    messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Form is Invalid!")
 
             else:
 
@@ -138,7 +122,7 @@ def show_ebi_sca_upload_server(request, server_id):
 
             data.update({ 'server': server, 'form': form })
 
-            return render(request, 'gallery/show_ebi_sca_upload_server.html', data)
+            return render(request, 'gallery/show_cpw_upload_server.html', data)
 
         else:
 

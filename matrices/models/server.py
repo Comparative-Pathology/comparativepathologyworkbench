@@ -79,6 +79,11 @@ CMD_BLOG_POST_A_POST = 'PostAPost'
 CMD_BLOG_POST_A_COMMENT = 'PostAComment'
 CMD_BLOG_DELETE_POST = 'DeletePost'
 
+SERVER_WORDPRESS = 'WORDPRESS'
+SERVER_OMERO_547 = 'OMERO_5.4.7'
+SERVER_EBI_SCA = 'EBI_SCA'
+SERVER_CPW = 'CPW'
+
 
 """
     SERVER
@@ -134,19 +139,25 @@ class Server(models.Model):
             return False
 
     def is_wordpress(self):
-        if self.type.name == 'WORDPRESS':
+        if self.type.name == SERVER_WORDPRESS:
             return True
         else:
             return False
 
     def is_omero547(self):
-        if self.type.name == 'OMERO_5.4.7':
+        if self.type.name == SERVER_OMERO_547:
             return True
         else:
             return False
 
     def is_ebi_sca(self):
-        if self.type.name == 'EBI_SCA':
+        if self.type.name == SERVER_EBI_SCA:
+            return True
+        else:
+            return False
+
+    def is_cpw(self):
+        if self.type.name == SERVER_CPW:
             return True
         else:
             return False

@@ -33,7 +33,10 @@ from __future__ import unicode_literals
 import os
 import time
 
+from datetime import datetime
+
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
@@ -61,12 +64,43 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
     comment = ''
 
+    print("image_id : " + str(image_id))
+
     json_image = ''
     image_name = ''
     image_viewer_url = ''
     image_birdseye_url = ''
+    image_comment = ''
+    full_image_name = image_id
+    image_key = ''
 
-    document_delete_key = ''
+
+    if server.is_cpw():
+
+        now = datetime.now()
+        date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
+
+        new_datetime = date_time.replace('-', '').replace(':', '').replace('.', '')
+
+        size = len(new_datetime)
+
+        image_key = new_datetime[8:size + 9]
+
+        document_key = '/' + image_id
+
+        image_birdseye_url = 'http://' + server.url_server + document_key
+
+        image_id = image_key
+
+        if Document.objects.filter(location=document_key).filter(owner=user).exists():
+
+            documents_list = Document.objects.filter(location=document_key).filter(owner=user)
+
+            for document in documents_list:
+
+                image_comment = document.comment
+                image_viewer_url = document.source_url
+
 
     if server.is_ebi_sca():
 
@@ -81,7 +115,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         image_viewer_url = chart['viewer_url']
         image_birdseye_url = chart['birdseye_url']
 
-        document_delete_key = '/' + full_image_name
+        document_key = '/' + full_image_name
 
 
     if server.is_omero547():
@@ -120,15 +154,15 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
     if roi_id == 0:
 
-        if document_delete_key != '':
+        if document_key != '':
 
-            if Document.objects.filter(location=document_delete_key).exists():
+            if Document.objects.filter(location=document_key).filter(owner=user).exists():
 
-                document = Document.objects.get(location=document_delete_key)
+                documents_list = Document.objects.filter(location=document_key).filter(owner=user)
 
-                comment = document.comment
+                for document in documents_list:
 
-                document.delete()
+                    document.delete()
 
         if exists_image_for_id_server_owner_roi(image_id, server, user, 0):
 
@@ -138,7 +172,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
         else:
 
-            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, comment)
+            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, image_comment)
 
             image_out.save()
 

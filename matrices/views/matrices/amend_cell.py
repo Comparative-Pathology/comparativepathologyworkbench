@@ -49,10 +49,7 @@ from matrices.models import Matrix
 from matrices.models import Cell
 
 from matrices.routines import add_image_to_collection
-from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import convert_url_omero_image_to_cpw
-from matrices.routines import convert_url_ebi_sca_to_chart_id
-from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_read_for_bench_and_user
@@ -137,20 +134,9 @@ def amend_cell(request, matrix_id, cell_id):
 
                     url_string = cd.get('url_string')
 
-                    url_string_ebi_sca_out = convert_url_ebi_sca_to_json(url_string)
                     url_string_omero_out = convert_url_omero_image_to_cpw(request, url_string)
 
-                    if url_string_omero_out != '' and url_string_ebi_sca_out != '':
-
-                        messages.error(request, "CPW_WEB:0210 Amend Cell - URL not found!")
-                        form.add_error(None, "CPW_WEB:0210 Amend Cell - URL not found!")
-
-                        data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
-
-                        return render(request, 'matrices/amend_cell.html', data)
-
-
-                    if url_string_omero_out == '' and url_string_ebi_sca_out == '':
+                    if url_string_omero_out == '':
 
                         messages.error(request, "CPW_WEB:0220 Amend Cell - URL not found!")
                         form.add_error(None, "CPW_WEB:0220 Amend Cell - URL not found!")
@@ -159,8 +145,7 @@ def amend_cell(request, matrix_id, cell_id):
 
                         return render(request, 'matrices/amend_cell.html', data)
 
-
-                    if url_string_omero_out != '' and url_string_ebi_sca_out == '':
+                    else:
 
                         server = get_server_from_omero_url(url_string_omero_out)
                         image_id = get_id_from_omero_url(url_string_omero_out)
@@ -179,54 +164,6 @@ def amend_cell(request, matrix_id, cell_id):
 
                             messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
                             form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
-
-                            data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
-
-                            return render(request, 'matrices/amend_cell.html', data)
-
-
-                    if url_string_omero_out == '' and url_string_ebi_sca_out != '':
-
-                        temp_dir = config('HIGHCHARTS_TEMP_DIR')
-                        output_dir = config('HIGHCHARTS_OUTPUT_DIR')
-                        highcharts_host = config('HIGHCHARTS_HOST')
-                        highcharts_web = config('HIGHCHARTS_OUTPUT_WEB')
-
-                        experiment_id = get_an_ebi_sca_experiment_id(url_string)
-
-                        image_id = convert_url_ebi_sca_to_chart_id(url_string)
-
-                        shell_command = create_an_ebi_sca_chart(url_string_ebi_sca_out, experiment_id, image_id, highcharts_host, temp_dir, output_dir)
-
-                        success = call(str(shell_command), shell=True)
-
-                        if success == 0:
-
-                            server = get_server_from_ebi_sca_url(url_string_ebi_sca_out)
-
-                            if exists_active_collection_for_user(request.user):
-
-                                image = add_image_to_collection(request.user, server, image_id, 0)
-
-                                queryset = get_active_collection_for_user(request.user)
-
-                                for collection in queryset:
-
-                                    matrix.set_last_used_collection(collection)
-
-                            else:
-
-                                messages.error(request, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
-                                form.add_error(None, "CPW_WEB:0240 Amend Cell - You have no Active Image Collection; Please create a Collection!")
-
-                                data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
-
-                                return render(request, 'matrices/amend_cell.html', data)
-
-                        else:
-
-                            messages.error(request, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
-                            form.add_error(None, "CPW_WEB:0250 Amend Cell - Unable to generate Chart, shell_command FAILED!")
 
                             data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 

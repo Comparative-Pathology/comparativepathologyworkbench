@@ -1,5 +1,5 @@
 <!--
-\file         detail_cell_blog.html
+\file         show_server.html
 \author       Mike Wicks
 \date         March 2021
 \version      $Id$
@@ -23,7 +23,7 @@ License along with this program; if not, write to the Free
 Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA  02110-1301, USA.
 \brief
-The detail cell blog template
+The show (imaging) server template
 -->
 
 {% extends 'includes/base.html' %}
@@ -36,7 +36,8 @@ The detail cell blog template
 
 <!-- Breadcrumb Menu -->
 
-			<li>Search</li>
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li>{{ server.name }}</li>
 
 {% endblock %}
 
@@ -56,11 +57,11 @@ The detail cell blog template
 <!-- Page Content -->
 <div class="page-content">
 
-	<h1>Search for an Chart</h1>
+	<h1>{{ server.name }}</h1>
 
-	<h3>Chart Search</h3>
+	<h3>Image Upload</h3>
 
-	<p>Input a URL to find an Chart</p>
+	<p>Input a Comment and a URL to upload an Image</p>
 	<hr>
 
 	<br />
@@ -69,7 +70,7 @@ The detail cell blog template
 
 	<br />
 
-	<form method="POST" class="post-form">
+	<form method="POST" class="post-form" enctype="multipart/form-data">
 
 {% csrf_token %}
 
@@ -77,7 +78,7 @@ The detail cell blog template
 
 		<br />
 
-		<button type="submit" class="button button-delete">SEARCH</button>
+		<button type="submit" class="button button-delete">UPLOAD</button>
 
 	</form>
 

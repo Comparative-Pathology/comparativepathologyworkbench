@@ -121,6 +121,9 @@ The view collection template
 		{% if collection_image.server.type.name == 'EBI_SCA' %}
 				<a href="{% url 'webgallery_show_ebi_sca_image' collection_image.server.id collection_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
 		{% endif %}
+		{% if collection_image.server.type.name == 'CPW' %}
+				<a href="{% url 'webgallery_show_cpw_image' collection_image.server.id collection_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+		{% endif %}
 		{% if collection_image.owner.username == user.username %}
 				<a href="{% url 'webgallery_delete_collection_image' collection.id collection_image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
 		{% endif %}

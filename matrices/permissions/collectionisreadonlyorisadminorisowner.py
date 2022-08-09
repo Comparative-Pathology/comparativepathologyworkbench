@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         matrixisreadonlyorisadminorisowneroriseditor.py
+# \file         collectionisreadonlyorisadminorisowner.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

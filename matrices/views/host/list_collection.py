@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_list_collection.py
+# \file         list_collection.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         cellserializer.py
+# \file         collectionserializer.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

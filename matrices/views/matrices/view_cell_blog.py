@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_matrices.py
+# \file         view_cell_blog.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

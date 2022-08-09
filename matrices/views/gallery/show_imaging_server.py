@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_gallery.py
+# \file         show_imaging_server.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

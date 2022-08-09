@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         collection_authorisation_exists_for_collection_and_permitted.py
+# \file         exists_bench_authorisation_editor.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

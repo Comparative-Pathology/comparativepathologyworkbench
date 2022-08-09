@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_primary_wordpress_server.py
+# \file         get_server_from_ebi_sca_url.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -41,8 +41,6 @@ from django.apps import apps
     Get a Server from an EBI SCA URL
 """
 def get_server_from_ebi_sca_url(a_url):
-
-    #https://www.ebi.ac.uk/gxa/sc ...
 
     result = urlparse(a_url)
 

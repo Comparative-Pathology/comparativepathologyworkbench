@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_maintenance.py
+# \file         view_type.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_server_for_uid_url.py
+# \file         validate_an_omero_image_url.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

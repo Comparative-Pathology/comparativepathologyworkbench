@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 ###!
-# \file		 views_matrices.py
+# \file		   amend_cell.py
 # \author	   Mike Wicks
-# \date		 March 2021
-# \version	  $Id$
+# \date		   March 2021
+# \version	   $Id$
 # \par
 # (C) University of Edinburgh, Edinburgh, UK
 # (C) Heriot-Watt University, Edinburgh, UK

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         delete_server.py
+# \file         bench_authorisation_delete.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

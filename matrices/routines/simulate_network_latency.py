@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         aescipher.py
+# \file         simulate_network_latency.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

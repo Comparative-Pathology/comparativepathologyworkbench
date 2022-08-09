@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         authorisation_exists_for_bench_and_permitted.py
+# \file         exists_blog_command_for_protocol.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

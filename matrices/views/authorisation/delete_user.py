@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_authorisation.py
+# \file         delete_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

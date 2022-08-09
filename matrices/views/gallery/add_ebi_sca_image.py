@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_gallery.py
+# \file         add_ebi_sca_image.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_authority_for_bench_and_user_and_requester.py
+# \file         exists_read_for_bench_and_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

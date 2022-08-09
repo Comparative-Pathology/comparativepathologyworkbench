@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_primary_wordpress_server.py
+# \file         get_server_from_omero_url.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -43,8 +43,6 @@ from django.apps import apps
     Get a Server from an OMERO URL
 """
 def get_server_from_omero_url(a_url):
-
-    #<scheme>://<netloc>/show_image/26/1654
 
     result = urlparse(a_url)
 

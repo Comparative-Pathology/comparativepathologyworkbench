@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file		 views_matrices.py
+# \file		 clear_cell.py
 # \author	   Mike Wicks
 # \date		 March 2021
 # \version	  $Id$

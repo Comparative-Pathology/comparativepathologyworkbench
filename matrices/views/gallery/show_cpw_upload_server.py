@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         show_cpw_upload.py
+# \file         show_cpw_upload_server.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

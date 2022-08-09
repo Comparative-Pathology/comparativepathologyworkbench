@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_host.py
+# \file         list_imaging_hosts.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

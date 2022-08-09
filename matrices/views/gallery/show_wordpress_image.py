@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_gallery.py
+# \file         show_wordpress_image.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

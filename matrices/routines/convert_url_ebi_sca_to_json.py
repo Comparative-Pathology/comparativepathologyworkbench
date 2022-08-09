@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_server_for_uid_url.py
+# \file         convert_url_ebi_sca_to_json.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

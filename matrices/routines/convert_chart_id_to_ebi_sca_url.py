@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_server_for_uid_url.py
+# \file         convert_chart_id_to_ebi_sca_url.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_benches_for_last_used_collection.py
+# \file         exists_benches_for_last_used_collection.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

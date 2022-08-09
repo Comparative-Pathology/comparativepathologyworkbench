@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         delete_server.py
+# \file         server_delete.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

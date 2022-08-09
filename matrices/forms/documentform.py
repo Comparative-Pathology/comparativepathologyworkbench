@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         commentform.py
+# \file         documentform.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

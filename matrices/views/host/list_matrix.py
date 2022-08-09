@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_list_matrix.py
+# \file         list_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

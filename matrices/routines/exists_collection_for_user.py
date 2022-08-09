@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_image_for_user.py
+# \file         exists_collection_for_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_image_in_cells.py
+# \file         exists_image_in_table.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

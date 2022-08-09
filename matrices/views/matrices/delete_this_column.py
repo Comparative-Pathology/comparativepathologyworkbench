@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_matrices.py
+# \file         delete_this_column.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

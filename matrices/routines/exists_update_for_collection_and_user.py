@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_collection_authority_for_collection_and_user_and_requester.py
+# \file         exists_update_for_collection_and_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         collection_authorisation_exists_for_collection_and_permitted.py
+# \file         exists_collection_authorisation_for_permitted.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

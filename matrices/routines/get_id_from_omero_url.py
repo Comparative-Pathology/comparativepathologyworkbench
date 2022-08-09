@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_primary_wordpress_server.py
+# \file         get_id_from_omero_url.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

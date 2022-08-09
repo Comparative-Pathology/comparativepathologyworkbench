@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         views_host.py
+# \file         home.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

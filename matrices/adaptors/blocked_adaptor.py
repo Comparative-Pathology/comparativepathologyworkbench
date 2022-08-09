@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         blocked_adaptor.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

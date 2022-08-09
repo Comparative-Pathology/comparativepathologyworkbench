@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         apps.py
+# \file         wsgi.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         add_server.py
+# \file         bench_blog_read.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

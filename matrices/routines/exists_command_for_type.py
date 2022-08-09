@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         authorisation_exists_for_bench_and_permitted.py
+# \file         exists_command_for_type.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$

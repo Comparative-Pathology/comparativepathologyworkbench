@@ -42,6 +42,42 @@ The view matrix (bench) template
 			<li>
 				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
 			</li>
+	{% if settings.LOCATION == 'CZI' %}
+			<li style="float: right;">
+				<a href="{% url 'matrix' next_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
+				</a>
+			</li>
+			<li style="float: right;">
+				<a href="{% url 'matrix' previous_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-arrow-left"></i> Previous</button>
+				</a>
+			</li>
+    {% endif %}
+    {% if settings.LOCATION == 'CANADA' %}
+			<li style="float: right;">
+				<a href="{% url 'matrix' next_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
+				</a>
+			</li>
+			<li style="float: right;">
+				<a href="{% url 'matrix' previous_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;"><i class="fa fa-arrow-left"></i> Previous</button>
+				</a>
+			</li>
+    {% endif %}
+    {% if settings.LOCATION == 'COELIAC' %}
+			<li style="float: right;">
+				<a href="{% url 'matrix' next_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
+				</a>
+			</li>
+			<li style="float: right;">
+				<a href="{% url 'matrix' previous_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;"><i class="fa fa-arrow-left"></i> Previous</button>
+				</a>
+			</li>
+    {% endif %}
 {% endblock %}
 
 {% block content %}

@@ -39,6 +39,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import Matrix
+from matrices.models import MatrixSummary
 
 from matrices.routines import credential_exists
 from matrices.routines import exists_read_for_bench_and_user
@@ -107,7 +108,32 @@ def view_matrix(request, matrix_id):
             columns = matrix.get_columns()
             rows = matrix.get_rows()
 
-            data.update({ 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'readBoolean': readBoolean, 'updateBoolean': updateBoolean, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            username = request.user.username
+            matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") OVER(ORDER BY \"matrix_id\") AS \"prev_val\", LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) AS \"next_val\" FROM public.matrices_bench_summary WHERE matrix_authorisation_permitted = %s AND matrix_authorisation_authority != \'ADMIN\'', [username])
+
+            next_bench = 0
+            previous_bench = 0
+            highest_bench = 0
+            lowest_bench = 0
+
+            for matrix_summary in matrix_summary_list_qs:
+                if matrix_id == matrix_summary.matrix_id:
+                    previous_bench = matrix_summary.prev_val
+                    next_bench = matrix_summary.next_val
+
+                if matrix_summary.prev_val == None:
+                    lowest_bench = matrix_summary.matrix_id
+
+                if matrix_summary.next_val == None:
+                    highest_bench = matrix_summary.matrix_id
+
+            if previous_bench == None:
+                previous_bench = highest_bench
+
+            if next_bench == None:
+                next_bench = lowest_bench
+
+            data.update({ 'previous_bench': previous_bench, 'next_bench': next_bench, 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'readBoolean': readBoolean, 'updateBoolean': updateBoolean, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return render(request, 'matrices/view_matrix.html', data)
 

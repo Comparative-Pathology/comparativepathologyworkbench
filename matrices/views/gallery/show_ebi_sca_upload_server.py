@@ -59,6 +59,9 @@ from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
 from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import convert_url_ebi_sca_to_chart_id
+from matrices.routines import validate_an_ebi_sca_image
+from matrices.routines import validate_an_ebi_sca_url
+
 
 HTTP_POST = 'POST'
 
@@ -90,42 +93,58 @@ def show_ebi_sca_upload_server(request, server_id):
 
                     url_string = cd.get('source_url')
 
-                    url_string_out = convert_url_ebi_sca_to_json(url_string)
+                    if validate_an_ebi_sca_url(url_string):
 
-                    if url_string_out == "":
+                        url_string_out = convert_url_ebi_sca_to_json(url_string)
 
-                        messages.error(request, "CPW_WEB:0040 Show EBI SCA - URL not found!")
-                        form.add_error(None, "CPW_WEB:0040 Show EBI SCA - URL not found!")
+                        if url_string_out == "":
+
+                            messages.error(request, "CPW_WEB:0040 Show EBI SCA - URL not found!")
+                            form.add_error(None, "CPW_WEB:0040 Show EBI SCA - URL not found!")
+
+                        else:
+
+                            if Document.objects.filter(owner=request.user).exists():
+
+                                Document.objects.filter(owner=request.user).delete()
+
+                            experiment_id = get_an_ebi_sca_experiment_id(url_string)
+
+                            chart_id = convert_url_ebi_sca_to_chart_id(url_string)
+
+                            document = form.save(commit=False)
+
+                            document.set_owner(request.user)
+
+                            upload_chart = str(document.location)
+
+                            if validate_an_ebi_sca_image(upload_chart):
+
+                                document.save()
+
+                                initial_path = document.location.path
+
+                                new_chart_id = '/' + chart_id
+
+                                new_path = settings.MEDIA_ROOT + new_chart_id
+
+                                document.set_location(new_chart_id)
+
+                                os.rename(initial_path, new_path)
+
+                                document.save()
+
+                                return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+
+                            else:
+
+                                messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Invalid Image Type!")
+                                form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Invalid Image Type!")
 
                     else:
 
-                        if Document.objects.filter(owner=request.user).exists():
-
-                            Document.objects.filter(owner=request.user).delete()
-
-                        experiment_id = get_an_ebi_sca_experiment_id(url_string)
-
-                        chart_id = convert_url_ebi_sca_to_chart_id(url_string)
-
-                        document = form.save(commit=False)
-
-                        document.set_owner(request.user)
-
-                        document.save()
-
-                        initial_path = document.location.path
-
-                        new_chart_id = '/' + chart_id
-
-                        new_path = settings.MEDIA_ROOT + new_chart_id
-
-                        document.set_location(new_chart_id)
-
-                        os.rename(initial_path, new_path)
-
-                        document.save()
-
-                        return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+                        messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Invalid EBI SCA URL!")
+                        form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Invalid EBI SCA URL!")
 
                 else:
 

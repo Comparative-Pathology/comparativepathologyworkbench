@@ -38,6 +38,7 @@ from django.shortcuts import render
 from matrices.forms import SearchUrlForm
 
 from matrices.models import Collection
+from matrices.models import CollectionSummary
 
 from matrices.routines import credential_exists
 from matrices.routines import get_header_data
@@ -67,9 +68,34 @@ def view_collection(request, collection_id):
 
         collection_image_list = get_images_for_collection(collection)
 
+        username = request.user.username
+        collection_summary_list_qs = CollectionSummary.objects.raw('SELECT id, collection_id, LAG(\"collection_id\") OVER(ORDER BY \"collection_id\") AS \"prev_val\", LEAD(\"collection_id\") OVER(ORDER BY \"collection_id\" ) AS \"next_val\" FROM public.matrices_collection_summary WHERE collection_authorisation_permitted = %s AND collection_authorisation_authority != \'ADMIN\'', [username])
+
+        next_collection = 0
+        previous_collection = 0
+        highest_collection = 0
+        lowest_collection = 0
+
+        for collection_summary in collection_summary_list_qs:
+            if collection_id == collection_summary.collection_id:
+                previous_collection = collection_summary.prev_val
+                next_collection = collection_summary.next_val
+
+            if collection_summary.prev_val == None:
+                lowest_collection = collection_summary.collection_id
+
+            if collection_summary.next_val == None:
+                highest_collection = collection_summary.collection_id
+
+        if previous_collection == None:
+            previous_collection = highest_collection
+
+        if next_collection == None:
+            next_collection = lowest_collection
+
         form = SearchUrlForm()
 
-        data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
+        data.update({ 'previous_collection': previous_collection, 'next_collection': next_collection, 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
 
         return render(request, 'matrices/view_collection.html', data)
 

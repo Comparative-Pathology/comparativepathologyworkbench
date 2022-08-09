@@ -31,8 +31,8 @@
 from __future__ import unicode_literals
 
 import os
-import subprocess
-from subprocess import call
+
+from datetime import datetime
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -55,6 +55,8 @@ from matrices.routines import credential_exists
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
+from matrices.routines import validate_a_cpw_image
+from matrices.routines import validate_a_cpw_url
 
 HTTP_POST = 'POST'
 
@@ -86,30 +88,48 @@ def show_cpw_upload_server(request, server_id):
 
                     url_string = cd.get('source_url')
 
-                    if Document.objects.filter(owner=request.user).exists():
+                    if validate_a_cpw_url(url_string):
 
-                        Document.objects.filter(owner=request.user).delete()
+                        if Document.objects.filter(owner=request.user).exists():
 
-                    document = form.save(commit=False)
+                            Document.objects.filter(owner=request.user).delete()
 
-                    document.set_owner(request.user)
+                        document = form.save(commit=False)
 
-                    chart_id = str(document.location)
+                        document.set_owner(request.user)
 
-                    document.save()
+                        chart_id = str(document.location)
 
-                    initial_path = document.location.path
-                    new_path = '/' + chart_id
+                        if validate_a_cpw_image(chart_id):
 
-                    new_full_path = settings.MEDIA_ROOT + new_path
+                            document.save()
 
-                    document.set_location(new_path)
+                            now = datetime.now()
+                            date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
-                    os.rename(initial_path, new_full_path)
+                            initial_path = document.location.path
+                            new_chart_id = date_time + '_' + chart_id
+                            new_path = '/' + new_chart_id
 
-                    document.save()
+                            new_full_path = settings.MEDIA_ROOT + new_path
 
-                    return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=chart_id)
+                            document.set_location(new_path)
+
+                            os.rename(initial_path, new_full_path)
+
+                            document.save()
+
+                            return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=new_chart_id)
+
+                        else:
+
+                            messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Invalid Image Type!")
+                            form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Invalid Image Type!")
+
+                    else:
+
+                        messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Invalid URL!")
+                        form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Invalid URL!")
 
                 else:
 

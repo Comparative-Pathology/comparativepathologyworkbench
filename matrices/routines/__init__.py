@@ -107,6 +107,9 @@ from .set_first_active_collection_for_user import set_first_active_collection_fo
 from .set_first_inactive_collection_for_user import set_first_inactive_collection_for_user
 from .set_inactive_collection_for_user import set_inactive_collection_for_user
 from .simulate_network_latency import simulate_network_latency
+from .validate_a_cpw_image import validate_a_cpw_image
+from .validate_a_cpw_url import validate_a_cpw_url
 from .validate_an_ebi_sca_url import validate_an_ebi_sca_url
+from .validate_an_ebi_sca_image import validate_an_ebi_sca_image
 from .validate_an_omero_image_url import validate_an_omero_image_url
 from .validate_an_omero_url import validate_an_omero_url

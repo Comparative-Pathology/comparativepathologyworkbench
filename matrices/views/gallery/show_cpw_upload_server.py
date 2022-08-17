@@ -123,7 +123,7 @@ def show_cpw_upload_server(request, server_id):
 
                         else:
 
-                            messages.error(request, "CPW_WEB:00240 Show CPW Upload - Invalid Image Type!")
+                            messages.error(request, "CPW_WEB:0240 Show CPW Upload - Invalid Image Type!")
                             form.add_error(None, "CPW_WEB:0240 Show CPW Upload - Invalid Image Type!")
 
                     else:

@@ -82,8 +82,8 @@ def signup(request):
 
         else:
 
-            messages.error(request, "CPW_WEB:0600 Sign Up - Form is Invalid!")
-            form.add_error(None, "CPW_WEB:0600 Sign Up - Form is Invalid!")
+            messages.error(request, "CPW_WEB:0360 Sign Up - Form is Invalid!")
+            form.add_error(None, "CPW_WEB:0360 Sign Up - Form is Invalid!")
 
             data.update({ 'form': form })
 

@@ -119,8 +119,8 @@ def bench_create(request):
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0370 New Bench  - WordPress Error, Contact System Administrator!")
-                    form.add_error(None, "CPW_WEB:0370 New Bench  - WordPress Error, Contact System Administrator!")
+                    messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
+                    form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
 
             else:
 

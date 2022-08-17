@@ -144,7 +144,7 @@ def view_matrix_blog(request, matrix_id):
 
             else:
 
-                messages.error(request, "CPW_WEB:0830 View Bench Blog - Form is Invalid!")
+                messages.error(request, "CPW_WEB:0580 View Bench Blog - Form is Invalid!")
 
         else:
 

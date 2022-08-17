@@ -78,7 +78,7 @@ def add_dataset(request, server_id, dataset_id):
 
         else:
 
-            messages.error(request, "CPW_WEB:0670 Add Dataset - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0430 Add Dataset - You have no Active Image Collection; Please create a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
 

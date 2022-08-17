@@ -58,7 +58,7 @@ def delete_image(request, image_id):
 
         if exists_image_in_cells(image):
 
-            messages.error(request, 'CPW_WEB:0790 Image ' + str(image.id) + ' NOT deleted - Still referenced in Benches!')
+            messages.error(request, 'CPW_WEB:0540 Image ' + str(image.id) + ' NOT deleted - Still referenced in Benches!')
 
         else:
 

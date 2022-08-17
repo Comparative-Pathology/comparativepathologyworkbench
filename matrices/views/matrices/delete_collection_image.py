@@ -59,7 +59,7 @@ def delete_collection_image(request, collection_id, image_id):
 
         if exists_image_in_cells(image):
 
-            messages.error(request, 'CPW_WEB:0780 Image ' + str(image.id) + ' NOT deleted - Still referenced in Benches!')
+            messages.error(request, 'CPW_WEB:0530 Image ' + str(image.id) + ' NOT deleted - Still referenced in Benches!')
 
         else:
 

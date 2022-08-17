@@ -96,7 +96,7 @@ def view_active_collection(request):
 
         else:
 
-            messages.error(request, "CPW_WEB:0840 View Active Collection - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0590 View Active Collection - You have no Active Image Collection; Please create a Collection!")
 
             data.update({ 'form': form, 'search_from': "view_all_collections" })
 

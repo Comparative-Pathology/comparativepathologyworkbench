@@ -53,13 +53,13 @@ def delete_bench_authority(request, bench_authority_id):
 
         if authority.is_viewer() and exists_bench_authorisation_viewer():
 
-            messages.error(request, 'CPW_WEB:0710 Bench Authority ' + authority.name + ' NOT Deleted - VIEWER Bench Authorisations still exist!')
+            messages.error(request, 'CPW_WEB:0460 Bench Authority ' + authority.name + ' NOT Deleted - VIEWER Bench Authorisations still exist!')
 
         else:
 
             if authority.is_editor() and exists_bench_authorisation_editor():
 
-                messages.error(request, 'CPW_WEB:0720 Bench Authority ' + authority.name + ' NOT Deleted - EDITOR Bench Authorisations still exist!')
+                messages.error(request, 'CPW_WEB:0470 Bench Authority ' + authority.name + ' NOT Deleted - EDITOR Bench Authorisations still exist!')
 
             else:
 

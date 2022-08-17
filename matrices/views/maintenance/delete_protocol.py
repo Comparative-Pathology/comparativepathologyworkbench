@@ -53,13 +53,13 @@ def delete_protocol(request, protocol_id):
 
         if exists_command_for_protocol(protocol):
 
-            messages.error(request, 'CPW_WEB:0740 Protocol ' + protocol.name + ' NOT Deleted - API Commands still exist!')
+            messages.error(request, 'CPW_WEB:0490 Protocol ' + protocol.name + ' NOT Deleted - API Commands still exist!')
 
         else:
 
             if exists_blog_command_for_protocol(protocol):
 
-                messages.error(request, 'CPW_WEB:0750 Protocol ' + protocol.name + ' NOT Deleted - Blog Commands still exist!')
+                messages.error(request, 'CPW_WEB:0500 Protocol ' + protocol.name + ' NOT Deleted - Blog Commands still exist!')
 
             else:
 

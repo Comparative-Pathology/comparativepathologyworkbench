@@ -52,7 +52,7 @@ def delete_collection_authority(request, collection_authority_id):
 
         if collection_authority.is_viewer() and exists_collection_authorisation_viewer():
 
-            messages.error(request, 'CPW_WEB:0730 Collection Authority ' + collection_authority.name + ' NOT Deleted - Collection Authorisations still exist!')
+            messages.error(request, 'CPW_WEB:0480 Collection Authority ' + collection_authority.name + ' NOT Deleted - Collection Authorisations still exist!')
 
         else:
 

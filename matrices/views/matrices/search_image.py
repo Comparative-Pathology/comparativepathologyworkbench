@@ -92,13 +92,13 @@ def search_image(request, path_from, identifier):
 
                 if url_string_omero_out != '' and url_string_ebi_sca_out != '':
 
-                    messages.error(request, "CPW_WEB:0410 Search Image - URL not found!")
-                    form.add_error(None, "CPW_WEB:0410 Search Image - URL not found!")
+                    messages.error(request, "CPW_WEB:0330 Search Image - URL not found!")
+                    form.add_error(None, "CPW_WEB:0330 Search Image - URL not found!")
 
                 if url_string_omero_out == '' and url_string_ebi_sca_out == '':
 
-                    messages.error(request, "CPW_WEB:0420 Search Image - URL not found!")
-                    form.add_error(None, "CPW_WEB:0420 Search Image - URL not found!")
+                    messages.error(request, "CPW_WEB:0340 Search Image - URL not found!")
+                    form.add_error(None, "CPW_WEB:0340 Search Image - URL not found!")
 
                 if url_string_omero_out != '' and url_string_ebi_sca_out == '':
 
@@ -111,8 +111,8 @@ def search_image(request, path_from, identifier):
 
             else:
 
-                messages.error(request, "CPW_WEB:0440 Search Image - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0440 Search Image - Form is Invalid!")
+                messages.error(request, "CPW_WEB:0350 Search Image - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0350 Search Image - Form is Invalid!")
 
         else:
 

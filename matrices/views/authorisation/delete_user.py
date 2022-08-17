@@ -56,37 +56,37 @@ def delete_user(request, user_id):
 
         if exists_authorisation_for_permitted(subject):
 
-            messages.error(request, 'CPW_WEB:0610 User NOT Deleted - Outstanding Bench Permissions Exist!')
+            messages.error(request, 'CPW_WEB:0370 User NOT Deleted - Outstanding Bench Permissions Exist!')
 
         else:
 
             if exists_collection_authorisation_for_permitted(subject):
 
-                messages.error(request, 'CPW_WEB:0620 User NOT Deleted - Outstanding Collection Permissions Exist!')
+                messages.error(request, 'CPW_WEB:0380 User NOT Deleted - Outstanding Collection Permissions Exist!')
 
             else:
 
                 if exists_bench_for_user(subject):
 
-                    messages.error(request, 'CPW_WEB:0630 User NOT Deleted - Outstanding Benches Exist!')
+                    messages.error(request, 'CPW_WEB:0390 User NOT Deleted - Outstanding Benches Exist!')
 
                 else:
 
                     if exists_collection_for_user(subject):
 
-                        messages.error(request, 'CPW_WEB:0640 User NOT Deleted - Outstanding Collections Exist!')
+                        messages.error(request, 'CPW_WEB:0400 User NOT Deleted - Outstanding Collections Exist!')
 
                     else:
 
                         if exists_image_for_user(subject):
 
-                            messages.error(request, 'CPW_WEB:0650 User NOT Deleted - Outstanding Images Exist!')
+                            messages.error(request, 'CPW_WEB:0410 User NOT Deleted - Outstanding Images Exist!')
 
                         else:
 
                             if credential_exists(subject):
 
-                                messages.error(request, 'CPW_WEB:0660 User NOT Deleted - Outstanding Blog Credential Exists!')
+                                messages.error(request, 'CPW_WEB:0420 User NOT Deleted - Outstanding Blog Credential Exists!')
 
                             else:
 

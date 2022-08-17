@@ -67,7 +67,7 @@ def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
         else:
 
-            messages.error(request, "CPW_WEB:0690 Add Image - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0450 Add Image - You have no Active Image Collection; Please create a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
 

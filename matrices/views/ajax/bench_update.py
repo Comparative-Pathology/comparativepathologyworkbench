@@ -115,8 +115,8 @@ def bench_update(request, bench_id):
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0330 Edit Bench - WordPress Error, Contact System Administrator!")
-                        form.add_error(None, "CPW_WEB:0330 Edit Bench - WordPress Error, Contact System Administrator!")
+                        messages.error(request, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
+                        form.add_error(None, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
 
             else:
 

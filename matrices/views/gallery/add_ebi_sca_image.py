@@ -65,7 +65,7 @@ def add_ebi_sca_image(request, server_id, image_id, path_from):
 
         else:
 
-            messages.error(request, "CPW_WEB:0680 Add EBI SCA - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0440 Add EBI SCA - You have no Active Image Collection; Please create a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
 

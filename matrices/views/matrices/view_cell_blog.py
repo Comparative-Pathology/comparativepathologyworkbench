@@ -144,7 +144,7 @@ def view_cell_blog(request, matrix_id, cell_id):
 
             else:
 
-                messages.error(request, "CPW_WEB:0820 View Cell Blog - Form is Invalid!")
+                messages.error(request, "CPW_WEB:0570 View Cell Blog - Form is Invalid!")
 
         else:
 

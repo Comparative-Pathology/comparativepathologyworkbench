@@ -92,7 +92,7 @@ def bench_delete(request, bench_id):
 
                         if response != WORDPRESS_SUCCESS:
 
-                            messages.error(request, "CPW_WEB:0800 Delete Bench - WordPress Error, Contact System Administrator!")
+                            messages.error(request, "CPW_WEB:0550 Delete Bench - WordPress Error, Contact System Administrator!")
 
                     if oldCell.has_image():
 
@@ -127,7 +127,7 @@ def bench_delete(request, bench_id):
 
             else:
 
-                messages.error(request, "CPW_WEB:0810 Delete Bench - WordPress Error, Contact System Administrator!")
+                messages.error(request, "CPW_WEB:0560 Delete Bench - WordPress Error, Contact System Administrator!")
 
     else:
 

@@ -106,8 +106,8 @@ def search_image(request, path_from, identifier):
 
                 if url_string_omero_out == '' and url_string_ebi_sca_out != '':
 
-                    messages.error(request, "CPW_WEB:0XXX Search Image - URL not found!")
-                    form.add_error(None, "CPW_WEB:0XXX Search Image - URL not found!")
+                    messages.error(request, "CPW_WEB:0050 Search Image - URL not found!")
+                    form.add_error(None, "CPW_WEB:0050 Search Image - URL not found!")
 
             else:
 

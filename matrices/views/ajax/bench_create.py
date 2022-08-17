@@ -124,8 +124,8 @@ def bench_create(request):
 
             else:
 
-                messages.error(request, "CPW_WEB:xxxx New Bench  - No WordPress Credentials, Contact System Administrator!")
-                form.add_error(None, "CPW_WEB:xxxx New Bench  - No WordPress Credentials, Contact System Administrator!")
+                messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
+                form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
 
     else:
 

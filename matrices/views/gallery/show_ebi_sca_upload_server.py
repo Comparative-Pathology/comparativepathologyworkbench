@@ -138,13 +138,13 @@ def show_ebi_sca_upload_server(request, server_id):
 
                             else:
 
-                                messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Invalid Image Type!")
-                                form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Invalid Image Type!")
+                                messages.error(request, "CPW_WEB:0250 Show CPW Upload - Invalid Image Type!")
+                                form.add_error(None, "CPW_WEB:0250 Show CPW Upload - Invalid Image Type!")
 
                     else:
 
-                        messages.error(request, "CPW_WEB:XXXX Show CPW Upload - Invalid EBI SCA URL!")
-                        form.add_error(None, "CPW_WEB:XXXX Show CPW Upload - Invalid EBI SCA URL!")
+                        messages.error(request, "CPW_WEB:0210 Show CPW Upload - Invalid EBI SCA URL!")
+                        form.add_error(None, "CPW_WEB:0210 Show CPW Upload - Invalid EBI SCA URL!")
 
                 else:
 

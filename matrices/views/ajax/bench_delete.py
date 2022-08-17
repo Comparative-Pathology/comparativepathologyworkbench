@@ -131,6 +131,6 @@ def bench_delete(request, bench_id):
 
     else:
 
-        messages.error(request, "CPW_WEB:xxxx DELETE Bench  - No WordPress Credentials, Contact System Administrator!")
+        messages.error(request, "CPW_WEB:0290 DELETE Bench  - No WordPress Credentials, Contact System Administrator!")
 
     return JsonResponse({'object_id': object_id})

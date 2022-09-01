@@ -1,0 +1,195 @@
+<!--
+\file		  amend_cell.html
+\author	      Mike Wicks
+\date		  March 2021
+\version	  $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The amend cell template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% load inlineedit %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li>
+				<a href="{% url 'view_all_image_links' %}">ALL Image Links</a>
+			</li>
+			<li>
+				<a href="{% url 'link_images' 0 0 selected_collection.id  %}">Link Images</a>
+			</li>
+			<li>An Image Link</li>
+			<li>
+				{{ image_link.id  }}
+			</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+
+<!-- Page Side Bar -->
+<div class="page-sidebar" style="overflow-y: scroll;">
+
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+{% if messages %}
+	{% for message in messages %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+  <div class="panel-alert">
+    <p>{{ message }}</p>
+  </div>
+		{% endif %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+  <div class="panel-success">
+	<p>{{ message }}</p>
+  </div>
+		{% endif %}
+    {% endfor %}
+{% endif %}
+
+  <h1>Image Link {{ image_link.id }}</h1>
+  <p>An Image Link</p>
+  <hr>
+  <br />
+
+  <!-- <div class="flex-bench-container"> -->
+  <div>
+
+	  <ul class="cell-list">
+		<li>
+			<div class="cell-image-gallery">
+  				<div class="cell-container-gallery">
+				  <h3>Image A</h3>
+				  <div id="image_parent">
+			  	  	<div id="image_parent">
+			  	  	  <div class="cell" id="image_parent" style="width: 384px; height: 384px;">
+			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 350px; height: 350px;">
+			  	  		  <a id="image_parent" href="{{ image_link.parent_image.viewer_url }}" target="_blank">
+			  	  		    <img id="image_parent" style="width: 350px; height: 350px;" alt="{{ image_link.parent_image.name }}" title="{{ image_link.parent_image.name }}" src="{{ image_link.parent_image.birdseye_url }}">
+			  	  		  </a>
+			  	  		</div>
+			  	  	  </div>
+			  	  	</div>
+			  	  </div>
+				  <br />
+{% if image_link.parent_image.server.type.name == 'WORDPRESS' %}
+		  		  <a href="{% url 'webgallery_show_wordpress_image' image_link.parent_image.server.id image_link.parent_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+{% if image_link.parent_image.server.type.name == 'OMERO_5.4.7' %}
+		  		  <a href="{% url 'webgallery_show_image' image_link.parent_image.server.id image_link.parent_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+{% if image_link.parent_image.server.type.name == 'EBI_SCA' %}
+		  		  <a href="{% url 'webgallery_show_ebi_sca_image' image_link.parent_image.server.id image_link.parent_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+{% if image_link.parent_image.server.type.name == 'CPW' %}
+		  		  <a href="{% url 'webgallery_show_cpw_image' image_link.parent_image.server.id image_link.parent_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+  			    </div>
+				<br />
+  			</div>
+		</li>
+  		<li>
+			<div class="cell-image-gallery">
+  				<div class="cell-container-gallery">
+				  <h3>Image B</h3>
+				  <div id="image_child">
+			  	  	<div id="image_child">
+			  	  	  <div class="cell" id="image_child" style="width: 384px; height: 384px;">
+			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 350px; height: 350px;">
+			  	  		  <a id="image_child" href="{{ image_link.child_image.viewer_url }}" target="_blank">
+			  	  		    <img id="image_child" style="width: 350px; height: 350px;" alt="{{ image_link.child_image.name }}" title="{{ image_link.child_image.name }}" src="{{ image_link.child_image.birdseye_url }}">
+			  	  		  </a>
+			  	  		</div>
+			  	  	  </div>
+			  	  	</div>
+			  	  </div>
+				  <br />
+{% if image_link.child_image.server.type.name == 'WORDPRESS' %}
+				  <a href="{% url 'webgallery_show_wordpress_image' image_link.child_image.server.id image_link.child_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+{% if image_link.child_image.server.type.name == 'OMERO_5.4.7' %}
+				  <a href="{% url 'webgallery_show_image' image_link.child_image.server.id image_link.child_image.identifier %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+{% if image_link.child_image.server.type.name == 'EBI_SCA' %}
+				  <a href="{% url 'webgallery_show_ebi_sca_image' image_link.child_image.server.id image_link.child_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+{% if image_link.child_image.server.type.name == 'CPW' %}
+				  <a href="{% url 'webgallery_show_cpw_image' image_link.child_image.server.id image_link.child_image.name %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+{% endif %}
+  			    </div>
+				<br />
+  			</div>
+  		</li>
+		<li>
+			<div class="cell-image-gallery" style="width: 600px;">
+  				<div class="cell-container-gallery">
+					<h3>Supplementary Information</h3>
+
+					<dl class="artefact">
+						<dt>Comment</dt>
+						<dd>{{ image_link.artefact.comment }}</dd>
+						<dt>Uploaded</dt>
+						<dd>{{ image_link.artefact.uploaded_at }}</dd>
+						<dt>Attachment</dt>
+						<dd>
+							<a href="{{ image_link.artefact.url }}">{{ image_link.artefact.get_location_minus_path }}</a>
+						</dd>
+					</dl>
+
+  			    </div>
+  				<br />
+  			</div>
+  		</li>
+  	</ul>
+
+  </div><!-- End of amend-cell-container -->
+  <br />
+
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+
+{% block extrajs %}
+
+{% endblock extrajs %}
+
+{% inlineedit_script %}
+
+{% endblock %}

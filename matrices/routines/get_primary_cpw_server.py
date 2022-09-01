@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         get_primary_cpw_server.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,25 +24,24 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# models Package Description.
+# Get the Primary Wordpress Server - This is the Blogging Engine (Back-end)
 ###
-from .type import Type
-from .server import Server
-from .image import Image
-from .collection import Collection
-from .matrix import Matrix
-from .profile import Profile
-from .protocol import Protocol
-from .command import Command
-from .cell import Cell
-from .document import Document
-from .blog import Blog
-from .credential import Credential
-from .authority import Authority
-from .authorisation import Authorisation
-from .collectionauthority import CollectionAuthority
-from .collectionauthorisation import CollectionAuthorisation
-from .matrixsummary import MatrixSummary
-from .collectionsummary import CollectionSummary
-from .artefact import Artefact
-from .imagelink import ImageLink
+from __future__ import unicode_literals
+
+import base64, hashlib
+
+from os import urandom
+
+from django.apps import apps
+
+from decouple import config
+
+
+"""
+    Get the Primary CPW Server - This is the CPW itself
+"""
+def get_primary_cpw_server():
+
+    Server = apps.get_model('matrices', 'Server')
+
+    return Server.objects.get(url_server=config('COMPARATIVE_PATHOLOGY_WORKBENCH'))

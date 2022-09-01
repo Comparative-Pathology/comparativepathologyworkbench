@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         validate_a_cpw_image.py
+# \file         get_parent_image_links_for_image.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,34 +24,28 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Do we have a valid OMERO URL?
+# Get the Parent Image Links from a particular Image
 ###
 from __future__ import unicode_literals
 
 import base64, hashlib
 
-from urllib.parse import urlparse
+from django.apps import apps
+
+from os import urandom
 
 
 """
-    Do we have a Valid CPW Image?
+    Get the Parent Image Links for a particular Image
 """
-def validate_a_cpw_image(an_image):
+def get_parent_image_links_for_image(a_image):
 
-    extention_list = ["png", "jpg", "jpeg", "pdf", "svg"]
+    ImageLink = apps.get_model('matrices', 'ImageLink')
 
-    image_array = an_image.split(".")
+    image_link_list = list()
 
-    if len(image_array) != 2:
+    parent_image_links = ImageLink.objects.filter(parent_image=a_image)
 
-        return False
+    image_link_list = list(set(parent_image_links))
 
-    else:
-
-        if image_array[1].lower() in extention_list:
-
-            return True
-
-        else:
-
-            return False
+    return image_link_list

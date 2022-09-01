@@ -55,7 +55,6 @@ from matrices.routines import credential_exists
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
-from matrices.routines import validate_a_cpw_image
 from matrices.routines import validate_a_cpw_url
 
 HTTP_POST = 'POST'
@@ -100,31 +99,24 @@ def show_cpw_upload_server(request, server_id):
 
                         chart_id = str(document.location)
 
-                        if validate_a_cpw_image(chart_id):
+                        document.save()
 
-                            document.save()
+                        now = datetime.now()
+                        date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
-                            now = datetime.now()
-                            date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
+                        initial_path = document.location.path
+                        new_chart_id = date_time + '_' + chart_id
+                        new_path = '/' + new_chart_id
 
-                            initial_path = document.location.path
-                            new_chart_id = date_time + '_' + chart_id
-                            new_path = '/' + new_chart_id
+                        new_full_path = settings.MEDIA_ROOT + new_path
 
-                            new_full_path = settings.MEDIA_ROOT + new_path
+                        document.set_location(new_path)
 
-                            document.set_location(new_path)
+                        os.rename(initial_path, new_full_path)
 
-                            os.rename(initial_path, new_full_path)
+                        document.save()
 
-                            document.save()
-
-                            return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=new_chart_id)
-
-                        else:
-
-                            messages.error(request, "CPW_WEB:0240 Show CPW Upload - Invalid Image Type!")
-                            form.add_error(None, "CPW_WEB:0240 Show CPW Upload - Invalid Image Type!")
+                        return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=new_chart_id)
 
                     else:
 

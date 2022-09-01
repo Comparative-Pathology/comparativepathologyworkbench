@@ -129,7 +129,7 @@ The view collection template
 	<table border="0">
 
 		<tr>
-			<th style="width: 100px; position: sticky; top: 0;">Action</th>
+			<th style="width: 200px; position: sticky; top: 0;">Action</th>
 			<th style="width: 100px; position: sticky; top: 0;"">ROI</th>
 			<th style="width: 350px; position: sticky; top: 0;">Server</th>
 			<th style="position: sticky; top: 0;">Image</th>
@@ -162,6 +162,12 @@ The view collection template
 		{% endif %}
 		{% if collection_image.owner.username == user.username %}
 				<a href="{% url 'webgallery_delete_collection_image' collection.id collection_image.id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+		{% endif %}
+		{% if collection_image.exists_parent_image_links %}
+				<a href="{% url 'view_a_image_link' collection_image.id %}"><button class="button button-view"><i class="fa fa-chain"></i></button></a>
+		{% endif %}
+		{% if collection_image.exists_child_image_links %}
+				<a href="{% url 'view_b_image_link' collection_image.id %}"><button class="button button-view"><i class="fa fa-chain"></i></button></a>
 		{% endif %}
 			</td>
 		{% if collection_image.roi == 0 %}

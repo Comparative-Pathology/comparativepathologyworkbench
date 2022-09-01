@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         exists_image_in_image_list.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,25 +24,27 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# models Package Description.
+# Is the supplied image in the supplied image list?
 ###
-from .type import Type
-from .server import Server
-from .image import Image
-from .collection import Collection
-from .matrix import Matrix
-from .profile import Profile
-from .protocol import Protocol
-from .command import Command
-from .cell import Cell
-from .document import Document
-from .blog import Blog
-from .credential import Credential
-from .authority import Authority
-from .authorisation import Authorisation
-from .collectionauthority import CollectionAuthority
-from .collectionauthorisation import CollectionAuthorisation
-from .matrixsummary import MatrixSummary
-from .collectionsummary import CollectionSummary
-from .artefact import Artefact
-from .imagelink import ImageLink
+from __future__ import unicode_literals
+
+import base64, hashlib
+
+from os import urandom
+
+
+"""
+    Get the Images from a particular Collection
+"""
+def exists_image_in_image_list(a_image, a_image_list):
+
+    image_exist = False
+
+    for image in a_image_list:
+
+        if image.id == a_image.id:
+
+            image_exist = True
+
+
+    return image_exist

@@ -36,11 +36,12 @@ from django.shortcuts import get_object_or_404
 
 from django.apps import apps
 
-from . import credential_exists
 from . import bench_list_by_user_and_direction
+from . import credential_exists
 from . import collection_list_by_user_and_direction
-from . import get_active_collection_images_for_user
 from . import exists_active_collection_for_user
+from . import get_active_collection_images_for_user
+from matrices.routines.get_images_for_collection_summary import get_images_for_collection_summary
 
 
 """
@@ -56,24 +57,17 @@ def get_header_data(a_user):
     collection_list = list()
     collection_summary_list = list()
 
-    direction = ''
-
     if not a_user.is_anonymous:
 
         Server = apps.get_model('matrices', 'Server')
         server_list = Server.objects.all().order_by('id')
 
-        matrix_list = bench_list_by_user_and_direction(a_user, direction, '', '', '', '', '', '', '', '', '')
+        matrix_list = bench_list_by_user_and_direction(a_user, '', '', '', '', '', '', '', '', '', '')
 
-        collection_summary_list = collection_list_by_user_and_direction(a_user, direction, '', '', '', '')
+        collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '')
 
-        for collection_summary in collection_summary_list:
+        image_list = get_images_for_collection_summary(collection_summary_list)
 
-            collection = Collection.objects.get(id=collection_summary.collection_id)
-
-            image_list.extend(collection.images.all())
-
-        image_list = list(set(image_list))
 
     data = { 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
 

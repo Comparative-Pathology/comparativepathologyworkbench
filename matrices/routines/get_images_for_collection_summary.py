@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         get_images_for_collection_summary.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,25 +24,32 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# models Package Description.
+# Get the Images from a particular Collection Summary List
 ###
-from .type import Type
-from .server import Server
-from .image import Image
-from .collection import Collection
-from .matrix import Matrix
-from .profile import Profile
-from .protocol import Protocol
-from .command import Command
-from .cell import Cell
-from .document import Document
-from .blog import Blog
-from .credential import Credential
-from .authority import Authority
-from .authorisation import Authorisation
-from .collectionauthority import CollectionAuthority
-from .collectionauthorisation import CollectionAuthorisation
-from .matrixsummary import MatrixSummary
-from .collectionsummary import CollectionSummary
-from .artefact import Artefact
-from .imagelink import ImageLink
+from __future__ import unicode_literals
+
+import base64, hashlib
+
+from django.apps import apps
+
+from os import urandom
+
+
+"""
+    Get the Images from a particular Collection Summary List
+"""
+def get_images_for_collection_summary(a_collection_summary_list):
+
+    Collection = apps.get_model('matrices', 'Collection')
+
+    image_list = list()
+
+    for collection_summary in a_collection_summary_list:
+
+        collection = Collection.objects.get(id=collection_summary.collection_id)
+
+        image_list.extend(collection.images.all())
+
+    image_list = list(set(image_list))
+
+    return image_list

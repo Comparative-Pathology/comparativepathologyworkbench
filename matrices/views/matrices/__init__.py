@@ -36,6 +36,8 @@
 # def choose_collection(request, matrix_id, collection_id):
 # def activate_collection(request, collection_id):
 #
+# def view_all_linked_images(request):
+#
 # def view_matrix_blog(request, matrix_id):
 # def view_cell_blog(request, matrix_id, cell_id):
 #
@@ -57,7 +59,9 @@
 # def delete_this_row(request, matrix_id, row_id):
 # def delete_last_row(request, matrix_id):
 #
-# def search_image(request, path_from, identifier)):
+# def search_image(request, path_from, identifier):
+#
+# def link_images(request):
 #
 ###
 
@@ -72,15 +76,21 @@ from .append_row import append_row
 from .choose_collection import choose_collection
 from .clear_cell import clear_cell
 from .delete_image import delete_image
+from .delete_image_link import delete_image_link
 from .delete_collection_image import delete_collection_image
 from .delete_last_column import delete_last_column
 from .delete_last_row import delete_last_row
 from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
+from .link_images import link_images
 from .search_image import search_image
 from .view_active_collection import view_active_collection
 from .view_all_collections import view_all_collections
+from .view_all_image_links import view_all_image_links
 from .view_cell_blog import view_cell_blog
 from .view_collection import view_collection
+from .view_image_link import view_image_link
+from .view_parent_image_link import view_parent_image_link
+from .view_child_image_link import view_child_image_link
 from .view_matrix import view_matrix
 from .view_matrix_blog import view_matrix_blog

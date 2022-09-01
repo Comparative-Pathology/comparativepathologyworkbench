@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         document.py
+# \file         artefact.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,11 +24,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# The Document Model - for items that are uploaded to the CPW ;-)
+# The Artefact Model - for items that are uploaded to the CPW when Images are linked
 ###
 from __future__ import unicode_literals
 
 import json, urllib, requests, base64, hashlib, requests
+
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -38,37 +40,29 @@ from django.db.models import Q
 from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from random import randint
-from decouple import config
-
-from requests.exceptions import HTTPError
-
-from matrices.models import Server
-
 
 
 """
-    DOCUMENT
+    ARTEFACT
 """
-class Document(models.Model):
+class Artefact(models.Model):
     comment = models.TextField(max_length=4095, default='')
-    source_url = models.CharField(max_length=255, blank=False, default='')
-    location = models.FileField(upload_to='', validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'pdf', 'svg'])])
+    location = models.FileField(upload_to='', validators=[FileExtensionValidator(['zip'])])
+    url = models.CharField(max_length=255, blank=False, default='')
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(User, related_name='uploads', on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey(User, related_name='artefacts', on_delete=models.DO_NOTHING)
 
     def set_comment(self, a_comment):
         self.comment = a_comment
 
-    def set_source_url(self, a_source_url):
-        self.source_url = a_source_url
-
     def set_location(self, a_location):
         self.location = a_location
+
+    def set_url(self, a_url):
+        self.url = a_url
 
     def set_uploaded_at(self, an_uploaded_at):
         self.uploaded_at = an_uploaded_at
@@ -78,14 +72,14 @@ class Document(models.Model):
 
 
     @classmethod
-    def create(cls, comment, source_url, location, uploaded_at, owner):
-        return cls(comment=comment, source_url=source_url, location=location, uploaded_at=uploaded_at)
+    def create(cls, comment, location, url, uploaded_at, owner):
+        return cls(comment=comment, location=location, url=url, uploaded_at=uploaded_at)
 
     def __str__(self):
-        return f"{self.id}, {self.comment}, {self.source_url}, {self.location}, {self.uploaded_at}, {self.owner.id}"
+        return f"{self.id}, {self.comment}, {self.location}, {self.url}, {self.uploaded_at}, {self.owner.id}"
 
     def __repr__(self):
-        return f"{self.id}, {self.comment}, {self.source_url}, {self.location}, {self.uploaded_at}, {self.owner.id}"
+        return f"{self.id}, {self.comment}, {self.location}, {self.url}, {self.uploaded_at}, {self.owner.id}"
 
 
     def is_owned_by(self, a_user):
@@ -94,8 +88,14 @@ class Document(models.Model):
         else:
             return False
 
-    def is_duplicate(self, a_comment, a_source_url, a_location, an_uploaded_at, a_owner):
-        if self.comment == a_comment and self.source_url == a_source_url and self.location == a_location and self.uploaded_at == an_uploaded_at and self.owner == a_owner:
+    def is_duplicate(self, a_comment, a_location, an_uploaded_at, a_owner):
+        if self.comment == a_comment and self.location == a_location and self.url == url and self.uploaded_at == an_uploaded_at and self.owner == a_owner:
             return True
         else:
             return False
+
+    def get_location_minus_path(self):
+
+        path_array = self.location.name.split("/")
+
+        return path_array[6]

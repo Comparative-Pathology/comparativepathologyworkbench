@@ -324,11 +324,11 @@ function onclick(source, target, source_type){
 		question = "Do you want to IMPORT this Image to this CELL?";
 	}
 
-	//console.log("source_type : " + source_type);
+	console.log("source_type : " + source_type);
 
 	confirmation(question, source_type).then(function (answer) {
 
-		//console.log("answer : " + answer);
+		console.log("answer : " + answer);
 
 		if (answer == "move"){
 
@@ -343,7 +343,7 @@ function onclick(source, target, source_type){
 				dataType: 'json',
 				type: 'post',
 				success: function (data) {
-					//console.log("Image Import SUCCESS! Source: " + data.source + "  Target: " + data.target);
+					console.log("Image Import SUCCESS! Source: " + data.source + "  Target: " + data.target);
 					if (data.failure) {
 						alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
 					}
@@ -387,26 +387,26 @@ function drop(ev){
 		src = document.getElementById(division);
 	}
 
-	//console.log("src.id : " + src.id);
+	console.log("src.id : " + src.id);
 
 	var srcParent = src.parentNode;
 
 	var source_array = src.id.split("_",2);
 	var source_id = source_array[1];
 	var source_type = source_array[0];
-	//console.log("source_id : " + source_id);
-	//console.log("source_type : " + source_type);
+	console.log("source_id : " + source_id);
+	console.log("source_type : " + source_type);
 
 	const data = ev.target;
-	//console.log("data : " + data);
+	console.log("data : " + data);
 
 	var tgt = ev.target;
 	var target_array = tgt.id.split("_",2);
 	var target_id = target_array[1];
 	var target_type = target_array[0];
 
-	//console.log("target_id : " + target_id);
-	//console.log("target_type : " + target_type);
+	console.log("target_id : " + target_id);
+	console.log("target_type : " + target_type);
 
 	onclick(source_id, target_id, source_type);
 

@@ -316,7 +316,18 @@ The view matrix (bench) template
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 						{% endif %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
-        <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">{{ matrix_cell.title|truncatechars:25 }}
+        <div id="cell_{{ matrix_cell.id }}" class="cell-title"  style="width:{{ matrix.width|add:"-62" }}px;">
+						{% if matrix_cell.image %}
+							{% if matrix_cell.image.exists_parent_image_links %}
+	  	  <a href="{% url 'view_a_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
+							{% endif %}
+							{% if matrix_cell.image.exists_child_image_links %}
+	  	  <a href="{% url 'view_b_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
+							{% endif %}
+							{% if not matrix_cell.image.exists_parent_image_links and not matrix_cell.image.exists_child_image_links %}
+							{{ matrix_cell.title|truncatechars:25 }}
+							{% endif %}
+						{% endif %}
         </div><!-- End of cell-title -->
         <div id="cell_{{ matrix_cell.id }}" class="cell-control">
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">

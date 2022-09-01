@@ -64,8 +64,6 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
     comment = ''
 
-    print("image_id : " + str(image_id))
-
     json_image = ''
     image_name = ''
     image_viewer_url = ''
@@ -73,6 +71,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
     image_comment = ''
     full_image_name = image_id
     image_key = ''
+    document_key = ''
 
 
     if server.is_cpw():

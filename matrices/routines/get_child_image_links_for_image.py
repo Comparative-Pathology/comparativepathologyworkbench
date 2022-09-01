@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         get_child_image_links_for_image.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,25 +24,28 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# models Package Description.
+# Get the Child Image Links from a particular Image
 ###
-from .type import Type
-from .server import Server
-from .image import Image
-from .collection import Collection
-from .matrix import Matrix
-from .profile import Profile
-from .protocol import Protocol
-from .command import Command
-from .cell import Cell
-from .document import Document
-from .blog import Blog
-from .credential import Credential
-from .authority import Authority
-from .authorisation import Authorisation
-from .collectionauthority import CollectionAuthority
-from .collectionauthorisation import CollectionAuthorisation
-from .matrixsummary import MatrixSummary
-from .collectionsummary import CollectionSummary
-from .artefact import Artefact
-from .imagelink import ImageLink
+from __future__ import unicode_literals
+
+import base64, hashlib
+
+from django.apps import apps
+
+from os import urandom
+
+
+"""
+    Get the Child Image Links for a particular Image
+"""
+def get_child_image_links_for_image(a_image):
+
+    ImageLink = apps.get_model('matrices', 'ImageLink')
+
+    image_link_list = list()
+
+    child_image_links = ImageLink.objects.filter(child_image=a_image)
+
+    image_link_list = list(set(child_image_links))
+
+    return image_link_list

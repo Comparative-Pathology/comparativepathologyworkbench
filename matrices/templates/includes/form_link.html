@@ -1,0 +1,100 @@
+<!--
+\file         form.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The general form include template
+-->
+
+{% load form_tags widget_tweaks %}
+
+{% if form.non_field_errors %}
+
+<div class="panel-alert">
+
+  {% for error in form.non_field_errors %}
+
+  <p{% if forloop.last %} class="mb-0"{% endif %}>{{ error }}</p>
+
+  {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+{% for field in form %}
+
+<div class="form-container">
+  <div class="form-row">
+    <div class="form-col-30">
+
+      {{ field.label_tag }}
+
+	</div>
+	<div class="form-col-5">
+	</div>
+	<div class="form-col-50">
+
+	  {% render_field field %}
+
+	</div>
+	<div class="form-col-5">
+	</div>
+	<div class="form-col-25">
+
+  {% if field.help_text %}
+
+    <p>{{ field.help_text|safe }}</p>
+
+  {% endif %}
+
+	</div>
+	<div class="form-col-25">
+	</div>
+
+  {% if field.errors %}
+
+	<div class="form-col-25">
+
+    {% for error in field.errors %}
+
+  	  <p>{{ error }}</p>
+
+  	{% endfor %}
+
+	</div>
+
+  {% else %}
+
+    <div class="form-col-5">
+	</div>
+
+  {% endif %}
+
+	<div class="form-col-5">
+	</div>
+  </div>
+</div>
+
+{% endfor %}

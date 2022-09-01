@@ -48,6 +48,10 @@ from requests.exceptions import HTTPError
 
 from matrices.models import Server
 
+from matrices.routines.exists_parent_image_links_for_image import exists_parent_image_links_for_image
+from matrices.routines.get_parent_image_links_for_image import get_parent_image_links_for_image
+from matrices.routines.exists_child_image_links_for_image import exists_child_image_links_for_image
+from matrices.routines.get_child_image_links_for_image import get_child_image_links_for_image
 
 
 """
@@ -127,3 +131,27 @@ class Image(models.Model):
 
     def image_id(self):
         return self.identifier
+
+
+    def exists_parent_image_links(self):
+        return exists_parent_image_links_for_image(self)
+
+    def get_parent_image_links(self):
+        return get_parent_image_links_for_image(self)
+
+    def exists_child_image_links(self):
+        return exists_child_image_links_for_image(self)
+
+    def get_child_image_links(self):
+        return get_child_image_links_for_image(self)
+
+
+    def exists_image_links(self):
+
+        boolReturn = False
+
+        if exists_parent_image_links_for_image(self) or exists_child_image_links_for_image(self):
+
+            boolReturn = True
+
+        return boolReturn

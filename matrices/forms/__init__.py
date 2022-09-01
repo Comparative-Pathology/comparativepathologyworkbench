@@ -27,6 +27,7 @@
 # forms Package Description.
 ###
 
+from .artefactform import ArtefactForm
 from .authorisationform import AuthorisationForm
 from .authorityform import AuthorityForm
 from .blogform import BlogForm

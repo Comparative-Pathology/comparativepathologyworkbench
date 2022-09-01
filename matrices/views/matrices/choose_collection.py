@@ -49,8 +49,8 @@ from matrices.routines import get_collection_authority_for_collection_and_user_a
 from matrices.routines import get_header_data
 from matrices.routines import set_inactive_collection_for_user
 
-VIEW_MATRIX = "view_matrix"
 AMEND_CELL = "amend_cell"
+VIEW_MATRIX = "view_matrix"
 
 
 #
@@ -67,6 +67,7 @@ def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
         owner = get_object_or_404(User, pk=matrix.owner_id)
+
         user = get_object_or_404(User, pk=request.user.id)
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, user)
@@ -97,15 +98,15 @@ def choose_collection(request, matrix_id, cell_id, collection_id, path_from):
 
         matrix.save()
 
-        if path_from == VIEW_MATRIX:
-
-            return redirect('matrix', matrix_id=matrix_id)
+        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
 
         if path_from == AMEND_CELL:
 
             return redirect('amend_cell', matrix_id=matrix_id, cell_id=cell_id)
 
-        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
+        if path_from == VIEW_MATRIX:
+
+            return redirect('matrix', matrix_id=matrix_id)
 
         return redirect('matrix', matrix_id=matrix_id)
 

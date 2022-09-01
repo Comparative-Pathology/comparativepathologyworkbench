@@ -27,6 +27,8 @@
 # The custom template tag
 ###
 import re
+import os
+
 from django import template
 from django.conf import settings
 
@@ -54,3 +56,7 @@ def replace(value, arg):
 
     what, to = arg.split('|')
     return value.replace(what, to)
+
+@register.filter
+def filename(value):
+    return os.path.basename(value.file.name)

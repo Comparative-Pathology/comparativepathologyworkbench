@@ -32,6 +32,7 @@ from __future__ import unicode_literals
 
 import subprocess
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -123,6 +124,14 @@ def delete_image(request, image_id):
                     Collection.unassign_image(image, collection)
 
                 messages.success(request, 'Image ' + str(image.id) + ' DELETED from the Workbench!')
+
+                if image.server.is_ebi_sca() or image.server.is_cpw():
+
+                    image_path = settings.MEDIA_ROOT + '/' + image.name
+
+                    rm_command = 'rm ' + str(image_path)
+
+                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                 image.delete()
 

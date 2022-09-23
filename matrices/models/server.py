@@ -1702,7 +1702,7 @@ class Server(models.Model):
         project_list = list()
         images_list = list()
 
-        payload = {'limit': 200}
+        payload = {'limit': 500}
         images_data = session.get(images_url, params=payload).json()
 
         payload = {'limit': 200}

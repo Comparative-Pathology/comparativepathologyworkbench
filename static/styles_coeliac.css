@@ -1180,15 +1180,51 @@ label {
   margin-top: 6px;
 }
 
+.form-col-10 {
+  float: left;
+  width: 10%;
+  margin-top: 6px;
+}
+
 .form-col-15 {
   float: left;
   width: 15%;
   margin-top: 6px;
 }
 
+.form-col-20 {
+  float: left;
+  width: 20%;
+  margin-top: 6px;
+}
+
 .form-col-25 {
   float: left;
   width: 25%;
+  margin-top: 6px;
+}
+
+.form-col-30 {
+  float: left;
+  width: 30%;
+  margin-top: 6px;
+}
+
+.form-col-35 {
+  float: left;
+  width: 35%;
+  margin-top: 6px;
+}
+
+.form-col-40 {
+  float: left;
+  width: 40%;
+  margin-top: 6px;
+}
+
+.form-col-45 {
+  float: left;
+  width: 45%;
   margin-top: 6px;
 }
 
@@ -1261,6 +1297,29 @@ label {
 }
 
 .standard dd {
+  margin: 0px 0px 0px 210px;
+  padding: 5px 0px 5px 0px;
+}
+
+.artefact dl {
+  padding: 0px 0px 0px 0px;
+}
+
+.artefact dt {
+  float: left;
+  clear: left;
+  width: 0px;
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 0px 5px 0px;
+}
+
+.artefact dt::after {
+  content: ":";
+}
+
+.artefact dd {
+  text-align: left;
   margin: 0px 0px 0px 210px;
   padding: 5px 0px 5px 0px;
 }
@@ -1536,4 +1595,38 @@ textarea.form-control.is-valid {
 
 textarea.form-control {
   height: auto;
+}
+
+.cell-list {
+  font-size: 0;
+  list-style: none;
+  padding: 0px 0px 0px 0px;
+}
+
+.cell-list li {
+  display: inline-block;
+  width: 25%;
+  font-size: 16px;
+  text-align: center;
+  min-height: 200px;
+  vertical-align: top;
+  padding: 10px 0px 10px 0px;
+}
+
+.cell-image-gallery {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 425px;
+  border-radius: 5px;
+  text-align: center;
+  min-height: 250px;
+  padding: 20px 0px 0px 0px;
+}
+
+.cell-image-gallery:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.cell-container-gallery {
+  padding: 2px 16px 2px 16px;
 }

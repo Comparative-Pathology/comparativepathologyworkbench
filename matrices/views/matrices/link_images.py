@@ -149,8 +149,6 @@ def link_images(request, image_parent_id, image_child_id, collection_id):
 
                         artefact.set_owner(request.user)
 
-                        print("artefact : " + str(artefact))
-
                         artefact.save()
 
                         location = str(artefact.location)

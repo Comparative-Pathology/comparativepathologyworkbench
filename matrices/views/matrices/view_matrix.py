@@ -42,6 +42,7 @@ from matrices.models import Matrix
 from matrices.models import MatrixSummary
 
 from matrices.routines import credential_exists
+from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_active_collection_images_for_user
@@ -95,7 +96,9 @@ def view_matrix(request, matrix_id):
 
             else:
 
-                collection_image_list = get_active_collection_images_for_user(request.user)
+                if exists_active_collection_for_user(request.user):
+
+                    collection_image_list = get_active_collection_images_for_user(request.user)
 
             updateBoolean = False
 

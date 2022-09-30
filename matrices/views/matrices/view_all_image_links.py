@@ -61,7 +61,15 @@ def view_all_image_links(request):
 
         selected_collection = collection_list[0]
 
-        image_link_list = ImageLink.objects.all().order_by('id').filter(artefact__owner=request.user)
+        image_link_list = list()
+
+        if request.user.is_superuser:
+
+            image_link_list = ImageLink.objects.all().order_by('id')
+
+        else:
+
+            image_link_list = ImageLink.objects.all().order_by('id').filter(artefact__owner=request.user)
 
         data = get_header_data(request.user)
 

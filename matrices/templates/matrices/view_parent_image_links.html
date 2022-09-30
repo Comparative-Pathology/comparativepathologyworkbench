@@ -128,14 +128,14 @@ The view collection template
 		{% if image_link.parent_image.server.is_accessible %}
 			{% if request.get_host == 'localhost:8000' %}
 				<div id="I_{{ image_link.parent_image.id }}_{{ image_link.parent_image.server.uid }}@{{ image_link.parent_image.server.url_server }}" class="loginStatus_out">
-					<a href="https://{{ image_link.parent_image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+					<a href="https://{{ image_link.parent_image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'view_a_image_link' image_link.parent_image.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 				</div>
 				<div id="O_{{ image_link.parent_image.id }}_{{ image_link.parent_image.server.uid }}@{{ image_link.parent_image.server.url_server }}" class="loginStatus_in">
 					<a href="{{ image_link.parent_image.viewer_url }}" target="_blank"><img id="image_{{ image_link.parent_image.id }}" alt="{{ image_link.parent_image.name }}" style="width:256px; height:256px; float: left" title="{{ image_link.parent_image.name }}" class="image-holder" src="{{ image_link.parent_image.birdseye_url }}"> </a>
 				</div>
 			{% else %}
 				<div id="I_{{ image_link.parent_image.id }}_{{ image_link.parent_image.server.uid }}@{{ image_link.parent_image.server.url_server }}" class="loginStatus_out">
-					<a href="https://{{ image_link.parent_image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+					<a href="https://{{ image_link.parent_image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'view_a_image_link' image_link.parent_image.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 				</div>
 				<div id="O_{{ image_link.parent_image.id }}_{{ image_link.parent_image.server.uid }}@{{ image_link.parent_image.server.url_server }}" class="loginStatus_in">
 					<a href="{{ image_link.parent_image.viewer_url }}" target="_blank"><img id="image_{{ image_link.parent_image.id }}" alt="{{ image_link.parent_image.name }}" style="width:256px; height:256px; float: left" title="{{ image_link.parent_image.name }}" class="image-holder" src="{{ image_link.parent_image.birdseye_url }}"> </a>
@@ -149,14 +149,14 @@ The view collection template
 		{% if image_link.child_image.server.is_accessible %}
 			{% if request.get_host == 'localhost:8000' %}
 				<div id="I_{{ image_link.child_image.id }}_{{ image_link.child_image.server.uid }}@{{ image_link.child_image.server.url_server }}" class="loginStatus_out">
-					<a href="https://{{ image_link.child_image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+					<a href="https://{{ image_link.child_image.server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'view_a_image_link' image_link.parent_image.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 				</div>
 				<div id="O_{{ image_link.child_image.id }}_{{ image_link.child_image.server.uid }}@{{ image_link.child_image.server.url_server }}" class="loginStatus_in">
 					<a href="{{ image_link.child_image.viewer_url }}" target="_blank"><img id="image_{{ image_link.child_image.id }}" alt="{{ image_link.child_image.name }}" style="width:256px; height:256px; float: left" title="{{ image_link.child_image.name }}" class="image-holder" src="{{ image_link.child_image.birdseye_url }}"> </a>
 				</div>
 			{% else %}
 				<div id="I_{{ image_link.child_image.id }}_{{ image_link.child_image.server.uid }}@{{ image_link.child_image.server.url_server }}" class="loginStatus_out">
-					<a href="https://{{ image_link.child_image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
+					<a href="https://{{ image_link.child_image.server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'view_a_image_link' image_link.parent_image.id %}"><button class="button button-add"><i class="fa fa-sign-in-alt"></i></button></a>
 				</div>
 				<div id="O_{{ image_link.child_image.id }}_{{ image_link.child_image.server.uid }}@{{ image_link.child_image.server.url_server }}" class="loginStatus_in">
 					<a href="{{ image_link.child_image.viewer_url }}" target="_blank"><img id="image_{{ image_link.child_image.id }}" alt="{{ image_link.child_image.name }}" style="width:256px; height:256px; float: left" title="{{ image_link.child_image.name }}" class="image-holder" src="{{ image_link.child_image.birdseye_url }}"> </a>

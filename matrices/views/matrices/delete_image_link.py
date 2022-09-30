@@ -62,7 +62,7 @@ def delete_image_link(request, image_link_id):
 
         image_link = get_object_or_404(ImageLink, pk=image_link_id)
 
-        if image_link.is_owned_by(request.user):
+        if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
             artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
 

@@ -127,12 +127,12 @@ The home template
 		  <div class="card-container">
           <h3>Browse</h3>
             <br />
-            <a href="{% url 'list_benches' %}">
+            <a href="{% url 'list_collections' %}">
             <button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Collections ({{ collection_list|length }}) &raquo;</button>
             </a>
             <br />
             <br />
-            <a href="{% url 'list_collections' %}">
+            <a href="{% url 'list_benches' %}">
 			<button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Benches ({{ matrix_list|length }}) &raquo;</button>
             </a>
             <br />

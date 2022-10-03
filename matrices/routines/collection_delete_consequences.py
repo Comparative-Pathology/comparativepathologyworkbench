@@ -30,6 +30,7 @@ from __future__ import unicode_literals
 
 import base64, hashlib
 
+from django.apps import apps
 from django.db.models import Q
 
 from os import urandom
@@ -46,6 +47,8 @@ from matrices.routines.set_first_active_collection_for_user import set_first_act
     Consequential Actions for Collection Deletes
 """
 def collection_delete_consequences(a_user, a_collection):
+
+    Collection = apps.get_model('matrices', 'Collection')
 
     images = get_images_for_collection(a_collection)
 

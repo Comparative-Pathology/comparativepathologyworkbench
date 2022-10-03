@@ -37,6 +37,7 @@ from django.http import JsonResponse
 from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Authorisation
+from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user

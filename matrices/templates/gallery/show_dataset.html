@@ -148,13 +148,13 @@ The show dataset template
 					<label for="image_{{image.id}}">Add to Active Collection?</label>
 					<input type="checkbox" id="image_check" value="{{image.id}}" name="checks[]">
 
-					<h5>{{ image.name }}</h5>
+					<h5>{{ image.name|truncatechars:20 }}</h5>
 
 			    </div>
 
 				<br />
 
-				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
+				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name|truncatechars:20 }}" title="{{ image.name|truncatechars:20 }}" src="{{ image.thumbnail_url  }}" ></a>
 
 
 			</div>

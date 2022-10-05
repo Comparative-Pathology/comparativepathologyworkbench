@@ -251,7 +251,22 @@ The view matrix (bench) template
       <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
   						{% csrf_token %}
       <div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-        <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">{{ matrix_cell.title|truncatechars:25 }}
+        <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
+					{% if matrix.height >= 75 and matrix.height <= 99 %}
+			{{ matrix_cell.title|truncatechars:1 }}
+					{% endif %}
+					{% if matrix.height >= 100 and matrix.height <= 199 %}
+			{{ matrix_cell.title|truncatechars:3 }}
+					{% endif %}
+					{% if matrix.height >= 200 and matrix.height <= 299 %}
+			{{ matrix_cell.title|truncatechars:7 }}
+					{% endif %}
+					{% if matrix.height >= 300 and matrix.height <= 399 %}
+			{{ matrix_cell.title|truncatechars:13 }}
+					{% endif %}
+					{% if matrix.height >= 400 and matrix.height <= 450 %}
+			{{ matrix_cell.title|truncatechars:18 }}
+				{% endif %}
         </div><!-- End of row-header-cell-title -->
         <div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
           <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
@@ -285,7 +300,25 @@ The view matrix (bench) template
     <div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 						{% csrf_token %}
       <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">{{ matrix_cell.title|truncatechars:25 }}
+        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+						{% if matrix.width >= 75 and matrix.width <= 109 %}
+			{{ matrix_cell.title|truncatechars:1 }}
+						{% endif %}
+						{% if matrix.width >= 110 and matrix.width <= 149 %}
+			{{ matrix_cell.title|truncatechars:3 }}
+						{% endif %}
+						{% if matrix.width >= 150 and matrix.width <= 199 %}
+			{{ matrix_cell.title|truncatechars:5 }}
+						{% endif %}
+						{% if matrix.width >= 200 and matrix.width <= 299 %}
+			{{ matrix_cell.title|truncatechars:12 }}
+						{% endif %}
+						{% if matrix.width >= 300 and matrix.width <= 399 %}
+			{{ matrix_cell.title|truncatechars:21 }}
+						{% endif %}
+						{% if matrix.width >= 400 and matrix.width <= 450 %}
+			{{ matrix_cell.title|truncatechars:30 }}
+						{% endif %}
         </div><!-- End of column-header-cell-title -->
         <div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
           <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
@@ -325,7 +358,21 @@ The view matrix (bench) template
 	  	  <a href="{% url 'view_b_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
 							{% endif %}
 							{% if not matrix_cell.image.exists_parent_image_links and not matrix_cell.image.exists_child_image_links %}
-							{{ matrix_cell.title|truncatechars:25 }}
+								{% if matrix.width >= 75 and matrix.width <= 99 %}
+		  {{ matrix_cell.title|truncatechars:3 }}
+								{% endif %}
+								{% if matrix.width >= 100 and matrix.width <= 199 %}
+		  {{ matrix_cell.title|truncatechars:6 }}
+								{% endif %}
+								{% if matrix.width >= 200 and matrix.width <= 299 %}
+		  {{ matrix_cell.title|truncatechars:15 }}
+								{% endif %}
+								{% if matrix.width >= 300 and matrix.width <= 399 %}
+		  {{ matrix_cell.title|truncatechars:30 }}
+								{% endif %}
+								{% if matrix.width >= 400 and matrix.width <= 450 %}
+		  {{ matrix_cell.title|truncatechars:40 }}
+								{% endif %}
 							{% endif %}
 						{% endif %}
         </div><!-- End of cell-title -->

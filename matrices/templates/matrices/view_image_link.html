@@ -199,12 +199,16 @@ The amend cell template
 
 					<dl class="artefact">
 						<dt>Comment</dt>
-						<dd>{{ image_link.artefact.comment }}</dd>
+						<dd>{% inlineedit "image_link.artefact.comment" "blocked" %}</dd>
 						<dt>Uploaded</dt>
 						<dd>{{ image_link.artefact.uploaded_at }}</dd>
 						<dt>Attachment</dt>
 						<dd>
+{% if image_link.artefact.has_location %}
 							<a href="{{ image_link.artefact.url }}">{{ image_link.artefact.get_location_minus_path }}</a>
+{% else %}
+							No Attachment!
+{% endif %}
 						</dd>
 					</dl>
 

@@ -151,23 +151,25 @@ def link_images(request, image_parent_id, image_child_id, collection_id):
 
                         artefact.save()
 
-                        location = str(artefact.location)
+                        if artefact.has_location():
 
-                        now = datetime.now()
-                        date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
+                            location = str(artefact.location)
 
-                        initial_path = artefact.location.path
-                        new_path = '/' + date_time + '_' + location
-                        new_full_path = settings.MEDIA_ROOT + new_path
+                            now = datetime.now()
+                            date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
-                        url = 'http://' + serverCPW.url_server + new_path
+                            initial_path = artefact.location.path
+                            new_path = '/' + date_time + '_' + location
+                            new_full_path = settings.MEDIA_ROOT + new_path
 
-                        artefact.set_location(new_full_path)
-                        artefact.set_url(url)
+                            url = 'http://' + serverCPW.url_server + new_path
 
-                        os.rename(initial_path, new_full_path)
+                            artefact.set_location(new_full_path)
+                            artefact.set_url(url)
 
-                        artefact.save()
+                            os.rename(initial_path, new_full_path)
+
+                            artefact.save()
 
                         image_link = ImageLink.create(image_parent, image_child, artefact)
 

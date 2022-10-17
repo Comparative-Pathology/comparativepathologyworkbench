@@ -66,9 +66,11 @@ def delete_image_link(request, image_link_id):
 
             artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
 
-            rm_command = 'rm ' + str(artefact.location)
+            if artefact.has_location():
 
-            process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                rm_command = 'rm ' + str(artefact.location)
+
+                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
             messages.success(request, 'Image Link ' + str(image_link.id) + ' DELETED from the Workbench!')
 

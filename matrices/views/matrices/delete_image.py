@@ -82,9 +82,11 @@ def delete_image(request, image_id):
 
                             artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
 
-                            rm_command = 'rm ' + str(artefact.location)
+                            if artefact.has_location():
 
-                            process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                rm_command = 'rm ' + str(artefact.location)
+
+                                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                             image_link.delete()
 
@@ -105,9 +107,11 @@ def delete_image(request, image_id):
 
                             artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
 
-                            rm_command = 'rm ' + str(artefact.location)
+                            if artefact.has_location():
 
-                            process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                rm_command = 'rm ' + str(artefact.location)
+
+                                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                             image_link.delete()
 

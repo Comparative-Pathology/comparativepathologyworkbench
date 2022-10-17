@@ -50,7 +50,7 @@ from django.utils.translation import gettext_lazy as _
 """
 class Artefact(models.Model):
     comment = models.TextField(max_length=4095, default='')
-    location = models.FileField(upload_to='', validators=[FileExtensionValidator(['zip'])], max_length=500)
+    location = models.FileField(upload_to='', validators=[FileExtensionValidator(['zip'])], max_length=500, blank=True)
     url = models.CharField(max_length=255, blank=False, default='')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, related_name='artefacts', on_delete=models.DO_NOTHING)
@@ -93,6 +93,13 @@ class Artefact(models.Model):
             return True
         else:
             return False
+
+    def has_location(self):
+
+        if self.location == "":
+            return False
+        else:
+            return True
 
     def get_location_minus_path(self):
 

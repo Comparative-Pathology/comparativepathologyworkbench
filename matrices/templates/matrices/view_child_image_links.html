@@ -168,7 +168,11 @@ The view collection template
 			</td>
 			<td>{{ image_link.artefact.uploaded_at }}</td>
 			<td>
+		{% if image_link.artefact.has_location %}
 				<a href="{{ image_link.artefact.url }}">{{ image_link.artefact.get_location_minus_path }}</a>
+		{% else %}
+				No Attachment!
+		{% endif %}
 			</td>
 			<td>{{ image_link.artefact.comment|truncatechars:50 }}</td>
 		</tr>

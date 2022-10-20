@@ -114,6 +114,11 @@ def view_matrix(request, matrix_id):
             username = request.user.username
             matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") OVER(ORDER BY \"matrix_id\") AS \"prev_val\", LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) AS \"next_val\" FROM public.matrices_bench_summary WHERE matrix_authorisation_permitted = %s AND matrix_authorisation_authority != \'ADMIN\'', [username])
 
+            if username == 'admin':
+
+                matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") OVER(ORDER BY \"matrix_id\") AS \"prev_val\", LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) AS \"next_val\" FROM public.matrices_bench_summary WHERE matrix_authorisation_authority = \'OWNER\'')
+
+
             next_bench = 0
             previous_bench = 0
             highest_bench = 0

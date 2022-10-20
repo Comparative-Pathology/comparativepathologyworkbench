@@ -34,6 +34,14 @@ The view matrix (bench) template
 
 {% load inlineedit %}
 
+{% block extrastyle %}
+
+<style>
+
+</style>
+
+{% endblock extrastyle %}
+
 {% block breadcrumb %}
 <!-- Breadcrumb Menu -->
 			<li>
@@ -244,70 +252,74 @@ The view matrix (bench) template
       <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
   						{% csrf_token %}
       <div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-        <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)" >
-
-		  				{% if matrix.height >= 75 and matrix.height <= 93 %}
-		  {{ matrix_cell.title|truncatechars:1 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 94 and matrix.height <= 112 %}
-		  {{ matrix_cell.title|truncatechars:3 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 113 and matrix.height <= 131 %}
-		  {{ matrix_cell.title|truncatechars:5 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 132 and matrix.height <= 150 %}
-		  {{ matrix_cell.title|truncatechars:7 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 151 and matrix.height <= 169 %}
-		  {{ matrix_cell.title|truncatechars:9 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 170 and matrix.height <= 188 %}
-		  {{ matrix_cell.title|truncatechars:11 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 189 and matrix.height <= 208 %}
-		  {{ matrix_cell.title|truncatechars:13 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 209 and matrix.height <= 227 %}
-		  {{ matrix_cell.title|truncatechars:15 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 228 and matrix.height <= 246 %}
-		  {{ matrix_cell.title|truncatechars:17 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 247 and matrix.height <= 265 %}
-		  {{ matrix_cell.title|truncatechars:19 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 266 and matrix.height <= 284 %}
-		  {{ matrix_cell.title|truncatechars:21 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 285 and matrix.height <= 303 %}
-		  {{ matrix_cell.title|truncatechars:23 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 304 and matrix.height <= 322 %}
-		  {{ matrix_cell.title|truncatechars:25 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 323 and matrix.height <= 341 %}
-		  {{ matrix_cell.title|truncatechars:27 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 342 and matrix.height <= 360 %}
-		  {{ matrix_cell.title|truncatechars:29 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 361 and matrix.height <= 379 %}
-		  {{ matrix_cell.title|truncatechars:31 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 380 and matrix.height <= 398 %}
-		  {{ matrix_cell.title|truncatechars:33 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 399 and matrix.height <= 407 %}
-		  {{ matrix_cell.title|truncatechars:35 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 408 and matrix.height <= 426 %}
-		  {{ matrix_cell.title|truncatechars:37 }}
-		  				{% endif %}
-		  				{% if matrix.height >= 427 and matrix.height <= 450 %}
-		  {{ matrix_cell.title|truncatechars:39 }}
-		  				{% endif %}
-
+		<div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" style="top: 27px;" draggable="true" ondragstart="drag(event)" >
+                        {% if matrix_cell.title != '' %}
+          <div class="tooltiprow"><i class="fa fa-info-circle"></i>
+              <span class="tooltiprowtext" style="margin-left: 22px;">{{ matrix_cell.title }}</span>
+          </div>
         </div><!-- End of row-header-cell-title -->
+        <div class="vertical-text" style="margin-top: {{ matrix.height|add:"-22" }}px; margin-left: 7px; width:{{ matrix.height|add:"-102" }}px;">
+                            {% if matrix.height >= 75 and matrix.height <= 93 %}
+                            {% endif %}
+                            {% if matrix.height >= 94 and matrix.height <= 112 %}
+            {{ matrix_cell.title|truncatechars:1 }}
+                            {% endif %}
+                            {% if matrix.height >= 113 and matrix.height <= 131 %}
+            {{ matrix_cell.title|truncatechars:3 }}
+                            {% endif %}
+                            {% if matrix.height >= 132 and matrix.height <= 150 %}
+            {{ matrix_cell.title|truncatechars:5 }}
+                            {% endif %}
+                            {% if matrix.height >= 151 and matrix.height <= 169 %}
+            {{ matrix_cell.title|truncatechars:6 }}
+                            {% endif %}
+                            {% if matrix.height >= 170 and matrix.height <= 188 %}
+            {{ matrix_cell.title|truncatechars:6 }}
+                            {% endif %}
+                            {% if matrix.height >= 189 and matrix.height <= 208 %}
+            {{ matrix_cell.title|truncatechars:9 }}
+                            {% endif %}
+                            {% if matrix.height >= 209 and matrix.height <= 227 %}
+            {{ matrix_cell.title|truncatechars:11 }}
+                            {% endif %}
+                            {% if matrix.height >= 228 and matrix.height <= 246 %}
+            {{ matrix_cell.title|truncatechars:13 }}
+                            {% endif %}
+                            {% if matrix.height >= 247 and matrix.height <= 265 %}
+            {{ matrix_cell.title|truncatechars:15 }}
+                            {% endif %}
+                            {% if matrix.height >= 266 and matrix.height <= 284 %}
+            {{ matrix_cell.title|truncatechars:18 }}
+                            {% endif %}
+                            {% if matrix.height >= 285 and matrix.height <= 303 %}
+            {{ matrix_cell.title|truncatechars:21 }}
+                            {% endif %}
+                            {% if matrix.height >= 304 and matrix.height <= 322 %}
+            {{ matrix_cell.title|truncatechars:23 }}
+                            {% endif %}
+                            {% if matrix.height >= 323 and matrix.height <= 341 %}
+            {{ matrix_cell.title|truncatechars:25 }}
+                            {% endif %}
+                            {% if matrix.height >= 342 and matrix.height <= 360 %}
+            {{ matrix_cell.title|truncatechars:27 }}
+                            {% endif %}
+                            {% if matrix.height >= 361 and matrix.height <= 379 %}
+            {{ matrix_cell.title|truncatechars:29 }}
+                            {% endif %}
+                            {% if matrix.height >= 380 and matrix.height <= 398 %}
+            {{ matrix_cell.title|truncatechars:31 }}
+                            {% endif %}
+                            {% if matrix.height >= 399 and matrix.height <= 407 %}
+            {{ matrix_cell.title|truncatechars:33 }}
+                            {% endif %}
+                            {% if matrix.height >= 408 and matrix.height <= 426 %}
+            {{ matrix_cell.title|truncatechars:35 }}
+                            {% endif %}
+                            {% if matrix.height >= 427 and matrix.height <= 450 %}
+            {{ matrix_cell.title|truncatechars:37 }}
+                            {% endif %}
+                        {% endif %}
+        </div>
         <div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
           <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
@@ -340,9 +352,71 @@ The view matrix (bench) template
     <div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 						{% csrf_token %}
       <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-			{{ matrix_cell.title }}
-        </div><!-- End of column-header-cell-title -->
+        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
+                        {% if matrix_cell.title != '' %}
+          <div class="tooltipcolumn"><i class="fa fa-info-circle"></i>
+                            {% if matrix.width >= 75 and matrix.width <= 93 %}
+                            {% endif %}
+                            {% if matrix.width >= 94 and matrix.width <= 112 %}
+                            {% endif %}
+                            {% if matrix.width >= 113 and matrix.width <= 131 %}
+            {{ matrix_cell.title|truncatechars:2 }}
+                            {% endif %}
+                            {% if matrix.width >= 132 and matrix.width <= 150 %}
+            {{ matrix_cell.title|truncatechars:4 }}
+                            {% endif %}
+                            {% if matrix.width >= 151 and matrix.width <= 169 %}
+            {{ matrix_cell.title|truncatechars:5 }}
+                            {% endif %}
+                            {% if matrix.width >= 170 and matrix.width <= 188 %}
+            {{ matrix_cell.title|truncatechars:7 }}
+                            {% endif %}
+                            {% if matrix.width >= 189 and matrix.width <= 208 %}
+            {{ matrix_cell.title|truncatechars:9 }}
+                            {% endif %}
+                            {% if matrix.width >= 209 and matrix.width <= 227 %}
+            {{ matrix_cell.title|truncatechars:12 }}
+                            {% endif %}
+                            {% if matrix.width >= 228 and matrix.width <= 246 %}
+            {{ matrix_cell.title|truncatechars:14 }}
+                            {% endif %}
+                            {% if matrix.width >= 247 and matrix.width <= 265 %}
+            {{ matrix_cell.title|truncatechars:17 }}
+                            {% endif %}
+                            {% if matrix.width >= 266 and matrix.width <= 284 %}
+            {{ matrix_cell.title|truncatechars:19 }}
+                            {% endif %}
+                            {% if matrix.width >= 285 and matrix.width <= 303 %}
+            {{ matrix_cell.title|truncatechars:23 }}
+                            {% endif %}
+                            {% if matrix.width >= 304 and matrix.width <= 322 %}
+            {{ matrix_cell.title|truncatechars:24 }}
+                            {% endif %}
+                            {% if matrix.width >= 323 and matrix.width <= 341 %}
+            {{ matrix_cell.title|truncatechars:26 }}
+                            {% endif %}
+                            {% if matrix.width >= 342 and matrix.width <= 360 %}
+            {{ matrix_cell.title|truncatechars:29 }}
+                            {% endif %}
+                            {% if matrix.width >= 361 and matrix.width <= 379 %}
+            {{ matrix_cell.title|truncatechars:31 }}
+                            {% endif %}
+                            {% if matrix.width >= 380 and matrix.width <= 398 %}
+            {{ matrix_cell.title|truncatechars:33 }}
+                            {% endif %}
+                            {% if matrix.width >= 399 and matrix.width <= 407 %}
+            {{ matrix_cell.title|truncatechars:36 }}
+                            {% endif %}
+                            {% if matrix.width >= 408 and matrix.width <= 426 %}
+            {{ matrix_cell.title|truncatechars:37 }}
+                            {% endif %}
+                            {% if matrix.width >= 427 and matrix.width <= 450 %}
+            {{ matrix_cell.title|truncatechars:39 }}
+                            {% endif %}
+            <span class="tooltipcolumntext">{{ matrix_cell.title }}</span>
+          </div>
+                        {% endif %}
+	  	</div><!-- End of column-header-cell-title -->
         <div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
           <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
@@ -372,16 +446,88 @@ The view matrix (bench) template
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 						{% endif %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
-        <div id="cell_{{ matrix_cell.id }}" class="cell-title" style="font-size: 12px; width:{{ matrix.width|add:"-62" }}px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-						{% if matrix_cell.image %}
-							{% if matrix_cell.image.exists_parent_image_links %}
-	  	  <a href="{% url 'view_a_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
-							{% endif %}
-							{% if matrix_cell.image.exists_child_image_links %}
-	  	  <a href="{% url 'view_b_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
-							{% endif %}
-		  {{ matrix_cell.title }}
-						{% endif %}
+        <div id="cell_{{ matrix_cell.id }}" class="cell-title" style="font-size: 12px; width:{{ matrix.width|add:"-62" }}px;">
+                        {% if matrix_cell.title != ''%}
+		  <div class="tooltip" style="font-size: 12px;">
+          <!-- <div class="tooltip" style="font-size: 12px; width:{{ matrix.width|add:"-82" }}px;"> -->
+
+                            {% if matrix.width >= 75 and matrix.width <= 93 %}
+      		  {{ matrix_cell.title|truncatechars:1 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 94 and matrix.width <= 112 %}
+      		  {{ matrix_cell.title|truncatechars:1 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 113 and matrix.width <= 131 %}
+      		  {{ matrix_cell.title|truncatechars:3 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 132 and matrix.width <= 150 %}
+      		  {{ matrix_cell.title|truncatechars:5 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 151 and matrix.width <= 169 %}
+      		  {{ matrix_cell.title|truncatechars:9 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 170 and matrix.width <= 188 %}
+      		  {{ matrix_cell.title|truncatechars:11 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 189 and matrix.width <= 208 %}
+      		  {{ matrix_cell.title|truncatechars:13 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 209 and matrix.width <= 227 %}
+      		  {{ matrix_cell.title|truncatechars:15 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 228 and matrix.width <= 246 %}
+      		  {{ matrix_cell.title|truncatechars:17 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 247 and matrix.width <= 265 %}
+      		  {{ matrix_cell.title|truncatechars:19 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 266 and matrix.width <= 284 %}
+      		  {{ matrix_cell.title|truncatechars:21 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 285 and matrix.width <= 303 %}
+      		  {{ matrix_cell.title|truncatechars:23 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 304 and matrix.width <= 322 %}
+      		  {{ matrix_cell.title|truncatechars:25 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 323 and matrix.width <= 341 %}
+      		  {{ matrix_cell.title|truncatechars:28 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 342 and matrix.width <= 360 %}
+      		  {{ matrix_cell.title|truncatechars:31 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 361 and matrix.width <= 379 %}
+      		  {{ matrix_cell.title|truncatechars:34 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 380 and matrix.width <= 398 %}
+      		  {{ matrix_cell.title|truncatechars:37 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 399 and matrix.width <= 407 %}
+      		  {{ matrix_cell.title|truncatechars:40 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 408 and matrix.width <= 426 %}
+      		  {{ matrix_cell.title|truncatechars:43 }}
+      		  				{% endif %}
+      		  				{% if matrix.width >= 427 and matrix.width <= 450 %}
+      		  {{ matrix_cell.title|truncatechars:43 }}
+      		  				{% endif %}
+
+    	    <!-- <span class="tooltiptext" style="margin-left: -{{ matrix.width|add:"-82" }}px;">{{ matrix_cell.title }}</span> -->
+            <span class="tooltiptext">{{ matrix_cell.title }}</span>
+    	  </div>
+                            {% if matrix_cell.image %}
+                                {% if matrix_cell.image.exists_parent_image_links %}
+		  <div id="cell_{{ matrix_cell.id }}" class="cell-control-chain" style="left: {{ matrix.width|add:"-82" }}px;">
+	  	    <a href="{% url 'view_a_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
+          </div>
+						        {% endif %}
+							    {% if matrix_cell.image.exists_child_image_links %}
+          <div id="cell_{{ matrix_cell.id }}" class="cell-control-chain" style="left: {{ matrix.width|add:"-62" }}px;">
+	  	    <a href="{% url 'view_b_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
+          </div>
+							    {% endif %}
+                            {% endif %}
+                        {% endif %}
         </div><!-- End of cell-title -->
         <div id="cell_{{ matrix_cell.id }}" class="cell-control">
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">

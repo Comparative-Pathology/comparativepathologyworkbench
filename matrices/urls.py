@@ -242,6 +242,7 @@ urlpatterns = [
 	path('view_all_image_links/', matrices_views.matrices.view_all_image_links, name='view_all_image_links'),
 	path('view_a_image_link/<int:image_parent_id>/', matrices_views.matrices.view_parent_image_link, name='view_a_image_link'),
 	path('view_b_image_link/<int:image_child_id>/', matrices_views.matrices.view_child_image_link, name='view_b_image_link'),
+	path('view_a_and_b_image_links/<int:image_selected_id>/', matrices_views.matrices.view_parent_and_child_image_links, name='view_a_and_b_image_links'),
 
 
 #   views/user

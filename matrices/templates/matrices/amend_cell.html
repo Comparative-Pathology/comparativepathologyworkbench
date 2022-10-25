@@ -40,7 +40,7 @@ The amend cell template
 
 			<li><a href="{% url 'list_benches' %}">Benches</a></li>
 			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
-			<li>Amend Cell</li>
+			<li>Edit Cell</li>
 
 {% endblock %}
 
@@ -235,6 +235,16 @@ The amend cell template
 		  <dd>
 			<a href="{% url 'matrix' matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a>
 		  </dd>
+	{% if cell.has_image == True %}
+		  <dt>Link as Image A</dt>
+		  <dd>
+			<a href="{% url 'link_images' cell.image.id 0 cell.matrix.last_used_collection.id %}"><button class="button button-add"><i class="fa fa-chain"></i></button></a>
+		  </dd>
+		  <dt>Link as Image B</dt>
+		  <dd>
+			<a href="{% url 'link_images' 0 cell.image.id cell.matrix.last_used_collection.id %}"><button class="button button-add"><i class="fa fa-chain"></i></button></a>
+		  </dd>
+	{% endif %}
 		</dl>
 	  </div>
 	</div><!-- End of amend-cell-container -->

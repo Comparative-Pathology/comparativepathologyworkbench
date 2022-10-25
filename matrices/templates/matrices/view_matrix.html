@@ -516,16 +516,11 @@ The view matrix (bench) template
             <span class="tooltiptext">{{ matrix_cell.title }}</span>
     	  </div>
                             {% if matrix_cell.image %}
-                                {% if matrix_cell.image.exists_parent_image_links %}
-		  <div id="cell_{{ matrix_cell.id }}" class="cell-control-chain" style="left: {{ matrix.width|add:"-82" }}px;">
-	  	    <a href="{% url 'view_a_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
+                                {% if matrix_cell.image.exists_parent_image_links or matrix_cell.image.exists_child_image_links %}
+		  <div id="cell_{{ matrix_cell.id }}" class="cell-control-chain" style="left: {{ matrix.width|add:"-62" }}px;">
+	  	    <a href="{% url 'view_a_and_b_image_links' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
           </div>
 						        {% endif %}
-							    {% if matrix_cell.image.exists_child_image_links %}
-          <div id="cell_{{ matrix_cell.id }}" class="cell-control-chain" style="left: {{ matrix.width|add:"-62" }}px;">
-	  	    <a href="{% url 'view_b_image_link' matrix_cell.image.id %}"><i class="fa fa-chain fa-sm"></i></a>
-          </div>
-							    {% endif %}
                             {% endif %}
                         {% endif %}
         </div><!-- End of cell-title -->

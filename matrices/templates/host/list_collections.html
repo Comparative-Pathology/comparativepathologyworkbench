@@ -126,7 +126,7 @@ The list collections template (with Search)
 		  <a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
 		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting {{ collection_summary.collection_id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
 				{% if collection_summary.is_active %}
 				{% else %}
@@ -139,7 +139,7 @@ The list collections template (with Search)
 		  <a href="{% url 'view_collection' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
 		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting {{ collection_summary.collection_id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
 			    {% if collection_summary.is_active %}
 				{% else %}
@@ -274,8 +274,10 @@ The list collections template (with Search)
 	      var row = $('tr#collection_summary-' + data.object_id);
 	      row.remove();
 
+          var collectionNum = data.object_id.toString().padStart(6, '0');
+
 	      Swal.fire({
-	        text: 'Collection "' + data.object_id + '" has been deleted',
+	        text: 'Collection ' + collectionNum + ' has been deleted!',
 	        icon: 'warning'
 	      })
 	    },

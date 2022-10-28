@@ -40,6 +40,7 @@ from frontend_forms.utils import get_object_by_uuid_or_404
 from matrices.models import Server
 
 from matrices.routines import credential_exists
+from matrices.routines import exists_image_for_server
 
 
 #
@@ -56,16 +57,24 @@ def server_delete(request, server_id):
 
         raise PermissionDenied
 
-    if not request.user.is_superuser:
-
-        raise PermissionDenied
-
     if not credential_exists(request.user):
 
         raise PermissionDenied
 
 
     server = get_object_by_uuid_or_404(Server, server_id)
+
+    if not request.user.is_superuser:
+
+        if server.owner != request.user:
+
+            raise PermissionDenied
+
+    if exists_image_for_server(server):
+
+        raise PermissionDenied
+
+
     server.delete()
 
     messages.success(request, 'Server ' + str(server_id) + ' Deleted!')

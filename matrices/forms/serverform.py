@@ -39,6 +39,8 @@ from django.utils.translation import gettext_lazy as _
 from matrices.models import Type
 from matrices.models import Server
 
+from matrices.routines import exists_server_for_uid_url
+
 
 #
 # SERVER FORM
@@ -60,6 +62,7 @@ class ServerForm(forms.ModelForm):
 
         name = cleaned_data.get("name")
         url_server = cleaned_data.get("url_server")
+        uid = cleaned_data.get("uid")
 
         if not name:
             msg = "Please Supply a Name!"
@@ -67,4 +70,8 @@ class ServerForm(forms.ModelForm):
 
         if not url_server:
             msg = "Please Supply a URL!"
+            raise ValidationError(msg)
+
+        if exists_server_for_uid_url(uid, url_server):
+            msg = "Server already exist for supplied Uid \"" + str(uid) + "\" and URL \"" + str(url_server) + "\""
             raise ValidationError(msg)

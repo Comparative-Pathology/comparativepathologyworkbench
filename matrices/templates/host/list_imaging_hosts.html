@@ -108,79 +108,79 @@ The list imaging hosts (Servers) template
 		{% endif %}
   <tr id="server-{{server.id}}" class="{% if request.GET.selected_record == server.id|stringformat:'s' %}selected{% endif %}">
     <td>
-            {% if readBoolean %}
-    			{% if updateBoolean %}
+        {% if readBoolean %}
+    		{% if server.owner == request.user or request.user.is_superuser %}
       <div class="generic-dropdown">
         <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
         <div class="generic-dropdown-content">
-    				{% if server.type.name == 'WORDPRESS' %}
+    			{% if server.type.name == 'WORDPRESS' %}
           <a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
-    				{% if server.type.name == 'OMERO_5.4.7' %}
+    			{% endif %}
+    			{% if server.type.name == 'OMERO_5.4.7' %}
           <a href="{% url 'webgallery_show_imaging_server' server.id %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
-    				{% if server.type.name == 'EBI_SCA' %}
+    			{% endif %}
+    			{% if server.type.name == 'EBI_SCA' %}
           <a href="{% url 'webgallery_show_ebi_sca_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
-					{% if server.type.name == 'CPW' %}
+    			{% endif %}
+				{% if server.type.name == 'CPW' %}
           <a href="{% url 'webgallery_show_cpw_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
+    			{% endif %}
           <a data-value="{{ server.id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
           <a href="{% url 'server_create_update' server.id %}" onclick="open_server_edit_dialog(event, 'Updating Server {{server.id}} ...'); return false;"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
           <a href="{% url 'server_delete' server.id %}" onclick="delete_server(event, 'Deleting {{server.id}}'); return false;"><i class="fa-solid fa-trash-can"></i> Delete</a>
-    				{% if server.is_accessible %}
-    					{% if request.get_host == 'localhost:8000' %}
+    			{% if server.is_accessible %}
+    				{% if request.get_host == 'localhost:8000' %}
           <div id="I_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_out">
             <a href="https://{{ server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'list_imaging_hosts' %}"><i class="fa fa-sign-in-alt"></i> Login</a>
           </div>
           <div id="O_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_in">
           </div>
-    					{% else %}
+    				{% else %}
           <div id="I_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_out">
             <a href="https://{{ server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'list_imaging_hosts' %}"><i class="fa fa-sign-in-alt"></i> Login</a>
           </div>
           <div id="O_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_in">
           </div>
-    					{% endif %}
     				{% endif %}
+    			{% endif %}
         </div><!-- End of generic-dropdown-content -->
       </div><!-- End of generic-dropdown -->
-    			{% else %}
+    		{% else %}
       <div class="generic-dropdown">
         <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
         <div class="generic-dropdown-content">
-    				{% if server.type.name == 'WORDPRESS' %}
+    			{% if server.type.name == 'WORDPRESS' %}
           <a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
-    				{% if server.type.name == 'OMERO_5.4.7' %}
+    			{% endif %}
+    			{% if server.type.name == 'OMERO_5.4.7' %}
           <a href="{% url 'webgallery_show_imaging_server' server.id %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
-    				{% if server.type.name == 'EBI_SCA' %}
+    			{% endif %}
+    			{% if server.type.name == 'EBI_SCA' %}
           <a href="{% url 'webgallery_show_ebi_sca_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
-					{% if server.type.name == 'CPW' %}
+    			{% endif %}
+				{% if server.type.name == 'CPW' %}
           <a href="{% url 'webgallery_show_cpw_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
-    				{% endif %}
+				{% endif %}
           <a data-value="{{ server.id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-    				{% if server.is_accessible %}
-    					{% if request.get_host == 'localhost:8000' %}
+				{% if server.is_accessible %}
+					{% if request.get_host == 'localhost:8000' %}
           <div id="I_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_out">
             <a href="https://{{ server.url_server }}/webclient/login/?url=http://{{ request.get_host }}{% url 'list_imaging_hosts' %}"><i class="fa fa-sign-in-alt"></i> Login</a>
           </div>
           <div id="O_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_in">
           </div>
-    					{% else %}
+					{% else %}
           <div id="I_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_out">
             <a href="https://{{ server.url_server }}/webclient/login/?url=https://{{ request.get_host }}{% url 'list_imaging_hosts' %}"><i class="fa fa-sign-in-alt"></i> Login</a>
           </div>
           <div id="O_{{ server.id }}_{{ server.uid }}@{{ server.url_server }}" class="loginStatus_in">
           </div>
-    					{% endif %}
-    				{% endif %}
+					{% endif %}
+				{% endif %}
         </div><!-- End of generic-dropdown-content -->
       </div><!-- End of generic-dropdown -->
-    			{% endif %}
-    		{% endif %}
+			{% endif %}
+		{% endif %}
     </td>
     <td>{{ server.owner.username }}</td>
     <td>{{ server.name }}</td>
@@ -196,13 +196,10 @@ The list imaging hosts (Servers) template
 	<td>&nbsp;</td>
   </tr>
   <tr>
-			{% if updateBoolean %}
     <td>
       <a href="{% url 'server_create_update' %}" class="btn button button-add" onclick="open_server_edit_dialog(event, 'Create a Server ...'); return false;"><i class="fa fa-plus"></i> Add</a>
     </td>
-			{% else %}
 	<td>&nbsp;</td>
-			{% endif %}
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>

@@ -63,10 +63,6 @@ def server_create_update(request, server_id=None):
 
         raise PermissionDenied
 
-    if not request.user.is_superuser:
-
-        raise PermissionDenied
-
     if not credential_exists(request.user):
 
         raise PermissionDenied
@@ -81,6 +77,13 @@ def server_create_update(request, server_id=None):
     else:
         # "Change" mode
         object = get_object_by_uuid_or_404(Server, server_id)
+
+        if not request.user.is_superuser:
+
+            if object.owner != request.user:
+
+                raise PermissionDenied
+
 
     template_name = 'frontend_forms/generic_form_inner.html'
 

@@ -54,13 +54,9 @@ def list_imaging_hosts(request):
 
         readBoolean = True
 
-        if request.user.is_superuser:
-
-            updateBoolean = True
-
         form = SearchUrlForm()
 
-        data.update({ 'form': form, 'search_from': "list_imaging_hosts", 'readBoolean': readBoolean, 'updateBoolean': updateBoolean })
+        data.update({ 'form': form, 'search_from': "list_imaging_hosts", 'readBoolean': readBoolean })
 
         return render(request, 'host/list_imaging_hosts.html', data)
 

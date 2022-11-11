@@ -120,7 +120,7 @@ The show dataset template
 
 {% if images %}
 
-	<p><a href="{% url 'webgallery_show_dataset_filtered' server.id dataset.id %}"><button class="button button-view"><i class="fa-solid fa-filter"></i></button></a> Dataset contains {{ dataset.imageCount }} images</p>
+	<p><a href="{% url 'webgallery_show_dataset' server.id dataset.id %}"><button class="button button-view"><i class="fa-solid fa-filter-circle-xmark"></i></button></a> Dataset contains {{ dataset.imageCount }} images;  (Filtered) Dataset shows {{ filteredimagecount }} images</p>
 
 	<hr>
 

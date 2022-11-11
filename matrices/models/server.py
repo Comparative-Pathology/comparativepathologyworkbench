@@ -1627,7 +1627,7 @@ class Server(models.Model):
     """
         Get the JSON Details for the Requested Dataset
     """
-    def get_imaging_server_dataset_json(self, dataset_id):
+    def get_imaging_server_dataset_json(self, dataset_id, filter):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1768,6 +1768,8 @@ class Server(models.Model):
                 'name': groupname,
             })
 
+            filteredImageCount = 0
+
             for i in idata:
 
                 image_id = str(i['@id'])
@@ -1778,8 +1780,8 @@ class Server(models.Model):
                 else:
                     image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + image_id
 
-                image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
-                image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+                    image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
+                    image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
 
                 image = ({
                     'id': image_id,
@@ -1787,11 +1789,26 @@ class Server(models.Model):
                     'viewer_url': image_viewer_url,
                     'birdseye_url': image_birdseye_url,
                     'thumbnail_url': image_thumbnail_url
-                })
+                    })
 
-                images_list.append(image)
+                if filter == True:
 
-        data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset }
+                    substring1 = "[macro image]"
+                    substring2 = "[macro mask image]"
+
+                    if substring1 not in image_name and substring2 not in image_name:
+
+                        filteredImageCount = filteredImageCount + 1
+
+                        images_list.append(image)
+
+                else:
+
+                    images_list.append(image)
+
+
+
+        data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'filteredimagecount': filteredImageCount  }
 
         return data
 

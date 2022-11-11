@@ -31,6 +31,7 @@
 # def show_group(request, server_id, group_id):
 # def show_project(request, server_id, project_id):
 # def show_dataset(request, server_id, dataset_id):
+# def show_dataset_filtered(request, server_id, dataset_id):
 # def show_image(request, server_id, image_id):
 # def show_wordpress(request, server_id, page_id):
 # def show_wordpress_image(request, server_id, image_id):
@@ -41,6 +42,7 @@
 from .add_image import add_image
 from .add_dataset import add_dataset
 from .show_dataset import show_dataset
+from .show_dataset_filtered import show_dataset_filtered
 from .add_cpw_image import add_cpw_image
 from .show_cpw_image import show_cpw_image
 from .show_cpw_upload_server import show_cpw_upload_server

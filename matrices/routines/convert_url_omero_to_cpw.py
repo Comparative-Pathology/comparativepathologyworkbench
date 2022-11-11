@@ -86,7 +86,7 @@ def convert_url_omero_to_cpw(request, a_url):
 
                     if query_type == "dataset":
 
-                        server_data = server.get_imaging_server_dataset_json(query_id)
+                        server_data = server.get_imaging_server_dataset_json(query_id, False)
 
                         dataset = server_data["dataset"]
 

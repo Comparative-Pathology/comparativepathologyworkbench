@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         show_dataset.py
+# \file         show_dataset_filtered.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the show_dataset view routine
+# This file contains the show_dataset_filtered view routine
 #
 ###
 from __future__ import unicode_literals
@@ -51,7 +51,7 @@ from matrices.routines import get_header_data
 #   FROM AN OMERO IMAGING SERVER
 #
 @login_required()
-def show_dataset(request, server_id, dataset_id):
+def show_dataset_filtered(request, server_id, dataset_id):
     """
     Show a dataset
     """
@@ -72,11 +72,11 @@ def show_dataset(request, server_id, dataset_id):
 
         if server.is_omero547():
 
-            server_data = server.get_imaging_server_dataset_json(dataset_id, False)
+            server_data = server.get_imaging_server_dataset_json(dataset_id, True)
 
             data.update(server_data)
 
-            return render(request, 'gallery/show_dataset.html', data)
+            return render(request, 'gallery/show_dataset_filtered.html', data)
 
         else:
 

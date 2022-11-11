@@ -149,6 +149,7 @@ urlpatterns = [
 	path('show_group/<int:server_id>/<int:group_id>/', matrices_views.gallery.show_group, name='webgallery_show_group'),
 	path('show_project/<int:server_id>/<int:project_id>/', matrices_views.gallery.show_project, name='webgallery_show_project'),
 	path('show_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.show_dataset, name='webgallery_show_dataset'),
+	path('show_dataset_filtered/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.show_dataset_filtered, name='webgallery_show_dataset_filtered'),
 	path('show_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_image, name='webgallery_show_image'),
 	path('show_wordpress/<int:server_id>/<int:page_id>/', matrices_views.gallery.show_wordpress, name='webgallery_show_wordpress'),
 	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),

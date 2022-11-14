@@ -108,7 +108,7 @@ The view matrix (bench) template
         {% for collection in collection_list %}
             {% if matrix.has_last_used_collection == True %}
 	            {% if matrix.last_used_collection.id == collection.collection_id %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title|truncatechars:5 }}</a>
 		         {% endif %}
             {% endif %}
         {% endfor %}
@@ -118,23 +118,23 @@ The view matrix (bench) template
 		        {% else %}
     		        {% if collection.collection_owner == user.username %}
 	    		        {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
 		    	        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
 			            {% endif %}
 			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
 			        {% endif %}
     	        {% endif %}
             {% else %}
 	            {% if collection.collection_owner == user.username %}
 		            {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
 			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
     		        {% endif %}
 	            {% else %}
-				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title }}</a>
+				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
 	            {% endif %}
 	        {% endif %}
         {% endfor %}

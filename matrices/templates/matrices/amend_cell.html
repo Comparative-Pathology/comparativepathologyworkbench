@@ -66,38 +66,13 @@ The amend cell template
 		  <div class="collection-dropdown">
 		    <button class="collection-drop-button"><i class="fas fa-bars"></i></button>
 			<div class="collection-dropdown-content">
+				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
 	{% if collection_list %}
 		{% for collection in collection_list %}
 			{% if cell.matrix.has_last_used_collection == True %}
 				{% if cell.matrix.last_used_collection.id == collection.collection_id %}
-			  <a href="{% url 'view_collection' cell.matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
+			  <a class="test-font" href="{% url 'view_collection' cell.matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
 				 {% endif %}
-			{% endif %}
-		{% endfor %}
-		{% for collection in collection_list %}
-			{% if cell.matrix.has_last_used_collection == True %}
-				{% if cell.matrix.last_used_collection.id == collection.collection_id %}
-				{% else %}
-					{% if collection.collection_owner == user.username %}
-						{% if collection.collection_active == True %}
-			  <a href="{% url 'choose_collection' cell.matrix.id cell.id collection.collection_id amend_cell %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-						{% else %}
-			  <a href="{% url 'choose_collection' cell.matrix.id cell.id collection.collection_id amend_cell %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button> ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-						{% endif %}
-					{% else %}
-			  <a href="{% url 'choose_collection' cell.matrix.id cell.id collection.collection_id amend_cell %}"><button class="button-mini button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-					{% endif %}
-				{% endif %}
-			{% else %}
-				{% if collection.collection_owner == user.username %}
-					{% if collection.collection_active == True %}
-			  <a href="{% url 'choose_collection' cell.matrix.id cell.id collection.collection_id amend_cell %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-					{% else %}
-			  <a href="{% url 'choose_collection' cell.matrix.id cell.id collection.collection_id amend_cell %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-					{% endif %}
-				{% else %}
-			  <a href="{% url 'choose_collection' cell.matrix.id cell.id collection.collection_id amend_cell %}"><button class="button button-delete"><i class="fa fa-check-square"></i></button>  ({{ collection.collection_owner }}), {{ collection.collection_title|truncatechars:25 }}</a>
-				{% endif %}
 			{% endif %}
 		{% endfor %}
 	{% endif %}
@@ -238,11 +213,11 @@ The amend cell template
 	{% if cell.has_image == True %}
 		  <dt>Link as Image A</dt>
 		  <dd>
-			<a href="{% url 'link_images' cell.image.id 0 cell.matrix.last_used_collection.id %}"><button class="button button-add"><i class="fa fa-chain"></i></button></a>
+			<a href="{% url 'link_images' cell.image.id 0 %}"><button class="button button-add"><i class="fa fa-chain"></i></button></a>
 		  </dd>
 		  <dt>Link as Image B</dt>
 		  <dd>
-			<a href="{% url 'link_images' 0 cell.image.id cell.matrix.last_used_collection.id %}"><button class="button button-add"><i class="fa fa-chain"></i></button></a>
+			<a href="{% url 'link_images' 0 cell.image.id %}"><button class="button button-add"><i class="fa fa-chain"></i></button></a>
 		  </dd>
 	{% endif %}
 		</dl>
@@ -421,6 +396,75 @@ function drop(ev){
 	onclick(source_id, target_id, source_type);
 
 }
+
+	// MAINLINE
+
+	// When page first loads, if we have a server...
+	//const server_url = getParameterByName("server");
+
+	collection_in = document.getElementsByClassName("loginStatus_in");
+
+	for (var i = 0; i < collection_in.length; i++) {
+
+		nodeHTML = collection_in[i];
+		text = nodeHTML.id;
+		//console.log("IN text : " + text);
+		myArray = text.split("@");
+		server_url = 'https://' + myArray[1] + '/';
+
+		server_present(server_url, nodeHTML.id);
+	}
+
+	collection_out = document.getElementsByClassName("loginStatus_out");
+
+	for (var i = 0; i < collection_out.length; i++) {
+
+		nodeHTML = collection_out[i]
+		text = nodeHTML.id;
+		//console.log("OUT text : " + text);
+		myArray = text.split("@");
+		server_url = 'https://' + myArray[1] + '/';
+
+		server_absent(server_url, nodeHTML.id);
+	}
+
+
+	function open_matrix_edit_dialog(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  dialog_edit.options.url = url;
+	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  dialog_edit.open(event);
+	}
+
+
+	$(document).ready(function () {
+	  dialog_edit = new Dialog({
+	    dialog_selector: '#dialog_generic',
+	    html: '<h1>Loading ...</h1>',
+	    width: '600px',
+	    min_height: '200px',
+	    button_save_initially_hidden: true,
+	    enable_trace: true,
+	    callback: function (event_name, dialog, params) {
+	      switch (event_name) {
+	        case "submitting":
+	          FrontendForms.overlay_show('.dialog-body');
+	          break;
+	        case "loaded":
+	          FrontendForms.overlay_hide('.dialog-body');
+	          break;
+	        case "submitted":
+	          var object_id = dialog.element.find('input[name=object_id]').val();
+	          // Reload page, with last selection enhanced
+	          var url = new URL(document.location.href);
+	          url.searchParams.set('selected_record', object_id);
+	          FrontendForms.gotourl(url, show_layer=true);
+	          break;
+	      }
+	    }
+	  });
+	});
 
 </script>
 

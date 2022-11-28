@@ -55,7 +55,6 @@ class Collection(models.Model):
     title = models.CharField(max_length=255, default='')
     description = models.TextField(max_length=4095, default='')
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    active = models.BooleanField(default=True)
     images = models.ManyToManyField(Image, related_name='collections')
 
     @classmethod
@@ -71,7 +70,7 @@ class Collection(models.Model):
         cancel_collection.images.remove(current_image)
 
     def __str__(self):
-        return f"{self.id:06d}, {self.title}"
+        return f"{self.id:06d}, {self.owner.username}, {self.title}"
 
     def __repr__(self):
         return f"{self.id}, {self.title}, {self.description}, {self.active}, {self.owner.id}"
@@ -90,24 +89,6 @@ class Collection(models.Model):
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:
-            return True
-        else:
-            return False
-
-    def set_active(self):
-        self.active = True
-
-    def set_inactive(self):
-        self.active = False
-
-    def is_active(self):
-        if self.active == True:
-            return True
-        else:
-            return False
-
-    def is_inactive(self):
-        if self.active == False:
             return True
         else:
             return False

@@ -57,12 +57,12 @@ from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 from matrices.routines import collection_list_by_user_and_direction
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_image_in_image_list
 from matrices.routines import exists_collection_in_collection_summary_list
 from matrices.routines import get_images_for_collection
 from matrices.routines import get_images_for_collection_summary
 from matrices.routines import get_primary_cpw_server
+from matrices.routines import get_last_used_collection_for_user
 
 HTTP_POST = 'POST'
 WORDPRESS_SUCCESS = 'Success!'
@@ -71,11 +71,11 @@ WORDPRESS_SUCCESS = 'Success!'
 # LINK_IMAGES VIEW ROUTINE
 #
 @login_required
-def link_images(request, image_parent_id, image_child_id, collection_id):
+def link_images(request, image_parent_id, image_child_id):
 
-    if request.is_ajax():
+    #if request.is_ajax():
 
-        raise PermissionDenied
+    #    raise PermissionDenied
 
     if not request.user.is_authenticated:
 
@@ -112,15 +112,13 @@ def link_images(request, image_parent_id, image_child_id, collection_id):
 
                 raise PermissionDenied
 
-        if collection_id != 0:
+        selected_collection = get_last_used_collection_for_user(request.user)
 
-            selected_collection = Collection.objects.get(id=collection_id)
+        if not exists_collection_in_collection_summary_list(selected_collection, collection_summary_list):
 
-            if not exists_collection_in_collection_summary_list(selected_collection, collection_summary_list):
+            raise PermissionDenied
 
-                raise PermissionDenied
-
-            collection_image_list = get_images_for_collection(selected_collection)
+        collection_image_list = get_images_for_collection(selected_collection)
 
 
         if request.method == HTTP_POST:

@@ -56,9 +56,7 @@ def delete_image_link(request, image_link_id):
 
     if credential_exists(request.user):
 
-        collection_list = get_active_collection_for_user(request.user)
-
-        collection = collection_list[0]
+        collection = get_active_collection_for_user(request.user)
 
         image_link = get_object_or_404(ImageLink, pk=image_link_id)
 
@@ -82,7 +80,7 @@ def delete_image_link(request, image_link_id):
 
             messages.error(request, 'Image Link ' + str(image_link.id) + ' NOT DELETED from the Workbench!')
 
-        return HttpResponseRedirect(reverse('link_images', args=(0, 0, collection.id)))
+        return HttpResponseRedirect(reverse('link_images', args=(0, 0)))
 
     else:
 

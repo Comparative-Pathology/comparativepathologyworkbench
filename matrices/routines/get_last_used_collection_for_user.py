@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         set_active_collection_for_user.py
+# \file         get_last_used_collection_for_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Set the Inactive Collection(s) for a particular User to Active
+# Get the Active Collection(s) for a particular User
 ###
 from __future__ import unicode_literals
 
@@ -32,19 +32,18 @@ import base64, hashlib
 
 from os import urandom
 
-
-from . import get_inactive_collection_for_user
+from django.apps import apps
 
 
 """
-    Set the Inactive Collection(s) for a particular User to Active
+    Get the Last Used Collection(s) for a particular User
 """
-def set_active_collection_for_user(a_user):
+def get_last_used_collection_for_user(a_user):
 
-    collection_list = get_inactive_collection_for_user(a_user)
+    if a_user.profile.last_used_collection == None:
 
-    for collection in collection_list:
+        return a_user.profile.active_collection
 
-        collection.set_active()
-
-        collection.save()
+    else:
+        
+        return a_user.profile.last_used_collection

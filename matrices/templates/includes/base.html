@@ -221,7 +221,12 @@ The base header and footer include template
               <button class="header-drop-button">Images ({{ image_list|length }}) <i class="fa fa-caret-down"></i></button>
 
               <div class="header-dropdown-content">
+    
+    {% if user.profile.has_active_collection %}
+
                 <a href="{% url 'view_active_collection' %}"><button class="button button-delete"><i class="fa fa-bell"></i></button> Current Collection</a>
+                
+    {% endif %}
                 <a href="{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images</a>
                 <a href="{% url 'view_all_image_links' %}"><button class="button button-add"><i class="fa fa-chain"></i></button> All YOUR Image Links</a>
               </div><!-- End of header-dropdown-content -->

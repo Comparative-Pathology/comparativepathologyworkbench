@@ -32,14 +32,16 @@ import base64, hashlib
 
 from os import urandom
 
-from django.apps import apps
-
 
 """
     Is there an Active Collection for a particular User?
 """
 def exists_active_collection_for_user(a_user):
 
-    Collection = apps.get_model('matrices', 'Collection')
+    existsFlag = False
 
-    return Collection.objects.filter(owner=a_user).filter(active=True).exists()
+    if a_user.profile.has_active_collection():
+
+        existsFlag = True
+
+    return existsFlag

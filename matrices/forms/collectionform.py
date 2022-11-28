@@ -49,7 +49,7 @@ class CollectionForm(forms.ModelForm):
 
     class Meta:
         model = Collection
-        fields = ('title', 'description', 'active', )
+        fields = ('title', 'description', )
 
 
     def __init__(self, *args, **kwargs):
@@ -73,7 +73,6 @@ class CollectionForm(forms.ModelForm):
 
         title = cleaned_data.get("title")
         description = cleaned_data.get("description")
-        active = cleaned_data.get("active")
 
         if not title:
             msg = "Please Supply a Title!"

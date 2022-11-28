@@ -43,7 +43,6 @@ from matrices.serializers import CollectionSerializer
 
 from matrices.routines import get_images_for_collection
 from matrices.routines import get_collections_for_image
-from matrices.routines import set_first_active_collection_for_user
 from matrices.routines import exists_image_in_cells
 from matrices.routines import exists_bench_for_last_used_collection
 from matrices.routines import get_benches_for_last_used_collection
@@ -109,11 +108,6 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                 matrix.set_no_last_used_collection()
 
                 matrix.save()
-
-
-        if collection.is_active():
-
-            set_first_active_collection_for_user(request.user)
 
 
         collection.delete()

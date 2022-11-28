@@ -44,6 +44,8 @@ from django.utils.translation import gettext_lazy as _
 from random import randint
 from decouple import config
 
+from matrices.models import Collection
+
 
 """
     PROFILE
@@ -54,16 +56,37 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     email_confirmed = models.BooleanField(default=False)
+    active_collection = models.ForeignKey(Collection, related_name='active_collections', null=True, on_delete=models.DO_NOTHING)
+    last_used_collection = models.ForeignKey(Collection, related_name='lastused_collections', null=True, on_delete=models.DO_NOTHING)
 
     @classmethod
-    def create(cls, user, bio, location, birth_date, email_confirmed):
-        return cls(user=user, bio=bio, location=location, birth_date=birth_date, email_confirmed=email_confirmed)
+    def create(cls, user, bio, location, birth_date, email_confirmed, active_collection, last_used_collection):
+        return cls(user=user, bio=bio, location=location, birth_date=birth_date, email_confirmed=email_confirmed, active_collection=active_collection, last_used_collection=last_used_collection)
 
     def __str__(self):
-        return f"{self.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}"
+        return f"{self.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}, {self.active_collection}, {self.last_used_collection}"
 
     def __repr__(self):
-        return f"{self.id}, {self.user.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}"
+        return f"{self.id}, {self.user.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}, {self.active_collection}, {self.last_used_collection}"
+
+
+    def set_active_collection(self, a_collection):
+        self.active_collection = a_collection
+
+    def set_last_used_collection(self, a_collection):
+        self.last_used_collection = a_collection
+
+    def has_active_collection(self):
+        if self.active_collection == None:
+            return False
+        else:
+            return True
+
+    def has_last_used_collection(self):
+        if self.last_used_collection == None:
+            return False
+        else:
+            return True
 
 
 @receiver(post_save, sender=User)

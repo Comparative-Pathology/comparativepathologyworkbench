@@ -36,6 +36,10 @@ The list collections template (with Search)
       background-color: #ffff99 !important;
     }
 
+    tr.active {
+      background-color: #ff0000 !important;
+    }
+
 </style>
 
 {% endblock extrastyle %}
@@ -112,8 +116,12 @@ The list collections template (with Search)
 	<td>&nbsp;</td>
   </tr>
 		{% endif %}
+		{% if collection_summary.collection_id == user.profile.active_collection.id %}
+  <tr id="collection_summary-{{collection_summary.collection_id}}" class="active">
+			{% else %}
   <tr id="collection_summary-{{collection_summary.collection_id}}" class="{% if request.GET.selected_record == collection_summary.collection_id|stringformat:'s' %}selected{% endif %}">
-		{% if readBoolean %}
+		{% endif %}
+	{% if readBoolean %}
     <td>
 	  <div class="generic-dropdown">
 		<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
@@ -128,7 +136,7 @@ The list collections template (with Search)
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-				{% if collection_summary.is_active %}
+				{% if collection_summary.collection_id == user.profile.active_collection.id %}
 				{% else %}
 					{% if collection_summary.collection_owner == user.username %}
 		  <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
@@ -141,7 +149,7 @@ The list collections template (with Search)
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-			    {% if collection_summary.is_active %}
+			    {% if collection_summary.collection_id == user.profile.active_collection.id %}
 				{% else %}
 			        {% if collection_summary.collection_owner == user.username %}
 		  <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>

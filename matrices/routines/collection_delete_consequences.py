@@ -36,11 +36,11 @@ from django.db.models import Q
 from os import urandom
 
 from matrices.routines.get_images_for_collection import get_images_for_collection
+from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.get_collections_for_image import get_collections_for_image
 from matrices.routines.exists_image_in_cells import exists_image_in_cells
 from matrices.routines.exists_bench_for_last_used_collection import exists_bench_for_last_used_collection
 from matrices.routines.get_benches_for_last_used_collection import get_benches_for_last_used_collection
-from matrices.routines.set_first_active_collection_for_user import set_first_active_collection_for_user
 
 
 """
@@ -83,7 +83,9 @@ def collection_delete_consequences(a_user, a_collection):
 
             matrix.save()
 
+    if a_collection == get_active_collection_for_user(a_user):
 
-    if a_collection.is_active():
+        a_user.profile.set_active_collection(None)
+        a_user.save()
 
-        set_first_active_collection_for_user(a_user)
+

@@ -40,7 +40,6 @@ from matrices.models import Type
 
 from matrices.routines import exists_server_for_type
 from matrices.routines import exists_command_for_type
-from matrices.routines import exists_blog_command_for_type
 
 #
 # DELETE A TYPE OF SERVER

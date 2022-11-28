@@ -104,39 +104,14 @@ The view matrix (bench) template
 		  <div class="collection-dropdown">
 			<button class="collection-drop-button"><i class="fas fa-bars"></i></button>
 			<div class="collection-dropdown-content">
+				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
     {% if collection_list %}
         {% for collection in collection_list %}
             {% if matrix.has_last_used_collection == True %}
 	            {% if matrix.last_used_collection.id == collection.collection_id %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title|truncatechars:5 }}</a>
-		         {% endif %}
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
+		        {% endif %}
             {% endif %}
-        {% endfor %}
-        {% for collection in collection_list %}
-            {% if matrix.has_last_used_collection == True %}
-	            {% if matrix.last_used_collection.id == collection.collection_id %}
-		        {% else %}
-    		        {% if collection.collection_owner == user.username %}
-	    		        {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
-		    	        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
-			            {% endif %}
-			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
-			        {% endif %}
-    	        {% endif %}
-            {% else %}
-	            {% if collection.collection_owner == user.username %}
-		            {% if collection.collection_active == True %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
-			        {% else %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
-    		        {% endif %}
-	            {% else %}
-				<a class="test-font" title="SAUSAGES" href="{% url 'choose_collection' matrix.id 0 collection.collection_id view_matrix %}">{{ collection.collection_title|truncatechars:8 }}</a>
-	            {% endif %}
-	        {% endif %}
         {% endfor %}
     {% endif %}
 			</div>

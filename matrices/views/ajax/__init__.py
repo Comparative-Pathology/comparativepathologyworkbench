@@ -62,10 +62,12 @@ from .collection_create import collection_create
 from .collection_read import collection_read
 from .collection_update import collection_update
 from .collection_delete import collection_delete
+from .collection_selection import collection_selection
 
 from .bench_create import bench_create
 from .bench_read import bench_read
 from .bench_update import bench_update
+from .bench_collection_update import bench_collection_update
 from .bench_delete import bench_delete
 
 from .header_read import header_read

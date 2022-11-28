@@ -115,10 +115,12 @@ urlpatterns = [
     path('collection_read/<int:collection_id>/', matrices_views.ajax.collection_read, name="collection_read"),
     path('collection_update/<int:collection_id>/', matrices_views.ajax.collection_update, name="collection_update"),
     path('collection_delete/<int:collection_id>/', matrices_views.ajax.collection_delete, name="collection_delete"),
+	path('collection_selection/<int:user_id>/', matrices_views.ajax.collection_selection, name='collection_selection'),
 
 	path('bench_read/<int:bench_id>/', matrices_views.ajax.bench_read, name='bench_read'),
 	path('bench_create/', matrices_views.ajax.bench_create, name='bench_create'),
 	path('bench_update/<int:bench_id>/', matrices_views.ajax.bench_update, name='bench_update'),
+	path('bench_collection_update/<int:bench_id>/', matrices_views.ajax.bench_collection_update, name='bench_collection_update'),
 	path('bench_delete/<int:bench_id>/', matrices_views.ajax.bench_delete, name='bench_delete'),
 
 	path('header_read/<int:bench_id>/<int:header_id>/', matrices_views.ajax.header_read, name='header_read'),
@@ -215,8 +217,7 @@ urlpatterns = [
 	path('view_collection/<int:collection_id>/', matrices_views.matrices.view_collection, name='view_collection'),
 	path('view_active_collection/', matrices_views.matrices.view_active_collection, name='view_active_collection'),
 	path('view_all_collections/', matrices_views.matrices.view_all_collections, name='view_all_collections'),
-	path('choose_collection/<int:matrix_id>/<int:cell_id>/<int:collection_id>/<str:path_from>/', matrices_views.matrices.choose_collection, name='choose_collection'),
-    path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
+	path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
 
 	path('detail_matrix_blog/<int:matrix_id>/', matrices_views.matrices.view_matrix_blog, name='detail_matrix_blog'),
 	path('view_cell_blog/<int:matrix_id>/<int:cell_id>/', matrices_views.matrices.view_cell_blog, name='view_cell_blog'),
@@ -236,7 +237,7 @@ urlpatterns = [
 
 	path('search_image/<str:path_from>/<int:identifier>/', matrices_views.matrices.search_image, name='search_image'),
 
-	path('link_images/<int:image_parent_id>/<int:image_child_id>/<int:collection_id>/', matrices_views.matrices.link_images, name='link_images'),
+	path('link_images/<int:image_parent_id>/<int:image_child_id>/', matrices_views.matrices.link_images, name='link_images'),
 	path('view_image_link/<int:image_link_id>/', matrices_views.matrices.view_image_link, name='view_image_link'),
 	path('delete_image_link/<int:image_link_id>/', matrices_views.matrices.delete_image_link, name='delete_image_link'),
 

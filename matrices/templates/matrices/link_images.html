@@ -43,23 +43,23 @@ The amend cell template
 				<a href="{% url 'view_all_image_links'  %}">ALL Image Links</a>
 			</li>
 			<li>
-				<a href="{% url 'link_images' 0 0 selected_collection.id  %}">Link Images</a>
+				<a href="{% url 'link_images' 0 0 %}">Link Images</a>
 			</li>
 			<li>
-				<a href="{% url 'link_images' 0 0 selected_collection.id  %}">Reset</a>
+				<a href="{% url 'link_images' 0 0 %}">Reset</a>
 			</li>
 			<li>
     {% if image_child == None %}
-				<a href="{% url 'link_images' 0 0 selected_collection.id  %}">Reset Image A</a>
+				<a href="{% url 'link_images' 0 0 %}">Reset Image A</a>
 	{% else %}
-				<a href="{% url 'link_images' 0 image_child.id selected_collection.id  %}">Reset Image A</a>
+				<a href="{% url 'link_images' 0 image_child.id %}">Reset Image A</a>
 	{% endif %}
 			</li>
 			<li>
 	{% if image_parent == None %}
-				<a href="{% url 'link_images' 0 0 selected_collection.id  %}">Reset Image B</a>
+				<a href="{% url 'link_images' 0 0 %}">Reset Image B</a>
 	{% else %}
-				<a href="{% url 'link_images' image_parent.id 0 selected_collection.id  %}">Reset Image B</a>
+				<a href="{% url 'link_images' image_parent.id 0 %}">Reset Image B</a>
 	{% endif %}
 			</li>
 
@@ -87,24 +87,12 @@ The amend cell template
 		  <div class="collection-dropdown">
 		    <button class="collection-drop-button"><i class="fas fa-bars"></i></button>
 			<div class="collection-dropdown-content">
-
+				<a class="test-font" href="{% url 'collection_selection' user.id %}" onclick="open_collection_selection_dialog(event, 'Select Collection ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
     {% if collection_list %}
 		{% for collection in collection_list %}
 			{% if collection.collection_id == selected_collection.id %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' collection.collection_id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button>{{ collection.collection_title }}</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' collection.collection_id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
 			{% else %}
-				{% if image_parent == None and image_child == None %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'link_images' 0 0 collection.collection_id  %}">{{ collection.collection_title }}</a>
-				{% endif %}
-				{% if image_parent == None and image_child != None %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'link_images' 0 image_child.id collection.collection_id  %}">{{ collection.collection_title }}</a>
-				{% endif %}
-				{% if image_parent != None and image_child == None %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'link_images' image_parent.id 0 collection.collection_id  %}">{{ collection.collection_title }}</a>
-				{% endif %}
-				{% if image_parent != None and image_child != None %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'link_images' image_parent.id image_child.id collection.collection_id  %}">{{ collection.collection_title }}</a>
-				{% endif %}
 			{% endif %}
 		{% endfor %}
 	{% endif %}
@@ -189,9 +177,9 @@ The amend cell template
 			  	  </div>
 				  <br />
 {% if image_child == None %}
- 			  	  <a href="{% url 'link_images' 0 0 selected_collection.id %}"><button class="button button-add">RESET</button></a>
+ 			  	  <a href="{% url 'link_images' 0 0 %}"><button class="button button-add">RESET</button></a>
 {% else %}
- 			  	  <a href="{% url 'link_images' 0 image_child.id selected_collection.id %}"><button class="button button-add">RESET</button></a>
+ 			  	  <a href="{% url 'link_images' 0 image_child.id %}"><button class="button button-add">RESET</button></a>
 {% endif %}
   			    </div>
 				<br />
@@ -221,9 +209,9 @@ The amend cell template
 			  	  </div>
 				  <br />
 {% if image_parent == None %}
-			  	  <a href="{% url 'link_images' 0 0 selected_collection.id %}"><button class="button button-add">RESET</button></a>
+			  	  <a href="{% url 'link_images' 0 0 %}"><button class="button button-add">RESET</button></a>
 {% else %}
-			  	  <a href="{% url 'link_images' image_parent.id 0 selected_collection.id %}"><button class="button button-add">RESET</button></a>
+			  	  <a href="{% url 'link_images' image_parent.id 0 %}"><button class="button button-add">RESET</button></a>
 {% endif %}
   			    </div>
 				<br />
@@ -330,7 +318,7 @@ function onclick(source, target, source_type, target_type){
 			if (target == "child") {
 				child = newChild;
 			}
-			newPath = protocol + '//' + host + '/' + view + '/' + parent + '/' + child + '/' + collection + '/';
+			newPath = protocol + '//' + host + '/' + view + '/' + parent + '/' + child + '/';
 
 			window.location.href = newPath;
 		}
@@ -392,6 +380,76 @@ function drop(ev){
 	onclick(source_id, target_id, source_type, target_type);
 
 }
+
+// MAINLINE
+
+// When page first loads, if we have a server...
+//const server_url = getParameterByName("server");
+
+collection_in = document.getElementsByClassName("loginStatus_in");
+
+for (var i = 0; i < collection_in.length; i++) {
+
+	nodeHTML = collection_in[i];
+	text = nodeHTML.id;
+	//console.log("IN text : " + text);
+	myArray = text.split("@");
+	server_url = 'https://' + myArray[1] + '/';
+
+	server_present(server_url, nodeHTML.id);
+}
+
+collection_out = document.getElementsByClassName("loginStatus_out");
+
+for (var i = 0; i < collection_out.length; i++) {
+
+	nodeHTML = collection_out[i]
+	text = nodeHTML.id;
+	//console.log("OUT text : " + text);
+	myArray = text.split("@");
+	server_url = 'https://' + myArray[1] + '/';
+
+	server_absent(server_url, nodeHTML.id);
+}
+
+
+function open_collection_selection_dialog(event, title) {
+  event.preventDefault();
+  var url = $(event.target).attr('href');
+  dialog_edit.options.url = url;
+  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+  dialog_edit.open(event);
+}
+
+
+$(document).ready(function () {
+  dialog_edit = new Dialog({
+	dialog_selector: '#dialog_generic',
+	html: '<h1>Loading ...</h1>',
+	width: '600px',
+	min_height: '200px',
+	button_save_initially_hidden: true,
+	enable_trace: true,
+	callback: function (event_name, dialog, params) {
+	  switch (event_name) {
+		case "submitting":
+		  FrontendForms.overlay_show('.dialog-body');
+		  break;
+		case "loaded":
+		  FrontendForms.overlay_hide('.dialog-body');
+		  break;
+		case "submitted":
+		  // Reload page, with last selection enhanced
+		  // var object_id = dialog.element.find('input[name=object_id]').val();
+          var url = new URL(document.location.href);
+          //url.searchParams.set('selected_record', object_id);
+          FrontendForms.gotourl(url, show_layer=true);
+		  break;
+	  }
+	}
+  });
+});
+
 
 </script>
 

@@ -54,7 +54,6 @@ class CollectionSummary(models.Model):
     collection_title = models.CharField(max_length=255, default='')
     collection_description = models.TextField(max_length=4095, default='')
     collection_owner = models.CharField(max_length=50, default='')
-    collection_active = models.BooleanField(default=True)
     collection_image_count = models.IntegerField(default=0, blank=False)
     collection_authorisation_id = models.IntegerField(default=0, blank=False)
     collection_authorisation_permitted = models.CharField(max_length=50, default='')
@@ -66,20 +65,7 @@ class CollectionSummary(models.Model):
         db_table = 'matrices_collection_summary'
 
     def __str__(self):
-        return f"{self.collection_id}, {self.collection_title}, {self.collection_description}, {self.collection_owner}, {self.collection_description}, {self.collection_active}, {self.collection_image_count}, {self.collection_authorisation_permitted}, {self.collection_authorisation_authority}"
+        return f"{self.collection_id}, {self.collection_title}, {self.collection_description}, {self.collection_owner}, {self.collection_description}, {self.collection_image_count}, {self.collection_authorisation_permitted}, {self.collection_authorisation_authority}"
 
     def __repr__(self):
-        return f"{self.collection_id}, {self.collection_title}, {self.collection_description}, {self.collection_owner}, {self.collection_description}, {self.collection_active}, {self.collection_image_count}, {self.collection_authorisation_permitted}, {self.collection_authorisation_authority}"
-
-
-    def is_active(self):
-        if self.collection_active == True:
-            return True
-        else:
-            return False
-
-    def is_inactive(self):
-        if self.collection_active == False:
-            return True
-        else:
-            return False
+        return f"{self.collection_id}, {self.collection_title}, {self.collection_description}, {self.collection_owner}, {self.collection_description}, {self.collection_image_count}, {self.collection_authorisation_permitted}, {self.collection_authorisation_authority}"

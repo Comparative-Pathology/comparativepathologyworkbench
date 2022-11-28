@@ -60,9 +60,7 @@ def view_image_link(request, image_link_id):
 
         data = get_header_data(request.user)
 
-        collection_list = get_active_collection_for_user(request.user)
-
-        selected_collection = collection_list[0]
+        selected_collection = get_active_collection_for_user(request.user)
 
         image_link = get_object_or_404(ImageLink, pk=image_link_id)
 

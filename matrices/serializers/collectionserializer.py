@@ -44,8 +44,6 @@ from matrices.routines import exists_image_for_id_server_owner_roi
 from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import get_servers_for_uid_url
-from matrices.routines import exists_active_collection_for_user
-from matrices.routines import set_inactive_collection_for_user
 from matrices.routines import get_collections_for_image
 from matrices.routines import get_images_for_collection
 from matrices.routines import exists_image_in_cells
@@ -61,7 +59,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 	title = serializers.CharField(max_length=255, required=False, allow_blank=True)
 	description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
-	active = serializers.BooleanField(required=True)
 	owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
 	#images = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), many=True)
@@ -69,7 +66,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 	class Meta:
 		model = Collection
-		fields = ('url', 'id', 'title', 'description', 'active', 'owner', 'images')
+		fields = ('url', 'id', 'title', 'description', 'owner', 'images')
 		read_only_fields = ('url', )
 
 
@@ -100,7 +97,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 		collection_title = ""
 		collection_description = ""
-		collection_active = False
 
 		if validated_data.get('title', None) == None:
 
@@ -118,15 +114,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 		else:
 
 			collection_description = validated_data.get('description')
-
-
-		if validated_data.get('active') == True:
-
-			collection_active = True
-
-		else:
-
-			collection_active = False
 
 
 		collection_owner = validated_data.get('owner')
@@ -147,7 +134,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 		if validated_data.get('images', None) == None:
 
-			collection = Collection.create(collection_title, collection_description, collection_active, collection_owner)
+			collection = Collection.create(collection_title, collection_description, collection_owner)
 
 		else:
 
@@ -157,7 +144,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
 			self.validate_collection_images(images_data, request_user, create_flag)
 
-			collection = Collection.create(collection_title, collection_description, collection_active, collection_owner)
+			collection = Collection.create(collection_title, collection_description, collection_owner)
 
 			for image_data in images_data:
 
@@ -227,13 +214,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 					image_in.save()
 
 					image_list.append(image_in)
-
-
-		if collection.is_active():
-
-			if exists_active_collection_for_user(request.user):
-
-				set_inactive_collection_for_user(request.user)
 
 
 		collection.save()

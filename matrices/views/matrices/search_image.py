@@ -48,15 +48,11 @@ from matrices.forms import SearchUrlForm
 from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import convert_url_omero_to_cpw
-from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_an_ebi_sca_experiment_id
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
-from matrices.routines import get_server_from_ebi_sca_url
 
 HTTP_POST = 'POST'
 LIST_IMAGING_HOSTS = "list_imaging_hosts"
@@ -129,8 +125,8 @@ def search_image(request, path_from, identifier):
 
         if path_from == VIEW_ACTIVE_COLLECTION:
 
-            collection_list = get_active_collection_for_user(request.user)
-            collection = collection_list[0]
+            collection = get_active_collection_for_user(request.user)
+
             collection_image_list = get_images_for_collection(collection)
 
             data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_active_collection" })

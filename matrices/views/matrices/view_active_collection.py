@@ -59,9 +59,7 @@ def view_active_collection(request):
 
         if exists_active_collection_for_user(request.user):
 
-            collection_list = get_active_collection_for_user(request.user)
-
-            collection = collection_list[0]
+            collection = get_active_collection_for_user(request.user)
 
             collection_image_list = get_images_for_collection(collection)
 

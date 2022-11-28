@@ -61,9 +61,7 @@ def view_parent_image_link(request, image_parent_id):
 
         data = get_header_data(request.user)
 
-        collection_list = get_active_collection_for_user(request.user)
-
-        selected_collection = collection_list[0]
+        selected_collection = get_active_collection_for_user(request.user)
 
         image_parent = get_object_or_404(Image, pk=image_parent_id)
 

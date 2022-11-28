@@ -35,6 +35,7 @@ from .collectionauthorisationform import CollectionAuthorisationForm
 from .collectionauthorityform import CollectionAuthorityForm
 from .collectionform import CollectionForm
 from .collectionsummarysearchform import CollectionSummarySearchForm
+from .collectionsummaryselectionform import CollectionSummarySelectionForm
 from .commandform import CommandForm
 from .commentform import CommentForm
 from .credentialform import CredentialForm

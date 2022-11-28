@@ -39,8 +39,6 @@ from django.apps import apps
 from . import bench_list_by_user_and_direction
 from . import credential_exists
 from . import collection_list_by_user_and_direction
-from . import exists_active_collection_for_user
-from . import get_active_collection_images_for_user
 from matrices.routines.get_images_for_collection_summary import get_images_for_collection_summary
 
 

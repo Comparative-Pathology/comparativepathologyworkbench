@@ -40,6 +40,4 @@ from django.apps import apps
 """
 def get_active_collection_for_user(a_user):
 
-    Collection = apps.get_model('matrices', 'Collection')
-
-    return Collection.objects.filter(owner=a_user).filter(active=True).order_by('id')
+    return a_user.profile.active_collection

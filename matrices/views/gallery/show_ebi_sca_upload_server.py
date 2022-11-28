@@ -54,10 +54,7 @@ from matrices.forms import DocumentForm
 from matrices.routines import credential_exists
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import get_an_ebi_sca_experiment_id
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
-from matrices.routines import get_images_for_collection
-from matrices.routines import create_an_ebi_sca_chart
 from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import validate_an_ebi_sca_image
 from matrices.routines import validate_an_ebi_sca_url

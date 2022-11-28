@@ -39,10 +39,7 @@ from django.urls import reverse
 from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import collection_crud_consequences
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
-from matrices.routines import set_inactive_collection_for_user
 
 
 #
@@ -57,15 +54,10 @@ def activate_collection(request, collection_id):
 
         collection = get_object_or_404(Collection, pk=collection_id)
 
-        if collection.is_inactive():
+        request.user.profile.set_active_collection(collection)
+        request.user.save()
 
-            collection.set_active()
-
-            collection_crud_consequences(request.user, collection)
-
-            messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
-
-            collection.save()
+        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
 
         return HttpResponseRedirect(reverse('list_collections', args=()))
 

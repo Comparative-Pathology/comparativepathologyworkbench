@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         bench_update.py
+# \file         bench_collection_update.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the AJAX bench_update view routine
+# This file contains the AJAX bench_collection_update view routine
 #
 ###
 from __future__ import unicode_literals
@@ -43,23 +43,20 @@ from decouple import config
 
 from matrices.routines import simulate_network_latency
 
-from matrices.forms import MatrixForm
+from matrices.forms import CollectionSummarySelectionForm
 
 from matrices.models import Matrix
+from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import simulate_network_latency
-
-WORDPRESS_SUCCESS = 'Success!'
 
 
 #
 # EDIT A BENCH
 #
 @login_required()
-def bench_update(request, bench_id):
+def bench_collection_update(request, bench_id):
 
     if not request.is_ajax():
 
@@ -74,9 +71,9 @@ def bench_update(request, bench_id):
         raise PermissionDenied
 
 
-    serverWordpress = get_primary_wordpress_server()
-
     object = get_object_by_uuid_or_404(Matrix, bench_id)
+    collection = object.last_used_collection
+
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -84,50 +81,25 @@ def bench_update(request, bench_id):
 
         simulate_network_latency()
 
-        form = MatrixForm(instance=object, data=request.POST)
+        form = CollectionSummarySelectionForm(instance=object, initial={'last_used_collection': collection }, data=request.POST, request=request)
 
         if form.is_valid():
 
-            object = form.save(commit=False)
+            cd = form.cleaned_data
 
-            object.set_owner(request.user)
+            collection = cd.get('last_used_collection')
 
-            post_id = ''
+            object.set_last_used_collection(collection)
 
-            if object.has_no_blogpost():
+            object.save()
 
-                credential = get_credential_for_user(request.user)
-
-                if credential.has_apppwd():
-
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, object.title, object.description)
-
-                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-                        post_id = returned_blogpost['id']
-
-                        object.set_blogpost(post_id)
-
-                        object.save()
-
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
-
-                    else:
-
-                        messages.error(request, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
-                        form.add_error(None, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
-
-            else:
-
-                object.save()
-
-                matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
+            matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
+            messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
 
     else:
 
-        form = MatrixForm(instance=object)
+        form = CollectionSummarySelectionForm(instance=object, request=request, initial={'last_used_collection': collection } )
+
 
     return render(request, template_name, {
         'form': form,

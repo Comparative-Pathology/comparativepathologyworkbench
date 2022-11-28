@@ -61,9 +61,7 @@ def view_child_image_link(request, image_child_id):
 
         data = get_header_data(request.user)
 
-        collection_list = get_active_collection_for_user(request.user)
-
-        selected_collection = collection_list[0]
+        selected_collection = get_active_collection_for_user(request.user)
 
         image_child = get_object_or_404(Image, pk=image_child_id)
 

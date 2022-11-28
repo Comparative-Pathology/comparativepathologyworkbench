@@ -33,7 +33,6 @@
 # def view_collection(request, collection_id):
 # def view_active_collection(request):
 # def view_all_collections(request):
-# def choose_collection(request, matrix_id, collection_id):
 # def activate_collection(request, collection_id):
 #
 # def view_all_linked_images(request):
@@ -73,7 +72,6 @@ from .add_row_below import add_row_below
 from .amend_cell import amend_cell
 from .append_column import append_column
 from .append_row import append_row
-from .choose_collection import choose_collection
 from .clear_cell import clear_cell
 from .delete_image import delete_image
 from .delete_image_link import delete_image_link

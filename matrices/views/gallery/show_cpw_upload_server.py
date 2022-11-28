@@ -52,7 +52,6 @@ from matrices.models import Document
 from matrices.forms import DocumentForm
 
 from matrices.routines import credential_exists
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
 from matrices.routines import validate_a_cpw_url

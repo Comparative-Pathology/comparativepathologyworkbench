@@ -45,7 +45,6 @@ from matrices.forms import CollectionForm
 
 from matrices.models import Collection
 
-from matrices.routines import collection_crud_consequences
 from matrices.routines import credential_exists
 from matrices.routines import simulate_network_latency
 
@@ -82,8 +81,6 @@ def collection_create(request, collection_id=None):
         if form.is_valid():
 
             object = form.save(commit=False)
-
-            collection_crud_consequences(request.user, object)
 
             object.set_owner(request.user)
 

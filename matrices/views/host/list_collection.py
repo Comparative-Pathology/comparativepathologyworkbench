@@ -56,7 +56,6 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
     allowed_sort_fields = {'collection_id': {'default_direction': '', 'verbose_name': 'Collection Id'},
                            'collection_title': {'default_direction': '', 'verbose_name': 'Title'},
-                           'collection_active': {'default_direction': '', 'verbose_name': 'Activity'},
                            'collection_image_count': {'default_direction': '', 'verbose_name': 'Images'},
                            'collection_owner': {'default_direction': '', 'verbose_name': 'Owner'},
                            'collection_authorisation_authority': {'default_direction': '', 'verbose_name': 'Authority'}

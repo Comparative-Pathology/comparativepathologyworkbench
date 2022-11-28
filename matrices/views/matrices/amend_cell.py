@@ -54,16 +54,12 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_active_collection_images_for_user
-from matrices.routines import get_an_ebi_sca_experiment_id
-from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_blog_link_post_url
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_id_from_omero_url import get_id_from_omero_url
 from matrices.routines import get_images_for_collection
 from matrices.routines import get_primary_wordpress_server
-from matrices.routines import get_server_from_ebi_sca_url
 from matrices.routines import get_server_from_omero_url
 
 HTTP_POST = 'POST'
@@ -111,16 +107,6 @@ def amend_cell(request, matrix_id, cell_id):
 
                 collection_image_list = get_images_for_collection(matrix.last_used_collection)
 
-            else:
-
-                if exists_active_collection_for_user(request.user):
-
-                    collection_image_list = get_active_collection_images_for_user(request.user)
-                    collection_list = get_active_collection_for_user(request.user)
-                    collection = collection_list[0]
-
-                    matrix.set_last_used_collection(collection)
-                    matrix.save()
 
             if request.method == HTTP_POST:
 
@@ -154,11 +140,9 @@ def amend_cell(request, matrix_id, cell_id):
 
                             image = add_image_to_collection(request.user, server, image_id, 0)
 
-                            queryset = get_active_collection_for_user(request.user)
+                            collection = get_active_collection_for_user(request.user)
 
-                            for collection in queryset:
-
-                                matrix.set_last_used_collection(collection)
+                            matrix.set_last_used_collection(collection)
 
                         else:
 
@@ -206,6 +190,10 @@ def amend_cell(request, matrix_id, cell_id):
                     cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
 
                     messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
+
+                    data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+
+                    return HttpResponseRedirect(reverse('amend_cell', args=(matrix_id, cell_id, )))
 
                 else:
 

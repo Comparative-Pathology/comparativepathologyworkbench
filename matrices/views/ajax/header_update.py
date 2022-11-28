@@ -48,8 +48,6 @@ from matrices.forms import HeaderForm
 from matrices.models import Cell
 
 from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import simulate_network_latency
 
 WORDPRESS_SUCCESS = 'Success!'

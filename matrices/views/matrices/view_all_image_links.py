@@ -37,7 +37,7 @@ from django.shortcuts import render
 from matrices.models import ImageLink
 
 from matrices.routines import credential_exists
-from matrices.routines import get_active_collection_for_user
+from matrices.routines import get_last_used_collection_for_user
 from matrices.routines import get_header_data
 
 #
@@ -57,9 +57,7 @@ def view_all_image_links(request):
 
     if credential_exists(request.user):
 
-        collection_list = get_active_collection_for_user(request.user)
-
-        selected_collection = collection_list[0]
+        selected_collection = get_last_used_collection_for_user(request.user)
 
         image_link_list = list()
 

@@ -175,11 +175,9 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
             image_out.save()
 
-        queryset = get_active_collection_for_user(user)
+        collection = get_active_collection_for_user(user)
 
-        for collection in queryset:
-
-            Collection.assign_image(image_out, collection)
+        Collection.assign_image(image_out, collection)
 
 
     else:
@@ -207,10 +205,8 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
                         image_out.save()
 
-                    queryset = get_active_collection_for_user(user)
+                    collection = get_active_collection_for_user(user)
 
-                    for collection in queryset:
-
-                        Collection.assign_image(image_out, collection)
+                    Collection.assign_image(image_out, collection)
 
     return image_out

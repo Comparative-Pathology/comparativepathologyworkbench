@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         bench_update.py
+# \file         collection_selection.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the AJAX bench_update view routine
+# This file contains the AJAX bench_collection_update view routine
 #
 ###
 from __future__ import unicode_literals
@@ -35,7 +35,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
@@ -43,23 +45,20 @@ from decouple import config
 
 from matrices.routines import simulate_network_latency
 
-from matrices.forms import MatrixForm
+from matrices.forms import CollectionSummarySelectionForm
 
 from matrices.models import Matrix
+from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import simulate_network_latency
 
-WORDPRESS_SUCCESS = 'Success!'
-
 
 #
-# EDIT A BENCH
+# Select a Collection
 #
 @login_required()
-def bench_update(request, bench_id):
+def collection_selection(request, user_id):
 
     if not request.is_ajax():
 
@@ -74,9 +73,8 @@ def bench_update(request, bench_id):
         raise PermissionDenied
 
 
-    serverWordpress = get_primary_wordpress_server()
-
-    object = get_object_by_uuid_or_404(Matrix, bench_id)
+    object = get_object_by_uuid_or_404(User, user_id)
+    collection = object.profile.last_used_collection
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -84,50 +82,23 @@ def bench_update(request, bench_id):
 
         simulate_network_latency()
 
-        form = MatrixForm(instance=object, data=request.POST)
+        form = CollectionSummarySelectionForm(instance=object, initial={'last_used_collection': collection }, data=request.POST, request=request)
 
         if form.is_valid():
 
-            object = form.save(commit=False)
+            cd = form.cleaned_data
 
-            object.set_owner(request.user)
+            collection = cd.get('last_used_collection')
 
-            post_id = ''
+            object.profile.set_last_used_collection(collection)
+            object.save()
 
-            if object.has_no_blogpost():
-
-                credential = get_credential_for_user(request.user)
-
-                if credential.has_apppwd():
-
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, object.title, object.description)
-
-                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-                        post_id = returned_blogpost['id']
-
-                        object.set_blogpost(post_id)
-
-                        object.save()
-
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
-
-                    else:
-
-                        messages.error(request, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
-                        form.add_error(None, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
-
-            else:
-
-                object.save()
-
-                matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
+            collection_id_formatted = "{:06d}".format(collection.id)
+            messages.success(request, 'User ' + str(user_id) + ' Updated with NEW Last Used Collection ' + collection_id_formatted + '!')
 
     else:
 
-        form = MatrixForm(instance=object)
+        form = CollectionSummarySelectionForm(instance=object, request=request, initial={'last_used_collection': collection } )
 
     return render(request, template_name, {
         'form': form,

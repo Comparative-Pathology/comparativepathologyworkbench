@@ -28,6 +28,18 @@ The view collection template
 
 {% extends 'includes/base.html' %}
 
+{% block extrastyle %}
+
+<style>
+
+    h1.active {
+      background-color: #ff0000 !important;
+    }
+
+</style>
+
+{% endblock extrastyle %}
+
 {% load custom %}
 
 {% load static %}
@@ -118,8 +130,18 @@ The view collection template
 	<br />
 	<hr>
 	<br />
+{% if collection.id == user.profile.active_collection.id %}
+	<h1 class="active">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
+{% else %}
+	{% if collection.owner == user %}
+	<h1>Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	<p><a href="{% url 'activate_in_collection' collection.id %}"><button class="button button-delete"><i class="fa-solid fa-bell"></i></button></a> You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
+	{% else %}
 	<h1>Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
 	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
+	{% endif %}
+{% endif %}
 	<hr>
 	<br />
 

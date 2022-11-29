@@ -65,6 +65,7 @@
 ###
 
 from .activate_collection import activate_collection
+from .activate_in_collection import activate_in_collection
 from .add_column_left import add_column_left
 from .add_column_right import add_column_right
 from .add_row_above import add_row_above

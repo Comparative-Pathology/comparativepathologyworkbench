@@ -218,6 +218,7 @@ urlpatterns = [
 	path('view_active_collection/', matrices_views.matrices.view_active_collection, name='view_active_collection'),
 	path('view_all_collections/', matrices_views.matrices.view_all_collections, name='view_all_collections'),
 	path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
+	path('activate_in_collection/<int:collection_id>/', matrices_views.matrices.activate_in_collection, name='activate_in_collection'),
 
 	path('detail_matrix_blog/<int:matrix_id>/', matrices_views.matrices.view_matrix_blog, name='detail_matrix_blog'),
 	path('view_cell_blog/<int:matrix_id>/<int:cell_id>/', matrices_views.matrices.view_cell_blog, name='view_cell_blog'),

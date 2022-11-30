@@ -33,7 +33,14 @@ The view collection template
 <style>
 
     h1.active {
-      background-color: #ff0000 !important;
+      background-color: #ff0000;
+	  padding: 22px 0px 22px 0px;
+	  margin: 0px 0px 0px 0px;
+    }
+
+	h1.inactive {
+	  padding: 22px 0px 22px 0px;
+	  margin: 0px 0px 0px 0px;
     }
 
 </style>
@@ -135,10 +142,10 @@ The view collection template
 	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
 {% else %}
 	{% if collection.owner == user %}
-	<h1>Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	<h1 class="inactive">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
 	<p><a href="{% url 'activate_in_collection' collection.id %}"><button class="button button-delete"><i class="fa-solid fa-bell"></i></button></a> You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
 	{% else %}
-	<h1>Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	<h1 class="inactive">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
 	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
 	{% endif %}
 {% endif %}

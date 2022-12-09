@@ -58,8 +58,8 @@ class Collection(models.Model):
     images = models.ManyToManyField(Image, related_name='collections')
 
     @classmethod
-    def create(cls, title, description, active, owner):
-        return cls(title=title, description=description, active=active, owner=owner)
+    def create(cls, title, description, owner):
+        return cls(title=title, description=description, owner=owner)
 
     @classmethod
     def assign_image(cls, current_image, new_collection):
@@ -73,7 +73,7 @@ class Collection(models.Model):
         return f"{self.id:06d}, {self.owner.username}, {self.title}"
 
     def __repr__(self):
-        return f"{self.id}, {self.title}, {self.description}, {self.active}, {self.owner.id}"
+        return f"{self.id}, {self.title}, {self.description}, {self.owner.id}"
 
     def set_matrix(self, a_matrix):
         self.matrix = a_matrix

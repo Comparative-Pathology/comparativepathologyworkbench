@@ -196,6 +196,7 @@ The view collection template
 				<a href="{% url 'view_a_and_b_image_links' collection_image.id %}"><button class="button button-view"><i class="fa fa-chain"></i></button></a>
 		{% endif %}
 			</td>
+			
 		{% if collection_image.roi == 0 %}
 			<td>&nbsp;</td>
 		{% else %}
@@ -203,9 +204,25 @@ The view collection template
 				<strong>ROI</strong>
 			</td>
 		{% endif %}
+		
 			<td style="vertical-align: top;">
 				{{ collection_image.server.name }}<br />( {{ collection_image.server.url_server }} )
 			</td>
+
+			<td colspan="3" style="vertical-align: top; width:256px;" >
+				{{ collection_image.name }}
+			</td>
+		</tr>
+
+		<tr>
+			<td style="vertical-align: top;">
+			</td>
+
+			<td>&nbsp;</td>
+			<td style="vertical-align: top;">
+
+			</td>
+		
 			<td style="vertical-align: top; width:256px;" >
 		{% if collection_image.server.is_accessible %}
 			{% if request.get_host == 'localhost:8000' %}
@@ -227,6 +244,7 @@ The view collection template
 				<a href="{{ collection_image.viewer_url  }}" target="_blank"><img alt="{{ collection_image.name }}" title="{{ collection_image.name }}" style="width:256px; height:256px; float: left" title="{{ collection_image.name }}" src="{{ collection_image.birdseye_url }}" ></a>
 		{% endif %}
 			</td>
+
 			<td style="vertical-align: top;">
 		{% for collection in collection_image.collections.all %}
 				<table>
@@ -237,6 +255,7 @@ The view collection template
 				</table>
 		{% endfor %}
 			</td>
+
 			<td style="vertical-align: top;">
 		{% for cell in collection_image.image.all %}
 				<table>
@@ -248,6 +267,12 @@ The view collection template
 		{% endfor %}
 			</td>
 		</tr>
+
+		<tr>
+			<td colspan="6"><hr>
+			</td>
+		</tr>
+
 		{% if forloop.last %}
 	</table>
 		{% endif %}

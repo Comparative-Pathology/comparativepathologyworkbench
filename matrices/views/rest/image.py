@@ -40,6 +40,8 @@ from matrices.permissions import ImageIsReadOnlyOrIsAdminOrIsOwner
 
 from matrices.serializers import ImageSerializer
 
+from matrices.routines import exists_image_in_cells
+
 #
 # BENCH CELL IMAGE REST INTERFACE ROUTINES
 #
@@ -62,3 +64,14 @@ class ImageViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
 
         return Response(data='Image LIST Not Available')
+
+
+    def destroy(self, request, *args, **kwargs):
+
+        image = self.get_object()
+
+        if not exists_image_in_cells(image):
+
+            image.delete()
+
+        return Response(data='Image Delete Success')

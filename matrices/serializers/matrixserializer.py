@@ -36,15 +36,17 @@ from django.db import models
 from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Image
-from matrices.models import Server
-from matrices.models import Credential
+from matrices.models import Collection
 
 from matrices.routines import get_primary_wordpress_server
+from matrices.routines import exists_collection_for_image
 from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import exists_image_for_id_server_owner_roi
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import get_servers_for_uid_url
 from matrices.routines import get_credential_for_user
+from matrices.routines import exists_active_collection_for_user
+from matrices.routines import get_active_collection_for_user
 
 from matrices.serializers import CellSerializer
 
@@ -264,6 +266,28 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 						image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
 						image.save()
+
+					collection = None
+
+					if exists_active_collection_for_user(request_user):
+
+						collection = get_active_collection_for_user(request_user)
+
+					else:
+			
+						collection_title = "A Default REST Collection"
+						collection_description = "A Collection created by a REST Request"
+						collection_owner = request_user
+
+						collection = Collection.create(collection_title, collection_description, collection_owner)
+
+						collection.save()
+
+						request_user.profile.set_active_collection(collection)
+						request_user.save()
+
+
+					Collection.assign_image(image, collection)
 
 
 				cell_in = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, image)
@@ -522,6 +546,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 									image_roi = int(json_roi['id'])
 
+							image = None
 
 							if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
@@ -538,6 +563,29 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 								image.save()
 
 								bench_cell.image = image
+
+
+							collection = None
+
+							if exists_active_collection_for_user(request_user):
+
+								collection = get_active_collection_for_user(request_user)
+
+							else:
+			
+								collection_title = "A Default REST Collection"
+								collection_description = "A Collection created by a REST Request"
+								collection_owner = request_user
+
+								collection = Collection.create(collection_title, collection_description, collection_owner)
+								collection.save()
+
+								request_user.profile.set_active_collection(collection)
+								request_user.save()
+							
+							if not exists_collection_for_image(collection, image):
+
+								Collection.assign_image(image, collection)
 
 
 							post_id = ''
@@ -633,6 +681,29 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 									image.save()
 
 									bench_cell.image = image
+
+								collection = None
+
+								if exists_active_collection_for_user(request_user):
+
+									collection = get_active_collection_for_user(request_user)
+
+								else:
+			
+									collection_title = "A Default REST Collection"
+									collection_description = "A Collection created by a REST Request"
+									collection_owner = request_user
+
+									collection = Collection.create(collection_title, collection_description, collection_owner)
+									collection.save()
+
+									request_user.profile.set_active_collection(collection)
+									request_user.save()
+
+							
+								if not exists_collection_for_image(collection, image):
+
+									Collection.assign_image(image, collection)
 
 
 								post_id = ''
@@ -832,6 +903,29 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 						cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
 
 						cell_image.save()
+
+					collection = None
+
+					if exists_active_collection_for_user(request_user):
+
+						collection = get_active_collection_for_user(request_user)
+
+					else:
+			
+						collection_title = "A Default REST Collection"
+						collection_description = "A Collection created by a REST Request"
+						collection_owner = request_user
+
+						collection = Collection.create(collection_title, collection_description, collection_owner)
+						collection.save()
+
+						request_user.profile.set_active_collection(collection)
+						request_user.save()
+							
+					if not exists_collection_for_image(collection, cell_image):
+
+						Collection.assign_image(cell_image, collection)
+
 
 
 					post_id = ''

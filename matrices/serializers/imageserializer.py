@@ -33,9 +33,11 @@ from rest_framework import serializers
 from django.db import models
 
 from matrices.models import Image
-from matrices.models import Server
+from matrices.models import Collection
 
+from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_server_for_uid_url
+from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_servers_for_uid_url
 
 
@@ -121,6 +123,27 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 		image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
 		image.save()
+
+		collection = None
+
+		if exists_active_collection_for_user(request_user):
+
+			collection = get_active_collection_for_user(request_user)
+
+		else:
+			
+			collection_title = "A Default REST Collection"
+			collection_description = "A Collection created by a REST Request"
+			collection_owner = request_user
+
+			collection = Collection.create(collection_title, collection_description, collection_owner)
+			collection.save()
+
+			request_user.profile.set_active_collection(collection)
+			request_user.save()
+
+		Collection.assign_image(image, collection)
+
 
 		return image
 

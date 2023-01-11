@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# This Serializer provides Read functions for a CELL
+# This Serializer provides Read functions for a Cell ONLY
 ###
 from django.contrib.auth.models import User
 
@@ -37,20 +37,34 @@ from matrices.models import Cell
 from matrices.serializers import ImageSerializer
 
 
-"""
-	This Serializer provides Read functions for a CELL
-"""
 class CellSerializer(serializers.HyperlinkedModelSerializer):
+    """A Serializer of Cells
 
-	title = serializers.CharField(max_length=255, required=False, allow_blank=True)
-	description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
-	column_index = serializers.IntegerField(source='xcoordinate')
-	row_index = serializers.IntegerField(source='ycoordinate')
-	cell_id = serializers.IntegerField(source='id')
+    A Serializer of Cells in the Comparative Pathology Workbench REST Interface
 
-	image = ImageSerializer(many=False, allow_null=True)
+    This Serializer provides Read functions for a Cell ONLY
 
-	class Meta:
-		model = Cell
-		fields = ('url', 'cell_id', 'title', 'description', 'column_index', 'row_index', 'image')
-		read_only_fields = ('url', )
+    Parameters:
+        url(Read Only): The (internal) URL of the Cell.
+
+        title: The Title of the Cell.
+        description: The Description of the Cell.
+        column_index: The X Coordinate of the Cell.
+        row_index: The Y Coordinate of the Cell.
+        cell_id: The identifier of the Cell.
+        image: An Image Object or None, associated with the Cell
+
+    """
+
+    title = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
+    column_index = serializers.IntegerField(source='xcoordinate')
+    row_index = serializers.IntegerField(source='ycoordinate')
+    cell_id = serializers.IntegerField(source='id')
+
+    image = ImageSerializer(many=False, allow_null=True)
+
+    class Meta:
+        model = Cell
+        fields = ('url', 'cell_id', 'title', 'description', 'column_index', 'row_index', 'image')
+        read_only_fields = ('url', )

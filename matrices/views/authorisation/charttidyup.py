@@ -46,6 +46,7 @@ from matrices.models import Artefact
 from matrices.routines import get_header_data
 from matrices.routines import exists_artefact_in_table
 from matrices.routines import exists_image_in_table
+from matrices.routines import exists_image_on_webserver
 
 #
 # SETUP DEFAULT COLLECTIONS VIEW
@@ -61,7 +62,8 @@ def charttidyup(request):
 
         Document.objects.all().delete()
 
-        image_list = Image.objects.filter(server__type__name='EBI_SCA').filter(server__type__name='CPW')
+        image_list1 = Image.objects.filter(server__type__name='EBI_SCA')
+        image_list2 = Image.objects.filter(server__type__name='CPW')
         artefact_list = Artefact.objects.all()
 
         out_message_list = list()
@@ -78,9 +80,7 @@ def charttidyup(request):
         imageWebAfterTotal = 0
         imageDelTotal = 0
 
-        for image in image_list:
-
-            imageDBTotal = imageDBTotal + 1
+        imageDBTotal = image_list1.count() + image_list2.count()
 
         ls_command = 'ls ' + config('HIGHCHARTS_OUTPUT_DIR')
         process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -88,24 +88,19 @@ def charttidyup(request):
         out_list = process.stdout.readlines()
         out_list_2 = out_list
 
-        for output in out_list:
-
-            imageWebBeforeTotal = imageWebBeforeTotal + 1
-
-        for artefact in artefact_list:
-
-            artefactDBTotal = artefactDBTotal + 1
+        imageWebBeforeTotal = len(out_list)
+        artefactDBTotal = len(artefact_list)
 
         out_message = "Total Number of Documents in Database = {}".format( documentDBTotal )
         out_message_list.append(out_message)
 
-        out_message = "Total Number of Charts in Database = {}".format( imageDBTotal )
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver BEFORE Cleanup = {}".format( imageWebBeforeTotal )
         out_message_list.append(out_message)
 
-        out_message = "Total Number of Files on Webserver BEFORE Cleanup = {}".format( imageWebBeforeTotal )
+        out_message = "Total Number of Charts (PNGs etc) in Database = {}".format( imageDBTotal )
         out_message_list.append(out_message)
 
-        out_message = "Total Number of Artefacts on Webserver BEFORE Cleanup = {}".format( artefactDBTotal )
+        out_message = "Total Number of Artefacts (ZIPs etc) on Database BEFORE Cleanup = {}".format( artefactDBTotal )
         out_message_list.append(out_message)
 
         for output in out_list_2:
@@ -116,11 +111,13 @@ def charttidyup(request):
 
                 if not exists_artefact_in_table(new_output):
 
-                    imageDelTotal = imageDelTotal + 1
+                    if not exists_image_on_webserver(output.strip()):
 
-                    rm_command = 'rm ' + config('HIGHCHARTS_OUTPUT_DIR') + output.strip()
+                        imageDelTotal = imageDelTotal + 1
 
-                    rm_list.append(rm_command)
+                        rm_command = 'rm ' + config('HIGHCHARTS_OUTPUT_DIR') + output.strip()
+
+                        rm_list.append(rm_command)
 
         aux_rm_list = list(set(rm_list))
 
@@ -135,11 +132,12 @@ def charttidyup(request):
 
         out_list_3 = process.stdout.readlines()
 
-        for output in out_list_3:
+        imageWebAfterTotal = len(out_list_3)
 
-            imageWebAfterTotal = imageWebAfterTotal + 1
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) DELETED from Webserver = {}".format( imageDelTotal )
+        out_message_list.append(out_message)
 
-        out_message = "Total Number of Files on Webserver AFTER Cleanup = {}".format( imageWebAfterTotal )
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup = {}".format( imageWebAfterTotal )
         out_message_list.append(out_message)
 
         data.update({ 'out_message_list': out_message_list })

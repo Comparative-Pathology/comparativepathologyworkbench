@@ -42,34 +42,78 @@ from matrices.serializers import ImageSerializer
 
 from matrices.routines import exists_image_in_cells
 
-#
+
 # BENCH CELL IMAGE REST INTERFACE ROUTINES
-#
+
 class ImageViewSet(viewsets.ModelViewSet):
+    """A ViewSet of Images
+
+    This viewset automatically provides:
+        List, Create, Retrieve, Update and Destroy actions for Images.
+
+    Parameters:
+        None
+
     """
-    This viewset automatically provides `list`, `create`, `retrieve`, `update` and `destroy` actions.
-    """
+
     queryset = Image.objects.all()
 
     serializer_class = ImageSerializer
 
+    # Check that the user is allowed permission to use the Image View Set
     permission_classes = ( permissions.IsAuthenticated,
                            ImageIsReadOnlyOrIsAdminOrIsOwner )
 
 
     def partial_update(self, request, *args, **kwargs):
+        """Partial Update Image.
+
+        A Partial Update of a Image is NOT Allowed
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
 
         return Response(data='Image PARTIAL UPDATE Not Available')
 
+
     def list(self, request, *args, **kwargs):
+        """List Images.
+
+        Listing Images is NOT Allowed
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
 
         return Response(data='Image LIST Not Available')
 
 
     def destroy(self, request, *args, **kwargs):
+        """Destroy Image.
+
+        This fucntion destroys the requested Image.
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
 
         image = self.get_object()
 
+        # Check if the Image is still referenced in a Cell
+        #  If not, then Delete may proceed
         if not exists_image_in_cells(image):
 
             image.delete()

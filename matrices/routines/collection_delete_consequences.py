@@ -41,6 +41,8 @@ from matrices.routines.get_collections_for_image import get_collections_for_imag
 from matrices.routines.exists_image_in_cells import exists_image_in_cells
 from matrices.routines.exists_bench_for_last_used_collection import exists_bench_for_last_used_collection
 from matrices.routines.get_benches_for_last_used_collection import get_benches_for_last_used_collection
+from matrices.routines.exists_user_for_last_used_collection import exists_user_for_last_used_collection
+from matrices.routines.get_users_for_last_used_collection import get_users_for_last_used_collection
 
 
 """
@@ -82,6 +84,17 @@ def collection_delete_consequences(a_user, a_collection):
             matrix.set_no_last_used_collection()
 
             matrix.save()
+
+
+    if exists_user_for_last_used_collection(a_collection):
+
+        user_list = get_users_for_last_used_collection(a_collection)
+
+        for user in user_list:
+
+            user.profile.set_last_used_collection(None)
+            user.save()
+
 
     if a_collection == get_active_collection_for_user(a_user):
 

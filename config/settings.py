@@ -72,6 +72,8 @@ INSTALLED_APPS = [
 
     'frontend_forms',
 
+    #'rest_framework_swagger',
+
 ]
 
 MIDDLEWARE = [

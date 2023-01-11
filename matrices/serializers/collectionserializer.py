@@ -53,549 +53,824 @@ CONST_4095 = 4095
 
 
 """
-	This Serializer provides Create, Read, Update and Delete functions for a COLLECTION
+    This Serializer provides Create, Read, Update and Delete functions for a COLLECTION
 """
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
+    """A Serializer of Collections
 
-	title = serializers.CharField(max_length=255, required=False, allow_blank=True)
-	description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
-	owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    A Serializer of Collections in the Comparative Pathology Workbench REST Interface
 
-	#images = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), many=True)
-	images = ImageSerializer(many=True, required=False)
+    This Serializer provides Create, Read and Update functions for a Collection
 
-	class Meta:
-		model = Collection
-		fields = ('url', 'id', 'title', 'description', 'owner', 'images')
-		read_only_fields = ('url', )
+    Parameters:
+        id: The (internal) Id of the Collection.
+        url(Read Only): The (internal) URL of the Collection.
+        owner: The Owner (User Model) of the Collection.
+        title: The Title of the Collection, Maximum 255 Characters.
+        description: The Description of the Collection, Maximum 4095 Characters.
+        images: An Array of Images or Null.
 
+    """
 
-	"""
-		Collection Serializer, Create Method
-	"""
-	def create(self, validated_data):
+    title = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
+    owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
-		request_user = None
+    #images = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), many=True)
+    images = ImageSerializer(many=True, required=False)
 
-		request = self.context.get("request")
+    class Meta:
+        model = Collection
+        fields = ('url', 'id', 'title', 'description', 'owner', 'images')
+        read_only_fields = ('url', )
 
-		if request and hasattr(request, "user"):
 
-			request_user = request.user
+    def create(self, validated_data):
+        """Create Method.
 
-		else:
+        Creates a NEW Collection Object from a Json Representation of a Collection.
 
-			user_id = Token.objects.get(key=request.auth.key).user_id
-			request_user = User.objects.get(id=user_id)
+        Parameters:
+            validated_data: A string of valid JSON.
 
+        Returns:
+            An Collection Object
 
-		if validated_data.get('title', None) == None and validated_data.get('description', None) == None:
+        Raises:
+            ValidationError: CPW_REST:0060 - Attempting to Create an Image for a different Owner.
+            ValidationError: CPW_REST:0380 - NO data supplied
+            ValidationError: CPW_REST:0390 - Attempting to Add a new Collection for a different Owner
+          
+        """
 
-			message = 'CPW_REST:0380 ERROR! NO data supplied for Collection Creation!'
-			raise serializers.ValidationError(message)
+        request_user = None
 
+        request = self.context.get("request")
+        
+        # Do we have a User of the Request?
+        if request and hasattr(request, "user"):
 
-		collection_title = ""
-		collection_description = ""
+            request_user = request.user
 
-		if validated_data.get('title', None) == None:
+        # No, Get the Token from the Request then
+        else:
 
-			collection_title = ""
+            user_id = Token.objects.get(key=request.auth.key).user_id
+            request_user = User.objects.get(id=user_id)
 
-		else:
 
-			collection_title = validated_data.get('title')
+        # Check we have been supplied with BOTH a Title and Description
+        if validated_data.get('title', None) == None and validated_data.get('description', None) == None:
 
+            message = 'CPW_REST:0380 ERROR! NO data supplied for Collection Creation!'
+            raise serializers.ValidationError(message)
 
-		if validated_data.get('description', None) == None:
 
-			collection_description = ""
+        collection_title = ""
+        collection_description = ""
 
-		else:
+        # Is there a Title supplied?
+        if validated_data.get('title', None) == None:
 
-			collection_description = validated_data.get('description')
+            collection_title = ""
+        
+        # Yes
+        else:
 
+            collection_title = validated_data.get('title')
 
-		collection_owner = validated_data.get('owner')
 
-		if request_user != collection_owner:
+        # Is there a Description supplied?
+        if validated_data.get('description', None) == None:
 
-			if not request_user.is_superuser:
+            collection_description = ""
 
-				message = 'CPW_REST:0390 ERROR! Attempting to Add a new Collection for a different Owner: ' + str(collection_owner) + '!'
-				raise serializers.ValidationError(message)
+        # Yes
+        else:
 
+            collection_description = validated_data.get('description')
 
-		self.validate_collection_json_fields(collection_title, collection_description)
 
-		collection = None
+        collection_owner = validated_data.get('owner')
 
-		image_list = list()
+        # Check the supplied Owner of the Collection against the Requesting User
+        #  If Requesting User is NOT the Owner of the Collection
+        if request_user != collection_owner:
 
-		if validated_data.get('images', None) == None:
+            # AND the Requesting User is NOT a Super-User, then Raise an Error!
+            if not request_user.is_superuser:
 
-			collection = Collection.create(collection_title, collection_description, collection_owner)
+                message = 'CPW_REST:0390 ERROR! Attempting to Add a new Collection for a different Owner: ' + str(collection_owner) + '!'
+                raise serializers.ValidationError(message)
 
-		else:
+        # Validate the Collection Fields
+        self.validate_collection_json_fields(collection_title, collection_description)
 
-			images_data = validated_data.pop('images')
+        collection = None
 
-			create_flag = True
+        image_list = list()
 
-			self.validate_collection_images(images_data, request_user, create_flag)
+        # Are there any Images supplied with the Collection?
+        #  No, just Create the Collection
+        if validated_data.get('images', None) == None:
 
-			collection = Collection.create(collection_title, collection_description, collection_owner)
+            # Create the Collection
+            collection = Collection.create(collection_title, collection_description, collection_owner)
 
-			for image_data in images_data:
+        # Yes ... 
+        else:
 
-				image = image_data.get('image')
+            # Get the Images Data
+            images_data = validated_data.pop('images')
 
-				image_server = image_data.get('server')
-				image_owner = image_data.get('owner')
-				image_id = image_data.get('image_id')
-				image_roi_id = image_data.get('roi')
-				image_comment = image_data.get('comment')
+            # We are Creating NOT Updating a Collection
+            create_flag = True
 
-				server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+            # Check that the Image Ownerships are OK
+            self.validate_collection_images(images_data, request_user, create_flag)
 
-				image_identifier = int(image_id)
+            # Create the Collection
+            collection = Collection.create(collection_title, collection_description, collection_owner)
 
-				image_name = ''
-				image_viewer_url = ''
-				image_birdseye_url = ''
-				image_roi = image_roi_id
-				image_comment = ''
+            # For each Image in the Images Data Array
+            for image_data in images_data:
 
-				if server.is_wordpress():
+                image_server = image_data.get('server')
+                image_owner = image_data.get('owner')
+                image_id = image_data.get('image_id')
+                image_roi_id = image_data.get('roi')
+                image_comment = image_data.get('comment')
 
-					data = server.check_wordpress_image(image_owner, image_id)
+                # Validate the supplied Image attributes against the supplied Server, and return the Server
+                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-					json_image = data['image']
+                image_name = ''
+                image_viewer_url = ''
+                image_birdseye_url = ''
+                image_roi = image_roi_id
+                image_comment = ''
 
-					image_name = json_image['name']
-					image_viewer_url = json_image['viewer_url']
-					image_birdseye_url = json_image['birdseye_url']
+                # If the Server is WordPress ... ?
+                if server.is_wordpress():
 
-				else:
+                    # Get the image data off the Server
+                    data = server.check_wordpress_image(image_owner, image_id)
 
-					data = server.check_imaging_server_image(image_owner, image_id)
+                    json_image = data['image']
 
-					json_image = data['image']
+                    image_name = json_image['name']
+                    image_viewer_url = json_image['viewer_url']
+                    image_birdseye_url = json_image['birdseye_url']
 
-					image_name = json_image['name']
-					image_viewer_url = json_image['viewer_url']
-					image_birdseye_url = json_image['birdseye_url']
+                # If the Server is OMERO ... ?
+                else:
 
-					if image_roi_id != 0:
+                    # Get the Image data off the Server
+                    data = server.check_imaging_server_image(image_id)
 
-						data = server.check_imaging_server_image_roi(image_owner, image_id, image_roi_id)
+                    json_image = data['image']
 
-						data = server.get_imaging_server_image_roi_json(image_id, image_roi_id)
+                    image_name = json_image['name']
+                    image_viewer_url = json_image['viewer_url']
+                    image_birdseye_url = json_image['birdseye_url']
 
-						json_roi = data['roi']
-						shape = json_roi['shape']
+                    # Do we have an ROI ... ?
+                    if image_roi_id != 0:
 
-						image_viewer_url = shape['viewer_url']
-						image_birdseye_url = shape['shape_url']
+                       # Get the ROW Image data off the Server
+                        data = server.get_imaging_server_image_roi_json(image_id, image_roi_id)
 
+                        json_roi = data['roi']
+                        shape = json_roi['shape']
 
-				if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
+                        image_viewer_url = shape['viewer_url']
+                        image_birdseye_url = shape['shape_url']
 
-					existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                # Does the image in the JSON already exist as an Image in the CPW?
+                #  Yes - Get the existing Image and add that to the Image List for the Collection
+                if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-					image_in = existing_image_list[0]
+                    existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
-					image_list.append(image_in)
+                    image_in = existing_image_list[0]
 
-				else:
+                    image_list.append(image_in)
 
-					image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                #  No - Create a NEW Image and add that to the Image List for the Collection
+                else:
 
-					image_in.save()
+                    image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
-					image_list.append(image_in)
+                    # Update the Database with the New Image
+                    image_in.save()
 
+                    image_list.append(image_in)
 
-		collection.save()
+        # Update the Database with the New Collection
+        collection.save()
 
+        # Add All the Images in Image List to the New Collection
+        for image_out in image_list:
 
-		for image_out in image_list:
+            Collection.assign_image(image_out, collection)
 
-			Collection.assign_image(image_out, collection)
+        # RETURN the created Collection Object
+        return collection
 
 
-		return collection
+    """
+        Collection Serializer, Update Method
+    """
+    def update(self, instance, validated_data):
+        """Update Method.
 
+        Updates an EXISTING Collection Object from a Json Representation of a Collection.
 
-	"""
-		Collection Serializer, Update Method
-	"""
-	def update(self, instance, validated_data):
+        Parameters:
+            instance: an existing Collection Object
+            validated_data: A string of valid JSON.
 
-		request_user = None
+        Returns:
+            An Collection Object
 
-		request = self.context.get("request")
+        Raises:
+            ValidationError: CPW_REST:0400 - Attempting to Update an existing Collection belonging to a different Owner
+          
+        """
 
-		if request and hasattr(request, "user"):
+        request_user = None
 
-			request_user = request.user
+        request = self.context.get("request")
 
-		else:
+        # Do we have a User of the Request?
+        if request and hasattr(request, "user"):
 
-			user_id = Token.objects.get(key=request.auth.key).user_id
-			request_user = User.objects.get(id=user_id)
+            request_user = request.user
 
+        # No, Get the Token from the Request then
+        else:
 
-		collection_title = validated_data.get('title', instance.title)
-		collection_description = validated_data.get('description', instance.description)
-		collection_owner = validated_data.get('owner', instance.owner)
+            user_id = Token.objects.get(key=request.auth.key).user_id
+            request_user = User.objects.get(id=user_id)
 
-		if request_user != collection_owner:
+        # Get the Collection Attributes from the JSON
+        collection_title = validated_data.get('title', instance.title)
+        collection_description = validated_data.get('description', instance.description)
+        collection_owner = validated_data.get('owner', instance.owner)
 
-			if not request_user.is_superuser:
+        # Update the Collection Object Attributes
+        instance.title = collection_title
+        instance.description = collection_description
 
-				message = 'CPW_REST:0400 ERROR! Attempting to Update an existing Collection for a different Owner: ' + str(collection_owner) + '!'
-				raise serializers.ValidationError(message)
+        # Check the supplied Owner of the Collection against the Requesting User
+        #  If Requesting User is NOT the Owner of the Collection
+        if request_user != collection_owner:
 
+            # AND the Requesting User is NOT a Super-User, then Raise an Error!
+            if not request_user.is_superuser:
 
-		self.validate_collection_json_fields(collection_title, collection_description)
+                message = 'CPW_REST:0400 ERROR! Attempting to Update an existing Collection for a different Owner: ' + str(collection_owner) + '!'
+                raise serializers.ValidationError(message)
 
-		images_data = []
 
-		if validated_data.get('images', None) != None:
+        # Validate the Collection Fields
+        self.validate_collection_json_fields(collection_title, collection_description)
 
-			images_data = validated_data.pop('images')
+        images_data = []
 
-		create_flag = False
+        # Get the Image data 
+        if validated_data.get('images', None) != None:
 
-		self.validate_collection_images(images_data, request_user, create_flag)
+            images_data = validated_data.pop('images')
 
-		self.delete_missing_images(instance, request_user, images_data)
+        # We are Updating NOT Creating a Collection
+        create_flag = False
 
-		self.add_new_images(instance, request_user, images_data)
+        # Check that the Image Ownerships are OK
+        self.validate_collection_images(images_data, request_user, create_flag)
 
-		instance.title = collection_title
-		instance.description = collection_description
+        # Delete from the Collection Object any Images that are NOT in the JSON
+        self.delete_missing_images(instance, images_data)
 
-		instance.save()
+        # Add to the Collection Object any NEW Images that are in the JSON
+        self.add_new_images(instance, images_data)
 
-		return instance
+        # Update the Database with the Existing Collection
+        instance.save()
 
+        # RETURN the updated Collection Object
+        return instance
 
 
-	"""
-		Collection Serializer, For a Collection, Validate the supplied Title and Description fields
-	"""
-	def validate_collection_json_fields(self, title, description):
+    def validate_collection_json_fields(self, a_title, a_description):
+        """Validate the supplied JSON fields.
 
-		len_title = len(title)
-		len_description = len(description)
+        Title and Description field overflows are trapped by the Django REST framework,
+         so these next 2 checks are redundant
 
-		"""
-			Title and Description field overflows are trapped by the Django REST framework,
-		 	so these next 2 checks are redundant
-		"""
-		if len_title > CONST_255:
+        Parameters:
+            title: The Title of the Collection, Maximum 255 Characters.
+            description: The Description of the Collection, Maximum 4095 Characters.
 
-			message = 'CPW_REST:0410 ERROR! Collection Title Length (' + str(len_title) + ') is greater than 255!'
-			raise serializers.ValidationError(message)
+        Returns:
+            None
 
-		if len_description > CONST_4095:
+        Raises:
+            ValidationError: CPW_REST:0410 - Title Too Long.
+            ValidationError: CPW_REST:0420 - Description Too Long
+          
+        """
 
-			message = 'CPW_REST:0420 ERROR! Collection Description Length (' + str(len_title) + ') is greater than 4095!'
-			raise serializers.ValidationError(message)
+        len_title = len(a_title)
+        len_description = len(a_description)
 
+        # Is the Title greater than 255 Characters?
+        if len_title > CONST_255:
 
-	"""
-		Collection Serializer, For a Collection, Delete any Missing Images
-	"""
-	def delete_missing_images(self, instance, request_user, images_data):
+            message = 'CPW_REST:0410 ERROR! Collection Title Length (' + str(len_title) + ') is greater than 255!'
+            raise serializers.ValidationError(message)
 
-		delete_image_list = list()
+        # Is the Description greater than 4095 Characters?
+        if len_description > CONST_4095:
 
-		image_id_input_list = list()
-		image_id_exist_list = list()
+            message = 'CPW_REST:0420 ERROR! Collection Description Length (' + str(len_title) + ') is greater than 4095!'
+            raise serializers.ValidationError(message)
 
-		images = (instance.images).all()
-		images = list(images)
 
-		for image_data in images_data:
+    def delete_missing_images(self, instance, a_images_data):
+        """Deletes Missing Images from the Collection
 
-			image_id = image_data.get('image_id', 0)
+        Takes the list of Images from the supplied JSON file, and compares this 
+         to the list of existing images in the Collection.
+        Performs a Set Comparison to produce a list of missing Ids.
+        Takes the list of missing Ids are deletes these images, if:
+         There is now other Colleciton for this Image
+         The image is not used on a Bench
 
-			image_id_input_list.append(image_id)
+        Parameters:
+            a_images_data: An Array of Images.
+            instance: The Collection being updated.
 
+        Returns:
 
-		for collection_image in images:
+        Raises:
 
-			collection_image_id = collection_image.identifier
+        """
 
-			image_id_exist_list.append(collection_image_id)
+        # A list of Images to be Deleted
+        delete_image_list = list()
 
+        # A list of JSON Ids
+        image_id_input_list = list()
 
-		set_difference = set(image_id_exist_list) - set(image_id_input_list)
-		delete_image_list = list(set_difference)
+        # A list of Database Ids
+        image_id_exist_list = list()
 
-		for delete_image_id in delete_image_list:
+        # Get All the images in the Collection 
+        images = (instance.images).all()
+        images = list(images)
 
-			images = get_images_for_collection(instance)
+        # For Each of the Images in the JSON file, get the Ids
+        for image_data in a_images_data:
 
-			for image in images:
+            image_id = image_data.get('image_id', 0)
 
-				if delete_image_id == image.identifier:
+            #  Add to list of JSON Ids
+            image_id_input_list.append(image_id)
 
-					collection_list = get_collections_for_image(image)
+        # For Each of the Images in the Collection, get the Ids
+        for collection_image in images:
 
-					delete_flag = True
+            collection_image_id = collection_image.identifier
 
-					for collection_other in collection_list:
+            #  Add to list of Database Ids
+            image_id_exist_list.append(collection_image_id)
 
-						if instance != collection_other:
+        # Delete the list of JSON Ids from the List of Database Ids
+        set_difference = set(image_id_exist_list) - set(image_id_input_list)
 
-							delete_flag = False
+        # The list of possible Images to be Deleted
+        delete_image_list = list(set_difference)
 
-						if delete_flag == True:
+        # For Each Id in the list of possible Images to be Deleted
+        for delete_image_id in delete_image_list:
 
-							if not exists_image_in_cells(image):
+            # Get the Images for this Collection
+            images = get_images_for_collection(instance)
 
-								image.delete()
+            # For Each Image in the Collection
+            for image in images:
 
-						else:
+                # Does the Id to be Delete match the Image Id in the Collection?
+                if delete_image_id == image.identifier:
 
-							Collection.unassign_image(image, instance)
+                    # Get the Collections for this Image
+                    collection_list = get_collections_for_image(image)
 
+                    delete_flag = True
 
-	"""
-		Collection Serializer, For a Collection, Add New Images
-	"""
-	def add_new_images(self, instance, request_user, images_data):
+                    # For each of these Collections ... 
+                    for collection_other in collection_list:
 
-		add_image_list = list()
+                        # If the Collection is not THIS Collection, Do NOT Delete, 
+                        #  As the image is in ANOTHER Collection!
+                        if instance != collection_other:
 
-		image_id_input_list = list()
-		image_id_exist_list = list()
+                            delete_flag = False
 
-		images = (instance.images).all()
-		images = list(images)
+                        # If we are allowed to Delete
+                        if delete_flag == True:
 
+                            # ... And the Image is NOT used in a Bench, then ...
+                            if not exists_image_in_cells(image):
 
-		for image_data in images_data:
+                                # Delete the Image!
+                                image.delete()
 
-			image_id = image_data.get('image_id', 0)
+                        # No - Image exists in ANOTHER Collection
+                        else:
+                            
+                            # Delete the LinkONLY between the Image and Collection
+                            Collection.unassign_image(image, instance)
 
-			image_id_input_list.append(image_id)
 
+    def add_new_images(self, an_instance, a_images_data):
+        """Adds New Images to the Collection
 
-		for collection_image in images:
+        Takes the list of Images from the supplied JSON file, and compares this 
+         to the list of existing images in the Collection.
+        Performs a Set Comparison to produce a list of new Ids.
+        Takes the list of new Ids are dds these images, if:
+         There is now other Colleciton for this Image
+         The image is not used on a Bench
 
-			collection_image_id = collection_image.identifier
+        Parameters:
+            a_images_data: An Array of Images.
+            an_instance: The Collection being updated.
 
-			image_id_exist_list.append(collection_image_id)
+        Returns:
 
+        Raises:
 
-		set_difference = set(image_id_input_list) - set(image_id_exist_list)
-		add_image_list = list(set_difference)
+        """
 
-		"""
-			Add NEW IMAGES
-		"""
-		for add_image_id in add_image_list:
+        # A list of Images to be Added
+        add_image_list = list()
 
-			for image_data in images_data:
+        # A list of JSON Ids
+        image_id_input_list = list()
 
-				image_id = image_data.get('image_id', 0)
+        # A list of Database Ids
+        image_id_exist_list = list()
 
-				new_image = None
+        # Get All the images in the Collection 
+        images = (an_instance.images).all()
+        images = list(images)
 
-				if image_id == add_image_id:
+        # For Each of the Images in the JSON file, get the Ids
+        for image_data in a_images_data:
 
-					server = image_data.get('server')
-					owner = image_data.get('owner')
-					image_id = image_data.get('image_id')
-					roi_id = image_data.get('roi')
+            image_id = image_data.get('image_id', 0)
 
-					server = self.validate_image_json(server, owner, image_id, roi_id)
+            #  Add to list of JSON Ids
+            image_id_input_list.append(image_id)
 
-					image_identifier = int(image_id)
 
-					image_name = ''
-					image_viewer_url = ''
-					image_birdseye_url = ''
-					image_roi = 0
+        # For Each of the Images in the Collection, get the Ids
+        for collection_image in images:
 
-					image_comment = ''
+            collection_image_id = collection_image.identifier
 
-					if server.is_wordpress():
+            #  Add to list of Database Ids
+            image_id_exist_list.append(collection_image_id)
 
-						data = server.check_wordpress_image(owner, image_id)
 
-						json_image = data['image']
+        # Delete the list of Database Ids from the List of JSON Ids
+        set_difference = set(image_id_input_list) - set(image_id_exist_list)
 
-						image_name = json_image['name']
-						image_viewer_url = json_image['viewer_url']
-						image_birdseye_url = json_image['birdseye_url']
+        # The list of possible Images to be Added
+        add_image_list = list(set_difference)
 
-					else:
+        # For Each Id in the list of possible Images to be Added
+        for add_image_id in add_image_list:
 
-						data = server.check_imaging_server_image(owner, image_id)
+            # For Each Image in the supplied list of JSON Images
+            for image_data in a_images_data:
 
-						json_image = data['image']
+                # Get the Image Id 
+                image_id = image_data.get('image_id', 0)
 
-						image_name = json_image['name']
-						image_viewer_url = json_image['viewer_url']
-						image_birdseye_url = json_image['birdseye_url']
+                new_image = None
 
-						if roi_id != 0:
+                # If the JSON Image Id Matches the Possible Add Image Id
+                if image_id == add_image_id:
 
-							data = server.check_imaging_server_image_roi(owner, image_id, roi_id)
+                    # Get the Image Attributes
+                    server = image_data.get('server')
+                    owner = image_data.get('owner')
+                    image_id = image_data.get('image_id')
+                    roi_id = image_data.get('roi')
 
-							json_roi = data['roi']
+                    # Validate the supplied Image attributes against the supplied Server, and return the Server
+                    server = self.validate_image_json(server, owner, image_id, roi_id)
 
-							image_roi = int(json_roi['id'])
+                    image_name = ''
+                    image_viewer_url = ''
+                    image_birdseye_url = ''
+                    image_roi = 0
 
+                    image_comment = ''
 
-					if exists_image_for_id_server_owner_roi(image_id, server, owner, image_roi):
+                    # if the Server is a WordPress Server
+                    if server.is_wordpress():
 
-						existing_image_list = get_images_for_id_server_owner_roi(image_id, server, owner, image_roi)
+                        # Get the Image data from the Server
+                        data = server.check_wordpress_image(owner, image_id)
 
-						existing_image = existing_image_list[0]
+                        json_image = data['image']
 
-						new_image = existing_image
+                        # Set the Image attributes
+                        image_name = json_image['name']
+                        image_viewer_url = json_image['viewer_url']
+                        image_birdseye_url = json_image['birdseye_url']
 
-						Collection.assign_image(new_image, instance)
+                    # if the Server is an OMERO Server
+                    else:
 
-					else:
+                        # Get the Image data from the Server
+                        data = server.check_imaging_server_image(image_id)
 
-						new_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
+                        json_image = data['image']
 
-						new_image.save()
+                        # Set the Image attributes
+                        image_name = json_image['name']
+                        image_viewer_url = json_image['viewer_url']
+                        image_birdseye_url = json_image['birdseye_url']
 
-						Collection.assign_image(new_image, instance)
+                        # Has an ROI been suppleid too?
+                        if roi_id != 0:
 
+                            # Get the ROI Image data from the Server
+                            data = server.check_imaging_server_image_roi(image_id, roi_id)
 
-	"""
-		Collection Serializer, For a Collection, Validate the supplied Images
-	"""
-	def validate_collection_images(self, images_data, request_user, mode_flag):
+                            json_roi = data['roi']
 
-		for image_data in images_data:
+                            # Set the ROI Image attribute
+                            image_roi = int(json_roi['id'])
 
-			image = image_data.get('image')
 
-			if image is not None:
+                    # Has the potential New Image already been created by this User?
+                    if exists_image_for_id_server_owner_roi(image_id, server, owner, image_roi):
 
-				server = image.get('server')
-				image_owner = image.get('owner')
-				image_id = image.get('image_id')
-				roi_id = image.get('roi')
+                        # Get the existing Image
+                        existing_image_list = get_images_for_id_server_owner_roi(image_id, server, owner, image_roi)
 
-				if mode_flag == True:
+                        existing_image = existing_image_list[0]
+                        new_image = existing_image
 
-					if request_user != image_owner:
+                        # Assign the existing Image to the New Colleciton
+                        Collection.assign_image(new_image, an_instance)
 
-						if not request_user.is_superuser:
+                    # No - Create a New Image Object
+                    else:
 
-							message = 'CPW_REST:0430 ERROR! Attempting to Add an Image to a Collection for a different Owner: ' + str(image_owner) + '!'
-							raise serializers.ValidationError(message)
+                        # Create a New Image Object with the gathered atttributes
+                        new_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
 
-		return True
+                        # Update the Database with the New Image
+                        new_image.save()
 
+                        # Assign the New Image to the New Colleciton
+                        Collection.assign_image(new_image, an_instance)
 
-	"""
-		Collection Serializer, For an Image in a Cell within a Collection, Validate the supplied Server, Owner, Image Id and ROI ID Fields
-	"""
-	def validate_image_json(self, server_str, user, image_id, roi_id):
 
-		server_list = server_str.split("@")
+    def validate_collection_images(self, a_images_data, a_request_user, a_mode_flag):
+        """Validates the supplied Images in the Collection
 
-		server_uid = str(server_list[0])
-		server_url = str(server_list[1])
+        Finds a Server Object from the the supplied server string, and 
+        Validates the supplied Owner, Image Id and ROI ID Fields against the 
+         Server Object.
 
-		if exists_server_for_uid_url(server_uid, server_url):
+        Parameters:
+            a_images_data: An Array of Images.
+            a_request_user: The Requesting User.
+            a_mode_flag: TRUE for Create; FALSE for UPDATE.
 
-			server = get_servers_for_uid_url(server_uid, server_url)
+        Returns:
 
-			if server.is_wordpress():
+        Raises:
+            ValidationError:
+                CPW_REST:0430 - Attempting to add an Image that belongs to somebody else!
 
-				if not self.validate_wordpress_image_id(server, user, image_id):
+        """
+        
+        # For each Image in the supplied Array of Images
+        for image_data in a_images_data:
 
-					message = 'CPW_REST:0440 ERROR! Image NOT Present on : ' + server_str + '!'
-					raise serializers.ValidationError(message)
+            # Retrieve the Image
+            image = image_data.get('image')
 
-			else:
+            # If there is an Image
+            if image is not None:
 
-				if server.is_omero547():
+                # Get the Image Owner
+                image_owner = image.get('owner')
 
-					if self.validate_imaging_image_id(server, user, image_id):
+                # If the Mode is TRUE for Create
+                if a_mode_flag == True:
 
-						if roi_id != 0:
+                    # If the Requesting User is NOT the Image Owner
+                    if a_request_user.username != image_owner:
 
-							if not self.validate_roi_id(server, user, image_id, roi_id):
+                        # And the User is NOT a Super-User, then Raise an Error!
+                        if not a_request_user.is_superuser:
 
-								message = 'CPW_REST:0450 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
-								raise serializers.ValidationError(message)
-					else:
+                            message = 'CPW_REST:0430 ERROR! Attempting to Add an Image to a Collection for a different Owner: ' + str(image_owner) + '!'
+                            raise serializers.ValidationError(message)
 
-						message = 'CPW_REST:0460 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
-						raise serializers.ValidationError(message)
-				else:
 
-					message = 'CPW_REST:0470 ERROR! Server Type Unknown : ' + server_str + '!'
-					raise serializers.ValidationError(message)
+    def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id):
+        """Validates the supplied Server, Owner, Image Id and ROI ID Fields
 
-			return server
+        Finds a Server Object from the the supplied server string, and 
+        Validates the supplied Owner, Image Id and ROI ID Fields against the 
+         Server Object.
 
-		else:
+        Parameters:
+            server_str: A string with a URL appended to a UID with an @
+            user: A User.
+            image_id: A string of valid JSON.
+            roi_id: A string of valid JSON.
 
-			message = 'CPW_REST:0480 ERROR! Server Unknown : ' + server_str + '!'
-			raise serializers.ValidationError(message)
+        Returns:
+            A Server Object or None
 
-			return None
+        Raises:
+            ValidationError:
+                CPW_REST:0440 - Image NOT Present on the WordPress Server
+            ValidationError:
+                CPW_REST:0450 - ROI NOT Present on the Server
+            ValidationError:
+                CPW_REST:0460 - Image NOT Present on the OMERO Server
+            ValidationError:
+                CPW_REST:0470 - Server Type is WordPress or OMERO
+            ValidationError:
+                CPW_REST:0480 - Server is Unknown
 
+        """
 
-	"""
-		Collection Serializer, For a WordPress Image in a Collection, Validate the supplied Server, Owner, Image Id Fields
-	"""
-	def validate_wordpress_image_id(self, server, user, image_id):
+        server = None
+        
+        # Split the Server String into UID and URL?
+        server_list = a_server_str.split("@")
+        
+        server_uid = str(server_list[0])
+        server_url = str(server_list[1])
 
-		data = server.check_wordpress_image(user, image_id)
+        # Is there a Server for the supplied UID and URL combination?
+        if exists_server_for_uid_url(server_uid, server_url):
 
-		json_image = data['image']
-		image_name = json_image['name']
+            # Get the Server Object
+            server = get_servers_for_uid_url(server_uid, server_url)
 
-		if image_name == "":
-			return False
-		else:
-			return True
+            # Is the Server a WordPress server?
+            if server.is_wordpress():
 
+                # Does the Image exist on the WordPress Server?
+                if not self.validate_wordpress_image_id(server, a_user, a_image_id):
 
-	"""
-		Collection Serializer, For an OMERO Image within a Colleciton, Check the supplied Image Exists
-	"""
-	def validate_imaging_image_id(self, server, user, image_id):
+                    message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + a_server_str + '!'
+                    raise serializers.ValidationError(message)
+            
+            # No ... 
+            else:
 
-		data = server.check_imaging_server_image(user, image_id)
+                # Is the Server an OMERO Server?
+                if server.is_omero547():
 
-		json_image = data['image']
-		image_name = json_image['name']
+                    # Does the Image exist on the OMERO Server?
+                    if self.validate_imaging_image_id(server, a_user, a_image_id):
 
-		if image_name == "":
-			return False
-		else:
-			return True
+                        # Was an ROI supplied with the Image? 
+                        if a_roi_id != 0:
 
+                            # Does the ROI for the Image exist?
+                            if not self.validate_roi_id(server, a_user, a_image_id, a_roi_id):
 
-	"""
-		Collection Serializer, For an OMERO Image within a Colleciton, Check the supplied Image ROI ID Exists
-	"""
-	def validate_roi_id(self, server, user, image_id, roi_id):
+                                # No such ROI, Raise Error!
+                                message = 'CPW_REST:0240 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
+                                raise serializers.ValidationError(message)
 
-		data = server.check_imaging_server_image_roi(user, image_id, roi_id)
+                    # Image does not exist on the Server, Raise Error!
+                    else:
 
-		json_roi = data['roi']
-		roi_id = json_roi['id']
+                        message = 'CPW_REST:0200 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + a_server_str + '!'
+                        raise serializers.ValidationError(message)
+                
+                # No - Server type unrecognised, Raise Error!
+                else:
 
-		if roi_id == "":
-			return False
-		else:
-			return True
+                    message = 'CPW_REST:0340 ERROR! Server Type Unknown : ' + a_server_str + '!'
+                    raise serializers.ValidationError(message)
+
+        # No Server exists, Raise Error!
+        else:
+
+            message = 'CPW_REST:0260 ERROR! Server Unknown : ' + a_server_str + '!'
+            raise serializers.ValidationError(message)
+
+        return server
+
+
+    def validate_wordpress_image_id(self, a_server, a_user, a_image_id):
+        """For a WordPress Image, Check the supplied Image Exists
+
+        Checks that an Image exists on a WordPress Server
+
+        Parameters:
+            a_server: A Server Object
+            a_user: A User Object
+            a_image_id: The Id of the Image on the WordPress Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the WordPress Image Data from the Server
+        data = a_server.check_wordpress_image(a_user, a_image_id)
+
+        json_image = data['image']
+        image_name = json_image['name']
+
+        # If the Image data is Empty then the Image does NOT exist
+        if image_name == "":
+            return False
+        else:
+            return True
+
+
+    def validate_imaging_image_id(self, a_server, a_user, a_image_id):
+        """For an OMERO Image, Check the supplied Image Exists
+
+        Checks that an Image exists on an OMERO Server
+
+        Parameters:
+            a_server: A Server Object
+            a_user: A User Object
+            a_image_id: The Id of the Image on the OMERO Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the OMERO Image Data from the Server
+        data = a_server.check_imaging_server_image(a_image_id)
+
+        json_image = data['image']
+        image_name = json_image['name']
+
+        # If the Image data is Empty then the Image does NOT exist
+        if image_name == "":
+            return False
+        else:
+            return True
+
+
+    def validate_roi_id(self, a_server, a_user, a_image_id, a_roi_id):
+        """For an OMERO Image ROI, Check the supplied ROI Exists
+
+        Checks that an ROI within an Image exists on an OMERO Server.
+
+        Parameters:
+            a_server: A Server Object
+            a_user: A User Object
+            a_image_id: The Id of the Image on the OMERO Server
+            a_roi_id: The Id of the ROI within the Image on the OMERO Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the OMERO ROI Data from the Server
+        data = a_server.check_imaging_server_image_roi(a_image_id, a_roi_id)
+
+        json_roi = data['roi']
+        roi_id = json_roi['id']
+
+        # If the ROI data is Empty then the Image does NOT exist
+        if roi_id == "":
+            return False
+        else:
+            return True

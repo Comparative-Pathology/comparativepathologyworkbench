@@ -38,15 +38,17 @@ from matrices.models import Cell
 from matrices.models import Image
 from matrices.models import Collection
 
-from matrices.routines import get_primary_wordpress_server
+from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_collection_for_image
-from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import exists_image_for_id_server_owner_roi
 from matrices.routines import exists_server_for_uid_url
-from matrices.routines import get_servers_for_uid_url
-from matrices.routines import get_credential_for_user
-from matrices.routines import exists_active_collection_for_user
+from matrices.routines import exists_user_for_username
 from matrices.routines import get_active_collection_for_user
+from matrices.routines import get_credential_for_user
+from matrices.routines import get_images_for_id_server_owner_roi
+from matrices.routines import get_primary_wordpress_server
+from matrices.routines import get_servers_for_uid_url
+from matrices.routines import get_user_from_username
 
 from matrices.serializers import CellSerializer
 
@@ -64,1210 +66,1787 @@ CONST_75 = 75
 CONST_ZERO = 0
 
 
-"""
-	This Serializer provides Create, Read, Update and Delete functions for a Matrix (Bench)
-"""
 class MatrixSerializer(serializers.HyperlinkedModelSerializer):
+    """A Serializer of Benches
 
-	title = serializers.CharField(max_length=255, required=False, allow_blank=True)
-	description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
-	height = serializers.IntegerField(required=False, default=75)
-	width = serializers.IntegerField(required=False, default=75)
+    A Serializer of Benches in the Comparative Pathology Workbench REST Interface
 
-	owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    This Serializer provides Create, Read and Update functions for a Bench
 
-	bench_cells = CellSerializer(many=True, required=False)
+    Parameters:
+        id(Read Only): The (internal) Id of the Image.
+        url(Read Only): The (internal) URL of the Image.
+        owner: The Owner (User Model) of the Image.
+        title: The Title of the Bench, Maximum 255 Characters.
+        description: The Description of the Bench, Maximum 4095 Characters.
+        height: The Height in Pixels of the Cells in this Bench, an Integer, between 75 and 450.
+        width: The Width in Pixels of the Cells in this Bench, an Integer, between 75 and 450.
+        bench_cells: an array of cells data
 
-	class Meta:
-		model = Matrix
-		fields = ('url', 'id', 'title', 'description', 'height', 'width', 'owner', 'bench_cells')
-		read_only_fields = ('id', 'url', )
+    """
 
+    title = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
+    height = serializers.IntegerField(required=False, default=75)
+    width = serializers.IntegerField(required=False, default=75)
 
-	"""
-		Matrix Serializer, Create Method
-	"""
-	def create(self, validated_data):
+    owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
-		request_user = None
+    bench_cells = CellSerializer(many=True, required=False)
 
-		request = self.context.get("request")
+    class Meta:
+        model = Matrix
+        fields = ('url', 'id', 'title', 'description', 'height', 'width', 'owner', 'bench_cells')
+        read_only_fields = ('id', 'url', )
 
-		if request and hasattr(request, "user"):
 
-			request_user = request.user
+    def create(self, validated_data):
+        """Create Method.
 
-		else:
+        Process the supplied Bench JSON and create a new Bench.
 
-			user_id = Token.objects.get(key=request.auth.key).user_id
-			request_user = User.objects.get(id=user_id)
+        Parameters:
+            validated_data: The validated JSON Bench data.
 
+        Returns:
+            None
 
-		if validated_data.get('title', None) == None and validated_data.get('description', None) == None and validated_data.get('bench_cells', None) == None:
+        Raises:
+            ValidationError: CPW_REST:0370 - No Cells supplied in validated data
+            ValidationError: CPW_REST:0050 - Attempting to Add a Bench for a Different Owner
+            ValidationError: CPW_REST:0070 - Attempting to Add a Image without a Cell Title or Description
+            ValidationError: WordPress Error
+          
+        """
 
-			message = 'CPW_REST:0370 ERROR! NO data supplied for Bench Creation!'
-			raise serializers.ValidationError(message)
+        request_user = None
 
+        # Get the request
+        request = self.context.get("request")
 
-		matrix_title = ""
-		matrix_description = ""
+        # Is there a User request attribute?
+        if request and hasattr(request, "user"):
 
-		if validated_data.get('title', None) == None:
+            request_user = request.user
 
-			matrix_title = ""
+        # No
+        else:
 
-		else:
+            # Get the User Id from the supplied Token
+            user_id = Token.objects.get(key=request.auth.key).user_id
+            # Get the User Object from the User Id
+            request_user = User.objects.get(id=user_id)
 
-			matrix_title = validated_data.get('title')
 
-		if validated_data.get('description', None) == None:
+        # Do we have any Bench Attributes?
+        if validated_data.get('title', None) == None and validated_data.get('description', None) == None and validated_data.get('bench_cells', None) == None:
 
-			matrix_description = ""
+            # No, then Raise an Error!
+            message = 'CPW_REST:0370 ERROR! NO data supplied for Bench Creation!'
+            raise serializers.ValidationError(message)
 
-		else:
 
-			matrix_description = validated_data.get('description')
+        matrix_title = ""
+        matrix_description = ""
 
-		matrix_height = validated_data.get('height')
-		matrix_width = validated_data.get('width')
+        # Access the Bench Title Attribute
+        if validated_data.get('title', None) == None:
 
+            matrix_title = ""
 
-		matrix_owner = validated_data.get('owner')
+        else:
 
-		if request_user != matrix_owner:
+            matrix_title = validated_data.get('title')
 
-			if not request_user.is_superuser:
+        # Access the Bench Description Attribute
+        if validated_data.get('description', None) == None:
 
-				message = 'CPW_REST:0050 ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner) + '!'
-				raise serializers.ValidationError(message)
+            matrix_description = ""
 
-		matrix_blogpost = ''
+        else:
 
-		self.validate_matrix_json_fields(matrix_title, matrix_description, matrix_height, matrix_width)
+            matrix_description = validated_data.get('description')
 
-		matrix = None
+        # Access the Bench Height Attribute
+        matrix_height = validated_data.get('height')
+        # Access the Bench Width Attribute
+        matrix_width = validated_data.get('width')
 
-		cell_list = list()
+        # Access the Bench Owner Attribute
+        matrix_owner = validated_data.get('owner')
 
-		if validated_data.get('bench_cells', None) == None:
+        # Is the Request User different to the Bench Owner?
+        if request_user != matrix_owner:
 
-			matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
+            # Yes, Is the Request User a Superuser?
+            if not request_user.is_superuser:
 
-			cell_title = ""
-			cell_description = ""
-			cell_xcoordinate = 0
-			cell_ycoordinate = 0
-			cell_blogpost = ''
-			cell_image = None
+                # No, then Raise an Error!
+                message = 'CPW_REST:0050 ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner) + '!'
+                raise serializers.ValidationError(message)
 
-			rows = 2
-			columns = 2
+        matrix_blogpost = ''
 
-			while cell_xcoordinate <= columns:
+        # Validate the supplied Bench JSON Fields
+        self.validate_matrix_json_fields(matrix_title, matrix_description, matrix_height, matrix_width)
 
-				cell_ycoordinate = 0
+        matrix = None
 
-				while cell_ycoordinate <= rows:
+        cell_list = list()
+        
+        # Do we have any Cells supplied?
+        if validated_data.get('bench_cells', None) != None:
 
-					cell = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
+            # Get the Cells JSON Data
+            cells_data = validated_data.get('bench_cells', None)
 
-					cell_list.append(cell)
+            if cells_data == []:
 
-					cell_ycoordinate = cell_ycoordinate + 1
+                # No, we need to set up a Default Bench 
+                #  Create a Matrix Object
+                matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
 
-				cell_xcoordinate = cell_xcoordinate + 1
+                # Define Cell Attributes
+                cell_title = ""
+                cell_description = ""
+                cell_xcoordinate = 0
+                cell_ycoordinate = 0
+                cell_blogpost = ''
+                cell_image = None
 
-		else:
+                # We will set up a default 3 x 3 Matrix
+                rows = 2
+                columns = 2
 
-			cells_data = validated_data.pop('bench_cells')
+                # While the X Coordinate is less than 2
+                while cell_xcoordinate <= columns:
 
-			create_flag = True
+                    cell_ycoordinate = 0
 
-			self.validate_cells(cells_data, request_user, create_flag)
+                    # While the Y Coordinate is less than 2
+                    while cell_ycoordinate <= rows:
 
-			matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
+                        # Create a Default Cell Object
+                        cell = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
 
-			for cell_data in cells_data:
+                        # Add this default cell to the list of cells to be added
+                        cell_list.append(cell)
 
-				cell_title = cell_data.get('title')
-				cell_description = cell_data.get('description')
-				cell_xcoordinate = cell_data.get('xcoordinate')
-				cell_ycoordinate = cell_data.get('ycoordinate')
+                        # Increment the Row Count
+                        cell_ycoordinate = cell_ycoordinate + 1
 
-				cell_blogpost = ''
+                    # Increment the Column Count
+                    cell_xcoordinate = cell_xcoordinate + 1
 
-				image_data = cell_data.get('image')
+            else:
 
-				image = None
+                # Creation mode
+                create_flag = True
 
-				if image_data is None:
+                # Validate the supplied Cells ... 
+                self.validate_cells(cells_data, request_user, create_flag)
 
-					image = None
+                #  Create a Matrix Object
+                matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
 
-				else:
+                # Process each Cell in the Cells Data
+                for cell_data in cells_data:
 
-					if cell_title == '' and cell_description == '':
+                    # Get the Cell Attributes
+                    cell_title = cell_data.get('title')
+                    cell_description = cell_data.get('description')
+                    cell_xcoordinate = cell_data.get('xcoordinate')
+                    cell_ycoordinate = cell_data.get('ycoordinate')
 
-						message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
-						raise serializers.ValidationError(message)
+                    cell_blogpost = ''
 
-					image_server = image_data.get('server')
-					image_owner = image_data.get('owner')
-					image_id = image_data.get('image_id')
-					image_roi_id = image_data.get('roi')
+                    # Get the Image Data from the Cell Data
+                    image_data = cell_data.get('image')
 
-					server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+                    image = None
 
-					image_identifier = int(image_id)
+                    # Is there an Image for this Cell?
+                    if image_data is None:
 
-					image_name = ''
-					image_viewer_url = ''
-					image_birdseye_url = ''
-					image_roi = 0
-					image_comment = ''
+                        # No image
+                        image = None
 
-					if server.is_wordpress():
+                    # Yes
+                    else:
 
-						data = server.check_wordpress_image(image_owner, image_id)
+                        # Are Both the Cell Title and Description Empty?
+                        if cell_title == '' and cell_description == '':
 
-						json_image = data['image']
+                            # Yes, Raise an Error!
+                            message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                            raise serializers.ValidationError(message)
 
-						image_name = json_image['name']
-						image_viewer_url = json_image['viewer_url']
-						image_birdseye_url = json_image['birdseye_url']
+                        # Get the mage Attributes
+                        image_server = image_data.get('server')
+                        owner = image_data.get('owner')
+                        image_id = image_data.get('image_id')
+                        image_roi_id = image_data.get('roi')
 
-					else:
+                        # Get the Image Owner Object
+                        image_owner = get_user_from_username(owner)
 
-						data = server.check_imaging_server_image(image_owner, image_id)
+                        # Validate the Image Attributes and return the associated Image Server
+                        server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-						json_image = data['image']
+                        # Set up further Image Attributes
+                        image_name = ''
+                        image_viewer_url = ''
+                        image_birdseye_url = ''
+                        image_roi = 0
+                        image_comment = ''
 
-						image_name = json_image['name']
-						image_viewer_url = json_image['viewer_url']
-						image_birdseye_url = json_image['birdseye_url']
+                        # Is the Image Server a WordPress Server
+                        if server.is_wordpress():
 
-						if image_roi_id != 0:
+                            # Check and Retrieve the Image Data from the Server
+                            data = server.check_wordpress_image(image_owner, image_id)
 
-							data = server.check_imaging_server_image_roi(image_owner, image_id, image_roi_id)
+                            json_image = data['image']
 
-							json_roi = data['roi']
+                            # Update the further Image Attributes
+                            image_name = json_image['name']
+                            image_viewer_url = json_image['viewer_url']
+                            image_birdseye_url = json_image['birdseye_url']
 
-							image_roi = int(json_roi['id'])
+                        # Is the Image Server an OMERO Server
+                        else:
 
+                            # Check and Retrieve the Image Data from the Server
+                            data = server.check_imaging_server_image(image_id)
 
-					if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
+                            json_image = data['image']
 
-						existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                            # Update the further Image Attributes
+                            image_name = json_image['name']
+                            image_viewer_url = json_image['viewer_url']
+                            image_birdseye_url = json_image['birdseye_url']
 
-						image = existing_image_list[0]
+                            # Do we have an ROI id?
+                            if image_roi_id != 0:
 
-					else:
+                                # Yes, Check and Retrieve ROI Data from the Server
+                                data = server.check_imaging_server_image_roi(image_id, image_roi_id)
 
-						image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                                json_roi = data['roi']
 
-						image.save()
+                                # Update the further Image ROI Attribute
+                                image_roi = int(json_roi['id'])
 
-					collection = None
 
-					if exists_active_collection_for_user(request_user):
+                        # Does the Image already exist in the Database?
+                        #  Yes
+                        if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-						collection = get_active_collection_for_user(request_user)
+                            # Get the Existing Image
+                            existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
-					else:
-			
-						collection_title = "A Default REST Collection"
-						collection_description = "A Collection created by a REST Request"
-						collection_owner = request_user
+                            image = existing_image_list[0]
 
-						collection = Collection.create(collection_title, collection_description, collection_owner)
+                        # No ... 
+                        else:
 
-						collection.save()
+                            # Create a New Image Object
+                            image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
-						request_user.profile.set_active_collection(collection)
-						request_user.save()
+                            # Save the New Object to the Database
+                            image.save()
 
+                        collection = None
 
-					Collection.assign_image(image, collection)
+                        # Does the Requesting User have a Active Collection?
+                        if exists_active_collection_for_user(request_user):
 
+                            # Get the Active Collection
+                            collection = get_active_collection_for_user(request_user)
 
-				cell_in = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, image)
+                        # No ...
+                        else:
 
-				cell_list.append(cell_in)
+                            # Set up Attributes for a New Collection            
+                            collection_title = "A Default REST Collection"
+                            collection_description = "A Collection created by a REST Request"
+                            collection_owner = request_user
 
+                            # Create a New Collection Object
+                            collection = Collection.create(collection_title, collection_description, collection_owner)
+                            # Write the New Collection Object to the Database
+                            collection.save()
 
-		credential = get_credential_for_user(request.user)
+                            # Set the New Collection to Requesting Users Active Collection
+                            request_user.profile.set_active_collection(collection)
+                            # Update the Database with the updated User.
+                            request_user.save()
 
-		post_id = ''
+                        # If the Image is Not already in the Collection
+                        if not exists_collection_for_image(collection, image):
 
-		if credential.has_apppwd():
+                            # Add the Image to the Collection
+                            Collection.assign_image(image, collection)
 
-			serverWordpress = get_primary_wordpress_server()
+                    # Create a new Cell Object
+                    cell_in = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, image)
 
-			returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
+                    # Add the new Cell Object to the Cell List
+                    cell_list.append(cell_in)
 
-			if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-				post_id = returned_blogpost['id']
+        # Get the Primary Blogging Engine
+        serverWordpress = get_primary_wordpress_server()
 
-			else:
+        # Get the Credentials for Requesting User
+        credential = get_credential_for_user(request.user)
 
-				message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-				raise serializers.ValidationError(message)
+        post_id = ''
 
+        # Does the Credential have a Password
+        if credential.has_apppwd():
 
-		matrix.set_blogpost(post_id)
+            # Post a New Blogpost for the Bench
+            returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
 
-		matrix.save()
+            # Check the Post Response
+            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
+                post_id = returned_blogpost['id']
 
-		for cell_out in cell_list:
+            else:
+                
+                # If failure, Raise an Error!
+                message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                raise serializers.ValidationError(message)
 
-			cell_out.matrix = matrix
+        # Update the Bench with the BlogPost Id
+        matrix.set_blogpost(post_id)
 
-			post_id = ''
+        # Process the Cells to be added
+        for cell_out in cell_list:
 
-			if cell_out.image is not None:
+            # Set the Cell's Bench 
+            cell_out.matrix = matrix
 
-				if credential.has_apppwd():
+            post_id = ''
 
-					serverWordpress = get_primary_wordpress_server()
+            # Does the Cell have an Image?
+            if cell_out.image is not None:
 
-					returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_out.title, cell_out.description)
+                # Yes ... 
+                #  Does the Credential have a Password
+                if credential.has_apppwd():
 
-					if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                    # Post a New Blogpost for the Cell
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_out.title, cell_out.description)
 
-						post_id = returned_blogpost['id']
+                    # Check the Post Response
+                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-					else:
+                        post_id = returned_blogpost['id']
 
-						message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-						raise serializers.ValidationError(message)
+                    else:
 
+                        # If failure, Raise an Error!
+                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                        raise serializers.ValidationError(message)
 
-			cell_out.set_blogpost(post_id)
+            # Update the Cell with the BlogPost Id
+            cell_out.set_blogpost(post_id)
 
-			cell_out.save()
 
-		return matrix
+        # Update the Database with the Bench Object
+        matrix.save()
 
+        # Update the Database with the Cell Objects
+        #  Process the Cells to be added
+        for cell_out in cell_list:
 
-	"""
-		Matrix Serializer, Update Method
-	"""
-	def update(self, instance, validated_data):
+            # Update the Database with the Cell Object
+            cell_out.save()
 
-		request_user = None
 
-		request = self.context.get("request")
+        return matrix
 
-		if request and hasattr(request, "user"):
 
-			request_user = request.user
+    def update(self, instance, validated_data):
+        """Update Method.
 
-		else:
+        Process the supplied Bench JSON and update the matching Existing Bench.
 
-			user_id = Token.objects.get(key=request.auth.key).user_id
-			request_user = User.objects.get(id=user_id)
+        Parameters:
+            instance: The Bench which will be added.
+            validated_data: The validated JSON Bench data.
 
+        Returns:
+            None
 
-		bench_title = validated_data.get('title', instance.title)
-		bench_description = validated_data.get('description', instance.description)
-		bench_height = validated_data.get('height', instance.height)
-		bench_width = validated_data.get('width', instance.width)
-		bench_owner = validated_data.get('owner', instance.owner)
+        Raises:
+            ValidationError: CPW_REST:0100 - Attempting to Update a Bench for a Different Owner
+            ValidationError: CPW_REST:0360 - No Cells supplied in validated data
+            ValidationError: WordPress Error
+          
+        """
 
-		if request_user != bench_owner:
+        request_user = None
 
-			if not request_user.is_superuser:
+        # Get the request
+        request = self.context.get("request")
 
-				message = 'CPW_REST:0100 ERROR! Attempting to Update an existing Bench for a different Owner: ' + str(bench_owner) + '!'
-				raise serializers.ValidationError(message)
+        # Is there a User request attribute?
+        if request and hasattr(request, "user"):
 
+            request_user = request.user
 
-		self.validate_matrix_json_fields(bench_title, bench_description, bench_height, bench_width)
+        # No
+        else:
 
+            # Get the User Id from the supplied Token
+            user_id = Token.objects.get(key=request.auth.key).user_id
+            # Get the User Object from the User Id
+            request_user = User.objects.get(id=user_id)
 
-		if validated_data.get('bench_cells', None) == None:
 
-			message = 'CPW_REST:0360 ERROR! No Cells Supplied for UPDATE!'
-			raise serializers.ValidationError(message)
+        # Get the Bench Attributes
+        bench_title = validated_data.get('title', instance.title)
+        bench_description = validated_data.get('description', instance.description)
+        bench_height = validated_data.get('height', instance.height)
+        bench_width = validated_data.get('width', instance.width)
+        bench_owner = validated_data.get('owner', instance.owner)
 
-		cells_data = validated_data.pop('bench_cells')
+        # Is the Request User different to the Bench Owner?
+        if request_user != bench_owner:
 
-		create_flag = False
+            # Yes, Is the Request User a Superuser?
+            if not request_user.is_superuser:
 
-		self.validate_cells(cells_data, request_user, create_flag)
+                # No, then Raise an Error!
+                message = 'CPW_REST:0100 ERROR! Attempting to Update an existing Bench for a different Owner: ' + str(bench_owner) + '!'
+                raise serializers.ValidationError(message)
 
-		self.update_existing_cells(instance, request_user, cells_data)
+        # Validate the supplied Bench JSON Fields
+        self.validate_matrix_json_fields(bench_title, bench_description, bench_height, bench_width)
 
-		self.delete_missing_cells(instance, request_user, cells_data)
+        # Has any Cell Data been supplied?
+        if validated_data.get('bench_cells', None) == None:
 
-		self.add_new_cells(instance, request_user, cells_data)
+            # No, then Raise an Error!
+            message = 'CPW_REST:0360 ERROR! No Cells Supplied for UPDATE!'
+            raise serializers.ValidationError(message)
 
-		instance.title = bench_title
-		instance.description = bench_description
-		instance.height = bench_height
-		instance.width = bench_width
+        # Get the Cell JSON Data
+        cells_data = validated_data.pop('bench_cells')
 
-		post_id = instance.blogpost
+        # Update Mode
+        create_flag = False
 
-		if instance.has_no_blogpost():
+        # Validate the supplied Cells ... 
+        self.validate_cells(cells_data, request_user, create_flag)
 
-			credential = get_credential_for_user(request.user)
+        # Update any Existing Cells
+        self.update_existing_cells(instance, request_user, cells_data)
 
-			if credential.has_apppwd():
+        # Delete any Missing Cells
+        self.delete_missing_cells(instance, request_user, cells_data)
 
-				serverWordpress = get_primary_wordpress_server()
+        # Add any New Cells
+        self.add_new_cells(instance, request_user, cells_data)
 
-				returned_blogpost = serverWordpress.post_wordpress_post(credential, instance.title, instance.description)
+        # Update the Bench Attributes
+        instance.title = bench_title
+        instance.description = bench_description
+        instance.height = bench_height
+        instance.width = bench_width
 
-				if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+        post_id = instance.blogpost
 
-					post_id = returned_blogpost['id']
+        # Does the Bench have a Blog Post?
+        if instance.has_no_blogpost():
 
-				else:
+            # Get the Credentials for Requesting User
+            credential = get_credential_for_user(request.user)
 
-					message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-					raise serializers.ValidationError(message)
+            # Does the Credential have a Password
+            if credential.has_apppwd():
 
-		instance.blogpost = post_id
+                # Get the Primary Blogging Engine
+                serverWordpress = get_primary_wordpress_server()
 
-		instance.save()
+                # Post a New Blogpost
+                returned_blogpost = serverWordpress.post_wordpress_post(credential, instance.title, instance.description)
 
-		return instance
+                # Check the Post Response
+                if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
+                    post_id = returned_blogpost['id']
 
-	"""
-		Matrix Serializer, For a Matrix, Update any Existing Cells from Input Grid
-	"""
-	def update_existing_cells(self, instance, request_user, cells_data):
+                else:
 
-		update_cell_list = list()
+                    # If failure, Raise an Error!
+                    message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                    raise serializers.ValidationError(message)
 
-		bench_cells = (instance.bench_cells).all()
-		bench_cells = list(bench_cells)
+        instance.blogpost = post_id
 
-		for bench_cell in bench_cells:
+        # Update the Bench
+        instance.save()
 
-			bench_cell_id = bench_cell.id
-			bench_cell_title = bench_cell.title
-			bench_cell_description = bench_cell.description
-			bench_cell_xcoordinate = bench_cell.xcoordinate
-			bench_cell_ycoordinate = bench_cell.ycoordinate
+        return instance
 
-			update_flag = True
 
-			for cell_data in cells_data:
+    def update_existing_cells(self, an_instance, a_request_user, a_cells_data):
+        """Update the Existing Cells in the Bench
 
-				cell_id = cell_data.get('id', 0)
-				cell_title = cell_data.get('title')
-				cell_description = cell_data.get('description')
-				cell_xcoordinate = cell_data.get('xcoordinate')
-				cell_ycoordinate = cell_data.get('ycoordinate')
+        Process the supplied Cells and Delete them from the Bench.
 
-				image_data = cell_data.get('image')
+        Parameters:
+            an_instance: The Bench to which the Cells will be Deleted.
+            a_request_user: The Requesting User.
+            a_cells_data: The supplied array of Cells JSON.
 
-				if cell_id == bench_cell_id:
+        Returns:
+            None
 
-					cell_image_data_id = 0
-					bench_image_data_id = 0
+        Raises:
+            ValidationError: WordPress Error
+          
+        """
 
-					if image_data is None:
+        update_cell_list = list()
 
-						cell_image_data_id = 0
+        # Get the Existing Cells associated with this Bench
+        bench_cells = (an_instance.bench_cells).all()
+        # Convert the QuerySet to a List
+        bench_cells = list(bench_cells)
 
-					else:
+        # Process the Exising Bench Cells
+        for bench_cell in bench_cells:
 
-						cell_image_data_id = image_data.get('id')
+            # Get the Cell Attributes from the database
+            bench_cell_id = bench_cell.id
+            bench_cell_title = bench_cell.title
+            bench_cell_description = bench_cell.description
+            bench_cell_xcoordinate = bench_cell.xcoordinate
+            bench_cell_ycoordinate = bench_cell.ycoordinate
 
-					if bench_cell.image is None:
+            update_flag = True
 
-						bench_image_data_id = 0
+            # Process the supplied cells data for each existing database cell
+            for cell_data in a_cells_data:
 
-					else:
+                # Get the Supplied Cell Attributes from the JSON 
+                cell_id = cell_data.get('id', 0)
+                cell_title = cell_data.get('title')
+                cell_description = cell_data.get('description')
+                cell_xcoordinate = cell_data.get('xcoordinate')
+                cell_ycoordinate = cell_data.get('ycoordinate')
 
-						bench_image_data_id = bench_cell.image.id
+                # Get the Supplied Cell Image Data
+                image_data = cell_data.get('image')
 
-					if cell_title == bench_cell_title and cell_description == bench_cell_description and cell_xcoordinate == bench_cell_xcoordinate and cell_ycoordinate == bench_cell_ycoordinate and cell_image_data_id == bench_image_data_id:
+                # If the Database Cell matches the Supplied JSON Cell
+                if cell_id == bench_cell_id:
 
-						update_flag = False
+                    cell_image_data_id = 0
+                    bench_image_data_id = 0
 
-					else:
+                    # If there is No Supplied Image Data
+                    if image_data is None:
 
-						bench_cell.title = cell_title
-						bench_cell.description = cell_description
-						bench_cell.xcoordinate = cell_xcoordinate
-						bench_cell.ycoordinate = cell_ycoordinate
+                        cell_image_data_id = 0
 
-						if image_data is not None and bench_cell.image is None:
+                    # If there is Supplied Image Data
+                    else:
 
-							#update bench cell image with image_data
+                        # Get the Supplied Image Id
+                        cell_image_data_id = image_data.get('id')
 
-							image_server = image_data.get('server')
-							image_owner = image_data.get('owner')
-							image_id = image_data.get('image_id')
-							image_roi_id = image_data.get('roi')
+                    # If there is No Database Image 
+                    if bench_cell.image is None:
 
-							server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+                        bench_image_data_id = 0
 
-							image_identifier = int(image_id)
+                    # If there is Database Image
+                    else:
 
-							image_name = ''
-							image_viewer_url = ''
-							image_birdseye_url = ''
-							image_roi = 0
-							image_comment = ''
+                        # Get the Database Image Id
+                        bench_image_data_id = bench_cell.image.id
 
-							if server.is_wordpress():
+                    # Compare ALL Supplied and Database Attributes
+                    if cell_title == bench_cell_title and cell_description == bench_cell_description and cell_xcoordinate == bench_cell_xcoordinate and cell_ycoordinate == bench_cell_ycoordinate and cell_image_data_id == bench_image_data_id:
 
-								data = server.check_wordpress_image(image_owner, image_id)
+                        update_flag = False
 
-								json_image = data['image']
+                    # Supplied Attributes are different, use them!
+                    else:
 
-								image_name = json_image['name']
-								image_viewer_url = json_image['viewer_url']
-								image_birdseye_url = json_image['birdseye_url']
+                        # Set the Bench Attributes to the Supplied Attributes
+                        bench_cell.title = cell_title
+                        bench_cell.description = cell_description
+                        bench_cell.xcoordinate = cell_xcoordinate
+                        bench_cell.ycoordinate = cell_ycoordinate
 
-							else:
+                        # If there was NO Database Image and there is a Supplied Image
+                        if image_data is not None and bench_cell.image is None:
 
-								data = server.check_imaging_server_image(image_owner, image_id)
+                            # Extract the supplied Image Attributes
+                            image_server = image_data.get('server')
+                            owner = image_data.get('owner')
+                            image_id = image_data.get('image_id')
+                            image_roi_id = image_data.get('roi')
+                            
+                            # Get the User Object for the Supplied Owner
+                            image_owner = get_user_from_username(owner)
 
-								json_image = data['image']
+                            # Validate the Supplied Image Attributes, and return the Associated Server
+                            server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-								image_name = json_image['name']
-								image_viewer_url = json_image['viewer_url']
-								image_birdseye_url = json_image['birdseye_url']
+                            image_identifier = int(image_id)
 
-								if image_roi_id != 0:
+                            image_name = ''
+                            image_viewer_url = ''
+                            image_birdseye_url = ''
+                            image_roi = 0
+                            image_comment = ''
 
-									data = server.check_imaging_server_image_roi(image_owner, image_id, image_roi_id)
+                            # Is the Server a WordPress Server?
+                            if server.is_wordpress():
 
-									json_roi = data['roi']
+                                # Get the Image from the WordPress Server for the supplied Id
+                                data = server.check_wordpress_image(image_owner, image_id)
 
-									image_roi = int(json_roi['id'])
+                                json_image = data['image']
+                                
+                                # Extract the Server Image Attributes
+                                image_name = json_image['name']
+                                image_viewer_url = json_image['viewer_url']
+                                image_birdseye_url = json_image['birdseye_url']
 
-							image = None
+                            # Is the Server an OMERO Server?
+                            else:
 
-							if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
+                                # Get the Image from the OMERO Server for the supplied Id
+                                data = server.check_imaging_server_image(image_id)
 
-								existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                                json_image = data['image']
 
-								image = existing_image_list[0]
+                                # Extract the Server Image Attributes
+                                image_name = json_image['name']
+                                image_viewer_url = json_image['viewer_url']
+                                image_birdseye_url = json_image['birdseye_url']
 
-								bench_cell.image = image
+                                # Is there an ROI Suppied too?
+                                if image_roi_id != 0:
 
-							else:
+                                    # Get the Image ROI from the OMERO Server for the Supplied Roi Id
+                                    data = server.check_imaging_server_image_roi(image_id, image_roi_id)
 
-								image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                                    json_roi = data['roi']
 
-								image.save()
+                                    # Extract the ROI Id
+                                    image_roi = int(json_roi['id'])
 
-								bench_cell.image = image
+                            image = None
 
+                            # Does the Image already exist in the Database?
+                            #  Yes
+                            if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-							collection = None
+                                # Get the Existing Image
+                                existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
-							if exists_active_collection_for_user(request_user):
+                                image = existing_image_list[0]
 
-								collection = get_active_collection_for_user(request_user)
+                                # Associate the Cell with the Existing Image
+                                bench_cell.image = image
 
-							else:
-			
-								collection_title = "A Default REST Collection"
-								collection_description = "A Collection created by a REST Request"
-								collection_owner = request_user
+                            # No ... 
+                            else:
 
-								collection = Collection.create(collection_title, collection_description, collection_owner)
-								collection.save()
+                                # Create a New Image Object
+                                image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
-								request_user.profile.set_active_collection(collection)
-								request_user.save()
-							
-							if not exists_collection_for_image(collection, image):
+                                # Save the New Object to the Database
+                                image.save()
 
-								Collection.assign_image(image, collection)
+                                # Associate the Cell with the New Image
+                                bench_cell.image = image
 
 
-							post_id = ''
+                            collection = None
 
-							if not bench_cell.has_blogpost():
+                            # Does the Requesting User have a Active Collection?
+                            if exists_active_collection_for_user(a_request_user):
 
-								credential = get_credential_for_user(request.user)
+                                # Get the Active Collection
+                                collection = get_active_collection_for_user(a_request_user)
 
-								if credential.has_apppwd():
+                            # No ...
+                            else:
+            
+                                # Set up Attributes for a New Collection            
+                                collection_title = "A Default REST Collection"
+                                collection_description = "A Collection created by a REST Request"
+                                collection_owner = a_request_user
 
-									serverWordpress = get_primary_wordpress_server()
+                                # Create a New Collection Object
+                                collection = Collection.create(collection_title, collection_description, collection_owner)
+                                # Write the New Collection Object to the Database
+                                collection.save()
 
-									returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
+                                # Set the New Collection to Requesting Users Active Collection
+                                a_request_user.profile.set_active_collection(collection)
+                                # Update the Database with the updated User.
+                                a_request_user.save()
+                            
+                            # If the Image is Not already in the Collection
+                            if not exists_collection_for_image(collection, image):
 
-									if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                                # Add the Image to the Collection
+                                Collection.assign_image(image, collection)
 
-										post_id = returned_blogpost['id']
 
-									else:
+                            post_id = ''
 
-										message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-										raise serializers.ValidationError(message)
+                            # If the Cell has No BLogpost
+                            if not bench_cell.has_blogpost():
 
-							bench_cell.set_blogpost(post_id)
+                                # Get the Credentials for Requesting User
+                                credential = get_credential_for_user(a_request_user)
 
+                                # Does the Credential have a Password
+                                if credential.has_apppwd():
 
-						if image_data is not None and bench_cell.image is not None:
+                                    # Get the Primary Blogging Engine
+                                    serverWordpress = get_primary_wordpress_server()
 
-							#update bench cell image with image_data IF image_data is different
-							#	Set bench cell image Active to True
-							#	Set image data image Active to False
+                                    # Post a New Blogpost
+                                    returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
 
-							image_server = image_data.get('server')
-							image_owner = image_data.get('owner')
-							image_id = image_data.get('image_id')
-							image_roi_id = image_data.get('roi')
+                                    # Check the Post Response
+                                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-							image_identifier = int(image_id)
+                                        post_id = returned_blogpost['id']
 
-							if image_identifier != bench_cell.image.identifier:
+                                    else:
 
-								server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+                                        # If failure, Raise an Error!
+                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                        raise serializers.ValidationError(message)
 
-								image_name = ''
-								image_viewer_url = ''
-								image_birdseye_url = ''
-								image_roi = 0
-								image_comment = ''
+                            # Set the Cell Blogpost to the new Blogpost
+                            bench_cell.set_blogpost(post_id)
 
-								if server.is_wordpress():
 
-									data = server.check_wordpress_image(image_owner, image_id)
+                        # If there is a Database Image and there is a Supplied Image
+                        if image_data is not None and bench_cell.image is not None:
 
-									json_image = data['image']
+                            # Extract the supplied Image Attributes 
+                            image_server = image_data.get('server')
+                            owner = image_data.get('owner')
+                            image_id = image_data.get('image_id')
+                            image_roi_id = image_data.get('roi')
 
-									image_name = json_image['name']
-									image_viewer_url = json_image['viewer_url']
-									image_birdseye_url = json_image['birdseye_url']
+                            # Get the User Object for the Supplied Image Owner
+                            image_owner = get_user_from_username(owner)
 
-								else:
+                            image_identifier = int(image_id)
 
-									data = server.check_imaging_server_image(image_owner, image_id)
+                            # Is the Suppied Image Id Different to the Exiying Database Image Id?
+                            #  Yes ...
+                            if image_identifier != bench_cell.image.identifier:
 
-									json_image = data['image']
+                                # Validate the new supplied Image Attributes, and return the associated Server
+                                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-									image_name = json_image['name']
-									image_viewer_url = json_image['viewer_url']
-									image_birdseye_url = json_image['birdseye_url']
+                                image_name = ''
+                                image_viewer_url = ''
+                                image_birdseye_url = ''
+                                image_roi = 0
+                                image_comment = ''
 
-									if image_roi_id != 0:
+                                # Is the Server a WordPress Server?
+                                if server.is_wordpress():
 
-										data = server.check_imaging_server_image_roi(image_owner, image_id, image_roi_id)
+                                    # Get the Image from the WordPress Server for the supplied Id
+                                    data = server.check_wordpress_image(image_owner, image_id)
 
-										json_roi = data['roi']
+                                    json_image = data['image']
 
-										image_roi = int(json_roi['id'])
+                                    # Extract the Server Image Attributes
+                                    image_name = json_image['name']
+                                    image_viewer_url = json_image['viewer_url']
+                                    image_birdseye_url = json_image['birdseye_url']
 
+                                # Is the Server an OMERO Server?
+                                else:
 
-								if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
+                                    # Get the Image from the OMERO Server for the supplied Id
+                                    data = server.check_imaging_server_image(image_id)
 
-									existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                                    json_image = data['image']
 
-									image = existing_image_list[0]
+                                    # Extract the Server Image Attributes
+                                    image_name = json_image['name']
+                                    image_viewer_url = json_image['viewer_url']
+                                    image_birdseye_url = json_image['birdseye_url']
 
-									image.save()
+                                    # Is there an ROI Suppied too?
+                                    if image_roi_id != 0:
 
-									bench_cell.image = image
+                                        # Get the Image ROI from the OMERO Server for the Supplied Roi Id
+                                        data = server.check_imaging_server_image_roi(image_id, image_roi_id)
 
-								else:
+                                        json_roi = data['roi']
 
-									image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                                        # Extract the ROI Id
+                                        image_roi = int(json_roi['id'])
 
-									image.save()
 
-									bench_cell.image = image
+                                # Does the Image already exist in the Database?
+                                #  Yes
+                                if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-								collection = None
+                                    # Get the Existing Image
+                                    existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
-								if exists_active_collection_for_user(request_user):
+                                    image = existing_image_list[0]
 
-									collection = get_active_collection_for_user(request_user)
+                                    # Associate the Cell with the Existing Image
+                                    bench_cell.image = image
 
-								else:
-			
-									collection_title = "A Default REST Collection"
-									collection_description = "A Collection created by a REST Request"
-									collection_owner = request_user
+                                # No ... 
+                                else:
 
-									collection = Collection.create(collection_title, collection_description, collection_owner)
-									collection.save()
+                                    # Create a New Image Object
+                                    image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
 
-									request_user.profile.set_active_collection(collection)
-									request_user.save()
+                                    # Save the New Object to the Database
+                                    image.save()
 
-							
-								if not exists_collection_for_image(collection, image):
+                                    # Associate the Cell with the New Image
+                                    bench_cell.image = image
 
-									Collection.assign_image(image, collection)
+                                collection = None
 
+                                # Does the Requesting User have a Active Collection?
+                                if exists_active_collection_for_user(a_request_user):
 
-								post_id = ''
+                                    # Get the Active Collection
+                                    collection = get_active_collection_for_user(a_request_user)
 
-								if bench_cell.has_blogpost():
+                                # No ...
+                                else:
 
-									credential = get_credential_for_user(request.user)
+                                    # Set up Attributes for a New Collection            
+                                    collection_title = "A Default REST Collection"
+                                    collection_description = "A Collection created by a REST Request"
+                                    collection_owner = a_request_user
 
-									if credential.has_apppwd():
+                                    # Create a New Collection Object
+                                    collection = Collection.create(collection_title, collection_description, collection_owner)
+                                    # Write the New Collection Object to the Database
+                                    collection.save()
 
-										serverWordpress = get_primary_wordpress_server()
+                                    # Set the New Collection to Requesting Users Active Collection
+                                    a_request_user.profile.set_active_collection(collection)
+                                    # Update the Database with the updated User.
+                                    a_request_user.save()
 
-										response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
+                                # If the Image is Not already in the Collection
+                                if not exists_collection_for_image(collection, image):
 
-										if response != WORDPRESS_SUCCESS:
+                                    # Add the Image to the Collection
+                                    Collection.assign_image(image, collection)
 
-											message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-											raise serializers.ValidationError(message)
 
-										returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
+                                post_id = ''
 
-										if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                                # Does the Cell have a Blogpost
+                                if bench_cell.has_blogpost():
 
-											post_id = returned_blogpost['id']
+                                    # Get the Credentials for Requesting User
+                                    credential = get_credential_for_user(a_request_user)
 
-										else:
+                                    # Does the Credential have a Password
+                                    if credential.has_apppwd():
 
-											message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-											raise serializers.ValidationError(message)
+                                        # Get the Primary Blogging Engine
+                                        serverWordpress = get_primary_wordpress_server()
 
-								bench_cell.set_blogpost(post_id)
+                                        # Delete the Associated Blogpost
+                                        response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
 
+                                        # Check the Delete Response
+                                        if response != WORDPRESS_SUCCESS:
 
-						if image_data is None and bench_cell.image is not None:
+                                            # If failure, Raise an Error!
+                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                            raise serializers.ValidationError(message)
 
-							bench_cell.image = None
+                                        # Post a New Blogpost
+                                        returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
 
-							if bench_cell.has_blogpost():
+                                        # Check the Post Response
+                                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-								credential = get_credential_for_user(request.user)
+                                            post_id = returned_blogpost['id']
 
-								if credential.has_apppwd():
+                                        else:
 
-									serverWordpress = get_primary_wordpress_server()
+                                            # If failure, Raise an Error!
+                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                            raise serializers.ValidationError(message)
+                                
+                                # Set the Cell Blogpost to the new Blogpost
+                                bench_cell.set_blogpost(post_id)
 
-									response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
 
-									if response != WORDPRESS_SUCCESS:
+                        # If there is a Database Image and there is No Supplied Image
+                        if image_data is None and bench_cell.image is not None:
 
-										message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-										raise serializers.ValidationError(message)
+                            # Set the Cell Image to None
+                            bench_cell.image = None
 
-							bench_cell.set_blogpost('')
+                            # Does the Cell have a Blogpost
+                            if bench_cell.has_blogpost():
 
+                                # Get the Credentials for Requesting User
+                                credential = get_credential_for_user(a_request_user)
 
-						update_cell_list.append(bench_cell)
+                                # Does the Credential have a Password
+                                if credential.has_apppwd():
 
+                                    # Get the Primary Blogging Engine
+                                    serverWordpress = get_primary_wordpress_server()
 
-		for update_cell in update_cell_list:
+                                    # Delete the Associated Blogpost
+                                    response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
 
-			update_cell.save()
+                                    # Check the Delete Response
+                                    if response != WORDPRESS_SUCCESS:
 
+                                        # If failure, Raise an Error!
+                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                        raise serializers.ValidationError(message)
 
-	"""
-		Matrix Serializer, For a Matrix, Delete any Missing Cells from Input Grid
-	"""
-	def delete_missing_cells(self, instance, request_user, cells_data):
+                            # Set the Cell Blogpost to Empty
+                            bench_cell.set_blogpost('')
 
-		delete_cell_list = list()
+                        # Add the Cell to the Update List 
+                        update_cell_list.append(bench_cell)
 
-		bench_cells = (instance.bench_cells).all()
-		bench_cells = list(bench_cells)
+        # Process the Update List
+        for update_cell in update_cell_list:
 
-		for bench_cell in bench_cells:
+            # Save the Updated Cell
+            update_cell.save()
 
-			bench_cell_id = bench_cell.id
 
-			delete_flag = True
+    def delete_missing_cells(self, an_instance, a_request_user, a_cells_data):
+        """Delete the Missing Cells from the Bench
 
-			for cell_data in cells_data:
+        Process the supplied Cells and Delete them from the Bench.
 
-				cell_id = cell_data.get('id', 0)
+        Parameters:
+            an_instance: The Bench to which the Cells will be Deleted.
+            a_request_user: The Requesting User.
+            a_cells_data: The supplied array of Cells JSON.
 
-				if cell_id == bench_cell_id:
+        Returns:
+            None
 
-					delete_flag = False
+        Raises:
+            ValidationError: WordPress Error
+          
+        """
 
-			if delete_flag == True:
+        delete_cell_list = list()
 
-				delete_cell_list.append(bench_cell)
+        # Get the Existing Cells associated with this Bench
+        bench_cells = (an_instance.bench_cells).all()
+        # Convert the QuerySet to a List
+        bench_cells = list(bench_cells)
 
+        # Process the Existing Cells
+        for bench_cell in bench_cells:
 
-		for delete_cell in delete_cell_list:
+            # Get the Existing Cell Id
+            bench_cell_id = bench_cell.id
 
-			if delete_cell.has_blogpost():
+            delete_flag = True
 
-				credential = get_credential_for_user(request.user)
+            # Process the Supplied Cells
+            for cell_data in a_cells_data:
 
-				if credential.has_apppwd():
+                # Get the Supplied Cell Id
+                cell_id = cell_data.get('id', 0)
 
-					serverWordpress = get_primary_wordpress_server()
+                # If the Supplied Cell Id is IN the Existing Cells
+                #  Ignore the Supplied Cell
+                if cell_id == bench_cell_id:
 
-					response = serverWordpress.delete_wordpress_post(credential, delete_cell.blogpost)
+                    delete_flag = False
 
-					if response != WORDPRESS_SUCCESS:
+            # The Bench Cell is NOT in the list of Supplied Cell, so can be deleted
+            if delete_flag == True:
 
-						message = "WordPress Error - Contact System Administrator!"
-						raise serializers.ValidationError(message)
+                # Add the Bench cell to the List of Deletes
+                delete_cell_list.append(bench_cell)
 
 
-			delete_cell.delete()
+        # Process the Cells to be Deleted
+        for delete_cell in delete_cell_list:
 
+            # If the Cell has an Associated Blogpost
+            if delete_cell.has_blogpost():
 
-	"""
-		Matrix Serializer, For a Matrix, Add New Cells
-	"""
-	def add_new_cells(self, instance, request_user, cells_data):
+                # Get the Credential for the Requesting User
+                credential = get_credential_for_user(a_request_user)
 
-		for cell_data in cells_data:
+                # If the Requesting User has a Password
+                if credential.has_apppwd():
 
-			cell_id = cell_data.get('id', 0)
-			cell_title = cell_data.get('title')
-			cell_description = cell_data.get('description')
-			cell_xcoordinate = cell_data.get('xcoordinate')
-			cell_ycoordinate = cell_data.get('ycoordinate')
-			cell_blogpost = "0"
+                    # Get the Primary Blogging Engine
+                    serverWordpress = get_primary_wordpress_server()
 
-			cell_image = None
+                    # Delete the Associated Blogpost
+                    response = serverWordpress.delete_wordpress_post(credential, delete_cell.blogpost)
 
-			"""
-				Add NEW CELLS
-			"""
-			if cell_id == 0:
+                    # Check the Response
+                    if response != WORDPRESS_SUCCESS:
 
-				image_data = cell_data.pop('image')
+                        # If the Blogpost Delete was unsuccessful, then Raise an Error!
+                        message = "WordPress Error - Contact System Administrator!"
+                        raise serializers.ValidationError(message)
 
-				if image_data is None:
+            # Delete the Cell
+            delete_cell.delete()
 
-					cell_image = None
 
-				else:
+    def add_new_cells(self, an_instance, a_request_user, a_cells_data):
+        """Add the New Cells to the Bench
 
-					server = image_data.get('server')
-					owner = image_data.get('owner')
-					image_id = image_data.get('image_id')
-					roi_id = image_data.get('roi')
+        Process the supplied Cells and add them to the Bench.
 
-					server = self.validate_image_json(server, owner, image_id, roi_id)
+        Parameters:
+            an_instance: The Bench to which the Cells will be added
+            a_request_user: The Requesting User.
+            a_cells_data: The supplied array of Cells JSON 
 
-					image_identifier = int(image_id)
+        Returns:
+            None
 
-					image_name = ''
-					image_viewer_url = ''
-					image_birdseye_url = ''
-					image_roi = 0
-					image_comment = ''
+        Raises:
+            ValidationError: WordPress Error
+          
+        """
 
-					if server.is_wordpress():
+        # For each Cell ...
+        for cell_data in a_cells_data:
 
-						data = server.check_wordpress_image(owner, image_id)
+            # Extract the Cell Attributes
+            cell_id = cell_data.get('id', 0)
+            cell_title = cell_data.get('title')
+            cell_description = cell_data.get('description')
+            cell_xcoordinate = cell_data.get('xcoordinate')
+            cell_ycoordinate = cell_data.get('ycoordinate')
+            cell_blogpost = "0"
 
-						json_image = data['image']
+            cell_image = None
 
-						image_name = json_image['name']
-						image_viewer_url = json_image['viewer_url']
-						image_birdseye_url = json_image['birdseye_url']
+            # If the Cell Id is Zero then we have a NEW Cell to Add
+            if cell_id == 0:
 
-					else:
+                # Extract the Image Data
+                image_data = cell_data.pop('image')
 
-						data = server.check_imaging_server_image(owner, image_id)
+                # Do we have any Inage Data?
+                #  No
+                if image_data is None:
 
-						json_image = data['image']
+                    cell_image = None
 
-						image_name = json_image['name']
-						image_viewer_url = json_image['viewer_url']
-						image_birdseye_url = json_image['birdseye_url']
+                #  Yes
+                else:
 
-						if roi_id != 0:
+                    # Extract the Image Attributes
+                    server = image_data.get('server')
+                    owner = image_data.get('owner')
+                    image_id = image_data.get('image_id')
+                    roi_id = image_data.get('roi')
+                    
+                    # Get the User Object from the database for the supplied owner
+                    image_owner = get_user_from_username(owner)
 
-							data = server.check_imaging_server_image_roi(owner, image_id, roi_id)
+                    # Validate the Attrubutes and Return the Server associated with them
+                    server = self.validate_image_json(server, image_owner, image_id, roi_id)
 
-							json_roi = data['roi']
+                    image_name = ''
+                    image_viewer_url = ''
+                    image_birdseye_url = ''
+                    image_roi = 0
+                    image_comment = ''
+                    
+                    # Is the Server a WordPress Server?
+                    #  Yes
+                    if server.is_wordpress():
 
-							image_roi = int(json_roi['id'])
+                        # Get the Image Data from the Server for the supplied Id
+                        data = server.check_wordpress_image(image_owner, image_id)
 
+                        json_image = data['image']
 
-					if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
+                        # Get the Image Attributes from the Image Data
+                        image_name = json_image['name']
+                        image_viewer_url = json_image['viewer_url']
+                        image_birdseye_url = json_image['birdseye_url']
 
-						existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                    #  No, Server must be an OMERO server then
+                    else:
 
-						existing_image = existing_image_list[0]
+                        # Get the Image Data from the Server for the supplied Id
+                        data = server.check_imaging_server_image(image_id)
 
-						cell_image = existing_image
+                        json_image = data['image']
 
-					else:
+                        # Get the Image Attributes from the Image Data
+                        image_name = json_image['name']
+                        image_viewer_url = json_image['viewer_url']
+                        image_birdseye_url = json_image['birdseye_url']
 
-						cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
+                        # Is there an ROI supplied
+                        if roi_id != 0:
 
-						cell_image.save()
+                            # Check the supplied ROI exists for the supplied Image
+                            data = server.check_imaging_server_image_roi(image_id, roi_id)
 
-					collection = None
+                            json_roi = data['roi']
 
-					if exists_active_collection_for_user(request_user):
+                            image_roi = int(json_roi['id'])
 
-						collection = get_active_collection_for_user(request_user)
+                    # Does the Image already exist in the database for the supplied attrubues and owner?
+                    #  Yes
+                    if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-					else:
-			
-						collection_title = "A Default REST Collection"
-						collection_description = "A Collection created by a REST Request"
-						collection_owner = request_user
+                        # Get the existing image from the database
+                        existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
-						collection = Collection.create(collection_title, collection_description, collection_owner)
-						collection.save()
+                        existing_image = existing_image_list[0]
 
-						request_user.profile.set_active_collection(collection)
-						request_user.save()
-							
-					if not exists_collection_for_image(collection, cell_image):
+                        cell_image = existing_image
 
-						Collection.assign_image(cell_image, collection)
+                    #  No, a new Image must be added to the database.
+                    else:
 
+                        # Create a New Image Object
+                        cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
 
+                        # Write the new Image Object to the database
+                        cell_image.save()
 
-					post_id = ''
+                    # The Image Object must be added to a Collection; it cannot exist on its own.
+                    collection = None
 
-					credential = get_credential_for_user(request.user)
+                    # Does the Requesting  User have an Active Collection?
+                    #  Yes
+                    if exists_active_collection_for_user(a_request_user):
 
-					if credential.has_apppwd():
+                        # Get the Active Collection
+                        collection = get_active_collection_for_user(a_request_user)
 
-						serverWordpress = get_primary_wordpress_server()
+                    # No active Collection - setup a Default Active Collection then
+                    else:
+            
+                        # Set up new Collection Attributes
+                        collection_title = "A Default REST Collection"
+                        collection_description = "A Collection created by a REST Request"
+                        collection_owner = a_request_user
 
-						returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_title, cell_description)
+                        # Create the new Collection Object
+                        collection = Collection.create(collection_title, collection_description, collection_owner)
+                        # Write the new Collection Object to the Database
+                        collection.save()
 
-						if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                        # Set the Users Active Collection to the new Collection Object
+                        a_request_user.profile.set_active_collection(collection)
+                        # Update the User to the database
+                        a_request_user.save()
 
-							post_id = returned_blogpost['id']
+                    # If the Image is NOT in the Collection already                            
+                    if not exists_collection_for_image(collection, cell_image):
 
-						else:
+                        # Add the Image to the Collection
+                        Collection.assign_image(cell_image, collection)
 
-							message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
-							raise serializers.ValidationError(message)
 
-					cell_blogpost = post_id
+                    post_id = ''
 
+                    # Get the Credentials for the Requesting User
+                    credential = get_credential_for_user(a_request_user)
 
-				cell = Cell.create(instance, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
+                    # Does the Requesting User have a Password?
+                    #  Yes
+                    if credential.has_apppwd():
 
-				cell.save()
+                        # Get the Primary WordPress Server - Blogging Engine
+                        serverWordpress = get_primary_wordpress_server()
 
+                        # Create a Blog Post for the New Cell
+                        returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_title, cell_description)
 
-	"""
-		Matrix Serializer, For a Matrix, Validate the supplied Title, Description, Height and Width fields
-	"""
-	def validate_matrix_json_fields(self, title, description, height, width):
+                        # Was the Post a success?
+                        #  Yes
+                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-		len_title = len(title)
-		len_description = len(description)
+                            # Store the Post id
+                            post_id = returned_blogpost['id']
 
-		"""
-			Title and Description field overflows are trapped by the Django REST framework,
-			 so these next 2 checks are redundant
-		"""
-		if len_title > CONST_255:
+                        #  No
+                        else:
 
-			message = 'CPW_REST:0160 ERROR! Bench Title Length (' + str(len_title) + ') is greater than 255!'
-			raise serializers.ValidationError(message)
+                            # Raise an Error!
+                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                            raise serializers.ValidationError(message)
 
-		if len_description > CONST_4095:
+                    # Add the Post Id to the Cell
+                    cell_blogpost = post_id
 
-			message = 'CPW_REST:0150 ERROR! Bench Description Length (' + str(len_title) + ') is greater than 4095!'
-			raise serializers.ValidationError(message)
 
-		if height > CONST_450:
+                # Create a New Cell Object
+                cell = Cell.create(an_instance, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
 
-			message = 'CPW_REST:0110 ERROR! Bench Cell Height (' + str(height) + ') is greater than 450!'
-			raise serializers.ValidationError(message)
+                # Write the New Cell to the database
+                cell.save()
 
-		if height < CONST_75:
 
-			message = 'CPW_REST:0120 ERROR! Bench Cell Height (' + str(height) + ') is less than 75!'
-			raise serializers.ValidationError(message)
+    def validate_matrix_json_fields(self, a_title, a_description, a_height, a_width):
+        """Validate the supplied JSON fields for the Bench
 
-		if width > CONST_450:
+        Title and Description field overflows are trapped by the Django REST framework
 
-			message = 'CPW_REST:0130 ERROR! Bench Cell Width (' + str(width) + ') is greater than 450!'
-			raise serializers.ValidationError(message)
+        Validate the supplied Title, Description, Height and Width fields of a Bench
 
-		if width < CONST_75:
+        Parameters:
+            a_title: The Supplied Title of the Bench.
+            a_description: The Supplied Title of the Bench.
+            a_height: The specified Height of the Cells in the Bench 
+            a_width: The specified Widt of the Cells in the Bench
 
-			message = 'CPW_REST:0140 ERROR! Bench Cell Width (' + str(width) + ') is less than 75!'
-			raise serializers.ValidationError(message)
+        Returns:
+            None
 
+        Raises:
+            ValidationError: CPW_REST:0160 - Bench Title Length is greater than 255 Characters
+            ValidationError: CPW_REST:0150 - Bench Description Length is greater than 4095 Characters
+            ValidationError: CPW_REST:0110 - Bench Cell Height is greater than 450 Pixels
+            ValidationError: CPW_REST:0120 - Bench Cell Height is less than 75 Pixels
+            ValidationError: CPW_REST:0130 - Bench Cell Width greater than 450 Pixels
+            ValidationError: CPW_REST:0140 - Bench Cell Width is less than 75 Pixels
+          
+        """
 
-	"""
-		Matrix Serializer, For a Matrix, Validate the supplied Cells
-	"""
-	def validate_cells(self, cells_data, request_user, mode_flag):
+        len_title = len(a_title)
+        len_description = len(a_description)
 
-		maxX = 0
-		maxY = 0
+        # Is the Title greater than 255 Characters? IF so, Raise an Error!
+        if len_title > CONST_255:
 
-		if not cells_data:
-			message = 'CPW_REST:0230 ERROR! NO Cells supplied with Bench!'
-			raise serializers.ValidationError(message)
+            message = 'CPW_REST:0160 ERROR! Bench Title Length (' + str(len_title) + ') is greater than 255!'
+            raise serializers.ValidationError(message)
 
-		for cell_data in cells_data:
+        # Is the Description greater than 4095 Characters? IF so, Raise an Error!
+        if len_description > CONST_4095:
 
-			title = cell_data.get('title')
-			description = cell_data.get('description')
+            message = 'CPW_REST:0150 ERROR! Bench Description Length (' + str(len_title) + ') is greater than 4095!'
+            raise serializers.ValidationError(message)
 
-			self.validate_cell_json_fields(title, description)
+        # Is the Height greater than 450 Pixels? IF so, Raise an Error!
+        if a_height > CONST_450:
 
-			currX = int(cell_data.get('xcoordinate', 0))
-			currY = int(cell_data.get('ycoordinate', 0))
+            message = 'CPW_REST:0110 ERROR! Bench Cell Height (' + str(a_height) + ') is greater than 450!'
+            raise serializers.ValidationError(message)
 
-			if currX > maxX:
-				maxX = currX
+        # Is the Height less than 75 Pixels? IF so, Raise an Error!
+        if a_height < CONST_75:
 
-			if currY > maxY:
-				maxY = currY
+            message = 'CPW_REST:0120 ERROR! Bench Cell Height (' + str(a_height) + ') is less than 75!'
+            raise serializers.ValidationError(message)
 
-		max_column_index = maxX
-		max_row_index = maxY
+        # Is the Width greater than 450 Pixels? IF so, Raise an Error!
+        if a_width > CONST_450:
 
-		maxX += 1
-		maxY += 1
+            message = 'CPW_REST:0130 ERROR! Bench Cell Width (' + str(a_width) + ') is greater than 450!'
+            raise serializers.ValidationError(message)
 
-		if maxX > MAX_COLUMNS:
-			message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than 10,000 Columns allowed!'
-			raise serializers.ValidationError(message)
+        # Is the Width less than 75 Pixels? IF so, Raise an Error!
+        if a_width < CONST_75:
 
-		if maxY > MAX_ROWS:
-			message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than 10,000 Rows allowed!'
-			raise serializers.ValidationError(message)
+            message = 'CPW_REST:0140 ERROR! Bench Cell Width (' + str(a_width) + ') is less than 75!'
+            raise serializers.ValidationError(message)
 
-		if maxX < MIN_COLUMNS:
-			message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least 3 Columns required!'
-			raise serializers.ValidationError(message)
 
-		if maxY < MIN_ROWS:
-			message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least 3 Rows required!'
-			raise serializers.ValidationError(message)
+    def validate_cells(self, a_cells_data, a_request_user, a_mode_flag):
+        """Validate the supplied JSON fields for an array of Cells
 
-		bench_cells=[[0 for cc in range(maxY)] for rc in range(maxX)]
+        The Array of Cells must be between 3x3 and 10000x10000 cells
+        For an Array of AxB Cells, ALL combinations of A and B MUST be present, 
+         With NO Gaps OR Duplicates
+        Image Data must NOT be present in Row/Column Header/Footer Cells
+        If Image Data is in a Cell, then this must be Valid too.
+        Creation is possible for ANY User;
+         Update is only possible for Owners
 
-		i = 0
+        Parameters:
+            a_cells_data: An Array of Cells.
+            a_request_user: The Requesting User.
+            a_mode_flag: TRUE for Create; FALSE for UPDATE.
 
-		while i < maxX:
+        Returns:
+            None
 
-			j = 0
+        Raises:
+            ValidationError: CPW_REST:0230 - NO Cells supplied with Bench
+            ValidationError: CPW_REST:0300 - Too many Columns in Bench
+            ValidationError: CPW_REST:0310 - Too many Rows in Bench
+            ValidationError: CPW_REST:0280 - Too few Columns in Bench
+            ValidationError: CPW_REST:0290 - Too few Rows in Bench
+            ValidationError: CPW_REST:0190 - Duplicate Cell
+            ValidationError: CPW_REST:0220 - Missing Cell
+            ValidationError: CPW_REST:0010 - An Image is not Permitted in Column Header
+            ValidationError: CPW_REST:0020 - An Image is not Permitted in : Column Footer
+            ValidationError: CPW_REST:0030 - An Image is not Permitted in : Row Header
+            ValidationError: CPW_REST:0040 - An Image is not Permitted in : Row Footer
+            ValidationError: CPW_REST:0090 - Attempting to Add an Image to a Bench for a different Owner
+            ValidationError: CPW_REST:0080 - Attempting to Add an Image to a Bench WITHOUT a Title or Description
+          
+        """
 
-			while j < maxY:
+        maxX = 0
+        maxY = 0
 
-				bench_cells[i][j] = False
-				j += 1
+        # Have any Cells been supplied with this Bench, if Not, Raise an Error!
+        if not a_cells_data:
 
-			i += 1
+            message = 'CPW_REST:0230 ERROR! NO Cells supplied with Bench!'
+            raise serializers.ValidationError(message)
 
-		cnt = 0
+        # Process the supplied Cells ...
+        for cell_data in a_cells_data:
 
-		for cell_data in cells_data:
+            # Extract the Cells Attributes 
+            title = cell_data.get('title')
+            description = cell_data.get('description')
 
-			cnt += 1
+            # Validate the Cell Attributes 
+            self.validate_cell_json_fields(title, description)
 
-			i = cell_data.get('xcoordinate', 0)
-			j = cell_data.get('ycoordinate', 0)
+            # Extract the Cell Coordinates
+            currX = int(cell_data.get('xcoordinate', 0))
+            currY = int(cell_data.get('ycoordinate', 0))
 
-			if bench_cells[i][j] == True:
-				message = 'CPW_REST:0190 ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
-				raise serializers.ValidationError(message)
+            # Save the largest X Coordinate
+            if currX > maxX:
 
-			bench_cells[i][j] = True
+                maxX = currX
 
-		i = 0
+            # Save the largest Y Coordinate
+            if currY > maxY:
 
-		cnt = 0
+                maxY = currY
 
-		while i < maxX:
+        max_column_index = maxX
+        max_row_index = maxY
 
-			j = 0
+        maxX += 1
+        maxY += 1
 
-			while j < maxY:
+        # Do we have more than 10,000 Columns?
+        if maxX > MAX_COLUMNS:
 
-				cnt += 1
+            message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than 10,000 Columns allowed!'
+            raise serializers.ValidationError(message)
 
-				if bench_cells[i][j] == False:
-					message = 'CPW_REST:0220 ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
-					raise serializers.ValidationError(message)
+        # Do we have more than 10,000 Rows?
+        if maxY > MAX_ROWS:
+            
+            message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than 10,000 Rows allowed!'
+            raise serializers.ValidationError(message)
 
-				j += 1
+        # Do we have less than 3 Columns?
+        if maxX < MIN_COLUMNS:
 
-			i += 1
+            message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least 3 Columns required!'
+            raise serializers.ValidationError(message)
 
+        # Do we have less than 3 Rows?
+        if maxY < MIN_ROWS:
 
-		for cell_data in cells_data:
+            message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least 3 Rows required!'
+            raise serializers.ValidationError(message)
 
-			image_data = cell_data.get('image')
+        # Initialise a 2D array for all possible cells ...
+        bench_cells=[[0 for cc in range(maxY)] for rc in range(maxX)]
 
-			xcoordinate = cell_data.get('xcoordinate', 0)
-			ycoordinate = cell_data.get('ycoordinate', 0)
-			cell_title = cell_data.get('title')
-			cell_description = cell_data.get('description')
+        i = 0
 
-			if xcoordinate == CONST_ZERO and image_data is not None:
-				message = 'CPW_REST:0010 ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
-				raise serializers.ValidationError(message)
+        # Set all entries in the 2D Array to False
+        while i < maxX:
 
-			if xcoordinate == max_column_index and image_data is not None:
-				message = 'CPW_REST:0020 ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
-				raise serializers.ValidationError(message)
+            j = 0
 
-			if ycoordinate == CONST_ZERO and image_data is not None:
-				message = 'CPW_REST:0030 ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
-				raise serializers.ValidationError(message)
+            while j < maxY:
 
-			if ycoordinate == max_row_index and image_data is not None:
-				message = 'CPW_REST:0040 ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
-				raise serializers.ValidationError(message)
+                bench_cells[i][j] = False
+                j += 1
 
-			if image_data is not None:
+            i += 1
 
-				server = image_data.get('server')
-				image_owner = image_data.get('owner')
-				image_id = image_data.get('image_id')
-				roi_id = image_data.get('roi')
+        cnt = 0
 
-				if mode_flag == True:
+        # Process all the supplied Cells, to find Duplicate Cells ...
+        for cell_data in a_cells_data:
 
-					if request_user != image_owner:
+            cnt += 1
 
-						if not request_user.is_superuser:
+            # Extract the X and Y Coordinates
+            i = cell_data.get('xcoordinate', 0)
+            j = cell_data.get('ycoordinate', 0)
 
-							message = 'CPW_REST:0090 ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(image_owner) + '!'
-							raise serializers.ValidationError(message)
+            # If there are already is a Cell at this X and Y Coordinate in the 2D Array,
+            #  we have a Duplicate Cell, so Raise an Error!
+            if bench_cells[i][j] == True:
 
-				if cell_title == '' or cell_description == '':
+                message = 'CPW_REST:0190 ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
+                raise serializers.ValidationError(message)
 
-					message = 'CPW_REST:0080 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
-					raise serializers.ValidationError(message)
+            # To mark the presence of a Cell at this X and Y Coordinate, set this entry in the 2D Array to True
+            bench_cells[i][j] = True
 
+        i = 0
 
-				server = self.validate_image_json(server, image_owner, image_id, roi_id)
+        cnt = 0
 
-		return True
+        # Check all the entries in the 2D Array, to find Missing Cells ...
+        #  For each Column ....
+        while i < maxX:
 
+            j = 0
 
-	"""
-		Matrix Serializer, For a Cell in a Matrix, Validate the supplied Title and Description fields
-	"""
-	def validate_cell_json_fields(self, title, description):
+            # For each Row ... 
+            while j < maxY:
 
-		len_title = len(title)
-		len_description = len(description)
+                cnt += 1
 
-		"""
-			Title and Description field overflows are trapped by the Django REST framework,
-			 so these next 2 checks are redundant
-		"""
-		if len_title > CONST_255:
+                # If the entry in the 2D Array is False, then we have a missing cell, 
+                #  so Raise an Error!
+                if bench_cells[i][j] == False:
 
-			message = 'CPW_REST:0180 ERROR! Cell Title Length (' + str(len_title) + ') is greater than 255!'
-			raise serializers.ValidationError(message)
+                    message = 'CPW_REST:0220 ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
+                    raise serializers.ValidationError(message)
 
-		if len_description > CONST_4095:
+                j += 1
 
-			message = 'CPW_REST:0170 ERROR! Cell Description Length (' + str(len_title) + ') is greater than 4095!'
-			raise serializers.ValidationError(message)
+            i += 1
 
 
-	"""
-		Matrix Serializer, For an Image in a Cell within a Matrix, Validate the supplied Server, Owner, Image Id and ROI ID Fields
-	"""
-	def validate_image_json(self, server_str, user, image_id, roi_id):
+        # Process all the Cells in the Cell Data
+        for cell_data in a_cells_data:
 
-		server_list = server_str.split("@")
+            image_data = cell_data.get('image')
 
-		server_uid = str(server_list[0])
-		server_url = str(server_list[1])
+            # Get the Image Attributes from the Image Data
+            xcoordinate = cell_data.get('xcoordinate', 0)
+            ycoordinate = cell_data.get('ycoordinate', 0)
+            cell_title = cell_data.get('title')
+            cell_description = cell_data.get('description')
 
-		if exists_server_for_uid_url(server_uid, server_url):
+            # Do we have Image Data ...
+            if image_data is not None:
 
-			server = get_servers_for_uid_url(server_uid, server_url)
+                # Do we have Image Data in the Column Header, if so, Raise an Error!
+                if xcoordinate == CONST_ZERO:
 
-			if server.is_wordpress():
+                    message = 'CPW_REST:0010 ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
+                    raise serializers.ValidationError(message)
 
-				if not self.validate_wordpress_image_id(server, user, image_id):
+                # Do we have Image Data in the Column Footer, if so, Raise an Error!
+                if xcoordinate == max_column_index:
 
-					message = 'CPW_REST:0330 ERROR! Image NOT Present on : ' + server_str + '!'
-					raise serializers.ValidationError(message)
-			else:
+                    message = 'CPW_REST:0020 ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
+                    raise serializers.ValidationError(message)
 
-				if server.is_omero547():
+                # Do we have Image Data in the Row Header, if so, Raise an Error!
+                if ycoordinate == CONST_ZERO:
 
-					if self.validate_imaging_image_id(server, user, image_id):
+                    message = 'CPW_REST:0030 ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
+                    raise serializers.ValidationError(message)
 
-						if roi_id != 0:
+                # Do we have Image Data in the Row Footer, if so, Raise an Error!
+                if ycoordinate == max_row_index:
 
-							if not self.validate_roi_id(server, user, image_id, roi_id):
+                    message = 'CPW_REST:0040 ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
+                    raise serializers.ValidationError(message)
 
-								message = 'CPW_REST:0250 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
-								raise serializers.ValidationError(message)
-					else:
+                # There must be a Title and Description for a Cell containing an Image, else Raise an Error
+                if cell_title == '' or cell_description == '':
 
-						message = 'CPW_REST:0210 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
-						raise serializers.ValidationError(message)
-				else:
+                    message = 'CPW_REST:0080 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                    raise serializers.ValidationError(message)
 
-					message = 'CPW_REST:0350 ERROR! Server Type Unknown : ' + server_str + '!'
-					raise serializers.ValidationError(message)
 
-			return server
+            # Is there any Image data in the Cell?
+            if image_data is not None:
 
-		else:
+                server = image_data.get('server')
+                owner = image_data.get('owner')
+                image_id = image_data.get('image_id')
+                roi_id = image_data.get('roi')
+                image_owner = None
 
-			message = 'CPW_REST:0270 ERROR! Server Unknown : ' + server_str + '!'
-			raise serializers.ValidationError(message)
+                # Does the Image Owner exist on the Database?
+                #  Yes
+                if exists_user_for_username(owner):
 
-			return None
+                    image_owner = get_user_from_username(owner)
 
+                    # Is the Mode is TRUE for Create?
+                    if a_mode_flag == True:
 
-	"""
-		Matrix Serializer, For an Image in a Cell within a Matrix, Validate the supplied Server, Owner, Image Id and ROI ID Fields
-	"""
-	def validate_wordpress_image_id(self, server, user, image_id):
+                        # Is the Requesting User is NOT the Image Owner?
+                        if a_request_user != image_owner:
 
-		data = server.check_wordpress_image(user, image_id)
+                            # And the User is NOT a Super-User, then Raise an Error!
+                            if not a_request_user.is_superuser:
 
-		json_image = data['image']
-		image_name = json_image['name']
+                                message = 'CPW_REST:0090 ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(owner) + '!'
+                                raise serializers.ValidationError(message)
+                    
+                # No User exists, Raise an Error!
+                else:
+                    message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(image_owner) + ' Does NOT Exist!'
+                    raise serializers.ValidationError(message)
 
-		if image_name == "":
-			return False
-		else:
-			return True
+                # Validate the Image in the Cell
+                server = self.validate_image_json(server, image_owner, image_id, roi_id)
 
 
-	"""
-		Matrix Serializer, For an OMERO Image in a Cell within a Matrix, Check the supplied Image Exists
-	"""
-	def validate_imaging_image_id(self, server, user, image_id):
+    def validate_cell_json_fields(self, a_title, a_description):
+        """Validate the supplied JSON fields for a Cell
 
-		data = server.check_imaging_server_image(user, image_id)
+        Title and Description field overflows are trapped by the Django REST framework,
+         so these next 2 checks are redundant
 
-		json_image = data['image']
-		image_name = json_image['name']
+        Parameters:
+            title: The Title of the Collection, Maximum 255 Characters.
+            description: The Description of the Collection, Maximum 4095 Characters.
 
-		if image_name == "":
-			return False
-		else:
-			return True
+        Returns:
+            None
 
+        Raises:
+            ValidationError: CPW_REST:0180 - Title Too Long.
+            ValidationError: CPW_REST:0170 - Description Too Long
+          
+        """
 
-	"""
-		Matrix Serializer, For an OMERO Image in a Cell within a Matrix, Check the supplied Image ROI ID Exists
-	"""
-	def validate_roi_id(self, server, user, image_id, roi_id):
+        len_title = len(a_title)
+        len_description = len(a_description)
 
-		data = server.check_imaging_server_image_roi(user, image_id, roi_id)
+        # Is the Title greater than 255 Characters?
+        if len_title > CONST_255:
 
-		json_roi = data['roi']
-		roi_id = json_roi['id']
+            message = 'CPW_REST:0180 ERROR! Cell Title Length (' + str(len_title) + ') is greater than 255!'
+            raise serializers.ValidationError(message)
 
-		if roi_id == "":
-			return False
-		else:
-			return True
+        # Is the Description greater than 4095 Characters?
+        if len_description > CONST_4095:
+
+            message = 'CPW_REST:0170 ERROR! Cell Description Length (' + str(len_title) + ') is greater than 4095!'
+            raise serializers.ValidationError(message)
+
+
+    def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id):
+        """Validates the supplied Server, Owner, Image Id and ROI ID Fields
+
+        Finds a Server Object from the the supplied server string, and 
+        Validates the supplied Owner, Image Id and ROI ID Fields against the 
+         Server Object.
+
+        Parameters:
+            server_str: A string with a URL appended to a UID with an @
+            user: A User.
+            image_id: A string of valid JSON.
+            roi_id: A string of valid JSON.
+
+        Returns:
+            A Server Object or None
+
+        Raises:
+            ValidationError:
+                CPW_REST:0330 - Image NOT Present on the WordPress Server
+            ValidationError:
+                CPW_REST:0250 - ROI NOT Present on the Server
+            ValidationError:
+                CPW_REST:0210 - Image NOT Present on the OMERO Server
+            ValidationError:
+                CPW_REST:0350 - Server Type is WordPress or OMERO
+            ValidationError:
+                CPW_REST:0270 - Server is Unknown
+
+        """
+        
+        server = None
+
+        # Split the Server String into UID and URL?
+        server_list = a_server_str.split("@")
+
+        server_uid = str(server_list[0])
+        server_url = str(server_list[1])
+
+        # Is there a Server for the supplied UID and URL combination?
+        if exists_server_for_uid_url(server_uid, server_url):
+
+            # Get the Server Object
+            server = get_servers_for_uid_url(server_uid, server_url)
+
+            # Is the Server a WordPress server?
+            if server.is_wordpress():
+
+                # Does the Image exist on the WordPress Server?
+                if not self.validate_wordpress_image_id(server, a_user, a_image_id):
+
+                    # No, then Error
+                    message = 'CPW_REST:0330 ERROR! Image NOT Present on : ' + a_server_str + '!'
+                    raise serializers.ValidationError(message)
+            
+            # No ...
+            else:
+
+                # Is the Server an OMERO Server?
+                if server.is_omero547():
+
+                    # Does the Image exist on the OMERO Server?
+                    if self.validate_imaging_image_id(server, a_image_id):
+
+                        # Was an ROI supplied with the Image? 
+                        if a_roi_id != 0:
+
+                            # Does the ROI for the Image exist?
+                            if not self.validate_roi_id(server, a_image_id, a_roi_id):
+
+                                # No such ROI, Raise Error!
+                                message = 'CPW_REST:0250 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
+                                raise serializers.ValidationError(message)
+                    
+                    # No Image, then Error
+                    else:
+
+                        message = 'CPW_REST:0210 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + a_server_str + '!'
+                        raise serializers.ValidationError(message)
+
+                # Not an OMERO server, then Error
+                else:
+
+                    message = 'CPW_REST:0350 ERROR! Server Type Unknown : ' + a_server_str + '!'
+                    raise serializers.ValidationError(message)
+
+        # No Server, then Error
+        else:
+
+            message = 'CPW_REST:0270 ERROR! Server Unknown : ' + a_server_str + '!'
+            raise serializers.ValidationError(message)
+
+        return server
+
+
+    def validate_wordpress_image_id(self, a_server, a_user, a_image_id):
+        """For a WordPress Image, Check the supplied Image Exists
+
+        Checks that an Image exists on a WordPress Server
+
+        Parameters:
+            a_server: A Server Object
+            a_user: A User Object
+            a_image_id: The Id of the Image on the WordPress Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the WordPress Image Data from the Server
+        data = a_server.check_wordpress_image(a_user, a_image_id)
+
+        json_image = data['image']
+        image_name = json_image['name']
+
+        # If the Image data is Empty then the Image does NOT exist
+        if image_name == "":
+            return False
+        else:
+            return True
+
+
+    def validate_imaging_image_id(self, a_server, a_image_id):
+        """For an OMERO Image, Check the supplied Image Exists
+
+        Checks that an Image exists on an OMERO Server
+
+        Parameters:
+            a_server: A Server Object
+            a_image_id: The Id of the Image on the OMERO Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the OMERO Image Data from the Server
+        data = a_server.check_imaging_server_image(a_image_id)
+
+        json_image = data['image']
+        image_name = json_image['name']
+
+        if image_name == "":
+            return False
+        else:
+            return True
+
+
+    def validate_roi_id(self, a_server, a_image_id, a_roi_id):
+        """For an OMERO Image ROI, Check the supplied ROI Exists
+
+        Checks that an ROI within an Image exists on an OMERO Server.
+
+        Parameters:
+            a_server: A Server Object
+            a_image_id: The Id of the Image on the OMERO Server
+            a_roi_id: The Id of the ROI within the Image on the OMERO Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the OMERO ROI Data from the Server
+        data = a_server.check_imaging_server_image_roi(a_image_id, a_roi_id)
+
+        json_roi = data['roi']
+        roi_id = json_roi['id']
+
+        # If the ROI data is Empty then the Image does NOT exist
+        if roi_id == "":
+            return False
+        else:
+            return True

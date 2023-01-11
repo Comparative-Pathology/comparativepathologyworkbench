@@ -164,7 +164,6 @@ The list collections template (with Search)
 		{% endif %}
 	<td>{{ collection_summary.collection_id|stringformat:"06d" }}</td>
 	<td>{{ collection_summary.collection_title }}</td>
-	<td>{{ collection_summary.collection_active }}</td>
 	<td>{{ collection_summary.collection_image_count }}</td>
 	<td>{{ collection_summary.collection_owner }}</td>
 	<td>{{ collection_summary.collection_authorisation_authority }}</td>
@@ -186,6 +185,7 @@ The list collections template (with Search)
 			{% else %}
 	<td>&nbsp;</td>
 			{% endif %}
+	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>

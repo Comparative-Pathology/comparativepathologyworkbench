@@ -30,14 +30,30 @@ from rest_framework import permissions
 
 
 class ImageIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
-    """
+    """A Permission Class for Images
+
     Custom permission to allow:
         1. Read Only Access to the Image;
         2. Write Access to Owners of the Image to edit the Image;
         3. Write Access to SuperUsers to edit the the Image;
+
+    Parameters:
+        None
+
     """
 
     def has_object_permission(self, request, view, obj):
+        """Does the Request have the relevant Permission?
+
+        Check whether the Request is allowed to access the Object
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
 
         return_flag = False
 

@@ -58,7 +58,7 @@ def collection_read(request, collection_id):
 	htmlString = ''
 
 	if object.owner == request.user:
-		if request.user.profile.active_collection.id == collection_id:
+		if request.user.profile.active_collection_id == collection_id:
 
 			activeFlag == True
 

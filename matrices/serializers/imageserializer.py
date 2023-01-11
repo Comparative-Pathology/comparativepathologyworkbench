@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# This Serializer provides Create, Read, Update and Delete functions for an Image
+# This Serializer provides Create, Read and Update functions for an Image
 ###
 from django.contrib.auth.models import User
 
@@ -41,270 +41,410 @@ from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_servers_for_uid_url
 
 
-"""
-	This Serializer provides Create, Read, Update and Delete functions for an Image
-"""
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    """A Serializer of Images
 
-	roi = serializers.IntegerField(default=0)
-	owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-	server = serializers.CharField()
-	image_id = serializers.IntegerField(default=0)
+    A Serializer of Images in the Comparative Pathology Workbench REST Interface
 
-	class Meta:
-		model = Image
-		fields = ('url', 'id', 'owner', 'roi', 'server', 'image_id')
-		read_only_fields = ('id', 'url' )
+    This Serializer provides Create, Read and Update functions for an Image
 
+    Parameters:
+        id(Read Only): The (internal) Id of the Image.
+        url(Read Only): The (internal) URL of the Image.
+        owner: The Owner (User Model) of the Image.
+        server: The Title of the Server, Maximum 255 Characters.
+        image_id: The identifier of the Image as stored on the Server.
+        roi: The ROI within the Image as stored on the Server.
 
-	"""
-		Image Serializer, Create Method
-	"""
-	def create(self, validated_data):
+    """
 
-		request_user = None
+    roi = serializers.IntegerField(default=0)
+    owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    server = serializers.CharField()
+    image_id = serializers.IntegerField(default=0)
 
-		request = self.context.get("request")
+    class Meta:
+        model = Image
+        fields = ('url', 'id', 'owner', 'roi', 'server', 'image_id')
+        read_only_fields = ('id', 'url' )
 
-		if request and hasattr(request, "user"):
 
-			request_user = request.user
+    def create(self, validated_data):
+        """Create Method.
 
-		image_server = validated_data.get('server')
-		image_owner = validated_data.get('owner')
-		image_id = validated_data.get('image_id')
-		image_roi_id = validated_data.get('roi')
+        Creates a NEW Image Object from a Json Representation of an Image.
 
-		if request_user != image_owner:
+        Parameters:
+            validated_data: A string of valid JSON.
 
-			if not request_user.is_superuser:
+        Returns:
+            An Image Object
 
-				message = 'CPW_REST:0060 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
-				raise serializers.ValidationError(message)
+        Raises:
+            ValidationError: CPW_REST:0060 - Attempting to Create an Image for a different Owner.
+          
+        """
 
-		server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+        request_user = None
 
-		image_identifier = int(image_id)
+        request = self.context.get("request")
 
-		image_name = ''
-		image_viewer_url = ''
-		image_birdseye_url = ''
-		image_roi = 0
-		image_comment = ''
+        if request and hasattr(request, "user"):
 
-		if server.is_wordpress():
+            request_user = request.user
 
-			data = server.check_wordpress_image(image_owner, image_id)
+        image_server = validated_data.get('server')
+        image_owner = validated_data.get('owner')
+        image_id = validated_data.get('image_id')
+        image_roi_id = validated_data.get('roi')
 
-			json_image = data['image']
+        # Check the User in the Request matches the Supplied Image Owner
+        if request_user != image_owner:
 
-			image_name = json_image['name']
-			image_viewer_url = json_image['viewer_url']
-			image_birdseye_url = json_image['birdseye_url']
+            if not request_user.is_superuser:
 
-		else:
+                message = 'CPW_REST:0060 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
+                raise serializers.ValidationError(message)
 
-			data = server.check_imaging_server_image(image_owner, image_id)
+        # Validate the Image Id, ROI, Owner, and Server and return the associated Server Object
+        server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-			json_image = data['image']
+        collection = None
 
-			image_name = json_image['name']
-			image_viewer_url = json_image['viewer_url']
-			image_birdseye_url = json_image['birdseye_url']
+        # Does the User have an Active Image Collection?
+        if exists_active_collection_for_user(request_user):
 
-			if image_roi_id != 0:
+            # Yes - get the User's Active Image Collection
+            collection = get_active_collection_for_user(request_user)
 
-				data = server.check_imaging_server_image_roi(image_owner, image_id, image_roi_id)
+        else:
+            
+            # No 
+            collection_title = "A Default REST Collection"
+            collection_description = "A Collection created by a REST Request"
+            collection_owner = request_user
 
-				json_roi = data['roi']
+            # CREATE an new Collection Object!
+            collection = Collection.create(collection_title, collection_description, collection_owner)
+            collection.save()
 
-				image_roi = int(json_roi['id'])
+            # Make the new Collection Object the User's Active Collection
+            request_user.profile.set_active_collection(collection)
+            request_user.save()
 
-		image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+        image_name = ''
+        image_viewer_url = ''
+        image_birdseye_url = ''
+        image_roi = 0
+        image_comment = ''
 
-		image.save()
+        # Is the Server is a WordPress Server?
+        if server.is_wordpress():
 
-		collection = None
+            # Get the Image Data from the Server
+            data = server.check_wordpress_image(image_owner, image_id)
 
-		if exists_active_collection_for_user(request_user):
+            json_image = data['image']
 
-			collection = get_active_collection_for_user(request_user)
+            image_name = json_image['name']
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = json_image['birdseye_url']
 
-		else:
-			
-			collection_title = "A Default REST Collection"
-			collection_description = "A Collection created by a REST Request"
-			collection_owner = request_user
+        # Is the Server is an OMERO Server?
+        else:
 
-			collection = Collection.create(collection_title, collection_description, collection_owner)
-			collection.save()
+            # Get the Image Data from the Server
+            data = server.check_imaging_server_image(image_id)
 
-			request_user.profile.set_active_collection(collection)
-			request_user.save()
+            json_image = data['image']
 
-		Collection.assign_image(image, collection)
+            image_name = json_image['name']
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = json_image['birdseye_url']
 
+            # Was an ROI supplied?
+            if image_roi_id != 0:
 
-		return image
+                # Get the Image and ROI Data from th Server
+                data = server.check_imaging_server_image_roi(image_id, image_roi_id)
 
+                json_roi = data['roi']
+                image_roi = int(json_roi['id'])
+        
+        # CREATE an new Image Object!
+        image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+        image.save()
 
-	"""
-	Image Serializer, Update Method
-	"""
-	def update(self, instance, validated_data):
+        # Add the Image to the User's Active Image Collection
+        Collection.assign_image(image, collection)
 
-		image_server = validated_data.get('server')
-		image_owner = validated_data.get('owner', instance.owner)
-		image_id = validated_data.get('image_id', instance.image_id)
-		image_roi_id = validated_data.get('roi', instance.roi)
-		image_comment = validated_data.get('roi', instance.comment)
+        # RETURN the created Image Object
+        return image
 
-		server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-		image_identifier = int(image_id)
-		image_name = ''
-		image_viewer_url = ''
-		image_birdseye_url = ''
-		image_roi = 0
-		image_comment = ''
+    def update(self, instance, validated_data):
+        """Update Method.
 
-		if server.is_wordpress():
+        Updates an EXISTING Image Object from a Json Representation of an Image.
 
-			data = server.check_wordpress_image(image_owner.id, image_id)
+        Parameters:
+            validated_data: A string of valid JSON.
 
-			json_image = data['image']
+        Returns:
+            An Image Object
 
-			image_name = json_image['name']
-			image_viewer_url = json_image['viewer_url']
-			image_birdseye_url = json_image['birdseye_url']
+        Raises:
+          
+        """
 
-		else:
+        image_server = validated_data.get('server')
+        image_owner = validated_data.get('owner', instance.owner)
+        image_id = validated_data.get('image_id', instance.image_id)
+        image_roi_id = validated_data.get('roi', instance.roi)
+        image_comment = validated_data.get('roi', instance.comment)
 
-			data = server.check_imaging_server_image(image_owner.id, image_id)
+        # Validate the Image parameters against the Server and return the Server Object
+        server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
 
-			json_image = data['image']
+        image_name = ''
+        image_viewer_url = ''
+        image_birdseye_url = ''
+        image_roi = 0
+        image_comment = ''
 
-			image_name = json_image['name']
-			image_viewer_url = json_image['viewer_url']
-			image_birdseye_url = json_image['birdseye_url']
+        # Is the Server is a WordPress Server?
+        if server.is_wordpress():
 
-			if image_roi_id != 0:
+            # Get the Image Data from the Server
+            data = server.check_wordpress_image(image_owner.id, image_id)
 
-				data = server.check_imaging_server_image_roi(image_owner, image_id, image_roi_id)
+            json_image = data['image']
 
-				json_roi = data['roi']
+            image_name = json_image['name']
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = json_image['birdseye_url']
 
-				image_roi = int(json_roi['id'])
+        # Is the Server is an OMERO Server?
+        else:
 
-		instance.server = server
-		instance.owner = image_owner
-		instance.image_id = image_id
-		instance.identifier = image_id
-		instance.name = image_name
-		instance.viewer_url = image_viewer_url
-		instance.birdseye_url = image_birdseye_url
-		instance.roi = image_roi
-		instance.comment = image_comment
+            # Get the Image Data from the Server
+            data = server.check_imaging_server_image(image_id)
 
-		instance.save()
+            json_image = data['image']
 
-		return instance
+            image_name = json_image['name']
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = json_image['birdseye_url']
 
+            # Was an ROI supplied?
+            if image_roi_id != 0:
+                
+                # Get the Image and ROI Data from the Server
+                data = server.check_imaging_server_image_roi(image_id, image_roi_id)
 
-	"""
-		Image Serializer, For an Image, Validate the supplied Server, Owner, Image Id and ROI ID Fields
-	"""
-	def validate_image_json(self, server_str, user, image_id, roi_id):
+                json_roi = data['roi']
+                image_roi = int(json_roi['id'])
 
-		server_list = server_str.split("@")
+        # Update the Existing Image Attributes
+        instance.server = server
+        instance.owner = image_owner
+        instance.image_id = image_id
+        instance.identifier = image_id
+        instance.name = image_name
+        instance.viewer_url = image_viewer_url
+        instance.birdseye_url = image_birdseye_url
+        instance.roi = image_roi
+        instance.comment = image_comment
 
-		server_uid = str(server_list[0])
-		server_url = str(server_list[1])
+        # UPDATE the Image Object
+        instance.save()
 
-		if exists_server_for_uid_url(server_uid, server_url):
+        return instance
 
-			server = get_servers_for_uid_url(server_uid, server_url)
 
-			if server.is_wordpress():
+    def validate_image_json(self, server_str, user, image_id, roi_id):
+        """Validates the supplied Server, Owner, Image Id and ROI ID Fields
 
-				if not self.validate_wordpress_image_id(server, user, image_id):
+        Finds a Server Object from the the supplied server string, and 
+        Validates the supplied Owner, Image Id and ROI ID Fields against the 
+         Server Object.
 
-					message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + server_str + '!'
-					raise serializers.ValidationError(message)
-			else:
+        Parameters:
+            server_str: A string with a URL appended to a UID with an @
+            user: A User.
+            image_id: A string of valid JSON.
+            roi_id: A string of valid JSON.
 
-				if server.is_omero547():
+        Returns:
+            A Server Object or None
 
-					if self.validate_imaging_image_id(server, user, image_id):
+        Raises:
+            ValidationError:
+                CPW_REST:0320 - Image NOT Present on the WordPress Server
+            ValidationError:
+                CPW_REST:0240 - ROI NOT Present on the Server
+            ValidationError:
+                CPW_REST:0200 - Image NOT Present on the OMERO Server
+            ValidationError:
+                CPW_REST:0340 - Server Type is WordPress or OMERO
+            ValidationError:
+                CPW_REST:0260 - Server is Unknown
 
-						if roi_id != 0:
+        """
+        
+        server = None
 
-							if not self.validate_roi_id(server, user, image_id, roi_id):
+        server_list = server_str.split("@")
 
-								message = 'CPW_REST:0240 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
-								raise serializers.ValidationError(message)
-					else:
+        server_uid = str(server_list[0])
+        server_url = str(server_list[1])
 
-						message = 'CPW_REST:0200 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
-						raise serializers.ValidationError(message)
-				else:
+        # Is there a Server for the supplied UID and URL combination?
+        if exists_server_for_uid_url(server_uid, server_url):
 
-					message = 'CPW_REST:0340 ERROR! Server Type Unknown : ' + server_str + '!'
-					raise serializers.ValidationError(message)
+            # Get the Server Object
+            server = get_servers_for_uid_url(server_uid, server_url)
 
-			return server
+            # Is the Server a WordPress server?
+            if server.is_wordpress():
 
-		else:
+                # Does the Image exist on the WordPress Server?
+                if not self.validate_wordpress_image_id(server, user, image_id):
 
-			message = 'CPW_REST:0260 ERROR! Server Unknown : ' + server_str + '!'
-			raise serializers.ValidationError(message)
+                    message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + server_str + '!'
+                    raise serializers.ValidationError(message)
+            
+            # No
+            else:
 
-			return None
+                # Is the Server an OMERO Server?
+                if server.is_omero547():
 
+                    # Does the Image exist on the OMERO Server?
+                    if self.validate_imaging_image_id(server, user, image_id):
 
-	"""
-		Image Serializer, For a Wordpress Image, Check the supplied Image Exists
-	"""
-	def validate_wordpress_image_id(self, server, user, image_id):
+                        # Was an ROI supplied with the Image? 
+                        if roi_id != 0:
 
-		data = server.check_wordpress_image(user, image_id)
+                            # Does the ROI for the Image exist?
+                            if not self.validate_roi_id(server, user, image_id, roi_id):
 
-		json_image = data['image']
-		image_name = json_image['name']
+                                # No such ROI, Raise Error!
+                                message = 'CPW_REST:0240 ERROR! ROI ID ' + str(roi_id) + ', for Image ID ' + str(image_id) + ", NOT Present on : " + server_str + '!'
+                                raise serializers.ValidationError(message)
 
-		if image_name == "":
-			return False
-		else:
-			return True
+                    # Image does not exist on the Server, Raise Error!
+                    else:
 
+                        message = 'CPW_REST:0200 ERROR! Image ID ' + str(image_id) + ', NOT Present on : ' + server_str + '!'
+                        raise serializers.ValidationError(message)
+                
+                # No - Server type unrecognised, Raise Error!
+                else:
 
-	"""
-		Image Serializer, For an OMERO Image, Check the supplied Image Exists
-	"""
-	def validate_imaging_image_id(self, server, user, image_id):
+                    message = 'CPW_REST:0340 ERROR! Server Type Unknown : ' + server_str + '!'
+                    raise serializers.ValidationError(message)
 
-		data = server.check_imaging_server_image(user, image_id)
+            return server
 
-		json_image = data['image']
-		image_name = json_image['name']
+        # No Server exists, Raise Error!
+        else:
 
-		if image_name == "":
-			return False
-		else:
-			return True
+            message = 'CPW_REST:0260 ERROR! Server Unknown : ' + server_str + '!'
+            raise serializers.ValidationError(message)
 
+            return server
 
-	"""
-		Image Serializer, For an OMERO Image ROI, Check the supplied ROI Exists
-	"""
-	def validate_roi_id(self, server, user, image_id, roi_id):
 
-		data = server.check_imaging_server_image_roi(user, image_id, roi_id)
+    def validate_wordpress_image_id(self, server, user, image_id):
+        """For a WordPress Image, Check the supplied Image Exists
 
-		json_roi = data['roi']
-		roi_id = json_roi['id']
+        Checks that an Image exists on a WordPress Server
 
-		if roi_id == "":
-			return False
-		else:
-			return True
+        Parameters:
+            server: A Server Object
+            user: A User Object
+            image_id: The Id of the Image on the WordPress Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the WordPress Image Data from the Server
+        data = server.check_wordpress_image(user, image_id)
+
+        json_image = data['image']
+        image_name = json_image['name']
+
+        # If the Image data is Empty then the Image does NOT exist
+        if image_name == "":
+            return False
+        else:
+            return True
+
+
+    def validate_imaging_image_id(self, server, user, image_id):
+        """For an OMERO Image, Check the supplied Image Exists
+
+        Checks that an Image exists on an OMERO Server
+
+        Parameters:
+            server: A Server Object
+            user: A User Object
+            image_id: The Id of the Image on the OMERO Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the OMERO Image Data from the Server
+        data = server.check_imaging_server_image(image_id)
+        
+        json_image = data['image']
+        image_name = json_image['name']
+        
+        # If the Image data is Empty then the Image does NOT exist
+        if image_name == "":
+            return False
+        else:
+            return True
+
+
+    def validate_roi_id(self, server, user, image_id, roi_id):
+        """For an OMERO Image ROI, Check the supplied ROI Exists
+
+        Checks that an ROI within an Image exists on an OMERO Server.
+
+        Parameters:
+            server: A Server Object
+            user: A User Object
+            image_id: The Id of the Image on the OMERO Server
+            roi_id: The Id of the ROI within the Image on the OMERO Server
+
+        Returns:
+            A Boolean
+
+        Raises:
+            None
+
+        """
+
+        # Get the OMERO ROI Data from the Server
+        data = server.check_imaging_server_image_roi(image_id, roi_id)
+
+        json_roi = data['roi']
+        roi_id = json_roi['id']
+
+        # If the ROI data is Empty then the Image does NOT exist
+        if roi_id == "":
+            return False
+        else:
+            return True

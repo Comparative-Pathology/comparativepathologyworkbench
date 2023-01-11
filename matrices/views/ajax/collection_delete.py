@@ -37,11 +37,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from matrices.models import Collection
-from matrices.models import Matrix
 
 from matrices.routines import collection_delete_consequences
 from matrices.routines import credential_exists
-
 
 #
 # DELETE A COLLECTION

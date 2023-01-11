@@ -2657,7 +2657,7 @@ class Server(models.Model):
     """
         Check the JSON Details for the Requested Image
     """
-    def check_imaging_server_image(self, user, image_id):
+    def check_imaging_server_image(self, image_id):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -2809,7 +2809,7 @@ class Server(models.Model):
     """
         Check the JSON Details for the Requested Image ROI
     """
-    def check_imaging_server_image_roi(self, user, image_id, in_roi_id):
+    def check_imaging_server_image_roi(self, image_id, in_roi_id):
 
         Command = apps.get_model('matrices', 'Command')
 

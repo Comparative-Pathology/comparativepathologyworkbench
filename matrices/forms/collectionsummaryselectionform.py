@@ -64,6 +64,6 @@ class CollectionSummarySelectionForm(forms.ModelForm):
 
             list_of_collection_ids.append(collection_summary.collection_id)
 
-        collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids)
+        collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('id')
 
         self.fields['last_used_collection'].queryset = collection_queryset

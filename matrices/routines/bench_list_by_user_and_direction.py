@@ -211,7 +211,7 @@ def bench_list_by_user_and_direction(a_user, a_direction, a_query_title, a_query
 
         else:
 
-            queryset = MatrixSummary.objects.filter(Q(matrix_authorisation_authority='ADMIN') & (Q(matrix_title__contains=a_query_search_term) | Q(matrix_description__contains=a_query_search_term)) | Q(matrix_owner__contains=a_query_search_term) | Q(matrix_authorisation_authority__contains=a_query_search_term)).order_by(sort_parameter)
+            queryset = MatrixSummary.objects.filter(Q(matrix_authorisation_authority='ADMIN') & (Q(matrix_title__contains=a_query_search_term) | Q(matrix_description__contains=a_query_search_term))).order_by(sort_parameter)
 
     else:
 
@@ -348,6 +348,6 @@ def bench_list_by_user_and_direction(a_user, a_direction, a_query_title, a_query
 
         else:
 
-            queryset = MatrixSummary.objects.filter((~Q(matrix_authorisation_authority='ADMIN') & Q(matrix_authorisation_permitted=a_user.username)) & (Q(matrix_title__contains=a_query_search_term) | Q(matrix_description__contains=a_query_search_term)) | Q(matrix_owner__contains=a_query_search_term) | Q(matrix_authorisation_authority__contains=a_query_search_term)).order_by(sort_parameter)
+            queryset = MatrixSummary.objects.filter((~Q(matrix_authorisation_authority='ADMIN') & Q(matrix_authorisation_permitted=a_user.username)) & (Q(matrix_title__contains=a_query_search_term) | Q(matrix_description__contains=a_query_search_term))).order_by(sort_parameter)
 
     return queryset

@@ -58,7 +58,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
     """
     queryset = Matrix.objects.all()
 
-    #permission_classes = [ MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor ]
+    permission_classes = [ MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor ]
 
     serializer_class = MatrixSerializer
 

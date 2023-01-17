@@ -286,19 +286,19 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         owner = image_data.get('owner')
                         image_id = image_data.get('image_id')
                         image_roi_id = image_data.get('roi')
+                        image_comment = image_data.get('comment')
 
                         # Get the Image Owner Object
                         image_owner = get_user_from_username(owner)
 
                         # Validate the Image Attributes and return the associated Image Server
-                        server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+                        server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
 
                         # Set up further Image Attributes
                         image_name = ''
                         image_viewer_url = ''
                         image_birdseye_url = ''
                         image_roi = 0
-                        image_comment = ''
 
                         # Is the Image Server a WordPress Server
                         if server.is_wordpress():
@@ -690,17 +690,20 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # If there was NO Database Image and there is a Supplied Image
                         if image_data is not None and bench_cell.image is None:
 
+                            print("HERE 1")
+
                             # Extract the supplied Image Attributes
                             image_server = image_data.get('server')
                             owner = image_data.get('owner')
                             image_id = image_data.get('image_id')
                             image_roi_id = image_data.get('roi')
+                            image_comment = image_data.get('comment')
                             
                             # Get the User Object for the Supplied Owner
                             image_owner = get_user_from_username(owner)
 
                             # Validate the Supplied Image Attributes, and return the Associated Server
-                            server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+                            server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
 
                             image_identifier = int(image_id)
 
@@ -708,7 +711,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             image_viewer_url = ''
                             image_birdseye_url = ''
                             image_roi = 0
-                            image_comment = ''
 
                             # Is the Server a WordPress Server?
                             if server.is_wordpress():
@@ -757,6 +759,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
                                 image = existing_image_list[0]
+
+                                # Do we have a new Image comment
+                                #  Yes
+                                if image.comment != image_comment:
+
+                                    # Set the Image Comment
+                                    image.comment = image_comment
+                                        
+                                    # Update the Database
+                                    image.save()
 
                                 # Associate the Cell with the Existing Image
                                 bench_cell.image = image
@@ -842,29 +854,102 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # If there is a Database Image and there is a Supplied Image
                         if image_data is not None and bench_cell.image is not None:
 
+                            print("HERE 2")
+
                             # Extract the supplied Image Attributes 
                             image_server = image_data.get('server')
                             owner = image_data.get('owner')
                             image_id = image_data.get('image_id')
                             image_roi_id = image_data.get('roi')
+                            image_comment = image_data.get('comment')
 
                             # Get the User Object for the Supplied Image Owner
                             image_owner = get_user_from_username(owner)
 
                             image_identifier = int(image_id)
 
+                            print("image_identifier : " + str(image_identifier))
+                            print("bench_cell.image.identifier : " + str(bench_cell.image.identifier))
+
                             # Is the Suppied Image Id Different to the Exiying Database Image Id?
                             #  Yes ...
-                            if image_identifier != bench_cell.image.identifier:
+                            if image_identifier == bench_cell.image.identifier:
 
                                 # Validate the new supplied Image Attributes, and return the associated Server
-                                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id)
+                                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
 
                                 image_name = ''
                                 image_viewer_url = ''
                                 image_birdseye_url = ''
                                 image_roi = 0
-                                image_comment = ''
+
+                                # Is the Server a WordPress Server?
+                                if server.is_wordpress():
+
+                                    # Get the Image from the WordPress Server for the supplied Id
+                                    data = server.check_wordpress_image(image_owner, image_id)
+
+                                    json_image = data['image']
+
+                                    # Extract the Server Image Attributes
+                                    image_name = json_image['name']
+                                    image_viewer_url = json_image['viewer_url']
+                                    image_birdseye_url = json_image['birdseye_url']
+
+                                # Is the Server an OMERO Server?
+                                else:
+
+                                    # Get the Image from the OMERO Server for the supplied Id
+                                    data = server.check_imaging_server_image(image_id)
+
+                                    json_image = data['image']
+
+                                    # Extract the Server Image Attributes
+                                    image_name = json_image['name']
+                                    image_viewer_url = json_image['viewer_url']
+                                    image_birdseye_url = json_image['birdseye_url']
+
+                                    # Is there an ROI Suppied too?
+                                    if image_roi_id != 0:
+
+                                        # Get the Image ROI from the OMERO Server for the Supplied Roi Id
+                                        data = server.check_imaging_server_image_roi(image_id, image_roi_id)
+
+                                        json_roi = data['roi']
+
+                                        # Extract the ROI Id
+                                        image_roi = int(json_roi['id'])
+
+                                # Does the Image already exist in the Database?
+                                #  Yes
+                                if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
+
+                                    print("HERE 4")
+
+                                    # Get the Existing Image
+                                    existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+
+                                    image = existing_image_list[0]
+
+                                    # Do we have a new Image comment
+                                    #  Yes
+                                    if image.comment != image_comment:
+
+                                        # Set the Image Comment
+                                        image.comment = image_comment
+                                        
+                                        # Update the Database
+                                        image.save()
+
+                            #  No ...
+                            else:
+                                # Validate the new supplied Image Attributes, and return the associated Server
+                                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
+
+                                image_name = ''
+                                image_viewer_url = ''
+                                image_birdseye_url = ''
+                                image_roi = 0
 
                                 # Is the Server a WordPress Server?
                                 if server.is_wordpress():
@@ -908,16 +993,30 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 #  Yes
                                 if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
+                                    print("HERE 4")
+
                                     # Get the Existing Image
                                     existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
                                     image = existing_image_list[0]
+
+                                    # Do we have a new Image comment
+                                    #  Yes
+                                    if image.comment != image_comment:
+
+                                        # Set the Image Comment
+                                        image.comment = image_comment
+                                        
+                                        # Update the Database
+                                        image.save()
 
                                     # Associate the Cell with the Existing Image
                                     bench_cell.image = image
 
                                 # No ... 
                                 else:
+
+                                    print("HERE 5")
 
                                     # Create a New Image Object
                                     image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
@@ -1005,6 +1104,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                         # If there is a Database Image and there is No Supplied Image
                         if image_data is None and bench_cell.image is not None:
+
+                            print("HERE 3")
 
                             # Set the Cell Image to None
                             bench_cell.image = None
@@ -1176,18 +1277,18 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     owner = image_data.get('owner')
                     image_id = image_data.get('image_id')
                     roi_id = image_data.get('roi')
+                    image_comment = image_data.get('comment')
                     
                     # Get the User Object from the database for the supplied owner
                     image_owner = get_user_from_username(owner)
 
                     # Validate the Attrubutes and Return the Server associated with them
-                    server = self.validate_image_json(server, image_owner, image_id, roi_id)
+                    server = self.validate_image_json(server, image_owner, image_id, roi_id, image_comment)
 
                     image_name = ''
                     image_viewer_url = ''
                     image_birdseye_url = ''
                     image_roi = 0
-                    image_comment = ''
                     
                     # Is the Server a WordPress Server?
                     #  Yes
@@ -1603,6 +1704,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 owner = image_data.get('owner')
                 image_id = image_data.get('image_id')
                 roi_id = image_data.get('roi')
+                image_comment = image_data.get('comment')
+
                 image_owner = None
 
                 # Does the Image Owner exist on the Database?
@@ -1629,7 +1732,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     raise serializers.ValidationError(message)
 
                 # Validate the Image in the Cell
-                server = self.validate_image_json(server, image_owner, image_id, roi_id)
+                server = self.validate_image_json(server, image_owner, image_id, roi_id, image_comment)
 
 
     def validate_cell_json_fields(self, a_title, a_description):
@@ -1667,7 +1770,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError(message)
 
 
-    def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id):
+    def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id, a_image_comment):
         """Validates the supplied Server, Owner, Image Id and ROI ID Fields
 
         Finds a Server Object from the the supplied server string, and 
@@ -1685,6 +1788,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
         Raises:
             ValidationError:
+                CPW_REST:XXXX - Image Comment Title Length is greater than 4095!
+            ValidationError:
                 CPW_REST:0330 - Image NOT Present on the WordPress Server
             ValidationError:
                 CPW_REST:0250 - ROI NOT Present on the Server
@@ -1698,6 +1803,14 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         """
         
         server = None
+
+        len_comment = len(a_image_comment)
+
+        # Is the Comment greater than 4095 Characters? IF so, Raise an Error!
+        if len_comment > CONST_4095:
+
+            message = 'CPW_REST:XXXX ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
+            raise serializers.ValidationError(message)
 
         # Split the Server String into UID and URL?
         server_list = a_server_str.split("@")

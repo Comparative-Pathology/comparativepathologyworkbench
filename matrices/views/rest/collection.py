@@ -46,8 +46,10 @@ from matrices.routines import get_collections_for_image
 from matrices.routines import exists_image_in_cells
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_bench_for_last_used_collection
+from matrices.routines import exists_user_for_last_used_collection
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_benches_for_last_used_collection
+from matrices.routines import get_users_for_last_used_collection
 
 #
 # COLLECTION REST INTERFACE ROUTINES
@@ -111,6 +113,23 @@ class  CollectionViewSet(viewsets.ModelViewSet):
 
                 matrix.save()
 
+
+        if exists_user_for_last_used_collection(collection):
+
+            user_list = get_users_for_last_used_collection(collection)
+
+            for user in user_list:
+
+                user.profile.set_last_used_collection(None)
+                user.save()
+
+
+        if collection == get_active_collection_for_user(request.user):
+
+            request.user.profile.set_active_collection(None)
+            request.user.save()
+
+
         if exists_active_collection_for_user(request.user):
 
             active_collection = get_active_collection_for_user(request.user)
@@ -118,6 +137,10 @@ class  CollectionViewSet(viewsets.ModelViewSet):
             if active_collection != collection:
                 
                 collection.delete()
+
+        else:
+
+            collection.delete()
 
 
         return Response(data='Collection Delete Success')

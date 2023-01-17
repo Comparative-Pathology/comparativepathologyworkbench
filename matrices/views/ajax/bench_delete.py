@@ -66,71 +66,69 @@ def bench_delete(request, bench_id):
 
         raise PermissionDenied
 
+    credential = get_credential_for_user(request.user)
+
+    if not credential.has_apppwd():
+
+        raise PermissionDenied
+
 
     object_id = ''
 
     serverWordpress = get_primary_wordpress_server()
-    credential = get_credential_for_user(request.user)
 
     matrix = get_object_or_404(Matrix, pk=bench_id)
 
     oldCells = Cell.objects.filter(matrix=bench_id)
 
-    if credential.has_apppwd():
+    if matrix.has_blogpost():
 
-        if matrix.has_blogpost():
+        response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
 
-            response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
+        if response != WORDPRESS_SUCCESS:
 
-            if response == WORDPRESS_SUCCESS:
+            messages.error(request, "CPW_WEB:0560 Delete Bench - WordPress Error, Contact System Administrator!")
 
-                for oldCell in oldCells:
 
-                    if oldCell.has_blogpost():
+    for oldCell in oldCells:
 
-                        response = serverWordpress.delete_wordpress_post(credential, oldCell.blogpost)
+        if oldCell.has_blogpost():
 
-                        if response != WORDPRESS_SUCCESS:
+            response = serverWordpress.delete_wordpress_post(credential, oldCell.blogpost)
 
-                            messages.error(request, "CPW_WEB:0550 Delete Bench - WordPress Error, Contact System Administrator!")
+            if response != WORDPRESS_SUCCESS:
 
-                    if oldCell.has_image():
+                messages.error(request, "CPW_WEB:0550 Delete Bench - WordPress Error, Contact System Administrator!")
 
-                        if not exists_collections_for_image(oldCell.image):
+        if oldCell.has_image():
 
-                            cell_list = get_cells_for_image(oldCell.image)
+            if not exists_collections_for_image(oldCell.image):
 
-                            delete_flag = True
+                cell_list = get_cells_for_image(oldCell.image)
 
-                            for otherCell in cell_list:
+                delete_flag = True
 
-                                if otherCell.matrix.id != bench_id:
+                for otherCell in cell_list:
 
-                                    delete_flag = False
+                    if otherCell.matrix.id != bench_id:
 
-                            if delete_flag == True:
+                        delete_flag = False
 
-                                image = oldCell.image
+                if delete_flag == True:
 
-                                oldCell.image = None
+                    image = oldCell.image
 
-                                oldCell.save()
+                    oldCell.image = None
 
-                                image.delete()
+                    oldCell.save()
 
-                object_id = matrix.id
+                    image.delete()
 
-                matrix.delete()
+    object_id = matrix.id
 
-                matrix_id_formatted = "CPW:" + "{:06d}".format(object_id)
-                messages.success(request, 'Bench ' + matrix_id_formatted + ' DELETED!')
+    matrix.delete()
 
-            else:
-
-                messages.error(request, "CPW_WEB:0560 Delete Bench - WordPress Error, Contact System Administrator!")
-
-    else:
-
-        messages.error(request, "CPW_WEB:0290 DELETE Bench  - No WordPress Credentials, Contact System Administrator!")
+    matrix_id_formatted = "CPW:" + "{:06d}".format(object_id)
+    messages.success(request, 'Bench ' + matrix_id_formatted + ' DELETED!')
 
     return JsonResponse({'object_id': object_id})

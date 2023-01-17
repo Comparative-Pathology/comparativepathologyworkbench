@@ -40,6 +40,8 @@ from matrices.models import Collection
 
 from matrices.routines import collection_delete_consequences
 from matrices.routines import credential_exists
+from matrices.routines import exists_active_collection_for_user
+from matrices.routines import get_active_collection_for_user
 
 #
 # DELETE A COLLECTION
@@ -62,11 +64,11 @@ def collection_delete(request, collection_id):
 
     collection = get_object_or_404(Collection, pk=collection_id)
 
+    object_id = collection.id
+
     collection_delete_consequences(request.user, collection)
 
     messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' DELETED!')
-
-    object_id = collection.id
 
     collection.delete()
 

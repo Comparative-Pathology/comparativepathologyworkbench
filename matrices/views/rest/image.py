@@ -50,8 +50,6 @@ from matrices.serializers import ImageSerializer
 from matrices.routines import exists_image_in_cells
 
 
-# BENCH CELL IMAGE REST INTERFACE ROUTINES
-
 class ImageViewSet(viewsets.ModelViewSet):
     """A ViewSet of Images
 
@@ -119,80 +117,130 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         image = self.get_object()
 
-        # Check if the Image is still referenced in a Cell
-        #  If not, then Delete may proceed
-        if not exists_image_in_cells(image):
+        responseMsg = 'Image Deletion Response Message'
 
-            list_collections = image.collections.all()
+        # Check if the Image is still referenced in a Cell
+        #  Yes
+        if exists_image_in_cells(image):
+
+            #  Image Deletion is NOT allowed for Images still referenced in a Bench
+            responseMsg = 'Image Deletion NOT Allowed - Image still referenced in a Bench!'
+
+        # No
+        else:
 
             boolAllowDelete = True
 
-            if image.exists_image_links():
+            # Is the Image from a WordPress or OMERO server ... ?
+            #  Yes
+            if image.server.is_wordpress() or image.server.is_omero547():
 
-                if image.exists_parent_image_links():
+                # Does the Image have any Image Links ... ?
+                #  Yes
+                if image.exists_image_links():
 
-                    image_link_list_parent = image.get_parent_image_links()
+                    # Does the Image have any Parent Image Links ... ?
+                    #  Yes
+                    if image.exists_parent_image_links():
 
-                    for image_link in image_link_list_parent:
+                        # Get all the image links that are Parents of this Image
+                        image_link_list_parent = image.get_parent_image_links()
 
-                        if image_link.is_owned_by(request.user):
+                        # Process all the image links that are Parents of this Image
+                        for image_link in image_link_list_parent:
 
-                            artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+                            # Does the Requesting User own this Image Link or is the Requesting User an Admin ... ?
+                            #  Yes
+                            if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
-                            if artefact.has_location():
+                                # Get the Artefact associated with this Image Link
+                                artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
 
-                                rm_command = 'rm ' + str(artefact.location)
+                                # Does the Image Link have a file location
+                                if artefact.has_location():
 
-                                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                    rm_command = 'rm ' + str(artefact.location)
 
-                            image_link.delete()
+                                    # Delete the located file for this artefact
+                                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
-                            artefact.delete()
+                                # Delete the Image Link
+                                image_link.delete()
 
-                        else:
+                                # Delete the Artefact
+                                artefact.delete()
 
-                            boolAllowDelete = False
+                            # No, disallow the Image deletion
+                            else:
 
-
-                if image.exists_child_image_links():
-
-                    image_link_list_child = image.get_child_image_links()
-
-                    for image_link in image_link_list_child:
-
-                        if image_link.is_owned_by(request.user):
-
-                            artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
-
-                            if artefact.has_location():
-
-                                rm_command = 'rm ' + str(artefact.location)
-
-                                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-
-                            image_link.delete()
-
-                            artefact.delete()
-
-                        else:
-
-                            boolAllowDelete = False
-
-            if boolAllowDelete == True:
-
-                for collection in list_collections:
-
-                    Collection.unassign_image(image, collection)
-
-                if image.server.is_ebi_sca() or image.server.is_cpw():
-
-                    image_path = settings.MEDIA_ROOT + '/' + image.name
-
-                    rm_command = 'rm ' + str(image_path)
-
-                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-
-                image.delete()
+                                boolAllowDelete = False
 
 
-        return Response(data='Image Delete Success')
+                    # Does the Image have any Parent Image Links ... ?
+                    #  Yes
+                    if image.exists_child_image_links():
+
+                        # Get all the image links that are Children of this Image
+                        image_link_list_child = image.get_child_image_links()
+
+                        # Process all the image links that are Children of this Image
+                        for image_link in image_link_list_child:
+
+                            # Does the Requesting User own this Image Link or is the Requesting User an Admin ... ?
+                            #  Yes
+                            if image_link.is_owned_by(request.user) or request.user.is_superuser:
+
+                                # Get the Artefact associated with this Image Link
+                                artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+
+                                # Does the Image Link have a file location
+                                if artefact.has_location():
+
+                                    rm_command = 'rm ' + str(artefact.location)
+
+                                    # Delete the located file for this artefact
+                                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+                                # Delete the Image Link
+                                image_link.delete()
+
+                                # Delete the Artefact
+                                artefact.delete()
+
+                            else:
+
+                                # No, disallow the Image deletion
+                                boolAllowDelete = False
+
+                #  Can we delete this image ... ?
+                #  Yes ... 
+                if boolAllowDelete == True:
+
+                    #  Get all the collections that have this Image
+                    list_collections = image.collections.all()
+
+                    #  Process all the Collections that hold this image
+                    for collection in list_collections:
+
+                        #  Delete the image from the Collection
+                        Collection.unassign_image(image, collection)
+
+                    #  Delete the image from the Database
+                    image.delete()
+
+                    responseMsg = 'Image Delete Success!'
+                
+                #  No ... 
+                else:
+
+                    #  Image Links have NOT been able to be deleted for this image!
+                    responseMsg = 'Image Deletion NOT Allowed - Image Links NOT Deleted!'
+
+            #  No
+            else:
+                
+                #  Image Deletion is NOT allowed for NON WordPress/OMERO served Images
+                responseMsg = 'Image Deletion NOT Allowed - Image Server is NOT OMERO or WordPress!'
+
+
+        return Response(data=responseMsg)

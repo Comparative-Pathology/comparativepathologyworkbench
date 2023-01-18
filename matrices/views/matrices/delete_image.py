@@ -85,8 +85,9 @@ def delete_image(request, image_id):
                             if artefact.has_location():
 
                                 rm_command = 'rm ' + str(artefact.location)
+                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                             image_link.delete()
 
@@ -110,8 +111,9 @@ def delete_image(request, image_id):
                             if artefact.has_location():
 
                                 rm_command = 'rm ' + str(artefact.location)
+                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                             image_link.delete()
 
@@ -134,8 +136,9 @@ def delete_image(request, image_id):
                     image_path = settings.MEDIA_ROOT + '/' + image.name
 
                     rm_command = 'rm ' + str(image_path)
+                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                 image.delete()
 

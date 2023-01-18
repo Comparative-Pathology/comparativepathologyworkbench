@@ -49,13 +49,17 @@ from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 
 
-#
-# BENCH REST INTERFACE ROUTINES
-#
 class MatrixViewSet(viewsets.ModelViewSet):
+    """A ViewSet of Benches
+
+    This viewset automatically provides:
+        List, Create, Retrieve, Update and Destroy actions for Benches.
+
+    Parameters:
+        None
+
     """
-    This viewset automatically provides `list`, `create`, `retrieve`, `update` and `destroy` actions.
-    """
+
     queryset = Matrix.objects.all()
 
     permission_classes = [ MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor ]
@@ -64,38 +68,84 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
+        """List Images.
+
+        Listing Benches is NOT Allowed
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
 
         return Response(data='Bench LIST Not Available')
 
 
     def partial_update(self, request, *args, **kwargs):
+        """Partial Update Bench.
+
+        A Partial Update of a Bench is NOT Allowed
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
 
         return Response(data='Bench PARTIAL UPDATE Not Available')
 
 
     def destroy(self, request, *args, **kwargs):
+        """Destroy Bench.
+
+        This fucntion destroys the requested Image.
+
+        Parameters:
+
+        Returns:
+
+        Raises:
+          
+        """
+
+        responseMsg = 'Bench Deletion Response Message'
 
         matrix = self.get_object()
 
         self.check_object_permissions(self.request, matrix)
 
+        # Get All the Cells for this Bench
         cell_list = Cell.objects.filter(Q(matrix=matrix))
 
         credential = get_credential_for_user(request.user)
 
         serverWordpress = get_primary_wordpress_server()
 
+        # Process All the cells in this Bench
         for cell in cell_list:
 
+            # Does the Cell have a Blogpost ... ?
+            #  Yes
             if cell.has_blogpost():
 
+                # Does the User have a Blog Password ... ?
+                #  Yes
                 if credential.has_apppwd():
 
+                    # Delete the Cell Blogpost
                     response = serverWordpress.delete_wordpress_post(credential, cell.blogpost)
 
 
+            # Does the Cell have an Image ... ?
+            #  Yes
             if cell.has_image():
 
+                # Is the Image in a Collection ... ?
+                #  No
                 if not exists_collections_for_image(cell.image):
 
                     cell_list = get_cells_for_image(cell.image)
@@ -118,13 +168,21 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                         image.delete()
 
+
+        # Does the Bench have a Blogpost ... ?
+        #  Yes
         if matrix.has_blogpost():
 
+            # Does the User have a Blog Password ... ?
+            #  Yes
             if credential.has_apppwd():
 
+                # Delete the Bench Blogpost
                 response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
 
+        responseMsg = 'Bench Delete Success!'
 
+        # Delete the Bench!
         matrix.delete()
 
-        return Response(data='Bench Delete Success')
+        return Response(data=responseMsg)

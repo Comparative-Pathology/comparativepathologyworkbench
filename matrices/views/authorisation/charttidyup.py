@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the collectivization view routine
+# This file contains the Chart Tidy Up view routine
 #
 ###
 from __future__ import unicode_literals
@@ -116,8 +116,9 @@ def charttidyup(request):
                         imageDelTotal = imageDelTotal + 1
 
                         rm_command = 'rm ' + config('HIGHCHARTS_OUTPUT_DIR') + output.strip()
+                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                        rm_list.append(rm_command)
+                        rm_list.append(rm_escaped)
 
         aux_rm_list = list(set(rm_list))
 

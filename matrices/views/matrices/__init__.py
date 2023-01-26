@@ -94,3 +94,4 @@ from .view_child_image_link import view_child_image_link
 from .view_parent_and_child_image_links import view_parent_and_child_image_links
 from .view_matrix import view_matrix
 from .view_matrix_blog import view_matrix_blog
+from .view_aggregated_blog import view_aggregated_blog

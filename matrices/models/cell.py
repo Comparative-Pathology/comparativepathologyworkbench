@@ -230,5 +230,5 @@ class Cell(models.Model):
                 'image_name': image_name,
                 'comment_list': comment_list
                 })
-
+        
         return cellComments

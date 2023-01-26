@@ -128,6 +128,7 @@ urlpatterns = [
 
 	path('bench_blog_read/<int:bench_id>/', matrices_views.ajax.bench_blog_read, name='bench_blog_read'),
 	path('bench_cell_blog_read/<int:cell_id>/', matrices_views.ajax.bench_cell_blog_read, name='bench_cell_blog_read'),
+	path('aggregate_bench_cell_blog_read/<int:cell_id>/', matrices_views.ajax.aggregate_bench_cell_blog_read, name='aggregate_bench_cell_blog_read'),
 
 #   views/authorisation
 	path('collectivization/', matrices_views.collectivization, name='collectivization'),
@@ -220,6 +221,7 @@ urlpatterns = [
 	path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
 	path('activate_in_collection/<int:collection_id>/', matrices_views.matrices.activate_in_collection, name='activate_in_collection'),
 
+	path('aggregated_matrix_blog/<int:matrix_id>/', matrices_views.matrices.view_aggregated_blog, name='aggregated_matrix_blog'),
 	path('detail_matrix_blog/<int:matrix_id>/', matrices_views.matrices.view_matrix_blog, name='detail_matrix_blog'),
 	path('view_cell_blog/<int:matrix_id>/<int:cell_id>/', matrices_views.matrices.view_cell_blog, name='view_cell_blog'),
 	path('matrix/<int:matrix_id>/', matrices_views.matrices.view_matrix, name='matrix'),

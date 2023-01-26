@@ -50,6 +50,26 @@ The view matrix (bench) template
 			<li>
 				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
 			</li>
+			<li>
+				<a href="{% url 'aggregated_matrix_blog' matrix.id %}">
+				  <div class="tooltip" style="font-size: 12px; width:150px;">
+	{% if settings.LOCATION == 'CZI' %}
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
+	{% endif %}
+	{% if settings.LOCATION == 'CANADA' %}
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;">
+	{% endif %}
+	{% if settings.LOCATION == 'COELIAC' %}
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;">
+	{% endif %}
+						<i class="fa fa-bullhorn"></i>
+					</button>
+		            <span class="tooltiptext">Aggregated Bench and Cell Commentary</span>
+		    	  </div>
+				</a>
+			</li>
+
+			
 	{% if settings.LOCATION == 'CZI' %}
 			<li style="float: right;">
 				<a href="{% url 'matrix' next_bench %}">
@@ -196,6 +216,7 @@ The view matrix (bench) template
 					{% if readBoolean %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Bench Commentary</a>
+			  <a href="{% url 'aggregated_matrix_blog' matrix.id %}"><i class="fa fa-bullhorn"></i><span class="menu-item">&#9;</span> Aggregated Commentary</a>
 						{% if updateBoolean %}
 			  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>

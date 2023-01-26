@@ -36,6 +36,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from sortable_listview import SortableListView
 
 from matrices.models import MatrixSummary
+
 from matrices.forms import MatrixSummarySearchForm
 
 from matrices.routines import credential_exists

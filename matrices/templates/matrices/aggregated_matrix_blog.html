@@ -1,0 +1,274 @@
+<!--
+\file         detail_matrix_blog.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The detail matrix (bench) blog template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li>Aggregated Bench and Cell Commentary</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+    <h1>Bench and Cell Commentary</h1>
+
+	<h3>Bench Commentary, Bench: CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h3>
+
+	<h5>Bench Title: "{{ matrix.title }}"</h5>
+
+	<table>
+		<tr>
+			<th width="100px">Date</th>
+			<th width="100px">Time</th>
+			<th width="100px">Author</th>
+			<th>Post</th>
+		</tr>
+		<tr>
+			<td>{{ bench_blogpost.date }}</td>
+			<td>{{ bench_blogpost.time }}</td>
+			<td>{{ bench_blogpost.author }}</td>
+			<td>{{ bench_blogpost.content|safe }}</td>
+		</tr>
+
+{% if bench_comment_list %}
+
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+
+	{% for bench_comment in bench_comment_list %}
+
+		{% if forloop.first %}
+
+		<tr>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Author</th>
+			<th>Comment</th>
+		</tr>
+
+		{% endif %}
+
+		<tr>
+			<td>{{ bench_comment.date }}</td>
+			<td>{{ bench_comment.time }}</td>
+			<td>{{ bench_comment.author_name }}</td>
+			<td>{{ bench_comment.content|safe }}</td>
+		</tr>
+
+	{% endfor %}
+
+{% else %}
+
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+
+		<tr>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Author</th>
+			<th>Comment</th>
+		</tr>
+
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>No Bench Comments!</td>
+		</tr>
+
+{% endif %}
+
+	</table>
+
+	<p><a href="{% url 'detail_matrix_blog' matrix.id %}"><button class="button button-delete">Edit &raquo;</button></a></p>
+
+	<br />
+
+	<hr>
+
+
+{% if matrix_cells %}
+
+	<p id ="btnSubmit"><button class="button button-add">Expand ALL &raquo;</button></p>
+
+
+	{% for matrix_cell in matrix_cells %}
+
+    <br />
+
+	<h3>Cell Commentary, Cell: {{ matrix_cell.id }}, Bench: CPW:{{ matrix.id|stringformat:"06d" }}</h3>
+	
+	<h5>Cell Title: "{{ matrix_cell.title|safe }}"</h5>
+
+	<p id ="btnSubmit_{{matrix_cell.id}}"><button class="button button-add">Expand &raquo;</button></p>
+
+	<p class="test_content_{{matrix_cell.id}}">
+	</p>
+
+    <p><a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}"><button class="button button-delete">Edit &raquo;</button></a></p>
+
+
+
+	<br />
+
+	<hr>
+
+	{% endfor %}
+
+{% else %}
+
+	<p>There are no Cell Comments</p>
+
+{% endif %}
+
+
+<script>
+
+{% if matrix_cells %}
+
+	{% for matrix_cell in matrix_cells %}
+
+	$(document).ready(function() {
+		$('#btnSubmit_{{matrix_cell.id}}').click(function() {
+			var button = document.getElementById("btnSubmit_{{matrix_cell.id}}");
+			var data = new FormData();
+			//var username = $('#id_username').val()
+			//data.append('htmlString', username);
+			$.ajax({
+				type: 'GET',
+				url: "{% url 'aggregate_bench_cell_blog_read' matrix_cell.id %}",
+				data: data,
+				processData: false,
+				contentType: false,
+				success : function(newdata) {
+             		$('.test_content_{{matrix_cell.id}}').html(newdata);
+		        }
+			})
+			button.style.display = "none";
+		});
+	});
+		
+	{% endfor %}
+
+{% endif %}
+
+
+$(document).ready(function() {
+		$('#btnSubmit').click(function() {
+			var button = document.getElementById("btnSubmit");
+{% if matrix_cells %}
+	{% for matrix_cell in matrix_cells %}
+			var button_{{matrix_cell.id}} = document.getElementById("btnSubmit_{{matrix_cell.id}}");
+			var data = new FormData();
+			//var username = $('#id_username').val()
+			//data.append('htmlString', username);
+			$.ajax({
+				type: 'GET',
+				url: "{% url 'aggregate_bench_cell_blog_read' matrix_cell.id %}",
+				data: data,
+				processData: false,
+				contentType: false,
+				success : function(newdata) {
+             		$('.test_content_{{matrix_cell.id}}').html(newdata);
+		        }
+			})
+			button_{{matrix_cell.id}}.style.display = "none";
+	{% endfor %}
+{% endif %}
+			button.style.display = "none";
+		});
+	});
+		
+
+
+</script>
+    
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+{% endblock %}

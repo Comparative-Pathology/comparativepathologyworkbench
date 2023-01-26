@@ -212,6 +212,23 @@ class Matrix(models.Model):
 
         return matrix_cells
 
+    def get_matrix_cells_with_blog(self):
+        """Returns the Cells with Blog Entries associated with this Bench."""
+
+        Cell = apps.get_model('matrices', 'Cell')
+
+        cells = Cell.objects.filter(matrix=self.id)
+
+        matrix_cells = list()
+
+        for cell in cells:
+
+            if cell.has_blogpost():
+
+                matrix_cells.append(cell)
+
+        return matrix_cells
+
 
     def validate_matrix(self):
         """Returns the Cells associated with this Bench as a 2 Dimensional Array."""

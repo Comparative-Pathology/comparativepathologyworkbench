@@ -73,6 +73,7 @@ from .bench_delete import bench_delete
 from .header_read import header_read
 from .header_update import header_update
 
+from .aggregate_bench_cell_blog_read import aggregate_bench_cell_blog_read
 from .bench_blog_read import bench_blog_read
 from .bench_cell_blog_read import bench_cell_blog_read
 

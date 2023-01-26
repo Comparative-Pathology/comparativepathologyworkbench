@@ -43,6 +43,7 @@ from matrices.permissions import MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor
 
 from matrices.serializers import MatrixSerializer
 
+from matrices.routines import bench_list_by_user_and_direction
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
@@ -67,6 +68,149 @@ class MatrixViewSet(viewsets.ModelViewSet):
     serializer_class = MatrixSerializer
 
 
+    def get_queryset(self):
+
+        query_title = self.request.query_params.get('title', '')
+        query_description = self.request.query_params.get('description', '')
+        query_owner = self.request.query_params.get('owner', '')
+        query_created_before = self.request.query_params.get('created_before', '')
+        query_created_after = self.request.query_params.get('created_after', '')
+        query_modified_before = self.request.query_params.get('modified_before', '')
+        query_modified_after = self.request.query_params.get('modified_after', '')
+
+        query_search = ''
+
+        sort_parameter = 'matrix_id'
+        order_parameter = 'matrix_id'
+        order_parameter_2 = 'id'
+
+        if self.request.query_params.get('sort', None) == None:
+
+            sort_parameter = 'matrix_id'
+
+        else:
+
+            sort_parameter = self.request.query_params.get('sort', None)
+
+        if sort_parameter == 'id':
+            order_parameter = 'matrix_id'
+            order_parameter_2 = 'id'
+        
+        if sort_parameter == '-id':
+            order_parameter = '-matrix_id'
+            order_parameter_2 = '-id'
+        
+        if sort_parameter == 'title':
+            order_parameter = 'matrix_title'
+            order_parameter_2 = 'title'
+        
+        if sort_parameter == '-title':
+            order_parameter = '-matrix_title'
+            order_parameter_2 = '-title'
+        
+        if sort_parameter == 'created':
+            order_parameter = 'matrix_created'
+            order_parameter_2 = 'created'
+        
+        if sort_parameter == '-created':
+            order_parameter = '-matrix_created'
+            order_parameter_2 = '-created'
+        
+        if sort_parameter == 'updated':
+            order_parameter = 'matrix_updated'
+            order_parameter_2 = 'updated'
+        
+        if sort_parameter == '-updated':
+            order_parameter = '-matrix_updated'
+            order_parameter_2 = '-updated'
+        
+        if sort_parameter == 'owner':
+            order_parameter = 'matrix_owner'
+            order_parameter_2 = 'owner'
+        
+        if sort_parameter == '-owner':
+            order_parameter = '-matrix_owner'
+            order_parameter_2 = '-owner'
+        
+        if sort_parameter == 'matrix_id':
+            order_parameter = 'matrix_id'
+            order_parameter_2 = 'id'
+        
+        if sort_parameter == '-matrix_id':
+            order_parameter = '-matrix_id'
+            order_parameter_2 = '-id'
+        
+        if sort_parameter == 'matrix_title':
+            order_parameter = 'matrix_title'
+            order_parameter_2 = 'title'
+        
+        if sort_parameter == '-matrix_title':
+            order_parameter = '-matrix_title'
+            order_parameter_2 = '-title'
+        
+        if sort_parameter == 'matrix_created':
+            order_parameter = 'matrix_created'
+            order_parameter_2 = 'created'
+        
+        if sort_parameter == '-matrix_created':
+            order_parameter = '-matrix_created'
+            order_parameter_2 = '-created'
+        
+        if sort_parameter == 'matrix_updated':
+            order_parameter = 'matrix_updated'
+            order_parameter_2 = 'updated'
+        
+        if sort_parameter == '-matrix_updated':
+            order_parameter = '-matrix_updated'
+            order_parameter_2 = '-updated'
+        
+        if sort_parameter == 'matrix_owner':
+            order_parameter = 'matrix_owner'
+            order_parameter_2 = 'owner'
+        
+        if sort_parameter == '-matrix_owner':
+            order_parameter = '-matrix_owner'
+            order_parameter_2 = '-owner'
+
+        if sort_parameter != 'id' and \
+            sort_parameter != '-id' and \
+            sort_parameter != 'title' and \
+            sort_parameter != '-title' and \
+            sort_parameter != 'created' and \
+            sort_parameter != '-created' and \
+            sort_parameter != 'updated' and \
+            sort_parameter != '-updated' and \
+            sort_parameter != 'owner' and \
+            sort_parameter != '-owner' and \
+            sort_parameter != 'matrix_id' and \
+            sort_parameter != '-matrix_id' and \
+            sort_parameter != 'matrix_title' and \
+            sort_parameter != '-matrix_title' and \
+            sort_parameter != 'matrix_created' and \
+            sort_parameter != '-matrix_created' and \
+            sort_parameter != 'matrix_updated' and \
+            sort_parameter != '-matrix_updated' and \
+            sort_parameter != 'matrix_owner' and \
+            sort_parameter != '-matrix_owner':
+
+            order_parameter = 'matrix_id'
+            order_parameter_2 = 'id'
+
+        bench_summary_queryset = bench_list_by_user_and_direction(self.request.user, order_parameter, query_title, query_description, query_owner, query_authority, query_created_after, query_created_before, query_modified_after, query_modified_before, query_search )
+
+        bench_queryset = Matrix.objects.none()
+
+        list_of_bench_ids = []
+
+        for bench_summary in bench_summary_queryset:
+
+            list_of_bench_ids.append(bench_summary.matrix_id)
+
+        bench_queryset = Matrix.objects.filter(id__in=list_of_bench_ids).order_by(order_parameter_2)
+
+        return bench_queryset
+
+
     def list(self, request, *args, **kwargs):
         """List Images.
 
@@ -80,8 +224,39 @@ class MatrixViewSet(viewsets.ModelViewSet):
           
         """
 
-        return Response(data='Bench LIST Not Available')
+        responseMsg = 'Bench List Response Message'
 
+        query_title = self.request.query_params.get('title', '')
+        query_description = self.request.query_params.get('description', '')
+        query_owner = self.request.query_params.get('owner', '')
+        query_authority = self.request.query_params.get('authority', '')
+        query_created_before = self.request.query_params.get('created_before', '')
+        query_created_after = self.request.query_params.get('created_after', '')
+        query_modified_before = self.request.query_params.get('modified_before', '')
+        query_modified_after = self.request.query_params.get('modified_after', '')
+
+        if not request.user.is_superuser:
+
+            if query_title == "" and \
+                query_description == "" and \
+                query_owner == "" and \
+                query_authority  == "" and \
+                query_created_before  == "" and \
+                query_created_after  == "" and \
+                query_modified_before  == "" and \
+                query_modified_after  == "":
+
+                responseMsg = 'Bench LIST Not Available without Search Parameters!'
+                
+                return Response(data=responseMsg)
+
+
+        queryset = self.get_queryset()
+
+        serializer = MatrixSerializer(queryset, many=True, context={'request': request})
+        
+        return Response(serializer.data)
+        
 
     def partial_update(self, request, *args, **kwargs):
         """Partial Update Bench.

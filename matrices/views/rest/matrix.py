@@ -73,6 +73,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
         query_title = self.request.query_params.get('title', '')
         query_description = self.request.query_params.get('description', '')
         query_owner = self.request.query_params.get('owner', '')
+        query_authority = ''
         query_created_before = self.request.query_params.get('created_before', '')
         query_created_after = self.request.query_params.get('created_after', '')
         query_modified_before = self.request.query_params.get('modified_before', '')

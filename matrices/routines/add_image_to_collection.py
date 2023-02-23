@@ -69,6 +69,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
     image_viewer_url = ''
     image_birdseye_url = ''
     image_comment = ''
+    image_hidden = False
     full_image_name = image_id
     image_key = ''
     document_key = ''
@@ -171,7 +172,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
         else:
 
-            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, image_comment)
+            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, image_comment, image_hidden)
 
             image_out.save()
 
@@ -201,7 +202,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
                     else:
 
-                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, comment)
+                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, comment, image_hidden)
 
                         image_out.save()
 

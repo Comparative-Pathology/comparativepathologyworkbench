@@ -58,16 +58,17 @@ class Profile(models.Model):
     email_confirmed = models.BooleanField(default=False)
     active_collection = models.ForeignKey(Collection, related_name='active_collections', null=True, on_delete=models.DO_NOTHING)
     last_used_collection = models.ForeignKey(Collection, related_name='lastused_collections', null=True, on_delete=models.DO_NOTHING)
+    hide_collection_image = models.BooleanField(default=False)
 
     @classmethod
-    def create(cls, user, bio, location, birth_date, email_confirmed, active_collection, last_used_collection):
-        return cls(user=user, bio=bio, location=location, birth_date=birth_date, email_confirmed=email_confirmed, active_collection=active_collection, last_used_collection=last_used_collection)
+    def create(cls, user, bio, location, birth_date, email_confirmed, active_collection, last_used_collection, hide_collection_image):
+        return cls(user=user, bio=bio, location=location, birth_date=birth_date, email_confirmed=email_confirmed, active_collection=active_collection, last_used_collection=last_used_collection, hide_collection_image=hide_collection_image)
 
     def __str__(self):
-        return f"{self.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}, {self.active_collection}, {self.last_used_collection}"
+        return f"{self.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}, {self.active_collection}, {self.last_used_collection}, {self.hide_collection_image}"
 
     def __repr__(self):
-        return f"{self.id}, {self.user.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}, {self.active_collection}, {self.last_used_collection}"
+        return f"{self.id}, {self.user.id}, {self.bio}, {self.location}, {self.birth_date}, {self.email_confirmed}, {self.active_collection}, {self.last_used_collection}, {self.hide_collection_image}"
 
 
     def set_active_collection(self, a_collection):
@@ -75,6 +76,9 @@ class Profile(models.Model):
 
     def set_last_used_collection(self, a_collection):
         self.last_used_collection = a_collection
+
+    def set_hide_collection_image(self, a_hide_collection_image):
+        self.a_hide_collection_image = a_hide_collection_image
 
     def has_active_collection(self):
         if self.active_collection == None:
@@ -84,6 +88,12 @@ class Profile(models.Model):
 
     def has_last_used_collection(self):
         if self.last_used_collection == None:
+            return False
+        else:
+            return True
+
+    def is_hide_collection_image(self):
+        if self.hide_collection_image == False:
             return False
         else:
             return True

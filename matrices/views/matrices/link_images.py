@@ -73,9 +73,9 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def link_images(request, image_parent_id, image_child_id):
 
-    #if request.is_ajax():
+    if request.user.username == 'guest':
 
-    #    raise PermissionDenied
+        raise PermissionDenied
 
     if not request.user.is_authenticated:
 

@@ -55,6 +55,10 @@ from matrices.routines import simulate_network_latency
 @login_required()
 def server_create_update(request, server_id=None):
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
     if not request.is_ajax():
 
         raise PermissionDenied

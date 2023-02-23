@@ -40,9 +40,11 @@ from matrices.models import MatrixSummary
 from matrices.forms import MatrixSummarySearchForm
 
 from matrices.routines import credential_exists
+from matrices.routines import get_bench_count_for_user
 from matrices.routines import get_header_data
 from matrices.routines import bench_list_by_user_and_direction
 
+MAX_BENCH_COUNT = 10
 
 #
 # The list_benches VIEW
@@ -142,7 +144,13 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
         form = MatrixSummarySearchForm(data_dict)
 
-        data.update({ 'form': form, 'readBoolean': readBoolean })
+        createBoolean = True
+
+        if get_bench_count_for_user(self.request.user) >= MAX_BENCH_COUNT and self.request.user.username == 'guest':
+
+            createBoolean = False
+
+        data.update({ 'form': form, 'readBoolean': readBoolean, 'createBoolean': createBoolean })
 
         context.update(data)
 

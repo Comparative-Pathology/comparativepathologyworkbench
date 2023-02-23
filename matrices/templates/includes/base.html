@@ -151,13 +151,17 @@ The base header and footer include template
 
     {% else %}
 
+      {% if user.username != 'guest' %}
+
                 <a href="{% url 'list_my_bench_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Bench Permissions</a>
                 <a href="{% url 'list_my_collection_authorisation' %}"><button class="button button-auth"><i class="fa fa-universal-access"></i></button> My Collection Permissions</a>
 
+      {% endif %}
+  
     {% endif %}
 
                 <a href="{% url 'password_change' %}"><button class="button button-edit"><i class="fa fa-key"></i></button> Change Password</a>
-                <a href="{% url 'detail_user' user.id %}"><button class="button button-info"><i class="fa fa-info-circle"></i></button> My Account</a>
+                <a href="{% url 'view_constrained_user' user.id %}"><button class="button button-info"><i class="fa fa-info-circle"></i></button> My Profile</a>
               </div><!-- End of header-dropdown-content -->
 
   {% else %}
@@ -228,8 +232,14 @@ The base header and footer include template
                 
     {% endif %}
                 <a href="{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images</a>
+
+    {% if user.username != 'guest' %}
+
                 <a href="{% url 'view_all_image_links' %}"><button class="button button-add"><i class="fa fa-chain"></i></button> All YOUR Image Links</a>
                 <a href="{% url 'link_images' 0 0 %}"><button class="button button-delete"><i class="fa fa-chain"></i></button> Link Images</a>
+    
+    {% endif %}
+
               </div><!-- End of header-dropdown-content -->
 
   {% else %}
@@ -275,18 +285,21 @@ The base header and footer include template
   {% if settings.LOCATION == 'CZI' %}
 
                 <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
+                <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
 
   {% endif %}
 
   {% if settings.LOCATION == 'CANADA' %}
 
-                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button>How To</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
+                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
 
   {% endif %}
 
   {% if settings.LOCATION == 'COELIAC' %}
 
                 <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
+                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
 
   {% endif %}
 

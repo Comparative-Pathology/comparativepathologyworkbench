@@ -66,6 +66,7 @@ class Image(models.Model):
     owner = models.ForeignKey(User, related_name='owner', on_delete=models.DO_NOTHING)
     roi = models.IntegerField(default=0)
     comment = models.TextField(max_length=4095, default='')
+    hidden = models.BooleanField(default=False)
 
     def set_identifier(self, an_identifier):
         self.identifier = an_identifier
@@ -91,15 +92,18 @@ class Image(models.Model):
     def set_comment(self, a_comment):
         self.comment = a_comment
 
+    def set_hidden(self, a_hidden):
+        self.hidden = a_hidden
+
     @classmethod
-    def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner, comment):
-        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, roi=roi, owner=owner, comment=comment)
+    def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner, comment, hidden):
+        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, roi=roi, owner=owner, comment=comment, hidden=hidden)
 
     def __str__(self):
-        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}"
+        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}, {self.hidden}"
 
     def __repr__(self):
-        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}"
+        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}, {self.hidden}"
 
 
     def is_owned_by(self, a_user):
@@ -123,8 +127,8 @@ class Image(models.Model):
         else:
             return True
 
-    def is_duplicate(self, a_identifier, a_name, a_server, a_viewer_url, a_birdseye_url, a_roi, a_owner):
-        if self.identifier == a_identifier and self.name == a_name and self.server == a_server and self.viewer_url == a_viewer_url and self.birdseye_url == a_birdseye_url and self.roi == a_roi and self.owner == a_owner:
+    def is_duplicate(self, a_identifier, a_name, a_server, a_viewer_url, a_birdseye_url, a_roi, a_owner, a_comment, a_hidden):
+        if self.identifier == a_identifier and self.name == a_name and self.server == a_server and self.viewer_url == a_viewer_url and self.birdseye_url == a_birdseye_url and self.roi == a_roi and self.owner == a_owner and self.comment == a_comment and self.hidden == a_hidden:
             return True
         else:
             return False
@@ -144,6 +148,12 @@ class Image(models.Model):
 
     def get_child_image_links(self):
         return get_child_image_links_for_image(self)
+
+    def set_comment(self, a_comment):
+        self.comment = a_comment
+
+    def set_hidden(self, a_hidden):
+        self.hidden = a_hidden
 
 
     def exists_image_links(self):

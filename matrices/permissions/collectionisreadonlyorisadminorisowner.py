@@ -83,6 +83,12 @@ class CollectionIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
 
                             return_flag = True
 
+
+        if request.user.username == 'guest':
+
+            return_flag = False
+
+
         return return_flag
 
 
@@ -108,5 +114,11 @@ class CollectionIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
             if credential_exists(request.user) and credential_apppwd(request.user) != '':
 
                 return_flag = True
+
+
+        if request.user.username == 'guest':
+
+            return_flag = False
+
 
         return return_flag

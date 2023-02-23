@@ -49,6 +49,10 @@ from matrices.routines import exists_image_for_server
 @login_required()
 def server_delete(request, server_id):
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
     if not request.is_ajax():
 
         raise PermissionDenied

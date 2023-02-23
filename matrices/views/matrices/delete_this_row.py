@@ -89,7 +89,36 @@ def delete_this_row(request, matrix_id, row_id):
 
                 if oldCell.has_image():
 
-                    if not exists_collections_for_image(oldCell.image):
+                    if exists_collections_for_image(oldCell.image):
+                                       
+                        cell_list = get_cells_for_image(oldCell.image)
+                    
+                        other_bench_Flag = False
+                    
+                        for otherCell in cell_list:
+                        
+                            if otherCell.matrix.id != matrix.id:
+                            
+                                other_bench_Flag = True
+                            
+                        if other_bench_Flag == True:
+                          
+                            if request.user.profile.is_hide_collection_image():
+                                
+                                oldCell.image.set_hidden(True)
+                                oldCell.image.save()
+                                
+                            else:
+                                
+                                oldCell.image.set_hidden(False)
+                                oldCell.image.save()
+                        
+                        else:
+                            
+                            oldCell.image.set_hidden(False)
+                            oldCell.image.save()
+                            
+                    else:
 
                         cell_list = get_cells_for_image(oldCell.image)
 

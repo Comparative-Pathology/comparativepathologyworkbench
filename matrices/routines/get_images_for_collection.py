@@ -32,10 +32,12 @@ import base64, hashlib
 
 from os import urandom
 
+from django.db.models import Q
+
 
 """
     Get the Images from a particular Collection
 """
 def get_images_for_collection(a_collection):
 
-    return a_collection.images.all()
+    return a_collection.images.filter(Q(hidden=False))

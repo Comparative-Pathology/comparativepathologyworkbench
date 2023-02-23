@@ -41,6 +41,8 @@ from matrices.models import Cell
 from matrices.models import Image
 
 from matrices.routines import credential_exists
+from matrices.routines import exists_collections_for_image
+from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_update_for_bench_and_user
@@ -116,8 +118,6 @@ def import_image(request):
             target_cell.title = source_image.name
             target_cell.description = source_image.name
 
-            target_cell.image = source_image
-
             if target_cell.has_no_blogpost():
 
                 credential = get_credential_for_user(request.user)
@@ -131,6 +131,66 @@ def import_image(request):
                         post_id = returned_blogpost['id']
 
                 target_cell.set_blogpost(post_id)
+
+            if target_cell.has_image():
+
+                if exists_collections_for_image(target_cell.image):
+
+                    cell_list = get_cells_for_image(target_cell.image)
+                    
+                    other_bench_Flag = False
+                    
+                    for otherCell in cell_list:
+                        
+                        if otherCell.matrix.id != matrix.id:
+                            
+                            other_bench_Flag = True
+                            
+                    if other_bench_Flag == True:
+
+                        if request.user.profile.is_hide_collection_image():
+                                
+                            target_cell.image.set_hidden(True)
+                            target_cell.image.save()
+                                
+                        else:
+                                
+                            target_cell.image.set_hidden(False)
+                            target_cell.image.save()
+                        
+                    else:
+                            
+                        target_cell.image.set_hidden(False)
+                        target_cell.image.save()
+
+                else:
+
+                    cell_list = get_cells_for_image(target_cell.image)
+
+                    delete_flag = True
+
+                    for otherCell in cell_list:
+
+                        if otherCell.matrix.id != matrix.id:
+
+                            delete_flag = False
+
+                    if delete_flag == True:
+
+                        image = target_cell.image
+
+                        target_cell.image = None
+
+                        target_cell.save()
+
+                        image.delete()
+
+            target_cell.image = source_image
+
+            if user.profile.is_hide_collection_image():
+
+                source_image.set_hidden(True)
+                source_image.save()
 
             target_cell.save()
 

@@ -197,7 +197,9 @@ The list imaging hosts (Servers) template
   </tr>
   <tr>
     <td>
+      {% if user.username != 'guest' %}
       <a href="{% url 'server_create_update' %}" class="btn button button-add" onclick="open_server_edit_dialog(event, 'Create a Server ...'); return false;"><i class="fa fa-plus"></i> Add</a>
+			{% endif %}
     </td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>

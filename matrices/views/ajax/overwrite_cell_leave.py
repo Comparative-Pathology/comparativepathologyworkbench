@@ -37,6 +37,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
+from matrices.models import Collection
 from matrices.models import Cell
 from matrices.models import Image
 
@@ -125,7 +126,36 @@ def overwrite_cell_leave(request):
 
             if target_cell.has_image():
 
-                if not exists_collections_for_image(target_cell.image):
+                if exists_collections_for_image(target_cell.image):
+
+                    cell_list = get_cells_for_image(target_cell.image)
+                    
+                    other_bench_Flag = False
+                    
+                    for otherCell in cell_list:
+                        
+                        if otherCell.matrix.id != matrix.id:
+                            
+                            other_bench_Flag = True
+                            
+                    if other_bench_Flag == True:
+                          
+                        if request.user.profile.is_hide_collection_image():
+                                
+                            target_cell.image.set_hidden(True)
+                            target_cell.image.save()
+                                
+                        else:
+                                
+                            target_cell.image.set_hidden(False)
+                            target_cell.image.save()
+                        
+                    else:
+                            
+                        target_cell.image.set_hidden(False)
+                        target_cell.image.save()
+
+                else:
 
                     cell_list = get_cells_for_image(target_cell.image)
 
@@ -154,12 +184,13 @@ def overwrite_cell_leave(request):
 
                 imageOld = Image.objects.get(pk=source_cell.image.id)
 
-                imageNew = Image.create(imageOld.identifier, imageOld.name, imageOld.server, imageOld.viewer_url, imageOld.birdseye_url, imageOld.roi, imageOld.owner, imageOld.comment)
+                imageNew = Image.create(imageOld.identifier, imageOld.name, imageOld.server, imageOld.viewer_url, imageOld.birdseye_url, imageOld.roi, imageOld.owner, imageOld.comment, imageOld.hidden)
 
                 imageNew.save()
 
                 target_cell.image = imageNew
 
+                Collection.assign_image(imageNew, matrix.last_used_collection)
 
             target_cell.blogpost = source_cell.blogpost
 

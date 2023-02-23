@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -46,6 +47,11 @@ from matrices.routines import get_header_data
 #
 @login_required
 def list_my_bench_authorisation(request):
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

@@ -55,12 +55,12 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     This Serializer provides Create, Read and Update functions for an Image
 
     Parameters:
-        id(Read Only): The (internal) Id of the Image.
-        url(Read Only): The (internal) URL of the Image.
-        owner: The Owner (User Model) of the Image.
-        server: The Title of the Server, Maximum 255 Characters.
-        image_id: The identifier of the Image as stored on the Server.
-        roi: The ROI within the Image as stored on the Server.
+        id(Read Only):      The (internal) Id of the Image.
+        url(Read Only):     The (internal) URL of the Image.
+        owner:              The Owner (User Model) of the Image.
+        server:             The Title of the Server, Maximum 255 Characters.
+        image_id:           The identifier of the Image as stored on the Server.
+        roi:                The ROI within the Image as stored on the Server.
 
     """
 
@@ -83,13 +83,16 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         Creates a NEW Image Object from a Json Representation of an Image.
 
         Parameters:
-            validated_data: A string of valid JSON.
+            validated_data:     A string of valid JSON.
 
         Returns:
             An Image Object
 
         Raises:
-            ValidationError: CPW_REST:0060 - Attempting to Create an Image for a different Owner.
+            ValidationError:
+                CPW_REST:0060 - Attempting to Create an Image for a different Owner.
+            ValidationError:
+                CPW_REST:0530 - the Image Owner Does NOT Exist!
           
         """
 
@@ -114,6 +117,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         image_id = validated_data.get('image_id')
         image_roi_id = validated_data.get('roi')
         image_comment = validated_data.get('comment')
+        image_hidden = False
 
         image_owner = None
 
@@ -127,7 +131,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0530 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
         # Check the User in the Request matches the Supplied Image Owner
@@ -203,7 +207,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 image_roi = int(json_roi['id'])
         
         # CREATE an new Image Object!
-        image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+        image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
         image.save()
 
         # Add the Image to the User's Active Image Collection
@@ -219,13 +223,17 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         Updates an EXISTING Image Object from a Json Representation of an Image.
 
         Parameters:
-            validated_data: A string of valid JSON.
+            validated_data:     A string of valid JSON.
 
         Returns:
             An Image Object
 
         Raises:
-          
+            ValidationError:
+                CPW_REST:0540 - the Image Owner Does NOT Exist!
+            ValidationError:
+                CPW_REST:0060 - Attempting to Create an Image for a different Owner.
+
         """
 
         request_user = None
@@ -248,6 +256,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         image_id = validated_data.get('image_id', instance.image_id)
         image_roi_id = validated_data.get('roi', instance.roi)
         image_comment = validated_data.get('comment', instance.comment)
+        image_hidden = False
 
         image_owner = None
 
@@ -261,7 +270,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0540 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
 
@@ -349,6 +358,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         instance.birdseye_url = image_birdseye_url
         instance.roi = image_roi
         instance.comment = image_comment
+        instance.hidden = image_hidden
 
         # UPDATE the Image Object
         instance.save()
@@ -370,17 +380,17 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
          Server Object.
 
         Parameters:
-            server_str: A string with a URL appended to a UID with an @
-            user: A User.
-            image_id: A string of valid JSON.
-            roi_id: A string of valid JSON.
+            server_str:     A string with a URL appended to a UID with an '@'.
+            user:           A User object.
+            image_id:       A string of valid JSON.
+            roi_id:         A string of valid JSON.
 
         Returns:
             A Server Object or None
 
         Raises:
             ValidationError:
-                CPW_REST:XXXX - Image Comment Title Length is greater than 4095!
+                CPW_REST:0550 - Image Comment Title Length is greater than 4095!
             ValidationError:
                 CPW_REST:0320 - Image NOT Present on the WordPress Server
             ValidationError:
@@ -401,7 +411,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Comment greater than 255 Characters? IF so, Raise an Error!
         if len_comment > CONST_4095:
 
-            message = 'CPW_REST:XXXX ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
+            message = 'CPW_REST:0550 ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         server_list = a_server_str.split("@")
@@ -470,9 +480,9 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an Image exists on a WordPress Server
 
         Parameters:
-            server: A Server Object
-            user: A User Object
-            image_id: The Id of the Image on the WordPress Server
+            server:     A Server Object.
+            user:       A User Object.
+            image_id:   The Id of the Image on the WordPress Server.
 
         Returns:
             A Boolean
@@ -501,9 +511,9 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an Image exists on an OMERO Server
 
         Parameters:
-            server: A Server Object
-            user: A User Object
-            image_id: The Id of the Image on the OMERO Server
+            server:     A Server Object.
+            user:       A User Object.
+            image_id:   The Id of the Image on the OMERO Server.
 
         Returns:
             A Boolean
@@ -532,10 +542,10 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an ROI within an Image exists on an OMERO Server.
 
         Parameters:
-            server: A Server Object
-            user: A User Object
-            image_id: The Id of the Image on the OMERO Server
-            roi_id: The Id of the ROI within the Image on the OMERO Server
+            server:     A Server Object.
+            user:       A User Object.
+            image_id:   The Id of the Image on the OMERO Server.
+            roi_id:     The Id of the ROI within the Image on the OMERO Server.
 
         Returns:
             A Boolean

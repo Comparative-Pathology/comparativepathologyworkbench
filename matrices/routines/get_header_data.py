@@ -37,9 +37,11 @@ from django.shortcuts import get_object_or_404
 from django.apps import apps
 
 from . import bench_list_by_user_and_direction
-from . import credential_exists
 from . import collection_list_by_user_and_direction
 from matrices.routines.get_images_for_collection_summary import get_images_for_collection_summary
+from matrices.routines.get_hidden_images_for_collection_summary import get_hidden_images_for_collection_summary
+
+SERVER_IDR = 'idr.openmicroscopy.org'
 
 
 """
@@ -50,23 +52,31 @@ def get_header_data(a_user):
     Collection = apps.get_model('matrices', 'Collection')
 
     image_list = list()
+    hidden_image_list = list()
     server_list = list()
     matrix_list = list()
-    collection_list = list()
     collection_summary_list = list()
 
     if not a_user.is_anonymous:
 
         Server = apps.get_model('matrices', 'Server')
-        server_list = Server.objects.all().order_by('id')
+
+        if a_user.username == 'guest':
+
+            server_list = Server.objects.filter(url_server=SERVER_IDR).order_by('id')
+
+        else:
+            
+            server_list = Server.objects.all().order_by('id')
 
         matrix_list = bench_list_by_user_and_direction(a_user, '', '', '', '', '', '', '', '', '', '')
 
         collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '')
 
         image_list = get_images_for_collection_summary(collection_summary_list)
+        hidden_image_list = get_hidden_images_for_collection_summary(collection_summary_list)
 
 
-    data = { 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list }
+    data = { 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list, 'hidden_image_list': hidden_image_list }
 
     return data

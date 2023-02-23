@@ -83,7 +83,11 @@ The view collection template
 	<hr>
 	<br />
 	<h1>All Collections</h1>
-	<p>You can view {{ image_list|length }} Images from {{ collection_list|length }} Collections</p>
+	{% if hidden_image_list|length == 0 %}
+	<p>You have collected {{ image_list|length }} Images from {{ collection_list|length }} Collections</p>
+	{% else %}
+	<p>You have collected {{ image_list|length }} Images (and {{ hidden_image_list|length }} Hidden Images) from {{ collection_list|length }} Collections</p>
+	{% endif %}
 	<hr>
 	<br />
 

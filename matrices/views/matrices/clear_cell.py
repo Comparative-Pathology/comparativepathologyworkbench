@@ -107,8 +107,37 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 
 			if cell.has_image():
+				
+				if exists_collections_for_image(cell.image):
+					
+					cell_list = get_cells_for_image(cell.image)
+					
+					other_bench_Flag = False
+					
+					for otherCell in cell_list:
+						
+						if otherCell.matrix.id != matrix.id:
+							
+							other_bench_Flag = True
+							
+					if other_bench_Flag == True:
+                          
+						if request.user.profile.is_hide_collection_image():
+                                
+							cell.image.set_hidden(True)
+							cell.image.save()
+                                
+						else:
+                                
+							cell.image.set_hidden(False)
+							cell.image.save()
+                        
+					else:
+                            
+						cell.image.set_hidden(False)
+						cell.image.save()
 
-				if not exists_collections_for_image(cell.image):
+				else:
 
 					cell_list = get_cells_for_image(cell.image)
 
@@ -164,7 +193,6 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 				data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
 
 				return HttpResponseRedirect(reverse('amend_cell', args=(matrix_id, cell_id, )))
-				#return render(request, return_page, data)
 
 			else:
 

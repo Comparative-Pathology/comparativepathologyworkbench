@@ -43,6 +43,7 @@ from matrices.models import CollectionSummary
 from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
+from matrices.routines import get_hidden_images_for_collection
 
 
 #
@@ -67,6 +68,7 @@ def view_collection(request, collection_id):
         collection = get_object_or_404(Collection, pk=collection_id)
 
         collection_image_list = get_images_for_collection(collection)
+        collection_hidden_image_list = get_hidden_images_for_collection(collection)
 
         username = request.user.username
         collection_summary_list_qs = CollectionSummary.objects.raw('SELECT id, collection_id, LAG(\"collection_id\") OVER(ORDER BY \"collection_id\") AS \"prev_val\", LEAD(\"collection_id\") OVER(ORDER BY \"collection_id\" ) AS \"next_val\" FROM public.matrices_collection_summary WHERE collection_authorisation_permitted = %s AND collection_authorisation_authority != \'ADMIN\'', [username])
@@ -95,7 +97,9 @@ def view_collection(request, collection_id):
 
         form = SearchUrlForm()
 
-        data.update({ 'previous_collection': previous_collection, 'next_collection': next_collection, 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
+        data.update({ 'previous_collection': previous_collection, 'next_collection': next_collection, 'collection': collection, \
+                    'collection_image_list': collection_image_list, 'collection_hidden_image_list': collection_hidden_image_list, \
+                    'form': form, 'search_from': "view_collection" })
 
         return render(request, 'matrices/view_collection.html', data)
 

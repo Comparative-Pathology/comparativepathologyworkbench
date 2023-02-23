@@ -322,7 +322,36 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                 # Is the Image in a Collection ... ?
                 #  No
-                if not exists_collections_for_image(cell.image):
+                if exists_collections_for_image(cell.image):
+
+                    cell_list = get_cells_for_image(cell.image)
+
+                    other_bench_Flag = False
+
+                    for otherCell in cell_list:
+
+                        if otherCell.matrix.id != matrix.id:
+
+                            other_bench_Flag = True
+                
+                    if other_bench_Flag == True:
+
+                        if request.user.profile.is_hide_collection_image():
+
+                            cell.image.set_hidden(True)
+                            cell.image.save()
+                        
+                        else:
+
+                            cell.image.set_hidden(False)
+                            cell.image.save()
+
+                    else:
+
+                        cell.image.set_hidden(False)
+                        cell.image.save()
+                
+                else:
 
                     cell_list = get_cells_for_image(cell.image)
 

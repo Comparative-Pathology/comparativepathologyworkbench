@@ -40,8 +40,6 @@ def validate_an_ebi_sca_image(an_image):
 
     extention_list = ["png", "jpg", "jpeg", "pdf", "svg"]
 
-    print("an_image : " + an_image)
-
     image_array = an_image.split(".")
 
     if len(image_array) != 2:

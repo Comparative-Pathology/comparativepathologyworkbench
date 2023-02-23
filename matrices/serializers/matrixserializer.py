@@ -74,14 +74,14 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
     This Serializer provides Create, Read and Update functions for a Bench
 
     Parameters:
-        id(Read Only): The (internal) Id of the Image.
-        url(Read Only): The (internal) URL of the Image.
-        owner: The Owner (User Model) of the Image.
-        title: The Title of the Bench, Maximum 255 Characters.
-        description: The Description of the Bench, Maximum 4095 Characters.
-        height: The Height in Pixels of the Cells in this Bench, an Integer, between 75 and 450.
-        width: The Width in Pixels of the Cells in this Bench, an Integer, between 75 and 450.
-        bench_cells: an array of cells data
+        id(Read Only):      The (internal) Id of the Image.
+        url(Read Only):     The (internal) URL of the Image.
+        owner:              The Owner (User Model) of the Image.
+        title:              The Title of the Bench, Maximum 255 Characters.
+        description:        The Description of the Bench, Maximum 4095 Characters.
+        height:             The Height in Pixels of the Cells in this Bench, an Integer, between 75 and 450.
+        width:              The Width in Pixels of the Cells in this Bench, an Integer, between 75 and 450.
+        bench_cells:        An array of cells data.
 
     """
 
@@ -106,16 +106,20 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Process the supplied Bench JSON and create a new Bench.
 
         Parameters:
-            validated_data: The validated JSON Bench data.
+            validated_data:     The validated JSON Bench data.
 
         Returns:
             None
 
         Raises:
-            ValidationError: CPW_REST:0370 - No Cells supplied in validated data
-            ValidationError: CPW_REST:0050 - Attempting to Add a Bench for a Different Owner
-            ValidationError: CPW_REST:0070 - Attempting to Add a Image without a Cell Title or Description
-            ValidationError: WordPress Error
+            ValidationError:
+                CPW_REST:0370 - No Cells supplied in validated data
+            ValidationError:
+                CPW_REST:0050 - Attempting to Add a Bench for a Different Owner
+            ValidationError:
+                CPW_REST:0070 - Attempting to Add a Image without a Cell Title or Description
+            ValidationError:
+                WordPress Error
           
         """
 
@@ -287,6 +291,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         image_id = image_data.get('image_id')
                         image_roi_id = image_data.get('roi')
                         image_comment = image_data.get('comment')
+                        image_hidden = False
 
                         # Get the Image Owner Object
                         image_owner = get_user_from_username(owner)
@@ -347,11 +352,24 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                             image = existing_image_list[0]
 
+                            # Is the requesting user Hiding Images in their Collections?
+                            #  Yes - ste the Image Hidden flags to true
+                            if request_user.profile.is_hide_collection_image():
+                                
+                                image.set_hidden(True)
+                                image.save()
+
                         # No ... 
                         else:
 
                             # Create a New Image Object
-                            image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                            image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
+
+                            # Is the requesting user Hiding Images in their Collections?
+                            #  Yes - ste the Image Hidden flags to true
+                            if request_user.profile.is_hide_collection_image():
+                                
+                                image.set_hidden(True)
 
                             # Save the New Object to the Database
                             image.save()
@@ -476,16 +494,19 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Process the supplied Bench JSON and update the matching Existing Bench.
 
         Parameters:
-            instance: The Bench which will be added.
-            validated_data: The validated JSON Bench data.
+            instance:           The Bench which will be added.
+            validated_data:     The validated JSON Bench data.
 
         Returns:
             None
 
         Raises:
-            ValidationError: CPW_REST:0100 - Attempting to Update a Bench for a Different Owner
-            ValidationError: CPW_REST:0360 - No Cells supplied in validated data
-            ValidationError: WordPress Error
+            ValidationError:
+                CPW_REST:0100 - Attempting to Update a Bench for a Different Owner
+            ValidationError:
+                CPW_REST:0360 - No Cells supplied in validated data
+            ValidationError:
+                WordPress Error
           
         """
 
@@ -601,15 +622,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Process the supplied Cells and Delete them from the Bench.
 
         Parameters:
-            an_instance: The Bench to which the Cells will be Deleted.
-            a_request_user: The Requesting User.
-            a_cells_data: The supplied array of Cells JSON.
+            an_instance:        The Bench to which the Cells will be Deleted.
+            a_request_user:     The Requesting User.
+            a_cells_data:       The supplied array of Cells JSON.
 
         Returns:
             None
 
         Raises:
-            ValidationError: WordPress Error
+            ValidationError:
+                WordPress Error
           
         """
 
@@ -690,8 +712,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # If there was NO Database Image and there is a Supplied Image
                         if image_data is not None and bench_cell.image is None:
 
-                            print("HERE 1")
-
                             # Extract the supplied Image Attributes
                             image_server = image_data.get('server')
                             owner = image_data.get('owner')
@@ -711,6 +731,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             image_viewer_url = ''
                             image_birdseye_url = ''
                             image_roi = 0
+                            image_hidden = False
 
                             # Is the Server a WordPress Server?
                             if server.is_wordpress():
@@ -770,6 +791,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     # Update the Database
                                     image.save()
 
+                                # Is the requesting user Hiding Images in their Collections?
+                                #  Yes ...
+                                if a_request_user.profile.is_hide_collection_image():
+                                
+                                    #  Set the Image Hidden flags to true
+                                    image.set_hidden(True)
+                                        
+                                    # Update the Database
+                                    image.save()
+
                                 # Associate the Cell with the Existing Image
                                 bench_cell.image = image
 
@@ -777,7 +808,14 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             else:
 
                                 # Create a New Image Object
-                                image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                                image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
+
+                                # Is the requesting user Hiding Images in their Collections?
+                                #  Yes ...
+                                if a_request_user.profile.is_hide_collection_image():
+                                
+                                    #  Set the Image Hidden flags to true
+                                    image.set_hidden(True)
 
                                 # Save the New Object to the Database
                                 image.save()
@@ -854,24 +892,20 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # If there is a Database Image and there is a Supplied Image
                         if image_data is not None and bench_cell.image is not None:
 
-                            print("HERE 2")
-
                             # Extract the supplied Image Attributes 
                             image_server = image_data.get('server')
                             owner = image_data.get('owner')
                             image_id = image_data.get('image_id')
                             image_roi_id = image_data.get('roi')
                             image_comment = image_data.get('comment')
+                            image_hidden = False
 
                             # Get the User Object for the Supplied Image Owner
                             image_owner = get_user_from_username(owner)
 
                             image_identifier = int(image_id)
 
-                            print("image_identifier : " + str(image_identifier))
-                            print("bench_cell.image.identifier : " + str(bench_cell.image.identifier))
-
-                            # Is the Suppied Image Id Different to the Exiying Database Image Id?
+                            # Is the Suppied Image Id Different to the Existing Database Image Id?
                             #  Yes ...
                             if image_identifier == bench_cell.image.identifier:
 
@@ -924,8 +958,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 #  Yes
                                 if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-                                    print("HERE 4")
-
                                     # Get the Existing Image
                                     existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
@@ -937,6 +969,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                         # Set the Image Comment
                                         image.comment = image_comment
+                                        
+                                        # Update the Database
+                                        image.save()
+
+                                    # Is the requesting user Hiding Images in their Collections?
+                                    #  Yes ...
+                                    if a_request_user.profile.is_hide_collection_image():
+                                
+                                        #  Set the Image Hidden flags to true
+                                        image.set_hidden(True)
                                         
                                         # Update the Database
                                         image.save()
@@ -993,8 +1035,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 #  Yes
                                 if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
-                                    print("HERE 4")
-
                                     # Get the Existing Image
                                     existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
 
@@ -1010,17 +1050,32 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                         # Update the Database
                                         image.save()
 
+                                    # Is the requesting user Hiding Images in their Collections?
+                                    #  Yes ...
+                                    if a_request_user.profile.is_hide_collection_image():
+                                
+                                        #  Set the Image Hidden flags to true
+                                        image.set_hidden(True)
+
+                                        # Update the Database
+                                        image.save()
+
                                     # Associate the Cell with the Existing Image
                                     bench_cell.image = image
 
                                 # No ... 
                                 else:
 
-                                    print("HERE 5")
-
                                     # Create a New Image Object
-                                    image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                                    image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
 
+                                    # Is the requesting user Hiding Images in their Collections?
+                                    #  Yes ...
+                                    if a_request_user.profile.is_hide_collection_image():
+                                
+                                        #  Set the Image Hidden flags to true
+                                        image.set_hidden(True)
+                                        
                                     # Save the New Object to the Database
                                     image.save()
 
@@ -1105,8 +1160,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # If there is a Database Image and there is No Supplied Image
                         if image_data is None and bench_cell.image is not None:
 
-                            print("HERE 3")
-
                             # Set the Cell Image to None
                             bench_cell.image = None
 
@@ -1151,15 +1204,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Process the supplied Cells and Delete them from the Bench.
 
         Parameters:
-            an_instance: The Bench to which the Cells will be Deleted.
-            a_request_user: The Requesting User.
-            a_cells_data: The supplied array of Cells JSON.
+            an_instance:        The Bench to which the Cells will be Deleted.
+            a_request_user:     The Requesting User.
+            a_cells_data:       The supplied array of Cells JSON.
 
         Returns:
             None
 
         Raises:
-            ValidationError: WordPress Error
+            ValidationError:
+                WordPress Error
           
         """
 
@@ -1232,15 +1286,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Process the supplied Cells and add them to the Bench.
 
         Parameters:
-            an_instance: The Bench to which the Cells will be added
-            a_request_user: The Requesting User.
-            a_cells_data: The supplied array of Cells JSON 
+            an_instance:        The Bench to which the Cells will be added.
+            a_request_user:     The Requesting User.
+            a_cells_data:       The supplied array of Cells JSON.
 
         Returns:
             None
 
         Raises:
-            ValidationError: WordPress Error
+            ValidationError:
+                WordPress Error
           
         """
 
@@ -1278,6 +1333,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     image_id = image_data.get('image_id')
                     roi_id = image_data.get('roi')
                     image_comment = image_data.get('comment')
+                    image_hidden = False
                     
                     # Get the User Object from the database for the supplied owner
                     image_owner = get_user_from_username(owner)
@@ -1327,7 +1383,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                             image_roi = int(json_roi['id'])
 
-                    # Does the Image already exist in the database for the supplied attrubues and owner?
+                    # Does the Image already exist in the database for the supplied attributes and owner?
                     #  Yes
                     if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
@@ -1338,11 +1394,29 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                         cell_image = existing_image
 
+                        # Is the requesting user Hiding Images in their Collections?
+                        #  Yes ...
+                        if a_request_user.profile.is_hide_collection_image():
+                                
+                            #  Set the Image Hidden flags to true
+                            cell_image.set_hidden(True)
+                                        
+                            # Update the Database
+                            cell_image.save()
+
+
                     #  No, a new Image must be added to the database.
                     else:
 
                         # Create a New Image Object
-                        cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
+                        cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment, image_hidden)
+
+                        # Is the requesting user Hiding Images in their Collections?
+                        #  Yes ...
+                        if a_request_user.profile.is_hide_collection_image():
+                                
+                            #  Set the Image Hidden flags to true
+                            cell_image.set_hidden(True)
 
                         # Write the new Image Object to the database
                         cell_image.save()
@@ -1430,21 +1504,27 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Validate the supplied Title, Description, Height and Width fields of a Bench
 
         Parameters:
-            a_title: The Supplied Title of the Bench.
-            a_description: The Supplied Title of the Bench.
-            a_height: The specified Height of the Cells in the Bench 
-            a_width: The specified Widt of the Cells in the Bench
+            a_title:        The Supplied Title of the Bench.
+            a_description:  The Supplied Title of the Bench.
+            a_height:       The specified Height of the Cells in the Bench.
+            a_width:        The specified Widt of the Cells in the Bench.
 
         Returns:
             None
 
         Raises:
-            ValidationError: CPW_REST:0160 - Bench Title Length is greater than 255 Characters
-            ValidationError: CPW_REST:0150 - Bench Description Length is greater than 4095 Characters
-            ValidationError: CPW_REST:0110 - Bench Cell Height is greater than 450 Pixels
-            ValidationError: CPW_REST:0120 - Bench Cell Height is less than 75 Pixels
-            ValidationError: CPW_REST:0130 - Bench Cell Width greater than 450 Pixels
-            ValidationError: CPW_REST:0140 - Bench Cell Width is less than 75 Pixels
+            ValidationError:
+                CPW_REST:0160 - Bench Title Length is greater than 255 Characters
+            ValidationError:
+                CPW_REST:0150 - Bench Description Length is greater than 4095 Characters
+            ValidationError:
+                CPW_REST:0110 - Bench Cell Height is greater than 450 Pixels
+            ValidationError:
+                CPW_REST:0120 - Bench Cell Height is less than 75 Pixels
+            ValidationError:
+                CPW_REST:0130 - Bench Cell Width greater than 450 Pixels
+            ValidationError:
+                CPW_REST:0140 - Bench Cell Width is less than 75 Pixels
           
         """
 
@@ -1500,27 +1580,41 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
          Update is only possible for Owners
 
         Parameters:
-            a_cells_data: An Array of Cells.
-            a_request_user: The Requesting User.
-            a_mode_flag: TRUE for Create; FALSE for UPDATE.
+            a_cells_data:       An Array of Cells.
+            a_request_user:     The Requesting User.
+            a_mode_flag:        TRUE for Create;
+                                FALSE for UPDATE.
 
         Returns:
             None
 
         Raises:
-            ValidationError: CPW_REST:0230 - NO Cells supplied with Bench
-            ValidationError: CPW_REST:0300 - Too many Columns in Bench
-            ValidationError: CPW_REST:0310 - Too many Rows in Bench
-            ValidationError: CPW_REST:0280 - Too few Columns in Bench
-            ValidationError: CPW_REST:0290 - Too few Rows in Bench
-            ValidationError: CPW_REST:0190 - Duplicate Cell
-            ValidationError: CPW_REST:0220 - Missing Cell
-            ValidationError: CPW_REST:0010 - An Image is not Permitted in Column Header
-            ValidationError: CPW_REST:0020 - An Image is not Permitted in : Column Footer
-            ValidationError: CPW_REST:0030 - An Image is not Permitted in : Row Header
-            ValidationError: CPW_REST:0040 - An Image is not Permitted in : Row Footer
-            ValidationError: CPW_REST:0090 - Attempting to Add an Image to a Bench for a different Owner
-            ValidationError: CPW_REST:0080 - Attempting to Add an Image to a Bench WITHOUT a Title or Description
+            ValidationError:
+                CPW_REST:0230 - NO Cells supplied with Bench
+            ValidationError:
+                CPW_REST:0300 - Too many Columns in Bench
+            ValidationError:
+                CPW_REST:0310 - Too many Rows in Bench
+            ValidationError:
+                CPW_REST:0280 - Too few Columns in Bench
+            ValidationError:
+                CPW_REST:0290 - Too few Rows in Bench
+            ValidationError:
+                CPW_REST:0190 - Duplicate Cell
+            ValidationError:
+                CPW_REST:0220 - Missing Cell
+            ValidationError:
+                CPW_REST:0010 - An Image is not Permitted in Column Header
+            ValidationError:
+                CPW_REST:0020 - An Image is not Permitted in : Column Footer
+            ValidationError:
+                CPW_REST:0030 - An Image is not Permitted in : Row Header
+            ValidationError:
+                CPW_REST:0040 - An Image is not Permitted in : Row Footer
+            ValidationError:
+                CPW_REST:0090 - Attempting to Add an Image to a Bench for a different Owner
+            ValidationError:
+                CPW_REST:0080 - Attempting to Add an Image to a Bench WITHOUT a Title or Description
           
         """
 
@@ -1742,15 +1836,17 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
          so these next 2 checks are redundant
 
         Parameters:
-            title: The Title of the Collection, Maximum 255 Characters.
-            description: The Description of the Collection, Maximum 4095 Characters.
+            title:          The Title of the Collection, Maximum 255 Characters.
+            description:    The Description of the Collection, Maximum 4095 Characters.
 
         Returns:
             None
 
         Raises:
-            ValidationError: CPW_REST:0180 - Title Too Long.
-            ValidationError: CPW_REST:0170 - Description Too Long
+            ValidationError: 
+                CPW_REST:0180 - Title Too Long.
+            ValidationError:
+                CPW_REST:0170 - Description Too Long
           
         """
 
@@ -1778,10 +1874,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
          Server Object.
 
         Parameters:
-            server_str: A string with a URL appended to a UID with an @
-            user: A User.
-            image_id: A string of valid JSON.
-            roi_id: A string of valid JSON.
+            server_str:     A string with a URL appended to a UID with an '@'.
+            user:           A User object.
+            image_id:       A string of valid JSON.
+            roi_id:         A string of valid JSON.
 
         Returns:
             A Server Object or None
@@ -1880,9 +1976,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an Image exists on a WordPress Server
 
         Parameters:
-            a_server: A Server Object
-            a_user: A User Object
-            a_image_id: The Id of the Image on the WordPress Server
+            a_server:       A Server Object.
+            a_user:         A User Object.
+            a_image_id:     The Id of the Image on the WordPress Server.
 
         Returns:
             A Boolean
@@ -1911,8 +2007,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an Image exists on an OMERO Server
 
         Parameters:
-            a_server: A Server Object
-            a_image_id: The Id of the Image on the OMERO Server
+            a_server:       A Server Object.
+            a_image_id:     The Id of the Image on the OMERO Server.
 
         Returns:
             A Boolean
@@ -1940,9 +2036,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an ROI within an Image exists on an OMERO Server.
 
         Parameters:
-            a_server: A Server Object
-            a_image_id: The Id of the Image on the OMERO Server
-            a_roi_id: The Id of the ROI within the Image on the OMERO Server
+            a_server:       A Server Object.
+            a_image_id:     The Id of the Image on the OMERO Server.
+            a_roi_id:       The Id of the ROI within the Image on the OMERO Server.
 
         Returns:
             A Boolean

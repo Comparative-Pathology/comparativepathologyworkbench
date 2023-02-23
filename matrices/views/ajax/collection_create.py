@@ -41,13 +41,15 @@ from frontend_forms.utils import get_object_by_uuid_or_404
 
 from decouple import config
 
-from matrices.forms import CollectionForm
+from matrices.forms import CollectionCreateForm
 
 from matrices.models import Collection
 
 from matrices.routines import credential_exists
+from matrices.routines import get_collection_count_for_user
 from matrices.routines import simulate_network_latency
 
+MAX_COLLECTION_COUNT = 10
 
 #
 # ADD A COLLECTION
@@ -76,21 +78,35 @@ def collection_create(request, collection_id=None):
 
         simulate_network_latency()
 
-        form = CollectionForm(instance=object, data=request.POST, request=request)
+        form = CollectionCreateForm(instance=object, data=request.POST, request=request)
 
-        if form.is_valid():
+        if get_collection_count_for_user(request.user) >= MAX_COLLECTION_COUNT and request.user.username == 'guest':
 
-            object = form.save(commit=False)
+            messages.error(request, "CPW_WEB:0610 New Collection  - Too Many Collections for Guest User!")
+            form.add_error(None, "CPW_WEB:0610 New Collection  - Too Many Collections for Guest User!")
+        
+        else:
 
-            object.set_owner(request.user)
+            if form.is_valid():
 
-            object.save()
+                object = form.save(commit=False)
 
-            messages.success(request, 'NEW Collection ' + "{:06d}".format(object.id) + ' Created!')
+                object.set_owner(request.user)
+
+                object.save()
+
+                activate_collection = form.cleaned_data['activate_collection']
+
+                if activate_collection == True:
+
+                    request.user.profile.set_active_collection(object)
+                    request.user.save()
+
+                messages.success(request, 'NEW Collection ' + "{:06d}".format(object.id) + ' Created!')
 
     else:
 
-        form = CollectionForm(request=request)
+        form = CollectionCreateForm(request=request)
 
 
     return render(request, template_name, {

@@ -139,14 +139,26 @@ The view collection template
 	<br />
 {% if collection.id == user.profile.active_collection.id %}
 	<h1 class="active">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	{% if collection_hidden_image_list|length == 0 %}
 	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
+	{% else %}
+	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }}) (and {{ collection_hidden_image_list|length }} Hidden Images)</p>
+	{% endif %}
 {% else %}
 	{% if collection.owner == user %}
 	<h1 class="inactive">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	{% if collection_hidden_image_list|length == 0 %}
 	<p><a href="{% url 'activate_in_collection' collection.id %}"><button class="button button-delete"><i class="fa-solid fa-bell"></i></button></a> You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
 	{% else %}
+	<p><a href="{% url 'activate_in_collection' collection.id %}"><button class="button button-delete"><i class="fa-solid fa-bell"></i></button></a> You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }}) (and {{ collection_hidden_image_list|length }} Hidden Images)</p>
+	{% endif %}
+	{% else %}
 	<h1 class="inactive">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+	{% if collection_hidden_image_list|length == 0 %}
 	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }})</p>
+	{% else %}
+	<p>You have collected {{ collection_image_list|length }} Images (Owned By {{ collection.owner.username }}) (and {{ collection_hidden_image_list|length }} Hidden Images)</p>
+	{% endif %}
 	{% endif %}
 {% endif %}
 	<hr>

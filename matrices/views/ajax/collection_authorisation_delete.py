@@ -51,6 +51,10 @@ from matrices.routines import exists_update_for_collection_and_user
 @login_required()
 def collection_authorisation_delete(request, collection_authorisation_id):
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
     if not request.is_ajax():
 
         raise PermissionDenied

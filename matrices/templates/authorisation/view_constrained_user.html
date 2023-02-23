@@ -1,0 +1,119 @@
+<!--
+\file         detail_user.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The detail user template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+		<li><a href="{% url 'view_constrained_user' subject.id %}">User {{ subject.id }}</a></li>
+		<li>View User Profile</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+	<h1>{{ subject.get_full_name }}</h1>
+
+	<hr>
+
+	<br />
+
+	<dl class="standard">
+		<dt>ID</dt>
+		<dd>{{ subject.id }}</dd>
+		<dt>User</dt>
+		<dd>{{ subject.username }}</dd>
+		<dt>Name</dt>
+		<dd>{{ subject.get_full_name }}</dd>
+		<dt>Email</dt>
+		<dd>{{ subject.email }}</dd>
+		<dt>Hide Images in Collections?</dt>
+		<dd>{{ subject.profile.hide_collection_image }}</dd>
+		<dt>Last Login Date</dt>
+		<dd>{{ subject.last_login }}</dd>
+		<dt>Date Joined</dt>
+		<dd>{{ subject.date_joined }}</dd>
+	</dl>
+
+	<br />
+
+	<a href="{% url 'edit_constrained_user' subject.id %}"><button class="button button-edit">EDIT</button></a>
+
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+{% endblock %}

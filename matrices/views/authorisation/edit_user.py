@@ -40,6 +40,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from matrices.forms import EditUserForm
+from matrices.forms import EditConstrainedProfileForm
+
+from matrices.models import Image
 
 from matrices.routines import get_header_data
 
@@ -63,13 +66,34 @@ def edit_user(request, user_id):
 
         if request.method == HTTP_POST:
 
-            form = EditUserForm(request.POST, instance=subject)
+            user_form = EditUserForm(request.POST, instance=subject)
+            profile_form = EditConstrainedProfileForm(request.POST, instance=subject.profile)
 
-            if form.is_valid():
+            if all((profile_form.is_valid(), user_form.is_valid())):
 
-                user = form.save(commit=False)
+                user = user_form.save()
+                profile = profile_form.save()
+
+                username = subject.username
+            
+                column_map = {'pk': 'e.id'}
+    
+                raw_image_queryset = Image.objects.raw('select e.id from matrices_collection a, auth_user b, matrices_collection_images c, matrices_cell d, matrices_image e \
+                                     where a.owner_id = b.id and b.username = %s and a.id = c.collection_id and c.image_id = d.image_id \
+                                     and c.image_id = e.id', [username], translations=column_map)
+
+                list_of_image_ids = []
+
+                for image in raw_image_queryset:
+        
+                    list_of_image_ids.append(int(image.id))
+
+                image_queryset = Image.objects.filter(pk__in=list_of_image_ids).order_by('id')
+
+                image_queryset.update(hidden=profile.hide_collection_image)
 
                 user.save()
+                profile.save()
 
                 messages.success(request, 'User ' + user.username + ' Updated!')
 
@@ -78,15 +102,16 @@ def edit_user(request, user_id):
             else:
 
                 messages.error(request, "CPW_WEB:0020 Edit User - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0020 Edit User - Form is Invalid!")
+                user_form.add_error(None, "CPW_WEB:0020 Edit User - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({ 'user_form': user_form, 'profile_form': profile_form })
 
         else:
 
-            form = EditUserForm(instance=subject)
+            user_form = EditUserForm(instance=subject)
+            profile_form = EditConstrainedProfileForm(instance=subject.profile)
 
-            data.update({ 'form': form })
+            data.update({ 'user_form': user_form, 'profile_form': profile_form })
 
         return render(request, 'authorisation/edit_user.html', data)
 

@@ -43,6 +43,7 @@ from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_collection
+from matrices.routines import get_hidden_images_for_collection
 
 
 #
@@ -62,6 +63,7 @@ def view_active_collection(request):
             collection = get_active_collection_for_user(request.user)
 
             collection_image_list = get_images_for_collection(collection)
+            collection_hidden_image_list = get_hidden_images_for_collection(collection)
 
             username = request.user.username
             collection_summary_list_qs = CollectionSummary.objects.raw('SELECT id, collection_id, LAG(\"collection_id\") OVER(ORDER BY \"collection_id\") AS \"prev_val\", LEAD(\"collection_id\") OVER(ORDER BY \"collection_id\" ) AS \"next_val\" FROM public.matrices_collection_summary WHERE collection_authorisation_permitted = %s AND collection_authorisation_authority != \'ADMIN\'', [username])
@@ -88,7 +90,9 @@ def view_active_collection(request):
             if next_collection == None:
                 next_collection = lowest_collection
 
-            data.update({ 'previous_collection': previous_collection, 'next_collection': next_collection, 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_active_collection" })
+            data.update({ 'previous_collection': previous_collection, 'next_collection': next_collection, 'collection': collection, \
+                        'collection_image_list': collection_image_list, 'collection_hidden_image_list': collection_hidden_image_list, 'form': form, \
+                        'search_from': "view_active_collection" })
 
             return render(request, 'matrices/view_collection.html', data)
 

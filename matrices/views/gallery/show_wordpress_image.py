@@ -30,6 +30,7 @@
 ###
 from __future__ import unicode_literals
 
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -53,6 +54,11 @@ def show_wordpress_image(request, server_id, image_id):
     """
     Show an image
     """
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

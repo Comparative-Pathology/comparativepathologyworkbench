@@ -30,6 +30,7 @@
 ###
 from __future__ import unicode_literals
 
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -60,9 +61,14 @@ def show_imaging_server(request, server_id):
 
         if server.is_omero547():
 
-            server_data = server.get_imaging_server_json()
+            if request.user.username == 'guest' and not server.is_idr():
+                
+                return HttpResponseRedirect(reverse('home', args=()))
 
-            data.update(server_data)
+            else:
+                
+                server_data = server.get_imaging_server_json()
+                data.update(server_data)
 
             return render(request, 'gallery/show_server.html', data)
 

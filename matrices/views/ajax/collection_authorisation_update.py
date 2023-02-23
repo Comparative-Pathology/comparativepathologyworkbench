@@ -62,6 +62,10 @@ from matrices.routines import exists_update_for_collection_and_user
 @login_required()
 def collection_authorisation_update(request, collection_authorisation_id, collection_id=None):
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
     if not request.is_ajax():
 
         raise PermissionDenied

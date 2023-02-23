@@ -59,6 +59,10 @@ from matrices.routines import simulate_network_latency
 @login_required()
 def bench_authorisation_create(request, bench_id=None):
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
     if not request.is_ajax():
 
         raise PermissionDenied

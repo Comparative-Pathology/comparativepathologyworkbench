@@ -220,7 +220,7 @@ The view matrix (bench) template
 						{% if updateBoolean %}
 			  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
-			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting {{ matrix.id }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 			  <a href="{% url 'append_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
 			  <a href="{% url 'delete_last_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
 			  <a href="{% url 'append_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>

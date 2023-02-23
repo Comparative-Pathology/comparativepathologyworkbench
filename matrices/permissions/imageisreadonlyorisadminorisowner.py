@@ -70,4 +70,10 @@ class ImageIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
         if request.user.is_superuser:
             return_flag = True
 
+
+        if request.user.username == 'guest':
+
+            return_flag = False
+
+
         return return_flag

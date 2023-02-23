@@ -48,11 +48,13 @@ from matrices.models import Matrix
 from matrices.routines import credential_exists
 from matrices.routines import bench_creation_consequences
 from matrices.routines import get_credential_for_user
+from matrices.routines import get_bench_count_for_user
 from matrices.routines import get_primary_wordpress_server
 from matrices.routines import simulate_network_latency
 
 WORDPRESS_SUCCESS = 'Success!'
 
+MAX_BENCH_COUNT = 10
 
 #
 # ADD A BENCH
@@ -86,51 +88,57 @@ def bench_create(request):
 
         form = NewMatrixForm(instance=object, data=request.POST)
 
-        if form.is_valid():
+        if get_bench_count_for_user(request.user) >= MAX_BENCH_COUNT and request.user.username == 'guest':
 
-            if credential.has_apppwd():
+            messages.error(request, "CPW_WEB:0600 New Bench  - Too Many Benches for Guest User!")
+            form.add_error(None, "CPW_WEB:0600 New Bench  - Too Many Benches for Guest User!")
+        
+        else:
 
-                object = form.save(commit=False)
+            if form.is_valid():
 
-                rows = form.cleaned_data['rows']
-                columns = form.cleaned_data['columns']
+                if credential.has_apppwd():
 
-                rows = rows + 1
-                columns = columns + 1
+                    object = form.save(commit=False)
 
-                object.set_owner(request.user)
+                    rows = form.cleaned_data['rows']
+                    columns = form.cleaned_data['columns']
 
-                post_id = ''
+                    rows = rows + 1
+                    columns = columns + 1
 
-                returned_blogpost = serverWordpress.post_wordpress_post(credential, object.title, object.description)
+                    object.set_owner(request.user)
 
-                if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                    post_id = ''
 
-                    post_id = returned_blogpost['id']
+                    returned_blogpost = serverWordpress.post_wordpress_post(credential, object.title, object.description)
 
-                    object.set_blogpost(post_id)
+                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-                    object.save()
+                        post_id = returned_blogpost['id']
 
-                    bench_creation_consequences(object, columns, rows)
+                        object.set_blogpost(post_id)
 
-                    matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                    messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+                        object.save()
+
+                        bench_creation_consequences(object, columns, rows)
+
+                        matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
+                        messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+
+                    else:
+
+                        messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
+                        form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
-                    form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
-
-            else:
-
-                messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
-                form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
+                    messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
+                    form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
 
     else:
 
         form = NewMatrixForm()
-
 
     return render(request, template_name, {
         'form': form,

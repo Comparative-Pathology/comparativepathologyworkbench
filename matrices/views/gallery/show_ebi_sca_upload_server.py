@@ -37,6 +37,7 @@ from subprocess import call
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -71,6 +72,11 @@ def show_ebi_sca_upload_server(request, server_id):
     """
     Show the EBI SCA Server
     """
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

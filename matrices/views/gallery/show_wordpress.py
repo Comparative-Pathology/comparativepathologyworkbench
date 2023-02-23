@@ -30,6 +30,7 @@
 ###
 from __future__ import unicode_literals
 
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -52,6 +53,11 @@ def show_wordpress(request, server_id, page_id):
     """
     Show the Wordpress Server
     """
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

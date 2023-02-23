@@ -46,7 +46,7 @@ from matrices.routines import exists_image_in_cells
 from matrices.routines import exists_user_for_username
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import get_collections_for_image
-from matrices.routines import get_images_for_collection
+from matrices.routines import get_images_all_for_collection
 from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import get_user_from_username
 from matrices.routines import get_servers_for_uid_url
@@ -55,9 +55,6 @@ CONST_255 = 255
 CONST_4095 = 4095
 
 
-"""
-    This Serializer provides Create, Read, Update and Delete functions for a COLLECTION
-"""
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     """A Serializer of Collections
 
@@ -66,12 +63,12 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     This Serializer provides Create, Read and Update functions for a Collection
 
     Parameters:
-        id: The (internal) Id of the Collection.
-        url(Read Only): The (internal) URL of the Collection.
-        owner: The Owner (User Model) of the Collection.
-        title: The Title of the Collection, Maximum 255 Characters.
-        description: The Description of the Collection, Maximum 4095 Characters.
-        images: An Array of Images or Null.
+        id:                 The (internal) Id of the Collection.
+        url(Read Only):     The (internal) URL of the Collection.
+        owner:              The Owner (User Model) of the Collection.
+        title:              The Title of the Collection, Maximum 255 Characters.
+        description:        The Description of the Collection, Maximum 4095 Characters.
+        images:             An Array of Images or Null.
 
     """
 
@@ -79,7 +76,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     description = serializers.CharField(max_length=4095, required=False, allow_blank=True)
     owner = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
-    #images = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), many=True)
     images = ImageSerializer(many=True, required=False)
 
     class Meta:
@@ -94,14 +90,18 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         Creates a NEW Collection Object from a Json Representation of a Collection.
 
         Parameters:
-            validated_data: A string of valid JSON.
+            validated_data:     A string of valid JSON.
 
         Returns:
             An Collection Object
 
         Raises:
-            ValidationError: CPW_REST:0060 - Attempting to Create an Image for a different Owner.
-            ValidationError: CPW_REST:0390 - Attempting to Add a new Collection for a different Owner
+            ValidationError:
+                CPW_REST:0060 - Attempting to Create an Image for a different Owner.
+            ValidationError:
+                CPW_REST:0390 - Attempting to Add a new Collection for a different Owner
+            ValidationError:
+                CPW_REST:0490 - the Image Owner Does NOT Exist!
           
         """
 
@@ -159,7 +159,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0490 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
         # Check the supplied Owner of the Collection against the Requesting User
@@ -209,7 +209,8 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                 image_id = image_data.get('image_id')
                 image_roi_id = image_data.get('roi')
                 image_comment = image_data.get('comment')
-                
+                image_hidden = False
+
                 image_owner = None
 
                 # Does the Image Owner exist on the Database?
@@ -231,7 +232,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                 # No User exists, Raise an Error!
                 else:
 
-                    message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+                    message = 'CPW_REST:0500 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
                     raise serializers.ValidationError(message)
 
 
@@ -292,7 +293,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                 #  No - Create a NEW Image and add that to the Image List for the Collection
                 else:
 
-                    image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment)
+                    image_in = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
 
                     # Update the Database with the New Image
                     image_in.save()
@@ -326,14 +327,17 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         Updates an EXISTING Collection Object from a Json Representation of a Collection.
 
         Parameters:
-            instance: an existing Collection Object
-            validated_data: A string of valid JSON.
+            instance:           an existing Collection Object
+            validated_data:     A string of valid JSON.
 
         Returns:
             An Collection Object
 
         Raises:
-            ValidationError: CPW_REST:0400 - Attempting to Update an existing Collection belonging to a different Owner
+            ValidationError:
+                CPW_REST:0400 - Attempting to Update an existing Collection belonging to a different Owner
+            ValidationError:
+                CPW_REST:0510 - the Image Owner Does NOT Exist!
           
         """
 
@@ -370,7 +374,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0510 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
         # Update the Collection Object Attributes
@@ -431,8 +435,8 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
          so these next 2 checks are redundant
 
         Parameters:
-            title: The Title of the Collection, Maximum 255 Characters.
-            description: The Description of the Collection, Maximum 4095 Characters.
+            title:          The Title of the Collection, Maximum 255 Characters.
+            description:    The Description of the Collection, Maximum 4095 Characters.
 
         Returns:
             None
@@ -449,7 +453,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
             message = 'CPW_REST:0380 ERROR! NO data supplied for Collection Creation!'
             raise serializers.ValidationError(message)
-
 
         len_title = len(a_title)
         len_description = len(a_description)
@@ -478,8 +481,8 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
          The image is not used on a Bench
 
         Parameters:
-            a_images_data: An Array of Images.
-            instance: The Collection being updated.
+            a_images_data:  An Array of Images.
+            instance:       The Collection being updated.
 
         Returns:
 
@@ -526,7 +529,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         for delete_image_id in delete_image_list:
 
             # Get the Images for this Collection
-            images = get_images_for_collection(instance)
+            images = get_images_all_for_collection(instance)
 
             # For Each Image in the Collection
             for image in images:
@@ -575,12 +578,14 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
          The image is not used on a Bench
 
         Parameters:
-            a_images_data: An Array of Images.
-            an_instance: The Collection being updated.
+            a_images_data:  An Array of Images.
+            an_instance:    The Collection being updated.
 
         Returns:
 
         Raises:
+            ValidationError:
+                CPW_REST:0520 - the Image Owner Does NOT Exist!
 
         """
 
@@ -621,8 +626,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # The list of possible Images to be Added
         add_image_list = list(set_difference)
 
-        print("add_image_list : " + str(add_image_list))
-
         # For Each Id in the list of possible Images to be Added
         for add_image_id in add_image_list:
 
@@ -643,6 +646,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                     image_id = image_data.get('image_id')
                     roi_id = image_data.get('roi')
                     image_comment = image_data.get('comment')
+                    image_hidden = False
 
                     owner = image_data.get('owner')
                     
@@ -658,7 +662,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                     # No User exists, Raise an Error!
                     else:
 
-                        message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+                        message = 'CPW_REST:0520 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
                         raise serializers.ValidationError(message)
 
                     # Validate the supplied Image attributes against the supplied Server, and return the Server
@@ -722,7 +726,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                     else:
 
                         # Create a New Image Object with the gathered atttributes
-                        new_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment)
+                        new_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment, image_hidden)
 
                         # Update the Database with the New Image
                         new_image.save()
@@ -739,15 +743,18 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
          Server Object.
 
         Parameters:
-            a_images_data: An Array of Images.
-            a_request_user: The Requesting User.
-            a_mode_flag: TRUE for Create; FALSE for UPDATE.
+            a_images_data:      An Array of Images.
+            a_request_user:     The Requesting User.
+            a_mode_flag:        TRUE for Create;
+                                FALSE for UPDATE.
 
         Returns:
 
         Raises:
             ValidationError:
                 CPW_REST:0430 - Attempting to add an Image that belongs to somebody else!
+            ValidationError:
+                CPW_REST:0530 - the Image Owner Does NOT Exist!
 
         """
         
@@ -787,7 +794,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                 # No User exists, Raise an Error!
                 else:
 
-                    message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+                    message = 'CPW_REST:0530 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
                     raise serializers.ValidationError(message)
 
 
@@ -799,17 +806,17 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
          Server Object.
 
         Parameters:
-            server_str: A string with a URL appended to a UID with an @
-            user: A User.
-            image_id: A string of valid JSON.
-            roi_id: A string of valid JSON.
+            server_str:     A string with a URL appended to a UID with an '@'.
+            user:           A User object.
+            image_id:       A string of valid JSON.
+            roi_id:         A string of valid JSON.
 
         Returns:
             A Server Object or None
 
         Raises:
             ValidationError:
-                CPW_REST:XXXX - Image Comment Title Length is greater than 4095!
+                CPW_REST:0540 - Image Comment Title Length is greater than 4095!
             ValidationError:
                 CPW_REST:0440 - Image NOT Present on the WordPress Server
             ValidationError:
@@ -830,7 +837,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Comment greater than 255 Characters? IF so, Raise an Error!
         if len_comment > CONST_4095:
 
-            message = 'CPW_REST:XXXX ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
+            message = 'CPW_REST:0540 ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         # Split the Server String into UID and URL?
@@ -900,9 +907,9 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an Image exists on a WordPress Server
 
         Parameters:
-            a_server: A Server Object
-            a_user: A User Object
-            a_image_id: The Id of the Image on the WordPress Server
+            a_server:       A Server Object.
+            a_user:         A User Object.
+            a_image_id:     The Id of the Image on the WordPress Server.
 
         Returns:
             A Boolean
@@ -931,8 +938,8 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an Image exists on an OMERO Server
 
         Parameters:
-            a_server: A Server Object
-            a_image_id: The Id of the Image on the OMERO Server
+            a_server:       A Server Object.
+            a_image_id:     The Id of the Image on the OMERO Server.
 
         Returns:
             A Boolean
@@ -961,9 +968,9 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         Checks that an ROI within an Image exists on an OMERO Server.
 
         Parameters:
-            a_server: A Server Object
-            a_image_id: The Id of the Image on the OMERO Server
-            a_roi_id: The Id of the ROI within the Image on the OMERO Server
+            a_server:       A Server Object.
+            a_image_id:     The Id of the Image on the OMERO Server.
+            a_roi_id:       The Id of the ROI within the Image on the OMERO Server.
 
         Returns:
             A Boolean

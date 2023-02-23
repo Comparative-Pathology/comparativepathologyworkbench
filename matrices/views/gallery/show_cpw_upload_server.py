@@ -37,6 +37,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -53,7 +54,6 @@ from matrices.forms import DocumentForm
 
 from matrices.routines import credential_exists
 from matrices.routines import get_header_data
-from matrices.routines import get_images_for_collection
 from matrices.routines import validate_a_cpw_url
 
 HTTP_POST = 'POST'
@@ -67,6 +67,11 @@ def show_cpw_upload_server(request, server_id):
     """
     Show the CPW Server
     """
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

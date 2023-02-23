@@ -83,6 +83,7 @@ SERVER_WORDPRESS = 'WORDPRESS'
 SERVER_OMERO_547 = 'OMERO_5.4.7'
 SERVER_EBI_SCA = 'EBI_SCA'
 SERVER_CPW = 'CPW'
+SERVER_IDR = 'idr.openmicroscopy.org'
 
 
 """
@@ -162,6 +163,12 @@ class Server(models.Model):
         else:
             return False
 
+    def is_idr(self):
+        if self.url_server == SERVER_IDR:
+            return True
+        else:
+            return False
+
     def get_uid_and_url(self):
         return f"{self.uid}@{self.url_server}"
 
@@ -181,7 +188,7 @@ class Server(models.Model):
         blogGetPost = Blog.objects.get(name=CMD_BLOG_GET_POST)
 
         get_post_url = blogGetPost.protocol.name + '://' + self.url_server + '/' + blogGetPost.application + '/' + blogGetPost.preamble + '/' + post_id
-
+        
         try:
             response = requests.get(get_post_url)
 
@@ -1864,6 +1871,10 @@ class Server(models.Model):
 
         image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + commandRegion.postamble
 
+        roi_list = list()
+        datasets_list = list()
+        projects_list = list()
+
         session = requests.Session()
         if self.id == 33:
             session.verify = False
@@ -1880,7 +1891,7 @@ class Server(models.Model):
             group_count = 0
             group_list = []
 
-            data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list }
+            data = { 'server': self, 'group': group, 'projects': projects_list, 'datasets': datasets_list, 'image': image, 'rois': roi_list }
 
             return data
 
@@ -1897,10 +1908,6 @@ class Server(models.Model):
 
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
-
-        roi_list = list()
-        datasets_list = list()
-        projects_list = list()
 
         payload = {'limit': 200}
         rois_data = session.get(rois_url, params=payload).json()
@@ -2264,6 +2271,10 @@ class Server(models.Model):
 
         image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + commandRegion.postamble
 
+        roi_list = list()
+        datasets_list = list()
+        projects_list = list()
+
         session = requests.Session()
 
         try:
@@ -2276,7 +2287,7 @@ class Server(models.Model):
             group_count = 0
             group_list = []
 
-            data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'rois': roi_list }
+            data = { 'server': self, 'group': group, 'projects': projects_list, 'datasets': datasets_list, 'image': image, 'rois': roi_list }
 
             return data
 

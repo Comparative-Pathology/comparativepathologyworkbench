@@ -39,9 +39,11 @@ from matrices.models import CollectionSummary
 from matrices.forms import CollectionSummarySearchForm
 
 from matrices.routines import credential_exists
+from matrices.routines import get_collection_count_for_user
 from matrices.routines import get_header_data
 from matrices.routines import collection_list_by_user_and_direction
 
+MAX_COLLECTION_COUNT = 10
 
 #
 # The list_collections VIEW
@@ -105,11 +107,17 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
             readBoolean = True
 
+        createBoolean = True
+
+        if get_collection_count_for_user(self.request.user) >= MAX_COLLECTION_COUNT and self.request.user.username == 'guest':
+
+            createBoolean = False
+
         data_dict = {'title': self.query_title, 'description': self.query_description, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by }
 
         form = CollectionSummarySearchForm(data_dict)
 
-        data.update({ 'form': form, 'readBoolean': readBoolean })
+        data.update({ 'form': form, 'readBoolean': readBoolean, 'createBoolean': createBoolean  })
 
         context.update(data)
 

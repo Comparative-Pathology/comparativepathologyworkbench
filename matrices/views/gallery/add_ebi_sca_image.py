@@ -30,6 +30,7 @@
 ###
 from __future__ import unicode_literals
 
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -49,6 +50,11 @@ from matrices.routines import add_image_to_collection
 #
 @login_required
 def add_ebi_sca_image(request, server_id, image_id, path_from):
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

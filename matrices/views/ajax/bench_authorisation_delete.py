@@ -49,6 +49,10 @@ from matrices.routines import exists_update_for_bench_and_user
 @login_required()
 def bench_authorisation_delete(request, authorisation_id):
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
     if not request.is_ajax():
 
         raise PermissionDenied

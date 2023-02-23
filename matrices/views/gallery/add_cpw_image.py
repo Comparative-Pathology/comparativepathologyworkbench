@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -52,6 +53,11 @@ SHOW_CPW_UPLOAD_IMAGE = 'show_cpw_upload_image'
 #
 @login_required
 def add_cpw_image(request, server_id, image_id, path_from):
+
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     data = get_header_data(request.user)
 

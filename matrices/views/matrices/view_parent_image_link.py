@@ -56,6 +56,10 @@ def view_parent_image_link(request, image_parent_id):
 
         raise PermissionDenied
 
+    if request.user.username == 'guest':
+
+        raise PermissionDenied
+
 
     if credential_exists(request.user):
 

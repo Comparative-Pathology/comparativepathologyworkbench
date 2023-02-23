@@ -135,7 +135,11 @@ The list collections template (with Search)
 		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+				
+		  		{% if user.username != 'guest' %}
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
+				{% endif %}
+
 				{% if collection_summary.collection_id == user.profile.active_collection.id %}
 				{% else %}
 					{% if collection_summary.collection_owner == user.username %}
@@ -179,9 +183,11 @@ The list collections template (with Search)
   </tr>
   <tr>
 			{% if readBoolean %}
+			{% if createBoolean %}
     <td>
 	  <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 	</td>
+			{% endif %}
 			{% else %}
 	<td>&nbsp;</td>
 			{% endif %}
@@ -198,9 +204,11 @@ The list collections template (with Search)
 {% else %}
 <p>No Collections are available.</p>
 	{% if readBoolean %}
+	{% if createBoolean %}
 <p>
   <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 </p>
+	{% endif %}
 	{% else %}
 <p>You are not authorised to add Collections yet!</p>
 	{% endif %}

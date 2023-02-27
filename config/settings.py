@@ -35,6 +35,7 @@ import os
 from decouple import config, Csv
 
 import dj_database_url
+import ckeditor.configs
 
 from pathlib import Path
 
@@ -60,20 +61,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 	'widget_tweaks',
     'rest_framework',
     'sortable_listview',
     'ckeditor',
     'inlineedit',
-
     'matrices.apps.MatricesConfig',
     'rest_framework.authtoken',
-
     'frontend_forms',
-
-    #'rest_framework_swagger',
-
 ]
 
 MIDDLEWARE = [
@@ -86,14 +81,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-#
 # UNCOMMENT for LIVE Server Configuration Settings
-#
 #ROOT_URLCONF = 'comparativepathologyworkbench.urls'
 
-#
 # UNCOMMENT for DEVELOPMENT Server Configuration Settings
-#
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -116,10 +107,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-#
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
@@ -131,9 +118,6 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-#
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -149,21 +133,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-#
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-#
-# These lines ensure all static files - CSS, images etc - come from a SINGLE base level
-#  folder in the application
-#
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -175,43 +150,24 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-#
-# Other stuff for the CPW
-#
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-NOT_EMAIL_HOST_PASSWORD = config('NOT_EMAIL_HOST_PASSWORD')
-
-#
-# UNCOMMENT for LIVE Server Mailer
-#
-#EMAIL_HOST = config('EMAIL_HOST')
-#EMAIL_PORT = config('EMAIL_PORT', cast=int)
-#EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-
-#EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-#EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
-#
-# UNCOMMENT for DEVELOPMENT Server Mailer to File
-#
 EMAIL_FILE_PATH = config('EMAIL_FILE_PATH')
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 
 LOCATION = config('LOCATION')
+
+SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', cast=int)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = config('SESSION_EXPIRE_AT_BROWSER_CLOSE', cast=bool)
 
 SETTINGS_EXPORT = [
     'LOCATION',
     'DEBUG',
 ]
 
-#
-# Django REST Framework
-#
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_PAGINATION_CLASS':
@@ -225,17 +181,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-#
-# Cookies
-#
-SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', cast=int)
-SESSION_EXPIRE_AT_BROWSER_CLOSE = config('SESSION_EXPIRE_AT_BROWSER_CLOSE', cast=bool)
-
-#
-# CKEditor settings
-#
-import ckeditor.configs
-
 CKEDITOR_CONFIGS = {
     "default": ckeditor.configs.DEFAULT_CONFIG,
     "empty_toolbar": {
@@ -244,34 +189,12 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-#
-# Django Inlineedit settings
-#
-# This setting controls default editing access within Django-inlineedit
-# In this case we are enabling editing to anyone using the example
 INLINEEDIT_EDIT_ACCESS = lambda user, model, field: True
 
-# Two custom adaptors are being registered below
 INLINEEDIT_ADAPTORS = {
     "blocked": "matrices.adaptors.BlockedAdaptor",
 }
 
-#
-# HighCharts Settings
-#
-HIGHCHARTS_TEMP_DIR = config('HIGHCHARTS_TEMP_DIR')
-HIGHCHARTS_OUTPUT_DIR = config('HIGHCHARTS_OUTPUT_DIR')
-HIGHCHARTS_HOST = config('HIGHCHARTS_HOST')
-HIGHCHARTS_OUTPUT_WEB = config('HIGHCHARTS_OUTPUT_WEB')
-
-#
-# EBI SCA Settings
-#
-EBI_SCA_EXPERIMENTS_URL = config('EBI_SCA_EXPERIMENTS_URL')
-
-#
-# Front End Forms Settings
-#
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 FRONTEND_FORMS_FORM_LAYOUT_FLAVOR  = "bs4"

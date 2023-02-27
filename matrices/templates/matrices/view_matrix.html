@@ -53,13 +53,13 @@ The view matrix (bench) template
 			<li>
 				<a href="{% url 'aggregated_matrix_blog' matrix.id %}">
 				  <div class="tooltip" style="font-size: 12px; width:150px;">
-	{% if settings.LOCATION == 'CZI' %}
+	{% if location == 'CZI' %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
 	{% endif %}
-	{% if settings.LOCATION == 'CANADA' %}
+	{% if location == 'CANADA' %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;">
 	{% endif %}
-	{% if settings.LOCATION == 'COELIAC' %}
+	{% if location == 'COELIAC' %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;">
 	{% endif %}
 						<i class="fa fa-bullhorn"></i>
@@ -70,7 +70,7 @@ The view matrix (bench) template
 			</li>
 
 			
-	{% if settings.LOCATION == 'CZI' %}
+	{% if location == 'CZI' %}
 			<li style="float: right;">
 				<a href="{% url 'matrix' next_bench %}">
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
@@ -82,7 +82,7 @@ The view matrix (bench) template
 				</a>
 			</li>
     {% endif %}
-    {% if settings.LOCATION == 'CANADA' %}
+    {% if location == 'CANADA' %}
 			<li style="float: right;">
 				<a href="{% url 'matrix' next_bench %}">
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
@@ -94,7 +94,7 @@ The view matrix (bench) template
 				</a>
 			</li>
     {% endif %}
-    {% if settings.LOCATION == 'COELIAC' %}
+    {% if location == 'COELIAC' %}
 			<li style="float: right;">
 				<a href="{% url 'matrix' next_bench %}">
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>

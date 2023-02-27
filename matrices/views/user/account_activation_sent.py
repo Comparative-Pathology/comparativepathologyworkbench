@@ -32,9 +32,13 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
+from matrices.routines import get_header_data
+
 #
 # ACCOUNT ACTIVATION
 #
 def account_activation_sent(request):
 
-    return render(request, 'user/account_activation_sent.html')
+    data = get_header_data(request.user)
+
+    return render(request, 'user/account_activation_sent.html', data)

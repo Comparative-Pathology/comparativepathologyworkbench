@@ -41,6 +41,8 @@ from django_filters.views import FilterView
 
 from rest_framework.authtoken.views import obtain_auth_token
 
+from decouple import config
+
 from matrices import views as matrices_views
 
 
@@ -71,16 +73,7 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
 
 #   auth_views
-    path('login/', auth_views.LoginView.as_view(template_name="user/login.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(template_name="user/login.html"), name='logout'),
-
-#   auth_views
-    path('reset/', auth_views.PasswordResetView.as_view(template_name='user/password_reset.html', email_template_name='user/password_reset_email.html', subject_template_name='user/password_reset_subject.txt'), name='password_reset'),
-    path('reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='user/password_reset_done.html'), name='password_reset_done'),
-    path('reset/<str:uidb64>/<str:token>/', auth_views.PasswordResetConfirmView.as_view(template_name='user/password_reset_confirm.html'), name='password_reset_confirm'),
-    path('reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user/password_reset_complete.html'), name='password_reset_complete'),
-    path('settings/password/', auth_views.PasswordChangeView.as_view(template_name='user/password_change.html'), name='password_change'),
-    path('settings/password/done/', auth_views.PasswordChangeDoneView.as_view(template_name='user/password_change_done.html'), name='password_change_done'),
 
 #   views/ajax
     path('ajax/overwrite_cell_leave/', matrices_views.ajax.overwrite_cell_leave, name='overwrite_cell_leave'),
@@ -253,9 +246,18 @@ urlpatterns = [
 
 
 #   views/user
+    path('login/', matrices_views.user.login_user, name="login"),
 	path('signup/', matrices_views.user.signup, name='signup'),
 	path('account_activation_sent/', matrices_views.user.account_activation_sent, name='account_activation_sent'),
 	path('activate/<str:uidb64>/<str:token>', matrices_views.user.activate, name='activate'),
+
+    path('settings/password/', matrices_views.user.ChangePasswordView.as_view(), name='password_change'),
+    path('settings/password/done/', matrices_views.user.ChangePasswordDoneView.as_view(), name='password_change_done'),
+
+    path('reset/', matrices_views.user.ResetPasswordView.as_view(email_template_name='user/password_reset_email.html', subject_template_name='user/password_reset_subject.txt'), name='password_reset'),
+    path('reset/done/', matrices_views.user.ResetPasswordDoneView.as_view(), name='password_reset_done'),
+    path('reset/<str:uidb64>/<str:token>/', matrices_views.user.ResetPasswordConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/complete/', matrices_views.user.ResetPasswordCompleteView.as_view(), name='password_reset_complete'),
 
 ]
 

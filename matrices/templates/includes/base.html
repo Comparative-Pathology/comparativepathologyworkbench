@@ -70,15 +70,15 @@ The base header and footer include template
   <link rel='stylesheet' href="{% static 'my_frontend_forms.css' %}">
   <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
 
-  {% if settings.LOCATION == 'CZI' %}
+  {% if location == 'CZI' %}
   <!-- CZI -->
   <link rel="stylesheet" href="{% static 'styles_czi.css' %}" />
   {% endif %}
-  {% if settings.LOCATION == 'CANADA' %}
+  {% if location == 'CANADA' %}
   <!-- CANADA -->
   <link rel="stylesheet" href="{% static 'styles_canada.css' %}">
   {% endif %}
-  {% if settings.LOCATION == 'COELIAC' %}
+  {% if location == 'COELIAC' %}
   <!-- COELIAC -->
   <link rel="stylesheet" href="{% static 'styles_coeliac.css' %}">
   {% endif %}
@@ -282,21 +282,21 @@ The base header and footer include template
                 <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project"><button class="button button-info"><i class="fa fa-info-circle"></i></button> About</a>
                 <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team"><button class="button button-info"><i class="fa fa-users"></i></button> Contributors</a>
 
-  {% if settings.LOCATION == 'CZI' %}
+  {% if location == 'CZI' %}
 
                 <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
                 <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
 
   {% endif %}
 
-  {% if settings.LOCATION == 'CANADA' %}
+  {% if location == 'CANADA' %}
 
                 <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
                 <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
 
   {% endif %}
 
-  {% if settings.LOCATION == 'COELIAC' %}
+  {% if location == 'COELIAC' %}
 
                 <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
                 <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
@@ -310,19 +310,19 @@ The base header and footer include template
           <div class="grid-item-header-breadcrumb">
             <ul class="breadcrumb">
 
-  {% if settings.LOCATION == 'CZI' %}
+  {% if location == 'CZI' %}
 
               <li><a href="{% url 'home' %}"><button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-home-alt"></i></button></a></li>
 
   {% endif %}
 
-  {% if settings.LOCATION == 'CANADA' %}
+  {% if location == 'CANADA' %}
 
               <li><a href="{% url 'home' %}"><button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;"><i class="fa fa-home-alt"></i></button></a></li>
 
   {% endif %}
 
-  {% if settings.LOCATION == 'COELIAC' %}
+  {% if location == 'COELIAC' %}
 
               <li><a href="{% url 'home' %}"><button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;"><i class="fa fa-home-alt"></i></button></a></li>
 

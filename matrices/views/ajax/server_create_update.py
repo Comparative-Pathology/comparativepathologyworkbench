@@ -47,6 +47,7 @@ from matrices.forms import ServerForm
 from matrices.routines import AESCipher
 from matrices.routines import credential_exists
 from matrices.routines import simulate_network_latency
+from matrices.routines import exists_server_for_uid_url
 
 
 #
@@ -76,10 +77,12 @@ def server_create_update(request, server_id=None):
 
     if server_id is None:
         # "Add" mode
+
         object = None
 
     else:
         # "Change" mode
+
         object = get_object_by_uuid_or_404(Server, server_id)
 
         if not request.user.is_superuser:
@@ -95,29 +98,40 @@ def server_create_update(request, server_id=None):
 
         simulate_network_latency()
 
-        #form = ServerForm(data=request.POST)
         form = ServerForm(instance=object, data=request.POST)
 
         if form.is_valid():
-
+            
             object = form.save(commit=False)
 
-            cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+            cipher = AESCipher(config('CPW_CIPHER_STRING'))
 
             encryptedPwd = cipher.encrypt(object.pwd).decode()
 
             object.set_pwd(encryptedPwd)
-
             object.set_owner(request.user)
 
-            object.save()
-
             if server_id is None:
+
                 # "Add" mode
-                messages.success(request, 'Server ' + str(object.id) + ' Added!')
+
+                if exists_server_for_uid_url(object.uid, object.url_server):
+
+                    messages.error(request, "CPW_WEB:0610 NEW Server - A Server already Exist for that User Id and URL!")
+                    form.add_error(None, "CPW_WEB:0610 NEW Server - A Server already Exist for that User Id and URL!")
+        
+                else:
+                    
+                    object.save()
+
+                    messages.success(request, 'Server ' + str(object.id) + ' Added!')
 
             else:
+
                 # "Change" mode
+
+                object.save()
+                
                 messages.success(request, 'Server ' + str(object.id) + ' Updated!')
 
     else:

@@ -45,6 +45,6 @@ def exists_image_on_webserver(an_image_name):
 
     Image = apps.get_model('matrices', 'Image')
 
-    a_viewer_url = settings.HIGHCHARTS_OUTPUT_WEB + an_image_name
+    a_viewer_url = config('CPW_WEB_ROOT') + an_image_name
 
     return Image.objects.filter(viewer_url=a_viewer_url).exists()

@@ -39,10 +39,14 @@ from django.urls import reverse
 
 from matrices.tokens import account_activation_token
 
+from matrices.routines import get_header_data
+
 #
 # ACCOUNT ACTIVATE
 #
 def activate(request, uidb64, token):
+
+    data = get_header_data(request.user)
 
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -63,4 +67,4 @@ def activate(request, uidb64, token):
 
     else:
 
-        return render(request, 'user/account_activation_invalid.html')
+        return render(request, 'user/account_activation_invalid.html', data)

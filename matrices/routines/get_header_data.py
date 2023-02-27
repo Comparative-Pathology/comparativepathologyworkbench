@@ -41,6 +41,8 @@ from . import collection_list_by_user_and_direction
 from matrices.routines.get_images_for_collection_summary import get_images_for_collection_summary
 from matrices.routines.get_hidden_images_for_collection_summary import get_hidden_images_for_collection_summary
 
+from decouple import config
+
 SERVER_IDR = 'idr.openmicroscopy.org'
 
 
@@ -56,6 +58,8 @@ def get_header_data(a_user):
     server_list = list()
     matrix_list = list()
     collection_summary_list = list()
+
+    location = config('LOCATION')
 
     if not a_user.is_anonymous:
 
@@ -77,6 +81,6 @@ def get_header_data(a_user):
         hidden_image_list = get_hidden_images_for_collection_summary(collection_summary_list)
 
 
-    data = { 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list, 'hidden_image_list': hidden_image_list }
+    data = { 'location': location, 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list, 'hidden_image_list': hidden_image_list }
 
     return data

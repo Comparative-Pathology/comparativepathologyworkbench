@@ -40,7 +40,7 @@ from matrices.routines.convert_chart_id_to_ebi_sca_url import convert_chart_id_t
 """
 def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
 
-    highcharts_web = config('HIGHCHARTS_OUTPUT_WEB')
+    highcharts_web = config('CPW_WEB_ROOT')
 
     chart_key = ''
     experiment_id = ''

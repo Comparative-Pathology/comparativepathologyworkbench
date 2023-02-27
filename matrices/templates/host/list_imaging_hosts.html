@@ -113,16 +113,16 @@ The list imaging hosts (Servers) template
       <div class="generic-dropdown">
         <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
         <div class="generic-dropdown-content">
-    			{% if server.type.name == 'WORDPRESS' %}
+    			{% if server.is_wordpress %}
           <a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
-    			{% if server.type.name == 'OMERO_5.4.7' %}
+    			{% if server.is_omero547 %}
           <a href="{% url 'webgallery_show_imaging_server' server.id %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
-    			{% if server.type.name == 'EBI_SCA' %}
+    			{% if server.is_ebi_sca %}
           <a href="{% url 'webgallery_show_ebi_sca_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
-				{% if server.type.name == 'CPW' %}
+				{% if server.is_cpw %}
           <a href="{% url 'webgallery_show_cpw_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
           <a data-value="{{ server.id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
@@ -149,16 +149,16 @@ The list imaging hosts (Servers) template
       <div class="generic-dropdown">
         <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
         <div class="generic-dropdown-content">
-    			{% if server.type.name == 'WORDPRESS' %}
+    			{% if server.is_wordpress %}
           <a href="{% url 'webgallery_show_wordpress' server.id 1 %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
-    			{% if server.type.name == 'OMERO_5.4.7' %}
+    			{% if server.is_omero547 %}
           <a href="{% url 'webgallery_show_imaging_server' server.id %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
-    			{% if server.type.name == 'EBI_SCA' %}
+    			{% if server.is_ebi_sca %}
           <a href="{% url 'webgallery_show_ebi_sca_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
     			{% endif %}
-				{% if server.type.name == 'CPW' %}
+				{% if server.is_cpw %}
           <a href="{% url 'webgallery_show_cpw_upload_server' server.id %}"><i class="fa fa-eye"></i> View</a>
 				{% endif %}
           <a data-value="{{ server.id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>

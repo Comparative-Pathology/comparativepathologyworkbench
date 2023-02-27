@@ -35,4 +35,11 @@
 
 from .account_activation_sent import account_activation_sent
 from .activate import activate
+from .login_user import login_user
 from .signup import signup
+from .change_password import *
+from .change_password_done import *
+from .reset_password import *
+from .reset_password_done import *
+from .reset_password_confirm import *
+from .reset_password_complete import *

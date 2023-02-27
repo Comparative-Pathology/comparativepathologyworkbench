@@ -1,6 +1,6 @@
-#!/usr/bin/python3
 ###!
-# \file         mailer.py
+#!/usr/bin/python3
+# \file         reset_password_confirm.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,39 +25,28 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the mailer view routine
+# The Reset Password Confirm View
 #
 ###
 from __future__ import unicode_literals
 
-from django.core.mail import send_mail
-from django.utils import timezone
-
-from django.shortcuts import render
-
-from decouple import config
+from django.contrib.auth.views import PasswordResetConfirmView
 
 from matrices.routines import get_header_data
 
-#
-# MAILER VIEW
-#
-def mailer(request):
 
-    data = get_header_data(request.user)
+class ResetPasswordConfirmView(PasswordResetConfirmView):
+    
+    template_name='user/password_reset_confirm.html'
 
-    if request.user.is_superuser:
 
-        now = timezone.now()
+    def get_context_data(self, **kwargs):
 
-        subject = 'A Time Check'
-        message = 'Here is the time : ' + str(now)
-        email_from = config('CPW_FROM_EMAIL')
-        recipient_list = ['mike.wicks@gmail.com',]
-        email_to = 'mike.wicks@gmail.com'
+        context = super().get_context_data(**kwargs)
 
-        data.update({ 'subject': subject, 'message': message, 'email_from': email_from, 'email_to': email_to })
+        data = get_header_data(self.request.user)
 
-        send_mail( subject, message, email_from, recipient_list, fail_silently=False )
+        context.update(data)
 
-    return render(request, 'authorisation/mailer.html', data)
+        return context
+

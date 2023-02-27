@@ -81,7 +81,7 @@ def convert_chart_id_to_ebi_sca_url(a_url_server, a_chart_id):
     query_parameter = query_parameter_type + query_parameter_option + query_parameter_colourBy + query_parameter_geneId
 
     #/json/experiments/
-    ebi_sca_web = config('EBI_SCA_EXPERIMENTS_URL')
+    ebi_sca_web = 'json/experiments'
 
     path_array = ebi_sca_web.split("/")
 

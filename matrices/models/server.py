@@ -541,7 +541,7 @@ class Server(models.Model):
 
         Command = apps.get_model('matrices', 'Command')
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         user = User.objects.get(username=credential.username)
@@ -695,7 +695,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         user = User.objects.get(username=credential.username)
@@ -804,7 +804,7 @@ class Server(models.Model):
     """
     def get_ebi_server_experiment_metadata(self, an_experiment_id):
 
-        experiments_url = config('EBI_SCA_EXPERIMENTS_URL')
+        experiments_url = 'json/experiments'
 
         full_experiments_url = 'https://' + self.url_server + '/' + experiments_url + '/'
 
@@ -911,8 +911,8 @@ class Server(models.Model):
     """
     def get_ebi_server_json(self):
 
-        experiments_url = config('EBI_SCA_EXPERIMENTS_URL')
-
+        experiments_url = 'json/experiments'
+        
         full_experiments_url = 'https://' + self.url_server + '/' + experiments_url + '/'
 
         session = requests.Session()
@@ -1011,7 +1011,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         memberOfGroup_list = list()
@@ -1271,7 +1271,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         memberOfGroup_list = list()
@@ -1519,7 +1519,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         if userid != "":
@@ -1640,7 +1640,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         if userid == "":
@@ -1829,7 +1829,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         commandAPI = Command.objects.filter(type=self.type).get(name=CMD_API_API)
@@ -2229,7 +2229,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         commandAPI = Command.objects.filter(type=self.type).get(name=CMD_API_API)
@@ -2674,7 +2674,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         commandAPI = Command.objects.filter(type=self.type).get(name=CMD_API_API)
@@ -2826,7 +2826,7 @@ class Server(models.Model):
 
         userid = self.uid
 
-        cipher = AESCipher(config('NOT_EMAIL_HOST_PASSWORD'))
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
         password = cipher.decrypt(self.pwd)
 
         commandAPI = Command.objects.filter(type=self.type).get(name=CMD_API_API)

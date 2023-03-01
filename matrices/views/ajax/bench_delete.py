@@ -41,9 +41,9 @@ from matrices.models import Cell
 
 from matrices.routines import credential_exists
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -75,7 +75,7 @@ def bench_delete(request, bench_id):
 
     object_id = ''
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     matrix = get_object_or_404(Matrix, pk=bench_id)
 
@@ -83,7 +83,7 @@ def bench_delete(request, bench_id):
 
     if matrix.has_blogpost():
 
-        response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
+        response = environment.delete_a_post_from_wordpress(credential, matrix.blogpost)
 
         if response != WORDPRESS_SUCCESS:
 
@@ -94,7 +94,7 @@ def bench_delete(request, bench_id):
 
         if oldCell.has_blogpost():
 
-            response = serverWordpress.delete_wordpress_post(credential, oldCell.blogpost)
+            response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
             if response != WORDPRESS_SUCCESS:
 

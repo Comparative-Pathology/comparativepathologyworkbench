@@ -1,0 +1,123 @@
+<!--
+\file         detail_environment.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The detail Environment template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li><a href="{% url 'maintenance' %}">Maintenance</a></li>
+			<li><a href="{% url 'detail_environment' environment.id %}">Environment {{ environment.id }}</a></li>
+			<li>Environment Details</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+
+	<h1>Environment {{ environment.id }}</h1>
+
+	<hr>
+
+	<br />
+
+	<dl class="standard">
+		<dt>Name</dt>
+		<dd>{{ environment.name }}</dd>
+		<dt>Location</dt>
+		<dd>{{ environment.location.name }}</dd>
+		<dt>Protocol</dt>
+		<dd>{{ environment.protocol.name }}</dd>
+		<dt>Web Root</dt>
+		<dd>{{ environment.web_root }}</dd>
+		<dt>(Full Web Root)</dt>
+		<dd>{{ environment.full_web_root }}</dd>
+		<dt>Document Root</dt>
+		<dd>{{ environment.document_root }}</dd>
+		<dt>Wordpress Web Root</dt>
+		<dd>{{ environment.wordpress_web_root }}</dd>
+		<dt>From Email</dt>
+		<dd>{{ environment.from_email }}</dd>
+		<dt>Minimum Cell Height</dt>
+		<dd>{{ environment.minimum_cell_height }}</dd>
+		<dt>Maximum Cell Height</dt>
+		<dd>{{ environment.maximum_cell_height }}</dd>
+		<dt>Minimum Cell Width</dt>
+		<dd>{{ environment.minimum_cell_width }}</dd>
+		<dt>Maximum Cell Width</dt>
+		<dd>{{ environment.maximum_cell_width }}</dd>
+		<dt>Maximum Initial Columns</dt>
+		<dd>{{ environment.maximum_initial_columns }}</dd>
+		<dt>Minimum Initial Columns</dt>
+		<dd>{{ environment.minimum_initial_columns }}</dd>
+		<dt>Maximum Initial Rows</dt>
+		<dd>{{ environment.maximum_initial_rows }}</dd>
+		<dt>Minimum Initial Rows</dt>
+		<dd>{{ environment.minimum_initial_rows }}</dd>
+		<dt>Maximum REST Columns</dt>
+		<dd>{{ environment.maximum_rest_columns }}</dd>
+		<dt>Minimum REST Columns</dt>
+		<dd>{{ environment.minimum_rest_columns }}</dd>
+		<dt>Maximum REST Rows</dt>
+		<dd>{{ environment.maximum_rest_rows }}</dd>
+		<dt>Minimum REST Rows</dt>
+		<dd>{{ environment.minimum_rest_rows }}</dd>
+		<dt>Maximum Bench Count</dt>
+		<dd>{{ environment.maximum_bench_count }}</dd>
+		<dt>Maximum Collection Count</dt>
+		<dd>{{ environment.maximum_collection_count }}</dd>
+	</dl>
+
+	<br />
+
+	<a href="{% url 'maintenance' %}"><button class="button button-add">BACK</button></a>
+	<a href="{% url 'edit_environment' environment.id %}"><button class="button button-edit">Edit</button></a>
+
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+{% endblock %}

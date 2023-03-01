@@ -45,12 +45,11 @@ from matrices.models import Cell
 from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import get_blog_link_post_url
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_images_for_collection
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_header_data
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 VIEW_MATRIX = "view_matrix"
 AMEND_CELL = "amend_cell"
@@ -63,8 +62,8 @@ WORDPRESS_SUCCESS = 'Success!'
 #
 @login_required
 def clear_cell(request, matrix_id, cell_id, path_from):
-
-	serverWordpress = get_primary_wordpress_server()
+	
+	environment = get_primary_cpw_environment()
 
 	data = get_header_data(request.user)
 
@@ -93,7 +92,7 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 				if credential.has_apppwd():
 
-					response = serverWordpress.delete_wordpress_post(credential, cell.blogpost)
+					response = environment.delete_a_post_from_wordpress(credential, cell.blogpost)
 
 					if response != WORDPRESS_SUCCESS:
 
@@ -177,7 +176,7 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 				form = SearchUrlForm()
 
-				cell_link = get_blog_link_post_url() + cell.blogpost
+				cell_link = environment.get_a_link_url_to_post() + cell.blogpost
 
 				matrix_link = 'matrix_link'
 				amend_cell = 'amend_cell'

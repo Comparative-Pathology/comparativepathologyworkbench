@@ -1,0 +1,26 @@
+[
+{
+    "model": "matrices.location",
+    "pk": 3,
+    "fields": {
+        "name": "CZI",
+        "owner": 1
+    }
+},
+{
+    "model": "matrices.location",
+    "pk": 4,
+    "fields": {
+        "name": "CANADA",
+        "owner": 1
+    }
+},
+{
+    "model": "matrices.location",
+    "pk": 5,
+    "fields": {
+        "name": "COELIAC",
+        "owner": 1
+    }
+}
+]

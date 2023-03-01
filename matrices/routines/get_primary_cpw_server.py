@@ -34,7 +34,8 @@ from os import urandom
 
 from django.apps import apps
 
-from decouple import config
+
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 """
@@ -44,4 +45,6 @@ def get_primary_cpw_server():
 
     Server = apps.get_model('matrices', 'Server')
 
-    return Server.objects.get(url_server=config('COMPARATIVE_PATHOLOGY_WORKBENCH'))
+    environment  = get_primary_cpw_environment()
+
+    return Server.objects.get(url_server=environment.web_root)

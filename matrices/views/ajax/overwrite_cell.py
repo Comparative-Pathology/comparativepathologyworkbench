@@ -43,8 +43,8 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_update_for_bench_and_user
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 #
 # OVERWRITE A CELL - MOVE
@@ -79,7 +79,7 @@ def overwrite_cell(request):
     owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     if credential_exists(user):
 
@@ -117,7 +117,7 @@ def overwrite_cell(request):
 
                 if credential.has_apppwd():
 
-                    response = serverWordpress.delete_wordpress_post(credential, target_cell.blogpost)
+                    response = environment.delete_a_post_from_wordpress(credential, target_cell.blogpost)
 
             if target_cell.has_image():
 

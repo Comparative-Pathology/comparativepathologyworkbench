@@ -43,13 +43,12 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from random import randint
-from decouple import config
 
 from requests.exceptions import HTTPError
 
 from matrices.models import Collection
 
-from matrices.routines import get_a_post_comments_from_wordpress
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 WORDPRESS_SUCCESS = 'Success!'
@@ -333,9 +332,11 @@ class Matrix(models.Model):
 
         error_flag = False
 
+        environment = get_primary_cpw_environment()
+
         if self.has_blogpost():
 
-            comment_list = get_a_post_comments_from_wordpress(self.blogpost)
+            comment_list = environment.get_a_post_comments_from_wordpress(self.blogpost)
 
             for comment in comment_list:
 

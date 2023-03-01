@@ -41,8 +41,6 @@ from django_filters.views import FilterView
 
 from rest_framework.authtoken.views import obtain_auth_token
 
-from decouple import config
-
 from matrices import views as matrices_views
 
 
@@ -185,23 +183,38 @@ urlpatterns = [
 	path('new_blog_command/', matrices_views.maintenance.new_blog_command, name='new_blog_command'),
     path('edit_blog_command/<int:blog_id>/', matrices_views.maintenance.edit_blog_command, name='edit_blog_command'),
     path('delete_blog_command/<int:blog_id>/', matrices_views.maintenance.delete_blog_command, name='delete_blog_command'),
-	path('detail_command/<int:command_id>/', matrices_views.maintenance.view_command, name='detail_command'),
+	
+    path('detail_command/<int:command_id>/', matrices_views.maintenance.view_command, name='detail_command'),
 	path('new_command/', matrices_views.maintenance.new_command, name='new_command'),
 	path('edit_command/<int:command_id>/', matrices_views.maintenance.edit_command, name='edit_command'),
 	path('delete_command/<int:command_id>/', matrices_views.maintenance.delete_command, name='delete_command'),
-	path('detail_protocol/<int:protocol_id>/', matrices_views.maintenance.view_protocol, name='detail_protocol'),
+	
+    path('detail_protocol/<int:protocol_id>/', matrices_views.maintenance.view_protocol, name='detail_protocol'),
 	path('new_protocol/', matrices_views.maintenance.new_protocol, name='new_protocol'),
 	path('edit_protocol/<int:protocol_id>/', matrices_views.maintenance.edit_protocol, name='edit_protocol'),
 	path('delete_protocol/<int:protocol_id>/', matrices_views.maintenance.delete_protocol, name='delete_protocol'),
-	path('detail_type/<int:type_id>/', matrices_views.maintenance.view_type, name='detail_type'),
+	
+    path('detail_type/<int:type_id>/', matrices_views.maintenance.view_type, name='detail_type'),
 	path('new_type/', matrices_views.maintenance.new_type, name='new_type'),
 	path('edit_type/<int:type_id>/', matrices_views.maintenance.edit_type, name='edit_type'),
 	path('delete_type/<int:type_id>/', matrices_views.maintenance.delete_type, name='delete_type'),
-	path('detail_bench_authority/<int:bench_authority_id>/', matrices_views.maintenance.view_bench_authority, name='detail_bench_authority'),
+	
+    path('detail_location/<int:location_id>/', matrices_views.maintenance.view_location, name='detail_location'),
+	path('new_location/', matrices_views.maintenance.new_location, name='new_location'),
+	path('edit_location/<int:location_id>/', matrices_views.maintenance.edit_location, name='edit_location'),
+	path('delete_location/<int:location_id>/', matrices_views.maintenance.delete_location, name='delete_location'),
+
+    path('detail_environment/<int:environment_id>/', matrices_views.maintenance.view_environment, name='detail_environment'),
+	path('new_environment/', matrices_views.maintenance.new_environment, name='new_environment'),
+	path('edit_environment/<int:environment_id>/', matrices_views.maintenance.edit_environment, name='edit_environment'),
+	path('delete_environment/<int:environment_id>/', matrices_views.maintenance.delete_environment, name='delete_environment'),
+
+    path('detail_bench_authority/<int:bench_authority_id>/', matrices_views.maintenance.view_bench_authority, name='detail_bench_authority'),
 	path('new_bench_authority/', matrices_views.maintenance.new_bench_authority, name='new_bench_authority'),
 	path('edit_bench_authority/<int:bench_authority_id>/', matrices_views.maintenance.edit_bench_authority, name='edit_bench_authority'),
 	path('delete_bench_authority/<int:bench_authority_id>/', matrices_views.maintenance.delete_bench_authority, name='delete_bench_authority'),
-	path('detail_collection_authority/<int:collection_authority_id>/', matrices_views.maintenance.view_collection_authority, name='detail_collection_authority'),
+	
+    path('detail_collection_authority/<int:collection_authority_id>/', matrices_views.maintenance.view_collection_authority, name='detail_collection_authority'),
 	path('new_collection_authority/', matrices_views.maintenance.new_collection_authority, name='new_collection_authority'),
 	path('edit_collection_authority/<int:collection_authority_id>/', matrices_views.maintenance.edit_collection_authority, name='edit_collection_authority'),
 	path('delete_collection_authority/<int:collection_authority_id>/', matrices_views.maintenance.delete_collection_authority, name='delete_collection_authority'),

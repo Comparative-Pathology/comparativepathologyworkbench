@@ -34,7 +34,6 @@ from os import urandom
 
 from decouple import config
 
-
 def simulate_network_latency():
 
     debug = config('DEBUG')

@@ -60,6 +60,8 @@ The maintenance template
 	    <button class="tablinks" onclick="openTab(event, 'protocols')">Protocols</button>
 	    <button class="tablinks" onclick="openTab(event, 'api_commands')">API Commands</button>
 	    <button class="tablinks" onclick="openTab(event, 'blog_commands')">Blog Commands</button>
+	    <button class="tablinks" onclick="openTab(event, 'environment_locations')">Environment Locations</button>
+	    <button class="tablinks" onclick="openTab(event, 'environments')">Environments</button>
 	</div>
 
 </div><!-- End of page-sidebar -->
@@ -573,13 +575,11 @@ The maintenance template
 				<th width="100px">Owner</th>
 				<th>Name</th>
 				<th>Protocol</th>
-				<th>URL</th>
 				<th>Application</th>
 				<th>Preamble</th>
 				<th>Postamble</th>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -610,7 +610,6 @@ The maintenance template
 				<td>{{ blog.owner.username }}</td>
 				<td>{{ blog.name }}</td>
 				<td>{{ blog.protocol.name }}</td>
-				<td>{{ blog.url_blog }}</td>
 				<td>{{ blog.application }}</td>
 				<td>{{ blog.preamble }}</td>
 				<td>{{ blog.postamble }}</td>
@@ -637,7 +636,6 @@ The maintenance template
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
-				<td>&nbsp;</td>
 			</tr>
 		</table>
 
@@ -652,6 +650,194 @@ The maintenance template
 	{% if user.is_superuser %}
 
 		<p><a href="{% url 'new_blog_command' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
+
+	{% else %}
+
+		<p>&nbsp;</p>
+
+	{% endif %}
+
+{% endif %}
+
+	</div>
+
+	<div id="environment_locations" class="tabcontent">
+
+		<h2>Environment Locations</h2>
+		<br />
+
+{% if location_list %}
+
+	{% for location in location_list %}
+
+		{% if forloop.first %}
+
+		<table>
+			<tr>
+				<th width="150px">Action</th>
+				<th width="100px">Owner</th>
+				<th>Name</th>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+
+		{% endif %}
+
+			<tr>
+
+		{% if user.is_superuser %}
+
+				<td>
+					<a href="{% url 'detail_location' location.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_location' location.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_location' location.id %}" onclick="return confirm('Are you sure you want to DELETE this Environment Location?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				</td>
+
+		{% else %}
+
+				<td><a href="{% url 'detail_location' location.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a></td>
+
+		{% endif %}
+
+				<td>{{ location.owner.username }}</td>
+				<td>{{ location.name }}</td>
+			</tr>
+
+		{% if forloop.last %}
+
+			<tr>
+
+			{% if user.is_superuser %}
+
+				<td><a href="{% url 'new_location' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></td>
+
+			{% else %}
+
+				<td>&nbsp;</td>
+
+			{% endif %}
+
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+
+		{% endif %}
+
+	{% endfor %}
+
+{% else %}
+
+		<p>No locations are available.</p>
+
+	{% if user.is_superuser %}
+
+		<p><a href="{% url 'new_location' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
+
+	{% else %}
+
+		<p>&nbsp;</p>
+
+	{% endif %}
+
+{% endif %}
+
+	</div>
+
+	
+	<div id="environments" class="tabcontent">
+
+		<h2>Environments</h2>
+		<br />
+
+{% if environment_list %}
+
+	{% for environment in environment_list %}
+
+		{% if forloop.first %}
+
+		<table>
+			<tr>
+				<th width="150px">Action</th>
+				<th width="100px">Owner</th>
+				<th>Name</th>
+				<th>Location</th>
+				<th>(Full) Web Root</th>
+				<th>Document Root</th>
+				<th>Wordpress Web Root</th>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+
+		{% endif %}
+
+			<tr>
+
+		{% if user.is_superuser %}
+
+				<td>
+					<a href="{% url 'detail_environment' environment.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a>
+					<a href="{% url 'edit_environment' environment.id %}"><button class="button button-edit"><i class="fa fa-edit"></i></button></a>
+					<a href="{% url 'delete_environment' environment.id %}" onclick="return confirm('Are you sure you want to DELETE this Environment?')"><button class="button button-delete"><i class="fa fa-trash"></i></button></a>
+				</td>
+
+		{% else %}
+
+				<td><a href="{% url 'detail_environment' environment.id %}"><button class="button button-info"><i class="fa fa-info"></i></button></a></td>
+
+		{% endif %}
+
+				<td>{{ environment.owner.username }}</td>
+				<td>{{ environment.name }}</td>
+				<td>{{ environment.location.name }}</td>
+				<td>{{ environment.full_web_root }}</td>
+				<td>{{ environment.document_root }}</td>
+				<td>{{ environment.wordpress_web_root }}</td>
+			</tr>
+
+		{% if forloop.last %}
+
+			<tr>
+
+			{% if user.is_superuser %}
+
+				<td><a href="{% url 'new_environment' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></td>
+
+			{% else %}
+
+				<td>&nbsp;</td>
+
+			{% endif %}
+
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+
+		{% endif %}
+
+	{% endfor %}
+
+{% else %}
+
+		<p>No environments are available.</p>
+
+	{% if user.is_superuser %}
+
+		<p><a href="{% url 'new_environment' %}"><button class="button button-add"><i class="fa fa-plus"></i></button></a></p>
 
 	{% else %}
 

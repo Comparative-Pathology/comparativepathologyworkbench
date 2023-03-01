@@ -33,10 +33,8 @@ import base64, hashlib
 from os import urandom
 
 from django.apps import apps
-from django.conf import settings
 
-from decouple import config
-
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 """
     Is there an Image for a particular Image on the Webserver?
@@ -45,6 +43,8 @@ def exists_image_on_webserver(an_image_name):
 
     Image = apps.get_model('matrices', 'Image')
 
-    a_viewer_url = config('CPW_WEB_ROOT') + an_image_name
+    environment  = get_primary_cpw_environment()
+
+    a_viewer_url = environment.full_web_root() + '/' + an_image_name
 
     return Image.objects.filter(viewer_url=a_viewer_url).exists()

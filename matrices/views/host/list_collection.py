@@ -42,8 +42,7 @@ from matrices.routines import credential_exists
 from matrices.routines import get_collection_count_for_user
 from matrices.routines import get_header_data
 from matrices.routines import collection_list_by_user_and_direction
-
-MAX_COLLECTION_COUNT = 10
+from matrices.routines import get_primary_cpw_environment
 
 #
 # The list_collections VIEW
@@ -109,7 +108,9 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
         createBoolean = True
 
-        if get_collection_count_for_user(self.request.user) >= MAX_COLLECTION_COUNT and self.request.user.username == 'guest':
+        environment = get_primary_cpw_environment()
+
+        if get_collection_count_for_user(self.request.user) >= environment.maximum_collection_count and self.request.user.username == 'guest':
 
             createBoolean = False
 

@@ -44,8 +44,8 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_update_for_bench_and_user
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -81,7 +81,7 @@ def import_image(request):
     owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     if credential_exists(user):
 
@@ -124,7 +124,7 @@ def import_image(request):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, target_cell.title, target_cell.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, target_cell.title, target_cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

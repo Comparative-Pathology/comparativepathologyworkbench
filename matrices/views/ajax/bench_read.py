@@ -38,17 +38,17 @@ from django.http import HttpResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.models import Matrix
 
-from matrices.routines import get_blog_link_post_url
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 #
 # READ A BENCH
 #
 @login_required()
 def bench_read(request, bench_id):
+
+    environment = get_primary_cpw_environment()
 
     object = get_object_by_uuid_or_404(Matrix, bench_id)
 
@@ -59,7 +59,7 @@ def bench_read(request, bench_id):
 
     if object.has_blogpost():
 
-        matrix_link = get_blog_link_post_url() + object.blogpost
+        matrix_link = environment.get_a_link_url_to_post() + object.blogpost
 
         htmlString = '<dl class=\"standard\">'\
             '<dt>Title</dt>'\

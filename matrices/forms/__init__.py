@@ -44,7 +44,9 @@ from .documentform import DocumentForm
 from .edituserform import EditUserForm
 from .editconstraineduserform import EditConstrainedUserForm
 from .editconstrainedprofileform import EditConstrainedProfileForm
+from .environmentform import EnvironmentForm
 from .headerform import HeaderForm
+from .locationform import LocationForm
 from .matrixform import MatrixForm
 from .matrixsummarysearchform import MatrixSummarySearchForm
 from .newmatrixform import NewMatrixForm

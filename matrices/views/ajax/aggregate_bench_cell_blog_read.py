@@ -38,11 +38,9 @@ from django.http import HttpResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.models import Cell
 
-from matrices.routines import get_primary_wordpress_server
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 #
 # READ A BENCH
@@ -50,11 +48,11 @@ from matrices.routines import get_primary_wordpress_server
 @login_required()
 def aggregate_bench_cell_blog_read(request, cell_id):
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     object = get_object_by_uuid_or_404(Cell, cell_id)
 
-    cell_blogpost = serverWordpress.get_wordpress_post(object.blogpost)
+    cell_blogpost = environment.get_a_post_from_wordpress(object.blogpost)
 
     cell_comments = object.get_cell_comments()
 

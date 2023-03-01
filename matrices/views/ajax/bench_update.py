@@ -39,8 +39,6 @@ from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.routines import simulate_network_latency
 
 from matrices.forms import MatrixForm
@@ -49,8 +47,8 @@ from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import simulate_network_latency
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -73,8 +71,7 @@ def bench_update(request, bench_id):
 
         raise PermissionDenied
 
-
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     object = get_object_by_uuid_or_404(Matrix, bench_id)
 
@@ -100,7 +97,7 @@ def bench_update(request, bench_id):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, object.title, object.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, object.title, object.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

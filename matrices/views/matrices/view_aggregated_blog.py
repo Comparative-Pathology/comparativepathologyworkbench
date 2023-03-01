@@ -43,9 +43,8 @@ from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
-from matrices.routines import get_primary_wordpress_server
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 HTTP_POST = 'POST'
 WORDPRESS_SUCCESS = 'Success!'
@@ -57,7 +56,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def view_aggregated_blog(request, matrix_id):
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     data = get_header_data(request.user)
 
@@ -77,9 +76,9 @@ def view_aggregated_blog(request, matrix_id):
 
             if matrix.has_blogpost():
 
-                bench_blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
+                bench_blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-            bench_comment_list = serverWordpress.get_wordpress_post_comments(matrix.blogpost)
+            bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
 
 
         data.update({ 'matrix': matrix, 'bench_blogpost': bench_blogpost, 'bench_comment_list': bench_comment_list, 'matrix_cells': matrix_cells })

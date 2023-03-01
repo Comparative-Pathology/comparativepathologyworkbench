@@ -35,9 +35,8 @@ from django.utils import timezone
 
 from django.shortcuts import render
 
-from decouple import config
-
 from matrices.routines import get_header_data
+from matrices.routines import get_primary_cpw_environment
 
 #
 # MAILER VIEW
@@ -46,13 +45,15 @@ def mailer(request):
 
     data = get_header_data(request.user)
 
+    environment  = get_primary_cpw_environment()
+
     if request.user.is_superuser:
 
         now = timezone.now()
 
         subject = 'A Time Check'
         message = 'Here is the time : ' + str(now)
-        email_from = config('CPW_FROM_EMAIL')
+        email_from = environment.from_email
         recipient_list = ['mike.wicks@gmail.com',]
         email_to = 'mike.wicks@gmail.com'
 

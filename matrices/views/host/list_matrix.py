@@ -43,8 +43,7 @@ from matrices.routines import credential_exists
 from matrices.routines import get_bench_count_for_user
 from matrices.routines import get_header_data
 from matrices.routines import bench_list_by_user_and_direction
-
-MAX_BENCH_COUNT = 10
+from matrices.routines import get_primary_cpw_environment
 
 #
 # The list_benches VIEW
@@ -146,7 +145,9 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
         createBoolean = True
 
-        if get_bench_count_for_user(self.request.user) >= MAX_BENCH_COUNT and self.request.user.username == 'guest':
+        environment = get_primary_cpw_environment()
+
+        if get_bench_count_for_user(self.request.user) >= environment.maximum_bench_count and self.request.user.username == 'guest':
 
             createBoolean = False
 

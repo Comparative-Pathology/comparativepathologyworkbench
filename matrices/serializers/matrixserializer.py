@@ -46,19 +46,15 @@ from matrices.routines import exists_user_for_username
 from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_images_for_id_server_owner_roi
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_servers_for_uid_url
 from matrices.routines import get_user_from_username
+from matrices.routines import get_primary_cpw_environment
 
 from matrices.serializers import CellSerializer
 
 
 WORDPRESS_SUCCESS = 'Success!'
 
-MAX_COLUMNS = 10000
-MAX_ROWS = 10000
-MIN_COLUMNS = 3
-MIN_ROWS = 3
 CONST_255 = 255
 CONST_4095 = 4095
 CONST_450 = 450
@@ -414,7 +410,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 
         # Get the Primary Blogging Engine
-        serverWordpress = get_primary_wordpress_server()
+        environment = get_primary_cpw_environment()
 
         # Get the Credentials for Requesting User
         credential = get_credential_for_user(request.user)
@@ -425,7 +421,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         if credential.has_apppwd():
 
             # Post a New Blogpost for the Bench
-            returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
+            returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
 
             # Check the Post Response
             if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -457,7 +453,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 if credential.has_apppwd():
 
                     # Post a New Blogpost for the Cell
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_out.title, cell_out.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, cell_out.title, cell_out.description)
 
                     # Check the Post Response
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -592,10 +588,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if credential.has_apppwd():
 
                 # Get the Primary Blogging Engine
-                serverWordpress = get_primary_wordpress_server()
+                environment = get_primary_cpw_environment()
 
                 # Post a New Blogpost
-                returned_blogpost = serverWordpress.post_wordpress_post(credential, instance.title, instance.description)
+                returned_blogpost = environment.post_a_post_to_wordpress(credential, instance.title, instance.description)
 
                 # Check the Post Response
                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -869,10 +865,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 if credential.has_apppwd():
 
                                     # Get the Primary Blogging Engine
-                                    serverWordpress = get_primary_wordpress_server()
+                                    environment = get_primary_cpw_environment()
 
                                     # Post a New Blogpost
-                                    returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
+                                    returned_blogpost = environment.post_a_post_to_wordpress(credential, bench_cell.title, bench_cell.description)
 
                                     # Check the Post Response
                                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -1127,10 +1123,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     if credential.has_apppwd():
 
                                         # Get the Primary Blogging Engine
-                                        serverWordpress = get_primary_wordpress_server()
+                                        environment = get_primary_cpw_environment()
 
                                         # Delete the Associated Blogpost
-                                        response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
+                                        response = environment.delete_a_post_from_wordpress(credential, bench_cell.blogpost)
 
                                         # Check the Delete Response
                                         if response != WORDPRESS_SUCCESS:
@@ -1140,7 +1136,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                             raise serializers.ValidationError(message)
 
                                         # Post a New Blogpost
-                                        returned_blogpost = serverWordpress.post_wordpress_post(credential, bench_cell.title, bench_cell.description)
+                                        returned_blogpost = environment.post_a_post_to_wordpress(credential, bench_cell.title, bench_cell.description)
 
                                         # Check the Post Response
                                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -1173,10 +1169,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 if credential.has_apppwd():
 
                                     # Get the Primary Blogging Engine
-                                    serverWordpress = get_primary_wordpress_server()
+                                    environment = get_primary_cpw_environment()
 
                                     # Delete the Associated Blogpost
-                                    response = serverWordpress.delete_wordpress_post(credential, bench_cell.blogpost)
+                                    response = environment.delete_a_post_from_wordpress(credential, bench_cell.blogpost)
 
                                     # Check the Delete Response
                                     if response != WORDPRESS_SUCCESS:
@@ -1264,10 +1260,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 if credential.has_apppwd():
 
                     # Get the Primary Blogging Engine
-                    serverWordpress = get_primary_wordpress_server()
+                    environment = get_primary_cpw_environment()
 
                     # Delete the Associated Blogpost
-                    response = serverWordpress.delete_wordpress_post(credential, delete_cell.blogpost)
+                    response = environment.delete_a_post_from_wordpress(credential, delete_cell.blogpost)
 
                     # Check the Response
                     if response != WORDPRESS_SUCCESS:
@@ -1466,10 +1462,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     if credential.has_apppwd():
 
                         # Get the Primary WordPress Server - Blogging Engine
-                        serverWordpress = get_primary_wordpress_server()
+                        environment = get_primary_cpw_environment()
 
                         # Create a Blog Post for the New Cell
-                        returned_blogpost = serverWordpress.post_wordpress_post(credential, cell_title, cell_description)
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential, cell_title, cell_description)
 
                         # Was the Post a success?
                         #  Yes
@@ -1657,28 +1653,30 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         maxX += 1
         maxY += 1
 
-        # Do we have more than 10,000 Columns?
-        if maxX > MAX_COLUMNS:
+        environment = get_primary_cpw_environment()
 
-            message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than 10,000 Columns allowed!'
+        # Do we have more than 10,000 Columns?
+        if maxX > environment.maximum_rest_columns:
+
+            message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than ' + str() + ' Columns allowed!'
             raise serializers.ValidationError(message)
 
         # Do we have more than 10,000 Rows?
-        if maxY > MAX_ROWS:
+        if maxY > environment.maximum_rest_rows:
             
-            message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than 10,000 Rows allowed!'
+            message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than ' + str() + ' Rows allowed!'
             raise serializers.ValidationError(message)
 
         # Do we have less than 3 Columns?
-        if maxX < MIN_COLUMNS:
+        if maxX < environment.minimum_rest_columns:
 
-            message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least 3 Columns required!'
+            message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least ' + str() + ' Columns required!'
             raise serializers.ValidationError(message)
 
         # Do we have less than 3 Rows?
-        if maxY < MIN_ROWS:
+        if maxY < environment.minimum_rest_rows:
 
-            message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least 3 Rows required!'
+            message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least ' + str() + ' Rows required!'
             raise serializers.ValidationError(message)
 
         # Initialise a 2D array for all possible cells ...

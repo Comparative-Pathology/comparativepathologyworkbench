@@ -41,8 +41,6 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from decouple import config
-
 from matrices.forms import SearchUrlForm
 
 from matrices.models import Collection

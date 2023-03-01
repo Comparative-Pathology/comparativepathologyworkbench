@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_blog_link_post_url.py
+# \file         locationform.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,34 +24,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Get the Blog Link Post URL
+# Form for adding/editing Locations.
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from django.apps import apps
-
-from matrices.routines.get_primary_wordpress_server import get_primary_wordpress_server
-
-
-CMD_BLOG_GET_LINK_POST = 'LinkPost'
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.utils.html import conditional_escape
+from django.utils.html import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 
+from matrices.models import Location
 
-"""
-    Get the Blog Link Post URL
-"""
-def get_blog_link_post_url():
 
-    Blog = apps.get_model('matrices', 'Blog')
+class LocationForm(forms.ModelForm):
 
-    blogLinkPost = Blog.objects.get(name=CMD_BLOG_GET_LINK_POST)
-
-    serverWordpress = get_primary_wordpress_server()
-
-    link_post_url = blogLinkPost.protocol.name + '://' + serverWordpress.url_server + '/' + blogLinkPost.application + '/'
-
-    return link_post_url
+    class Meta:
+        model = Location
+        fields = ('name', )

@@ -37,8 +37,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from decouple import config
-
 from matrices.models import Image
 from matrices.models import Document
 from matrices.models import Artefact
@@ -47,12 +45,14 @@ from matrices.routines import get_header_data
 from matrices.routines import exists_artefact_in_table
 from matrices.routines import exists_image_in_table
 from matrices.routines import exists_image_on_webserver
+from matrices.routines import get_primary_cpw_environment
 
 #
 # SETUP DEFAULT COLLECTIONS VIEW
 #
 def charttidyup(request):
 
+    environment  = get_primary_cpw_environment()
 
     data = get_header_data(request.user)
 
@@ -82,7 +82,7 @@ def charttidyup(request):
 
         imageDBTotal = image_list1.count() + image_list2.count()
 
-        ls_command = 'ls ' + config('CPW_DOCUMENT_ROOT')
+        ls_command = 'ls ' + environment.document_root
         process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
         out_list = process.stdout.readlines()
@@ -115,7 +115,7 @@ def charttidyup(request):
 
                         imageDelTotal = imageDelTotal + 1
 
-                        rm_command = 'rm ' + config('CPW_DOCUMENT_ROOT') + output.strip()
+                        rm_command = 'rm ' + environment.document_root + output.strip()
                         rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
                         rm_list.append(rm_escaped)
@@ -128,7 +128,7 @@ def charttidyup(request):
 
             process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
-        ls_command = 'ls ' + config('CPW_DOCUMENT_ROOT')
+        ls_command = 'ls ' + environment.document_root
         process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
         out_list_3 = process.stdout.readlines()

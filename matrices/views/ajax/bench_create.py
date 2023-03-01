@@ -39,8 +39,6 @@ from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.forms import NewMatrixForm
 
 from matrices.models import Matrix
@@ -49,12 +47,10 @@ from matrices.routines import credential_exists
 from matrices.routines import bench_creation_consequences
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_bench_count_for_user
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import simulate_network_latency
+from matrices.routines import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
-
-MAX_BENCH_COUNT = 10
 
 #
 # ADD A BENCH
@@ -75,8 +71,8 @@ def bench_create(request):
         raise PermissionDenied
 
 
-    serverWordpress = get_primary_wordpress_server()
     credential = get_credential_for_user(request.user)
+    environment = get_primary_cpw_environment()
 
     object = None
 
@@ -88,7 +84,7 @@ def bench_create(request):
 
         form = NewMatrixForm(instance=object, data=request.POST)
 
-        if get_bench_count_for_user(request.user) >= MAX_BENCH_COUNT and request.user.username == 'guest':
+        if get_bench_count_for_user(request.user) >= environment.maximum_bench_count and request.user.username == 'guest':
 
             messages.error(request, "CPW_WEB:0600 New Bench  - Too Many Benches for Guest User!")
             form.add_error(None, "CPW_WEB:0600 New Bench  - Too Many Benches for Guest User!")
@@ -111,7 +107,7 @@ def bench_create(request):
 
                     post_id = ''
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, object.title, object.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, object.title, object.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

@@ -42,8 +42,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from random import randint
-from decouple import config
-
 
 """
     AUTHORITY (for Bench Authorisations)

@@ -36,6 +36,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import Type
+from matrices.models import Environment
+from matrices.models import Location
 from matrices.models import Protocol
 from matrices.models import Command
 from matrices.models import Blog
@@ -55,13 +57,15 @@ def maintenance(request):
         data = get_header_data(request.user)
 
         type_list = Type.objects.all()
+        environment_list = Environment.objects.all()
+        location_list = Location.objects.all()
         protocol_list = Protocol.objects.all()
         command_list = Command.objects.all()
         blog_list = Blog.objects.all()
         authority_list = Authority.objects.all()
         collection_authority_list = CollectionAuthority.objects.all()
 
-        data.update({ 'type_list': type_list, 'protocol_list': protocol_list, 'command_list': command_list, 'blog_list': blog_list, 'authority_list': authority_list, 'collection_authority_list': collection_authority_list })
+        data.update({ 'environment_list': environment_list, 'location_list': location_list, 'type_list': type_list, 'protocol_list': protocol_list, 'command_list': command_list, 'blog_list': blog_list, 'authority_list': authority_list, 'collection_authority_list': collection_authority_list })
 
         return render(request, 'host/maintenance.html', data)
 

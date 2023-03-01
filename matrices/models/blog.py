@@ -42,8 +42,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from random import randint
-from decouple import config
-
 
 from matrices.models import Protocol
 
@@ -54,21 +52,20 @@ from matrices.models import Protocol
 class Blog(models.Model):
     name = models.CharField(max_length=50, blank=False, unique=True)
     protocol = models.ForeignKey(Protocol, related_name='blogs', default=0, on_delete=models.CASCADE)
-    url_blog = models.CharField(max_length=50, blank=False, default='')
     application = models.CharField(max_length=25, blank=True, default='')
     preamble = models.CharField(max_length=50, blank=True, default='')
     postamble = models.CharField(max_length=50, blank=True, default='')
     owner = models.ForeignKey(User, related_name='blogs', on_delete=models.DO_NOTHING)
 
     @classmethod
-    def create(cls, name, protocol, url_blog, application, preamble, postamble, owner):
-        return cls(name=name, protocol=protocol, url_blog=url_blog, application=application, preamble=preamble, postamble=postamble, owner=owner)
+    def create(cls, name, protocol, application, preamble, postamble, owner):
+        return cls(name=name, protocol=protocol, application=application, preamble=preamble, postamble=postamble, owner=owner)
 
     def __str__(self):
-        return f"{self.id}, {self.name}, {self.protocol.id}, {self.url_blog}, {self.application}, {self.preamble}, {self.postamble}, {self.owner.id}"
+        return f"{self.id}, {self.name}, {self.protocol.id}, {self.application}, {self.preamble}, {self.postamble}, {self.owner.id}"
 
     def __repr__(self):
-        return f"{self.id}, {self.name}, {self.protocol.id}, {self.url_blog}, {self.application}, {self.preamble}, {self.postamble}, {self.owner.id}"
+        return f"{self.id}, {self.name}, {self.protocol.id}, {self.application}, {self.preamble}, {self.postamble}, {self.owner.id}"
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:

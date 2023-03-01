@@ -40,8 +40,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from decouple import config
-
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.get_image_count_for_image import get_image_count_for_image
 from matrices.routines.exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi

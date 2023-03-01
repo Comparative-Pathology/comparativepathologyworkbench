@@ -30,9 +30,8 @@ from __future__ import unicode_literals
 
 import base64, hashlib
 
-from decouple import config
-
 from matrices.routines.convert_chart_id_to_ebi_sca_url import convert_chart_id_to_ebi_sca_url
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 """
@@ -40,7 +39,9 @@ from matrices.routines.convert_chart_id_to_ebi_sca_url import convert_chart_id_t
 """
 def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
 
-    highcharts_web = config('CPW_WEB_ROOT')
+    environment  = get_primary_cpw_environment()
+
+    highcharts_web = environment.full_web_root()
 
     chart_key = ''
     experiment_id = ''
@@ -50,7 +51,7 @@ def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
     colourBy = ''
     geneId = ''
 
-    birdseye_url = highcharts_web + a_chart_id
+    birdseye_url = highcharts_web + '/' + a_chart_id
     viewer_url = convert_chart_id_to_ebi_sca_url(a_url_server, a_chart_id)
 
     chart_array = a_chart_id.split("_")

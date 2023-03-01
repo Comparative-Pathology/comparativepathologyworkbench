@@ -45,7 +45,7 @@ from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
-from matrices.routines import get_primary_wordpress_server
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 HTTP_POST = 'POST'
 WORDPRESS_SUCCESS = 'Success!'
@@ -57,7 +57,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def view_matrix_blog(request, matrix_id):
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     data = get_header_data(request.user)
 
@@ -79,7 +79,7 @@ def view_matrix_blog(request, matrix_id):
 
             if matrix.has_blogpost():
 
-                blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
+                blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
                 if blogpost['status'] != WORDPRESS_SUCCESS:
 
@@ -89,7 +89,7 @@ def view_matrix_blog(request, matrix_id):
 
                     if credential.has_apppwd():
 
-                        returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
 
                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -99,7 +99,7 @@ def view_matrix_blog(request, matrix_id):
 
                     matrix.save()
 
-                    blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
+                    blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
             else:
 
@@ -109,7 +109,7 @@ def view_matrix_blog(request, matrix_id):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = serverWordpress.post_wordpress_post(credential, matrix.title, matrix.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -119,10 +119,10 @@ def view_matrix_blog(request, matrix_id):
 
                 matrix.save()
 
-                blogpost = serverWordpress.get_wordpress_post(matrix.blogpost)
+                blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
 
-            comment_list = serverWordpress.get_wordpress_post_comments(matrix.blogpost)
+            comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
 
         if request.method == HTTP_POST:
 
@@ -138,7 +138,7 @@ def view_matrix_blog(request, matrix_id):
 
                     credential = get_credential_for_user(request.user)
 
-                    returned_comment = serverWordpress.post_wordpress_comment(credential, matrix.blogpost, comment)
+                    returned_comment = environment.post_a_comment_to_wordpress(credential, matrix.blogpost, comment)
 
                 return HttpResponseRedirect(reverse('detail_matrix_blog', args=(matrix_id,)))
 

@@ -43,12 +43,10 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from random import randint
-from decouple import config
 
 from requests.exceptions import HTTPError
 
 from matrices.models import Server
-
 
 
 """

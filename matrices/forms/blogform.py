@@ -43,5 +43,5 @@ class BlogForm(forms.ModelForm):
 
     class Meta:
         model = Blog
-        fields = ('name', 'protocol', 'url_blog', 'application', 'preamble', 'postamble', )
+        fields = ('name', 'protocol', 'application', 'preamble', 'postamble', )
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())

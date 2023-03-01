@@ -58,13 +58,13 @@ The home template
 	  <div class="home-grid-item">
 		  <div class="card">
 		  <div class="card-link">
-  {% if location == 'CZI' %}
+  {% if environment.is_czi %}
 			  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
   {% endif %}
-  {% if location == 'CANADA' %}
+  {% if environment.is_canada %}
 			  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html">
   {% endif %}
-  {% if location == 'COELIAC' %}
+  {% if environment.is_coeliac %}
 			  <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html">
   {% endif %}
 			  <span class="card-link-link"></span></a>
@@ -220,13 +220,13 @@ The home template
 	  <div class="home-grid-item">
 		<div class="card">
 		  <div class="card-link">
-{% if location == 'CZI' %}
+{% if environment.is_czi %}
 			<a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/guest.html">
 {% endif %}
-{% if location == 'CANADA' %}
+{% if environment.is_canada %}
 			<a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/guest.html">
 {% endif %}
-{% if location == 'COELIAC' %}
+{% if environment.is_coeliac %}
 			<a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/guest.html">
 {% endif %}
 			  <span class="card-link-link"></span>

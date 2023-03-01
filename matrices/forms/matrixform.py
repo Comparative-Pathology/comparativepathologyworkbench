@@ -38,11 +38,7 @@ from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Matrix
 
-MINIMUM_HEIGHT = 75
-MAXIMUM_HEIGHT = 450
-MINIMUM_WIDTH = 75
-MAXIMUM_WIDTH = 450
-
+from matrices.routines import get_primary_cpw_environment
 
 class MatrixForm(forms.ModelForm):
 
@@ -51,6 +47,8 @@ class MatrixForm(forms.ModelForm):
         fields = ('title', 'description', 'height', 'width' )
 
     def clean(self):
+
+        environment = get_primary_cpw_environment()
 
         cleaned_data = super().clean()
 
@@ -67,18 +65,18 @@ class MatrixForm(forms.ModelForm):
             msg = "Please Supply a Description!"
             raise ValidationError(msg)
 
-        if height < MINIMUM_HEIGHT:
-            msg = "Bench Cell Height is TOO small! Enter a value GREATER than 75 Pixels"
+        if height < environment.minimum_cell_height:
+            msg = "Bench Cell Height is TOO small! Enter a value GREATER than " + str(environment.minimum_cell_height) + " Pixels"
             raise ValidationError(msg)
 
-        if height > MAXIMUM_HEIGHT:
-            msg = "Bench Cell Height is TOO great! Enter a value LESS than 450 Pixels"
+        if height > environment.maximum_cell_height:
+            msg = "Bench Cell Height is TOO great! Enter a value LESS than " + str(environment.maximum_cell_height) + " Pixels"
             raise ValidationError(msg)
 
-        if width < MINIMUM_WIDTH:
-            msg = "Bench Cell Width is TOO small! Enter a value GREATER than 75 Pixels"
+        if width < environment.minimum_cell_width:
+            msg = "Bench Cell Width is TOO small! Enter a value GREATER than " + str(environment.minimum_cell_width) + " Pixels"
             raise ValidationError(msg)
 
-        if width > MAXIMUM_WIDTH:
-            msg = "Bench Cell Width is TOO great! Enter a value LESS than 450 Pixels"
+        if width > environment.maximum_cell_width:
+            msg = "Bench Cell Width is TOO great! Enter a value LESS than " + str(environment.maximum_cell_width) + " Pixels"
             raise ValidationError(msg)

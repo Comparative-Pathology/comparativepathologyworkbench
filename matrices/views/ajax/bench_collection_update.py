@@ -39,8 +39,6 @@ from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.routines import simulate_network_latency
 
 from matrices.forms import CollectionSummarySelectionForm

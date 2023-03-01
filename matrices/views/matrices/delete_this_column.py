@@ -44,7 +44,7 @@ from matrices.routines import exists_collections_for_image
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_primary_wordpress_server
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines import get_header_data
 
 
@@ -54,7 +54,7 @@ from matrices.routines import get_header_data
 @login_required
 def delete_this_column(request, matrix_id, column_id):
 
-    serverWordpress = get_primary_wordpress_server()
+    environment = get_primary_cpw_environment()
 
     data = get_header_data(request.user)
 
@@ -84,7 +84,7 @@ def delete_this_column(request, matrix_id, column_id):
 
                     if credential.has_apppwd():
 
-                        response = serverWordpress.delete_wordpress_post(credential, oldCell.blogpost)
+                        response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
 
                 if oldCell.has_image():

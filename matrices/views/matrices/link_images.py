@@ -44,8 +44,6 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from decouple import config
-
 from matrices.forms import ArtefactForm
 
 from matrices.models import Image

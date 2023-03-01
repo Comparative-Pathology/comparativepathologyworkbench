@@ -46,3 +46,5 @@ from .matrixsummary import MatrixSummary
 from .collectionsummary import CollectionSummary
 from .artefact import Artefact
 from .imagelink import ImageLink
+from .environment import Environment
+from .location import Location

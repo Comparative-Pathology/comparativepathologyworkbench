@@ -34,8 +34,6 @@ from datetime import datetime
 
 from os import urandom
 
-from decouple import config
-
 """
     Convert a CPW Chart Id to an EBI SCA URL
 """

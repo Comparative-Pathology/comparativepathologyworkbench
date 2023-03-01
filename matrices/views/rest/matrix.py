@@ -44,10 +44,10 @@ from matrices.permissions import MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor
 from matrices.serializers import MatrixSerializer
 
 from matrices.routines import bench_list_by_user_and_direction
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 class MatrixViewSet(viewsets.ModelViewSet):
@@ -299,7 +299,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
         credential = get_credential_for_user(request.user)
 
-        serverWordpress = get_primary_wordpress_server()
+        environment = get_primary_cpw_environment()
 
         # Process All the cells in this Bench
         for cell in cell_list:
@@ -313,7 +313,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
                 if credential.has_apppwd():
 
                     # Delete the Cell Blogpost
-                    response = serverWordpress.delete_wordpress_post(credential, cell.blogpost)
+                    response = environment.delete_a_post_from_wordpress(credential, cell.blogpost)
 
 
             # Does the Cell have an Image ... ?
@@ -383,7 +383,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
             if credential.has_apppwd():
 
                 # Delete the Bench Blogpost
-                response = serverWordpress.delete_wordpress_post(credential, matrix.blogpost)
+                response = environment.delete_a_post_from_wordpress(credential, matrix.blogpost)
 
         responseMsg = 'Bench Delete Success!'
 

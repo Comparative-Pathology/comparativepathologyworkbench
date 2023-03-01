@@ -41,8 +41,6 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
-from decouple import config
-
 from matrices.forms import SearchUrlForm
 
 from matrices.models import Matrix
@@ -54,13 +52,12 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_blog_link_post_url
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_id_from_omero_url import get_id_from_omero_url
 from matrices.routines import get_images_for_collection
-from matrices.routines import get_primary_wordpress_server
 from matrices.routines import get_server_from_omero_url
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 HTTP_POST = 'POST'
 WORDPRESS_SUCCESS = 'Success!'
@@ -83,14 +80,14 @@ def amend_cell(request, matrix_id, cell_id):
     if credential_exists(request.user):
 
         data = get_header_data(request.user)
-        serverWordpress = get_primary_wordpress_server()
+        environment = get_primary_cpw_environment()
 
         cell = get_object_or_404(Cell, pk=cell_id)
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
         if exists_read_for_bench_and_user(matrix, request.user):
 
-            cell_link = get_blog_link_post_url() + cell.blogpost
+            cell_link = environment.get_a_link_url_to_post() + cell.blogpost
 
             matrix_link = 'matrix_link'
             amend_cell = 'amend_cell'
@@ -167,7 +164,7 @@ def amend_cell(request, matrix_id, cell_id):
 
                         if credential.has_apppwd():
 
-                            returned_blogpost = serverWordpress.post_wordpress_post(credential, cell.title, cell.description)
+                            returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title, cell.description)
 
                             if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 

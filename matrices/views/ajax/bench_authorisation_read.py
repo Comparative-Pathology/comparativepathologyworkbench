@@ -41,8 +41,6 @@ from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.models import Authorisation
 
 #

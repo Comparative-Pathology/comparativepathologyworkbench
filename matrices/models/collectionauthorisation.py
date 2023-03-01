@@ -42,7 +42,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from random import randint
-from decouple import config
 
 from matrices.models import Collection
 from matrices.models import CollectionAuthority

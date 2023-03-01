@@ -39,8 +39,6 @@ from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from decouple import config
-
 from matrices.forms import CollectionCreateForm
 
 from matrices.models import Collection
@@ -48,8 +46,7 @@ from matrices.models import Collection
 from matrices.routines import credential_exists
 from matrices.routines import get_collection_count_for_user
 from matrices.routines import simulate_network_latency
-
-MAX_COLLECTION_COUNT = 10
+from matrices.routines import get_primary_cpw_environment
 
 #
 # ADD A COLLECTION
@@ -73,6 +70,7 @@ def collection_create(request, collection_id=None):
     object = None
 
     template_name = 'frontend_forms/generic_form_inner.html'
+    environment = get_primary_cpw_environment()
 
     if request.method == 'POST':
 
@@ -80,7 +78,7 @@ def collection_create(request, collection_id=None):
 
         form = CollectionCreateForm(instance=object, data=request.POST, request=request)
 
-        if get_collection_count_for_user(request.user) >= MAX_COLLECTION_COUNT and request.user.username == 'guest':
+        if get_collection_count_for_user(request.user) >= environment.maximum_collection_count and request.user.username == 'guest':
 
             messages.error(request, "CPW_WEB:0610 New Collection  - Too Many Collections for Guest User!")
             form.add_error(None, "CPW_WEB:0610 New Collection  - Too Many Collections for Guest User!")

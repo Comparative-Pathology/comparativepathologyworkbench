@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_primary_wordpress_server.py
+# \file         exists_environment_for_location.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Get the Primary Wordpress Server - This is the Blogging Engine (Back-end)
+# Are there any Servers for a particular Server Type?
 ###
 from __future__ import unicode_literals
 
@@ -34,14 +34,12 @@ from os import urandom
 
 from django.apps import apps
 
-from decouple import config
-
 
 """
-    Get the Primary Wordpress Server - This is the Blogging Engine (Back-end)
+    Are there any Servers for a particular Server Type?
 """
-def get_primary_wordpress_server():
+def exists_environment_for_location(a_location):
 
-    Server = apps.get_model('matrices', 'Server')
+    Environment = apps.get_model('matrices', 'Environment')
 
-    return Server.objects.get(url_server=config('WORDPRESS'))
+    return Environment.objects.filter(location=a_location).exists()

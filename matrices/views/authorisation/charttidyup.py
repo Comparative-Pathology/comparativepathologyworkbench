@@ -42,6 +42,7 @@ from matrices.models import Document
 from matrices.models import Artefact
 
 from matrices.routines import get_header_data
+from matrices.routines import escape_string
 from matrices.routines import exists_artefact_in_table
 from matrices.routines import exists_image_in_table
 from matrices.routines import exists_image_on_webserver
@@ -115,8 +116,8 @@ def charttidyup(request):
 
                         imageDelTotal = imageDelTotal + 1
 
-                        rm_command = 'rm ' + environment.document_root + output.strip()
-                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                        rm_command = environment.document_root + output.strip()
+                        rm_escaped = 'rm ' + escape_string(rm_command)
 
                         rm_list.append(rm_escaped)
 

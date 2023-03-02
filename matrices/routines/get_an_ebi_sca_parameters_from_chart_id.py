@@ -41,7 +41,7 @@ def get_an_ebi_sca_parameters_from_chart_id(a_url_server, a_chart_id):
 
     environment  = get_primary_cpw_environment()
 
-    highcharts_web = environment.full_web_root()
+    highcharts_web = environment.get_full_web_root()
 
     chart_key = ''
     experiment_id = ''

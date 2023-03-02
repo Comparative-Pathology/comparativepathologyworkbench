@@ -126,7 +126,7 @@ class Environment(models.Model):
                 {self.maximum_rest_rows}, {self.minimum_rest_rows}, \
                 {self.maximum_bench_count}, {self.maximum_collection_count}"
 
-    def full_web_root(self):
+    def get_full_web_root(self):
         return self.protocol.name + '://' + self.web_root
 
     def is_owned_by(self, a_user):

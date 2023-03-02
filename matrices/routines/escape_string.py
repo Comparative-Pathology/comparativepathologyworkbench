@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_title_for_collection_for_user.py
+# \file         escape_string.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Is there an Existing Collection with the Same Title for a particular User?
+# Escape all characters in a string that need escaping
 ###
 from __future__ import unicode_literals
 
@@ -32,14 +32,16 @@ import base64, hashlib
 
 from os import urandom
 
-from django.apps import apps
-
 
 """
-    Is there an Existing Collection with the Same Title for a particular User?
+    Escape all characters in a string that need escaping
 """
-def exists_title_for_collection_for_user(a_user, a_title):
+def escape_string(a_string):
 
-    Collection = apps.get_model('matrices', 'Collection')
+    output_string = a_string.replace(" ", "\ " ).replace("!", "\!" ).replace("#", "\#" ).replace("$", "\$" ).replace("&", "\&" ) \
+                        .replace("'", r"\'" ).replace("(", "\(" ).replace(")", "\)" ).replace("*", "\*" ).replace(",", "\," ) \
+                        .replace(";", "\;" ).replace("<", "\<" ).replace(">", "\>" ).replace("?", "\?" ).replace("[", "\[" ) \
+                        .replace("]", "\]" ).replace("^", "\^" ).replace("`", "\`" ).replace("{", "\{" ).replace("|", "\|" ) \
+                        .replace("}", "\}" )
 
-    return Collection.objects.filter(owner=a_user).filter(title=a_title).exists()
+    return output_string

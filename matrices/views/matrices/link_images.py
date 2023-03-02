@@ -59,7 +59,7 @@ from matrices.routines import exists_image_in_image_list
 from matrices.routines import exists_collection_in_collection_summary_list
 from matrices.routines import get_images_for_collection
 from matrices.routines import get_images_for_collection_summary
-from matrices.routines import get_primary_cpw_server
+from matrices.routines import get_primary_cpw_environment
 from matrices.routines import get_last_used_collection_for_user
 
 HTTP_POST = 'POST'
@@ -79,7 +79,7 @@ def link_images(request, image_parent_id, image_child_id):
 
         raise PermissionDenied
 
-    serverCPW = get_primary_cpw_server()
+    environment = get_primary_cpw_environment()
 
     if credential_exists(request.user):
 
@@ -158,7 +158,7 @@ def link_images(request, image_parent_id, image_child_id):
                             new_path = '/' + date_time + '_' + location
                             new_full_path = settings.MEDIA_ROOT + new_path
 
-                            url = 'http://' + serverCPW.url_server + new_path
+                            url = 'http://' + environment.web_root + new_path
 
                             artefact.set_location(new_full_path)
                             artefact.set_url(url)

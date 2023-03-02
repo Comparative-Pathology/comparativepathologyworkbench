@@ -45,6 +45,6 @@ def exists_image_on_webserver(an_image_name):
 
     environment  = get_primary_cpw_environment()
 
-    a_viewer_url = environment.full_web_root() + '/' + an_image_name
+    a_viewer_url = environment.get_full_web_root() + '/' + an_image_name
 
     return Image.objects.filter(viewer_url=a_viewer_url).exists()

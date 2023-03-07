@@ -40,7 +40,7 @@ from . import bench_list_by_user_and_direction
 from . import collection_list_by_user_and_direction
 from matrices.routines.get_images_for_collection_summary import get_images_for_collection_summary
 from matrices.routines.get_hidden_images_for_collection_summary import get_hidden_images_for_collection_summary
-from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines.get_primary_cpw_environment_summary import get_primary_cpw_environment_summary
 
 SERVER_IDR = 'idr.openmicroscopy.org'
 
@@ -58,7 +58,7 @@ def get_header_data(a_user):
     matrix_list = list()
     collection_summary_list = list()
 
-    environment = get_primary_cpw_environment()
+    environment_summary = get_primary_cpw_environment_summary()
 
     if not a_user.is_anonymous:
 
@@ -80,6 +80,6 @@ def get_header_data(a_user):
         hidden_image_list = get_hidden_images_for_collection_summary(collection_summary_list)
 
 
-    data = { 'environment': environment, 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list, 'hidden_image_list': hidden_image_list }
+    data = { 'environment': environment_summary, 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list, 'hidden_image_list': hidden_image_list }
 
     return data

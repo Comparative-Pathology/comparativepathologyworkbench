@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         __init__.py
+# \file         get_primary_cpw_environment_summary.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,28 +24,24 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# models Package Description.
+# Get the Primary CPW Environment Summary
 ###
-from .type import Type
-from .server import Server
-from .image import Image
-from .collection import Collection
-from .matrix import Matrix
-from .profile import Profile
-from .protocol import Protocol
-from .command import Command
-from .cell import Cell
-from .document import Document
-from .blog import Blog
-from .credential import Credential
-from .authority import Authority
-from .authorisation import Authorisation
-from .collectionauthority import CollectionAuthority
-from .collectionauthorisation import CollectionAuthorisation
-from .matrixsummary import MatrixSummary
-from .collectionsummary import CollectionSummary
-from .artefact import Artefact
-from .imagelink import ImageLink
-from .environment import Environment
-from .environmentsummary import EnvironmentSummary
-from .location import Location
+from __future__ import unicode_literals
+
+import base64, hashlib
+
+from os import urandom
+
+from django.apps import apps
+
+
+CPW_ENVIRONMENT = 'CPW'
+
+"""
+    Get the Primary CPW Environment Row
+"""
+def get_primary_cpw_environment_summary():
+
+    EnvironmentSummary = apps.get_model('matrices', 'EnvironmentSummary')
+
+    return EnvironmentSummary.objects.get(environment_name=CPW_ENVIRONMENT)

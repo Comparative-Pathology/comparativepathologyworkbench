@@ -109,6 +109,7 @@ from .get_bench_count_for_user import get_bench_count_for_user
 from .get_parent_image_links_for_image import get_parent_image_links_for_image
 from .get_child_image_links_for_image import get_child_image_links_for_image
 from .get_primary_cpw_environment import get_primary_cpw_environment
+from .get_primary_cpw_environment_summary import get_primary_cpw_environment_summary
 from .get_server_from_omero_url import get_server_from_omero_url
 from .get_server_list_for_url import get_server_list_for_url
 from .get_servers_for_uid_url import get_servers_for_uid_url

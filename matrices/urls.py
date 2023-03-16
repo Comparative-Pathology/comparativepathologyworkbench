@@ -177,6 +177,8 @@ urlpatterns = [
     path('list_user_collection_authorisation/<int:user_id>/', matrices_views.host.list_user_collection_authorisation, name='list_user_collection_authorisation'),
     path('list_benches/', matrices_views.host.MatrixListView.as_view(), name='list_benches'),
     path('list_collections/', matrices_views.host.CollectionListView.as_view(), name='list_collections'),
+    path('list_images/', matrices_views.host.ImageListView.as_view(), name='list_images'),
+    path('list_images/<int:collection_id>/', matrices_views.host.ImageListView.as_view(), name='list_images'),
 
 #   views/maintenance
 	path('detail_blog_command/<int:blog_id>/', matrices_views.maintenance.view_blog_command, name='detail_blog_command'),
@@ -223,9 +225,6 @@ urlpatterns = [
 	path('delete_image/<int:image_id>/', matrices_views.matrices.delete_image, name='webgallery_delete_image'),
 	path('delete_collection_image/<int:collection_id>/<int:image_id>/', matrices_views.matrices.delete_collection_image, name='webgallery_delete_collection_image'),
 
-	path('view_collection/<int:collection_id>/', matrices_views.matrices.view_collection, name='view_collection'),
-	path('view_active_collection/', matrices_views.matrices.view_active_collection, name='view_active_collection'),
-	path('view_all_collections/', matrices_views.matrices.view_all_collections, name='view_all_collections'),
 	path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection, name='activate_collection'),
 	path('activate_in_collection/<int:collection_id>/', matrices_views.matrices.activate_in_collection, name='activate_in_collection'),
 

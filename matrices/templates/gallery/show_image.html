@@ -166,7 +166,7 @@ The show image template
 	<br />
 	<br />
 
-	<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+	<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	{% else %}
 
@@ -238,7 +238,7 @@ The show image template
 		    {% if image_flag %}
 
 				<br />
-				<a class="dropdown-item" href="{% url 'view_active_collection' %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+				<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	        {% else %}
 

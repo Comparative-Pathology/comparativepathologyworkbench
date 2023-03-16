@@ -71,7 +71,7 @@ The amend cell template
 		{% for collection in collection_list %}
 			{% if cell.matrix.has_last_used_collection == True %}
 				{% if cell.matrix.last_used_collection.id == collection.collection_id %}
-			  <a class="test-font" href="{% url 'view_collection' cell.matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
+			  <a class="test-font" href="{% url 'list_images' cell.matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
 				 {% endif %}
 			{% endif %}
 		{% endfor %}

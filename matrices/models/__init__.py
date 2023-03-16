@@ -29,6 +29,7 @@
 from .type import Type
 from .server import Server
 from .image import Image
+from .imagesummary import ImageSummary
 from .collection import Collection
 from .matrix import Matrix
 from .profile import Profile

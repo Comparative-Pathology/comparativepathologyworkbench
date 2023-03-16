@@ -228,10 +228,10 @@ The base header and footer include template
     
     {% if user.profile.has_active_collection %}
 
-                <a href="{% url 'view_active_collection' %}"><button class="button button-delete"><i class="fa fa-bell"></i></button> Current Collection</a>
+                <a href="{% url 'list_images' user.profile.active_collection.id %}"><button class="button button-delete"><i class="fa fa-bell"></i></button> Current Collection</a>
                 
     {% endif %}
-                <a href="{% url 'view_all_collections' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images</a>
+                <a href="{% url 'list_images' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images</a>
 
     {% if user.username != 'guest' %}
 

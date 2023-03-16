@@ -69,7 +69,7 @@ def activate_in_collection(request, collection_id):
 
         messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
 
-        return HttpResponseRedirect(reverse('view_collection', args=(collection_id, )))
+        return HttpResponseRedirect(reverse('list_images', args=(collection_id, )))
 
     else:
 

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         view_all_collections.py
+# \file         get_list_of_image_ids_for_collection_summary.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,46 +24,40 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
-# This file contains the view_all_collections view routine
-#
+# Get the List of Image Ids from a particular Collection Summary List
 ###
 from __future__ import unicode_literals
 
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
+import base64, hashlib
 
-from matrices.forms import SearchUrlForm
+from django.apps import apps
 
-from matrices.routines import credential_exists
-from matrices.routines import get_header_data
+from django.db.models import Q
 
-#
-# VIEW THE ACTIVE COLLECTION
-#
-@login_required
-def view_all_collections(request):
-
-    if request.is_ajax():
-
-        raise PermissionDenied
-
-    if not request.user.is_authenticated:
-
-        raise PermissionDenied
+from os import urandom
 
 
-    if credential_exists(request.user):
+"""
+    Get the List of Image Ids from a particular Collection Summary List
+"""
+def get_list_of_image_ids_for_collection_summary(a_collection_summary_list):
 
-        data = get_header_data(request.user)
+    Collection = apps.get_model('matrices', 'Collection')
 
-        form = SearchUrlForm()
+    image_list = list()
 
-        data.update({ 'form': form, 'search_from': "view_all_collections" })
+    for collection_summary in a_collection_summary_list:
 
-        return render(request, 'matrices/view_all_collections.html', data)
+        collection = Collection.objects.get(id=collection_summary.collection_id)
 
-    else:
+        image_list.extend(collection.images.all())
 
-        raise PermissionDenied
+    image_list = list(set(image_list))
+
+    list_of_image_ids = []
+
+    for image in image_list:
+
+        list_of_image_ids.append(image.id)
+
+    return list_of_image_ids

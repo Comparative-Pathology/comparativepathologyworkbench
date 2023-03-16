@@ -30,9 +30,6 @@
 # def delete_image(request, image_id):
 # def delete_collection_image(request, collection_id, image_id):
 #
-# def view_collection(request, collection_id):
-# def view_active_collection(request):
-# def view_all_collections(request):
 # def activate_collection(request, collection_id):
 #
 # def view_all_linked_images(request):
@@ -83,11 +80,8 @@ from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
 from .link_images import link_images
 from .search_image import search_image
-from .view_active_collection import view_active_collection
-from .view_all_collections import view_all_collections
 from .view_all_image_links import view_all_image_links
 from .view_cell_blog import view_cell_blog
-from .view_collection import view_collection
 from .view_image_link import view_image_link
 from .view_parent_image_link import view_parent_image_link
 from .view_child_image_link import view_child_image_link

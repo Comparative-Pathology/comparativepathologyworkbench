@@ -82,7 +82,7 @@ The list benches template
   <h1>Benches</h1>
   <p>Search the list of Benches</p>
   <form action="{% url 'list_benches' %}" method="get">
-{% include 'includes/formsearch.html' %}
+{% include 'includes/form_search_benches.html' %}
     <button class="button button-add" type="submit">Search</button>
 	<button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
   </form>

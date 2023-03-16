@@ -52,6 +52,7 @@ from .maintenance import maintenance
 
 from .home import home
 from .list_collection import *
+from .list_image import *
 from .list_image_cart import list_image_cart
 from .list_imaging_hosts import list_imaging_hosts
 from .list_matrix import *

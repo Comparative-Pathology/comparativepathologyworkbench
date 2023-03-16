@@ -299,7 +299,7 @@ The show image template
 
 	<br />
 	<br />
-	<a class="dropdown-item" href="{% url 'view_active_collection' %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+	<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 	{% else %}
 

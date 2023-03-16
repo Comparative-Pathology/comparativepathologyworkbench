@@ -146,7 +146,7 @@ def delete_image(request, image_id):
 
                 messages.error(request, 'Image ' + str(image.id) + ' NOT DELETED from the Workbench!')
 
-        return HttpResponseRedirect(reverse('view_all_collections', args=()))
+        return HttpResponseRedirect(reverse('list_images', args=()))
 
     else:
 

@@ -54,9 +54,6 @@ from matrices.routines import get_images_for_collection
 
 HTTP_POST = 'POST'
 LIST_IMAGING_HOSTS = "list_imaging_hosts"
-VIEW_ACTIVE_COLLECTION = "view_active_collection"
-VIEW_ALL_COLLECTIONS = "view_all_collections"
-VIEW_COLLECTION = "view_collection"
 
 
 #
@@ -119,35 +116,6 @@ def search_image(request, path_from, identifier):
             data.update({ 'form': form, 'search_from': "list_imaging_hosts" })
 
             return_page = 'host/list_imaging_hosts.html'
-
-
-        if path_from == VIEW_ACTIVE_COLLECTION:
-
-            collection = get_active_collection_for_user(request.user)
-
-            collection_image_list = get_images_for_collection(collection)
-
-            data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_active_collection" })
-
-            return_page = 'matrices/view_collection.html'
-
-
-        if path_from == VIEW_ALL_COLLECTIONS:
-
-            data.update({ 'form': form, 'search_from': "view_all_collections" })
-
-            return_page = 'matrices/view_all_collections.html'
-
-
-        if path_from == VIEW_COLLECTION:
-
-            collection = get_object_or_404(Collection, pk=identifier)
-            collection_image_list = get_images_for_collection(collection)
-
-            data.update({ 'collection': collection, 'collection_image_list': collection_image_list, 'form': form, 'search_from': "view_collection" })
-
-            return_page = 'matrices/view_collection.html'
-
 
         return render(request, return_page, data)
 

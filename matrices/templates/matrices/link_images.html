@@ -91,7 +91,7 @@ The amend cell template
     {% if collection_list %}
 		{% for collection in collection_list %}
 			{% if collection.collection_id == selected_collection.id %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'view_collection' collection.collection_id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
+				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'list_images' collection.collection_id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
 			{% else %}
 			{% endif %}
 		{% endfor %}

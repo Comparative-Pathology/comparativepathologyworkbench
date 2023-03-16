@@ -96,7 +96,7 @@ class Server(models.Model):
         return cls(name=name, url_server=url_server, uid=uid, pwd=pwd, type=type, owner=owner, accessible=accessible)
 
     def __str__(self):
-        return f"{self.uid}@{self.url_server}"
+        return f"{self.name}"
 
     def __repr__(self):
         return f"{self.id}, {self.name}, {self.url_server}, {self.uid}, {self.pwd}, {self.type.id}, {self.owner.id}, {self.accessible}"
@@ -1423,8 +1423,8 @@ class Server(models.Model):
                 else:
                     image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + image_id
 
-                    image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
-                    image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+                image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
+                image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
 
                 image = ({
                     'id': image_id,

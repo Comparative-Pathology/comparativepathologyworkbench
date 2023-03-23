@@ -1,7 +1,7 @@
 [
 {
     "model": "matrices.location",
-    "pk": 3,
+    "pk": 1,
     "fields": {
         "name": "CZI",
         "owner": 1
@@ -9,7 +9,7 @@
 },
 {
     "model": "matrices.location",
-    "pk": 4,
+    "pk": 2,
     "fields": {
         "name": "CANADA",
         "owner": 1
@@ -17,7 +17,7 @@
 },
 {
     "model": "matrices.location",
-    "pk": 5,
+    "pk": 3,
     "fields": {
         "name": "COELIAC",
         "owner": 1

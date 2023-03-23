@@ -53,7 +53,7 @@ from matrices.routines import image_list_by_user_and_direction
 class ImageListView(LoginRequiredMixin, SortableListView):
 
     query_name = forms.CharField(max_length=25)
-    query_server = forms.CharField(max_length=25)
+    query_source = forms.CharField(max_length=25)
     query_roi = forms.IntegerField()
     query_comment = forms.CharField(max_length=25)
     query_hidden = forms.BooleanField()
@@ -70,7 +70,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                            'image_roi': {'default_direction': '', 'verbose_name': 'ROI'},
                            'image_hidden': {'default_direction': '', 'verbose_name': 'Hidden?'},
                            'image_owner': {'default_direction': '', 'verbose_name': 'Owner'},
-                           'image_server': {'default_direction': '', 'verbose_name': 'Server'},
+                           'image_source': {'default_direction': '', 'verbose_name': 'Source'},
                            'image_collection_id': {'default_direction': '', 'verbose_name': 'Collection'},
                            'image_matrix_id': {'default_direction': '', 'verbose_name': 'Bench'}
                            }
@@ -96,7 +96,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
             kwargs_collection_id = self.kwargs['collection_id']
 
         self.query_name = self.request.GET.get('name', '')
-        self.query_server = self.request.GET.get('server', '')
+        self.query_source = self.request.GET.get('source', '')
         self.query_roi = self.request.GET.get('roi', '')
         self.query_comment = self.request.GET.get('comment', '')
         self.query_hidden = self.request.GET.get('hidden', '')
@@ -134,7 +134,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
             self.query_hidden = False
 
 
-        return image_list_by_user_and_direction(self.request.user, sort_parameter, self.query_name, self.query_server, self.query_roi, self.query_comment, \
+        return image_list_by_user_and_direction(self.request.user, sort_parameter, self.query_name, self.query_source, self.query_roi, self.query_comment, \
                                         self.query_hidden, self.query_owner, collection_id, self.query_bench_id )
 
 
@@ -174,7 +174,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             readBoolean = True
 
-        data_dict = { 'name': self.query_name, 'server': self.query_server, 'roi': self.query_roi, 'comment': self.query_comment, 'hidden': self.query_hidden, \
+        data_dict = { 'name': self.query_name, 'source': self.query_source, 'roi': self.query_roi, 'comment': self.query_comment, 'hidden': self.query_hidden, \
                     'owner': self.query_owner, 'collection_id': self.query_collection_id, 'bench_id': self.query_bench_id, 'paginate_by': self.query_paginate_by  }
 
         form = ImageSummarySearchForm(data_dict, request=self.request)

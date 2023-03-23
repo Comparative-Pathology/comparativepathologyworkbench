@@ -48,8 +48,8 @@ class MatrixSummarySearchForm(forms.ModelForm):
     created_after = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], required=False)
     modified_before = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], required=False)
     modified_after = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], required=False)
-    owner = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
-    authority = forms.ModelChoiceField(queryset=Authority.objects.all(), required=False)
+    owner = forms.ModelChoiceField(queryset=User.objects.all(), required=False, empty_label="(All Owners)")
+    authority = forms.ModelChoiceField(queryset=Authority.objects.all(), required=False, empty_label="(All Permissions)")
     paginate_by = forms.ChoiceField(widget=forms.Select, choices=CHOICES, required=False)
 
     class Meta:

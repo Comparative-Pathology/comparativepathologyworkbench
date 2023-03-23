@@ -50,10 +50,10 @@ class ImageSummarySearchForm(forms.ModelForm):
     roi = forms.IntegerField(required=False)
     comment = forms.CharField(max_length=50, required=False)
     hidden = forms.BooleanField(initial=False, required=False)
-    owner = forms.ModelChoiceField(queryset=User.objects.all().order_by('id'), required=False)
-    server = forms.ModelChoiceField(queryset=Server.objects.all().order_by('id'), required=False)
-    collection_id = forms.ModelChoiceField(queryset=Collection.objects.all().order_by('id'), required=False)
-    bench_id = forms.ModelChoiceField(queryset=Matrix.objects.all().order_by('id'), required=False)
+    owner = forms.ModelChoiceField(queryset=User.objects.all().order_by('id'), required=False, empty_label="(All Owners)")
+    source = forms.ModelChoiceField(queryset=Server.objects.all().order_by('id'), required=False, empty_label="(All Sources)")
+    collection_id = forms.ModelChoiceField(queryset=Collection.objects.all().order_by('id'), required=False, empty_label="(All Collections)")
+    bench_id = forms.ModelChoiceField(queryset=Matrix.objects.all().order_by('id'), required=False, empty_label="(All Benches)")
     paginate_by = forms.ChoiceField(widget=forms.Select, choices=CHOICES, required=False)
 
     class Meta:
@@ -62,7 +62,7 @@ class ImageSummarySearchForm(forms.ModelForm):
                 'comment',
                 'roi',
                 'hidden',
-                'server',
+                'source',
                 'collection_id',
                 'bench_id',
                 'paginate_by',
@@ -112,6 +112,7 @@ class ImageSummarySearchForm(forms.ModelForm):
             else:
 
                 list_of_collection_ids.insert(0, param_collection_id)
+                self.fields['collection_id'].empty_label = None
 
             collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('id')
 

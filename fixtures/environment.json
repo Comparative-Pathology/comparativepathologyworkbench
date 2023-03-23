@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
         "name": "CPW",
-        "location": 3,
+        "location": 1,
         "protocol": 2,
         "web_root": "localhost/sca_data",
         "document_root": "/Library/WebServer/Documents/SCA_data/",
@@ -29,10 +29,10 @@
 },
 {
     "model": "matrices.environment",
-    "pk": 4,
+    "pk": 2,
     "fields": {
         "name": "CZI",
-        "location": 3,
+        "location": 1,
         "protocol": 1,
         "web_root": "workbench-czi-cpw.mvm.ed.ac.uk/highcharts",
         "document_root": "/home/mwicks23/highcharts-output/",
@@ -57,10 +57,10 @@
 },
 {
     "model": "matrices.environment",
-    "pk": 5,
+    "pk": 3,
     "fields": {
         "name": "CANADA",
-        "location": 4,
+        "location": 2,
         "protocol": 1,
         "web_root": "workbench-czi-cpw.mvm.ed.ac.uk/highcharts",
         "document_root": "/home/mwicks23/highcharts-output/",
@@ -85,10 +85,10 @@
 },
 {
     "model": "matrices.environment",
-    "pk": 6,
+    "pk": 4,
     "fields": {
         "name": "COELIAC",
-        "location": 5,
+        "location": 3,
         "protocol": 1,
         "web_root": "workbench-czi-cpw.mvm.ed.ac.uk/highcharts",
         "document_root": "/home/mwicks23/highcharts-output/",

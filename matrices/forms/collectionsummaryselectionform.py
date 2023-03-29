@@ -67,3 +67,5 @@ class CollectionSummarySelectionForm(forms.ModelForm):
         collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('id')
 
         self.fields['last_used_collection'].queryset = collection_queryset
+        self.fields['last_used_collection'].label_from_instance = lambda obj: "{0:06d}, {1}, {2}".format(obj.id, obj.owner.username, obj.title)
+

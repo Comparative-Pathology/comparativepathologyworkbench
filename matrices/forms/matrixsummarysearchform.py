@@ -64,3 +64,10 @@ class MatrixSummarySearchForm(forms.ModelForm):
                 'modified_before',
                 'modified_after',
                 )
+
+    def __init__(self, *args, **kwargs):
+
+        super(MatrixSummarySearchForm, self).__init__(*args, **kwargs)
+
+        self.fields['owner'].label_from_instance = lambda obj: "{0}".format(obj.username)
+        self.fields['authority'].label_from_instance = lambda obj: "{0}".format(obj.name)

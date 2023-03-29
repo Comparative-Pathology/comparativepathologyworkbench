@@ -48,3 +48,11 @@ class EnvironmentForm(forms.ModelForm):
                 'maximum_rest_rows', 'minimum_rest_rows', 'maximum_bench_count', 'maximum_collection_count', )
         location = forms.ModelChoiceField(queryset=Location.objects.all())
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
+
+
+    def __init__(self, *args, **kwargs):
+
+        super(EnvironmentForm, self).__init__(*args, **kwargs)
+
+        self.fields['location'].label_from_instance = lambda obj: "{0}".format(obj.name)
+        self.fields['protocol'].label_from_instance = lambda obj: "{0}".format(obj.name)

@@ -47,3 +47,11 @@ class CommandForm(forms.ModelForm):
         fields = ('name', 'type', 'application', 'preamble', 'postamble', 'protocol')
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
         type = forms.ModelChoiceField(queryset=Type.objects.all())
+
+
+    def __init__(self, *args, **kwargs):
+
+        super(CommandForm, self).__init__(*args, **kwargs)
+
+        self.fields['protocol'].label_from_instance = lambda obj: "{0}".format(obj.name)
+        self.fields['type'].label_from_instance = lambda obj: "{0}".format(obj.name)

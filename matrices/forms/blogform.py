@@ -45,3 +45,9 @@ class BlogForm(forms.ModelForm):
         model = Blog
         fields = ('name', 'protocol', 'application', 'preamble', 'postamble', )
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
+
+    def __init__(self, *args, **kwargs):
+
+        super(BlogForm, self).__init__(*args, **kwargs)
+
+        self.fields['protocol'].label_from_instance = lambda obj: "{0}".format(obj.name)

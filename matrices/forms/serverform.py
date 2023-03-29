@@ -68,3 +68,10 @@ class ServerForm(forms.ModelForm):
         if not url_server:
             msg = "Please Supply a URL!"
             raise ValidationError(msg)
+
+
+    def __init__(self, *args, **kwargs):
+
+        super(ServerForm, self).__init__(*args, **kwargs)
+
+        self.fields['type'].label_from_instance = lambda obj: "{0}".format(obj.name)

@@ -137,9 +137,13 @@ def collection_authorisation_update(request, collection_authorisation_id, collec
 
     form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
     form.fields['authority'].initial = object.collection_authority.id
+    form.fields['authority'].label_from_instance = lambda obj: "{0}".format(obj.name)
 
     form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
     form.fields['permitted'].initial = object.permitted.id
+    form.fields['permitted'].label_from_instance = lambda obj: "{0}".format(obj.username)
+
+    form.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}".format(obj.id, obj.title)
 
 
     return render(request, template_name, {

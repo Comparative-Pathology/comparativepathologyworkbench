@@ -96,7 +96,7 @@ class Server(models.Model):
         return cls(name=name, url_server=url_server, uid=uid, pwd=pwd, type=type, owner=owner, accessible=accessible)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.uid}@{self.url_server}"
 
     def __repr__(self):
         return f"{self.id}, {self.name}, {self.url_server}, {self.uid}, {self.pwd}, {self.type.id}, {self.owner.id}, {self.accessible}"

@@ -89,7 +89,7 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
             object = form.save(commit=False)
 
             permitted = form.cleaned_data['permitted']
-            bench = form.cleaned_data['matrix']
+            bench = form.cleaned_data['bench']
             authority = form.cleaned_data['authority']
 
             if not exists_update_for_bench_and_user(bench, request.user):
@@ -97,6 +97,7 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
                 raise PermissionDenied
 
 
+            object.set_matrix(bench)
             object.set_authority(authority)
 
             authorisation_crud_consequences(permitted, bench, authority)
@@ -114,11 +115,11 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
 
         if request.user.is_superuser:
 
-            form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.all())
+            form.fields['bench'] = forms.ModelChoiceField(Matrix.objects.all())
 
         else:
 
-            form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
+            form.fields['bench'] = forms.ModelChoiceField(Matrix.objects.filter(owner=request.user))
 
     else:
 
@@ -129,14 +130,18 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
             raise PermissionDenied
 
 
-        form.fields['matrix'] = forms.ModelChoiceField(Matrix.objects.filter(id=bench_id))
-        form.fields['matrix'].initial = bench_id
+        form.fields['bench'] = forms.ModelChoiceField(Matrix.objects.filter(id=bench_id))
+        form.fields['bench'].initial = bench_id
 
     form.fields['authority'] = forms.ModelChoiceField(Authority.objects.all())
     form.fields['authority'].initial = object.authority.id
+    form.fields['authority'].label_from_instance = lambda obj: "{0}".format(obj.name)
 
     form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
     form.fields['permitted'].initial = object.permitted.id
+    form.fields['permitted'].label_from_instance = lambda obj: "{0}".format(obj.username)
+
+    form.fields['bench'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id, obj.title)
 
 
     return render(request, template_name, {

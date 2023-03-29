@@ -43,6 +43,13 @@ from django.utils.translation import gettext_lazy as _
 
 from random import randint
 
+AUTHORITY_NONE = 'NONE'
+AUTHORITY_EDITOR = 'EDITOR'
+AUTHORITY_VIEWER = 'VIEWER'
+AUTHORITY_OWNER = 'OWNER'
+AUTHORITY_ADMIN = 'ADMIN'
+
+
 """
     AUTHORITY (for Bench Authorisations)
 """
@@ -70,76 +77,76 @@ class Authority(models.Model):
         self.owner = a_user
 
     def set_as_none(self):
-        self.name = 'NONE'
+        self.name = AUTHORITY_NONE
 
     def set_as_editor(self):
-        self.name = 'EDITOR'
+        self.name = AUTHORITY_EDITOR
 
     def set_as_viewer(self):
-        self.name = 'VIEWER'
+        self.name = AUTHORITY_VIEWER
 
     def set_as_owner(self):
-        self.name = 'OWNER'
+        self.name = AUTHORITY_OWNER
 
     def set_as_admin(self):
-        self.name = 'ADMIN'
+        self.name = AUTHORITY_ADMIN
 
     def is_none(self):
-        if self.name == 'NONE':
+        if self.name == AUTHORITY_NONE:
             return True
         else:
             return False
 
     def is_not_none(self):
-        if self.name == 'NONE':
+        if self.name == AUTHORITY_NONE:
             return False
         else:
             return True
 
     def is_editor(self):
-        if self.name == 'EDITOR':
+        if self.name == AUTHORITY_EDITOR:
             return True
         else:
             return False
 
     def is_not_editor(self):
-        if self.name == 'EDITOR':
+        if self.name == AUTHORITY_EDITOR:
             return False
         else:
             return True
 
     def is_viewer(self):
-        if self.name == 'VIEWER':
+        if self.name == AUTHORITY_VIEWER:
             return True
         else:
             return False
 
     def is_not_viewer(self):
-        if self.name == 'VIEWER':
+        if self.name == AUTHORITY_VIEWER:
             return False
         else:
             return True
 
     def is_owner(self):
-        if self.name == 'OWNER':
+        if self.name == AUTHORITY_OWNER:
             return True
         else:
             return False
 
     def is_not_owner(self):
-        if self.name == 'OWNER':
+        if self.name == AUTHORITY_OWNER:
             return False
         else:
             return True
 
     def is_admin(self):
-        if self.name == 'ADMIN':
+        if self.name == AUTHORITY_ADMIN:
             return True
         else:
             return False
 
     def is_not_admin(self):
-        if self.name == 'ADMIN':
+        if self.name == AUTHORITY_ADMIN:
             return False
         else:
             return True

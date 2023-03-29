@@ -114,7 +114,8 @@ DATABASES = {
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT')
+        'PORT': config('DB_PORT'),
+        'ATOMIC_REQUESTS': config('DB_ATOMIC_REQUESTS'),
     }
 }
 

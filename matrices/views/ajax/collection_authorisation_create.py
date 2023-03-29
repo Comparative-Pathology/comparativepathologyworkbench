@@ -137,8 +137,12 @@ def collection_authorisation_create(request, collection_id=None):
         form.fields['collection'].initial = collection_id
 
     form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
+    form.fields['authority'].label_from_instance = lambda obj: "{0}".format(obj.name)
 
     form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
+    form.fields['permitted'].label_from_instance = lambda obj: "{0}".format(obj.username)
+
+    form.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}".format(obj.id, obj.title)
 
 
     return render(request, template_name, {

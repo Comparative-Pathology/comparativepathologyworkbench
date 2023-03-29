@@ -90,6 +90,10 @@ class ImageSummarySearchForm(forms.ModelForm):
 
         super(ImageSummarySearchForm, self).__init__(*args, **kwargs)
 
+        self.fields['source'].label_from_instance = lambda obj: "{0}".format(obj.name)
+        self.fields['collection_id'].label_from_instance = lambda obj: "{0:06d}, {1}, {2}".format(obj.id, obj.owner.username, obj.title)
+        self.fields['bench_id'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id, obj.title)
+
         if not request.user.is_superuser:
 
             # Hide the Owner Search Selection box

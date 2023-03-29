@@ -49,24 +49,24 @@ from matrices.routines import authorisation_exists_for_bench_and_permitted
 #
 class AuthorisationForm(forms.ModelForm):
 
-    matrix = forms.ModelChoiceField(queryset=Matrix.objects.all(), label=_('Bench'))
+    bench = forms.ModelChoiceField(queryset=Matrix.objects.all(), label=_('Bench'))
     permitted = forms.ModelChoiceField(queryset=User.objects.all())
     authority = forms.ModelChoiceField(queryset=Authority.objects.all())
 
     class Meta:
         model = Authorisation
-        fields = ('matrix', 'permitted', 'authority', )
+        fields = ('bench', 'permitted', 'authority', )
 
 
     def clean(self):
 
         cleaned_data = super().clean()
 
-        matrix = cleaned_data.get("matrix")
+        bench = cleaned_data.get("bench")
         permitted = cleaned_data.get("permitted")
         authority = cleaned_data.get("authority")
 
-        if not matrix:
+        if not bench:
             msg = "Please Select a Bench!"
             raise ValidationError(msg)
 
@@ -78,11 +78,11 @@ class AuthorisationForm(forms.ModelForm):
             msg = "Please Select an Authority!"
             raise ValidationError(msg)
 
-        if authorisation_exists_for_bench_and_permitted(matrix, permitted):
+        if authorisation_exists_for_bench_and_permitted(bench, permitted):
 
-            authorisation_old = Authorisation.objects.get(Q(matrix=matrix) & Q(permitted=permitted))
+            authorisation_old = Authorisation.objects.get(Q(matrix=bench) & Q(permitted=permitted))
 
             if authorisation_old.authority == authority:
 
-                msg = 'A Bench Authorisation for \"' + str(permitted.username) + '\" and ' + str(authority.name) + ' already exists for Bench CPW:' + '{num:06d}'.format(num=matrix.id)
+                msg = 'A Bench Authorisation for \"' + str(permitted.username) + '\" and ' + str(authority.name) + ' already exists for Bench CPW:' + '{num:06d}'.format(num=bench.id)
                 raise ValidationError(msg)

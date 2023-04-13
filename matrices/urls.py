@@ -32,6 +32,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.urls import re_path as url
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
@@ -120,6 +121,8 @@ urlpatterns = [
 	path('bench_blog_read/<int:bench_id>/', matrices_views.ajax.bench_blog_read, name='bench_blog_read'),
 	path('bench_cell_blog_read/<int:cell_id>/', matrices_views.ajax.bench_cell_blog_read, name='bench_cell_blog_read'),
 	path('aggregate_bench_cell_blog_read/<int:cell_id>/', matrices_views.ajax.aggregate_bench_cell_blog_read, name='aggregate_bench_cell_blog_read'),
+    
+	path('tag-autocomplete/<int:image_id>/', matrices_views.ajax.autocompleteTag, name='autocompleteTag'),
 
 #   views/authorisation
 	path('collectivization/', matrices_views.collectivization, name='collectivization'),
@@ -146,18 +149,20 @@ urlpatterns = [
 	path('show_project/<int:server_id>/<int:project_id>/', matrices_views.gallery.show_project, name='webgallery_show_project'),
 	path('show_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.show_dataset, name='webgallery_show_dataset'),
 	path('show_dataset_filtered/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.show_dataset_filtered, name='webgallery_show_dataset_filtered'),
-	path('show_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_image, name='webgallery_show_image'),
 	path('show_wordpress/<int:server_id>/<int:page_id>/', matrices_views.gallery.show_wordpress, name='webgallery_show_wordpress'),
-	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),
-	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
-	path('add_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.add_dataset, name='webgallery_add_dataset'),
-	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
-	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),
 	path('show_ebi_sca_upload_server/<int:server_id>/', matrices_views.gallery.show_ebi_sca_upload_server, name='webgallery_show_ebi_sca_upload_server'),
-
-	path('add_cpw_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_cpw_image, name='webgallery_add_cpw_image'),
-	path('show_cpw_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_cpw_image, name='webgallery_show_cpw_image'),
 	path('show_cpw_upload_server/<int:server_id>/', matrices_views.gallery.show_cpw_upload_server, name='webgallery_show_cpw_upload_server'),
+	path('add_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.add_dataset, name='webgallery_add_dataset'),
+	path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image, name='webgallery_add_image'),
+	path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image, name='webgallery_add_ebi_sca_image'),
+	path('add_cpw_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_cpw_image, name='webgallery_add_cpw_image'),
+	path('show_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_image, name='webgallery_show_image'),
+	path('show_wordpress_image/<int:server_id>/<int:image_id>/', matrices_views.gallery.show_wordpress_image, name='webgallery_show_wordpress_image'),
+	path('show_ebi_sca_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_ebi_sca_image, name='webgallery_show_ebi_sca_image'),
+	path('show_cpw_image/<int:server_id>/<str:image_id>/', matrices_views.gallery.show_cpw_image, name='webgallery_show_cpw_image'),
+	path('edit_image/<int:image_id>/', matrices_views.gallery.edit_image, name='webgallery_edit_image'),
+	path('tag_image/<int:image_id>/<slug:slug>/', matrices_views.gallery.tag_image, name='webgallery_tag_image'),
+	path('untag_image/<int:image_id>/<slug:slug>/', matrices_views.gallery.untag_image, name='webgallery_untag_image'),
 
 #   views/host
 	path('', matrices_views.host.home, name='home'),
@@ -179,6 +184,7 @@ urlpatterns = [
     path('list_collections/', matrices_views.host.CollectionListView.as_view(), name='list_collections'),
     path('list_images/', matrices_views.host.ImageListView.as_view(), name='list_images'),
     path('list_images/<int:collection_id>/', matrices_views.host.ImageListView.as_view(), name='list_images'),
+    path('list_images/<int:collection_id>/<int:tag_id>/', matrices_views.host.ImageListView.as_view(), name='list_images'),
 
 #   views/maintenance
 	path('detail_blog_command/<int:blog_id>/', matrices_views.maintenance.view_blog_command, name='detail_blog_command'),

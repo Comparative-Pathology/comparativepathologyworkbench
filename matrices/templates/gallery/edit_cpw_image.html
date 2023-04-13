@@ -1,0 +1,196 @@
+<!--
+\file         show_cpw_image.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The show image template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
+			<li><a href="{% url 'webgallery_show_cpw_upload_server' server.id %}">{{ server.name }}</a></li>
+
+	{% if image.name != 'ERROR' %}
+
+			<li>{{ image.name|truncatechars:20 }}</li>
+
+	{% endif %}
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+
+{% if messages %}
+
+	{% for message in messages %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+	<div class="panel-alert">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+	<div class="panel-success">
+
+		<p>{{ message }}</p>
+
+	</div>
+
+		{% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+{% if image.name == 'ERROR' %}
+
+	<p>Image {{ image.id }} Does NOT Exist!</p>
+
+{% else %}
+
+	<h1>Image: {{ chart.chart_id }}</h1>
+
+	<hr>
+
+	<h3>Tags</h3>
+    <p>Existing Tags for this Image: 
+	{% for used_tag in local_image.tags.all %}
+	<a href="{% url 'webgallery_untag_image' local_image.id used_tag.slug %}" class="badge badge-danger" onclick="return confirm('Are you sure you want to REMOVE this TAG?')">#{{ used_tag }}</a>
+	{% endfor %}
+	</p>
+	
+	<form id="search" method="POST" action="{% url 'autocompleteTag' local_image.id %}">
+
+		{% csrf_token %}
+
+		<div class="form-container">
+			<div class="form-row">
+				<div class="form-col-15">
+					<label for="txtSearch">Add Tags:</label>
+			  	</div>
+			  	<div class="form-col-5">
+			  	</div>
+			  	<div class="form-col-20">
+					<input type="text" name="txtSearch" maxlength="255" required id="txtSearch">
+			  	</div>
+			  	<div class="form-col-5">&nbsp;
+			  	</div>
+			  	<div class="form-col-50">
+	{% if unused_tags %}
+					<p>Common Tags to reuse:
+		{% for unused_tag in unused_tags %}
+					<a href="{% url 'webgallery_tag_image' local_image.id unused_tag.slug %}" class="badge badge-success">#{{ unused_tag.name }}</a>
+		{% endfor %}
+					</p>
+	{% endif %}
+			  	</div>
+			  	<div class="form-col-5">
+			  	</div>
+			</div>
+		</div>
+
+	</form>
+
+	<br />
+
+	<hr>
+
+	<table>
+    	<tr>
+            <td>
+				<a href="{{ chart.viewer_url  }}" target="_blank"><img  style="height:256px; float: left" alt="{{ chart.chart_id }}" title="{{ chart.chart_id }}" src="{{ chart.birdseye_url }}" ></a>
+			</td>
+		</tr>
+	</table>
+
+	<br />
+
+    <h3>Image Information</h3>
+
+	<hr>
+
+	<dl class="standard">
+		<dt>Image Name</dt>
+		<dd>{{ chart.chart_id }}</dd>
+		<dt>Comment</dt>
+		<dd>{{ image_comment }}</dd>
+		<dt>Source</dt>
+		<dd>{{ image_url }}</dd>
+	</dl>
+
+	<br />
+	<br />
+
+	{% if image_flag %}
+
+	<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
+
+	{% else %}
+
+	<div class="panel-alert">
+        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
+    </div>
+
+	{% endif %}
+
+	<br />
+	<br />
+
+	<hr>
+
+{% endif %}
+
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+{% endblock %}

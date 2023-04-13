@@ -41,6 +41,8 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
+from taggit.managers import TaggableManager
+
 from random import randint
 
 from requests.exceptions import HTTPError
@@ -66,6 +68,8 @@ class Image(models.Model):
     roi = models.IntegerField(default=0)
     comment = models.TextField(max_length=4095, default='')
     hidden = models.BooleanField(default=False)
+
+    tags = TaggableManager()
 
     def set_identifier(self, an_identifier):
         self.identifier = an_identifier

@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'matrices.apps.MatricesConfig',
     'rest_framework.authtoken',
     'frontend_forms',
+    'taggit',
 ]
 
 MIDDLEWARE = [

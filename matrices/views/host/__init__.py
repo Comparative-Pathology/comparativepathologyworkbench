@@ -49,8 +49,8 @@
 
 from .authorisation import authorisation
 from .maintenance import maintenance
-
 from .home import home
+
 from .list_collection import *
 from .list_image import *
 from .list_image_cart import list_image_cart

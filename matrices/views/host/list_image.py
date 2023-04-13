@@ -39,6 +39,8 @@ from sortable_listview import SortableListView
 from matrices.models import Collection
 from matrices.models import ImageSummary
 
+from taggit.models import Tag
+
 from matrices.forms import ImageSummarySearchForm
 
 from matrices.routines import credential_exists
@@ -60,6 +62,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
     query_owner = forms.CharField(max_length=25)
     query_collection_id = forms.CharField(max_length=25)
     query_matrix_id = forms.CharField(max_length=25)
+    query_tag_id = forms.CharField(max_length=25)
 
     query_search = forms.CharField(max_length=25)
 
@@ -70,6 +73,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                            'image_roi': {'default_direction': '', 'verbose_name': 'ROI'},
                            'image_hidden': {'default_direction': '', 'verbose_name': 'Hidden?'},
                            'image_owner': {'default_direction': '', 'verbose_name': 'Owner'},
+                           'image_tag_id': {'default_direction': '', 'verbose_name': 'Tag'},
                            'image_source': {'default_direction': '', 'verbose_name': 'Source'},
                            'image_collection_id': {'default_direction': '', 'verbose_name': 'Collection'},
                            'image_matrix_id': {'default_direction': '', 'verbose_name': 'Bench'}
@@ -89,32 +93,45 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
     def get_queryset(self):
 
+        sort_parameter = ''
+
+        # URL Parameters
         kwargs_collection_id = ''
+        kwargs_tag_id = ''
 
+        # Search Parameters
+        search_collection_id = ''
+        search_tag_id = ''
+
+        # image_list_by_user_and_direction Parameters
+        out_collection_id = ''
+        out_tag_id = ''
+
+        # Does the URL contain a Collection Id and a Tag Id
         if self.kwargs != None and self.kwargs != {}:
-                
-            kwargs_collection_id = self.kwargs['collection_id']
 
+            for key in self.kwargs:
+
+                if key == 'collection_id':
+                    
+                    kwargs_collection_id = self.kwargs['collection_id']
+
+                if key == 'tag_id':
+                    
+                    kwargs_tag_id = self.kwargs['tag_id']
+
+        # Get the URL GET Parameters
         self.query_name = self.request.GET.get('name', '')
         self.query_source = self.request.GET.get('source', '')
         self.query_roi = self.request.GET.get('roi', '')
         self.query_comment = self.request.GET.get('comment', '')
         self.query_hidden = self.request.GET.get('hidden', '')
         self.query_owner = self.request.GET.get('owner', '')
-        self.query_collection_id = self.request.GET.get('collection_id', '')
+        self.query_collection_id = self.request.GET.get('collection', '')
+        self.query_tag_id = self.request.GET.get('tag', '')
+        self.query_bench_id = self.request.GET.get('bench', '')
 
-        if kwargs_collection_id != '':
-        
-            collection_id = kwargs_collection_id
-        
-        else:
-
-            collection_id = self.query_collection_id
-
-        self.query_bench_id = self.request.GET.get('bench_id', '')
-
-        sort_parameter = ''
-
+        # Set the Sort Parameter
         if self.request.GET.get('sort', None) == None:
 
             sort_parameter = 'image_name'
@@ -123,8 +140,10 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             sort_parameter = self.request.GET.get('sort', None)
 
+        # Set the Pagination Parameter
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
+        # Set the Hidden Parameter
         if self.request.GET.get('hidden', None) == 'on':
 
             self.query_hidden = True
@@ -133,38 +152,150 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             self.query_hidden = False
 
+        # If there isn't a URL Collection Id, use the GET Collection Id
+        if kwargs_collection_id == '':
+        
+            search_collection_id = self.query_collection_id
+        
+        else:
+
+            search_collection_id = kwargs_collection_id
+
+        # If there isn't a URL Tag Id, use the GET Tag Id
+        if kwargs_tag_id == '':
+        
+            search_tag_id = self.query_tag_id
+        
+        else:
+
+            search_tag_id = kwargs_tag_id
+
+        # Check for Zero Collection id
+        if search_collection_id == '0':
+        
+            out_collection_id = ''
+        
+        else:
+
+            out_collection_id = search_collection_id
+
+        # Check for Zero Tag Id
+        if search_tag_id == '0':
+        
+            out_tag_id = ''
+        
+        else:
+
+            out_tag_id = search_tag_id
 
         return image_list_by_user_and_direction(self.request.user, sort_parameter, self.query_name, self.query_source, self.query_roi, self.query_comment, \
-                                        self.query_hidden, self.query_owner, collection_id, self.query_bench_id )
+                                        self.query_hidden, self.query_owner, out_collection_id, self.query_bench_id, out_tag_id )
 
 
     def get_context_data(self, **kwargs):
 
         collection_id = ''
+        tag_id = ''
+
+        # URL Parameters
+        kwargs_collection_id = ''
+        kwargs_tag_id = ''
+
+        # Search Parameters
+        search_collection_id = ''
+        search_tag_id = ''
+
         context = super().get_context_data(**kwargs)
 
-        allBoolean = True
-
+        # Does the URL contain a Collection Id and a Tag Id
         if self.kwargs != None and self.kwargs != {}:
                 
-            allBoolean = False
-            collection_id = self.kwargs['collection_id']
+            for key in self.kwargs:
 
-        if collection_id == '' or collection_id == 0 :
+                if key == 'collection_id':
+                    
+                    kwargs_collection_id = self.kwargs['collection_id']
 
-            collection_id = self.query_collection_id
+                if key == 'tag_id':
+        
+                    kwargs_tag_id = self.kwargs['tag_id']            
+        
+        # If there isn't a URL Collection Id, use the GET Collection Id
+        if kwargs_collection_id == '':
+        
+            search_collection_id = self.query_collection_id
+        
+        else:
+
+            search_collection_id = kwargs_collection_id
+
+        # If there isn't a URL Tag Id, use the GET Tag Id
+        if kwargs_tag_id == '':
+        
+            search_tag_id = self.query_tag_id
+        
+        else:
+
+            search_tag_id = kwargs_tag_id
 
         collection = None
+        tag = None
+
         collection_image_list = []
         collection_hidden_image_list = []
 
         int_collection_id = 0
-        if collection_id != '':
-            int_collection_id = int(collection_id)
+        int_tag_id = 0
 
-            collection = get_object_or_404(Collection, pk=collection_id)
-            collection_image_list = get_images_for_collection(collection)
-            collection_hidden_image_list = get_hidden_images_for_collection(collection)
+        if search_collection_id != '':
+
+            allBoolean = False
+
+            int_collection_id = int(search_collection_id)
+
+            if int_collection_id != 0:
+
+                collection = get_object_or_404(Collection, pk=int_collection_id)
+                collection_image_list = get_images_for_collection(collection)
+                collection_hidden_image_list = get_hidden_images_for_collection(collection)
+
+        if search_tag_id != '':
+
+            tagBoolean = True
+
+            int_tag_id = int(search_tag_id)
+
+            if int_tag_id != 0:
+
+                tag = get_object_or_404(Tag, pk=int_tag_id)
+
+        allBoolean = True
+        tagBoolean = True
+
+        if tag is None: 
+            
+            if collection is None:
+
+                allBoolean = True
+                tagBoolean = False
+
+            else:
+                
+                allBoolean = False
+                tagBoolean = False
+        
+        else:
+
+            if collection is None:
+
+                allBoolean = True
+                tagBoolean = True
+
+            else:
+
+                allBoolean = False
+                tagBoolean = True
+
 
         data = get_header_data(self.request.user)
 
@@ -175,12 +306,13 @@ class ImageListView(LoginRequiredMixin, SortableListView):
             readBoolean = True
 
         data_dict = { 'name': self.query_name, 'source': self.query_source, 'roi': self.query_roi, 'comment': self.query_comment, 'hidden': self.query_hidden, \
-                    'owner': self.query_owner, 'collection_id': self.query_collection_id, 'bench_id': self.query_bench_id, 'paginate_by': self.query_paginate_by  }
+                    'owner': self.query_owner, 'collection': self.query_collection_id, 'bench': self.query_bench_id, 'tag': self.query_tag_id, 'paginate_by': self.query_paginate_by }
 
         form = ImageSummarySearchForm(data_dict, request=self.request)
 
-        data.update({ 'form': form, 'allBoolean': allBoolean, 'readBoolean': readBoolean, 'collection_id': int_collection_id, 'collection': collection, \
-                     'collection_image_list': collection_image_list, 'collection_hidden_image_list': collection_hidden_image_list })
+        data.update({ 'form': form, 'tagBoolean': tagBoolean, 'allBoolean': allBoolean, 'readBoolean': readBoolean, 'collection_id': int_collection_id, \
+                        'tag': tag, 'collection': collection, 'tag_id': int_tag_id, \
+                        'collection_image_list': collection_image_list, 'collection_hidden_image_list': collection_hidden_image_list })
 
         context.update(data)
 

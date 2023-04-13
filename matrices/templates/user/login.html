@@ -93,9 +93,10 @@ The login template
 
 		<input type="hidden" name="next" value="{{ next }}" />
 
+		<div class="form-container">
+
 {% for field in form %}
 
-		<div class="form-container">
 
 			<div class="form-row">
 
@@ -164,9 +165,10 @@ The login template
 
 {% endif %}
 
-		</div>
 
 {% endfor %}
+
+		</div>
 
 		<br />
 

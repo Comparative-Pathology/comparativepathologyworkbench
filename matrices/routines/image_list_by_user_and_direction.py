@@ -47,31 +47,57 @@ from matrices.routines import get_list_of_image_ids_for_collection_summary
     Get All Images for a particular User
 """
 def image_list_by_user_and_direction(a_user, a_direction, a_query_name, a_query_source, a_query_roi, a_query_comment, a_query_hidden, \
-                                     a_query_owner, a_query_collection_id, a_query_matrix_id):
+                                     a_query_owner, a_query_collection_id, a_query_matrix_id, a_query_tag_id):
 
+    # Search Parameters
+    search_collection_id = 0
+    search_tag_id = 0
+    search_bench_id = 0
+
+    if str(a_query_collection_id).isdigit():
+
+        search_collection_id = int(a_query_collection_id)
+    
+    if str(a_query_tag_id).isdigit():
+
+        search_tag_id = int(a_query_tag_id)
+
+    if str(a_query_matrix_id).isdigit():
+
+        search_bench_id = int(a_query_matrix_id)
+    
     ImageSummary = apps.get_model('matrices', 'ImageSummary')
     Collection = apps.get_model('matrices', 'Collection')
     Matrix = apps.get_model('matrices', 'Matrix')
     Server = apps.get_model('matrices', 'Server')
+    Tag = apps.get_model('taggit', 'Tag')
 
+    str_query_tag = ''
     str_query_collection = ''
     str_query_matrix = ''
     str_query_source = ''
     str_query_owner = ''
 
+    tag = None
+
     collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '')
 
     list_of_image_ids = get_list_of_image_ids_for_collection_summary(collection_summary_list)
 
-    if a_query_collection_id != '':
+    if search_tag_id != 0:
 
-        collection = Collection.objects.get(pk=int(a_query_collection_id))
-        str_query_collection = collection.id
+        tag = Tag.objects.get(pk=int(search_tag_id))
+        str_query_tag = str(tag.id)
 
-    if a_query_matrix_id != '':
+    if search_collection_id != 0:
+
+        collection = Collection.objects.get(pk=int(search_collection_id))
+        str_query_collection = str(collection.id)
+
+    if search_bench_id != 0:
 
         matrix = Matrix.objects.get(pk=int(a_query_matrix_id))
-        str_query_matrix = matrix.id
+        str_query_matrix = str(matrix.id)
 
     if a_query_source != '':
 
@@ -94,6 +120,7 @@ def image_list_by_user_and_direction(a_user, a_direction, a_query_name, a_query_
         sort_parameter = a_direction
 
     queryset = []
+    queryset_out = []
 
     if a_user.is_superuser:
 
@@ -674,5 +701,15 @@ def image_list_by_user_and_direction(a_user, a_direction, a_query_name, a_query_
 
         if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and str_query_matrix == '' and str_query_source == '':
             queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden).filter(image_id__in=list_of_image_ids).order_by(sort_parameter)
+
+    if tag is not None:
+            
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_tag(tag):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
 
     return queryset

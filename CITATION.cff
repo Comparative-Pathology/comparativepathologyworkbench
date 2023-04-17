@@ -1,0 +1,42 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: The Comparative Pathology Workbench
+message: >-
+  This is the CCF for the Comparative Pathology Workbench
+  software
+type: software
+authors:
+  - given-names: Michael
+    name-particle: 'N'
+    family-names: Wicks
+    email: mwicks23@ed.ac.uk
+    affiliation: University of Edinburgh
+    orcid: 'https://orcid.org/0000-0002-4390-4654'
+identifiers:
+  - type: url
+    value: >-
+      https://github.com/Comparative-Pathology/comparativepathologyworkbench
+    description: The Comparative Pathology Workbench Repository
+repository-code: >-
+  https://github.com/Comparative-Pathology/comparativepathologyworkbench
+url: 'https://workbench-czi-cpw.mvm.ed.ac.uk/home/'
+repository: >-
+  https://github.com/Comparative-Pathology/comparativepathologyworkbench_static
+repository-artifact: >-
+  https://github.com/Comparative-Pathology/comparativepathologyworkbench/releases/tag/Release-Candidate-1.0.0
+abstract: >-
+  The Comparative Pathology Workbench (CPW) is a web browser
+  based visual analytics platform providing shared access to
+  an interactive “spreadsheet” style presentation of image
+  and associated analysis data.
+keywords:
+  - Python
+  - Postgres
+  - Django
+license: GPL-2.0
+commit: '2023-03-29'
+version: >-
+  https://github.com/Comparative-Pathology/comparativepathologyworkbench/releases/tag/Release-Candidate-1.0.0
+date-released: '2023-03-29'

@@ -140,6 +140,22 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             sort_parameter = self.request.GET.get('sort', None)
 
+            if sort_parameter == "image_source":
+
+                sort_parameter = "image_server_id"
+        
+            if sort_parameter == "-image_source":
+
+                sort_parameter = "-image_server_id"
+
+            if sort_parameter == "image_tag_id":
+
+                sort_parameter = "image_tags"
+
+            if sort_parameter == "-image_tag_id":
+
+                sort_parameter = "-image_tags"
+
         # Set the Pagination Parameter
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
 

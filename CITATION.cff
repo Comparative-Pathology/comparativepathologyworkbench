@@ -9,7 +9,6 @@ message: >-
 type: software
 authors:
   - given-names: Michael
-    name-particle: 'N'
     family-names: Wicks
     email: mwicks23@ed.ac.uk
     affiliation: University of Edinburgh

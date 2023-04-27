@@ -60,3 +60,7 @@ def replace(value, arg):
 @register.filter
 def filename(value):
     return os.path.basename(value.file.name)
+
+@register.simple_tag
+def userdateformat(value, argument):
+    return value.strftime(argument)

@@ -54,8 +54,10 @@ def bench_read(request, bench_id):
 
     htmlString = ''
 
-    date_created = object.created.strftime('%Y/%m/%d %H:%M')
-    date_modified = object.modified.strftime('%Y/%m/%d %H:%M')
+    date_created = object.created.strftime(environment.date_format)
+    date_modified = object.modified.strftime(environment.date_format)
+    time_created = object.created.strftime(' %H:%M')
+    time_modified = object.modified.strftime(' %H:%M')
 
     if object.has_blogpost():
 
@@ -73,9 +75,9 @@ def bench_read(request, bench_id):
             '<dt>Owner</dt>'\
             '<dd>' + object.owner.username + ' (' + object.owner.first_name + ' ' + object.owner.last_name + ')</dd>'\
             '<dt>Created</dt>'\
-            '<dd>' + date_created + '</dd>'\
+            '<dd>' + date_created + time_created + '</dd>'\
             '<dt>Last Modified</dt>'\
-            '<dd>' + date_modified + '</dd>'\
+            '<dd>' + date_modified + time_modified + '</dd>'\
             '<dt>Blog Post</dt>'\
             '<dd><a class=\"btn btn-default\" href=\"' + matrix_link + '\" role=\"button\" target=\"_blank\"><button class=\"button button-view\">View Blog Post ' + object.blogpost + ' &raquo;</button></a></dd>'\
             '</dl>'

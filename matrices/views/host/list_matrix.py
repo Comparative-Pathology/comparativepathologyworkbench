@@ -151,7 +151,7 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
             createBoolean = False
 
-        data.update({ 'form': form, 'readBoolean': readBoolean, 'createBoolean': createBoolean })
+        data.update({ 'form': form, 'readBoolean': readBoolean, 'createBoolean': createBoolean, 'date_format': environment.date_format })
 
         context.update(data)
 

@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=hello_cpw_dev_db
+      - POSTGRES_USER=hello_cpw_dev_user
+      - POSTGRES_PASSWORD=hello_cpw_dev_pwd
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8010
+    container_name: cpw
+    volumes:
+      - .:/cpw
+    ports:
+      - "8010:8010"
+    depends_on:
+      - db
+    env_file:
+      - ./config/.env_docker
+
+volumes:
+  postgres_data:

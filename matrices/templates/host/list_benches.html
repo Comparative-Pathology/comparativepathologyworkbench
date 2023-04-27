@@ -28,6 +28,8 @@ The list benches template
 
 {% extends 'includes/base.html' %}
 
+{% load custom %}
+
 {% block extrastyle %}
 
 <style>
@@ -148,8 +150,8 @@ The list benches template
 		{% endif %}
 	<td>CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }}</td>
 	<td>{{ matrix_summary.matrix_title|truncatechars:75 }}</td>
-	<td>{{ matrix_summary.matrix_created|date:'Y/m/d' }}</td>
-	<td>{{ matrix_summary.matrix_modified|date:'Y/m/d' }}</td>
+	<td>{% userdateformat matrix_summary.matrix_created date_format %}</td>
+	<td>{% userdateformat matrix_summary.matrix_modified date_format %}</td>
 	<td>{{ matrix_summary.matrix_owner }}</td>
 	<td>{{ matrix_summary.matrix_authorisation_authority }}</td>
   </tr>

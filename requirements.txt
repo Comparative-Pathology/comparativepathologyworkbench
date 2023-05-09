@@ -27,7 +27,7 @@ django-sortable-listview==0.43
 django-taggit-templatetags2==1.6.1
 django-taggit==3.1.0
 django-widget-tweaks==1.4.11
-django==3.2.18
+django==3.2.19
 djangorestframework==3.14.0
 gunicorn==20.1.0
 httpie==2.6.0

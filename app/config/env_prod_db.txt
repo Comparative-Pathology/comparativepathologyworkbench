@@ -1,0 +1,4 @@
+POSTGRES_DB=workbench_czi_prod
+POSTGRES_USER=workbench_czi
+POSTGRES_PASSWORD=workbench_czi
+

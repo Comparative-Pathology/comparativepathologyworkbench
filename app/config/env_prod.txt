@@ -1,0 +1,30 @@
+#
+# CPW Environment Settings
+#
+SECRET_KEY=a_secret_key
+ENCRYPT_KEY=anothen_secret_key
+CPW_CIPHER_STRING=a_cipher_string
+#
+DEBUG=True
+ALLOWED_HOSTS=localhost, 127.0.0.1 [::1]
+#
+# PostGres Database Settings
+#
+DATABASE=postgres
+DB_ENGINE=django.db.backends.postgresql_psycopg2
+DB_NAME=workbench_czi_prod
+DB_USER=workbench_czi
+DB_PASSWORD=workbench_czi
+DB_HOST=db
+DB_PORT=5432
+DB_ATOMIC_REQUESTS=True
+#
+# Dummy Email File Backend
+#
+EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend
+EMAIL_FILE_PATH=/home/app/web/emailfiles
+#
+SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+SESSION_COOKIE_AGE=86400
+# Default: 1209600 (2 weeks, in seconds)
+

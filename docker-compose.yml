@@ -1,26 +1,39 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  db:
-    image: postgres
-    environment:
-      - POSTGRES_DB=hello_cpw_dev_db
-      - POSTGRES_USER=hello_cpw_dev_user
-      - POSTGRES_PASSWORD=hello_cpw_dev_pwd
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8010
-    container_name: cpw
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: gunicorn matrices.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/cpw
-    ports:
-      - "8010:8010"
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+      - email_volume:/home/app/web/emailfiles
+    expose:
+      - 8000
+    env_file:
+      - ./app/config/env_prod.txt
     depends_on:
       - db
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./config/.env_docker
+      - ./app/config/env_prod_db.txt
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+    ports:
+      - 1337:80
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
+  static_volume:
+  media_volume:
+  email_volume:

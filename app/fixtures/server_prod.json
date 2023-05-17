@@ -4,9 +4,9 @@
     "pk": 1,
     "fields": {
         "name": "THIS Comparative Pathology Workbench",
-        "url_server": "localhost/sca_data",
+        "url_server": "localhost:1337/media",
         "uid": "",
-        "pwd": "",
+        "pwd": "Vc9Am+xyFjyfH75VraC7h0JzQi2c3PbUh2aYaQZfnZ0=",
         "type": 4,
         "owner": 1,
         "accessible": false
@@ -17,9 +17,9 @@
     "pk": 2,
     "fields": {
         "name": "Your WordPress Images",
-        "url_server": "localhost/my-wordpress",
+        "url_server": "192.168.0.10:80/my-wordpress",
         "uid": "",
-        "pwd": "",
+        "pwd": "MkV5eGlk04ee3bi7n7CHstgu1uVUTK0dzPzmorqk4tI=",
         "type": 1,
         "owner": 1,
         "accessible": false
@@ -34,6 +34,19 @@
         "uid": "",
         "pwd": "",
         "type": 2,
+        "owner": 1,
+        "accessible": false
+    }
+},
+{
+    "model": "matrices.server",
+    "pk": 4,
+    "fields": {
+        "name": "EBI Single Cell Atlas",
+        "url_server": "www.ebi.ac.uk/gxa/sc",
+        "uid": "",
+        "pwd": "ovYMedWzVsmus8lWRCxKSb+ZM730mJ2WdpJ3QutbSss=",
+        "type": 3,
         "owner": 1,
         "accessible": false
     }

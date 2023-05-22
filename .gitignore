@@ -1,5 +1,4 @@
 # mwicks23 gitignore customisations
-*.sql
 *.lock
 logfile
 

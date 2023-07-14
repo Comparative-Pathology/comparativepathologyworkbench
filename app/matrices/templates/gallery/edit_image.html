@@ -174,7 +174,7 @@ The show image template
     	<tr>
         	<td>Image:</td>
             <td>
-				<a href="{{ image.viewer_url  }}" target="_blank"><img style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
+				<a href="{{ image.viewer_url  }}" target="_blank"><img style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ local_image.birdseye_url }}" ></a>
 			</td>
 		</tr>
     	<tr>
@@ -236,47 +236,6 @@ The show image template
 	       	<td>&nbsp;</td>
 		    <td>&nbsp;</td>
 		</tr>
-		<tr>
-	       	<td>&nbsp;</td>
-		    <td>
-
-			{% if image_flag %}
-
-				<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id shape.id add_from 0 %}" title="Add ROI to Image Collection" onclick="return confirm('Are you sure you want to ADD this ROI to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
-
-	        {% else %}
-
-				<div class="panel-alert">
-					<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
-				</div>
-
-	        {% endif %}
-
-		    </td>
-		</tr>
-	    <tr>
-    		<td>&nbsp;</td>
-		    <td>
-
-		    {% if image_flag %}
-
-				<br />
-				<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
-
-	        {% else %}
-
-				<div class="panel-alert">
-					<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collection' %}">HERE</a></p>
-				</div>
-
-	        {% endif %}
-
-		    </td>
-		</tr>
-	    <tr>
-	       	<td>&nbsp;</td>
-		    <td>&nbsp;</td>
-		</tr>
 
 		<hr>
 
@@ -285,21 +244,6 @@ The show image template
     </table>
 
 	{% endfor %}
-
-	<br />
-	<br />
-
-	{% if image_flag %}
-
-	<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
-
-	{% else %}
-
-	<div class="panel-alert">
-        <p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
-    </div>
-
-	{% endif %}
 
 	<br />
 	<br />

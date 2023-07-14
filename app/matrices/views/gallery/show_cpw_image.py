@@ -100,8 +100,8 @@ def show_cpw_image(request, server_id, image_id):
 
             chart = ({
                 'chart_id': image_id,
-                'viewer_url': image_url,
-                'birdseye_url': viewer_url,
+                'viewer_url': viewer_url,
+                'birdseye_url': birdseye_url,
             })
 
 

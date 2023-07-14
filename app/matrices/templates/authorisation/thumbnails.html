@@ -1,5 +1,5 @@
 <!--
-\file         collectivization.html
+\file         thumbnails.html
 \author       Mike Wicks
 \date         March 2021
 \version      $Id$
@@ -23,7 +23,7 @@ License along with this program; if not, write to the Free
 Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA  02110-1301, USA.
 \brief
-The collectivization template
+The thumbnails template
 -->
 
 {% extends 'includes/base.html' %}
@@ -37,7 +37,7 @@ The collectivization template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'execute_command' %}">Execute Command</a></li>
-			<li>Create Default Collections</li>
+			<li>Generate Thumbnails</li>
 
 {% endblock %}
 
@@ -56,11 +56,11 @@ The collectivization template
 	<!-- Tab links -->
 	<div class="tab">
 		<button class="tablinks"><a href="{% url 'execute_command' %}">Execute Command</a></button>
-		<button class="tablinks active"><a href="{% url 'collectivization' %}">Setup Default Collections</a></button>
+		<button class="tablinks"><a href="{% url 'collectivization' %}">Setup Default Collections</a></button>
 		<button class="tablinks"><a href="{% url 'renaming' %}">Rename Images</a></button>
 		<button class="tablinks"><a href="{% url 'mailer' %}">Send Test Email</a></button>
 		<button class="tablinks"><a href="{% url 'charttidyup' %}">Clean Up Charts</a></button>
-		<button class="tablinks"><a href="{% url 'thumbnails' %}">Generate Thumbnails</a></button>
+		<button class="tablinks active"><a href="{% url 'thumbnails' %}">Generate Thumbnails</a></button>
 	</div>
 
 </div><!-- End of page-sidebar -->
@@ -68,9 +68,9 @@ The collectivization template
 <!-- Page Content -->
 <div class="page-content">
 
-	<h1>Create Default Collections</h1>
+	<h1>Generate Thumbnails</h1>
 
-	<p>Create Default Collections for ALL Users</p>
+	<p>Generate Thumbnails for OMERO Images</p>
 
 	<hr>
 

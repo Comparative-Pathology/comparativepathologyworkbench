@@ -46,8 +46,6 @@ from decouple import config
 
 from matrices.routines import AESCipher
 
-from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
-
 from matrices.models import Type
 
 CMD_API_WORDPRESS_IMAGE = 'WordpressImage'

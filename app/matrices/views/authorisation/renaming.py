@@ -32,7 +32,7 @@ from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
 
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 
 from matrices.models import Image
 from matrices.models import Server

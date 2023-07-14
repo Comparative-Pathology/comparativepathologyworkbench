@@ -28,9 +28,12 @@
 ###
 from __future__ import unicode_literals
 
+
 import base64, hashlib
+import subprocess
 
 from django.apps import apps
+from django.conf import settings
 from django.db.models import Q
 
 from os import urandom
@@ -71,6 +74,24 @@ def collection_delete_consequences(a_user, a_collection):
             if not exists_image_in_cells(image):
 
                 Collection.unassign_image(image, a_collection)
+
+                if image.server.is_ebi_sca() or image.server.is_cpw():
+
+                    image_path = str(settings.MEDIA_ROOT) + '/' + image.name
+
+                    rm_command = 'rm ' + str(image_path)
+                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+                if image.server.is_omero547() and not image.server.is_idr():
+
+                    image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+
+                    rm_command = 'rm ' + str(image_path)
+                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                 image.delete()
 

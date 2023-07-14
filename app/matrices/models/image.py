@@ -53,6 +53,7 @@ from matrices.routines.exists_parent_image_links_for_image import exists_parent_
 from matrices.routines.get_parent_image_links_for_image import get_parent_image_links_for_image
 from matrices.routines.exists_child_image_links_for_image import exists_child_image_links_for_image
 from matrices.routines.get_child_image_links_for_image import get_child_image_links_for_image
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 """
@@ -168,3 +169,14 @@ class Image(models.Model):
             boolReturn = True
 
         return boolReturn
+
+
+    def get_file_name_from_birdseye_url(self):
+
+        environment = get_primary_cpw_environment()
+
+        full_web_root = environment.get_full_web_root() + '/'
+        web_root_len = len(full_web_root)
+        local_image_name = self.birdseye_url[web_root_len:]
+
+        return local_image_name

@@ -35,17 +35,24 @@ import time
 
 from datetime import datetime
 
+from omero.gateway import BlitzGateway
+from io import BytesIO
+from PIL import Image as ImageOME
+
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
 
+from decouple import config
+
+from matrices.routines.aescipher import AESCipher
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.get_image_count_for_image import get_image_count_for_image
 from matrices.routines.exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi
 from matrices.routines.get_images_for_id_server_owner_roi import get_images_for_id_server_owner_roi
 from matrices.routines.get_an_ebi_sca_experiment_id_from_chart_id import get_an_ebi_sca_experiment_id_from_chart_id
 from matrices.routines.get_an_ebi_sca_parameters_from_chart_id import get_an_ebi_sca_parameters_from_chart_id
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 #
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
@@ -55,6 +62,8 @@ def add_image_to_collection(credential, server, image_id, roi_id):
     Image = apps.get_model('matrices', 'Image')
     Collection = apps.get_model('matrices', 'Collection')
     Document = apps.get_model('matrices', 'Document')
+
+    environment  = get_primary_cpw_environment()
 
     user = User.objects.get(username=credential.username)
 
@@ -137,8 +146,44 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         full_image_name = group_name + "/" + project_name + "/" + dataset_name + "/" + image_name
 
         image_viewer_url = json_image['viewer_url']
-        image_birdseye_url = json_image['birdseye_url']
+        image_birdseye_url = ''
 
+        if server.is_idr():
+
+            image_birdseye_url = json_image['birdseye_url']
+
+        else:
+
+            password = ''
+
+            conn = None
+
+            cipher = AESCipher(config('CPW_CIPHER_STRING'))
+            byte_password = cipher.decrypt(server.pwd)
+            password = byte_password.decode('utf-8')
+
+            conn = BlitzGateway(server.uid, password, host=server.url_server, port=4064, secure=True)
+            conn.connect()
+
+            image_ome = conn.getObject("Image", str(image_id))
+
+            if image_ome != None:
+
+                img_data = image_ome.getThumbnail(300)
+                rendered_thumb = ImageOME.open(BytesIO(img_data))
+
+                now = datetime.now()
+                date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
+
+                new_chart_id = date_time + '_' + str(image_id) + '_' + 'thumbnail.jpg'
+
+                image_birdseye_url = 'http://' + environment.web_root + '/' + new_chart_id
+
+                new_full_path = str(settings.MEDIA_ROOT) + '/' + new_chart_id
+
+                rendered_thumb.save(new_full_path)
+            
+            conn.close()
 
     if server.is_wordpress():
 

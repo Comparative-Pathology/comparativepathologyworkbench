@@ -141,6 +141,15 @@ def delete_collection_image(request, collection_id, image_id):
 
                     process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
+                if image.server.is_omero547() and not image.server.is_idr():
+
+                    image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+
+                    rm_command = 'rm ' + str(image_path)
+                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
                 image.delete()
 
             else:

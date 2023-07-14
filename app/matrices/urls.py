@@ -129,6 +129,7 @@ urlpatterns = [
 	path('charttidyup/', matrices_views.charttidyup, name='charttidyup'),
 	path('renaming/', matrices_views.renaming, name='renaming'),
 	path('mailer/', matrices_views.mailer, name='mailer'),
+	path('thumbnails/', matrices_views.thumbnails, name='thumbnails'),
 	path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'),
 	path('view_constrained_user/<int:user_id>/', matrices_views.view_constrained_user, name='view_constrained_user'),
 	path('edit_user/<int:user_id>/', matrices_views.edit_user, name='edit_user'),

@@ -74,14 +74,6 @@ def edit_image(request, image_id):
 
         data.update({ 'local_image': local_image })
 
-        image_flag = False
-
-        if exists_active_collection_for_user(request.user):
-
-            image_flag = True
-
-        data.update({ 'image_flag': image_flag })
-
         if server.is_wordpress():
 
             server_data = server.get_wordpress_image_json(credential, image_id)

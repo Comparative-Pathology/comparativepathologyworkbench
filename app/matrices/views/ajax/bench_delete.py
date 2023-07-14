@@ -30,6 +30,9 @@
 ###
 from __future__ import unicode_literals
 
+import subprocess
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -150,6 +153,24 @@ def bench_delete(request, bench_id):
                     oldCell.image = None
 
                     oldCell.save()
+
+                    if image.server.is_ebi_sca() or image.server.is_cpw():
+
+                        image_path = str(settings.MEDIA_ROOT) + '/' + image.name
+
+                        rm_command = 'rm ' + str(image_path)
+                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+                    if image.server.is_omero547() and not image.server.is_idr():
+
+                        image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+
+                        rm_command = 'rm ' + str(image_path)
+                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                     image.delete()
 

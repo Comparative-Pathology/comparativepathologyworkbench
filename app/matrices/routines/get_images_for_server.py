@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         exists_image_on_webserver.py
+# \file         get_images_for_server.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,7 +24,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Is there an Image for a particular Server?
+# Get Active Images for a particular User
 ###
 from __future__ import unicode_literals
 
@@ -34,34 +34,12 @@ from os import urandom
 
 from django.apps import apps
 
-from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 """
-    Is there an Image for a particular Image on the Webserver?
+    Get Active Images for a particular Server
 """
-def exists_image_on_webserver(an_image_name):
+def get_images_for_server(a_server):
 
     Image = apps.get_model('matrices', 'Image')
 
-    environment  = get_primary_cpw_environment()
-
-    a_viewer_url = environment.get_full_web_root() + '/' + an_image_name
-
-    returnBool = False
-
-    viewerUrlBool = False
-    birdseyeUrlBool = False
-
-    if Image.objects.filter(viewer_url=a_viewer_url).exists():
-
-        viewerUrlBool = True
-
-    if Image.objects.filter(birdseye_url=a_viewer_url).exists():
-
-        birdseyeUrlBool = True
-    
-    if viewerUrlBool == True or birdseyeUrlBool == True:
-
-        returnBool = True
-
-    return returnBool
+    return Image.objects.filter(server=a_server)

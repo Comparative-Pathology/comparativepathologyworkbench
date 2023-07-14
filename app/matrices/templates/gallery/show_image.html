@@ -131,7 +131,12 @@ The show image template
     	<tr>
         	<td>Image:</td>
             <td>
+	
+	{% if local_image %}
+				<a href="{{ image.viewer_url  }}" target="_blank"><img style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ local_image.birdseye_url }}" ></a>
+	{% else %}
 				<a href="{{ image.viewer_url  }}" target="_blank"><img style="height:256px; float: left" alt="{{ image.name }}" title="{{ image.name }}" src="{{ image.birdseye_url }}" ></a>
+	{% endif %}
 			</td>
 		</tr>
     	<tr>

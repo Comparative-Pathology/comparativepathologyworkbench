@@ -41,6 +41,8 @@ from matrices.models import Server
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
+from matrices.routines.exists_image_for_id_server_roi import exists_image_for_id_server_roi
+from matrices.routines.get_images_for_id_server_roi import get_images_for_id_server_roi
 
 
 #
@@ -59,6 +61,8 @@ def show_image(request, server_id, image_id):
 
     data = get_header_data(request.user)
 
+    local_image = None
+
     if credential_exists(request.user):
 
         image_flag = False
@@ -73,9 +77,17 @@ def show_image(request, server_id, image_id):
 
         if server.is_omero547():
 
+            if exists_image_for_id_server_roi(image_id, server, 0):
+
+                existing_image_list = get_images_for_id_server_roi(image_id, server, 0)
+
+                local_image = existing_image_list[0]
+            
             server_data = server.get_imaging_server_image_json(image_id)
 
             data.update(server_data)
+
+            data.update({ 'local_image': local_image })
 
             return render(request, 'gallery/show_image.html', data)
 

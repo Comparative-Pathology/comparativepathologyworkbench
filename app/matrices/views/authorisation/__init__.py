@@ -49,6 +49,7 @@ from .edit_constrained_user import edit_constrained_user
 from .mailer import mailer
 from .new_blog_credential import new_blog_credential
 from .renaming import renaming
+from .thumbnails import thumbnails
 from .view_blog_credential import view_blog_credential
 from .view_user import view_user
 from .view_constrained_user import view_constrained_user

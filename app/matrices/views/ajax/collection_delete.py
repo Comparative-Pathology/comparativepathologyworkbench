@@ -49,7 +49,7 @@ from matrices.routines import get_active_collection_for_user
 @login_required()
 def collection_delete(request, collection_id):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

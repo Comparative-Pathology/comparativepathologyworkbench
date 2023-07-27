@@ -51,7 +51,7 @@ from matrices.routines import credential_exists
 @login_required
 def activate_in_collection(request, collection_id):
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

@@ -65,7 +65,7 @@ def collection_authorisation_create(request, collection_id=None):
 
         raise PermissionDenied
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

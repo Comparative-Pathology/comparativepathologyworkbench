@@ -1,0 +1,75 @@
+conda config --set auto_activate_base false
+
+conda create -n cpw_env_python37_django3 python=3.7
+
+conda deactivate
+
+conda activate cpw_env_python37_django3
+ 
+python -V
+ 
+pip install asgiref==3.4.1
+pip install certifi==2023.5.7
+pip install chardet==5.0.0
+pip install charset-normalizer==2.0.12
+pip install coreapi==2.3.3
+pip install coreschema==0.0.4
+pip install defusedxml==0.7.1
+pip install dj-database-url==2.0.0
+pip install django-ckeditor==6.3.2
+pip install django-classy-tags==2.0.0
+pip install django-cors-headers==3.10.1
+pip install django-filter==21.1
+pip install django-frontend-forms==0.2.20
+pip install django-inlineedit==1.2.2
+pip install django-js-asset==2.0.0
+pip install django-rest-swagger==2.2.0
+pip install django-settings-export==1.2.1
+pip install django-sortable-listview==0.43
+pip install django-taggit-templatetags2==1.6.1
+pip install django-taggit==4.0.0
+pip install django-widget-tweaks==1.4.11
+pip install django==3.2.19
+
+(pip install django==3.2.19 => for Postgresql 11)
+
+pip install djangorestframework==3.14.0
+pip install gunicorn==20.1.0
+pip install httpie==2.6.0
+pip install idna==3.4
+pip install importlib-metadata==4.8.3
+pip install itypes==1.2.0
+pip install jinja2==3.0.3
+pip install markdown==3.3.7
+pip install markupsafe==2.0.1
+pip install mypy-extensions==1.0.0
+pip install openapi-codec==1.3.2
+pip install pipfile==0.0.2
+pip install psycopg2-binary==2.9.6
+pip install psycopg2==2.9.6
+pip install pycryptodome==3.17
+pip install pygments==2.14.0
+pip install pysocks==1.7.1
+pip install python-dateutil==2.8.2
+pip install python-decouple==3.8
+pip install pytz==2023.3
+pip install pyyaml==6.0
+pip install requests-toolbelt==1.0.0
+pip install requests==2.27.1
+pip install simplejson==3.19.1
+pip install six==1.16.0
+pip install sqlparse==0.4.4
+pip install toml==0.10.2
+pip install typing-extensions==4.1.1
+pip install upgrade-requirements==1.7.0
+pip install uritemplate==4.1.1
+pip install urllib3==1.26.15
+pip install whitenoise==5.3.0
+pip install yapps2==2.2.0
+pip install zipp==3.6.0
+pip install uwsgi==2.0.21
+
+conda install -c conda-forge omero-py
+
+
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl

@@ -54,7 +54,7 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 @login_required()
 def overwrite_cell(request):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

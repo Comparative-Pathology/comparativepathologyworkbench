@@ -175,8 +175,6 @@ class Environment(models.Model):
 
         get_post_url = blogGetPost.protocol.name + '://' + self.wordpress_web_root + '/' + blogGetPost.application + '/' + blogGetPost.preamble + '/' + post_id
 
-        print("get_post_url : " +str(get_post_url))
-        
         try:
             response = requests.get(get_post_url)
 
@@ -259,8 +257,6 @@ class Environment(models.Model):
         blogGetPostComments = Blog.objects.get(name=CMD_BLOG_GET_POST_COMMENTS)
 
         get_post_comments_url = blogGetPostComments.protocol.name + '://' + self.wordpress_web_root + '/' + blogGetPostComments.application + '/' + blogGetPostComments.preamble + post_id
-
-        print("get_post_comments_url : " +str(get_post_comments_url))
 
         comment_list = list()
 

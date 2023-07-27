@@ -47,7 +47,7 @@ from matrices.routines import get_header_data
 @login_required
 def view_image_link(request, image_link_id):
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

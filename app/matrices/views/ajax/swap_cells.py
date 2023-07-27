@@ -50,7 +50,7 @@ from matrices.routines import exists_update_for_bench_and_user
 @login_required()
 def swap_cells(request):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

@@ -56,7 +56,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required()
 def import_image(request):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

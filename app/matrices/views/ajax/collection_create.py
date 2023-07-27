@@ -54,7 +54,7 @@ from matrices.routines import get_primary_cpw_environment
 @login_required()
 def collection_create(request, collection_id=None):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

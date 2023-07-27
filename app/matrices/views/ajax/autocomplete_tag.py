@@ -52,7 +52,7 @@ def autocompleteTag(request, image_id):
 
     local_image = get_object_or_404(Image, pk=image_id)
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         if request.method == 'GET':
 

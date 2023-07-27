@@ -58,7 +58,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required()
 def bench_create(request):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

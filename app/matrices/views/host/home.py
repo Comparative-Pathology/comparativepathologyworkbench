@@ -42,7 +42,7 @@ from matrices.routines import get_header_data
 #
 def home(request):
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

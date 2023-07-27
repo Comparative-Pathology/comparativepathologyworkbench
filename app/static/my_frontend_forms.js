@@ -230,7 +230,7 @@ var Dialog = function () {
                 cache: false,
                 crossDomain: true,
                 headers: {
-                    // make sure request.is_ajax() return True on the server
+                    // make sure request.headers.get('x-requested-with') == 'XMLHttpRequest': return True on the server
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).done(function (data, textStatus, jqXHR) {
@@ -379,7 +379,7 @@ var Dialog = function () {
                     cache: false,
                     crossDomain: true,
                     headers: {
-                        // make sure request.is_ajax() return True on the server
+                        // make sure request.headers.get('x-requested-with') == 'XMLHttpRequest': return True on the server
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 }).done(function (xhr, textStatus, jqXHR) {
@@ -746,7 +746,7 @@ window.FrontendForms = function () {
                         dataType: 'json',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
-                            'X-Requested-With': 'XMLHttpRequest' // make sure request.is_ajax() return True on the server
+                            'X-Requested-With': 'XMLHttpRequest' // make sure request.headers.get('x-requested-with') == 'XMLHttpRequest': return True on the server
                         }
                     });
                 }

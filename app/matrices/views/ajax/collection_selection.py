@@ -58,7 +58,7 @@ from matrices.routines import simulate_network_latency
 @login_required()
 def collection_selection(request, user_id):
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

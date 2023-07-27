@@ -55,7 +55,7 @@ from matrices.routines import get_images_for_collection
 @login_required
 def view_matrix(request, matrix_id):
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

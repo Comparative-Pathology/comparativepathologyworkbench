@@ -53,7 +53,7 @@ def bench_authorisation_delete(request, authorisation_id):
 
         raise PermissionDenied
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

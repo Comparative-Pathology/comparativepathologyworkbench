@@ -60,7 +60,7 @@ def server_create_update(request, server_id=None):
 
         raise PermissionDenied
 
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

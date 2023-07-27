@@ -68,7 +68,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def amend_cell(request, matrix_id, cell_id):
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
         raise PermissionDenied
 

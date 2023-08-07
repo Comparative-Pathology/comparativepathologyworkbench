@@ -36,6 +36,7 @@ from .collectionauthorityform import CollectionAuthorityForm
 from .collectionform import CollectionForm
 from .collectioncreateform import CollectionCreateForm
 from .collectionsummarysearchform import CollectionSummarySearchForm
+from .collectionactivesummaryselectionform import CollectionActiveSummarySelectionForm
 from .collectionsummaryselectionform import CollectionSummarySelectionForm
 from .commandform import CommandForm
 from .commentform import CommentForm

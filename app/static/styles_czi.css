@@ -553,6 +553,19 @@ ul.breadcrumb li+li:before {
   box-shadow: #B3B3B3 2px 2px 2px;
 }
 
+.collection-menu {
+  width: 100px;
+  height: 45px;
+  padding: 5px 5px 5px 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  background-color: #FF8C69;
+  -webkit-box-shadow: #B3B3B3 2px 2px 2px;
+  -moz-box-shadow: #B3B3B3 2px 2px 2px;
+  box-shadow: #B3B3B3 2px 2px 2px;
+}
+
 .image-holder {
   width: 90px;
   height: 90px;

@@ -71,7 +71,54 @@ The show image template
 <div class="page-body">
 
 <!-- Page Side Bar -->
+<!-- Page Side Bar -->
 <div class="page-sidebar">
+	<div class="collection-container">
+  
+{% if image_flag %}
+
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<a href="{% url 'list_images' user.profile.active_collection.id %}">
+			  <button class="button button-view">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-eye"></i>
+				  <span class="tooltipcolumntext"> View Active Image Collection</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+		
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<a href="#" onclick="open_active_collection_selection_dialog(event, 'Select Active Collection ...'); return false;">
+			  <button class="button button-add">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-bell"></i>
+				  <span class="tooltipcolumntext"> Select Active Collection</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+	
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<a href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')">
+			  <button class="button button-add">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-plus"></i>
+				  <span class="tooltipcolumntext"> Add Image to Active Image Collection</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+
+{% endif %}
+
+	</div>
 </div><!-- End of page-sidebar -->
 
 <!-- Page Content -->
@@ -160,26 +207,6 @@ The show image template
 		    <td>{{ image.sizeZ }} x {{ image.sizeT }}</td>
 	    </tr>
     </table>
-
-	<br />
-	<br />
-
-	{% if image_flag %}
-
-	<a class="dropdown-item" href="{% url 'webgallery_add_image' server.id image.id 0 add_from 0 %}" title="Add Image to Image Collection" onclick="return confirm('Are you sure you want to ADD this Image to Your ACTIVE Image Collection?')"><button class="button button-add"><i class="fas fa-plus"></i></button></a>
-
-	<br />
-	<br />
-
-	<a class="dropdown-item" href="{% url 'list_images' user.profile.active_collection.id %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
-
-	{% else %}
-
-	<div class="panel-alert">
-		<p>You have NO Active Image Collections! Please create a Collection <a href="{% url 'list_collections' %}">HERE</a></p>
-	</div>
-
-	{% endif %}
 
 	<br />
 	<br />
@@ -274,4 +301,52 @@ The show image template
 
 </div><!-- End of page-body -->
 
+{% block extrajs %}
+
+<script type="text/javascript">
+
+	// MAINLINE
+
+	function open_active_collection_selection_dialog(event, title) {
+		event.preventDefault();
+
+		var url = "{% url 'active_collection_selection' user.id %}";
+
+		dialog_edit.options.url = url;
+	  	dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  	dialog_edit.open(event);
+	}
+	
+	
+	$(document).ready(function () {
+	  dialog_edit = new Dialog({
+		dialog_selector: '#dialog_generic',
+		html: '<h1>Loading ...</h1>',
+		width: '600px',
+		min_height: '200px',
+		button_save_initially_hidden: true,
+		enable_trace: true,
+		callback: function (event_name, dialog, params) {
+		  switch (event_name) {
+			case "submitting":
+			  FrontendForms.overlay_show('.dialog-body');
+			  break;
+			case "loaded":
+			  FrontendForms.overlay_hide('.dialog-body');
+			  break;
+			case "submitted":
+			  // Reload page, with last selection enhanced
+			  // var object_id = dialog.element.find('input[name=object_id]').val();
+			  var url = new URL(document.location.href);
+			  //url.searchParams.set('selected_record', object_id);
+			  FrontendForms.gotourl(url, show_layer=true);
+			  break;
+		  }
+		}
+	  });
+	});
+
+</script>
+
+{% endblock extrajs %}
 {% endblock %}

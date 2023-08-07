@@ -72,6 +72,106 @@ The show dataset template
 
 <!-- Page Side Bar -->
 <div class="page-sidebar">
+	<div class="collection-container">
+  
+	  <div class="collection-item">
+		  <div class="collection-menu">
+			<a href="{% url 'webgallery_show_dataset' server.id dataset.id %}">
+			  <button class="button button-view">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-filter-circle-xmark"></i>
+				  <span class="tooltipcolumntext"> Unfiltered Dataset</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+	
+{% if image_flag %}
+
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<a href="{% url 'list_images' user.profile.active_collection.id %}">
+			  <button class="button button-view">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-eye"></i>
+				  <span class="tooltipcolumntext"> View Active Image Collection ({{user.profile.active_collection.id|stringformat:"06d"}}, {{user.profile.active_collection.title}})</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+		
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<a href="#" onclick="open_active_collection_selection_dialog(event, 'Select Active Collection ...'); return false;">
+			  <button class="button button-add">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-bell"></i>
+				  <span class="tooltipcolumntext"> Select Active Collection</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+
+{% endif %}
+
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<button id="toggle" class="button button-delete">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-check"></i>
+				  <span class="tooltipcolumntext"> Toggle Checkboxes</span>
+				</div>
+			</button>
+		  </div>
+		</div>
+	
+		<div class="collection-item">
+		  <div class="collection-menu">
+			<a href="{% url 'webgallery_add_dataset_all_filtered_new_collection' server.id dataset.id %}" onclick="return confirm('Are you sure you want to ADD ALL Filtered Images to a NEW ACTIVE Image Collection?')">
+			  <button class="button button-delete">
+				  <div class="tooltipcolumn">
+				  <i class="fa-solid fa-folder-plus"></i>
+				  <span class="tooltipcolumntext"> Add ALL Images to NEW Image Collection</span>
+				</div>
+			  </button>
+			</a>
+		  </div>
+		</div>
+
+{% if image_flag %}
+
+		<div class="collection-item">
+			<div class="collection-menu">
+			  <a href="#" onclick="add_selected_images(event); return false;">
+				<button id="submitDataset" class="button button-edit">
+					<div class="tooltipcolumn">
+					<i class="fa-solid fa-cart-plus"></i>
+					<span class="tooltipcolumntext"> Add Selected Images to Active Image Collection ({{user.profile.active_collection.id|stringformat:"06d"}}, {{user.profile.active_collection.title}})</span>
+				  </div>
+				</button>
+			  </a>
+			</div>
+		  </div>
+	
+		  <div class="collection-item">
+			<div class="collection-menu">
+			  <a href="{% url 'webgallery_add_dataset_all_filtered' server.id dataset.id %}" onclick="return confirm('Are you sure you want to ADD ALL Filtered Images to Your ACTIVE Image Collection?')">
+				<button class="button button-add">
+					<div class="tooltipcolumn">
+					<i class="fa-solid fa-plus"></i>
+					<span class="tooltipcolumntext"> Add ALL Filtered Images to Active Image Collection ({{user.profile.active_collection.id|stringformat:"06d"}}, {{user.profile.active_collection.title}})</span>
+				  </div>
+				</button>
+			  </a>
+			</div>
+		  </div>
+
+{% endif %}
+
+	</div>
 </div><!-- End of page-sidebar -->
 
 <!-- Page Content -->
@@ -114,17 +214,17 @@ The show dataset template
 
 	<h1>{{ dataset.name }}</h1>
 
-	<br />
-
 {% endif %}
+
+	<br />
 
 {% if images %}
 
-	<p><a href="{% url 'webgallery_show_dataset' server.id dataset.id %}"><button class="button button-view"><i class="fa-solid fa-filter-circle-xmark"></i></button></a> Dataset contains {{ dataset.imageCount }} images;  (Filtered) Dataset shows {{ filteredimagecount }} images</p>
+	<p>Dataset contains {{ dataset.imageCount }} images;  (Filtered) Dataset shows {{ filteredimagecount }} images</p>
+
+<form id="datasetForm" action="{% url 'webgallery_add_dataset' server.id dataset.id %}" method="post">
 
 	<hr>
-
-<form action="{% url 'webgallery_add_dataset' server.id dataset.id %}" method="post">
 
 	{% csrf_token %}
 
@@ -154,7 +254,7 @@ The show dataset template
 
 				<br />
 
-				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name|truncatechars:20 }}" title="{{ image.name|truncatechars:20 }}" src="{{ image.thumbnail_url  }}" ></a>
+				<a href="{% url 'webgallery_show_image' server.id image.id %}"><img alt="{{ image.name|truncatechars:20 }}" title="{{ image.name|truncatechars:20 }}" src="{{ image.thumbnail_url  }}" width="150" ></a>
 
 
 			</div>
@@ -165,17 +265,7 @@ The show dataset template
 
 	</ul>
 
-	<button type="submit" class="button button-add" title="Add Selected Images to Image Collection"><i class="fas fa-plus"></i></button>
-
 </form>
-
-<br />
-<a href="{% url 'list_images' user.profile.active_collection.id %}" title="View Active Image Collection"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
-
-<br />
-<br />
-<button id="toggle" class="button button-delete" title="Toggle Checkboxes"><i class="fas fa-check"></i></button>
-
 
 {% endif %}
 
@@ -183,16 +273,74 @@ The show dataset template
 
 </div><!-- End of page-body -->
 
+{% block extrajs %}
+
 <script type="text/javascript">
+
+	// MAINLINE
+	var datasetForm = document.getElementById("datasetForm");
+
+	datasetForm.addEventListener("submit", (e) => {
+  		e.preventDefault();
+
+  	// handle submit
+	});
 
 	document.getElementById('toggle').onclick = function() {
 	    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-	    for (var checkbox of checkboxes) {
+
+		for (var checkbox of checkboxes) {
 	        checkbox.checked = !checkbox.checked;
 	    }
 	}
 
+	function add_selected_images(event) {
+
+		if (confirm('Are you sure you want to ADD the Selected Images to Your ACTIVE Image Collection?')) {
+
+			document.getElementById('datasetForm').submit();
+		}
+	}
+
+	function open_active_collection_selection_dialog(event, title) {
+		event.preventDefault();
+		//var url = $(event.target).attr('href');
+        var url = "{% url 'active_collection_selection' user.id %}";
+	  	dialog_edit.options.url = url;
+	  	dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  	dialog_edit.open(event);
+	}
+	
+	$(document).ready(function () {
+	  dialog_edit = new Dialog({
+		dialog_selector: '#dialog_generic',
+		html: '<h1>Loading ...</h1>',
+		width: '600px',
+		min_height: '200px',
+		button_save_initially_hidden: true,
+		enable_trace: true,
+		callback: function (event_name, dialog, params) {
+		  switch (event_name) {
+			case "submitting":
+			  FrontendForms.overlay_show('.dialog-body');
+			  break;
+			case "loaded":
+			  FrontendForms.overlay_hide('.dialog-body');
+			  break;
+			case "submitted":
+			  // Reload page, with last selection enhanced
+			  // var object_id = dialog.element.find('input[name=object_id]').val();
+			  var url = new URL(document.location.href);
+			  //url.searchParams.set('selected_record', object_id);
+			  FrontendForms.gotourl(url, show_layer=true);
+			  break;
+		  }
+		}
+	  });
+	});
+
 </script>
 
+{% endblock extrajs %}
 
 {% endblock %}

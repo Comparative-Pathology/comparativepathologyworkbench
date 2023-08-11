@@ -160,15 +160,11 @@ The amend cell template
 				  <div id="image_parent">
 			  	  	<div id="image_parent" ondrop="drop(event)" ondragover="allowDrop(event)">
 			    				{% csrf_token %}
-			  	  	  <div class="cell" id="image_parent" style="width: 384px; height: 384px;">
-			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 350px; height: 350px;">
-{% if image_parent == None %}
-			  	  		  <a id="image_parent" href="https://www.ed.ac.uk/comparative-pathology">
-			  	  		    <img id="image_parent" style="padding: 60px 0px 0px 0px; width: 350px;" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" src="/static/ccp-logo.png">
-			  	  		  </a>
-{% else %}
+			  	  	  <div class="cell" id="image_parent" style="width: 284px; height: 284px;">
+			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 250px; height: 250px;">
+{% if image_parent != None %}
 			  	  		  <a id="image_parent" href="{{ image_parent.viewer_url }}" target="_blank">
-			  	  		    <img id="image_parent" style="width: 350px; height: 350px;" alt="{{ image_parent.name }}" title="{{ image_parent.name }}" src="{{ image_parent.birdseye_url }}">
+			  	  		    <img id="image_parent" style="width: 250px; height: 250px;" alt="{{ image_parent.name }}" title="{{ image_parent.name }}" src="{{ image_parent.birdseye_url }}">
 			  	  		  </a>
 {% endif %}
 			  	  		</div>
@@ -192,15 +188,11 @@ The amend cell template
 				  <div id="image_child">
 			  	  	<div id="image_child" ondrop="drop(event)" ondragover="allowDrop(event)">
 			    				{% csrf_token %}
-			  	  	  <div class="cell" id="image_child" style="width: 384px; height: 384px;">
-			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 350px; height: 350px;">
-{% if image_child == None %}
-			  	  		  <a id="image_parent" href="https://www.ed.ac.uk/comparative-pathology">
-			  	  		    <img id="image_child" style="padding: 60px 0px 0px 0px; width: 350px;" alt="The Centre for Comparative Pathology" title="The Centre for Comparative Pathology" src="/static/ccp-logo.png">
-			  	  		  </a>
-{% else %}
+			  	  	  <div class="cell" id="image_child" style="width: 284px; height: 284px;">
+			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 250px; height: 250px;">
+{% if image_child != None %}
 			  	  		  <a id="image_child" href="{{ image_child.viewer_url }}" target="_blank">
-			  	  		    <img id="image_child" style="width: 350px; height: 350px;" alt="{{ image_child.name }}" title="{{ image_child.name }}" src="{{ image_child.birdseye_url }}">
+			  	  		    <img id="image_child" style="width: 250px; height: 250px;" alt="{{ image_child.name }}" title="{{ image_child.name }}" src="{{ image_child.birdseye_url }}">
 			  	  		  </a>
 {% endif %}
 			  	  		</div>

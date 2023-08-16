@@ -53,6 +53,9 @@ The view matrix (bench) template
 			<li>
 				<a href="{% url 'aggregated_matrix_blog' matrix.id %}">
 				  <div class="tooltip" style="font-size: 12px; width:150px;">
+	{% if environment.is_development %}
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #CA03FC; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
+	{% endif %}
 	{% if environment.is_czi %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
 	{% endif %}
@@ -70,6 +73,18 @@ The view matrix (bench) template
 			</li>
 
 			
+	{% if environment.is_development %}
+			<li style="float: right;">
+				<a href="{% url 'matrix' next_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #CA03FC; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
+				</a>
+			</li>
+			<li style="float: right;">
+				<a href="{% url 'matrix' previous_bench %}">
+					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #CA03FC; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;"><i class="fa fa-arrow-left"></i> Previous</button>
+				</a>
+			</li>
+    {% endif %}
 	{% if environment.is_czi %}
 			<li style="float: right;">
 				<a href="{% url 'matrix' next_bench %}">

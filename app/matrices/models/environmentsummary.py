@@ -50,6 +50,7 @@ from matrices.models import Protocol
 ENVIRONMENT_CZI = 'CZI'
 ENVIRONMENT_CANADA = 'CANADA'
 ENVIRONMENT_COELIAC = 'COELIAC'
+ENVIRONMENT_DEVELOPMENT = 'DEVELOPMENT'
 
 """
     The Environment Model
@@ -84,6 +85,12 @@ class EnvironmentSummary(models.Model):
 
     def is_coeliac(self):
         if self.environment_location == ENVIRONMENT_COELIAC:
+            return True
+        else:
+            return False
+
+    def is_development(self):
+        if self.environment_location == ENVIRONMENT_DEVELOPMENT:
             return True
         else:
             return False

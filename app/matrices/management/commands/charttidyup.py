@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the Chart Tidy Up view routine
+# This file contains the Chart Tidy Up admin command
 #
 ###
 from __future__ import unicode_literals
@@ -33,16 +33,13 @@ from __future__ import unicode_literals
 import subprocess
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
+from django.core.management.base import BaseCommand
 
 from matrices.models import Image
 from matrices.models import Document
 from matrices.models import Artefact
 from matrices.models import Server
 
-from matrices.routines import get_header_data
 from matrices.routines import escape_string
 from matrices.routines import exists_artefact_in_table
 from matrices.routines import exists_image_in_table
@@ -50,18 +47,37 @@ from matrices.routines import exists_image_on_webserver
 from matrices.routines import get_images_for_server
 from matrices.routines import get_primary_cpw_environment
 
+
 #
-# SETUP DEFAULT COLLECTIONS VIEW
+# The Chart Tidy Up admin command
 #
-def charttidyup(request):
+class Command(BaseCommand):
+    help = "Tidy Up the Charts stored on the webserver"
 
-    environment  = get_primary_cpw_environment()
 
-    data = get_header_data(request.user)
+    def add_arguments(self, parser):
 
-    if request.user.is_superuser:
+        # Named (optional) arguments
+        parser.add_argument(
+            "--update",
+            action="store_true",
+            help="No update performed!",
+        )
 
-        out_message_list = list()
+
+    def handle(self, *args, **options):
+
+        update = False
+
+        if options["update"]:
+            
+            update = True
+            
+        out_message = "Update                                                                     : {}".format( update )
+        self.stdout.write(self.style.SUCCESS(out_message))
+
+        environment = get_primary_cpw_environment()
+        
         out_list_ebi = list()
         out_list_cpw = list()
         out_list_omero = list()
@@ -84,25 +100,25 @@ def charttidyup(request):
         #
         # BEFORE
         #
-        out_message = "Total Number of Documents in Database BEFORE Cleanup= {}".format( documentDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Documents in Database BEFORE Cleanup                       : {}".format( documentDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         Document.objects.all().delete()
 
         artefact_list = Artefact.objects.all()
         artefactDBTotal = len(artefact_list)
-        out_message = "Total Number of Artefacts (ZIPs etc) on Database BEFORE Cleanup = {}".format( artefactDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Artefacts (ZIPs etc) on Database BEFORE Cleanup            : {}".format( artefactDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_ebi = Image.objects.filter(server__type__name='EBI_SCA')
         imageEBIDBTotal = out_list_ebi.count()
-        out_message = "Total Number of EBI Charts (PNGs etc) in Database BEFORE Cleanup= {}".format( imageEBIDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of EBI Charts (PNGs etc) in Database BEFORE Cleanup           : {}".format( imageEBIDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_cpw = Image.objects.filter(server__type__name='CPW')
         imageCPWDBTotal = out_list_cpw.count()
-        out_message = "Total Number of CPW Charts (PNGs etc) in Database BEFORE Cleanup= {}".format( imageCPWDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of CPW Charts (PNGs etc) in Database BEFORE Cleanup           : {}".format( imageCPWDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         server_list = Server.objects.all()
 
@@ -114,9 +130,8 @@ def charttidyup(request):
 
                 imageOMERODBTotal = imageOMERODBTotal + out_list_omero.count()
 
-        out_message = "Total Number of OMERO Charts (PNGs etc) in Database BEFORE Cleanup = {}".format( imageOMERODBTotal )
-        out_message_list.append(out_message)
-
+        out_message = "Total Number of OMERO Charts (PNGs etc) in Database BEFORE Cleanup         : {}".format( imageOMERODBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         ls_command = 'ls ' + environment.document_root
         process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -125,8 +140,8 @@ def charttidyup(request):
         out_list_2 = out_list
 
         imageWebBeforeTotal = len(out_list)
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver BEFORE Cleanup = {}".format( imageWebBeforeTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver BEFORE Cleanup : {}".format( imageWebBeforeTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         #
         # CLEANUP
@@ -150,11 +165,13 @@ def charttidyup(request):
 
         aux_rm_list = list(set(rm_list))
 
-        out_message_list = out_message_list + aux_rm_list
-
         for rm_command in aux_rm_list:
 
-            process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            self.stdout.write(self.style.SUCCESS(rm_command))
+
+            if update:
+
+                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
         #
         # AFTER
@@ -166,34 +183,35 @@ def charttidyup(request):
 
         imageWebAfterTotal = len(out_list_3)
 
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) DELETED from Webserver = {}".format( imageDelTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) DELETED from Webserver      : {}".format( imageDelTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup = {}".format( imageWebAfterTotal )
-        out_message_list.append(out_message)
-
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup  : {}".format( imageWebAfterTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         documentDBTotal = Document.objects.count()
 
-        out_message = "Total Number of Documents in Database AFTER Cleanup= {}".format( documentDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Documents in Database AFTER Cleanup                        : {}".format( documentDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        Document.objects.all().delete()
+        if update:
+
+            Document.objects.all().delete()
 
         artefact_list = Artefact.objects.all()
         artefactDBTotal = len(artefact_list)
-        out_message = "Total Number of Artefacts (ZIPs etc) on Database AFTER Cleanup = {}".format( artefactDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Artefacts (ZIPs etc) on Database AFTER Cleanup             : {}".format( artefactDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_ebi = Image.objects.filter(server__type__name='EBI_SCA')
         imageEBIDBTotal = out_list_ebi.count()
-        out_message = "Total Number of EBI Charts (PNGs etc) in Database AFTER Cleanup= {}".format( imageEBIDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of EBI Charts (PNGs etc) in Database AFTER Cleanup            : {}".format( imageEBIDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_cpw = Image.objects.filter(server__type__name='CPW')
         imageCPWDBTotal = out_list_cpw.count()
-        out_message = "Total Number of CPW Charts (PNGs etc) in Database AFTER Cleanup= {}".format( imageCPWDBTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of CPW Charts (PNGs etc) in Database AFTER Cleanup            : {}".format( imageCPWDBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         imageOMERODBTotal = 0
         
@@ -207,9 +225,8 @@ def charttidyup(request):
 
                 imageOMERODBTotal = imageOMERODBTotal + out_list_omero.count()
 
-        out_message = "Total Number of OMERO Charts (PNGs etc) in Database AFTER Cleanup = {}".format( imageOMERODBTotal )
-        out_message_list.append(out_message)
-
+        out_message = "Total Number of OMERO Charts (PNGs etc) in Database AFTER Cleanup          : {}".format( imageOMERODBTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         ls_command = 'ls ' + environment.document_root
         process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -218,13 +235,6 @@ def charttidyup(request):
         out_list_2 = out_list
 
         imageWebBeforeTotal = len(out_list)
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup = {}".format( imageWebBeforeTotal )
-        out_message_list.append(out_message)
-        data.update({ 'out_message_list': out_message_list })
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup  : {}".format( imageWebBeforeTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-
-        return render(request, 'authorisation/charttidyup.html', data)
-
-    else:
-
-        return HttpResponseRedirect(reverse('home', args=()))

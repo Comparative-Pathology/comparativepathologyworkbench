@@ -64,8 +64,8 @@ class CollectionActiveSummarySelectionForm(forms.ModelForm):
 
             list_of_collection_ids.append(collection_summary.collection_id)
 
-        collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('id')
+        collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('title')
 
         self.fields['active_collection'].queryset = collection_queryset
-        self.fields['active_collection'].label_from_instance = lambda obj: "{0:06d}, {1}, {2}".format(obj.id, obj.owner.username, obj.title)
+        self.fields['active_collection'].label_from_instance = lambda obj: "{0}, {1:06d}, {2}".format(obj.title, obj.id, obj.owner.username)
 

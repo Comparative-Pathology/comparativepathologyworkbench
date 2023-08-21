@@ -25,33 +25,44 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the collectivization view routine
+# This file contains the Image File Renaming admin command
 #
 ###
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-
-from django.shortcuts import render, reverse
+from django.core.management.base import BaseCommand
 
 from matrices.models import Image
-from matrices.models import Server
-
-from matrices.routines import get_header_data
-from matrices.routines import get_images_for_user
 
 #
-# SETUP DEFAULT COLLECTIONS VIEW
+# The Image File Renaming admin command
 #
-def renaming(request):
+class Command(BaseCommand):
+    help = "Rename all the OMERO Images"
 
-    data = get_header_data(request.user)
 
-    if request.user.is_superuser:
+    def add_arguments(self, parser):
+
+        # Named (optional) arguments
+        parser.add_argument(
+            "--update",
+            action="store_true",
+            help="No update performed!",
+        )
+
+
+    def handle(self, *args, **options):
+
+        update = False
+
+        if options["update"]:
+            
+            update = True
+            
+        out_message = "Update                             : {}".format( update )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
         image_list = Image.objects.all()
-
-        out_message_list = list()
 
         imageTotal = 0
         imageChanged = 0
@@ -123,25 +134,21 @@ def renaming(request):
                             imageChanged = imageChanged + 1
 
                             image.set_name(full_image_name)
-                            image.save()
+
+                            if update:
+                                
+                                image.save()
 
             else:
 
                 imageNotChanged = imageNotChanged + 1
 
-        out_message = "Total Number of Images {}".format( imageTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images             : {}".format( imageTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Changed {}".format( imageChanged )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images Changed     : {}".format( imageChanged )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Not Changed {}".format( imageNotChanged )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images Not Changed : {}".format( imageNotChanged )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        data.update({ 'out_message_list': out_message_list })
-
-        return render(request, 'authorisation/renaming.html', data)
-
-    else:
-
-        return HttpResponseRedirect(reverse('home', args=()))

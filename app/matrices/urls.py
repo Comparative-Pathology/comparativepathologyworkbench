@@ -126,11 +126,6 @@ urlpatterns = [
 	path('tag-autocomplete/<int:image_id>/', matrices_views.ajax.autocompleteTag, name='autocompleteTag'),
 
 #   views/authorisation
-	path('collectivization/', matrices_views.collectivization, name='collectivization'),
-	path('charttidyup/', matrices_views.charttidyup, name='charttidyup'),
-	path('renaming/', matrices_views.renaming, name='renaming'),
-	path('mailer/', matrices_views.mailer, name='mailer'),
-	path('thumbnails/', matrices_views.thumbnails, name='thumbnails'),
 	path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'),
 	path('view_constrained_user/<int:user_id>/', matrices_views.view_constrained_user, name='view_constrained_user'),
 	path('edit_user/<int:user_id>/', matrices_views.edit_user, name='edit_user'),
@@ -175,7 +170,6 @@ urlpatterns = [
 	path('home/', matrices_views.host.home, name='home'),
 	path('authorisation/', matrices_views.host.authorisation, name='authorisation'),
     path('maintenance/', matrices_views.host.maintenance, name='maintenance'),
-    path('execute_command/', matrices_views.host.execute_command, name='execute_command'),
     path('list_imaging_hosts/', matrices_views.host.list_imaging_hosts, name='list_imaging_hosts'),
 	path('list_image_cart/', matrices_views.host.list_image_cart, name='list_image_cart'),
 	path('list_bench_authorisation/', matrices_views.host.list_bench_authorisation, name='list_bench_authorisation'),

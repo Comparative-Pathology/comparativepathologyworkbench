@@ -54,6 +54,8 @@ class CollectionSummarySelectionForm(forms.ModelForm):
 
         super(CollectionSummarySelectionForm, self).__init__(*args, **kwargs)
 
+        print("HERE!!!")
+
         collection_summary_queryset = collection_list_by_user_and_direction(self.request.user, 'collection_id', '', '', '', '')
 
         collection_queryset = Collection.objects.none()
@@ -64,8 +66,8 @@ class CollectionSummarySelectionForm(forms.ModelForm):
 
             list_of_collection_ids.append(collection_summary.collection_id)
 
-        collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('id')
+        collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('title')
 
         self.fields['last_used_collection'].queryset = collection_queryset
-        self.fields['last_used_collection'].label_from_instance = lambda obj: "{0:06d}, {1}, {2}".format(obj.id, obj.owner.username, obj.title)
+        self.fields['last_used_collection'].label_from_instance = lambda obj: "{0}, {1:06d}, {2}".format(obj.title, obj.id, obj.owner.username)
 

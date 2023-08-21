@@ -99,8 +99,11 @@ The show project template
 
 						<div class="card-container-gallery">
 
-							<h5>{{ dataset.name|truncatechars:20 }}</h5>
-
+							<div class="tooltipcolumn">
+								<h5>{{ dataset.name|truncatechars:20 }}</h5>
+								<span class="tooltipcolumntext" style="top: 30px;">{{ dataset.name }}</span>
+	  						</div>
+	
 		            		<dl>
 		                		<dt>Images</dt>
 		                		<dd>{{ dataset.imageCount }}</dd>

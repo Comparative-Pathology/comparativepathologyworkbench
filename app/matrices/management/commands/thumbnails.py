@@ -25,22 +25,22 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the thumbnails view routine
+# This file contains the Generate Thumbnails admin command
 #
 ###
 from __future__ import unicode_literals
 
+from django.core.management.base import BaseCommand
+
 from datetime import datetime
+
+from django.conf import settings
+
+from decouple import config
 
 from omero.gateway import BlitzGateway
 from io import BytesIO
 from PIL import Image as ImageOME
-
-from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, reverse
-
-from decouple import config
 
 from matrices.models import Image
 from matrices.models import Server
@@ -49,19 +49,35 @@ from matrices.routines import AESCipher
 from matrices.routines import get_header_data
 from matrices.routines import get_images_for_server
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
-
 #
-# SETUP DEFAULT COLLECTIONS VIEW
+# The Generate Thumbnails admin command
 #
-def thumbnails(request):
+class Command(BaseCommand):
+    help = "Generate Thumbnails"
 
-    data = get_header_data(request.user)
 
-    environment  = get_primary_cpw_environment()
+    def add_arguments(self, parser):
 
-    if request.user.is_superuser:
+        # Named (optional) arguments
+        parser.add_argument(
+            "--update",
+            action="store_true",
+            help="No update performed!",
+        )
 
-        out_message_list = list()
+
+    def handle(self, *args, **options):
+
+        update = False
+
+        if options["update"]:
+            
+            update = True
+            
+        out_message = "Update                                   : {}".format( update )
+        self.stdout.write(self.style.SUCCESS(out_message))
+
+        environment  = get_primary_cpw_environment()
 
         imageTotal = 0
         imageChanged = 0
@@ -116,9 +132,12 @@ def thumbnails(request):
                             new_full_path = str(settings.MEDIA_ROOT) + '/' + new_chart_id
 
                             image.set_birdseye_url(new_birdseye_url)
-                            image.save()
 
-                            rendered_thumb.save(new_full_path)
+                            if update: 
+
+                                image.save()
+
+                                rendered_thumb.save(new_full_path)
 
                             imageChanged = imageChanged + 1
 
@@ -130,22 +149,15 @@ def thumbnails(request):
                 conn.close()
 
 
-        out_message = "Total Number of Images = {}".format( imageTotal )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images                   : {}".format( imageTotal )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images that Do Not Exist = {}".format( imageNotExist )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images that Do Not Exist : {}".format( imageNotExist )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Changed = {}".format( imageChanged )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images Changed           : {}".format( imageChanged )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Not Changed = {}".format( imageNotChanged )
-        out_message_list.append(out_message)
+        out_message = "Total Number of Images Not Changed       : {}".format( imageNotChanged )
+        self.stdout.write(self.style.SUCCESS(out_message))
 
-        data.update({ 'out_message_list': out_message_list })
-
-        return render(request, 'authorisation/thumbnails.html', data)
-
-    else:
-
-        return HttpResponseRedirect(reverse('home', args=()))

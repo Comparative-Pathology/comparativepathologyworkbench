@@ -24,27 +24,5 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
-# AUTHORSATION VIEW ROUTINES
 # 
-# def delete_blog_credential(request, credential_id):
-# def delete_user(request, user_id):
-# def edit_blog_credential(request, credential_id):
-# def edit_user(request, user_id):
-# def edit_constrained_user(request, user_id):
-# def new_blog_credential(request):
-# def view_blog_credential(request, credential_id):
-# def view_user(request, user_id):
-# def view_constrained_user(request, user_id):
-#
 ###
-
-from .delete_blog_credential import delete_blog_credential
-from .delete_user import delete_user
-from .edit_blog_credential import edit_blog_credential
-from .edit_user import edit_user
-from .edit_constrained_user import edit_constrained_user
-from .new_blog_credential import new_blog_credential
-from .view_blog_credential import view_blog_credential
-from .view_user import view_user
-from .view_constrained_user import view_constrained_user

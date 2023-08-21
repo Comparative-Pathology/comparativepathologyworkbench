@@ -91,7 +91,10 @@ The show group template
 
 				<div class="card-container-gallery">
 
-					<h5>{{ project.name|truncatechars:20 }}</h5>
+					<div class="tooltipcolumn">
+						<h5>{{ project.name|truncatechars:20 }}</h5>
+						<span class="tooltipcolumntext" style="top: 30px;">{{ project.name }}</span>
+					</div>
 
 	        		<dl>
 	        	    	<dt>Datasets</dt>

@@ -54,8 +54,6 @@ class CollectionSummarySelectionForm(forms.ModelForm):
 
         super(CollectionSummarySelectionForm, self).__init__(*args, **kwargs)
 
-        print("HERE!!!")
-
         collection_summary_queryset = collection_list_by_user_and_direction(self.request.user, 'collection_id', '', '', '', '')
 
         collection_queryset = Collection.objects.none()

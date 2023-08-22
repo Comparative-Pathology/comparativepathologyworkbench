@@ -39,7 +39,6 @@ from matrices.models import Collection
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_image_for_user
 from matrices.routines import get_images_for_user
-from matrices.routines import get_primary_cpw_environment
 
 #
 # The Setup Default Collections admin command

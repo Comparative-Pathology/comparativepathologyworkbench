@@ -46,9 +46,9 @@ from matrices.models import Image
 from matrices.models import Server
 
 from matrices.routines import AESCipher
-from matrices.routines import get_header_data
 from matrices.routines import get_images_for_server
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+
 #
 # The Generate Thumbnails admin command
 #
@@ -58,6 +58,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
 
+        parser.add_argument('search_string', type=str, help='Indicates the Search String to be used')
+    
         # Named (optional) arguments
         parser.add_argument(
             "--update",
@@ -68,6 +70,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        search_string = options['search_string']
+
         update = False
 
         if options["update"]:
@@ -75,6 +79,9 @@ class Command(BaseCommand):
             update = True
             
         out_message = "Update                                   : {}".format( update )
+        self.stdout.write(self.style.SUCCESS(out_message))
+
+        out_message = "Search String                            : {}".format( search_string )
         self.stdout.write(self.style.SUCCESS(out_message))
 
         environment  = get_primary_cpw_environment()
@@ -109,7 +116,7 @@ class Command(BaseCommand):
 
                     imageTotal = imageTotal + 1
 
-                    if "webgateway" in image.birdseye_url:
+                    if search_string in image.birdseye_url:
 
                         image_ome = conn.getObject("Image", str(image.identifier))
 

@@ -57,7 +57,6 @@ from matrices.routines import get_header_data
 from matrices.routines import collection_list_by_user_and_direction
 from matrices.routines import exists_image_in_image_list
 from matrices.routines import exists_collection_in_collection_summary_list
-from matrices.routines import get_images_for_collection
 from matrices.routines import get_images_for_collection_summary
 from matrices.routines import get_primary_cpw_environment
 from matrices.routines import get_last_used_collection_for_user
@@ -116,7 +115,7 @@ def link_images(request, image_parent_id, image_child_id):
 
             raise PermissionDenied
 
-        collection_image_list = get_images_for_collection(selected_collection)
+        collection_image_list = selected_collection.get_images()
 
 
         if request.method == HTTP_POST:

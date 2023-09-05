@@ -53,7 +53,7 @@ class CollectionIsReadOnlyOrIsAdminOrIsOwner(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
 
             # A Users Authority must either be Editor, Owner or Admin for Write permission.
-            if authority.is_viewer() == True or authority.is_owner() == True or authority.is_admin() == True:
+            if authority.is_viewer() or authority.is_owner() or authority.is_admin():
 
                 return_flag = True
 

@@ -50,7 +50,7 @@ def get_images_for_collection_summary(a_collection_summary_list):
 
         collection = Collection.objects.get(id=collection_summary.collection_id)
 
-        image_list.extend(collection.images.filter(Q(hidden=False)))
+        image_list.extend(collection.get_images())
 
     image_list = list(set(image_list))
 

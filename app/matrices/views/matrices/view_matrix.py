@@ -46,8 +46,6 @@ from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
-from matrices.routines import get_images_for_collection
-
 
 #
 # DISPLAY THE BENCH!
@@ -87,10 +85,21 @@ def view_matrix(request, matrix_id):
                 matrix_link = ''
 
             collection_image_list = list()
+            collection_tag_list = list()
+
+            if matrix.has_last_used_tag():
+
+                collection_image_list = matrix.last_used_collection.get_images_for__tag(matrix.last_used_tag)
+            
+            else:
+
+                if matrix.has_last_used_collection():
+
+                    collection_image_list = matrix.last_used_collection.get_images()
 
             if matrix.has_last_used_collection():
-
-                collection_image_list = get_images_for_collection(matrix.last_used_collection)
+                
+                collection_tag_list = matrix.last_used_collection.get_tags()
 
 
             updateBoolean = False
@@ -134,7 +143,7 @@ def view_matrix(request, matrix_id):
             if next_bench == None:
                 next_bench = lowest_bench
 
-            data.update({ 'previous_bench': previous_bench, 'next_bench': next_bench, 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'readBoolean': readBoolean, 'updateBoolean': updateBoolean, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            data.update({ 'previous_bench': previous_bench, 'next_bench': next_bench, 'collection_tag_list': collection_tag_list, 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'readBoolean': readBoolean, 'updateBoolean': updateBoolean, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
 
             return render(request, 'matrices/view_matrix.html', data)
 

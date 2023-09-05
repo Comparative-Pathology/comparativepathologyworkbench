@@ -46,7 +46,6 @@ from matrices.routines import exists_image_in_cells
 from matrices.routines import exists_user_for_username
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import get_collections_for_image
-from matrices.routines import get_images_all_for_collection
 from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import get_user_from_username
 from matrices.routines import get_servers_for_uid_url
@@ -529,7 +528,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         for delete_image_id in delete_image_list:
 
             # Get the Images for this Collection
-            images = get_images_all_for_collection(instance)
+            images = instance.get_all_images()
 
             # For Each Image in the Collection
             for image in images:

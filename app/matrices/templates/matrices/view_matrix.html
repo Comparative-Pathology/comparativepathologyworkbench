@@ -141,13 +141,23 @@ The view matrix (bench) template
 			<div class="collection-dropdown-content">
 				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
     {% if collection_list %}
-        {% for collection in collection_list %}
-            {% if matrix.has_last_used_collection == True %}
-	            {% if matrix.last_used_collection.id == collection.collection_id %}
+		{% for collection in collection_list %}
+			{% if matrix.has_last_used_collection == True %}
+				{% if matrix.last_used_collection.id == collection.collection_id %}
 				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'list_images' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
-		        {% endif %}
-            {% endif %}
-        {% endfor %}
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+		{% if collection_tag_list %}
+			{% if matrix.has_last_used_tag == True %}
+				<a class="test-font" title="Select No Tags!" href="{% url 'set_no_last_used_tag' matrix.id %}">No Tags</a>
+			{% endif %}
+			{% for tag in collection_tag_list %}
+				{% if matrix.last_used_tag != tag %}
+					<a class="test-font" title="Select the Tag {{ tag.name }}" href="{% url 'set_last_used_tag' matrix.id tag.id %}">Tag "{{ tag.name }}"</a>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
     {% endif %}
 			</div>
 		  </div>

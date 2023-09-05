@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         collectivization.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -40,13 +39,12 @@ from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_image_for_user
 from matrices.routines import get_images_for_user
 
+
 #
 # The Setup Default Collections admin command
 #
-
 class Command(BaseCommand):
     help = "Setup Default Collections for each User"
-
 
     def add_arguments(self, parser):
 
@@ -57,16 +55,16 @@ class Command(BaseCommand):
             help="No update performed!",
         )
 
-
     def handle(self, *args, **options):
 
         update = False
 
         if options["update"]:
-            
+
             update = True
-            
-        out_message = "Update                                     : {}".format( update )
+
+        out_message = "Update                                     \
+            : {}".format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         user_list = User.objects.all()
@@ -81,7 +79,7 @@ class Command(BaseCommand):
 
                 if exists_active_collection_for_user(user):
 
-                    out_message = "Default Collection ALREADY exists for User : {}".format( user.username )
+                    out_message = "Default Collection ALREADY exists for User : {}".format(user.username)
                     self.stdout.write(self.style.SUCCESS(out_message))
 
                 else:
@@ -98,11 +96,11 @@ class Command(BaseCommand):
 
                             Collection.assign_image(image, collection)
 
-                        out_message = "Default Collection created for {} Images for User : {}".format( imageCount, user.username )
+                        out_message = "Default Collection created for {} Images for User \
+                            : {}".format(imageCount, user.username)
                         self.stdout.write(self.style.SUCCESS(out_message))
 
             else:
 
-                out_message = "NO Default Collection created for User : {}".format( user.username )
+                out_message = "NO Default Collection created for User : {}".format(user.username)
                 self.stdout.write(self.style.SUCCESS(out_message))
-

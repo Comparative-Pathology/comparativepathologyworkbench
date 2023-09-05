@@ -80,6 +80,8 @@ from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
 from .link_images import link_images
 from .search_image import search_image
+from .set_last_used_tag_in_matrix import set_last_used_tag_in_matrix
+from .set_no_last_used_tag_in_matrix import set_no_last_used_tag_in_matrix
 from .view_all_image_links import view_all_image_links
 from .view_cell_blog import view_cell_blog
 from .view_image_link import view_image_link

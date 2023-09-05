@@ -184,8 +184,6 @@ class Server(models.Model):
 
         images_url = commandWordpressImages.protocol.name + '://' + self.url_server + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + str(page_id) + commandWordpressImages.postamble + str(credential.wordpress)
 
-        print("images_url : " +str(images_url))
-
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
 

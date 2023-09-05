@@ -48,6 +48,8 @@ from requests.exceptions import HTTPError
 
 from matrices.models import Collection
 
+from taggit.models import Tag
+
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
@@ -68,6 +70,7 @@ class Matrix(models.Model):
         width: The Width in Pixels of the Cells in this Bench, an Integer.
         owner: The Owner (User Model) of the Bench
         last_used_collection: The Collecion (Colleciton Model) last used to updte this Bench.
+        last_used_tag: The Tag (Tag Model) last used to updte this Bench.
 
     """
 
@@ -80,6 +83,7 @@ class Matrix(models.Model):
     width = models.IntegerField(default=75, blank=False)
     owner = models.ForeignKey(User, related_name='matrices', on_delete=models.DO_NOTHING)
     last_used_collection = models.ForeignKey(Collection, related_name='collections', null=True, on_delete=models.DO_NOTHING)
+    last_used_tag = models.ForeignKey(Tag, related_name='lastused_tags', null=True, on_delete=models.DO_NOTHING)
 
     class Meta:
         verbose_name = 'Bench'
@@ -184,6 +188,36 @@ class Matrix(models.Model):
         else:
             return True
 
+
+    def set_last_used_tag(self, a_last_used_tag):
+        """Sets the last_used_tag of the Bench to a_last_used_tag."""
+
+        self.last_used_tag = a_last_used_tag
+
+
+    def set_no_last_used_tag(self):
+        """Sets the last_used_tag of the Bench to None."""
+
+        self.last_used_tag = None
+
+
+    def has_no_last_used_tag(self):
+        """If this Bench has NO last_used_tag, then True, else False."""
+
+        if self.last_used_tag is None:
+            return True
+        else:
+            return False
+
+    def has_last_used_tag(self):
+        """If this Bench has A last_used_tag, then True, else False."""
+
+        if self.last_used_tag is None:
+            return False
+        else:
+            return True
+
+
     def get_matrix(self):
         """Returns the Cells associated with this Bench as a 2 Dimensional Array."""
 
@@ -210,6 +244,26 @@ class Matrix(models.Model):
                 matrix_cells[i][j] = matrix_cell
 
         return matrix_cells
+
+    def get_matrix_cells_with_image(self):
+        """Returns the Cells with Images associated with this Bench."""
+
+        Cell = apps.get_model('matrices', 'Cell')
+
+        cells = Cell.objects.filter(matrix=self.id)
+
+        matrix_cells = list()
+
+        for cell in cells:
+
+            if cell.image is not None:
+
+                if cell.image.id != 0:
+
+                    matrix_cells.append(cell)
+
+        return matrix_cells
+
 
     def get_matrix_cells_with_blog(self):
         """Returns the Cells with Blog Entries associated with this Bench."""
@@ -333,9 +387,6 @@ class Matrix(models.Model):
         error_flag = False
 
         environment = get_primary_cpw_environment()
-
-        print("self.has_blogpost() : " +str(self.has_blogpost()))
-        print("self.blogpost : " +str(self.blogpost))
 
         if self.has_blogpost():
 

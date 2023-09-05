@@ -55,7 +55,6 @@ from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_id_from_omero_url import get_id_from_omero_url
-from matrices.routines import get_images_for_collection
 from matrices.routines import get_server_from_omero_url
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
@@ -102,7 +101,7 @@ def amend_cell(request, matrix_id, cell_id):
 
             if matrix.has_last_used_collection():
 
-                collection_image_list = get_images_for_collection(matrix.last_used_collection)
+                collection_image_list = matrix.last_used_collection.get_images()
 
 
             if request.method == HTTP_POST:

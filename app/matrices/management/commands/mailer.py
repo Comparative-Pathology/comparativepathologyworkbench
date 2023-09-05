@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         mailer.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -31,61 +30,109 @@
 from __future__ import unicode_literals
 
 from django.core.management.base import BaseCommand
+import magic
+import os
 
-from django.core.mail import send_mail
 from django.utils import timezone
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from matrices.routines import get_primary_cpw_environment
 
-class Command(BaseCommand):
-    help = "Mails out a Test Email"
 
 #
 # The Mailer Admin Command
 #
+class Command(BaseCommand):
+    help = "Mails out a Test Email"
 
     def add_arguments(self, parser):
 
-        # Named (optional) arguments
-        parser.add_argument(
-            "--update",
-            action="store_true",
-            help="No update performed!",
-        )
+        parser.add_argument('-a', '--attachment', type=str, help='Supply an Attachment', )
+        parser.add_argument('-s', '--subject', type=str, help='Supply a Subject', )
+        parser.add_argument('-m', '--message', type=str, help='Supply a Message', )
+        parser.add_argument('-r', '--recipient', type=str, help='Supply a Recipient', )
 
     def handle(self, *args, **options):
 
-        update = False
+        attachment = False
+        subject = False
+        message = False
+        recipient = False
 
-        if options["update"]:
-            
-            update = True
-            
-        out_message = "Update  : {}".format( update )
-        self.stdout.write(self.style.SUCCESS(out_message))
+        subject_text = ''
+        message_text = ''
+        recipient_text = ''
 
-        environment  = get_primary_cpw_environment()
-        
+        recipient_list = list()
+
+        if options["attachment"]:
+
+            attachment = True
+
+        if options["subject"]:
+
+            subject = True
+
+        if options["message"]:
+
+            message = True
+
+        if options["recipient"]:
+
+            recipient = True
+
+        if attachment:
+
+            attachment_file = options["attachment"]
+
+            attachment_path = '{attachment}'.format(attachment=attachment_file)
+
+            file_path = settings.BASE_DIR / attachment_path
+
+            with open(file_path, 'rb') as file:
+
+                file_content = file.read()
+
+            mime_type = magic.from_buffer(file_content, mime=True)
+
+            file_name = os.path.basename(attachment_path)
+
+        environment = get_primary_cpw_environment()
+
         now = timezone.now()
 
-        subject = 'A Time Check'
-        message = 'Here is the time : ' + str(now)
+        if subject:
+
+            subject_text = options["subject"]
+
+        else:
+
+            subject_text = 'A Time Check'
+
+        if message:
+
+            message_text = options["message"]
+
+        else:
+
+            message_text = 'Here is the time : ' + str(now)
+
+        if recipient:
+
+            recipient_text = options["recipient"]
+            recipient_list.append(recipient_text)
+
+        else:
+
+            recipient_list.append('edgutcellatlas-cpw@mlist.is.ed.ac.uk')
+
         email_from = environment.from_email
-        recipient_list = ['mike.wicks@gmail.com',]
-        email_to = 'mike.wicks@gmail.com'
 
-        send_mail( subject, message, email_from, recipient_list, fail_silently=False )
+        email = EmailMessage(subject_text, message_text, email_from, recipient_list)
 
-        out_message = "To      : {}".format( email_to )
-        self.stdout.write(self.style.SUCCESS(out_message))
+        if attachment:
 
-        out_message = "From    : {}".format( email_from )
-        self.stdout.write(self.style.SUCCESS(out_message))
+            email.attach(file_name, file_content, mime_type)
 
-        out_message = "Subject : {}".format( subject )
-        self.stdout.write(self.style.SUCCESS(out_message))
-
-        out_message = "Message : {}".format( message )
-        self.stdout.write(self.style.SUCCESS(out_message))
-
-
+        email.send()

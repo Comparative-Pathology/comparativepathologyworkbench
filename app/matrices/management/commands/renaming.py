@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         renaming.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -34,12 +33,12 @@ from django.core.management.base import BaseCommand
 
 from matrices.models import Image
 
+
 #
 # The Image File Renaming admin command
 #
 class Command(BaseCommand):
     help = "Rename all the OMERO Images"
-
 
     def add_arguments(self, parser):
 
@@ -50,16 +49,15 @@ class Command(BaseCommand):
             help="No update performed!",
         )
 
-
     def handle(self, *args, **options):
 
         update = False
 
         if options["update"]:
-            
+
             update = True
-            
-        out_message = "Update                             : {}".format( update )
+
+        out_message = "Update                             : {}".format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         image_list = Image.objects.all()
@@ -136,19 +134,18 @@ class Command(BaseCommand):
                             image.set_name(full_image_name)
 
                             if update:
-                                
+
                                 image.save()
 
             else:
 
                 imageNotChanged = imageNotChanged + 1
 
-        out_message = "Total Number of Images             : {}".format( imageTotal )
+        out_message = "Total Number of Images             : {}".format(imageTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Changed     : {}".format( imageChanged )
+        out_message = "Total Number of Images Changed     : {}".format(imageChanged)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Not Changed : {}".format( imageNotChanged )
+        out_message = "Total Number of Images Not Changed : {}".format(imageNotChanged)
         self.stdout.write(self.style.SUCCESS(out_message))
-

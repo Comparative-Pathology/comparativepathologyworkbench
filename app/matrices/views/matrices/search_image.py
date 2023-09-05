@@ -1,5 +1,5 @@
-#!/usr/bin/python3
-###!
+# !/usr/bin/python3
+# !
 # \file         search_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -30,31 +30,22 @@
 ###
 from __future__ import unicode_literals
 
-import subprocess
-from subprocess import call
-
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.forms import SearchUrlForm
 
-from matrices.models import Collection
-
 from matrices.routines import credential_exists
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import convert_url_omero_to_cpw
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
-from matrices.routines import get_images_for_collection
 
 HTTP_POST = 'POST'
 LIST_IMAGING_HOSTS = "list_imaging_hosts"
-
 
 #
 # Search for an Image
@@ -113,7 +104,7 @@ def search_image(request, path_from, identifier):
 
         if path_from == LIST_IMAGING_HOSTS:
 
-            data.update({ 'form': form, 'search_from': "list_imaging_hosts" })
+            data.update({'form': form, 'search_from': "list_imaging_hosts"})
 
             return_page = 'host/list_imaging_hosts.html'
 

@@ -74,7 +74,7 @@ def view_cell_blog(request, matrix_id, cell_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer() == True or authority.is_editor() == True or authority.is_owner() == True or authority.is_admin() == True:
+        if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
 
             if cell.has_no_blogpost() and cell.image.id != 0:
 

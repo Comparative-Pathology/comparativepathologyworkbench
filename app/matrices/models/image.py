@@ -28,7 +28,7 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
+import json, urllib, requests, base64, hashlib
 
 from django.db import models
 from django.db.models import Q
@@ -180,3 +180,33 @@ class Image(models.Model):
         local_image_name = self.birdseye_url[web_root_len:]
 
         return local_image_name
+
+
+    def has_tags(self):
+
+        if self.tags.all() == None:
+            return False
+        else:
+            return True
+
+
+    def get_tags(self):
+
+        return self.tags.all()
+        
+
+    def has_this_tag(self, a_tag):
+
+        tag_present = False
+
+        if self.has_tags():
+
+            tags = self.get_tags()
+
+            for tag in tags:
+
+                if tag == a_tag:
+
+                    tag_present = True
+
+        return tag_present

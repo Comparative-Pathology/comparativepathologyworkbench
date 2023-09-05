@@ -38,7 +38,6 @@ from django.db.models import Q
 
 from os import urandom
 
-from matrices.routines.get_images_all_for_collection import get_images_all_for_collection
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.get_collections_for_image import get_collections_for_image
 from matrices.routines.exists_image_in_cells import exists_image_in_cells
@@ -55,7 +54,7 @@ def collection_delete_consequences(a_user, a_collection):
 
     Collection = apps.get_model('matrices', 'Collection')
 
-    images = get_images_all_for_collection(a_collection)
+    images = a_collection.get_all_images()
 
     for image in images:
 

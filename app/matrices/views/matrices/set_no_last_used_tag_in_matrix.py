@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_hidden_images_for_collection.py
+# \file         set_no_last_used_tag_in_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,20 +24,37 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Get the Images from a particular Collection
+#
+# This file contains the set_no_last_used_tag_in_matrix view routine
+#
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 
-from os import urandom
+from matrices.models import Matrix
 
-from django.db.models import Q
+from matrices.routines import credential_exists
 
 
-"""
-    Get the Hidden Images from a particular Collection
-"""
-def get_hidden_images_for_collection(a_collection):
+#
+# ACTIVATE AN IMAGE COLLECTION
+#
+@login_required
+def set_no_last_used_tag_in_matrix(request, matrix_id):
 
-    return a_collection.images.filter(Q(hidden=True))
+    if credential_exists(request.user):
+
+        matrix = get_object_or_404(Matrix, pk=matrix_id)
+
+        matrix.set_no_last_used_tag()
+        matrix.save()
+
+        return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

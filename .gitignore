@@ -121,3 +121,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 app/media
+.vscode/settings.json
+app/docs/sample.pdf

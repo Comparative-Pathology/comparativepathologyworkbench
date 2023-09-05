@@ -47,7 +47,6 @@ from matrices.routines import exists_collections_for_image
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_images_for_collection
 from matrices.routines import get_header_data
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
@@ -74,7 +73,7 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 		authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-		if authority.is_viewer() == True or authority.is_none() == True:
+		if authority.is_viewer() or authority.is_none():
 
 			matrix_cells = matrix.get_matrix()
 			columns = matrix.get_columns()
@@ -172,7 +171,7 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
 			if path_from == AMEND_CELL:
 
-				collection_image_list = get_images_for_collection(matrix.last_used_collection)
+				collection_image_list = matrix.last_used_collection.get_images()
 
 				form = SearchUrlForm()
 

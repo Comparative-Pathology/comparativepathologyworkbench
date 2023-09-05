@@ -44,8 +44,6 @@ from taggit.models import Tag
 from matrices.forms import ImageSummarySearchForm
 
 from matrices.routines import credential_exists
-from matrices.routines import get_images_for_collection
-from matrices.routines import get_hidden_images_for_collection
 from matrices.routines import get_header_data
 from matrices.routines import image_list_by_user_and_direction
 
@@ -272,8 +270,8 @@ class ImageListView(LoginRequiredMixin, SortableListView):
             if int_collection_id != 0:
 
                 collection = get_object_or_404(Collection, pk=int_collection_id)
-                collection_image_list = get_images_for_collection(collection)
-                collection_hidden_image_list = get_hidden_images_for_collection(collection)
+                collection_image_list = collection.get_images()
+                collection_hidden_image_list = collection.get_all_images()
 
         if search_tag_id != '':
 

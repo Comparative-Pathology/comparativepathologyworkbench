@@ -57,7 +57,7 @@ def add_column_right(request, matrix_id, column_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        if authority.is_viewer() == True or authority.is_none() == True:
+        if authority.is_viewer() or authority.is_none():
 
             return HttpResponseRedirect(reverse('home', args=()))
 

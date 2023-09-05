@@ -46,7 +46,6 @@ from matrices.permissions import CollectionIsReadOnlyOrIsAdminOrIsOwner
 
 from matrices.serializers import CollectionSerializer
 
-from matrices.routines import get_images_for_collection
 from matrices.routines import exists_image_in_cells
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_bench_for_last_used_collection
@@ -131,7 +130,7 @@ class  CollectionViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, collection)
 
         # Get all the Images in the Collection
-        image_list = get_images_for_collection(collection)
+        image_list = collection.get_images()
 
         # Check each Image in the Collection
         for image in image_list:

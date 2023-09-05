@@ -90,3 +90,37 @@ class Collection(models.Model):
             return True
         else:
             return False
+
+    def get_tags(self):
+
+        collection_tag_list = list()
+
+        collection_image_list = self.get_images()
+
+        for image in collection_image_list:
+
+            for tag in image.tags.all():
+
+                if tag not in collection_tag_list:
+                
+                    collection_tag_list.append(tag)
+
+        return collection_tag_list
+
+
+    def get_images(self):
+
+        return self.images.filter(Q(hidden=False))
+
+    def get_hidden_images(self):
+
+        return self.images.filter(Q(hidden=True))
+
+    def get_images_for__tag(self, a_tag):
+
+        return self.images.filter(Q(hidden=False)).filter(tags__name__in=[a_tag.name])
+
+
+    def get_all_images(self):
+
+        return self.images.all()

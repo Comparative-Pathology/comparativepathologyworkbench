@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         charttidyup.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -54,7 +53,6 @@ from matrices.routines import get_primary_cpw_environment
 class Command(BaseCommand):
     help = "Tidy Up the Charts stored on the webserver"
 
-
     def add_arguments(self, parser):
 
         # Named (optional) arguments
@@ -64,20 +62,19 @@ class Command(BaseCommand):
             help="No update performed!",
         )
 
-
     def handle(self, *args, **options):
 
         update = False
 
         if options["update"]:
-            
+
             update = True
-            
-        out_message = "Update                                                                     : {}".format( update )
+
+        out_message = "Update                                                                     : {}".format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         environment = get_primary_cpw_environment()
-        
+
         out_list_ebi = list()
         out_list_cpw = list()
         out_list_omero = list()
@@ -100,24 +97,28 @@ class Command(BaseCommand):
         #
         # BEFORE
         #
-        out_message = "Total Number of Documents in Database BEFORE Cleanup                       : {}".format( documentDBTotal )
+        out_message = "Total Number of Documents in Database BEFORE \
+            Cleanup                       : {}".format(documentDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         Document.objects.all().delete()
 
         artefact_list = Artefact.objects.all()
         artefactDBTotal = len(artefact_list)
-        out_message = "Total Number of Artefacts (ZIPs etc) on Database BEFORE Cleanup            : {}".format( artefactDBTotal )
+        out_message = "Total Number of Artefacts (ZIPs etc) on Database BEFORE \
+            Cleanup            : {}".format(artefactDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_ebi = Image.objects.filter(server__type__name='EBI_SCA')
         imageEBIDBTotal = out_list_ebi.count()
-        out_message = "Total Number of EBI Charts (PNGs etc) in Database BEFORE Cleanup           : {}".format( imageEBIDBTotal )
+        out_message = "Total Number of EBI Charts (PNGs etc) in Database BEFORE \
+            Cleanup           : {}".format(imageEBIDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_cpw = Image.objects.filter(server__type__name='CPW')
         imageCPWDBTotal = out_list_cpw.count()
-        out_message = "Total Number of CPW Charts (PNGs etc) in Database BEFORE Cleanup           : {}".format( imageCPWDBTotal )
+        out_message = "Total Number of CPW Charts (PNGs etc) in Database BEFORE \
+            Cleanup           : {}".format(imageCPWDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         server_list = Server.objects.all()
@@ -130,17 +131,20 @@ class Command(BaseCommand):
 
                 imageOMERODBTotal = imageOMERODBTotal + out_list_omero.count()
 
-        out_message = "Total Number of OMERO Charts (PNGs etc) in Database BEFORE Cleanup         : {}".format( imageOMERODBTotal )
+        out_message = "Total Number of OMERO Charts (PNGs etc) in Database BEFORE \
+            Cleanup         : {}".format(imageOMERODBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         ls_command = 'ls ' + environment.document_root
-        process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   universal_newlines=True)
 
         out_list = process.stdout.readlines()
         out_list_2 = out_list
 
         imageWebBeforeTotal = len(out_list)
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver BEFORE Cleanup : {}".format( imageWebBeforeTotal )
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver BEFORE \
+            Cleanup : {}".format(imageWebBeforeTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         #
@@ -171,27 +175,32 @@ class Command(BaseCommand):
 
             if update:
 
-                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                           universal_newlines=True)
 
         #
         # AFTER
         #
         ls_command = 'ls ' + environment.document_root
-        process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   universal_newlines=True)
 
         out_list_3 = process.stdout.readlines()
 
         imageWebAfterTotal = len(out_list_3)
 
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) DELETED from Webserver      : {}".format( imageDelTotal )
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) DELETED from \
+            Webserver      : {}".format(imageDelTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup  : {}".format( imageWebAfterTotal )
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER \
+            Cleanup  : {}".format(imageWebAfterTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         documentDBTotal = Document.objects.count()
 
-        out_message = "Total Number of Documents in Database AFTER Cleanup                        : {}".format( documentDBTotal )
+        out_message = "Total Number of Documents in Database AFTER \
+            Cleanup                        : {}".format(documentDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         if update:
@@ -200,21 +209,24 @@ class Command(BaseCommand):
 
         artefact_list = Artefact.objects.all()
         artefactDBTotal = len(artefact_list)
-        out_message = "Total Number of Artefacts (ZIPs etc) on Database AFTER Cleanup             : {}".format( artefactDBTotal )
+        out_message = "Total Number of Artefacts (ZIPs etc) on Database AFTER \
+            Cleanup             : {}".format(artefactDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_ebi = Image.objects.filter(server__type__name='EBI_SCA')
         imageEBIDBTotal = out_list_ebi.count()
-        out_message = "Total Number of EBI Charts (PNGs etc) in Database AFTER Cleanup            : {}".format( imageEBIDBTotal )
+        out_message = "Total Number of EBI Charts (PNGs etc) in Database AFTER \
+            Cleanup            : {}".format(imageEBIDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         out_list_cpw = Image.objects.filter(server__type__name='CPW')
         imageCPWDBTotal = out_list_cpw.count()
-        out_message = "Total Number of CPW Charts (PNGs etc) in Database AFTER Cleanup            : {}".format( imageCPWDBTotal )
+        out_message = "Total Number of CPW Charts (PNGs etc) in Database AFTER \
+            Cleanup            : {}".format(imageCPWDBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         imageOMERODBTotal = 0
-        
+
         server_list = Server.objects.all()
 
         for server in server_list:
@@ -225,16 +237,18 @@ class Command(BaseCommand):
 
                 imageOMERODBTotal = imageOMERODBTotal + out_list_omero.count()
 
-        out_message = "Total Number of OMERO Charts (PNGs etc) in Database AFTER Cleanup          : {}".format( imageOMERODBTotal )
+        out_message = "Total Number of OMERO Charts (PNGs etc) in Database AFTER \
+            Cleanup          : {}".format(imageOMERODBTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         ls_command = 'ls ' + environment.document_root
-        process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        process = subprocess.Popen(ls_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   universal_newlines=True)
 
         out_list = process.stdout.readlines()
         out_list_2 = out_list
 
         imageWebBeforeTotal = len(out_list)
-        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup  : {}".format( imageWebBeforeTotal )
+        out_message = "Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER \
+            Cleanup  : {}".format(imageWebBeforeTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
-

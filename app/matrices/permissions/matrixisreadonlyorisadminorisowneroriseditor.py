@@ -54,7 +54,7 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
 
             # A Users Authority must either be Editor, Owner or Admin for Write permission.
-            if authority.is_viewer() == True or authority.is_editor() == True or authority.is_owner() == True or authority.is_admin() == True:
+            if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
 
                 return_flag = True
 
@@ -77,7 +77,7 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
                 else:
 
                     # A Users Authority must either be Editor, Owner or Admin for Write permission.
-                    if authority.is_editor() == True or authority.is_owner() == True or authority.is_admin() == True:
+                    if authority.is_editor() or authority.is_owner() or authority.is_admin():
 
                         # A Users must have a Credential record and a Password to write to WordPress.
                         if credential_exists(request.user) and credential_apppwd(request.user) != '':

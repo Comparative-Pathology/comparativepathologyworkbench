@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         thumbnails.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -42,12 +41,12 @@ from omero.gateway import BlitzGateway
 from io import BytesIO
 from PIL import Image as ImageOME
 
-from matrices.models import Image
 from matrices.models import Server
 
 from matrices.routines import AESCipher
 from matrices.routines import get_images_for_server
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+
 
 #
 # The Generate Thumbnails admin command
@@ -55,18 +54,16 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 class Command(BaseCommand):
     help = "Generate Thumbnails"
 
-
     def add_arguments(self, parser):
 
         parser.add_argument('search_string', type=str, help='Indicates the Search String to be used')
-    
+
         # Named (optional) arguments
         parser.add_argument(
             "--update",
             action="store_true",
             help="No update performed!",
         )
-
 
     def handle(self, *args, **options):
 
@@ -75,16 +72,16 @@ class Command(BaseCommand):
         update = False
 
         if options["update"]:
-            
+
             update = True
-            
-        out_message = "Update                                   : {}".format( update )
+
+        out_message = "Update                                   : {}".format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Search String                            : {}".format( search_string )
+        out_message = "Search String                            : {}".format(search_string)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        environment  = get_primary_cpw_environment()
+        environment = get_primary_cpw_environment()
 
         imageTotal = 0
         imageChanged = 0
@@ -120,7 +117,7 @@ class Command(BaseCommand):
 
                         image_ome = conn.getObject("Image", str(image.identifier))
 
-                        if image_ome == None:
+                        if image_ome is None:
 
                             imageNotExist = imageNotExist + 1
 
@@ -140,7 +137,7 @@ class Command(BaseCommand):
 
                             image.set_birdseye_url(new_birdseye_url)
 
-                            if update: 
+                            if update:
 
                                 image.save()
 
@@ -148,23 +145,20 @@ class Command(BaseCommand):
 
                             imageChanged = imageChanged + 1
 
-
                     else:
 
                         imageNotChanged = imageNotChanged + 1
 
                 conn.close()
 
-
-        out_message = "Total Number of Images                   : {}".format( imageTotal )
+        out_message = "Total Number of Images                   : {}".format(imageTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images that Do Not Exist : {}".format( imageNotExist )
+        out_message = "Total Number of Images that Do Not Exist : {}".format(imageNotExist)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Changed           : {}".format( imageChanged )
+        out_message = "Total Number of Images Changed           : {}".format(imageChanged)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Not Changed       : {}".format( imageNotChanged )
+        out_message = "Total Number of Images Not Changed       : {}".format(imageNotChanged)
         self.stdout.write(self.style.SUCCESS(out_message))
-

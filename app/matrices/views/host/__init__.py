@@ -36,7 +36,6 @@
 # def maintenance(request):
 #
 # def list_imaging_hosts(request):
-# def list_image_cart(request):
 #
 # def list_bench_authorisation(request):
 # def list_my_bench_authorisation(request):
@@ -53,7 +52,6 @@ from .home import home
 
 from .list_collection import *
 from .list_image import *
-from .list_image_cart import list_image_cart
 from .list_imaging_hosts import list_imaging_hosts
 from .list_matrix import *
 from .list_bench_authorisation import list_bench_authorisation

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         get_images_for_collection.py
+# \file         set_last_used_tag_in_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,18 +24,40 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Get the Images from a particular Collection
+#
+# This file contains the set_last_used_tag_in_matrix view routine
+#
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 
-from os import urandom
+from matrices.models import Matrix
+
+from taggit.models import Tag
+
+from matrices.routines import credential_exists
 
 
-"""
-    Get the Images from a particular Collection
-"""
-def get_images_all_for_collection(a_collection):
+#
+# ACTIVATE AN IMAGE COLLECTION
+#
+@login_required
+def set_last_used_tag_in_matrix(request, matrix_id, tag_id):
 
-    return a_collection.images.all()
+    if credential_exists(request.user):
+
+        matrix = get_object_or_404(Matrix, pk=matrix_id)
+        tag = get_object_or_404(Tag, pk=tag_id)
+
+        matrix.set_last_used_tag(tag)
+        matrix.save()
+
+        return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

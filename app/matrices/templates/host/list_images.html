@@ -113,7 +113,11 @@ The list images template (with Search)
 <h1>Search Images From All Your Collections, with Tag "{{ tag.name }}"</h1>
 		{% if hidden_image_list|length == 0 %}
 <p>You have collected {{ image_list|length }} Images from {{ collection_list|length }} Collections</p>
-		{% else %}
+		{% endif %}
+		{% if hidden_image_list|length == 1 %}
+<p>You have collected {{ image_list|length }} Image (and {{ hidden_image_list|length }} Hidden Images) from {{ collection_list|length }} Collections</p>
+		{% endif %}
+		{% if hidden_image_list|length > 1 %}
 <p>You have collected {{ image_list|length }} Images (and {{ hidden_image_list|length }} Hidden Images) from {{ collection_list|length }} Collections</p>
 		{% endif %}
 

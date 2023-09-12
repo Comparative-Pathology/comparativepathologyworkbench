@@ -226,6 +226,7 @@ urlpatterns = [
          name='list_my_collection_authorisation'),
     path('list_user_collection_authorisation/<int:user_id>/', matrices_views.host.list_user_collection_authorisation,
          name='list_user_collection_authorisation'),
+    path('list_global/', matrices_views.host.list_global, name='list_global'),
     path('list_benches/', matrices_views.host.MatrixListView.as_view(), name='list_benches'),
     path('list_collections/', matrices_views.host.CollectionListView.as_view(), name='list_collections'),
     path('list_images/', matrices_views.host.ImageListView.as_view(), name='list_images'),

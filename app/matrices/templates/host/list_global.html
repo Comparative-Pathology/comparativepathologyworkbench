@@ -1,0 +1,503 @@
+<!--
+\file         list_global.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The list global template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% block extrastyle %}
+<style>
+
+tr.selected {
+      background-color: #ffff99 !important;
+    }
+
+</style>
+{% endblock extrastyle %}
+
+{% load custom %}
+
+{% load static %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li>Global</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+
+{% if messages %}
+	{% for message in messages %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+<div class="panel-alert">
+  <p>{{ message }}</p>
+</div>
+		{% endif %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+<div class="panel-success">
+  <p>{{ message }}</p>
+</div>
+		{% endif %}
+    {% endfor %}
+{% endif %}
+
+<h1>Global Search</h1>
+<br />
+<hr>
+<br />
+
+<h3>Benches</h3>
+{% if search_bench_list|length == 0 %}
+<p>There are No Benches with '{{search_term}}' in Title or Description</p>
+{% endif %}
+{% if search_bench_list|length == 1 %}
+<p>There is 1 Bench with '{{search_term}}' in Title or Description:</p>
+{% endif %}
+{% if search_bench_list|length > 1 and search_bench_list|length < 11 %}
+<p>There are {{ search_bench_list|length }} Benches with '{{search_term}}' in Title or Description:</p>
+{% endif %}
+{% if search_bench_list|length > 10 %}
+<p>There are {{ search_bench_list|length }} Benches with '{{search_term}}' in Title or Description; Here are the first 10 Benches:</p>
+{% endif %}
+
+{% if search_bench_list %}
+	{% for bench in search_bench_list %}
+		{% if forloop.first %}
+<table border="0">
+  <tr>
+    <th>Action</th>
+  	<th>Bench Id</th>
+	  <th>Title</th>
+  	<th>Created On</th>
+	  <th>Updated On</th>
+  	<th>Owner</th>
+	  <th>Authority</th>
+  </tr>
+  <tr>
+    <td colspan="7">&nbsp;</td>
+	</tr>
+		{% endif %}
+  <tr id="bench-{{bench.matrix_id}}" class="{% if request.GET.selected_record == bench.matrix_id|stringformat:'s' %}selected{% endif %}">
+		{% if readBoolean %}
+ 	  <td>
+		  <div class="generic-dropdown">
+		    <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
+		    <div class="generic-dropdown-content">
+			{% if bench.matrix_authorisation_authority == 'VIEWER' %}
+		      <a href="{% url 'matrix' bench.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+		      <a data-value="{{ bench.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			{% endif %}
+			{% if bench.matrix_authorisation_authority == 'EDITOR' %}
+		      <a href="{% url 'matrix' bench.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+		      <a data-value="{{ bench.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			{% endif %}
+			{% if bench.matrix_authorisation_authority == 'OWNER' %}
+		      <a href="{% url 'matrix' bench.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+		      <a data-value="{{ bench.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			  {% if user.username != 'guest' %}
+			  {% endif %}
+			{% endif %}
+			{% if bench.matrix_authorisation_authority == 'ADMIN' %}
+		      <a href="{% url 'matrix' bench.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+		      <a data-value="{{ bench.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			{% endif %}
+		    </div><!-- End of generic-dropdown-content -->
+	    </div><!-- End of generic-dropdown -->
+	  </td>
+        {% else %}
+    <td>&nbsp;</td>
+		{% endif %}
+    <td>CPW:{{ bench.matrix_id|stringformat:"06d" }}</td>
+	  <td>{{ bench.matrix_title|truncatechars:75 }}</td>
+	  <td>{% userdateformat bench.matrix_created date_format %}</td>
+  	<td>{% userdateformat bench.matrix_modified date_format %}</td>
+	  <td>{{ bench.matrix_owner }}</td>
+	  <td>{{ bench.matrix_authorisation_authority }}</td>
+  </tr>
+		{% if forloop.last %}
+  <tr>
+    <td colspan="7">&nbsp;</td>
+  </tr>
+</table>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+<p><a href="{% url 'list_benches' %}?title={{search_term}}&description=&owner=&authority=&paginate_by=10&created_before=&created_after=&modified_before=&modified_after="><button class="button button-view"><i class="fa fa-eye"></i></button></a> for more Bench Search options ...</p>
+
+<br />
+<hr>
+<br />
+
+<h3>Collections</h3>
+{% if search_collection_list|length == 0 %}
+<p>There are No Collections with '{{search_term}}' in Title or Description:</p>
+{% endif %}
+{% if search_collection_list|length == 1 %}
+<p>There is 1 Collection with '{{search_term}}' in Title or Description:</p>
+{% endif %}
+{% if search_collection_list|length > 1 and search_collection_list|length < 11 %}
+<p>There are {{ search_collection_list|length }} Collections with '{{search_term}}' in Title or Description:</p>
+{% endif %}
+{% if search_collection_list|length > 10 %}
+<p>There are {{ search_collection_list|length }} Collections with '{{search_term}}' in Title or Description; here are the first 10 Collections:</p>
+{% endif %}
+
+{% if search_collection_list %}
+	{% for collection in search_collection_list %}
+		{% if forloop.first %}
+<table border="0">
+  <tr>
+    <th>Action</th>
+	  <th>Collection Id</th>
+	  <th>Title</th>
+	  <th>Images</th>
+	  <th>Owner</th>
+	  <th>Authority</th>
+  </tr>
+  <tr>
+    <td colspan="6">&nbsp;</td>
+  </tr>
+		{% endif %}
+
+		{% if collection.collection_id == user.profile.active_collection.id %}
+  <tr id="collection_summary-{{collection.collection_id}}" class="active">
+			{% else %}
+  <tr id="collection_summary-{{collection.collection_id}}" class="{% if request.GET.selected_record == collection.collection_id|stringformat:'s' %}selected{% endif %}">
+		{% endif %}
+	{% if readBoolean %}
+    <td>
+	  <div class="generic-dropdown">
+		<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
+	    <div class="generic-dropdown-content">
+			{% if collection.collection_authorisation_authority == 'VIEWER' %}
+		  <a href="{% url 'list_images' collection.collection_id %}"><i class="fa fa-eye"></i> View</a>
+		  <a data-value="{{ collection.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			{% endif %}
+			{% if collection.collection_authorisation_authority == 'OWNER' %}
+		  <a href="{% url 'list_images' collection.collection_id %}"><i class="fa fa-eye"></i> View</a>
+		  <a data-value="{{ collection.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+				
+		  		{% if user.username != 'guest' %}
+				{% endif %}
+
+			{% endif %}
+			{% if collection.collection_authorisation_authority == 'ADMIN' %}
+		  <a href="{% url 'list_images' collection.collection_id %}"><i class="fa fa-eye"></i> View</a>
+		  <a data-value="{{ collection.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			{% endif %}
+		</div><!-- End of generic-dropdown-content -->
+	  </div><!-- End of generic-dropdown -->
+	</td>
+		{% else %}
+    <td>&nbsp;</td>
+		{% endif %}
+
+  	<td>{{ collection.collection_id|stringformat:"06d" }}</td>
+	  <td>{{ collection.collection_title }}</td>
+	  <td>{{ collection.collection_image_count }}</td>
+	  <td>{{ collection.collection_owner }}</td>
+	  <td>{{ collection.collection_authorisation_authority }}</td>
+  </tr>
+		{% if forloop.last %}
+  <tr>
+    <td colspan="6">&nbsp;</td>
+  </tr>
+</table>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<p><a href="{% url 'list_collections' %}?title={{search_term}}&description=&owner=&authority=&paginate_by=10"><button class="button button-view"><i class="fa fa-eye"></i></button></a> for more Collection Search options ...</p>
+
+<br />
+<hr>
+<br />
+
+<h3>Images</h3>
+{% if search_image_list|length == 0 %}
+<p>There are No Images with '{{search_term}}' in Name</p>
+{% endif %}
+{% if search_image_list|length == 1 %}
+<p>There is 1 Image with '{{search_term}}' in Name:</p>
+{% endif %}
+{% if search_image_list|length > 1 and search_image_list|length < 10 %}
+<p>There are {{ search_image_list|length }} Images with '{{search_term}}' in Name:</p>
+{% endif %}
+{% if search_image_list|length > 10 %}
+<p>There are {{ search_image_list|length }} Images with '{{search_term}}' in Name; Here are the first 10 Images:</p>
+{% endif %}
+
+{% if search_image_list %}
+	{% for image_summary in search_image_list %}
+		{% if forloop.first %}
+<table border="0">
+  <tr>
+    <th>Action</th>
+    <th colspan="9"></th>
+  </tr>
+  <tr>
+    <td colspan="10" style="border-bottom:2px solid Black;">&nbsp;</td>
+  </tr>
+		{% endif %}
+		{% if forloop.counter < 11 %}
+  <tr id="image_summary-{{image_summary.image_id}}-A">
+
+	{% if readBoolean %}
+    <td>
+        <div class="generic-dropdown">
+            <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
+            <div class="generic-dropdown-content">
+        {% if image_summary.is_wordpress %}
+              <a class="btn btn-primary" href="{% url 'webgallery_show_wordpress_image' image_summary.image_server_id image_summary.image_identifier %}"><i class="fa fa-info"></i> Image Info.</a>
+        {% endif %}
+        {% if image_summary.is_omero547 %}
+              <a class="btn btn-primary" href="{% url 'webgallery_show_image' image_summary.image_server_id image_summary.image_identifier %}"><i class="fa fa-info"></i> Image Info.</a>
+        {% endif %}
+        {% if image_summary.is_ebi_sca %}
+              <a class="btn btn-primary" href="{% url 'webgallery_show_ebi_sca_image' image_summary.image_server_id image_summary.image_name %}"><i class="fa fa-info"></i> Image Info.</a>
+        {% endif %}
+        {% if image_summary.is_cpw %}
+              <a class="btn btn-primary" href="{% url 'webgallery_show_cpw_image' image_summary.image_server_id image_summary.image_name %}"><i class="fa fa-info"></i> Image Info.</a>
+        {% endif %}
+		{% if image_summary.image_owner == user.username or user.username == 'admin' %}
+		{% endif %}
+
+		{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
+				<a class="btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
+		{% endif %}
+
+                <a class="btn btn-primary" href="{% url 'list_images' image_summary.image_collection_id %}"><i class="fa fa-eye"></i> View Collection "{{ image_summary.image_collection_id|stringformat:"06d" }}"</a>
+
+        {% if image_summary.image_matrix_id != 0 %}
+                <a class="btn btn-primary" href="{% url 'matrix' image_summary.image_matrix_id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"</a>
+    	{% endif %}
+
+            </div><!-- End of generic-dropdown-content -->
+        </div><!-- End of generic-dropdown -->
+    </td>
+	{% else %}
+    <td>&nbsp;</td>
+	{% endif %}
+	
+
+	<td colspan="2" rowspan="7">
+		<a href="{{ image_summary.image_viewer_url  }}" target="_blank"><img alt="{{ image_summary.image_name }}" title="{{ image_summary.image_name }}" style="width:256px; height:256px; float: left" title="{{ image_summary.image_name }}" src="{{ image_summary.image_birdseye_url }}" ></a>
+    </td>
+	<td><strong>Name:</strong></td>
+	<td colspan="7">{{ image_summary.image_name }}</td>
+</tr>
+
+<tr id="image_summary-{{image_summary.image_id}}-B">
+    <td colspan="1">&nbsp;</td>
+	    {% if image_summary.image_comment == '' %}
+	<td><strong>Comment:</strong></td>
+	<td colspan="7">No Comments</td>
+	    {% else %}
+	<td><strong>Comment:</strong></td>
+	<td colspan="7">{{ image_summary.image_comment }}</td>
+	    {% endif %}
+  </tr>
+
+<tr id="image_summary-{{image_summary.image_id}}-C">
+	<td colspan="1">&nbsp;</td>
+	<td><strong>ROI:</strong></td>
+	<td colspan="2">{{ image_summary.image_roi }}</td>
+	<td><strong>Server:</strong></td>
+	<td colspan="3">{{ image_summary.image_server }}</td>
+  </tr>
+
+  <tr id="image_summary-{{image_summary.image_id}}-D">
+    <td colspan="1">&nbsp;</td>
+	<td><strong>Hidden:</strong></td>
+	<td colspan="2">{{ image_summary.image_hidden }}</td>
+	<td><strong>Collection:</strong></td>
+	<td colspan="3">"{{ image_summary.image_collection_id|stringformat:"06d" }}"; "{{ image_summary.image_collection_title }}"; (Owned By {{ image_summary.image_collection_owner }}) <a href="{% url 'list_images' image_summary.image_collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+  </tr>
+
+  <tr id="image_summary-{{image_summary.image_id}}-E">
+    <td colspan="1">&nbsp;</td>
+	<td><strong>Owner:</strong></td>
+	<td colspan="2">{{ image_summary.image_owner }}</td>
+	<td><strong>Bench:</strong></td>
+      {% if image_summary.image_matrix_id == 0 %}
+	<td colspan="3">Image NOT Used in a Bench!</td>
+	    {% else %}
+	<td colspan="3">"CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"; "{{ image_summary.image_matrix_title }}"; (Owned By {{ image_summary.image_matrix_owner }}) <a href="{% url 'matrix' image_summary.image_matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+	    {% endif %}
+  </tr>
+
+      {% if image_summary.has_tags %}
+  <tr id="image_summary-{{image_summary.image_id}}-F">
+    <td colspan="3">&nbsp;
+	</td>
+    <td><strong>Tags:</strong>
+	</td>
+    <td colspan="6">
+		    {% for tag in image_summary.get_tags %}
+		<a href="{% url 'list_images' collection_id tag.id %}" class="badge badge-info">#{{ tag.name }}</a>
+		    {% endfor %}
+	</td>
+  </tr>
+      {% else %}
+  <tr id="image_summary-{{image_summary.image_id}}-F">
+    <td colspan="10">&nbsp;
+	</td>
+  </tr>
+      {% endif %}
+
+  <tr id="image_summary-{{image_summary.image_id}}-G">
+	<td colspan="10">&nbsp;</td>
+  </tr>
+	
+  <tr id="image_summary-{{image_summary.image_id}}-H">
+    <td colspan="10" style="border-bottom:2px solid Black;">&nbsp;</td>
+  </tr>
+    {% endif %}
+		{% if forloop.last %}
+  <tr>
+    <td colspan="0"></td>
+  </tr>
+</table>
+  {% endif %}
+	{% endfor %}
+{% endif %}
+
+<p><a href="{% url 'list_images' %}?name={{search_term}}&comment=&roi=&source=&collection=&bench=&paginate_by=10&owner=&tag="><button class="button button-view"><i class="fa fa-eye"></i></button></a> for more Image Search options ...</p>
+
+<br />
+<hr>
+<br />
+
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+{% endblock %}
+
+{% block extrajs %}
+<script language="javascript">
+
+
+  function onLinkMatrixButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+    {% if search_bench_list %}
+    	{% for bench in search_bench_list %}
+            {% if forloop.first %}
+            var dialogs = [
+            {% endif %}
+            dialog{{ bench.matrix_id }},
+            {% if forloop.last %}
+                dialog{{ bench.matrix_id }}
+                ];
+                var target = "dialog" + n.toString();
+                eval(target).open(event);
+            {% endif %}
+        {% endfor %}
+	{% endif %}}
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkMatrixButtonClicked);
+
+    {% if search_bench_list %}
+		{% for bench in search_bench_list %}
+        dialog{{ bench.matrix_id }} = new Dialog({
+            url: "{% url 'bench_read' bench.matrix_id %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ bench.matrix_id|stringformat:"06d" }} ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+        {% endfor %}
+	{% endif %}
+    });
+
+
+    function onLinkCollectionButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+    {% if collection_summary_list %}
+    	{% for collection in search_collection_list %}
+            {% if forloop.first %}
+            var dialogs = [
+            {% endif %}
+            dialog{{ collection.collection_id }},
+            {% if forloop.last %}
+                dialog{{ collection.collection_id }}
+                ];
+                var target = "dialog" + n.toString();
+                eval(target).open(event);
+            {% endif %}
+        {% endfor %}
+	{% endif %}}
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkCollectionButtonClicked);
+
+    {% if search_collection_list %}
+		{% for collection in search_collection_list %}
+        dialog{{ collection.collection_id }} = new Dialog({
+            url: "{% url 'collection_read' collection.collection_id %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Collection {{ collection.collection_id|stringformat:"06d" }} ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+        {% endfor %}
+	{% endif %}
+    });
+
+
+</script>
+{% endblock extrajs %}

@@ -117,7 +117,7 @@ class ImageSummarySearchForm(forms.ModelForm):
 
 
         # Update the Collection Selection Box to Only show Collections that the user has access to
-        collection_summary_queryset = collection_list_by_user_and_direction(request.user, 'collection_id', '', '', '', '')
+        collection_summary_queryset = collection_list_by_user_and_direction(request.user, 'collection_id', '', '', '', '', '')
 
 
         collection_queryset = Collection.objects.none()

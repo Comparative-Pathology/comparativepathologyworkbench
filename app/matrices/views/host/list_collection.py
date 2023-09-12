@@ -91,7 +91,7 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
         self.query_authority = self.request.GET.get('authority', '')
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
-        return collection_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority)
+        return collection_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority, '')
 
 
     def get_context_data(self, **kwargs):

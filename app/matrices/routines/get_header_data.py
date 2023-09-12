@@ -74,7 +74,7 @@ def get_header_data(a_user):
 
         matrix_list = bench_list_by_user_and_direction(a_user, '', '', '', '', '', '', '', '', '', '')
 
-        collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '')
+        collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '', '')
 
         image_list = get_images_for_collection_summary(collection_summary_list)
         hidden_image_list = get_hidden_images_for_collection_summary(collection_summary_list)

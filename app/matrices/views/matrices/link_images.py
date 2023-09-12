@@ -89,7 +89,7 @@ def link_images(request, image_parent_id, image_child_id):
 
         image_list = list()
 
-        collection_summary_list = collection_list_by_user_and_direction(request.user, '', '', '', '', '')
+        collection_summary_list = collection_list_by_user_and_direction(request.user, '', '', '', '', '', '')
 
         image_list = get_images_for_collection_summary(collection_summary_list)
 

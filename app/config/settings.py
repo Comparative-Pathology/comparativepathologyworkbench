@@ -34,7 +34,6 @@ import os
 
 from decouple import config, Csv
 
-import dj_database_url
 import ckeditor.configs
 
 from pathlib import Path
@@ -61,7 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'widget_tweaks',
+    'widget_tweaks',
     'rest_framework',
     'sortable_listview',
     'ckeditor',
@@ -159,6 +158,10 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+# EMAIL_HOST = config('EMAIL_HOST')
+# EMAIL_PORT = config('EMAIL_PORT', cast=int)
+# EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
 EMAIL_FILE_PATH = config('EMAIL_FILE_PATH')
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 
@@ -174,7 +177,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
 
-    #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated', ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -198,7 +200,7 @@ INLINEEDIT_ADAPTORS = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FRONTEND_FORMS_FORM_LAYOUT_FLAVOR  = "bs4"
+FRONTEND_FORMS_FORM_LAYOUT_FLAVOR = "bs4"
 FRONTEND_FORMS_FORM_LAYOUT_DEFAULT = "vertical"
 FRONTEND_FORMS_MODEL_FORMS_MODULES = ['frontend.forms', ]
 

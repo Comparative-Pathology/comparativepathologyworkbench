@@ -8,6 +8,7 @@
         "protocol": 2,
         "web_root": "localhost:1337/media",
         "document_root": "/home/app/web/mediafiles/",
+        "nginx_private_location": "private_highcharts",
         "wordpress_web_root": "192.168.0.10:80/my-wordpress",
         "from_email": "The Comparative Pathology Workbench Team <Michael.Wicks@ed.ac.uk>",
         "date_format": "%Y/%m/%d",

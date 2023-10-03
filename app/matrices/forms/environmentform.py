@@ -42,13 +42,13 @@ class EnvironmentForm(forms.ModelForm):
 
     class Meta:
         model = Environment
-        fields = ('name', 'location', 'protocol', 'web_root', 'document_root', 'wordpress_web_root', 'from_email', 'date_format', \
-                'minimum_cell_height', 'maximum_cell_height', 'minimum_cell_width', 'maximum_cell_width', 'maximum_initial_columns', \
-                'minimum_initial_columns', 'maximum_initial_rows', 'minimum_initial_rows', 'maximum_rest_columns', 'minimum_rest_columns', \
-                'maximum_rest_rows', 'minimum_rest_rows', 'maximum_bench_count', 'maximum_collection_count', )
+        fields = ('name', 'location', 'protocol', 'web_root', 'document_root', 'nginx_private_location',
+                  'wordpress_web_root', 'from_email', 'date_format', 'minimum_cell_height', 'maximum_cell_height',
+                  'minimum_cell_width', 'maximum_cell_width', 'maximum_initial_columns', 'minimum_initial_columns',
+                  'maximum_initial_rows', 'minimum_initial_rows', 'maximum_rest_columns', 'minimum_rest_columns',
+                  'maximum_rest_rows', 'minimum_rest_rows', 'maximum_bench_count', 'maximum_collection_count', )
         location = forms.ModelChoiceField(queryset=Location.objects.all())
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
-
 
     def __init__(self, *args, **kwargs):
 

@@ -65,6 +65,7 @@ class Environment(models.Model):
     protocol = models.ForeignKey(Protocol, related_name='environments', default=0, on_delete=models.DO_NOTHING)
     web_root = models.CharField(max_length=255, blank=False, default='')
     document_root = models.CharField(max_length=255, blank=False, default='')
+    nginx_private_location = models.CharField(max_length=255, blank=False, default='')
     wordpress_web_root = models.CharField(max_length=255, blank=False, default='')
     from_email = models.CharField(max_length=255, blank=False, default='')
     date_format = models.CharField(max_length=255, blank=False, default='%A, %B %e, %Y')
@@ -89,12 +90,14 @@ class Environment(models.Model):
     maximum_collection_count = models.IntegerField(default=10, blank=False)
 
     @classmethod
-    def create(cls, name, location, protocol, web_root, document_root, wordpress_web_root, from_email, date_format,
+    def create(cls, name, location, protocol, web_root, document_root, nginx_private_location, wordpress_web_root,
+               from_email, date_format,
                owner, minimum_cell_height, maximum_cell_height, minimum_cell_width, maximum_cell_width,
                maximum_initial_columns, minimum_initial_columns, maximum_initial_rows, minimum_initial_rows,
                maximum_rest_columns,  minimum_rest_columns, maximum_rest_rows, minimum_rest_rows, maximum_bench_count,
                maximum_collection_count):
         return cls(name=name, location=location, protocol=protocol, web_root=web_root, document_root=document_root,
+                   nginx_private_location=nginx_private_location,
                    wordpress_web_root=wordpress_web_root, from_email=from_email, date_format=date_format, owner=owner,
                    minimum_cell_height=minimum_cell_height, maximum_cell_height=maximum_cell_height,
                    minimum_cell_width=minimum_cell_width, maximum_cell_width=maximum_cell_width,
@@ -106,7 +109,8 @@ class Environment(models.Model):
 
     def __str__(self):
         return f"{self.id}, {self.name}, {self.location.id}, {self.protocol.id}, {self.web_root}, \
-                {self.document_root}, {self.wordpress_web_root}, {self.from_email}, {self.date_format}, \
+                {self.document_root}, {self.nginx_private_location}, {self.wordpress_web_root}, {self.from_email}, \
+                {self.date_format}, \
                 {self.owner.id}, {self.minimum_cell_height}, {self.maximum_cell_height}, \
                 {self.minimum_cell_width}, {self.maximum_cell_width}, \
                 {self.maximum_initial_columns}, {self.minimum_initial_columns}, \
@@ -117,7 +121,8 @@ class Environment(models.Model):
 
     def __repr__(self):
         return f"{self.id}, {self.name}, {self.location.id}, {self.protocol.id}, {self.web_root}, \
-                {self.document_root}, {self.wordpress_web_root}, {self.from_email}, {self.date_format}, \
+                {self.document_root}, {self.nginx_private_location}, {self.wordpress_web_root}, {self.from_email}, \
+                {self.date_format}, \
                 {self.owner.id}, {self.minimum_cell_height}, {self.maximum_cell_height}, \
                 {self.minimum_cell_width}, {self.maximum_cell_width}, \
                 {self.maximum_initial_columns}, {self.minimum_initial_columns}, \

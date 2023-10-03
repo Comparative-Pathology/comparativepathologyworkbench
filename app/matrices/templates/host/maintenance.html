@@ -767,9 +767,11 @@ The maintenance template
 				<th>Location</th>
 				<th>(Full) Web Root</th>
 				<th>Document Root</th>
+				<th>NGINX Private Location</th>
 				<th>Wordpress Web Root</th>
 			</tr>
 			<tr>
+				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -801,6 +803,7 @@ The maintenance template
 				<td>{{ environment.location.name }}</td>
 				<td>{{ environment.get_full_web_root }}</td>
 				<td>{{ environment.document_root }}</td>
+				<td>{{ environment.nginx_private_location }}</td>
 				<td>{{ environment.wordpress_web_root }}</td>
 			</tr>
 
@@ -818,6 +821,7 @@ The maintenance template
 
 			{% endif %}
 
+				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>

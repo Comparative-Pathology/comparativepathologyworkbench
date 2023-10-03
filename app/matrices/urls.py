@@ -41,19 +41,19 @@ from matrices import views as matrices_views
 
 router = DefaultRouter()
 
-#   views/rest_matrix.py
+#   views/rest/matrix.py
 router.register(r'benches', matrices_views.MatrixViewSet)
 
-#   views/rest_cell.py
+#   views/rest/cell.py
 router.register(r'cells', matrices_views.CellViewSet)
 
-#   views/rest_image.py
+#   views/rest/image.py
 router.register(r'images', matrices_views.ImageViewSet)
 
-#   views/rest_collection.py
+#   views/rest/collection.py
 router.register(r'collections', matrices_views.CollectionViewSet)
 
-#   views/rest_user.py
+#   views/rest/user.py
 router.register(r'users', matrices_views.UserViewSet)
 
 
@@ -152,6 +152,8 @@ urlpatterns = [
          name='edit_blog_credential'),
     path('delete_blog_credential/<int:credential_id>/', matrices_views.delete_blog_credential,
          name='delete_blog_credential'),
+    path('highcharts/<str:image_id>/', matrices_views.nginx_accel,
+         name='nginx_accel'),
 
     #   views/ebi
     path('show_ebi_server/<int:server_id>/', matrices_views.ebi.show_ebi_server, name='ebi_show_ebi_server'),

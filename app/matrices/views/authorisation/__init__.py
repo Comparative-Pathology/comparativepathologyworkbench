@@ -33,6 +33,7 @@
 # def edit_user(request, user_id):
 # def edit_constrained_user(request, user_id):
 # def new_blog_credential(request):
+# def new_blog_credential(request):
 # def view_blog_credential(request, credential_id):
 # def view_user(request, user_id):
 # def view_constrained_user(request, user_id):
@@ -45,6 +46,7 @@ from .edit_blog_credential import edit_blog_credential
 from .edit_user import edit_user
 from .edit_constrained_user import edit_constrained_user
 from .new_blog_credential import new_blog_credential
+from .nginx_accel import nginx_accel
 from .view_blog_credential import view_blog_credential
 from .view_user import view_user
 from .view_constrained_user import view_constrained_user

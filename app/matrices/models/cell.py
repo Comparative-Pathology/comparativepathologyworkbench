@@ -173,6 +173,17 @@ class Cell(models.Model):
     def decrement_y(self):
         self.ycoordinate -= 1
 
+    def add_to_x(self, an_amount):
+        self.xcoordinate = self.xcoordinate + an_amount
+
+    def add_to_y(self, an_amount):
+        self.ycoordinate = self.ycoordinate + an_amount
+
+    def subtract_from_x(self, an_amount):
+        self.xcoordinate = self.xcoordinate - an_amount
+
+    def subtract_from_y(self, an_amount):
+        self.ycoordinate = self.ycoordinate - an_amount
 
     """
         Get Matrix Cell Comments

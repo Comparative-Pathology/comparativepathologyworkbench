@@ -45,13 +45,9 @@
 # def amend_cell(request, matrix_id, cell_id):
 #
 # def append_column(request, matrix_id):
-# def add_column_left(request, matrix_id, column_id):
-# def add_column_right(request, matrix_id, column_id):
 # def delete_this_column(request, matrix_id, column_id):
 # def delete_last_column(request, matrix_id):
 # def append_row(request, matrix_id):
-# def add_row_above(request, matrix_id, row_id):
-# def add_row_below(request, matrix_id, row_id):
 # def delete_this_row(request, matrix_id, row_id):
 # def delete_last_row(request, matrix_id):
 #
@@ -63,19 +59,11 @@
 
 from .activate_collection import activate_collection
 from .activate_in_collection import activate_in_collection
-from .add_column_left import add_column_left
-from .add_column_right import add_column_right
-from .add_row_above import add_row_above
-from .add_row_below import add_row_below
 from .amend_cell import amend_cell
-from .append_column import append_column
-from .append_row import append_row
 from .clear_cell import clear_cell
 from .delete_image import delete_image
 from .delete_image_link import delete_image_link
 from .delete_collection_image import delete_collection_image
-from .delete_last_column import delete_last_column
-from .delete_last_row import delete_last_row
 from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
 from .link_images import link_images

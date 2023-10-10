@@ -61,149 +61,149 @@ WORDPRESS_SUCCESS = 'Success!'
 #
 @login_required
 def clear_cell(request, matrix_id, cell_id, path_from):
-	
-	environment = get_primary_cpw_environment()
 
-	data = get_header_data(request.user)
+    environment = get_primary_cpw_environment()
 
-	if credential_exists(request.user):
+    data = get_header_data(request.user)
 
-		cell = get_object_or_404(Cell, pk=cell_id)
-		matrix = get_object_or_404(Matrix, pk=matrix_id)
+    if credential_exists(request.user):
 
-		authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
+        cell = get_object_or_404(Cell, pk=cell_id)
+        matrix = get_object_or_404(Matrix, pk=matrix_id)
 
-		if authority.is_viewer() or authority.is_none():
+        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-			matrix_cells = matrix.get_matrix()
-			columns = matrix.get_columns()
-			rows = matrix.get_rows()
+        if authority.is_viewer() or authority.is_none():
 
-			data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            matrix_cells = matrix.get_matrix()
+            columns = matrix.get_columns()
+            rows = matrix.get_rows()
 
-			return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+            data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
 
-		else:
+            return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
-			if cell.has_blogpost() == True:
+        else:
 
-				credential = get_credential_for_user(request.user)
+            if cell.has_blogpost():
 
-				if credential.has_apppwd():
+                credential = get_credential_for_user(request.user)
 
-					response = environment.delete_a_post_from_wordpress(credential, cell.blogpost)
+                if credential.has_apppwd():
 
-					if response != WORDPRESS_SUCCESS:
+                    response = environment.delete_a_post_from_wordpress(credential, cell.blogpost)
 
-						matrix_cells = matrix.get_matrix()
-						columns = matrix.get_columns()
-						rows = matrix.get_rows()
+                    if response != WORDPRESS_SUCCESS:
 
-						data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+                        matrix_cells = matrix.get_matrix()
+                        columns = matrix.get_columns()
+                        rows = matrix.get_rows()
 
-						return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+                        data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
 
+                        return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
-			if cell.has_image():
-				
-				if exists_collections_for_image(cell.image):
-					
-					cell_list = get_cells_for_image(cell.image)
-					
-					other_bench_Flag = False
-					
-					for otherCell in cell_list:
-						
-						if otherCell.matrix.id != matrix.id:
-							
-							other_bench_Flag = True
-							
-					if other_bench_Flag == True:
-                          
-						if request.user.profile.is_hide_collection_image():
-                                
-							cell.image.set_hidden(True)
-							cell.image.save()
-                                
-						else:
-                                
-							cell.image.set_hidden(False)
-							cell.image.save()
-                        
-					else:
-                            
-						cell.image.set_hidden(False)
-						cell.image.save()
+            if cell.has_image():
 
-				else:
+                if exists_collections_for_image(cell.image):
 
-					cell_list = get_cells_for_image(cell.image)
+                    cell_list = get_cells_for_image(cell.image)
 
-					delete_flag = True
+                    other_bench_Flag = False
 
-					for otherCell in cell_list:
+                    for otherCell in cell_list:
 
-						if otherCell.matrix.id != matrix_id:
+                        if otherCell.matrix.id != matrix.id:
 
-							delete_flag = False
+                            other_bench_Flag = True
 
-					if delete_flag == True:
+                    if other_bench_Flag:
 
-						image = cell.image
+                        if request.user.profile.is_hide_collection_image():
 
-						image.delete()
+                            cell.image.set_hidden(True)
+                            cell.image.save()
 
-				cell.set_blogpost('')
-				cell.set_title('')
-				cell.set_description('')
+                        else:
 
-				cell.image = None
+                            cell.image.set_hidden(False)
+                            cell.image.save()
 
-				cell.save()
+                    else:
 
-			matrix_cells = matrix.get_matrix()
-			columns = matrix.get_columns()
-			rows = matrix.get_rows()
+                        cell.image.set_hidden(False)
+                        cell.image.save()
 
-			cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
+                else:
 
-			messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
+                    cell_list = get_cells_for_image(cell.image)
 
-			if path_from == AMEND_CELL:
+                    delete_flag = True
 
-				collection_image_list = matrix.last_used_collection.get_images()
+                    for otherCell in cell_list:
 
-				form = SearchUrlForm()
+                        if otherCell.matrix.id != matrix_id:
 
-				cell_link = environment.get_a_link_url_to_post() + cell.blogpost
+                            delete_flag = False
 
-				matrix_link = 'matrix_link'
-				amend_cell = 'amend_cell'
+                    if delete_flag:
 
-				credential = get_credential_for_user(request.user)
+                        image = cell.image
 
-				if not credential.has_apppwd():
+                        image.delete()
 
-					matrix_link = ''
+                cell.set_blogpost('')
+                cell.set_title('')
+                cell.set_description('')
 
-				return_page = 'matrices/amend_cell.html'
+                cell.image = None
 
-				data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                cell.save()
 
-				return HttpResponseRedirect(reverse('amend_cell', args=(matrix_id, cell_id, )))
+            matrix_cells = matrix.get_matrix()
+            columns = matrix.get_columns()
+            rows = matrix.get_rows()
 
-			else:
+            cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
 
-				if path_from == VIEW_MATRIX:
+            messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
 
-					data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            if path_from == AMEND_CELL:
 
-					return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+                collection_image_list = matrix.last_used_collection.get_images()
 
-			data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+                form = SearchUrlForm()
 
-			return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+                cell_link = environment.get_a_link_url_to_post() + cell.blogpost
 
-	else:
+                matrix_link = 'matrix_link'
+                amend_cell = 'amend_cell'
 
-		return HttpResponseRedirect(reverse('home', args=()))
+                credential = get_credential_for_user(request.user)
+
+                if not credential.has_apppwd():
+
+                    matrix_link = ''
+
+                return_page = 'matrices/amend_cell.html'
+
+                data.update({'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell,
+                             'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix})
+
+                return HttpResponseRedirect(reverse('amend_cell', args=(matrix_id, cell_id, )))
+
+            else:
+
+                if path_from == VIEW_MATRIX:
+
+                    data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
+
+                    return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+            data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
+
+            return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

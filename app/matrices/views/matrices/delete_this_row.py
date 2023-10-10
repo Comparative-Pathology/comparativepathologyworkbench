@@ -81,7 +81,7 @@ def delete_this_row(request, matrix_id, row_id):
 
             for oldCell in oldCells:
 
-                if oldCell.has_blogpost() == True:
+                if oldCell.has_blogpost():
 
                     credential = get_credential_for_user(request.user)
 

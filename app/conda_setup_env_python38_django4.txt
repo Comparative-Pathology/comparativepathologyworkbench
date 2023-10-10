@@ -48,6 +48,7 @@ pip install pygments
 pip install pysocks
 pip install python-dateutil
 pip install python-decouple
+pip install python-magic (PREREQ: yum install file-devel && yum install file-libs)
 pip install pytz
 pip install pyyaml
 pip install requests

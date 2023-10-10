@@ -46,6 +46,10 @@
 
 from .active_collection_selection import active_collection_selection
 
+from .add_cell import add_cell
+from .add_columns import add_columns
+from .add_rows import add_rows
+
 from .aggregate_bench_cell_blog_read import aggregate_bench_cell_blog_read
 
 from .autocomplete_tag import autocompleteTag
@@ -58,6 +62,12 @@ from .bench_authorisation_delete import bench_authorisation_delete
 from .bench_blog_read import bench_blog_read
 from .bench_cell_blog_read import bench_cell_blog_read
 
+from .bench_create import bench_create
+from .bench_read import bench_read
+from .bench_update import bench_update
+from .bench_collection_update import bench_collection_update
+from .bench_delete import bench_delete
+
 from .collection_authorisation_create import collection_authorisation_create
 from .collection_authorisation_read import collection_authorisation_read
 from .collection_authorisation_update import collection_authorisation_update
@@ -69,11 +79,7 @@ from .collection_update import collection_update
 from .collection_delete import collection_delete
 from .collection_selection import collection_selection
 
-from .bench_create import bench_create
-from .bench_read import bench_read
-from .bench_update import bench_update
-from .bench_collection_update import bench_collection_update
-from .bench_delete import bench_delete
+from .delete_cell import delete_cell
 
 from .header_read import header_read
 from .header_update import header_update

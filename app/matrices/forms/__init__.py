@@ -50,6 +50,10 @@ from .headerform import HeaderForm
 from .imagesummarysearchform import ImageSummarySearchForm
 from .locationform import LocationForm
 from .matrixform import MatrixForm
+from .matrixaddcellform import MatrixAddCellForm
+from .matrixaddrowform import MatrixAddRowForm
+from .matrixaddcolumnform import MatrixAddColumnForm
+from .matrixdeletecellform import MatrixDeleteCellForm
 from .matrixsummarysearchform import MatrixSummarySearchForm
 from .newmatrixform import NewMatrixForm
 from .protocolform import ProtocolForm

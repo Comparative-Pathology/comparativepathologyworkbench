@@ -139,6 +139,15 @@ urlpatterns = [
 
     path('tag-autocomplete/<int:image_id>/', matrices_views.ajax.autocompleteTag, name='autocompleteTag'),
 
+    path('add_columns/<int:matrix_id>/<int:column_id>/', matrices_views.ajax.add_columns,
+         name='add_columns'),
+    path('add_rows/<int:matrix_id>/<int:row_id>/', matrices_views.ajax.add_rows,
+         name='add_rows'),
+    path('add_cell/<int:matrix_id>/<int:cell_id>/', matrices_views.ajax.add_cell,
+         name='add_cell'),
+    path('delete_cell/<int:matrix_id>/<int:cell_id>/', matrices_views.ajax.delete_cell,
+         name='delete_cell'),
+
     #   views/authorisation
     path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'),
     path('view_constrained_user/<int:user_id>/', matrices_views.view_constrained_user, name='view_constrained_user'),
@@ -313,20 +322,10 @@ urlpatterns = [
     path('clear_cell/<int:matrix_id>/<int:cell_id>/<str:path_from>/', matrices_views.matrices.clear_cell,
          name='clear_cell'),
     path('amend_cell/<int:matrix_id>/<int:cell_id>/', matrices_views.matrices.amend_cell, name='amend_cell'),
-    path('append_column/<int:matrix_id>/', matrices_views.matrices.append_column, name='append_column'),
-    path('add_column_left/<int:matrix_id>/<int:column_id>/', matrices_views.matrices.add_column_left,
-         name='add_column_left'),
-    path('add_column_right/<int:matrix_id>/<int:column_id>/', matrices_views.matrices.add_column_right,
-         name='add_column_right'),
     path('delete_this_column/<int:matrix_id>/<int:column_id>/', matrices_views.matrices.delete_this_column,
          name='delete_this_column'),
-    path('delete_last_column/<int:matrix_id>/', matrices_views.matrices.delete_last_column, name='delete_last_column'),
-    path('append_row/<int:matrix_id>/', matrices_views.matrices.append_row, name='append_row'),
-    path('add_row_above/<int:matrix_id>/<int:row_id>/', matrices_views.matrices.add_row_above, name='add_row_above'),
-    path('add_row_below/<int:matrix_id>/<int:row_id>/', matrices_views.matrices.add_row_below, name='add_row_below'),
     path('delete_this_row/<int:matrix_id>/<int:row_id>/', matrices_views.matrices.delete_this_row,
          name='delete_this_row'),
-    path('delete_last_row/<int:matrix_id>/', matrices_views.matrices.delete_last_row, name='delete_last_row'),
 
     path('search_image/<str:path_from>/<int:identifier>/', matrices_views.matrices.search_image, name='search_image'),
 

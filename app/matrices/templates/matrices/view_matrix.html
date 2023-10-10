@@ -228,10 +228,6 @@ The view matrix (bench) template
 			  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
 			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-			  <a href="{% url 'append_column' matrix.id %}"><i class="fa fa-angle-double-right"></i><span class="menu-item">&#9;</span>APPEND Column</a>
-			  <a href="{% url 'delete_last_column' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last COLUMN?')"><i class="fa fa-angle-double-left"></i><span class="menu-item">&#9;</span>Delete LAST Column</a>
-			  <a href="{% url 'append_row' matrix.id %}"><i class="fa fa-angle-double-down"></i><span class="menu-item">&#9;</span>APPEND Row</a>
-			  <a href="{% url 'delete_last_row' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE the last ROW?')"><i class="fa fa-angle-double-up"></i><span class="menu-item">&#9;</span>Delete LAST Row</a>
 			        	{% endif %}
 					{% endif %}
             </div><!-- End of bench-dropdown-content -->
@@ -330,9 +326,8 @@ The view matrix (bench) template
 						{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
 			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Row Header</a>
-			  <a href="{% url 'add_row_above' matrix.id forloop.parentloop.counter0	%}"><i class="fa fa-angle-up"></i><span class="menu-item">&#9;</span>Add Row Above</a>
-			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Row</a>
-		      <a href="{% url 'add_row_below' matrix.id forloop.parentloop.counter0 %}"><i class="fa fa-angle-down"></i><span class="menu-item">&#9;</span>Add Row Below</a>
+			  <a href="{% url 'add_rows' matrix.id forloop.parentloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Rows to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Rows ...</a>
+			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Row</a>
 						{% endif %}
             </div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
@@ -427,9 +422,8 @@ The view matrix (bench) template
 						{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
 			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Column Header</a>
-			  <a href="{% url 'add_column_left' matrix.id forloop.counter0	%}"><i class="fa fa-angle-left"></i><span class="menu-item">&#9;</span>Add Column Left</a>
-			  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete This Column</a>
-              <a href="{% url 'add_column_right' matrix.id forloop.counter0 %}"><i class="fa fa-angle-right"></i><span class="menu-item">&#9;</span>Add Column Right</a>
+			  <a href="{% url 'add_columns' matrix.id forloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Columns to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Columns ...</a>
+			  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Column</a>
 						{% endif %}
             </div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
@@ -536,10 +530,14 @@ The view matrix (bench) template
 			  				{% if updateBoolean %}
 			  					{% if matrix_cell.has_image %}
 			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Cell Commentary</a>
+			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
+			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
 								{% else %}
+			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
+			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
 			  					{% endif %}
 			  				{% endif %}
 		    			{% endif %}
@@ -1022,6 +1020,14 @@ The view matrix (bench) template
 	}
 
 	function open_header_edit_dialog(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  dialog_edit.options.url = url;
+	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  dialog_edit.open(event);
+	}
+
+	function open_edit_cell_dialog(event, title) {
 	  event.preventDefault();
 	  var url = $(event.target).attr('href');
 	  dialog_edit.options.url = url;

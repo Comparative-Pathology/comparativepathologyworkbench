@@ -100,6 +100,7 @@ dependencies:
       - django-taggit-templatetags2==1.6.1
       - django-widget-tweaks==1.4.12
       - djangorestframework==3.14.0
+      - faker==19.9.0
       - gunicorn==21.2.0
       - httpie==3.2.2
       - importlib-metadata==6.8.0

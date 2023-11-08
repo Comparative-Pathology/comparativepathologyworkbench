@@ -70,7 +70,6 @@ def bench_create(request):
 
         raise PermissionDenied
 
-
     credential = get_credential_for_user(request.user)
     environment = get_primary_cpw_environment()
 
@@ -84,11 +83,12 @@ def bench_create(request):
 
         form = NewMatrixForm(instance=object, data=request.POST)
 
-        if get_bench_count_for_user(request.user) >= environment.maximum_bench_count and request.user.username == 'guest':
+        if get_bench_count_for_user(request.user) >= environment.maximum_bench_count and \
+           request.user.username == 'guest':
 
             messages.error(request, "CPW_WEB:0600 New Bench  - Too Many Benches for Guest User!")
             form.add_error(None, "CPW_WEB:0600 New Bench  - Too Many Benches for Guest User!")
-        
+
         else:
 
             if form.is_valid():
@@ -107,7 +107,8 @@ def bench_create(request):
 
                     post_id = ''
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, object.title, object.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, object.title,
+                                                                             object.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -124,13 +125,17 @@ def bench_create(request):
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
-                        form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, Contact System Administrator!")
+                        messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, "
+                                       "Contact System Administrator!")
+                        form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, "
+                                       "Contact System Administrator!")
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
-                    form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, Contact System Administrator!")
+                    messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, "
+                                   "Contact System Administrator!")
+                    form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, "
+                                   "Contact System Administrator!")
 
     else:
 

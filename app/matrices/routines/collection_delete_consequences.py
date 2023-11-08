@@ -68,7 +68,7 @@ def collection_delete_consequences(a_user, a_collection):
 
                 delete_flag = True
 
-        if delete_flag == False:
+        if delete_flag is False:
 
             if not exists_image_in_cells(image):
 
@@ -79,7 +79,7 @@ def collection_delete_consequences(a_user, a_collection):
                     image_path = str(settings.MEDIA_ROOT) + '/' + image.name
 
                     rm_command = 'rm ' + str(image_path)
-                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                    rm_escaped = rm_command.replace("(","\(").replace(")","\)")
 
                     process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
@@ -88,12 +88,11 @@ def collection_delete_consequences(a_user, a_collection):
                     image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
 
                     rm_command = 'rm ' + str(image_path)
-                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                    rm_escaped = rm_command.replace("(","\(").replace(")","\)")
 
                     process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
                 image.delete()
-
 
     if exists_bench_for_last_used_collection(a_collection):
 
@@ -105,7 +104,6 @@ def collection_delete_consequences(a_user, a_collection):
 
             matrix.save()
 
-
     if exists_user_for_last_used_collection(a_collection):
 
         user_list = get_users_for_last_used_collection(a_collection)
@@ -115,10 +113,7 @@ def collection_delete_consequences(a_user, a_collection):
             user.profile.set_last_used_collection(None)
             user.save()
 
-
     if a_collection == get_active_collection_for_user(a_user):
 
         a_user.profile.set_active_collection(None)
         a_user.save()
-
-

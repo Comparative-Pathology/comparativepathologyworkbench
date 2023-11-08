@@ -89,7 +89,8 @@ def view_matrix_blog(request, matrix_id):
 
                     if credential.has_apppwd():
 
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
+                                                                                 matrix.description)
 
                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -109,7 +110,8 @@ def view_matrix_blog(request, matrix_id):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
+                                                                             matrix.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -120,7 +122,6 @@ def view_matrix_blog(request, matrix_id):
                 matrix.save()
 
                 blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
-
 
             comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
 
@@ -150,7 +151,8 @@ def view_matrix_blog(request, matrix_id):
 
             form = CommentForm()
 
-        data.update({ 'form': form, 'matrix': matrix, 'blogpost': blogpost, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells, 'comment_list': comment_list })
+        data.update({'form': form, 'matrix': matrix, 'blogpost': blogpost, 'rows': rows, 'columns': columns,
+                     'matrix_cells': matrix_cells, 'comment_list': comment_list})
 
         return render(request, 'matrices/detail_matrix_blog.html', data)
 

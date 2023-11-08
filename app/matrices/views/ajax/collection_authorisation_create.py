@@ -100,10 +100,9 @@ def collection_authorisation_create(request, collection_id=None):
 
                 raise PermissionDenied
 
-
             object.set_collection_authority(authority)
 
-            collection_authorisation_create_update_consequences(permitted, collection, authority)
+            collection_authorisation_create_update_consequences(permitted, collection)
 
             object.save()
 

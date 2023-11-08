@@ -75,10 +75,12 @@ class Command(BaseCommand):
 
             update = True
 
-        out_message = "Update                                   : {}".format(update)
+        out_message = "Update                                   : {}"\
+            .format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Search String                            : {}".format(search_string)
+        out_message = "Search String                            : {}"\
+            .format(search_string)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         environment = get_primary_cpw_environment()
@@ -151,14 +153,18 @@ class Command(BaseCommand):
 
                 conn.close()
 
-        out_message = "Total Number of Images                   : {}".format(imageTotal)
+        out_message = "Total Number of Images                   : {}"\
+            .format(imageTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images that Do Not Exist : {}".format(imageNotExist)
+        out_message = "Total Number of Images that Do Not Exist : {}"\
+            .format(imageNotExist)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Changed           : {}".format(imageChanged)
+        out_message = "Total Number of Images Changed           : {}"\
+            .format(imageChanged)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Not Changed       : {}".format(imageNotChanged)
+        out_message = "Total Number of Images Not Changed       : {}"\
+            .format(imageNotChanged)
         self.stdout.write(self.style.SUCCESS(out_message))

@@ -28,20 +28,9 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
 from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
-
-from random import randint
 
 from matrices.models import Image
 
@@ -49,6 +38,8 @@ from matrices.models import Image
 """
     COLLECTION
 """
+
+
 class Collection(models.Model):
     title = models.CharField(max_length=255, default='')
     description = models.TextField(max_length=4095, default='')
@@ -102,11 +93,10 @@ class Collection(models.Model):
             for tag in image.tags.all():
 
                 if tag not in collection_tag_list:
-                
+
                     collection_tag_list.append(tag)
 
         return collection_tag_list
-
 
     def get_images(self):
 
@@ -119,7 +109,6 @@ class Collection(models.Model):
     def get_images_for__tag(self, a_tag):
 
         return self.images.filter(Q(hidden=False)).filter(tags__name__in=[a_tag.name])
-
 
     def get_all_images(self):
 

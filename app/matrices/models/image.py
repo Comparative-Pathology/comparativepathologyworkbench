@@ -28,24 +28,10 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
 
 from taggit.managers import TaggableManager
-
-from random import randint
-
-from requests.exceptions import HTTPError
 
 from matrices.models import Server
 
@@ -59,6 +45,8 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 """
     IMAGE
 """
+
+
 class Image(models.Model):
     identifier = models.IntegerField(default=0)
     name = models.CharField(max_length=255, blank=False, default='')
@@ -101,23 +89,22 @@ class Image(models.Model):
 
     @classmethod
     def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner, comment, hidden):
-        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, roi=roi, owner=owner, comment=comment, hidden=hidden)
+        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, 
+                   roi=roi, owner=owner, comment=comment, hidden=hidden)
 
     def __str__(self):
-        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}, {self.hidden}"
+        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, \
+                 {self.owner.id}, {self.roi}, {self.comment}, {self.hidden}"
 
     def __repr__(self):
-        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, {self.owner.id}, {self.roi}, {self.comment}, {self.hidden}"
-
+        return f"{self.id}, {self.identifier}, {self.name}, {self.server.id}, {self.viewer_url}, {self.birdseye_url}, \
+                 {self.owner.id}, {self.roi}, {self.comment}, {self.hidden}"
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:
             return True
         else:
             return False
-
-    def set_owner(self, a_user):
-        self.owner = a_user
 
     def is_omero_image(self):
         if "iviewer" in self.viewer_url:
@@ -131,15 +118,19 @@ class Image(models.Model):
         else:
             return True
 
-    def is_duplicate(self, a_identifier, a_name, a_server, a_viewer_url, a_birdseye_url, a_roi, a_owner, a_comment, a_hidden):
-        if self.identifier == a_identifier and self.name == a_name and self.server == a_server and self.viewer_url == a_viewer_url and self.birdseye_url == a_birdseye_url and self.roi == a_roi and self.owner == a_owner and self.comment == a_comment and self.hidden == a_hidden:
+    def is_duplicate(self, a_identifier, a_name, a_server, a_viewer_url, a_birdseye_url, a_roi, a_owner, a_comment, 
+                     a_hidden):
+
+        if self.identifier == a_identifier and self.name == a_name and self.server == a_server and \
+           self.viewer_url == a_viewer_url and self.birdseye_url == a_birdseye_url and self.roi == a_roi and \
+           self.owner == a_owner and self.comment == a_comment and self.hidden == a_hidden:
+
             return True
         else:
             return False
 
     def image_id(self):
         return self.identifier
-
 
     def exists_parent_image_links(self):
         return exists_parent_image_links_for_image(self)
@@ -153,13 +144,6 @@ class Image(models.Model):
     def get_child_image_links(self):
         return get_child_image_links_for_image(self)
 
-    def set_comment(self, a_comment):
-        self.comment = a_comment
-
-    def set_hidden(self, a_hidden):
-        self.hidden = a_hidden
-
-
     def exists_image_links(self):
 
         boolReturn = False
@@ -169,7 +153,6 @@ class Image(models.Model):
             boolReturn = True
 
         return boolReturn
-
 
     def get_file_name_from_birdseye_url(self):
 
@@ -181,19 +164,16 @@ class Image(models.Model):
 
         return local_image_name
 
-
     def has_tags(self):
 
-        if self.tags.all() == None:
+        if self.tags.all() is None:
             return False
         else:
             return True
 
-
     def get_tags(self):
 
         return self.tags.all()
-        
 
     def has_this_tag(self, a_tag):
 

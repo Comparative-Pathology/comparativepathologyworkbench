@@ -57,7 +57,8 @@ class Command(BaseCommand):
 
             update = True
 
-        out_message = "Update                             : {}".format(update)
+        out_message = "Update                             : {}"\
+            .format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         image_list = Image.objects.all()
@@ -141,11 +142,14 @@ class Command(BaseCommand):
 
                 imageNotChanged = imageNotChanged + 1
 
-        out_message = "Total Number of Images             : {}".format(imageTotal)
+        out_message = "Total Number of Images             : {}"\
+            .format(imageTotal)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Changed     : {}".format(imageChanged)
+        out_message = "Total Number of Images Changed     : {}"\
+            .format(imageChanged)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Images Not Changed : {}".format(imageNotChanged)
+        out_message = "Total Number of Images Not Changed : {}"\
+            .format(imageNotChanged)
         self.stdout.write(self.style.SUCCESS(out_message))

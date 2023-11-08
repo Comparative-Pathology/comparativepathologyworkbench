@@ -121,12 +121,16 @@ urlpatterns = [
     path('collection_selection/<int:user_id>/', matrices_views.ajax.collection_selection, name='collection_selection'),
     path('active_collection_selection/<int:user_id>/', matrices_views.ajax.active_collection_selection,
          name='active_collection_selection'),
+    path('collection_update_owner/<int:collection_id>/', matrices_views.ajax.collection_update_owner,
+         name="collection_update_owner"),
 
     path('bench_read/<int:bench_id>/', matrices_views.ajax.bench_read, name='bench_read'),
     path('bench_create/', matrices_views.ajax.bench_create, name='bench_create'),
     path('bench_update/<int:bench_id>/', matrices_views.ajax.bench_update, name='bench_update'),
     path('bench_collection_update/<int:bench_id>/', matrices_views.ajax.bench_collection_update,
          name='bench_collection_update'),
+    path('bench_update_owner/<int:bench_id>/', matrices_views.ajax.bench_update_owner,
+         name="bench_update_owner"),
     path('bench_delete/<int:bench_id>/', matrices_views.ajax.bench_delete, name='bench_delete'),
 
     path('header_read/<int:bench_id>/<int:header_id>/', matrices_views.ajax.header_read, name='header_read'),

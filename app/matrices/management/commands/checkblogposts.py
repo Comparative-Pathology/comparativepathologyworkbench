@@ -66,10 +66,12 @@ class Command(BaseCommand):
 
             update = True
 
-        out_message = "Update                                                   : {}".format(update)
+        out_message = "Update                                                   : {}"\
+            .format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Check Bench                                              : {}".format(check_bench)
+        out_message = "Check Bench                                              : {}"\
+            .format(check_bench)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         environment = get_primary_cpw_environment()
@@ -111,7 +113,8 @@ class Command(BaseCommand):
 
                     benchBlogNoExistsCount = benchBlogNoExistsCount + 1
 
-                    out_message = "Bench CPW:{0:06d} has Blogpost that does NOT EXIST!!".format(matrix.id)
+                    out_message = "Bench CPW:{0:06d} has Blogpost that does NOT EXIST!!"\
+                        .format(matrix.id)
                     self.stdout.write(self.style.SUCCESS(out_message))
 
                     if update:
@@ -130,13 +133,15 @@ class Command(BaseCommand):
                                 matrix.set_blogpost(post_id)
                                 matrix.save()
 
-                                out_message = "Bench CPW:{0:06d} has NEW Blogpost: {1}!!".format(matrix.id, post_id)
+                                out_message = "Bench CPW:{0:06d} has NEW Blogpost: {1}!!"\
+                                    .format(matrix.id, post_id)
                                 self.stdout.write(self.style.SUCCESS(out_message))
             else:
 
                 benchNoBlogCount = benchNoBlogCount + 1
 
-                out_message = "Bench CPW:{0:06d} has NO Blogpost!!".format(matrix.id)
+                out_message = "Bench CPW:{0:06d} has NO Blogpost!!"\
+                    .format(matrix.id)
                 self.stdout.write(self.style.SUCCESS(out_message))
 
                 if update:
@@ -155,7 +160,8 @@ class Command(BaseCommand):
                             matrix.set_blogpost(post_id)
                             matrix.save()
 
-                            out_message = "Bench CPW:{0:06d} has NEW Blogpost: {1}!!".format(matrix.id, post_id)
+                            out_message = "Bench CPW:{0:06d} has NEW Blogpost: {1}!!"\
+                                .format(matrix.id, post_id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
             matrix_cells = list()
@@ -178,11 +184,12 @@ class Command(BaseCommand):
 
                         cellBlogNoExistsCount = cellBlogNoExistsCount + 1
 
-                        out_message = "Image Name : {0}".format(cell.image.name)
+                        out_message = "Image Name : {0}"\
+                            .format(cell.image.name)
                         self.stdout.write(self.style.SUCCESS(out_message))
 
-                        out_message = "Cell  CPW:{0:06d}_{1:012d} has Blogpost that does NOT \
-                            EXIST!!".format(matrix.id, cell.id)
+                        out_message = "Cell  CPW:{0:06d}_{1:012d} has Blogpost that does NOT EXIST!!"\
+                            .format(matrix.id, cell.id)
                         self.stdout.write(self.style.SUCCESS(out_message))
 
                         if update:
@@ -201,18 +208,20 @@ class Command(BaseCommand):
                                     cell.set_blogpost(post_id)
                                     cell.save()
 
-                                    out_message = "Cell  CPW:{0:06d}_{1:012d} has NEW \
-                                        Blogpost: {2}!!".format(matrix.id, cell.id, post_id)
+                                    out_message = "Cell  CPW:{0:06d}_{1:012d} has NEW Blogpost: {2}!!"\
+                                        .format(matrix.id, cell.id, post_id)
                                     self.stdout.write(self.style.SUCCESS(out_message))
 
                 else:
 
                     cellNoBlogCount = cellNoBlogCount + 1
 
-                    out_message = "Image Name : {0}".format(cell.image.name)
+                    out_message = "Image Name : {0}"\
+                        .format(cell.image.name)
                     self.stdout.write(self.style.SUCCESS(out_message))
 
-                    out_message = "Cell  CPW:{0:06d}_{1:012d} has NO Blogpost!!".format(matrix.id, cell.id)
+                    out_message = "Cell  CPW:{0:06d}_{1:012d} has NO Blogpost!!"\
+                        .format(matrix.id, cell.id)
                     self.stdout.write(self.style.SUCCESS(out_message))
 
                     if update:
@@ -231,30 +240,38 @@ class Command(BaseCommand):
                                 cell.set_blogpost(post_id)
                                 cell.save()
 
-                                out_message = "Cell  CPW:{0:06d}_{1:012d} has NEW \
-                                    Blogpost: {2}!!".format(matrix.id, cell.id, post_id)
+                                out_message = "Cell  CPW:{0:06d}_{1:012d} has NEW Blogpost              : {2}!!"\
+                                    .format(matrix.id, cell.id, post_id)
                                 self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Benches                                  : {}".format(benchCount)
+        out_message = "Total Number of Benches                                  : {}"\
+            .format(benchCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Benches WITH a Blogpost                  : {}".format(benchBlogCount)
+        out_message = "Total Number of Benches WITH a Blogpost                  : {}"\
+            .format(benchBlogCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Benches WITH NO Blogpost                 : {}".format(benchNoBlogCount)
+        out_message = "Total Number of Benches WITH NO Blogpost                 : {}"\
+            .format(benchNoBlogCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Benches WITH a NON-EXISTING Blogpost     : {}".format(benchBlogNoExistsCount)
+        out_message = "Total Number of Benches WITH a NON-EXISTING Blogpost     : {}"\
+            .format(benchBlogNoExistsCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Cells with an Image                      : {}".format(cellCount)
+        out_message = "Total Number of Cells with an Image                      : {}"\
+            .format(cellCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Cells with an Image and a Blogpost       : {}".format(cellBlogCount)
+        out_message = "Total Number of Cells with an Image and a Blogpost       : {}"\
+            .format(cellBlogCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Cells with an Image WITHOUT a Blogpost   : {}".format(cellNoBlogCount)
+        out_message = "Total Number of Cells with an Image WITHOUT a Blogpost   : {}"\
+            .format(cellNoBlogCount)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Total Number of Cells WITH a NON-EXISTING Blogpost       : {}".format(cellBlogNoExistsCount)
+        out_message = "Total Number of Cells WITH a NON-EXISTING Blogpost       : {}"\
+            .format(cellBlogNoExistsCount)
         self.stdout.write(self.style.SUCCESS(out_message))

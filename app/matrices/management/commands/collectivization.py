@@ -63,8 +63,8 @@ class Command(BaseCommand):
 
             update = True
 
-        out_message = "Update                                     \
-            : {}".format(update)
+        out_message = "Update                                                 : {}"\
+            .format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         user_list = User.objects.all()
@@ -79,7 +79,8 @@ class Command(BaseCommand):
 
                 if exists_active_collection_for_user(user):
 
-                    out_message = "Default Collection ALREADY exists for User : {}".format(user.username)
+                    out_message = "Default Collection ALREADY exists for User             : {}"\
+                        .format(user.username)
                     self.stdout.write(self.style.SUCCESS(out_message))
 
                 else:
@@ -96,11 +97,12 @@ class Command(BaseCommand):
 
                             Collection.assign_image(image, collection)
 
-                        out_message = "Default Collection created for {} Images for User \
-                            : {}".format(imageCount, user.username)
+                        out_message = "Default Collection created for {} Images for User      : {}"\
+                            .format(imageCount, user.username)
                         self.stdout.write(self.style.SUCCESS(out_message))
 
             else:
 
-                out_message = "NO Default Collection created for User : {}".format(user.username)
+                out_message = "NO Default Collection created for User                 : {}"\
+                    .format(user.username)
                 self.stdout.write(self.style.SUCCESS(out_message))

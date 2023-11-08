@@ -43,7 +43,7 @@ def exists_image_on_webserver(an_image_name):
 
     Image = apps.get_model('matrices', 'Image')
 
-    environment  = get_primary_cpw_environment()
+    environment = get_primary_cpw_environment()
 
     a_viewer_url = environment.get_full_web_root() + '/' + an_image_name
 
@@ -59,8 +59,8 @@ def exists_image_on_webserver(an_image_name):
     if Image.objects.filter(birdseye_url=a_viewer_url).exists():
 
         birdseyeUrlBool = True
-    
-    if viewerUrlBool == True or birdseyeUrlBool == True:
+
+    if viewerUrlBool is True or birdseyeUrlBool is True:
 
         returnBool = True
 

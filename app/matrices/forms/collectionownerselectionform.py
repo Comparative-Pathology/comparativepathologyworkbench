@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         collection_authorisation_create_update_consequences.py
+# \file         collectionownerselectionform.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,30 +24,21 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Consequential Actions for Collection Authorisation Creates and Updates
+# Form for selecting a new owner of a collection.
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
+from django import forms
+from django.utils.translation import gettext_lazy as _
 
-from django.db.models import Q
-
-from os import urandom
-
-from django.apps import apps
-
-from matrices.routines import collection_authorisation_exists_for_collection_and_permitted
+from django.contrib.auth.models import User
+from matrices.models import Collection
 
 
-"""
-    Consequential Actions for Collection Authorisation Creates and Updates
-"""
-def collection_authorisation_create_update_consequences(a_permitted, a_collection):
+class CollectionOwnerSelectionForm(forms.ModelForm):
 
-    CollectionAuthorisation = apps.get_model('matrices', 'CollectionAuthorisation')
+    owner = forms.ModelChoiceField(queryset=User.objects.all(), required=True, empty_label=None)
 
-    if collection_authorisation_exists_for_collection_and_permitted(a_collection, a_permitted):
-
-        collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=a_collection) & Q(permitted=a_permitted))
-
-        collection_authorisation_old.delete()
+    class Meta:
+        model = Collection
+        fields = ('owner', )

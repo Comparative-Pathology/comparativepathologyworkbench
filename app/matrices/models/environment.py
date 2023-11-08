@@ -384,7 +384,7 @@ class Environment(models.Model):
             post = {'id': '',
                     'title': title,
                     'content': content,
-                    'status': 'publish',
+                    'state': 'publish',
                     'author': credential.wordpress,
                     'format': 'standard',
                     'status': f'HTTP error occurred: {http_err}'
@@ -397,7 +397,7 @@ class Environment(models.Model):
             post = {'id': '',
                     'title': title,
                     'content': content,
-                    'status': 'publish',
+                    'state': 'publish',
                     'author': credential.wordpress,
                     'format': 'standard',
                     'status': f'Other error occurred: {err}'
@@ -408,7 +408,7 @@ class Environment(models.Model):
             post = {'id': post_id,
                     'title': title,
                     'content': content,
-                    'status': 'publish',
+                    'state': 'publish',
                     'author': credential.wordpress,
                     'format': 'standard',
                     'status': 'Success!'

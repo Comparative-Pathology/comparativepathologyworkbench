@@ -65,6 +65,7 @@ from .bench_cell_blog_read import bench_cell_blog_read
 from .bench_create import bench_create
 from .bench_read import bench_read
 from .bench_update import bench_update
+from .bench_update_owner import bench_update_owner
 from .bench_collection_update import bench_collection_update
 from .bench_delete import bench_delete
 
@@ -76,6 +77,7 @@ from .collection_authorisation_delete import collection_authorisation_delete
 from .collection_create import collection_create
 from .collection_read import collection_read
 from .collection_update import collection_update
+from .collection_update_owner import collection_update_owner
 from .collection_delete import collection_delete
 from .collection_selection import collection_selection
 

@@ -96,7 +96,6 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                 blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
-
             if cell.blogpost != '':
 
                 blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
@@ -109,7 +108,8 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                     if credential.has_apppwd():
 
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title, cell.description)
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title,
+                                                                                 cell.description)
 
                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -120,7 +120,6 @@ def view_cell_blog(request, matrix_id, cell_id):
                     cell.save()
 
                     blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
-
 
             comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
 
@@ -150,7 +149,8 @@ def view_cell_blog(request, matrix_id, cell_id):
 
             form = CommentForm()
 
-        data.update({ 'form': form, 'matrix_id': matrix_id, 'cell': cell, 'matrix': matrix, 'blogpost': blogpost, 'comment_list': comment_list })
+        data.update({'form': form, 'matrix_id': matrix_id, 'cell': cell, 'matrix': matrix, 'blogpost': blogpost,
+                     'comment_list': comment_list})
 
         return render(request, 'matrices/detail_cell_blog.html', data)
 

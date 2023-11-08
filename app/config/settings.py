@@ -81,10 +81,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# UNCOMMENT for LIVE Server Configuration Settings
-#ROOT_URLCONF = 'comparativepathologyworkbench.urls'
-
-# UNCOMMENT for DEVELOPMENT Server Configuration Settings
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -161,6 +157,7 @@ LOGOUT_REDIRECT_URL = 'home'
 # EMAIL_HOST = config('EMAIL_HOST')
 # EMAIL_PORT = config('EMAIL_PORT', cast=int)
 # EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 EMAIL_FILE_PATH = config('EMAIL_FILE_PATH')
 EMAIL_BACKEND = config('EMAIL_BACKEND')

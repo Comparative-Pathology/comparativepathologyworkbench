@@ -104,64 +104,77 @@ class Command(BaseCommand):
 
             clear = True
 
-        out_message = "Update                                         : {}".format(update)
+        out_message = "Update                                         : {}"\
+            .format(update)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Clear                                          : {}".format(clear)
+        out_message = "Clear                                          : {}"\
+            .format(clear)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Table                                          : {}".format(table)
+        out_message = "Table                                          : {}"\
+            .format(table)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Column                                         : {}".format(column)
+        out_message = "Column                                         : {}"\
+            .format(column)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Identifier                                     : {}".format(identifier)
+        out_message = "Identifier                                     : {}"\
+            .format(identifier)
         self.stdout.write(self.style.SUCCESS(out_message))
 
-        out_message = "Output                                         : {}".format(output)
+        out_message = "Output                                         : {}"\
+            .format(output)
         self.stdout.write(self.style.SUCCESS(out_message))
 
         if table not in TABLES:
-            out_message = "Supplied Table not Matrix/Cell/Image           : {}".format(table)
+            out_message = "Supplied Table not Matrix/Cell/Image           : {}"\
+                .format(table)
             self.stdout.write(self.style.ERROR(out_message))
 
         if table == MATRIX:
             update_matrix = True
             if column not in MATRIX_COLUMNS:
-                out_message = "Supplied Column not Title/Description/All      : {}".format(column)
+                out_message = "Supplied Column not Title/Description/All      : {}"\
+                    .format(column)
                 self.stdout.write(self.style.ERROR(out_message))
                 proceed = False
 
         if table == CELL:
             update_cell = True
             if column not in CELL_COLUMNS:
-                out_message = "Supplied Column not Title/Description/All      : {}".format(column)
+                out_message = "Supplied Column not Title/Description/All      : {}"\
+                    .format(column)
                 self.stdout.write(self.style.ERROR(out_message))
                 proceed = False
 
         if table == COLLECTION:
             update_collection = True
             if column not in COLLECTION_COLUMNS:
-                out_message = "Supplied Column not Title/Description/All      : {}".format(column)
+                out_message = "Supplied Column not Title/Description/All      : {}"\
+                    .format(column)
                 self.stdout.write(self.style.ERROR(out_message))
                 proceed = False
 
         if table == IMAGE:
             update_image = True
             if column not in IMAGE_COLUMNS:
-                out_message = "Supplied Column not Name/Comment/All           : {}".format(column)
+                out_message = "Supplied Column not Name/Comment/All           : {}"\
+                    .format(column)
                 self.stdout.write(self.style.ERROR(out_message))
                 proceed = False
 
         if identifier.isnumeric():
             if int(identifier) < 1:
-                out_message = "Supplied Identifer must be GT 0                : {}".format(identifier)
+                out_message = "Supplied Identifer must be GT 0                : {}"\
+                    .format(identifier)
                 self.stdout.write(self.style.ERROR(out_message))
                 proceed = False
         else:
             if identifier != ALL:
-                out_message = "Supplied Identifer is not ALL or a Number      : {}".format(identifier)
+                out_message = "Supplied Identifer is not ALL or a Number      : {}"\
+                    .format(identifier)
                 self.stdout.write(self.style.ERROR(out_message))
                 proceed = False
 
@@ -220,12 +233,14 @@ class Command(BaseCommand):
 
                             matrix.save()
 
-                            out_message = "Matrix SAVED!                                  : {}".format(matrix.id)
+                            out_message = "Matrix SAVED!                                  : {}"\
+                                .format(matrix.id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Matrix NOT SAVED!                              : {}".format(matrix.id)
+                            out_message = "Matrix NOT SAVED!                              : {}"\
+                                .format(matrix.id)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_matrix SET title = \'" + old_title +
@@ -281,12 +296,14 @@ class Command(BaseCommand):
 
                             matrix.save()
 
-                            out_message = "Matrix SAVED!                                  : {}".format(identifier)
+                            out_message = "Matrix SAVED!                                  : {}"\
+                                .format(identifier)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Matrix NOT SAVED!                              : {}".format(identifier)
+                            out_message = "Matrix NOT SAVED!                              : {}"\
+                                .format(identifier)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_matrix SET title = \'" + old_title +
@@ -295,7 +312,8 @@ class Command(BaseCommand):
 
                     else:
 
-                        out_message = "There is NO Matrix for the Supplied Identifer! : {}".format(identifier)
+                        out_message = "There is NO Matrix for the Supplied Identifer! : {}"\
+                            .format(identifier)
                         self.stdout.write(self.style.ERROR(out_message))
 
             if update_collection:
@@ -349,12 +367,14 @@ class Command(BaseCommand):
 
                             collection.save()
 
-                            out_message = "Collection SAVED!                             : {}".format(collection.id)
+                            out_message = "Collection SAVED!                             : {}"\
+                                .format(collection.id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Collection NOT SAVED!                         : {}".format(collection.id)
+                            out_message = "Collection NOT SAVED!                         : {}"\
+                                .format(collection.id)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_collection SET title = \'" + old_title +
@@ -410,21 +430,25 @@ class Command(BaseCommand):
 
                             collection.save()
 
-                            out_message = "Collection SAVED!                             : {}".format(identifier)
+                            out_message = "Collection SAVED!                             : {}"\
+                                .format(identifier)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Collection NOT SAVED!                         : {}".format(identifier)
+                            out_message = "Collection NOT SAVED!                         : {}"\
+                                .format(identifier)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_collection SET title = \'" + old_title +
-                                          "\', description = \'" + old_description + "\' WHERE id = " + str(identifier) +
+                                          "\', description = \'" + old_description + "\' WHERE id = " +
+                                          str(identifier) +
                                           ";")
 
                     else:
 
-                        out_message = "There is NO Collection for the Supplied Identifer! : {}".format(identifier)
+                        out_message = "There is NO Collection for the Supplied Identifer! : {}"\
+                            .format(identifier)
                         self.stdout.write(self.style.ERROR(out_message))
 
             if update_cell:
@@ -478,17 +502,19 @@ class Command(BaseCommand):
 
                             cell.save()
 
-                            out_message = "Cell SAVED!                                    : {}".format(cell.id)
+                            out_message = "Cell SAVED!                                    : {}"\
+                                .format(cell.id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Cell NOT SAVED!                                : {}".format(cell.id)
+                            out_message = "Cell NOT SAVED!                                : {}"\
+                                .format(cell.id)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_cell SET title = \'" + old_title +
-                                              "\', description = \'" + old_description + "\' WHERE id = " +
-                                              str(cell.id) + ";\n")
+                                          "\', description = \'" + old_description + "\' WHERE id = " +
+                                          str(cell.id) + ";\n")
 
                 else:
 
@@ -539,21 +565,25 @@ class Command(BaseCommand):
 
                             cell.save()
 
-                            out_message = "Cell SAVED!                                    : {}".format(cell.id)
+                            out_message = "Cell SAVED!                                    : {}"\
+                                .format(cell.id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Cell NOT SAVED!                                : {}".format(cell.id)
+                            out_message = "Cell NOT SAVED!                                : {}"\
+                                .format(cell.id)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_cell SET title = \'" + old_title +
-                                          "\', description = \'" + old_description + "\' WHERE id = " + str(identifier) +
+                                          "\', description = \'" + old_description + "\' WHERE id = " +
+                                          str(identifier) +
                                           ";")
 
                     else:
 
-                        out_message = "There is NO Cell for the Supplied Identifer!   : {}".format(identifier)
+                        out_message = "There is NO Cell for the Supplied Identifer!   : {}"\
+                            .format(identifier)
                         self.stdout.write(self.style.ERROR(out_message))
 
             if update_image:
@@ -607,17 +637,19 @@ class Command(BaseCommand):
 
                             image.save()
 
-                            out_message = "Image SAVED!                                   : {}".format(image.id)
+                            out_message = "Image SAVED!                                   : {}"\
+                                .format(image.id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Image NOT SAVED!                               : {}".format(image.id)
+                            out_message = "Image NOT SAVED!                               : {}"\
+                                .format(image.id)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_image SET name = \'" + old_name +
-                                              "\', comment = \'" + old_comment + "\' WHERE id = " +
-                                              str(image.id) + ";\n")
+                                          "\', comment = \'" + old_comment + "\' WHERE id = " +
+                                          str(image.id) + ";\n")
 
                 else:
 
@@ -668,12 +700,14 @@ class Command(BaseCommand):
 
                             image.save()
 
-                            out_message = "Image SAVED!                                   : {}".format(image.id)
+                            out_message = "Image SAVED!                                   : {}"\
+                                .format(image.id)
                             self.stdout.write(self.style.SUCCESS(out_message))
 
                         else:
 
-                            out_message = "Image NOT SAVED!                               : {}".format(image.id)
+                            out_message = "Image NOT SAVED!                               : {}"\
+                                .format(image.id)
                             self.stdout.write(self.style.ERROR(out_message))
 
                         output_file.write("UPDATE public.matrices_image SET name = \'" + old_name +
@@ -682,7 +716,8 @@ class Command(BaseCommand):
 
                     else:
 
-                        out_message = "There is NO Image for the Supplied Identifer!  : {}".format(identifier)
+                        out_message = "There is NO Image for the Supplied Identifer!  : {}"\
+                            .format(identifier)
                         self.stdout.write(self.style.ERROR(out_message))
 
             output_file.close()

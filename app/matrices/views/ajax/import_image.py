@@ -68,7 +68,6 @@ def import_image(request):
 
         raise PermissionDenied
 
-
     source = request.POST['source']
     target = request.POST['target']
     source_type = request.POST['source_type']
@@ -124,7 +123,8 @@ def import_image(request):
 
                 if credential.has_apppwd():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, target_cell.title, target_cell.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential, target_cell.title,
+                                                                             target_cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -137,29 +137,29 @@ def import_image(request):
                 if exists_collections_for_image(target_cell.image):
 
                     cell_list = get_cells_for_image(target_cell.image)
-                    
+
                     other_bench_Flag = False
-                    
+
                     for otherCell in cell_list:
-                        
+
                         if otherCell.matrix.id != matrix.id:
-                            
+
                             other_bench_Flag = True
-                            
-                    if other_bench_Flag == True:
+
+                    if other_bench_Flag:
 
                         if request.user.profile.is_hide_collection_image():
-                                
+
                             target_cell.image.set_hidden(True)
                             target_cell.image.save()
-                                
+
                         else:
-                                
+
                             target_cell.image.set_hidden(False)
                             target_cell.image.save()
-                        
+
                     else:
-                            
+
                         target_cell.image.set_hidden(False)
                         target_cell.image.save()
 
@@ -175,7 +175,7 @@ def import_image(request):
 
                             delete_flag = False
 
-                    if delete_flag == True:
+                    if delete_flag:
 
                         image = target_cell.image
 
@@ -194,15 +194,15 @@ def import_image(request):
 
             target_cell.save()
 
-            data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            data = {'failure': False, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
         else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+            data = {'failure': True, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
     else:
 
-        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = {'failure': True, 'source': str(source), 'target': str(target)}
         return JsonResponse(data)

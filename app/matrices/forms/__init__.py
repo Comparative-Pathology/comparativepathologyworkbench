@@ -38,6 +38,7 @@ from .collectioncreateform import CollectionCreateForm
 from .collectionsummarysearchform import CollectionSummarySearchForm
 from .collectionactivesummaryselectionform import CollectionActiveSummarySelectionForm
 from .collectionsummaryselectionform import CollectionSummarySelectionForm
+from .collectionownerselectionform import CollectionOwnerSelectionForm
 from .commandform import CommandForm
 from .commentform import CommentForm
 from .credentialform import CredentialForm
@@ -54,6 +55,7 @@ from .matrixaddcellform import MatrixAddCellForm
 from .matrixaddrowform import MatrixAddRowForm
 from .matrixaddcolumnform import MatrixAddColumnForm
 from .matrixdeletecellform import MatrixDeleteCellForm
+from .matrixownerselectionform import MatrixOwnerSelectionForm
 from .matrixsummarysearchform import MatrixSummarySearchForm
 from .newmatrixform import NewMatrixForm
 from .protocolform import ProtocolForm

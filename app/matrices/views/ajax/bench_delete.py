@@ -75,7 +75,6 @@ def bench_delete(request, bench_id):
 
         raise PermissionDenied
 
-
     object_id = ''
 
     environment = get_primary_cpw_environment()
@@ -91,7 +90,6 @@ def bench_delete(request, bench_id):
         if response != WORDPRESS_SUCCESS:
 
             messages.error(request, "CPW_WEB:0560 Delete Bench - WordPress Error, Contact System Administrator!")
-
 
     for oldCell in oldCells:
 
@@ -116,14 +114,14 @@ def bench_delete(request, bench_id):
                     if otherCell.matrix.id != bench_id:
 
                         other_bench_Flag = True
-                
-                if other_bench_Flag == True:
+
+                if other_bench_Flag is True:
 
                     if request.user.profile.is_hide_collection_image():
 
                         oldCell.image.set_hidden(True)
                         oldCell.image.save()
-                        
+
                     else:
 
                         oldCell.image.set_hidden(False)
@@ -147,33 +145,34 @@ def bench_delete(request, bench_id):
                         delete_flag = False
 
                 image = oldCell.image
-                
-                if delete_flag == True:
-                    
+
+                if delete_flag is True:
+
                     oldCell.image = None
 
                     oldCell.save()
 
                     if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                        image_path = str(settings.MEDIA_ROOT) + '/' + image.name
+                        image_path = environment.document_root + '/' + image.name
 
                         rm_command = 'rm ' + str(image_path)
                         rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE, universal_newlines=True)
 
                     if image.server.is_omero547() and not image.server.is_idr():
 
-                        image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+                        image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
                         rm_command = 'rm ' + str(image_path)
                         rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE, universal_newlines=True)
 
                     image.delete()
-
 
     object_id = matrix.id
 

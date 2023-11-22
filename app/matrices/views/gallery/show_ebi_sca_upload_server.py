@@ -31,10 +31,7 @@
 from __future__ import unicode_literals
 
 import os
-import subprocess
-from subprocess import call
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -57,7 +54,7 @@ from matrices.routines import get_header_data
 from matrices.routines import convert_url_ebi_sca_to_chart_id
 from matrices.routines import validate_an_ebi_sca_image
 from matrices.routines import validate_an_ebi_sca_url
-
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 HTTP_POST = 'POST'
 
@@ -75,6 +72,7 @@ def show_ebi_sca_upload_server(request, server_id):
 
         raise PermissionDenied
 
+    environment = get_primary_cpw_environment()
 
     data = get_header_data(request.user)
 
@@ -127,7 +125,7 @@ def show_ebi_sca_upload_server(request, server_id):
 
                                 new_chart_id = '/' + chart_id
 
-                                new_path = str(settings.MEDIA_ROOT) + new_chart_id
+                                new_path = environment.document_root + '/' + chart_id
 
                                 document.set_location(new_chart_id)
 
@@ -135,7 +133,8 @@ def show_ebi_sca_upload_server(request, server_id):
 
                                 document.save()
 
-                                return redirect('webgallery_show_ebi_sca_image', server_id=server.id, image_id=chart_id)
+                                return redirect('webgallery_show_ebi_sca_image', server_id=server.id,
+                                                image_id=chart_id)
 
                             else:
 
@@ -156,7 +155,7 @@ def show_ebi_sca_upload_server(request, server_id):
 
                 form = DocumentForm()
 
-            data.update({ 'server': server, 'form': form })
+            data.update({'server': server, 'form': form})
 
             return render(request, 'gallery/show_ebi_sca_upload_server.html', data)
 

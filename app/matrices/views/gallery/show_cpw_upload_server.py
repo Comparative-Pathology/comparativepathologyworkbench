@@ -34,7 +34,6 @@ import os
 
 from datetime import datetime
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -53,6 +52,7 @@ from matrices.forms import DocumentForm
 from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import validate_a_cpw_url
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 HTTP_POST = 'POST'
 
@@ -69,8 +69,9 @@ def show_cpw_upload_server(request, server_id):
     if request.user.username == 'guest':
 
         raise PermissionDenied
-        
-    
+
+    environment = get_primary_cpw_environment()
+
     data = get_header_data(request.user)
 
     if credential_exists(request.user):
@@ -110,7 +111,7 @@ def show_cpw_upload_server(request, server_id):
                         new_chart_id = date_time + '_' + chart_id
                         new_path = '/' + new_chart_id
 
-                        new_full_path = str(settings.MEDIA_ROOT) + new_path
+                        new_full_path = environment.document_root + '/' + new_chart_id
 
                         document.set_location(new_path)
 

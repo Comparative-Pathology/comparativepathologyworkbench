@@ -45,7 +45,7 @@ def nginx_accel(request, image_id):
 
     environment = get_primary_cpw_environment()
 
-    filepath = environment.document_root + image_id
+    filepath = environment.document_root + '/' + image_id
 
     test_command = 'echo $(test -f ' + filepath + ') $?'
 

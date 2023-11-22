@@ -33,8 +33,6 @@ from django.core.management.base import BaseCommand
 
 from datetime import datetime
 
-from django.conf import settings
-
 from decouple import config
 
 from omero.gateway import BlitzGateway
@@ -135,7 +133,7 @@ class Command(BaseCommand):
 
                             new_birdseye_url = 'http://' + environment.web_root + '/' + new_chart_id
 
-                            new_full_path = str(settings.MEDIA_ROOT) + '/' + new_chart_id
+                            new_full_path = environment.document_root + '/' + new_chart_id
 
                             image.set_birdseye_url(new_birdseye_url)
 

@@ -30,6 +30,7 @@
 ###
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
@@ -54,6 +55,6 @@ def home(request):
 
     data = get_header_data(request.user)
 
-    data.update({ 'credentialExists': credentialExists,  })
+    data.update({'credentialExists': credentialExists, })
 
     return render(request, 'host/home.html', data)

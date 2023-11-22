@@ -45,6 +45,7 @@ from matrices.routines.exists_bench_for_last_used_collection import exists_bench
 from matrices.routines.get_benches_for_last_used_collection import get_benches_for_last_used_collection
 from matrices.routines.exists_user_for_last_used_collection import exists_user_for_last_used_collection
 from matrices.routines.get_users_for_last_used_collection import get_users_for_last_used_collection
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 """
@@ -53,6 +54,8 @@ from matrices.routines.get_users_for_last_used_collection import get_users_for_l
 def collection_delete_consequences(a_user, a_collection):
 
     Collection = apps.get_model('matrices', 'Collection')
+
+    environment = get_primary_cpw_environment()
 
     images = a_collection.get_all_images()
 
@@ -76,21 +79,23 @@ def collection_delete_consequences(a_user, a_collection):
 
                 if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                    image_path = str(settings.MEDIA_ROOT) + '/' + image.name
+                    image_path = environment.document_root + '/' + image.name
 
                     rm_command = 'rm ' + str(image_path)
                     rm_escaped = rm_command.replace("(","\(").replace(")","\)")
 
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                               universal_newlines=True)
 
                 if image.server.is_omero547() and not image.server.is_idr():
 
-                    image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+                    image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
                     rm_command = 'rm ' + str(image_path)
                     rm_escaped = rm_command.replace("(","\(").replace(")","\)")
 
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                               universal_newlines=True)
 
                 image.delete()
 

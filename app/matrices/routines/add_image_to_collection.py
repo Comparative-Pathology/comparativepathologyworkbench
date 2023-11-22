@@ -47,7 +47,6 @@ from decouple import config
 
 from matrices.routines.aescipher import AESCipher
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
-from matrices.routines.get_image_count_for_image import get_image_count_for_image
 from matrices.routines.exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi
 from matrices.routines.get_images_for_id_server_owner_roi import get_images_for_id_server_owner_roi
 from matrices.routines.get_an_ebi_sca_experiment_id_from_chart_id import get_an_ebi_sca_experiment_id_from_chart_id
@@ -63,7 +62,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
     Collection = apps.get_model('matrices', 'Collection')
     Document = apps.get_model('matrices', 'Document')
 
-    environment  = get_primary_cpw_environment()
+    environment = get_primary_cpw_environment()
 
     user = User.objects.get(username=credential.username)
 
@@ -108,7 +107,6 @@ def add_image_to_collection(credential, server, image_id, roi_id):
                 image_comment = document.comment
                 image_viewer_url = document.source_url
 
-
     if server.is_ebi_sca():
 
         experiment_id = get_an_ebi_sca_experiment_id_from_chart_id(image_id)
@@ -123,7 +121,6 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         image_birdseye_url = chart['birdseye_url']
 
         document_key = '/' + full_image_name
-
 
     if server.is_omero547():
 
@@ -179,10 +176,10 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
                 image_birdseye_url = 'http://' + environment.web_root + '/' + new_chart_id
 
-                new_full_path = str(settings.MEDIA_ROOT) + '/' + new_chart_id
+                new_full_path = environment.document_root + '/' + new_chart_id
 
                 rendered_thumb.save(new_full_path)
-            
+
             conn.close()
 
     if server.is_wordpress():
@@ -193,7 +190,6 @@ def add_image_to_collection(credential, server, image_id, roi_id):
         full_image_name = json_image['name']
         image_viewer_url = json_image['viewer_url']
         image_birdseye_url = json_image['thumbnail_url']
-
 
     if roi_id == 0:
 
@@ -215,14 +211,14 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
         else:
 
-            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, image_comment, image_hidden)
+            image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id,
+                                     user, image_comment, image_hidden)
 
             image_out.save()
 
         collection = get_active_collection_for_user(user)
 
         Collection.assign_image(image_out, collection)
-
 
     else:
 
@@ -245,7 +241,8 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
                     else:
 
-                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url, image_birdseye_url, roi_id, user, comment, image_hidden)
+                        image_out = Image.create(image_id, full_image_name, server, image_viewer_url,
+                                                 image_birdseye_url, roi_id, user, comment, image_hidden)
 
                         image_out.save()
 

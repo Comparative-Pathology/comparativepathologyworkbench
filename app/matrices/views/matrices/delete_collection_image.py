@@ -47,6 +47,7 @@ from matrices.models import Artefact
 from matrices.routines import credential_exists
 from matrices.routines import exists_image_in_cells
 from matrices.routines import get_header_data
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 #
@@ -54,6 +55,8 @@ from matrices.routines import get_header_data
 #
 @login_required
 def delete_collection_image(request, collection_id, image_id):
+
+    environment = get_primary_cpw_environment()
 
     data = get_header_data(request.user)
 
@@ -63,7 +66,8 @@ def delete_collection_image(request, collection_id, image_id):
 
         if exists_image_in_cells(image):
 
-            messages.error(request, 'CPW_WEB:0530 Image ' + str(image.id) + ' NOT deleted - Still referenced in Benches!')
+            messages.error(request, 'CPW_WEB:0530 Image ' + str(image.id) +
+                           ' NOT deleted - Still referenced in Benches!')
 
         else:
 
@@ -88,7 +92,8 @@ def delete_collection_image(request, collection_id, image_id):
                                 rm_command = 'rm ' + str(artefact.location)
                                 rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE, universal_newlines=True)
 
                             image_link.delete()
 
@@ -114,7 +119,8 @@ def delete_collection_image(request, collection_id, image_id):
                                 rm_command = 'rm ' + str(artefact.location)
                                 rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE, universal_newlines=True)
 
                             image_link.delete()
 
@@ -134,21 +140,23 @@ def delete_collection_image(request, collection_id, image_id):
 
                 if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                    image_path = str(settings.MEDIA_ROOT) + '/' + image.name
+                    image_path = environment.document_root + '/' + image.name
 
                     rm_command = 'rm ' + str(image_path)
                     rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                               universal_newlines=True)
 
                 if image.server.is_omero547() and not image.server.is_idr():
 
-                    image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+                    image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
                     rm_command = 'rm ' + str(image_path)
                     rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                               universal_newlines=True)
 
                 image.delete()
 

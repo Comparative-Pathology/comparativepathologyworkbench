@@ -189,7 +189,7 @@ The amend cell template
 			  	  	<div id="image_child" ondrop="drop(event)" ondragover="allowDrop(event)">
 			    				{% csrf_token %}
 			  	  	  <div class="cell" id="image_child" style="width: 284px; height: 284px;">
-			  	  	    <div id="image_parent" class="cell-body" style="top: 12px; left: 12px; width: 250px; height: 250px;">
+			  	  	    <div id="image_child" class="cell-body" style="top: 12px; left: 12px; width: 250px; height: 250px;">
 {% if image_child != None %}
 			  	  		  <a id="image_child" href="{{ image_child.viewer_url }}" target="_blank">
 			  	  		    <img id="image_child" style="width: 250px; height: 250px;" alt="{{ image_child.name }}" title="{{ image_child.name }}" src="{{ image_child.birdseye_url }}">

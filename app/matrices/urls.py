@@ -165,7 +165,7 @@ urlpatterns = [
          name='edit_blog_credential'),
     path('delete_blog_credential/<int:credential_id>/', matrices_views.delete_blog_credential,
          name='delete_blog_credential'),
-    path('highcharts/<str:image_id>/', matrices_views.nginx_accel,
+    path('protected/<str:image_id>/', matrices_views.nginx_accel,
          name='nginx_accel'),
 
     #   views/ebi

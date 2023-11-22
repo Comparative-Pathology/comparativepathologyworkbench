@@ -34,7 +34,6 @@ import os
 
 from datetime import datetime
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -47,8 +46,6 @@ from django.urls import reverse
 from matrices.forms import ArtefactForm
 
 from matrices.models import Image
-from matrices.models import Collection
-from matrices.models import Artefact
 from matrices.models import ImageLink
 
 from matrices.routines import credential_exists
@@ -117,19 +114,18 @@ def link_images(request, image_parent_id, image_child_id):
 
         collection_image_list = selected_collection.get_images()
 
-
         if request.method == HTTP_POST:
 
             form = ArtefactForm(request.POST, request.FILES)
 
-            if image_parent == None:
+            if image_parent is None:
 
                 messages.error(request, "CPW_WEB:0080 Link Images - No Parent Image Supplied!")
                 form.add_error(None, "CPW_WEB:0080 Link Images - No Parent Image Supplied!")
 
             else:
 
-                if image_child == None:
+                if image_child is None:
 
                     messages.error(request, "CPW_WEB:0080 Link Images - No Child Image Supplied!")
                     form.add_error(None, "CPW_WEB:0080 Link Images - No Child Image Supplied!")
@@ -154,10 +150,10 @@ def link_images(request, image_parent_id, image_child_id):
                             date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
                             initial_path = artefact.location.path
-                            new_path = '/' + date_time + '_' + location
-                            new_full_path = str(settings.MEDIA_ROOT) + new_path
+                            new_path = date_time + '_' + location
+                            new_full_path = environment.document_root + '/' + new_path
 
-                            url = 'http://' + environment.web_root + new_path
+                            url = 'http://' + environment.web_root + '/' + new_path
 
                             artefact.set_location(new_full_path)
                             artefact.set_url(url)
@@ -181,7 +177,8 @@ def link_images(request, image_parent_id, image_child_id):
 
         data = get_header_data(request.user)
 
-        data.update({ 'form': form, 'image_parent': image_parent, 'image_child': image_child, 'selected_collection': selected_collection, 'collection_image_list': collection_image_list })
+        data.update({'form': form, 'image_parent': image_parent, 'image_child': image_child,
+                     'selected_collection': selected_collection, 'collection_image_list': collection_image_list})
 
         return render(request, 'matrices/link_images.html', data)
 

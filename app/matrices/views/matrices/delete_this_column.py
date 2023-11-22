@@ -89,38 +89,36 @@ def delete_this_column(request, matrix_id, column_id):
 
                         response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
-
                 if oldCell.has_image():
 
                     if exists_collections_for_image(oldCell.image):
-                                       
+
                         cell_list = get_cells_for_image(oldCell.image)
-                    
+
                         other_bench_Flag = False
-                    
+
                         for otherCell in cell_list:
-                        
+
                             if otherCell.matrix.id != matrix.id:
-                            
+
                                 other_bench_Flag = True
-                            
-                        if other_bench_Flag == True:
-                          
+
+                        if other_bench_Flag is True:
+
                             if request.user.profile.is_hide_collection_image():
-                                
+
                                 oldCell.image.set_hidden(True)
                                 oldCell.image.save()
-                                
+
                             else:
-                                
+
                                 oldCell.image.set_hidden(False)
                                 oldCell.image.save()
-                        
                         else:
-                            
+
                             oldCell.image.set_hidden(False)
                             oldCell.image.save()
-                            
+
                     else:
 
                         cell_list = get_cells_for_image(oldCell.image)
@@ -143,21 +141,23 @@ def delete_this_column(request, matrix_id, column_id):
 
                             if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                                image_path = str(settings.MEDIA_ROOT) + '/' + image.name
+                                image_path = environment.document_root + '/' + image.name
 
                                 rm_command = 'rm ' + str(image_path)
                                 rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE, universal_newlines=True)
 
                             if image.server.is_omero547() and not image.server.is_idr():
 
-                                image_path = str(settings.MEDIA_ROOT) + '/' + image.get_file_name_from_birdseye_url()
+                                image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
                                 rm_command = 'rm ' + str(image_path)
                                 rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE, universal_newlines=True)
 
                             image.delete()
 
@@ -178,7 +178,7 @@ def delete_this_column(request, matrix_id, column_id):
             columns = matrix.get_columns()
             rows = matrix.get_rows()
 
-            data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 

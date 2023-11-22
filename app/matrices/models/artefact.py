@@ -105,4 +105,4 @@ class Artefact(models.Model):
 
         path_array = self.location.name.split("/")
 
-        return path_array[6]
+        return path_array[len(path_array) - 1]

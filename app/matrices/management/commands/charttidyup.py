@@ -31,7 +31,6 @@ from __future__ import unicode_literals
 
 import subprocess
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from matrices.models import Image
@@ -154,7 +153,7 @@ class Command(BaseCommand):
 
             if not exists_image_in_table(output.strip()):
 
-                new_output = str(settings.MEDIA_ROOT) + "/" + output.strip()
+                new_output = environment.document_root + '/' + output.strip()
 
                 if not exists_artefact_in_table(new_output):
 
@@ -162,7 +161,7 @@ class Command(BaseCommand):
 
                         imageDelTotal = imageDelTotal + 1
 
-                        rm_command = environment.document_root + output.strip()
+                        rm_command = environment.document_root + '/' + output.strip()
                         rm_escaped = 'rm ' + escape_string(rm_command)
 
                         rm_list.append(rm_escaped)

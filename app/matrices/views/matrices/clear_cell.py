@@ -34,7 +34,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.forms import SearchUrlForm
@@ -68,6 +67,8 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
     if credential_exists(request.user):
 
+        credential = get_credential_for_user(request.user)
+
         cell = get_object_or_404(Cell, pk=cell_id)
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
@@ -87,9 +88,7 @@ def clear_cell(request, matrix_id, cell_id, path_from):
 
             if cell.has_blogpost():
 
-                credential = get_credential_for_user(request.user)
-
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     response = environment.delete_a_post_from_wordpress(credential, cell.blogpost)
 
@@ -179,16 +178,19 @@ def clear_cell(request, matrix_id, cell_id, path_from):
                 matrix_link = 'matrix_link'
                 amend_cell = 'amend_cell'
 
-                credential = get_credential_for_user(request.user)
-
                 if not credential.has_apppwd():
 
                     matrix_link = ''
 
                 return_page = 'matrices/amend_cell.html'
 
-                data.update({'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell,
-                             'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix})
+                data.update({'form': form,
+                             'collection_image_list': collection_image_list,
+                             'amend_cell': amend_cell,
+                             'matrix_link': matrix_link,
+                             'cell': cell,
+                             'cell_link': cell_link,
+                             'matrix': matrix})
 
                 return HttpResponseRedirect(reverse('amend_cell', args=(matrix_id, cell_id, )))
 

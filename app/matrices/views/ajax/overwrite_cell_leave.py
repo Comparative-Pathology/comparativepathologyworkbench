@@ -25,14 +25,13 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the overwrite_cell_leave view routine
+# This file contains the overwrite_cell_leave view routine - COPY
 #
 ###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -54,7 +53,7 @@ WORDPRESS_SUCCESS = 'Success!'
 #
 # OVERWRITE A TARGET CELL AND LEAVE SOURCE IN PLACE - COPY
 #
-#  Overwrites Target Cell with Source Cell, Source Cell is left in place
+#  Overwrites Target Cell with Source Cell, Source Cell is left in place - COPY
 #
 @login_required()
 def overwrite_cell_leave(request):
@@ -71,22 +70,21 @@ def overwrite_cell_leave(request):
 
         raise PermissionDenied
 
-
     source = request.POST['source']
     target = request.POST['target']
-    source_type = request.POST['source_type']
 
     source_cell = get_object_or_404(Cell, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
 
     matrix = source_cell.matrix
 
-    owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
     environment = get_primary_cpw_environment()
 
     if credential_exists(user):
+
+        credential = get_credential_for_user(request.user)
 
         if exists_update_for_bench_and_user(matrix, request.user):
 
@@ -118,9 +116,7 @@ def overwrite_cell_leave(request):
 
             if target_cell.has_blogpost():
 
-                credential = get_credential_for_user(request.user)
-
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     response = environment.delete_a_post_from_wordpress(credential, target_cell.blogpost)
 
@@ -129,29 +125,29 @@ def overwrite_cell_leave(request):
                 if exists_collections_for_image(target_cell.image):
 
                     cell_list = get_cells_for_image(target_cell.image)
-                    
+
                     other_bench_Flag = False
-                    
+
                     for otherCell in cell_list:
-                        
+
                         if otherCell.matrix.id != matrix.id:
-                            
+
                             other_bench_Flag = True
-                            
-                    if other_bench_Flag == True:
-                          
+
+                    if other_bench_Flag is True:
+
                         if request.user.profile.is_hide_collection_image():
-                                
+
                             target_cell.image.set_hidden(True)
                             target_cell.image.save()
-                                
+
                         else:
-                                
+
                             target_cell.image.set_hidden(False)
                             target_cell.image.save()
-                        
+
                     else:
-                            
+
                         target_cell.image.set_hidden(False)
                         target_cell.image.save()
 
@@ -167,7 +163,7 @@ def overwrite_cell_leave(request):
 
                             delete_flag = False
 
-                    if delete_flag == True:
+                    if delete_flag is True:
 
                         image = target_cell.image
 
@@ -184,7 +180,15 @@ def overwrite_cell_leave(request):
 
                 imageOld = Image.objects.get(pk=source_cell.image.id)
 
-                imageNew = Image.create(imageOld.identifier, imageOld.name, imageOld.server, imageOld.viewer_url, imageOld.birdseye_url, imageOld.roi, imageOld.owner, imageOld.comment, imageOld.hidden)
+                imageNew = Image.create(imageOld.identifier,
+                                        imageOld.name,
+                                        imageOld.server,
+                                        imageOld.viewer_url,
+                                        imageOld.birdseye_url,
+                                        imageOld.roi,
+                                        imageOld.owner,
+                                        imageOld.comment,
+                                        imageOld.hidden)
 
                 imageNew.save()
 
@@ -196,13 +200,13 @@ def overwrite_cell_leave(request):
 
             if source_cell.has_blogpost():
 
-                credential = get_credential_for_user(request.user)
-
                 post_id = ''
 
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, source_cell.title, source_cell.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                             source_cell.title,
+                                                                             source_cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -213,15 +217,15 @@ def overwrite_cell_leave(request):
             source_cell.save()
             target_cell.save()
 
-            data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            data = {'failure': False, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
         else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+            data = {'failure': True, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
     else:
 
-        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = {'failure': True, 'source': str(source), 'target': str(target)}
         return JsonResponse(data)

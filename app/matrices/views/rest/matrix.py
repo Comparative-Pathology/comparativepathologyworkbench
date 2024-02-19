@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-###!
+#
 # \file         matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -31,10 +31,8 @@ from __future__ import unicode_literals
 
 from django.db.models import Q
 
-from rest_framework import permissions, renderers, viewsets
-from rest_framework.decorators import action
+from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from matrices.models import Matrix
 from matrices.models import Cell
@@ -63,10 +61,9 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
     queryset = Matrix.objects.all()
 
-    permission_classes = [ MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor ]
+    permission_classes = [MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor]
 
     serializer_class = MatrixSerializer
-
 
     def get_queryset(self):
 
@@ -96,103 +93,103 @@ class MatrixViewSet(viewsets.ModelViewSet):
         if sort_parameter == 'id':
             order_parameter = 'matrix_id'
             order_parameter_2 = 'id'
-        
+
         if sort_parameter == '-id':
             order_parameter = '-matrix_id'
             order_parameter_2 = '-id'
-        
+
         if sort_parameter == 'title':
             order_parameter = 'matrix_title'
             order_parameter_2 = 'title'
-        
+
         if sort_parameter == '-title':
             order_parameter = '-matrix_title'
             order_parameter_2 = '-title'
-        
+
         if sort_parameter == 'created':
             order_parameter = 'matrix_created'
             order_parameter_2 = 'created'
-        
+
         if sort_parameter == '-created':
             order_parameter = '-matrix_created'
             order_parameter_2 = '-created'
-        
+
         if sort_parameter == 'updated':
             order_parameter = 'matrix_updated'
             order_parameter_2 = 'updated'
-        
+
         if sort_parameter == '-updated':
             order_parameter = '-matrix_updated'
             order_parameter_2 = '-updated'
-        
+
         if sort_parameter == 'owner':
             order_parameter = 'matrix_owner'
             order_parameter_2 = 'owner'
-        
+
         if sort_parameter == '-owner':
             order_parameter = '-matrix_owner'
             order_parameter_2 = '-owner'
-        
+
         if sort_parameter == 'matrix_id':
             order_parameter = 'matrix_id'
             order_parameter_2 = 'id'
-        
+
         if sort_parameter == '-matrix_id':
             order_parameter = '-matrix_id'
             order_parameter_2 = '-id'
-        
+
         if sort_parameter == 'matrix_title':
             order_parameter = 'matrix_title'
             order_parameter_2 = 'title'
-        
+
         if sort_parameter == '-matrix_title':
             order_parameter = '-matrix_title'
             order_parameter_2 = '-title'
-        
+
         if sort_parameter == 'matrix_created':
             order_parameter = 'matrix_created'
             order_parameter_2 = 'created'
-        
+
         if sort_parameter == '-matrix_created':
             order_parameter = '-matrix_created'
             order_parameter_2 = '-created'
-        
+
         if sort_parameter == 'matrix_updated':
             order_parameter = 'matrix_updated'
             order_parameter_2 = 'updated'
-        
+
         if sort_parameter == '-matrix_updated':
             order_parameter = '-matrix_updated'
             order_parameter_2 = '-updated'
-        
+
         if sort_parameter == 'matrix_owner':
             order_parameter = 'matrix_owner'
             order_parameter_2 = 'owner'
-        
+
         if sort_parameter == '-matrix_owner':
             order_parameter = '-matrix_owner'
             order_parameter_2 = '-owner'
 
         if sort_parameter != 'id' and \
-            sort_parameter != '-id' and \
-            sort_parameter != 'title' and \
-            sort_parameter != '-title' and \
-            sort_parameter != 'created' and \
-            sort_parameter != '-created' and \
-            sort_parameter != 'updated' and \
-            sort_parameter != '-updated' and \
-            sort_parameter != 'owner' and \
-            sort_parameter != '-owner' and \
-            sort_parameter != 'matrix_id' and \
-            sort_parameter != '-matrix_id' and \
-            sort_parameter != 'matrix_title' and \
-            sort_parameter != '-matrix_title' and \
-            sort_parameter != 'matrix_created' and \
-            sort_parameter != '-matrix_created' and \
-            sort_parameter != 'matrix_updated' and \
-            sort_parameter != '-matrix_updated' and \
-            sort_parameter != 'matrix_owner' and \
-            sort_parameter != '-matrix_owner':
+           sort_parameter != '-id' and \
+           sort_parameter != 'title' and \
+           sort_parameter != '-title' and \
+           sort_parameter != 'created' and \
+           sort_parameter != '-created' and \
+           sort_parameter != 'updated' and \
+           sort_parameter != '-updated' and \
+           sort_parameter != 'owner' and \
+           sort_parameter != '-owner' and \
+           sort_parameter != 'matrix_id' and \
+           sort_parameter != '-matrix_id' and \
+           sort_parameter != 'matrix_title' and \
+           sort_parameter != '-matrix_title' and \
+           sort_parameter != 'matrix_created' and \
+           sort_parameter != '-matrix_created' and \
+           sort_parameter != 'matrix_updated' and \
+           sort_parameter != '-matrix_updated' and \
+           sort_parameter != 'matrix_owner' and \
+           sort_parameter != '-matrix_owner':
 
             order_parameter = 'matrix_id'
             order_parameter_2 = 'id'
@@ -211,7 +208,6 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
         return bench_queryset
 
-
     def list(self, request, *args, **kwargs):
         """List Images.
 
@@ -222,7 +218,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         responseMsg = 'Bench List Response Message'
@@ -239,25 +235,23 @@ class MatrixViewSet(viewsets.ModelViewSet):
         if not request.user.is_superuser:
 
             if query_title == "" and \
-                query_description == "" and \
-                query_owner == "" and \
-                query_authority  == "" and \
-                query_created_before  == "" and \
-                query_created_after  == "" and \
-                query_modified_before  == "" and \
-                query_modified_after  == "":
+               query_description == "" and \
+               query_owner == "" and \
+               query_authority == "" and \
+               query_created_before == "" and \
+               query_created_after == "" and \
+               query_modified_before == "" and \
+               query_modified_after == "":
 
                 responseMsg = 'Bench LIST Not Available without Search Parameters!'
-                
-                return Response(data=responseMsg)
 
+                return Response(data=responseMsg)
 
         queryset = self.get_queryset()
 
         serializer = MatrixSerializer(queryset, many=True, context={'request': request})
-        
+
         return Response(serializer.data)
-        
 
     def partial_update(self, request, *args, **kwargs):
         """Partial Update Bench.
@@ -269,11 +263,10 @@ class MatrixViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         return Response(data='Bench PARTIAL UPDATE Not Available')
-
 
     def destroy(self, request, *args, **kwargs):
         """Destroy Bench.
@@ -285,7 +278,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         responseMsg = 'Bench Deletion Response Message'
@@ -310,11 +303,10 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                 # Does the User have a Blog Password ... ?
                 #  Yes
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     # Delete the Cell Blogpost
                     response = environment.delete_a_post_from_wordpress(credential, cell.blogpost)
-
 
             # Does the Cell have an Image ... ?
             #  Yes
@@ -333,14 +325,14 @@ class MatrixViewSet(viewsets.ModelViewSet):
                         if otherCell.matrix.id != matrix.id:
 
                             other_bench_Flag = True
-                
-                    if other_bench_Flag == True:
+
+                    if other_bench_Flag is True:
 
                         if request.user.profile.is_hide_collection_image():
 
                             cell.image.set_hidden(True)
                             cell.image.save()
-                        
+
                         else:
 
                             cell.image.set_hidden(False)
@@ -350,7 +342,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                         cell.image.set_hidden(False)
                         cell.image.save()
-                
+
                 else:
 
                     cell_list = get_cells_for_image(cell.image)
@@ -363,7 +355,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                             delete_flag = False
 
-                    if delete_flag == True:
+                    if delete_flag is True:
 
                         image = cell.image
 
@@ -373,14 +365,13 @@ class MatrixViewSet(viewsets.ModelViewSet):
 
                         image.delete()
 
-
         # Does the Bench have a Blogpost ... ?
         #  Yes
         if matrix.has_blogpost():
 
             # Does the User have a Blog Password ... ?
             #  Yes
-            if credential.has_apppwd():
+            if credential.has_apppwd() and environment.is_wordpress_active():
 
                 # Delete the Bench Blogpost
                 response = environment.delete_a_post_from_wordpress(credential, matrix.blogpost)

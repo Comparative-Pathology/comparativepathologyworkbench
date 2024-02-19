@@ -10,6 +10,7 @@
         "document_root": "/home/app/web/mediafiles/",
         "nginx_private_location": "private_highcharts",
         "wordpress_web_root": "192.168.0.10:80/my-wordpress",
+        "wordpress_active": true,
         "from_email": "The Comparative Pathology Workbench Team <Michael.Wicks@ed.ac.uk>",
         "date_format": "%Y/%m/%d",
         "owner": 1,

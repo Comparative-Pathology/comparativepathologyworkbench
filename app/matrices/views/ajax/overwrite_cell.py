@@ -25,14 +25,13 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the overwrite_cell view routine
+# This file contains the overwrite_cell view routine - CUT
 #
 ###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -47,9 +46,9 @@ from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 #
-# OVERWRITE A CELL - MOVE
+# OVERWRITE A CELL - MOVE - CUT
 #
-#  Overwrites Target Cell with Source Cell, Source Cell is emptied
+#  Overwrites Target Cell with Source Cell, Source Cell is emptied - CUT
 #
 @login_required()
 def overwrite_cell(request):
@@ -66,22 +65,21 @@ def overwrite_cell(request):
 
         raise PermissionDenied
 
-
     source = request.POST['source']
     target = request.POST['target']
-    source_type = request.POST['source_type']
 
     source_cell = get_object_or_404(Cell, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
 
     matrix = source_cell.matrix
 
-    owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
     environment = get_primary_cpw_environment()
 
     if credential_exists(user):
+
+        credential = get_credential_for_user(request.user)
 
         if exists_update_for_bench_and_user(matrix, request.user):
 
@@ -113,9 +111,7 @@ def overwrite_cell(request):
 
             if target_cell.has_blogpost():
 
-                credential = get_credential_for_user(request.user)
-
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     response = environment.delete_a_post_from_wordpress(credential, target_cell.blogpost)
 
@@ -124,29 +120,29 @@ def overwrite_cell(request):
                 if exists_collections_for_image(target_cell.image):
 
                     cell_list = get_cells_for_image(target_cell.image)
-                    
+
                     other_bench_Flag = False
-                    
+
                     for otherCell in cell_list:
-                        
+
                         if otherCell.matrix.id != matrix.id:
-                            
+
                             other_bench_Flag = True
-                            
-                    if other_bench_Flag == True:
-                          
+
+                    if other_bench_Flag is True:
+
                         if request.user.profile.is_hide_collection_image():
-                                
+
                             target_cell.image.set_hidden(True)
                             target_cell.image.save()
-                                
+
                         else:
-                                
+
                             target_cell.image.set_hidden(False)
                             target_cell.image.save()
-                        
+
                     else:
-                            
+
                         target_cell.image.set_hidden(False)
                         target_cell.image.save()
 
@@ -162,7 +158,7 @@ def overwrite_cell(request):
 
                             delete_flag = False
 
-                    if delete_flag == True:
+                    if delete_flag is True:
 
                         image = target_cell.image
 
@@ -171,7 +167,6 @@ def overwrite_cell(request):
                         target_cell.save()
 
                         image.delete()
-
 
             source_xcoordinate = source_cell.xcoordinate
             source_ycoordinate = source_cell.ycoordinate
@@ -194,15 +189,15 @@ def overwrite_cell(request):
             source_cell.save()
             target_cell.save()
 
-            data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            data = {'failure': False, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
         else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+            data = {'failure': True, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
     else:
 
-        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = {'failure': True, 'source': str(source), 'target': str(target)}
         return JsonResponse(data)

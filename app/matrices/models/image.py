@@ -107,13 +107,13 @@ class Image(models.Model):
             return False
 
     def is_omero_image(self):
-        if "iviewer" in self.viewer_url:
+        if self.server.is_omero547():
             return True
         else:
             return False
 
     def is_non_omero_image(self):
-        if "iviewer" in self.viewer_url:
+        if self.server.is_omero547():
             return False
         else:
             return True

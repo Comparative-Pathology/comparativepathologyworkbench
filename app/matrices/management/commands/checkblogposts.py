@@ -99,29 +99,29 @@ class Command(BaseCommand):
 
         for matrix in matrix_list:
 
+            credential = get_credential_for_user(matrix.owner)
+
             benchCount = benchCount + 1
 
             if matrix.has_blogpost():
 
-                blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
-                if blogpost['status'] == WORDPRESS_SUCCESS:
+                    blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-                    benchBlogCount = benchBlogCount + 1
+                    if blogpost['status'] == WORDPRESS_SUCCESS:
 
-                else:
+                        benchBlogCount = benchBlogCount + 1
 
-                    benchBlogNoExistsCount = benchBlogNoExistsCount + 1
+                    else:
 
-                    out_message = "Bench CPW:{0:06d} has Blogpost that does NOT EXIST!!"\
-                        .format(matrix.id)
-                    self.stdout.write(self.style.SUCCESS(out_message))
+                        benchBlogNoExistsCount = benchBlogNoExistsCount + 1
 
-                    if update:
+                        out_message = "Bench CPW:{0:06d} has Blogpost that does NOT EXIST!!"\
+                            .format(matrix.id)
+                        self.stdout.write(self.style.SUCCESS(out_message))
 
-                        credential = get_credential_for_user(matrix.owner)
-
-                        if credential.has_apppwd():
+                        if update:
 
                             returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
                                                                                      matrix.description)
@@ -146,9 +146,7 @@ class Command(BaseCommand):
 
                 if update:
 
-                    credential = get_credential_for_user(matrix.owner)
-
-                    if credential.has_apppwd():
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                         returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
                                                                                  matrix.description)
@@ -174,31 +172,30 @@ class Command(BaseCommand):
 
                 if cell.has_blogpost():
 
-                    blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
-                    if blogpost['status'] == WORDPRESS_SUCCESS:
+                        blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
-                        cellBlogCount = cellBlogCount + 1
+                        if blogpost['status'] == WORDPRESS_SUCCESS:
 
-                    else:
+                            cellBlogCount = cellBlogCount + 1
 
-                        cellBlogNoExistsCount = cellBlogNoExistsCount + 1
+                        else:
 
-                        out_message = "Image Name : {0}"\
-                            .format(cell.image.name)
-                        self.stdout.write(self.style.SUCCESS(out_message))
+                            cellBlogNoExistsCount = cellBlogNoExistsCount + 1
 
-                        out_message = "Cell  CPW:{0:06d}_{1:012d} has Blogpost that does NOT EXIST!!"\
-                            .format(matrix.id, cell.id)
-                        self.stdout.write(self.style.SUCCESS(out_message))
+                            out_message = "Image Name : {0}"\
+                                .format(cell.image.name)
+                            self.stdout.write(self.style.SUCCESS(out_message))
 
-                        if update:
+                            out_message = "Cell  CPW:{0:06d}_{1:012d} has Blogpost that does NOT EXIST!!"\
+                                .format(matrix.id, cell.id)
+                            self.stdout.write(self.style.SUCCESS(out_message))
 
-                            credential = get_credential_for_user(matrix.owner)
+                            if update:
 
-                            if credential.has_apppwd():
-
-                                returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title,
+                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                         cell.title,
                                                                                          cell.description)
 
                                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -226,9 +223,7 @@ class Command(BaseCommand):
 
                     if update:
 
-                        credential = get_credential_for_user(matrix.owner)
-
-                        if credential.has_apppwd():
+                        if credential.has_apppwd() and environment.is_wordpress_active():
 
                             returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title,
                                                                                      cell.description)

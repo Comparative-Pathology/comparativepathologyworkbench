@@ -107,10 +107,15 @@ DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
         'ATOMIC_REQUESTS': config('DB_ATOMIC_REQUESTS'),
-        "OPTIONS": {
-            "service": "cpw_service",
-            "passfile": ".cpw_pgpass"
-        }
+        # "OPTIONS": {
+        # "service": "cpw_service",
+        # "passfile": ".cpw_pgpass"
+        # }
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
 

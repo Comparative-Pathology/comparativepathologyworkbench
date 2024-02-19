@@ -58,10 +58,10 @@ The home template
 	  <div class="home-grid-item">
 		  <div class="card">
 		  <div class="card-link">
-{% if environment.is_development %}
+  {% if environment.is_development %}
 			  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
-{% endif %}
-{% if environment.is_czi %}
+  {% endif %}
+  {% if environment.is_czi %}
 			  <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
   {% endif %}
   {% if environment.is_canada %}

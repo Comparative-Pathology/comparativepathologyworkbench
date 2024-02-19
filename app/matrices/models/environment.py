@@ -54,12 +54,11 @@ CMD_BLOG_DELETE_POST = 'DeletePost'
 CMD_BLOG_GET_LINK_POST = 'LinkPost'
 
 
-"""
-    The Environment Model
-"""
-
-
+#
+#    The Environment Model
+#
 class Environment(models.Model):
+
     name = models.CharField(max_length=50, blank=False, unique=True)
     location = models.ForeignKey(Location, related_name='environments', default=0, on_delete=models.DO_NOTHING)
     protocol = models.ForeignKey(Protocol, related_name='environments', default=0, on_delete=models.DO_NOTHING)
@@ -67,6 +66,7 @@ class Environment(models.Model):
     document_root = models.CharField(max_length=255, blank=False, default='')
     nginx_private_location = models.CharField(max_length=255, blank=False, default='')
     wordpress_web_root = models.CharField(max_length=255, blank=False, default='')
+    wordpress_active = models.BooleanField(default=False)
     from_email = models.CharField(max_length=255, blank=False, default='')
     date_format = models.CharField(max_length=255, blank=False, default='%A, %B %e, %Y')
     owner = models.ForeignKey(User, related_name='environments', on_delete=models.DO_NOTHING)
@@ -160,6 +160,12 @@ class Environment(models.Model):
 
     def is_development(self):
         if self.location.name == ENVIRONMENT_DEVELOPMENT:
+            return True
+        else:
+            return False
+
+    def is_wordpress_active(self):
+        if self.wordpress_active is True:
             return True
         else:
             return False

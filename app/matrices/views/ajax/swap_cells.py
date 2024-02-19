@@ -62,17 +62,14 @@ def swap_cells(request):
 
         raise PermissionDenied
 
-
     source = request.POST['source']
     target = request.POST['target']
-    source_type = request.POST['source_type']
 
     source_cell = get_object_or_404(Cell, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
 
     matrix = source_cell.matrix
 
-    owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
     if credential_exists(user):
@@ -105,7 +102,6 @@ def swap_cells(request):
 
                 matrix.save()
 
-
             source_xcoordinate = source_cell.xcoordinate
             source_ycoordinate = source_cell.ycoordinate
 
@@ -121,15 +117,15 @@ def swap_cells(request):
             source_cell.save()
             target_cell.save()
 
-            data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            data = {'failure': False, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
         else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+            data = {'failure': True, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
     else:
 
-        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = {'failure': True, 'source': str(source), 'target': str(target)}
         return JsonResponse(data)

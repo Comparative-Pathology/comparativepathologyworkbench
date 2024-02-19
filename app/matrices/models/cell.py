@@ -28,21 +28,8 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
-
-from random import randint
 
 from matrices.models import Matrix
 from matrices.models import Image
@@ -52,10 +39,11 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 WORDPRESS_SUCCESS = 'Success!'
 
 
-"""
-    CELL (in a BENCH)
-"""
+#
+#    CELL (in a BENCH)
+#
 class Cell(models.Model):
+
     matrix = models.ForeignKey(Matrix, related_name='bench_cells', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, default='', blank=True)
     description = models.TextField(max_length=4095, default='', blank=True)
@@ -193,7 +181,7 @@ class Cell(models.Model):
         comment_list = list()
 
         error_flag = False
-        
+
         environment = get_primary_cpw_environment()
 
         if self.has_blogpost():
@@ -213,7 +201,6 @@ class Cell(models.Model):
         if error_flag == True:
 
             comment_list = []
-
 
         viewer_url = ''
         birdseye_url = ''
@@ -242,5 +229,5 @@ class Cell(models.Model):
                 'image_name': image_name,
                 'comment_list': comment_list
                 })
-        
+
         return cellComments

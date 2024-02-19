@@ -40,7 +40,6 @@ from matrices.models import Server
 from matrices.models import Image
 
 from matrices.routines import credential_exists
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_an_ebi_sca_experiment_id_from_chart_id
@@ -64,7 +63,7 @@ def edit_image(request, image_id):
     all_unused_tags = set(common_tags).difference(set(used_tags))
     unused_tags = list(all_unused_tags)[:10]
 
-    data.update({ 'unused_tags': unused_tags })
+    data.update({'unused_tags': unused_tags})
 
     template = ''
 
@@ -72,14 +71,14 @@ def edit_image(request, image_id):
 
         server = get_object_or_404(Server, pk=local_image.server_id)
 
-        data.update({ 'local_image': local_image })
+        data.update({'local_image': local_image})
 
         if server.is_wordpress():
 
             server_data = server.get_wordpress_image_json(credential, image_id)
 
             data.update(server_data)
-            data.update({ 'image': local_image })
+            data.update({'image': local_image})
 
             template = 'gallery/edit_wordpress_image.html'
 
@@ -99,7 +98,8 @@ def edit_image(request, image_id):
                 'birdseye_url': local_image.birdseye_url,
             })
 
-            data.update({ 'image_url': local_image.viewer_url, 'image_comment': local_image.comment, 'server': server, 'chart': chart })
+            data.update({'image_url': local_image.viewer_url, 'image_comment': local_image.comment, 'server': server,
+                         'chart': chart})
 
             template = 'gallery/edit_cpw_image.html'
 
@@ -111,7 +111,7 @@ def edit_image(request, image_id):
 
             chart = get_an_ebi_sca_parameters_from_chart_id(server.url_server, local_image.name)
 
-            data.update({ 'image_comment': local_image.comment, 'server': server, 'chart': chart, 'metadata': metadata })
+            data.update({'image_comment': local_image.comment, 'server': server, 'chart': chart, 'metadata': metadata})
 
             template = 'gallery/edit_ebi_sca_image.html'
 

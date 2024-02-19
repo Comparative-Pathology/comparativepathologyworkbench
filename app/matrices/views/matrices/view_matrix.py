@@ -44,7 +44,6 @@ from matrices.models import MatrixSummary
 from matrices.routines import credential_exists
 from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 
 #
@@ -61,13 +60,11 @@ def view_matrix(request, matrix_id):
 
         raise PermissionDenied
 
-
     if credential_exists(request.user):
 
         data = get_header_data(request.user)
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
-        owner = get_object_or_404(User, pk=matrix.owner_id)
         user = get_object_or_404(User, pk=request.user.id)
 
         readBoolean = False
@@ -78,19 +75,13 @@ def view_matrix(request, matrix_id):
 
             view_matrix = 'view_matrix'
 
-            credential = get_credential_for_user(request.user)
-
-            if not credential.has_apppwd():
-
-                matrix_link = ''
-
             collection_image_list = list()
             collection_tag_list = list()
 
             if matrix.has_last_used_tag():
 
                 collection_image_list = matrix.last_used_collection.get_images_for__tag(matrix.last_used_tag)
-            
+
             else:
 
                 if matrix.has_last_used_collection():
@@ -98,9 +89,8 @@ def view_matrix(request, matrix_id):
                     collection_image_list = matrix.last_used_collection.get_images()
 
             if matrix.has_last_used_collection():
-                
-                collection_tag_list = matrix.last_used_collection.get_tags()
 
+                collection_tag_list = matrix.last_used_collection.get_tags()
 
             updateBoolean = False
 
@@ -114,12 +104,21 @@ def view_matrix(request, matrix_id):
             rows = matrix.get_rows()
 
             username = request.user.username
-            matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") OVER(ORDER BY \"matrix_id\") AS \"prev_val\", LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) AS \"next_val\" FROM public.matrices_bench_summary WHERE matrix_authorisation_permitted = %s AND matrix_authorisation_authority != \'ADMIN\'', [username])
+            matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") ' +
+                                                               'OVER(ORDER BY \"matrix_id\") AS \"prev_val\", ' +
+                                                               'LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) ' +
+                                                               'AS \"next_val\" FROM public.matrices_bench_summary ' +
+                                                               'WHERE matrix_authorisation_permitted = %s ' +
+                                                               'AND matrix_authorisation_authority != \'ADMIN\'',
+                                                               [username])
 
             if username == 'admin':
 
-                matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") OVER(ORDER BY \"matrix_id\") AS \"prev_val\", LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) AS \"next_val\" FROM public.matrices_bench_summary WHERE matrix_authorisation_authority = \'OWNER\'')
-
+                matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") ' +
+                                                                   'OVER(ORDER BY \"matrix_id\") AS \"prev_val\", ' +
+                                                                   'LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) ' +
+                                                                   'AS \"next_val\" FROM public.matrices_bench_summary ' +
+                                                                   'WHERE matrix_authorisation_authority = \'OWNER\'')
 
             next_bench = 0
             previous_bench = 0
@@ -131,19 +130,29 @@ def view_matrix(request, matrix_id):
                     previous_bench = matrix_summary.prev_val
                     next_bench = matrix_summary.next_val
 
-                if matrix_summary.prev_val == None:
+                if matrix_summary.prev_val is None:
                     lowest_bench = matrix_summary.matrix_id
 
-                if matrix_summary.next_val == None:
+                if matrix_summary.next_val is None:
                     highest_bench = matrix_summary.matrix_id
 
-            if previous_bench == None:
+            if previous_bench is None:
                 previous_bench = highest_bench
 
-            if next_bench == None:
+            if next_bench is None:
                 next_bench = lowest_bench
 
-            data.update({ 'previous_bench': previous_bench, 'next_bench': next_bench, 'collection_tag_list': collection_tag_list, 'collection_image_list': collection_image_list, 'view_matrix': view_matrix, 'readBoolean': readBoolean, 'updateBoolean': updateBoolean, 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            data.update({'previous_bench': previous_bench,
+                         'next_bench': next_bench,
+                         'collection_tag_list': collection_tag_list,
+                         'collection_image_list': collection_image_list,
+                         'view_matrix': view_matrix,
+                         'readBoolean': readBoolean,
+                         'updateBoolean': updateBoolean,
+                         'matrix': matrix,
+                         'rows': rows,
+                         'columns': columns,
+                         'matrix_cells': matrix_cells})
 
             return render(request, 'matrices/view_matrix.html', data)
 

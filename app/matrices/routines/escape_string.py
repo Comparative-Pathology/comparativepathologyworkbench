@@ -28,20 +28,16 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from os import urandom
-
-
-"""
-    Escape all characters in a string that need escaping
-"""
 def escape_string(a_string):
+    """
+        Escape all characters in a string that need escaping
+    """
 
-    output_string = a_string.replace(" ", "\ " ).replace("!", "\!" ).replace("#", "\#" ).replace("$", "\$" ).replace("&", "\&" ) \
-                        .replace("'", r"\'" ).replace("(", "\(" ).replace(")", "\)" ).replace("*", "\*" ).replace(",", "\," ) \
-                        .replace(";", "\;" ).replace("<", "\<" ).replace(">", "\>" ).replace("?", "\?" ).replace("[", "\[" ) \
-                        .replace("]", "\]" ).replace("^", "\^" ).replace("`", "\`" ).replace("{", "\{" ).replace("|", "\|" ) \
-                        .replace("}", "\}" )
+    output_string = a_string.replace(" ", "\ ").replace("!", "\!").replace("#", "\#").replace("$", "\$") \
+        .replace("&", "\&").replace("'", r"\'").replace("(", "\(").replace(")", "\)").replace("*", "\*") \
+        .replace(",", "\,").replace(";", "\;").replace("<", "\<").replace(">", "\>").replace("?", "\?") \
+        .replace("[", "\[").replace("]", "\]").replace("^", "\^").replace("`", "\`").replace("{", "\{") \
+        .replace("|", "\|").replace("}", "\}")
 
     return output_string

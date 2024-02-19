@@ -93,49 +93,63 @@ def bench_create(request):
 
             if form.is_valid():
 
-                if credential.has_apppwd():
+                object = form.save(commit=False)
 
-                    object = form.save(commit=False)
+                rows = form.cleaned_data['rows']
+                columns = form.cleaned_data['columns']
 
-                    rows = form.cleaned_data['rows']
-                    columns = form.cleaned_data['columns']
+                rows = rows + 1
+                columns = columns + 1
 
-                    rows = rows + 1
-                    columns = columns + 1
+                object.set_owner(request.user)
 
-                    object.set_owner(request.user)
+                post_id = ''
 
-                    post_id = ''
+                if environment.is_wordpress_active():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, object.title,
-                                                                             object.description)
+                    if credential.has_apppwd():
 
-                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                 object.title,
+                                                                                 object.description)
 
-                        post_id = returned_blogpost['id']
+                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-                        object.set_blogpost(post_id)
+                            post_id = returned_blogpost['id']
 
-                        object.save()
+                            object.set_blogpost(post_id)
 
-                        bench_creation_consequences(object, columns, rows)
+                            object.save()
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                        messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+                            bench_creation_consequences(object, columns, rows)
+
+                            matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
+                            messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+
+                        else:
+
+                            messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, "
+                                           "Contact System Administrator!")
+                            form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, "
+                                           "Contact System Administrator!")
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0320 New Bench  - WordPress Error, "
+                        messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, "
                                        "Contact System Administrator!")
-                        form.add_error(None, "CPW_WEB:0320 New Bench  - WordPress Error, "
+                        form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, "
                                        "Contact System Administrator!")
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0300 New Bench  - No WordPress Credentials, "
-                                   "Contact System Administrator!")
-                    form.add_error(None, "CPW_WEB:0300 New Bench  - No WordPress Credentials, "
-                                   "Contact System Administrator!")
+                    object.set_blogpost(post_id)
+
+                    object.save()
+
+                    bench_creation_consequences(object, columns, rows)
+
+                    matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
+                    messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
 
     else:
 

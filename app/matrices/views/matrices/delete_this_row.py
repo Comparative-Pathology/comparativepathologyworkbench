@@ -67,6 +67,8 @@ def delete_this_row(request, matrix_id, row_id):
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
+        credential = get_credential_for_user(request.user)
+
         if authority.is_viewer() or authority.is_none():
 
             return HttpResponseRedirect(reverse('home', args=()))
@@ -83,9 +85,7 @@ def delete_this_row(request, matrix_id, row_id):
 
                 if oldCell.has_blogpost():
 
-                    credential = get_credential_for_user(request.user)
-
-                    if credential.has_apppwd():
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                         response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
@@ -145,20 +145,26 @@ def delete_this_row(request, matrix_id, row_id):
                                 image_path = environment.document_root + '/' + image.name
 
                                 rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped,
+                                                           shell=True,
+                                                           stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE,
+                                                           universal_newlines=True)
 
                             if image.server.is_omero547() and not image.server.is_idr():
 
                                 image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
                                 rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped,
+                                                           shell=True,
+                                                           stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE,
+                                                           universal_newlines=True)
 
                             image.delete()
 

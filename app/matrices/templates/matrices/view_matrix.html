@@ -50,27 +50,29 @@ The view matrix (bench) template
 			<li>
 				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
 			</li>
+	{% if environment.is_wordpress_active %}
 			<li>
 				<a href="{% url 'aggregated_matrix_blog' matrix.id %}">
 				  <div class="tooltip" style="font-size: 12px; width:150px;">
-	{% if environment.is_development %}
+		{% if environment.is_development %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #CA03FC; border-radius: 5px; color: Black; background-color: #CA03FC; font-size: 1em;">
-	{% endif %}
-	{% if environment.is_czi %}
+		{% endif %}
+		{% if environment.is_czi %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #E3F2FD; border-radius: 5px; color: Black; background-color: #E3F2FD; font-size: 1em;">
-	{% endif %}
-	{% if environment.is_canada %}
+		{% endif %}
+		{% if environment.is_canada %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #F5776E; border-radius: 5px; color: Black; background-color: #F5776E; font-size: 1em;">
-	{% endif %}
-	{% if environment.is_coeliac %}
+		{% endif %}
+		{% if environment.is_coeliac %}
 					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #FCBA03; border-radius: 5px; color: Black; background-color: #FCBA03; font-size: 1em;">
-	{% endif %}
+		{% endif %}
 						<i class="fa fa-bullhorn"></i>
 					</button>
 		            <span class="tooltiptext">Aggregated Bench and Cell Commentary</span>
 		    	  </div>
 				</a>
 			</li>
+	{% endif %}
 
 			
 	{% if environment.is_development %}
@@ -222,11 +224,17 @@ The view matrix (bench) template
             <div class="bench-dropdown-content">
 					{% if readBoolean %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+					  	{% if environment.is_wordpress_active %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Bench Commentary</a>
 			  <a href="{% url 'aggregated_matrix_blog' matrix.id %}"><i class="fa fa-bullhorn"></i><span class="menu-item">&#9;</span> Aggregated Commentary</a>
-						{% if updateBoolean %}
+						{% endif %}
+					  	{% if updateBoolean %}
 			  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+					  	{% endif %}
+						{% if environment.is_wordpress_active %}
 			  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
+						{% endif %}
+			  			{% if updateBoolean %}
 			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 			        	{% endif %}
 					{% endif %}
@@ -526,10 +534,14 @@ The view matrix (bench) template
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
     					{% if readBoolean %}
+							{% if environment.is_wordpress_active %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Cell Commentary</a>
-			  				{% if updateBoolean %}
-			  					{% if matrix_cell.has_image %}
+							{% endif %}
+							{% if updateBoolean %}
+				  				{% if matrix_cell.has_image %}
+									{% if environment.is_wordpress_active %}
 			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Cell Commentary</a>
+									{% endif %}
 			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>

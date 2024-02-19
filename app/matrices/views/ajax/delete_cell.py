@@ -73,6 +73,8 @@ def delete_cell(request, matrix_id, cell_id):
 
     if credential_exists(request.user):
 
+        credential = get_credential_for_user(request.user)
+
         matrix = get_object_or_404(Matrix, pk=matrix_id)
         cell = get_object_or_404(Cell, pk=cell_id)
 
@@ -114,9 +116,7 @@ def delete_cell(request, matrix_id, cell_id):
 
                                 if shuffleCell.has_blogpost():
 
-                                    credential = get_credential_for_user(request.user)
-
-                                    if credential.has_apppwd():
+                                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                                         response = environment.delete_a_post_from_wordpress(credential,
                                                                                             shuffleCell.blogpost)
@@ -202,9 +202,7 @@ def delete_cell(request, matrix_id, cell_id):
 
                                 if shuffleCell.has_blogpost():
 
-                                    credential = get_credential_for_user(request.user)
-
-                                    if credential.has_apppwd():
+                                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                                         response = environment.delete_a_post_from_wordpress(credential,
                                                                                             shuffleCell.blogpost)

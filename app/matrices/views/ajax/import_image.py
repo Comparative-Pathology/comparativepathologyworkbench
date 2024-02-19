@@ -32,7 +32,6 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -70,19 +69,19 @@ def import_image(request):
 
     source = request.POST['source']
     target = request.POST['target']
-    source_type = request.POST['source_type']
 
     source_image = get_object_or_404(Image, pk=source)
     target_cell = get_object_or_404(Cell, pk=target)
 
     matrix = target_cell.matrix
 
-    owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
     environment = get_primary_cpw_environment()
 
     if credential_exists(user):
+
+        credential = get_credential_for_user(request.user)
 
         if exists_update_for_bench_and_user(matrix, request.user):
 
@@ -119,9 +118,7 @@ def import_image(request):
 
             if target_cell.has_no_blogpost():
 
-                credential = get_credential_for_user(request.user)
-
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     returned_blogpost = environment.post_a_post_to_wordpress(credential, target_cell.title,
                                                                              target_cell.description)

@@ -71,7 +71,7 @@ def show_image(request, server_id, image_id):
 
             image_flag = True
 
-        data.update({ 'image_flag': image_flag, 'add_from': "show_image" })
+        data.update({'image_flag': image_flag, 'add_from': "show_image"})
 
         server = get_object_or_404(Server, pk=server_id)
 
@@ -82,12 +82,12 @@ def show_image(request, server_id, image_id):
                 existing_image_list = get_images_for_id_server_roi(image_id, server, 0)
 
                 local_image = existing_image_list[0]
-            
+
             server_data = server.get_imaging_server_image_json(image_id)
 
             data.update(server_data)
 
-            data.update({ 'local_image': local_image })
+            data.update({'local_image': local_image})
 
             return render(request, 'gallery/show_image.html', data)
 

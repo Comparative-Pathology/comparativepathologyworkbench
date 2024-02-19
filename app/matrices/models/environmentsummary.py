@@ -28,37 +28,23 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-
-from django.apps import apps
-
-from random import randint
-
-from requests.exceptions import HTTPError
-
-from matrices.models.location import Location
-from matrices.models import Protocol
 
 ENVIRONMENT_CZI = 'CZI'
 ENVIRONMENT_CANADA = 'CANADA'
 ENVIRONMENT_COELIAC = 'COELIAC'
 ENVIRONMENT_DEVELOPMENT = 'DEVELOPMENT'
 
-"""
-    The Environment Model
-"""
+
+#
+#   The Environment Summary Model
+#
 class EnvironmentSummary(models.Model):
+
     environment_id = models.IntegerField(default=0, blank=False)
     environment_name = models.CharField(max_length=50, blank=False, unique=True)
     environment_location = models.CharField(max_length=25, blank=False, unique=True)
+    environment_wordpress_active = models.BooleanField(default=False)
 
     class Meta:
         managed = False
@@ -69,7 +55,6 @@ class EnvironmentSummary(models.Model):
 
     def __repr__(self):
         return f"{self.environment_id}, {self.environment_name}, {self.environment_location}"
-
 
     def is_czi(self):
         if self.environment_location == ENVIRONMENT_CZI:
@@ -95,3 +80,8 @@ class EnvironmentSummary(models.Model):
         else:
             return False
 
+    def is_wordpress_active(self):
+        if self.environment_wordpress_active is True:
+            return True
+        else:
+            return False

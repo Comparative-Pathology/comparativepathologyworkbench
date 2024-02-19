@@ -8,6 +8,10 @@ conda activate cpw_env_python38_django4
 
 python -V
 
+conda install -c conda-forge uwsgi
+
+conda install -c ome omero-py
+
 pip install asgiref
 pip install certifi
 pip install chardet
@@ -69,6 +73,3 @@ pip install zipp
 (pip install psycopg2)
 (pip install uwsgi)
 
-conda install -c conda-forge uwsgi
-
-conda install -c ome omero-py

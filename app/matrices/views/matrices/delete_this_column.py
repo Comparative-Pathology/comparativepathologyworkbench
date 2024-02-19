@@ -32,9 +32,7 @@ from __future__ import unicode_literals
 
 import subprocess
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -63,6 +61,8 @@ def delete_this_column(request, matrix_id, column_id):
 
     if credential_exists(request.user):
 
+        credential = get_credential_for_user(request.user)
+
         matrix = get_object_or_404(Matrix, pk=matrix_id)
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
@@ -83,9 +83,7 @@ def delete_this_column(request, matrix_id, column_id):
 
                 if oldCell.has_blogpost():
 
-                    credential = get_credential_for_user(request.user)
-
-                    if credential.has_apppwd():
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                         response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
@@ -131,7 +129,7 @@ def delete_this_column(request, matrix_id, column_id):
 
                                 delete_flag = False
 
-                        if delete_flag == True:
+                        if delete_flag is True:
 
                             image = oldCell.image
 
@@ -144,23 +142,28 @@ def delete_this_column(request, matrix_id, column_id):
                                 image_path = environment.document_root + '/' + image.name
 
                                 rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped,
+                                                           shell=True,
+                                                           stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE,
+                                                           universal_newlines=True)
 
                             if image.server.is_omero547() and not image.server.is_idr():
 
                                 image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
                                 rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE, universal_newlines=True)
+                                process = subprocess.Popen(rm_escaped,
+                                                           shell=True,
+                                                           stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE,
+                                                           universal_newlines=True)
 
                             image.delete()
-
 
             Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
 

@@ -59,6 +59,7 @@ dependencies:
   - python-dateutil=2.8.2=pyhd8ed1ab_0
   - python_abi=3.8=3_cp38
   - pywin32-on-windows=0.1.0=pyh1179c8e_3
+  - pyyaml=6.0.1=py38hb192615_1
   - readline=8.2=h1a28f6b_0
   - requests=2.31.0=pyhd8ed1ab_0
   - setuptools=68.0.0=py38hca03da5_0
@@ -100,7 +101,7 @@ dependencies:
       - django-taggit-templatetags2==1.6.1
       - django-widget-tweaks==1.4.12
       - djangorestframework==3.14.0
-      - faker==19.9.0
+      - djangorestframework-simplejwt==5.3.0
       - gunicorn==21.2.0
       - httpie==3.2.2
       - importlib-metadata==6.8.0
@@ -118,10 +119,10 @@ dependencies:
       - psycopg-binary==3.1.10
       - pycryptodome==3.18.0
       - pygments==2.15.1
+      - pyjwt==2.8.0
       - python-decouple==3.8
       - python-magic==0.4.27
       - pytz==2023.3
-      - pyyaml==6.0.1
       - requests-toolbelt==1.0.0
       - rich==13.5.2
       - simplejson==3.19.1

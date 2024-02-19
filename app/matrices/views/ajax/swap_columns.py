@@ -59,7 +59,6 @@ def swap_columns(request):
 
         raise PermissionDenied
 
-
     source = request.POST['source']
     target = request.POST['target']
 
@@ -68,7 +67,6 @@ def swap_columns(request):
 
     matrix = in_source_cell.matrix
 
-    owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
     if credential_exists(user):
@@ -99,7 +97,6 @@ def swap_columns(request):
 
                 output_cell.save()
 
-
             if matrix.get_max_column() == in_target_cell.xcoordinate:
 
                 nextColumn = matrix.get_column_count()
@@ -113,15 +110,15 @@ def swap_columns(request):
 
                 matrix.save()
 
-            data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            data = {'failure': False, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
         else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+            data = {'failure': True, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
     else:
 
-        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = {'failure': True, 'source': str(source), 'target': str(target)}
         return JsonResponse(data)

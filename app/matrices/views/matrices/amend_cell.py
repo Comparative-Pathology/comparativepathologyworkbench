@@ -30,9 +30,6 @@
 ###
 from __future__ import unicode_literals
 
-import subprocess
-from subprocess import call
-
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -75,8 +72,9 @@ def amend_cell(request, matrix_id, cell_id):
 
         raise PermissionDenied
 
-
     if credential_exists(request.user):
+
+        credential = get_credential_for_user(request.user)
 
         data = get_header_data(request.user)
         environment = get_primary_cpw_environment()
@@ -91,9 +89,7 @@ def amend_cell(request, matrix_id, cell_id):
             matrix_link = 'matrix_link'
             amend_cell = 'amend_cell'
 
-            credential = get_credential_for_user(request.user)
-
-            if not credential.has_apppwd():
+            if not credential.has_apppwd() and environment.is_wordpress_active():
 
                 matrix_link = ''
 
@@ -102,7 +98,6 @@ def amend_cell(request, matrix_id, cell_id):
             if matrix.has_last_used_collection():
 
                 collection_image_list = matrix.last_used_collection.get_images()
-
 
             if request.method == HTTP_POST:
 
@@ -123,7 +118,13 @@ def amend_cell(request, matrix_id, cell_id):
                         messages.error(request, "CPW_WEB:0220 Amend Cell - URL not found!")
                         form.add_error(None, "CPW_WEB:0220 Amend Cell - URL not found!")
 
-                        data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                        data.update({'form': form,
+                                     'collection_image_list': collection_image_list,
+                                     'amend_cell': amend_cell,
+                                     'matrix_link': matrix_link,
+                                     'cell': cell,
+                                     'cell_link': cell_link,
+                                     'matrix': matrix})
 
                         return render(request, 'matrices/amend_cell.html', data)
 
@@ -142,13 +143,20 @@ def amend_cell(request, matrix_id, cell_id):
 
                         else:
 
-                            messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
-                            form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; Please create a Collection!")
+                            messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; " +
+                                           "Please create a Collection!")
+                            form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; " +
+                                           "Please create a Collection!")
 
-                            data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                            data.update({'form': form,
+                                         'collection_image_list': collection_image_list,
+                                         'amend_cell': amend_cell,
+                                         'matrix_link': matrix_link,
+                                         'cell': cell,
+                                         'cell_link': cell_link,
+                                         'matrix': matrix})
 
                             return render(request, 'matrices/amend_cell.html', data)
-
 
                     cell.set_title(image.name)
                     cell.set_description(image.name)
@@ -159,11 +167,11 @@ def amend_cell(request, matrix_id, cell_id):
 
                     if cell.has_no_blogpost():
 
-                        credential = get_credential_for_user(request.user)
+                        if credential.has_apppwd() and environment.is_wordpress_active():
 
-                        if credential.has_apppwd():
-
-                            returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title, cell.description)
+                            returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                     cell.title,
+                                                                                     cell.description)
 
                             if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -172,10 +180,18 @@ def amend_cell(request, matrix_id, cell_id):
 
                             else:
 
-                                messages.error(request, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
-                                form.add_error(None, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System Administrator!")
+                                messages.error(request, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System " +
+                                               "Administrator!")
+                                form.add_error(None, "CPW_WEB:0260 Amend Cell - WordPress Error, Contact System " +
+                                               "Administrator!")
 
-                                data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                                data.update({'form': form,
+                                             'collection_image_list': collection_image_list,
+                                             'amend_cell': amend_cell,
+                                             'matrix_link': matrix_link,
+                                             'cell': cell,
+                                             'cell_link': cell_link,
+                                             'matrix': matrix})
 
                                 return render(request, 'matrices/amend_cell.html', data)
 
@@ -187,7 +203,13 @@ def amend_cell(request, matrix_id, cell_id):
 
                     messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
 
-                    data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                    data.update({'form': form,
+                                 'collection_image_list': collection_image_list,
+                                 'amend_cell': amend_cell,
+                                 'matrix_link': matrix_link,
+                                 'cell': cell,
+                                 'cell_link': cell_link,
+                                 'matrix': matrix})
 
                     return HttpResponseRedirect(reverse('amend_cell', args=(matrix_id, cell_id, )))
 
@@ -196,13 +218,25 @@ def amend_cell(request, matrix_id, cell_id):
                     messages.error(request, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
                     form.add_error(None, "CPW_WEB:0270 Amend Cell - Form is Invalid!")
 
-                    data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+                    data.update({'form': form,
+                                 'collection_image_list': collection_image_list,
+                                 'amend_cell': amend_cell,
+                                 'matrix_link': matrix_link,
+                                 'cell': cell,
+                                 'cell_link': cell_link,
+                                 'matrix': matrix})
 
                     return render(request, 'matrices/amend_cell.html', data)
 
             form = SearchUrlForm()
 
-            data.update({ 'form': form, 'collection_image_list': collection_image_list, 'amend_cell': amend_cell, 'matrix_link': matrix_link, 'cell': cell, 'cell_link': cell_link, 'matrix': matrix })
+            data.update({'form': form,
+                         'collection_image_list': collection_image_list,
+                         'amend_cell': amend_cell,
+                         'matrix_link': matrix_link,
+                         'cell': cell,
+                         'cell_link': cell_link,
+                         'matrix': matrix})
 
             return render(request, 'matrices/amend_cell.html', data)
 
@@ -212,7 +246,7 @@ def amend_cell(request, matrix_id, cell_id):
             columns = matrix.get_columns()
             rows = matrix.get_rows()
 
-            data.update({ 'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells })
+            data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
 
             return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 

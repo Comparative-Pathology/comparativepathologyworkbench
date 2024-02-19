@@ -64,6 +64,8 @@ def view_cell_blog(request, matrix_id, cell_id):
 
     if credential_exists(request.user):
 
+        credential = get_credential_for_user(request.user)
+
         cell = get_object_or_404(Cell, pk=cell_id)
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
@@ -76,15 +78,15 @@ def view_cell_blog(request, matrix_id, cell_id):
 
         if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
 
-            if cell.has_no_blogpost() and cell.image.id != 0:
-
-                credential = get_credential_for_user(request.user)
+            if cell.has_no_blogpost() and cell.has_image():
 
                 post_id = ''
 
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title, cell.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                             cell.title,
+                                                                             cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -94,21 +96,24 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                 cell.save()
 
-                blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
-            if cell.blogpost != '':
+                    blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+
+                    comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
+
+            if cell.has_blogpost():
 
                 blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
                 if blogpost['status'] != WORDPRESS_SUCCESS:
 
-                    credential = get_credential_for_user(request.user)
-
                     post_id = ''
 
-                    if credential.has_apppwd():
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title,
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                 cell.title,
                                                                                  cell.description)
 
                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -119,9 +124,11 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                     cell.save()
 
-                    blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
-            comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
+                        blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+
+                        comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
 
         if request.method == HTTP_POST:
 
@@ -135,9 +142,9 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                 if comment != '':
 
-                    credential = get_credential_for_user(request.user)
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
-                    returned_comment = environment.post_a_comment_to_wordpress(credential, cell.blogpost, comment)
+                        returned_comment = environment.post_a_comment_to_wordpress(credential, cell.blogpost, comment)
 
                 return HttpResponseRedirect(reverse('view_cell_blog', args=(matrix_id, cell_id)))
 

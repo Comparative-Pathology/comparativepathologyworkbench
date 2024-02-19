@@ -30,9 +30,7 @@
 ###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
@@ -47,7 +45,6 @@ from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 from matrices.routines import get_credential_for_user
-from matrices.routines import simulate_network_latency
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
@@ -71,6 +68,8 @@ def bench_update(request, bench_id):
 
         raise PermissionDenied
 
+    credential = get_credential_for_user(request.user)
+
     environment = get_primary_cpw_environment()
 
     object = get_object_by_uuid_or_404(Matrix, bench_id)
@@ -93,11 +92,11 @@ def bench_update(request, bench_id):
 
             if object.has_no_blogpost():
 
-                credential = get_credential_for_user(request.user)
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
-                if credential.has_apppwd():
-
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, object.title, object.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                             object.title,
+                                                                             object.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -112,8 +111,17 @@ def bench_update(request, bench_id):
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
-                        form.add_error(None, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System Administrator!")
+                        messages.error(request, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System " +
+                                       "Administrator!")
+                        form.add_error(None, "CPW_WEB:0310 Edit Bench - WordPress Error, Contact System " +
+                                       "Administrator!")
+
+                else:
+
+                    object.save()
+
+                    matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
+                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
 
             else:
 

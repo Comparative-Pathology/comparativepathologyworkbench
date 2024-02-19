@@ -60,7 +60,6 @@ def shuffle_columns(request):
 
         raise PermissionDenied
 
-
     source = request.POST['source']
     target = request.POST['target']
 
@@ -72,7 +71,6 @@ def shuffle_columns(request):
 
     matrix = in_source_cell.matrix
 
-    owner = get_object_or_404(User, pk=matrix.owner_id)
     user = get_object_or_404(User, pk=request.user.id)
 
     if credential_exists(user):
@@ -83,7 +81,9 @@ def shuffle_columns(request):
 
             if source_xcoordinate < target_xcoordinate:
 
-                oldCells = Cell.objects.filter(matrix=matrix.id).filter(xcoordinate__gt=source_xcoordinate).filter(xcoordinate__lte=target_xcoordinate)
+                oldCells = Cell.objects.filter(matrix=matrix.id)\
+                                       .filter(xcoordinate__gt=source_xcoordinate)\
+                                       .filter(xcoordinate__lte=target_xcoordinate)
 
                 output_cells = list()
 
@@ -103,10 +103,11 @@ def shuffle_columns(request):
 
                     output_cell.save()
 
-
             if source_xcoordinate > target_xcoordinate:
 
-                oldCells = Cell.objects.filter(matrix=matrix.id).filter(xcoordinate__gte=target_xcoordinate).filter(xcoordinate__lt=source_xcoordinate)
+                oldCells = Cell.objects.filter(matrix=matrix.id)\
+                                       .filter(xcoordinate__gte=target_xcoordinate)\
+                                       .filter(xcoordinate__lt=source_xcoordinate)
 
                 output_cells = list()
 
@@ -126,7 +127,6 @@ def shuffle_columns(request):
 
                     output_cell.save()
 
-
             if matrix.get_max_column() == target_xcoordinate:
 
                 nextColumn = matrix.get_column_count()
@@ -140,15 +140,15 @@ def shuffle_columns(request):
 
                 matrix.save()
 
-            data = { 'failure': False, 'source': str(source), 'target': str(target) }
+            data = {'failure': False, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
         else:
 
-            data = { 'failure': True, 'source': str(source), 'target': str(target) }
+            data = {'failure': True, 'source': str(source), 'target': str(target)}
             return JsonResponse(data)
 
     else:
 
-        data = { 'failure': True, 'source': str(source), 'target': str(target) }
+        data = {'failure': True, 'source': str(source), 'target': str(target)}
         return JsonResponse(data)

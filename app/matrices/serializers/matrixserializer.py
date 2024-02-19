@@ -31,8 +31,6 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from django.db import models
-
 from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Image
@@ -95,7 +93,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'title', 'description', 'height', 'width', 'owner', 'bench_cells')
         read_only_fields = ('id', 'url', )
 
-
     def create(self, validated_data):
         """Create Method.
 
@@ -116,7 +113,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0070 - Attempting to Add a Image without a Cell Title or Description
             ValidationError:
                 WordPress Error
-          
+
         """
 
         request_user = None
@@ -137,14 +134,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             # Get the User Object from the User Id
             request_user = User.objects.get(id=user_id)
 
-
         # Do we have any Bench Attributes?
         if validated_data.get('title', None) == None and validated_data.get('description', None) == None and validated_data.get('bench_cells', None) == None:
 
             # No, then Raise an Error!
             message = 'CPW_REST:0370 ERROR! NO data supplied for Bench Creation!'
             raise serializers.ValidationError(message)
-
 
         matrix_title = ""
         matrix_description = ""
@@ -193,9 +188,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         matrix = None
 
         cell_list = list()
-        
+
         # Do we have any Cells supplied?
-        if validated_data.get('bench_cells', None) != None:
+        if validated_data.get('bench_cells', None) is not None:
 
             # Get the Cells JSON Data
             cells_data = validated_data.get('bench_cells', None)
@@ -204,7 +199,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                 # No, we need to set up a Default Bench 
                 #  Create a Matrix Object
-                matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
+                matrix = Matrix.create(matrix_title,
+                                       matrix_description,
+                                       matrix_blogpost,
+                                       matrix_height,
+                                       matrix_width,
+                                       matrix_owner)
 
                 # Define Cell Attributes
                 cell_title = ""
@@ -227,7 +227,13 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     while cell_ycoordinate <= rows:
 
                         # Create a Default Cell Object
-                        cell = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
+                        cell = Cell.create(matrix,
+                                           cell_title,
+                                           cell_description,
+                                           cell_xcoordinate,
+                                           cell_ycoordinate,
+                                           cell_blogpost,
+                                           cell_image)
 
                         # Add this default cell to the list of cells to be added
                         cell_list.append(cell)
@@ -247,7 +253,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 self.validate_cells(cells_data, request_user, create_flag)
 
                 #  Create a Matrix Object
-                matrix = Matrix.create(matrix_title, matrix_description, matrix_blogpost, matrix_height, matrix_width, matrix_owner)
+                matrix = Matrix.create(matrix_title,
+                                       matrix_description,
+                                       matrix_blogpost,
+                                       matrix_height,
+                                       matrix_width,
+                                       matrix_owner)
 
                 # Process each Cell in the Cells Data
                 for cell_data in cells_data:
@@ -278,7 +289,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         if cell_title == '' and cell_description == '':
 
                             # Yes, Raise an Error!
-                            message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                            message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title " + \
+                                "or Description!'
                             raise serializers.ValidationError(message)
 
                         # Get the mage Attributes
@@ -293,7 +305,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         image_owner = get_user_from_username(owner)
 
                         # Validate the Image Attributes and return the associated Image Server
-                        server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
+                        server = self.validate_image_json(image_server,
+                                                          image_owner,
+                                                          image_id,
+                                                          image_roi_id,
+                                                          image_comment)
 
                         # Set up further Image Attributes
                         image_name = ''
@@ -344,7 +360,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
                             # Get the Existing Image
-                            existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                            existing_image_list = get_images_for_id_server_owner_roi(image_id,
+                                                                                     server,
+                                                                                     image_owner,
+                                                                                     image_roi)
 
                             image = existing_image_list[0]
 
@@ -359,7 +378,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         else:
 
                             # Create a New Image Object
-                            image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
+                            image = Image.create(image_id,
+                                                 image_name,
+                                                 server,
+                                                 image_viewer_url,
+                                                 image_birdseye_url,
+                                                 image_roi,
+                                                 image_owner,
+                                                 image_comment,
+                                                 image_hidden)
 
                             # Is the requesting user Hiding Images in their Collections?
                             #  Yes - ste the Image Hidden flags to true
@@ -403,11 +430,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             Collection.assign_image(image, collection)
 
                     # Create a new Cell Object
-                    cell_in = Cell.create(matrix, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, image)
+                    cell_in = Cell.create(matrix,
+                                          cell_title,
+                                          cell_description,
+                                          cell_xcoordinate,
+                                          cell_ycoordinate,
+                                          cell_blogpost,
+                                          image)
 
                     # Add the new Cell Object to the Cell List
                     cell_list.append(cell_in)
-
 
         # Get the Primary Blogging Engine
         environment = get_primary_cpw_environment()
@@ -418,7 +450,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         post_id = ''
 
         # Does the Credential have a Password
-        if credential.has_apppwd():
+        if credential.has_apppwd() and environment.is_wordpress_active():
 
             # Post a New Blogpost for the Bench
             returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
@@ -429,9 +461,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 post_id = returned_blogpost['id']
 
             else:
-                
+
                 # If failure, Raise an Error!
-                message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                message = "WordPress Error - Contact System Administrator : " + str(returned_blogpost) + '!'
                 raise serializers.ValidationError(message)
 
         # Update the Bench with the BlogPost Id
@@ -450,10 +482,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                 # Yes ... 
                 #  Does the Credential have a Password
-                if credential.has_apppwd():
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     # Post a New Blogpost for the Cell
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, cell_out.title, cell_out.description)
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                             cell_out.title,
+                                                                             cell_out.description)
 
                     # Check the Post Response
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -462,13 +496,12 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                     else:
 
-                        # If failure, Raise an Error!
-                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                        # If failure, Raise an Error!
+                        message = "WordPress Error - Contact System Administrator : " + str(returned_blogpost) + '!'
                         raise serializers.ValidationError(message)
 
             # Update the Cell with the BlogPost Id
             cell_out.set_blogpost(post_id)
-
 
         # Update the Database with the Bench Object
         matrix.save()
@@ -480,9 +513,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             # Update the Database with the Cell Object
             cell_out.save()
 
-
         return matrix
-
 
     def update(self, instance, validated_data):
         """Update Method.
@@ -503,7 +534,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0360 - No Cells supplied in validated data
             ValidationError:
                 WordPress Error
-          
+
         """
 
         request_user = None
@@ -524,7 +555,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             # Get the User Object from the User Id
             request_user = User.objects.get(id=user_id)
 
-
         # Get the Bench Attributes
         bench_title = validated_data.get('title', instance.title)
         bench_description = validated_data.get('description', instance.description)
@@ -539,14 +569,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if not request_user.is_superuser:
 
                 # No, then Raise an Error!
-                message = 'CPW_REST:0100 ERROR! Attempting to Update an existing Bench for a different Owner: ' + str(bench_owner) + '!'
+                message = 'CPW_REST:0100 ERROR! Attempting to Update an existing Bench for a different Owner: ' + \
+                    str(bench_owner) + '!'
                 raise serializers.ValidationError(message)
 
         # Validate the supplied Bench JSON Fields
         self.validate_matrix_json_fields(bench_title, bench_description, bench_height, bench_width)
 
         # Has any Cell Data been supplied?
-        if validated_data.get('bench_cells', None) == None:
+        if validated_data.get('bench_cells', None) is None:
 
             # No, then Raise an Error!
             message = 'CPW_REST:0360 ERROR! No Cells Supplied for UPDATE!'
@@ -584,14 +615,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             # Get the Credentials for Requesting User
             credential = get_credential_for_user(request.user)
 
-            # Does the Credential have a Password
-            if credential.has_apppwd():
+            # Get the Primary Blogging Engine
+            environment = get_primary_cpw_environment()
 
-                # Get the Primary Blogging Engine
-                environment = get_primary_cpw_environment()
+            # Does the Credential have a Password
+            if credential.has_apppwd() and environment.is_wordpress_active():
 
                 # Post a New Blogpost
-                returned_blogpost = environment.post_a_post_to_wordpress(credential, instance.title, instance.description)
+                returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                         instance.title,
+                                                                         instance.description)
 
                 # Check the Post Response
                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -600,8 +633,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                 else:
 
-                    # If failure, Raise an Error!
-                    message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                    # If failure, Raise an Error!
+                    message = "WordPress Error - Contact System Administrator : " + str(returned_blogpost) + '!'
                     raise serializers.ValidationError(message)
 
         instance.blogpost = post_id
@@ -610,7 +643,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         instance.save()
 
         return instance
-
 
     def update_existing_cells(self, an_instance, a_request_user, a_cells_data):
         """Update the Existing Cells in the Bench
@@ -628,7 +660,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Raises:
             ValidationError:
                 WordPress Error
-          
+
         """
 
         update_cell_list = list()
@@ -680,7 +712,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # Get the Supplied Image Id
                         cell_image_data_id = image_data.get('id')
 
-                    # If there is No Database Image 
+                    # If there is No Database Image
                     if bench_cell.image is None:
 
                         bench_image_data_id = 0
@@ -692,7 +724,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         bench_image_data_id = bench_cell.image.id
 
                     # Compare ALL Supplied and Database Attributes
-                    if cell_title == bench_cell_title and cell_description == bench_cell_description and cell_xcoordinate == bench_cell_xcoordinate and cell_ycoordinate == bench_cell_ycoordinate and cell_image_data_id == bench_image_data_id:
+                    if cell_title == bench_cell_title and \
+                       cell_description == bench_cell_description and \
+                       cell_xcoordinate == bench_cell_xcoordinate and \
+                       cell_ycoordinate == bench_cell_ycoordinate and \
+                       cell_image_data_id == bench_image_data_id:
 
                         update_flag = False
 
@@ -719,7 +755,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             image_owner = get_user_from_username(owner)
 
                             # Validate the Supplied Image Attributes, and return the Associated Server
-                            server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
+                            server = self.validate_image_json(image_server,
+                                                              image_owner,
+                                                              image_id,
+                                                              image_roi_id,
+                                                              image_comment)
 
                             image_identifier = int(image_id)
 
@@ -773,7 +813,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
                                 # Get the Existing Image
-                                existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                                existing_image_list = get_images_for_id_server_owner_roi(image_id,
+                                                                                         server,
+                                                                                         image_owner,
+                                                                                         image_roi)
 
                                 image = existing_image_list[0]
 
@@ -804,7 +847,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             else:
 
                                 # Create a New Image Object
-                                image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
+                                image = Image.create(image_id,
+                                                     image_name,
+                                                     server,
+                                                     image_viewer_url,
+                                                     image_birdseye_url,
+                                                     image_roi,
+                                                     image_owner,
+                                                     image_comment,
+                                                     image_hidden)
 
                                 # Is the requesting user Hiding Images in their Collections?
                                 #  Yes ...
@@ -818,7 +869,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                 # Associate the Cell with the New Image
                                 bench_cell.image = image
-
 
                             collection = None
 
@@ -837,7 +887,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 collection_owner = a_request_user
 
                                 # Create a New Collection Object
-                                collection = Collection.create(collection_title, collection_description, collection_owner)
+                                collection = Collection.create(collection_title,
+                                                               collection_description,
+                                                               collection_owner)
                                 # Write the New Collection Object to the Database
                                 collection.save()
 
@@ -852,7 +904,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 # Add the Image to the Collection
                                 Collection.assign_image(image, collection)
 
-
                             post_id = ''
 
                             # If the Cell has No BLogpost
@@ -861,14 +912,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 # Get the Credentials for Requesting User
                                 credential = get_credential_for_user(a_request_user)
 
-                                # Does the Credential have a Password
-                                if credential.has_apppwd():
+                                # Get the Primary Blogging Engine
+                                environment = get_primary_cpw_environment()
 
-                                    # Get the Primary Blogging Engine
-                                    environment = get_primary_cpw_environment()
+                                # Does the Credential have a Password
+                                if credential.has_apppwd() and environment.is_wordpress_active():
 
                                     # Post a New Blogpost
-                                    returned_blogpost = environment.post_a_post_to_wordpress(credential, bench_cell.title, bench_cell.description)
+                                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                             bench_cell.title,
+                                                                                             bench_cell.description)
 
                                     # Check the Post Response
                                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -878,7 +931,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     else:
 
                                         # If failure, Raise an Error!
-                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                        message = "WordPress Error - Contact System Administrator : " + \
+                                            str(returned_blogpost) + '!'
                                         raise serializers.ValidationError(message)
 
                             # Set the Cell Blogpost to the new Blogpost
@@ -906,7 +960,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             if image_identifier == bench_cell.image.identifier:
 
                                 # Validate the new supplied Image Attributes, and return the associated Server
-                                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
+                                server = self.validate_image_json(image_server,
+                                                                  image_owner,
+                                                                  image_id,
+                                                                  image_roi_id,
+                                                                  image_comment)
 
                                 image_name = ''
                                 image_viewer_url = ''
@@ -955,7 +1013,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
                                     # Get the Existing Image
-                                    existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                                    existing_image_list = get_images_for_id_server_owner_roi(image_id,
+                                                                                             server,
+                                                                                             image_owner,
+                                                                                             image_roi)
 
                                     image = existing_image_list[0]
 
@@ -982,7 +1043,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             #  No ...
                             else:
                                 # Validate the new supplied Image Attributes, and return the associated Server
-                                server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
+                                server = self.validate_image_json(image_server,
+                                                                  image_owner,
+                                                                  image_id,
+                                                                  image_roi_id,
+                                                                  image_comment)
 
                                 image_name = ''
                                 image_viewer_url = ''
@@ -1032,7 +1097,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
                                     # Get the Existing Image
-                                    existing_image_list = existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                                    existing_image_list = get_images_for_id_server_owner_roi(image_id,
+                                                                                             server,
+                                                                                             image_owner,
+                                                                                             image_roi)
 
                                     image = existing_image_list[0]
 
@@ -1063,7 +1131,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 else:
 
                                     # Create a New Image Object
-                                    image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
+                                    image = Image.create(image_id,
+                                                         image_name,
+                                                         server,
+                                                         image_viewer_url,
+                                                         image_birdseye_url,
+                                                         image_roi,
+                                                         image_owner,
+                                                         image_comment,
+                                                         image_hidden)
 
                                     # Is the requesting user Hiding Images in their Collections?
                                     #  Yes ...
@@ -1095,7 +1171,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     collection_owner = a_request_user
 
                                     # Create a New Collection Object
-                                    collection = Collection.create(collection_title, collection_description, collection_owner)
+                                    collection = Collection.create(collection_title,
+                                                                   collection_description,
+                                                                   collection_owner)
                                     # Write the New Collection Object to the Database
                                     collection.save()
 
@@ -1110,7 +1188,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     # Add the Image to the Collection
                                     Collection.assign_image(image, collection)
 
-
                                 post_id = ''
 
                                 # Does the Cell have a Blogpost
@@ -1119,24 +1196,29 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     # Get the Credentials for Requesting User
                                     credential = get_credential_for_user(a_request_user)
 
-                                    # Does the Credential have a Password
-                                    if credential.has_apppwd():
+                                    # Get the Primary Blogging Engine
+                                    environment = get_primary_cpw_environment()
 
-                                        # Get the Primary Blogging Engine
-                                        environment = get_primary_cpw_environment()
+                                    # Does the Credential have a Password
+                                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                                         # Delete the Associated Blogpost
-                                        response = environment.delete_a_post_from_wordpress(credential, bench_cell.blogpost)
+                                        response = environment.delete_a_post_from_wordpress(credential,
+                                                                                            bench_cell.blogpost)
 
                                         # Check the Delete Response
                                         if response != WORDPRESS_SUCCESS:
 
-                                            # If failure, Raise an Error!
-                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                            # If failure, Raise an Error!
+                                            message = "WordPress Error - Contact System Administrator : " + \
+                                                str(returned_blogpost) + '!'
                                             raise serializers.ValidationError(message)
 
                                         # Post a New Blogpost
-                                        returned_blogpost = environment.post_a_post_to_wordpress(credential, bench_cell.title, bench_cell.description)
+                                        returned_blogpost = \
+                                            environment.post_a_post_to_wordpress(credential,
+                                                                                 bench_cell.title,
+                                                                                 bench_cell.description)
 
                                         # Check the Post Response
                                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -1145,13 +1227,13 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                         else:
 
-                                            # If failure, Raise an Error!
-                                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                            # If failure, Raise an Error!
+                                            message = "WordPress Error - Contact System Administrator : " + \
+                                                str(returned_blogpost) + '!'
                                             raise serializers.ValidationError(message)
                                 
                                 # Set the Cell Blogpost to the new Blogpost
                                 bench_cell.set_blogpost(post_id)
-
 
                         # If there is a Database Image and there is No Supplied Image
                         if image_data is None and bench_cell.image is not None:
@@ -1165,20 +1247,22 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 # Get the Credentials for Requesting User
                                 credential = get_credential_for_user(a_request_user)
 
-                                # Does the Credential have a Password
-                                if credential.has_apppwd():
+                                # Get the Primary Blogging Engine
+                                environment = get_primary_cpw_environment()
 
-                                    # Get the Primary Blogging Engine
-                                    environment = get_primary_cpw_environment()
+                                # Does the Credential have a Password
+                                if credential.has_apppwd() and environment.is_wordpress_active():
 
                                     # Delete the Associated Blogpost
-                                    response = environment.delete_a_post_from_wordpress(credential, bench_cell.blogpost)
+                                    response = environment.delete_a_post_from_wordpress(credential,
+                                                                                        bench_cell.blogpost)
 
                                     # Check the Delete Response
                                     if response != WORDPRESS_SUCCESS:
 
-                                        # If failure, Raise an Error!
-                                        message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                                        # If failure, Raise an Error!
+                                        message = "WordPress Error - Contact System Administrator : " + \
+                                            str(returned_blogpost) + '!'
                                         raise serializers.ValidationError(message)
 
                             # Set the Cell Blogpost to Empty
@@ -1190,9 +1274,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Process the Update List
         for update_cell in update_cell_list:
 
-            # Save the Updated Cell
+            # Save the Updated Cell
             update_cell.save()
-
 
     def delete_missing_cells(self, an_instance, a_request_user, a_cells_data):
         """Delete the Missing Cells from the Bench
@@ -1210,7 +1293,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Raises:
             ValidationError:
                 WordPress Error
-          
+
         """
 
         delete_cell_list = list()
@@ -1241,7 +1324,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     delete_flag = False
 
             # The Bench Cell is NOT in the list of Supplied Cell, so can be deleted
-            if delete_flag == True:
+            if delete_flag is True:
 
                 # Add the Bench cell to the List of Deletes
                 delete_cell_list.append(bench_cell)
@@ -1256,11 +1339,11 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 # Get the Credential for the Requesting User
                 credential = get_credential_for_user(a_request_user)
 
-                # If the Requesting User has a Password
-                if credential.has_apppwd():
+                # Get the Primary Blogging Engine
+                environment = get_primary_cpw_environment()
 
-                    # Get the Primary Blogging Engine
-                    environment = get_primary_cpw_environment()
+                # If the Requesting User has a Password
+                if credential.has_apppwd() and environment.is_wordpress_active():
 
                     # Delete the Associated Blogpost
                     response = environment.delete_a_post_from_wordpress(credential, delete_cell.blogpost)
@@ -1274,7 +1357,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             # Delete the Cell
             delete_cell.delete()
-
 
     def add_new_cells(self, an_instance, a_request_user, a_cells_data):
         """Add the New Cells to the Bench
@@ -1292,7 +1374,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         Raises:
             ValidationError:
                 WordPress Error
-          
+
         """
 
         # For each Cell ...
@@ -1384,7 +1466,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
 
                         # Get the existing image from the database
-                        existing_image_list = get_images_for_id_server_owner_roi(image_id, server, image_owner, image_roi)
+                        existing_image_list = get_images_for_id_server_owner_roi(image_id,
+                                                                                 server,
+                                                                                 image_owner,
+                                                                                 image_roi)
 
                         existing_image = existing_image_list[0]
 
@@ -1393,24 +1478,31 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # Is the requesting user Hiding Images in their Collections?
                         #  Yes ...
                         if a_request_user.profile.is_hide_collection_image():
-                                
+
                             #  Set the Image Hidden flags to true
                             cell_image.set_hidden(True)
-                                        
+
                             # Update the Database
                             cell_image.save()
-
 
                     #  No, a new Image must be added to the database.
                     else:
 
                         # Create a New Image Object
-                        cell_image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, owner, image_comment, image_hidden)
+                        cell_image = Image.create(image_id,
+                                                  image_name,
+                                                  server,
+                                                  image_viewer_url,
+                                                  image_birdseye_url,
+                                                  image_roi,
+                                                  owner,
+                                                  image_comment,
+                                                  image_hidden)
 
                         # Is the requesting user Hiding Images in their Collections?
                         #  Yes ...
                         if a_request_user.profile.is_hide_collection_image():
-                                
+
                             #  Set the Image Hidden flags to true
                             cell_image.set_hidden(True)
 
@@ -1429,7 +1521,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                     # No active Collection - setup a Default Active Collection then
                     else:
-            
+
                         # Set up new Collection Attributes
                         collection_title = "A Default REST Collection"
                         collection_description = "A Collection created by a REST Request"
@@ -1451,21 +1543,22 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # Add the Image to the Collection
                         Collection.assign_image(cell_image, collection)
 
-
                     post_id = ''
 
                     # Get the Credentials for the Requesting User
                     credential = get_credential_for_user(a_request_user)
 
+                    # Get the Primary WordPress Server - Blogging Engine
+                    environment = get_primary_cpw_environment()
+
                     # Does the Requesting User have a Password?
                     #  Yes
-                    if credential.has_apppwd():
-
-                        # Get the Primary WordPress Server - Blogging Engine
-                        environment = get_primary_cpw_environment()
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
                         # Create a Blog Post for the New Cell
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential, cell_title, cell_description)
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                 cell_title,
+                                                                                 cell_description)
 
                         # Was the Post a success?
                         #  Yes
@@ -1478,7 +1571,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         else:
 
                             # Raise an Error!
-                            message = "WordPress Error - Contact System Administrator : "  + str(returned_blogpost) + '!'
+                            message = "WordPress Error - Contact System Administrator : " + \
+                                str(returned_blogpost) + '!'
                             raise serializers.ValidationError(message)
 
                     # Add the Post Id to the Cell
@@ -1486,11 +1580,16 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
 
                 # Create a New Cell Object
-                cell = Cell.create(an_instance, cell_title, cell_description, cell_xcoordinate, cell_ycoordinate, cell_blogpost, cell_image)
+                cell = Cell.create(an_instance,
+                                   cell_title,
+                                   cell_description,
+                                   cell_xcoordinate,
+                                   cell_ycoordinate,
+                                   cell_blogpost,
+                                   cell_image)
 
                 # Write the New Cell to the database
                 cell.save()
-
 
     def validate_matrix_json_fields(self, a_title, a_description, a_height, a_width):
         """Validate the supplied JSON fields for the Bench
@@ -1521,7 +1620,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0130 - Bench Cell Width greater than 450 Pixels
             ValidationError:
                 CPW_REST:0140 - Bench Cell Width is less than 75 Pixels
-          
+
         """
 
         len_title = len(a_title)
@@ -1562,7 +1661,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             message = 'CPW_REST:0140 ERROR! Bench Cell Width (' + str(a_width) + ') is less than 75!'
             raise serializers.ValidationError(message)
-
 
     def validate_cells(self, a_cells_data, a_request_user, a_mode_flag):
         """Validate the supplied JSON fields for an array of Cells
@@ -1611,7 +1709,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0090 - Attempting to Add an Image to a Bench for a different Owner
             ValidationError:
                 CPW_REST:0080 - Attempting to Add an Image to a Bench WITHOUT a Title or Description
-          
+
         """
 
         maxX = 0
@@ -1658,29 +1756,33 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Do we have more than 10,000 Columns?
         if maxX > environment.maximum_rest_columns:
 
-            message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than ' + str() + ' Columns allowed!'
+            message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than ' + str() + \
+                ' Columns allowed!'
             raise serializers.ValidationError(message)
 
         # Do we have more than 10,000 Rows?
         if maxY > environment.maximum_rest_rows:
             
-            message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than ' + str() + ' Rows allowed!'
+            message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than ' + str() + \
+                ' Rows allowed!'
             raise serializers.ValidationError(message)
 
         # Do we have less than 3 Columns?
         if maxX < environment.minimum_rest_columns:
 
-            message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least ' + str() + ' Columns required!'
+            message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least ' + str() +\
+                ' Columns required!'
             raise serializers.ValidationError(message)
 
         # Do we have less than 3 Rows?
         if maxY < environment.minimum_rest_rows:
 
-            message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least ' + str() + ' Rows required!'
+            message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least ' + str() + \
+                ' Rows required!'
             raise serializers.ValidationError(message)
 
         # Initialise a 2D array for all possible cells ...
-        bench_cells=[[0 for cc in range(maxY)] for rc in range(maxX)]
+        bench_cells = [[0 for cc in range(maxY)] for rc in range(maxX)]
 
         i = 0
 
@@ -1709,9 +1811,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             # If there are already is a Cell at this X and Y Coordinate in the 2D Array,
             #  we have a Duplicate Cell, so Raise an Error!
-            if bench_cells[i][j] == True:
+            if bench_cells[i][j] is True:
 
-                message = 'CPW_REST:0190 ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
+                message = 'CPW_REST:0190 ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + \
+                    str(j) + '!'
                 raise serializers.ValidationError(message)
 
             # To mark the presence of a Cell at this X and Y Coordinate, set this entry in the 2D Array to True
@@ -1734,15 +1837,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                 # If the entry in the 2D Array is False, then we have a missing cell, 
                 #  so Raise an Error!
-                if bench_cells[i][j] == False:
+                if bench_cells[i][j] is False:
 
-                    message = 'CPW_REST:0220 ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + str(j) + '!'
+                    message = 'CPW_REST:0220 ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + \
+                        str(j) + '!'
                     raise serializers.ValidationError(message)
 
                 j += 1
 
             i += 1
-
 
         # Process all the Cells in the Cell Data
         for cell_data in a_cells_data:
@@ -1761,33 +1864,37 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 # Do we have Image Data in the Column Header, if so, Raise an Error!
                 if xcoordinate == CONST_ZERO:
 
-                    message = 'CPW_REST:0010 ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
+                    message = 'CPW_REST:0010 ERROR! An Image is not Permitted in : Column Index = ' + \
+                        str(xcoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # Do we have Image Data in the Column Footer, if so, Raise an Error!
                 if xcoordinate == max_column_index:
 
-                    message = 'CPW_REST:0020 ERROR! An Image is not Permitted in : Column Index = ' + str(xcoordinate) + '!'
+                    message = 'CPW_REST:0020 ERROR! An Image is not Permitted in : Column Index = ' + \
+                        str(xcoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # Do we have Image Data in the Row Header, if so, Raise an Error!
                 if ycoordinate == CONST_ZERO:
 
-                    message = 'CPW_REST:0030 ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
+                    message = 'CPW_REST:0030 ERROR! An Image is not Permitted in : Row Index = ' + \
+                        str(ycoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # Do we have Image Data in the Row Footer, if so, Raise an Error!
                 if ycoordinate == max_row_index:
 
-                    message = 'CPW_REST:0040 ERROR! An Image is not Permitted in : Row Index = ' + str(ycoordinate) + '!'
+                    message = 'CPW_REST:0040 ERROR! An Image is not Permitted in : Row Index = ' + \
+                        str(ycoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # There must be a Title and Description for a Cell containing an Image, else Raise an Error
                 if cell_title == '' or cell_description == '':
 
-                    message = 'CPW_REST:0080 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or Description!'
+                    message = 'CPW_REST:0080 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or " + \
+                        "Description!'
                     raise serializers.ValidationError(message)
-
 
             # Is there any Image data in the Cell?
             if image_data is not None:
@@ -1807,7 +1914,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     image_owner = get_user_from_username(owner)
 
                     # Is the Mode is TRUE for Create?
-                    if a_mode_flag == True:
+                    if a_mode_flag is True:
 
                         # Is the Requesting User is NOT the Image Owner?
                         if a_request_user != image_owner:
@@ -1815,9 +1922,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             # And the User is NOT a Super-User, then Raise an Error!
                             if not a_request_user.is_superuser:
 
-                                message = 'CPW_REST:0090 ERROR! Attempting to Add an Image to a Bench for a different Owner: ' + str(owner) + '!'
+                                message = 'CPW_REST:0090 ERROR! Attempting to Add an Image to a Bench for a " + \
+                                    "different Owner: ' + str(owner) + '!'
                                 raise serializers.ValidationError(message)
-                    
+
                 # No User exists, Raise an Error!
                 else:
                     message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(image_owner) + ' Does NOT Exist!'
@@ -1825,7 +1933,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                 # Validate the Image in the Cell
                 server = self.validate_image_json(server, image_owner, image_id, roi_id, image_comment)
-
 
     def validate_cell_json_fields(self, a_title, a_description):
         """Validate the supplied JSON fields for a Cell
@@ -1845,7 +1952,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0180 - Title Too Long.
             ValidationError:
                 CPW_REST:0170 - Description Too Long
-          
+
         """
 
         len_title = len(a_title)
@@ -1862,7 +1969,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             message = 'CPW_REST:0170 ERROR! Cell Description Length (' + str(len_title) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
-
 
     def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id, a_image_comment):
         """Validates the supplied Server, Owner, Image Id and ROI ID Fields
@@ -1895,7 +2001,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0270 - Server is Unknown
 
         """
-        
+
         server = None
 
         len_comment = len(a_image_comment)
@@ -1903,7 +2009,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Comment greater than 4095 Characters? IF so, Raise an Error!
         if len_comment > CONST_4095:
 
-            message = 'CPW_REST:XXXX ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
+            message = 'CPW_REST:XXXX ERROR! Image Comment Title Length (' + str(len_comment) + \
+                ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         # Split the Server String into UID and URL?
@@ -1927,7 +2034,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     # No, then Error
                     message = 'CPW_REST:0330 ERROR! Image NOT Present on : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
-            
+
             # No ...
             else:
 
@@ -1944,13 +2051,15 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             if not self.validate_roi_id(server, a_image_id, a_roi_id):
 
                                 # No such ROI, Raise Error!
-                                message = 'CPW_REST:0250 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
+                                message = 'CPW_REST:0250 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + \
+                                    str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
                                 raise serializers.ValidationError(message)
-                    
+
                     # No Image, then Error
                     else:
 
-                        message = 'CPW_REST:0210 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + a_server_str + '!'
+                        message = 'CPW_REST:0210 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + \
+                            a_server_str + '!'
                         raise serializers.ValidationError(message)
 
                 # Not an OMERO server, then Error
@@ -1966,7 +2075,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError(message)
 
         return server
-
 
     def validate_wordpress_image_id(self, a_server, a_user, a_image_id):
         """For a WordPress Image, Check the supplied Image Exists
@@ -1998,7 +2106,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         else:
             return True
 
-
     def validate_imaging_image_id(self, a_server, a_image_id):
         """For an OMERO Image, Check the supplied Image Exists
 
@@ -2026,7 +2133,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             return False
         else:
             return True
-
 
     def validate_roi_id(self, a_server, a_image_id, a_roi_id):
         """For an OMERO Image ROI, Check the supplied ROI Exists

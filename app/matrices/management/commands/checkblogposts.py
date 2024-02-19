@@ -123,7 +123,8 @@ class Command(BaseCommand):
 
                         if update:
 
-                            returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
+                            returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                     matrix.title,
                                                                                      matrix.description)
 
                             if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -148,7 +149,8 @@ class Command(BaseCommand):
 
                     if credential.has_apppwd() and environment.is_wordpress_active():
 
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                 matrix.title,
                                                                                  matrix.description)
 
                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -225,7 +227,8 @@ class Command(BaseCommand):
 
                         if credential.has_apppwd() and environment.is_wordpress_active():
 
-                            returned_blogpost = environment.post_a_post_to_wordpress(credential, cell.title,
+                            returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                     cell.title,
                                                                                      cell.description)
 
                             if returned_blogpost['status'] == WORDPRESS_SUCCESS:

@@ -194,7 +194,17 @@ class MatrixViewSet(viewsets.ModelViewSet):
             order_parameter = 'matrix_id'
             order_parameter_2 = 'id'
 
-        bench_summary_queryset = bench_list_by_user_and_direction(self.request.user, order_parameter, query_title, query_description, query_owner, query_authority, query_created_after, query_created_before, query_modified_after, query_modified_before, query_search )
+        bench_summary_queryset = bench_list_by_user_and_direction(self.request.user,
+                                                                  order_parameter,
+                                                                  query_title,
+                                                                  query_description,
+                                                                  query_owner,
+                                                                  query_authority,
+                                                                  query_created_after,
+                                                                  query_created_before,
+                                                                  query_modified_after,
+                                                                  query_modified_before,
+                                                                  query_search)
 
         bench_queryset = Matrix.objects.none()
 

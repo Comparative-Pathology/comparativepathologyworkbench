@@ -135,7 +135,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             request_user = User.objects.get(id=user_id)
 
         # Do we have any Bench Attributes?
-        if validated_data.get('title', None) == None and validated_data.get('description', None) == None and validated_data.get('bench_cells', None) == None:
+        if validated_data.get('title', None) is None and \
+           validated_data.get('description', None) is None and \
+           validated_data.get('bench_cells', None) is None:
 
             # No, then Raise an Error!
             message = 'CPW_REST:0370 ERROR! NO data supplied for Bench Creation!'
@@ -177,7 +179,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if not request_user.is_superuser:
 
                 # No, then Raise an Error!
-                message = 'CPW_REST:0050 ERROR! Attempting to Add a new Bench for a different Owner: ' + str(matrix_owner) + '!'
+                message = 'CPW_REST:0050 ERROR! Attempting to Add a new Bench for a different Owner: ' + \
+                          str(matrix_owner) + '!'
                 raise serializers.ValidationError(message)
 
         matrix_blogpost = ''
@@ -289,8 +292,8 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         if cell_title == '' and cell_description == '':
 
                             # Yes, Raise an Error!
-                            message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title " + \
-                                "or Description!'
+                            message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title ' + \
+                                      'or Description!'
                             raise serializers.ValidationError(message)
 
                         # Get the mage Attributes
@@ -370,7 +373,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             # Is the requesting user Hiding Images in their Collections?
                             #  Yes - ste the Image Hidden flags to true
                             if request_user.profile.is_hide_collection_image():
-                                
+
                                 image.set_hidden(True)
                                 image.save()
 
@@ -391,7 +394,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             # Is the requesting user Hiding Images in their Collections?
                             #  Yes - ste the Image Hidden flags to true
                             if request_user.profile.is_hide_collection_image():
-                                
+
                                 image.set_hidden(True)
 
                             # Save the New Object to the Database
@@ -414,7 +417,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             collection_owner = request_user
 
                             # Create a New Collection Object
-                            collection = Collection.create(collection_title, collection_description, collection_owner)
+                            collection = Collection.create(collection_title,
+                                                           collection_description,
+                                                           collection_owner)
                             # Write the New Collection Object to the Database
                             collection.save()
 
@@ -453,7 +458,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         if credential.has_apppwd() and environment.is_wordpress_active():
 
             # Post a New Blogpost for the Bench
-            returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title, matrix.description)
+            returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                     matrix.title,
+                                                                     matrix.description)
 
             # Check the Post Response
             if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -462,7 +469,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
             else:
 
-                # If failure, Raise an Error!
+                # If failure, Raise an Error!
                 message = "WordPress Error - Contact System Administrator : " + str(returned_blogpost) + '!'
                 raise serializers.ValidationError(message)
 
@@ -750,7 +757,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             image_id = image_data.get('image_id')
                             image_roi_id = image_data.get('roi')
                             image_comment = image_data.get('comment')
-                            
+
                             # Get the User Object for the Supplied Owner
                             image_owner = get_user_from_username(owner)
 
@@ -776,7 +783,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 data = server.check_wordpress_image(image_owner, image_id)
 
                                 json_image = data['image']
-                                
+
                                 # Extract the Server Image Attributes
                                 image_name = json_image['name']
                                 image_viewer_url = json_image['viewer_url']
@@ -826,17 +833,17 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                     # Set the Image Comment
                                     image.comment = image_comment
-                                        
+
                                     # Update the Database
                                     image.save()
 
                                 # Is the requesting user Hiding Images in their Collections?
                                 #  Yes ...
                                 if a_request_user.profile.is_hide_collection_image():
-                                
+
                                     #  Set the Image Hidden flags to true
                                     image.set_hidden(True)
-                                        
+
                                     # Update the Database
                                     image.save()
 
@@ -860,7 +867,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 # Is the requesting user Hiding Images in their Collections?
                                 #  Yes ...
                                 if a_request_user.profile.is_hide_collection_image():
-                                
+
                                     #  Set the Image Hidden flags to true
                                     image.set_hidden(True)
 
@@ -880,7 +887,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                             # No ...
                             else:
-            
+
                                 # Set up Attributes for a New Collection            
                                 collection_title = "A Default REST Collection"
                                 collection_description = "A Collection created by a REST Request"
@@ -897,7 +904,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 a_request_user.profile.set_active_collection(collection)
                                 # Update the Database with the updated User.
                                 a_request_user.save()
-                            
+
                             # If the Image is Not already in the Collection
                             if not exists_collection_for_image(collection, image):
 
@@ -930,14 +937,13 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                     else:
 
-                                        # If failure, Raise an Error!
+                                        # If failure, Raise an Error!
                                         message = "WordPress Error - Contact System Administrator : " + \
                                             str(returned_blogpost) + '!'
                                         raise serializers.ValidationError(message)
 
                             # Set the Cell Blogpost to the new Blogpost
                             bench_cell.set_blogpost(post_id)
-
 
                         # If there is a Database Image and there is a Supplied Image
                         if image_data is not None and bench_cell.image is not None:
@@ -1026,17 +1032,17 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                         # Set the Image Comment
                                         image.comment = image_comment
-                                        
+
                                         # Update the Database
                                         image.save()
 
                                     # Is the requesting user Hiding Images in their Collections?
                                     #  Yes ...
                                     if a_request_user.profile.is_hide_collection_image():
-                                
+
                                         #  Set the Image Hidden flags to true
                                         image.set_hidden(True)
-                                        
+
                                         # Update the Database
                                         image.save()
 
@@ -1091,7 +1097,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                         # Extract the ROI Id
                                         image_roi = int(json_roi['id'])
 
-
                                 # Does the Image already exist in the Database?
                                 #  Yes
                                 if exists_image_for_id_server_owner_roi(image_id, server, image_owner, image_roi):
@@ -1110,14 +1115,14 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                         # Set the Image Comment
                                         image.comment = image_comment
-                                        
+
                                         # Update the Database
                                         image.save()
 
                                     # Is the requesting user Hiding Images in their Collections?
                                     #  Yes ...
                                     if a_request_user.profile.is_hide_collection_image():
-                                
+
                                         #  Set the Image Hidden flags to true
                                         image.set_hidden(True)
 
@@ -1144,10 +1149,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                     # Is the requesting user Hiding Images in their Collections?
                                     #  Yes ...
                                     if a_request_user.profile.is_hide_collection_image():
-                                
+
                                         #  Set the Image Hidden flags to true
                                         image.set_hidden(True)
-                                        
+
                                     # Save the New Object to the Database
                                     image.save()
 
@@ -1231,7 +1236,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                             message = "WordPress Error - Contact System Administrator : " + \
                                                 str(returned_blogpost) + '!'
                                             raise serializers.ValidationError(message)
-                                
+
                                 # Set the Cell Blogpost to the new Blogpost
                                 bench_cell.set_blogpost(post_id)
 
@@ -1329,7 +1334,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 # Add the Bench cell to the List of Deletes
                 delete_cell_list.append(bench_cell)
 
-
         # Process the Cells to be Deleted
         for delete_cell in delete_cell_list:
 
@@ -1412,7 +1416,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     roi_id = image_data.get('roi')
                     image_comment = image_data.get('comment')
                     image_hidden = False
-                    
+
                     # Get the User Object from the database for the supplied owner
                     image_owner = get_user_from_username(owner)
 
@@ -1423,7 +1427,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     image_viewer_url = ''
                     image_birdseye_url = ''
                     image_roi = 0
-                    
+
                     # Is the Server a WordPress Server?
                     #  Yes
                     if server.is_wordpress():
@@ -1577,7 +1581,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                     # Add the Post Id to the Cell
                     cell_blogpost = post_id
-
 
                 # Create a New Cell Object
                 cell = Cell.create(an_instance,
@@ -1762,7 +1765,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
         # Do we have more than 10,000 Rows?
         if maxY > environment.maximum_rest_rows:
-            
+
             message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than ' + str() + \
                 ' Rows allowed!'
             raise serializers.ValidationError(message)

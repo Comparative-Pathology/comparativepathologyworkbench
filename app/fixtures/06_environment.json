@@ -1,18 +1,18 @@
 [
-{
-    "model": "matrices.environment",
-    "pk": 1,
-    "fields": {
+    {
+      "model": "matrices.environment",
+      "pk": 4,
+      "fields": {
         "name": "CPW",
-        "location": 3,
+        "location": 1,
         "protocol": 2,
-        "web_root": "localhost:1337/media",
-        "document_root": "/home/app/web/mediafiles/",
-        "nginx_private_location": "private_highcharts",
-        "wordpress_web_root": "192.168.0.10:80/my-wordpress",
+        "web_root": "workbench-czi-cpw.mvm.ed.ac.uk/protected",
+        "document_root": "/home/ehgcap/WWW/private_media",
+        "nginx_private_location": "private_media",
+        "wordpress_web_root": "workbench-czi-cpw.mvm.ed.ac.uk/wordpress",
         "wordpress_active": true,
-        "from_email": "The Comparative Pathology Workbench Team <Michael.Wicks@ed.ac.uk>",
-        "date_format": "%Y/%m/%d",
+        "from_email": "The Comparative Pathology Workbench (CZI) Team <edgutcellatlas-cpw@mlist.is.ed.ac.uk>",
+        "date_format": "%A, %B %e, %Y",
         "owner": 1,
         "minimum_cell_height": 75,
         "maximum_cell_height": 450,
@@ -28,6 +28,6 @@
         "minimum_rest_rows": 3,
         "maximum_bench_count": 10,
         "maximum_collection_count": 10
+      }
     }
-}
-]
+  ]

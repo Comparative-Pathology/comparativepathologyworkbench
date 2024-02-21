@@ -1,0 +1,93 @@
+[
+    {
+      "model": "matrices.server",
+      "pk": 10,
+      "fields": {
+        "name": "Your WordPress Images",
+        "url_server": "workbench-czi-cpw.mvm.ed.ac.uk/wordpress",
+        "uid": "",
+        "pwd": "gUhd9TxpnQppnZVAf7cv9oFIXfU8aZ0KaZ2VQH+3L/Y=",
+        "type": 1,
+        "owner": 1,
+        "accessible": false
+      }
+    },
+    {
+      "model": "matrices.server",
+      "pk": 12,
+      "fields": {
+        "name": "public@IDR",
+        "url_server": "idr.openmicroscopy.org",
+        "uid": "",
+        "pwd": "gUhd9TxpnQppnZVAf7cv9oFIXfU8aZ0KaZ2VQH+3L/Y=",
+        "type": 4,
+        "owner": 1,
+        "accessible": false
+      }
+    },
+    {
+      "model": "matrices.server",
+      "pk": 26,
+      "fields": {
+        "name": "mwicks23@CompPathUofE",
+        "url_server": "omero-czi-cpw.mvm.ed.ac.uk",
+        "uid": "mwicks23",
+        "pwd": "Ikim59Y1gym9V+g9E8SwV3fwCsf+68SQZUMzJe3mh6M=",
+        "type": 4,
+        "owner": 1,
+        "accessible": true
+      }
+    },
+    {
+      "model": "matrices.server",
+      "pk": 27,
+      "fields": {
+        "name": "public_user@CompPathUofE",
+        "url_server": "omero-czi-cpw.mvm.ed.ac.uk",
+        "uid": "public_user",
+        "pwd": "bc0VscQObE3Hj7ODc7EeJxSQGkqgUuNnv5HL6pZwCvQ=",
+        "type": 4,
+        "owner": 1,
+        "accessible": true
+      }
+    },
+    {
+      "model": "matrices.server",
+      "pk": 28,
+      "fields": {
+        "name": "CPW - CZI OMERO server",
+        "url_server": "omero-czi-cpw.mvm.ed.ac.uk",
+        "uid": "mwicks23",
+        "pwd": "PpGUZOYEcuGc+Jm9YeZ1q1dTxqyAyN2KXPWmogJ/KA8=",
+        "type": 4,
+        "owner": 1,
+        "accessible": true
+      }
+    },
+    {
+      "model": "matrices.server",
+      "pk": 30,
+      "fields": {
+        "name": "EBI Single Cell Atlas",
+        "url_server": "www.ebi.ac.uk/gxa/sc",
+        "uid": "",
+        "pwd": "LZ+UjEmoBqK65kSPGhv8vxTPWbeygoXgKr+3ymN1+zQ=",
+        "type": 5,
+        "owner": 1,
+        "accessible": false
+      }
+    },
+    {
+      "model": "matrices.server",
+      "pk": 31,
+      "fields": {
+        "name": "THIS Comparative Pathology Workbench",
+        "url_server": "workbench-czi-cpw.mvm.ed.ac.uk/protected",
+        "uid": "",
+        "pwd": "V7sPKTxHrT2Co9SxJUui8cB5u58awON5OXXX7HKCpX4=",
+        "type": 6,
+        "owner": 1,
+        "accessible": false
+      }
+    }
+  ]

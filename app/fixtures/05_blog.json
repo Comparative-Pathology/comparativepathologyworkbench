@@ -1,74 +1,74 @@
 [
-{
-    "model": "matrices.blog",
-    "pk": 1,
-    "fields": {
+    {
+      "model": "matrices.blog",
+      "pk": 28,
+      "fields": {
         "name": "PostAPost",
-        "protocol": 2,
+        "protocol": 1,
         "application": "wp-json/wp/v2",
         "preamble": "posts",
         "postamble": "",
         "owner": 1
-    }
-},
-{
-    "model": "matrices.blog",
-    "pk": 2,
-    "fields": {
+      }
+    },
+    {
+      "model": "matrices.blog",
+      "pk": 29,
+      "fields": {
         "name": "GetPostComments",
-        "protocol": 2,
+        "protocol": 1,
         "application": "wp-json/wp/v2",
         "preamble": "comments?post=",
         "postamble": "",
         "owner": 1
-    }
-},
-{
-    "model": "matrices.blog",
-    "pk": 3,
-    "fields": {
+      }
+    },
+    {
+      "model": "matrices.blog",
+      "pk": 30,
+      "fields": {
         "name": "PostAComment",
-        "protocol": 2,
+        "protocol": 1,
         "application": "wp-json/wp/v2",
         "preamble": "comments",
         "postamble": "",
         "owner": 1
-    }
-},
-{
-    "model": "matrices.blog",
-    "pk": 4,
-    "fields": {
+      }
+    },
+    {
+      "model": "matrices.blog",
+      "pk": 31,
+      "fields": {
         "name": "GetPost",
-        "protocol": 2,
+        "protocol": 1,
         "application": "wp-json/wp/v2",
         "preamble": "posts",
         "postamble": "",
         "owner": 1
-    }
-},
-{
-    "model": "matrices.blog",
-    "pk": 5,
-    "fields": {
+      }
+    },
+    {
+      "model": "matrices.blog",
+      "pk": 32,
+      "fields": {
         "name": "LinkPost",
-        "protocol": 2,
+        "protocol": 1,
         "application": "archives",
         "preamble": "",
         "postamble": "",
         "owner": 1
-    }
-},
-{
-    "model": "matrices.blog",
-    "pk": 6,
-    "fields": {
+      }
+    },
+    {
+      "model": "matrices.blog",
+      "pk": 33,
+      "fields": {
         "name": "DeletePost",
-        "protocol": 2,
+        "protocol": 1,
         "application": "wp-json/wp/v2",
         "preamble": "posts",
         "postamble": "",
         "owner": 1
+      }
     }
-}
-]
+  ]

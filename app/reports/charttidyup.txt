@@ -1,0 +1,16 @@
+Update                                                                     : False
+Total Number of Documents in Database BEFORE Cleanup                       : 0
+Total Number of Artefacts (ZIPs etc) on Database BEFORE Cleanup            : 7
+Total Number of EBI Charts (PNGs etc) in Database BEFORE Cleanup           : 3
+Total Number of CPW Charts (PNGs etc) in Database BEFORE Cleanup           : 14
+Total Number of OMERO Charts (PNGs etc) in Database BEFORE Cleanup         : 103
+Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver BEFORE Cleanup : 129
+Total Number of Files (ZIPs etc Plus PNGs etc) DELETED from Webserver      : 0
+Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup  : 129
+Total Number of Documents in Database AFTER Cleanup                        : 0
+Total Number of Artefacts (ZIPs etc) on Database AFTER Cleanup             : 7
+Total Number of EBI Charts (PNGs etc) in Database AFTER Cleanup            : 3
+Total Number of CPW Charts (PNGs etc) in Database AFTER Cleanup            : 14
+Total Number of OMERO Charts (PNGs etc) in Database AFTER Cleanup          : 103
+Total Number of Files (ZIPs etc Plus PNGs etc) on Webserver AFTER Cleanup  : 129
+

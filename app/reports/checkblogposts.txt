@@ -1,0 +1,11 @@
+Update                                                   : False
+Check Bench                                              : all
+Total Number of Benches                                  : 14
+Total Number of Benches WITH a Blogpost                  : 14
+Total Number of Benches WITH NO Blogpost                 : 0
+Total Number of Benches WITH a NON-EXISTING Blogpost     : 0
+Total Number of Cells with an Image                      : 95
+Total Number of Cells with an Image and a Blogpost       : 95
+Total Number of Cells with an Image WITHOUT a Blogpost   : 0
+Total Number of Cells WITH a NON-EXISTING Blogpost       : 0
+

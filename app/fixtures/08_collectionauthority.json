@@ -1,0 +1,10 @@
+[
+    {
+      "model": "matrices.collectionauthority",
+      "pk": 1,
+      "fields": {
+        "name": "VIEWER",
+        "owner": 1
+      }
+    }
+  ]

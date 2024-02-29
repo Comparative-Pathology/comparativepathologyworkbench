@@ -41,6 +41,8 @@ from requests.exceptions import HTTPError
 from matrices.models.location import Location
 from matrices.models import Protocol
 
+ENVIRONMENT_NAME_CPW = 'CPW'
+
 ENVIRONMENT_CZI = 'CZI'
 ENVIRONMENT_CANADA = 'CANADA'
 ENVIRONMENT_COELIAC = 'COELIAC'
@@ -136,6 +138,12 @@ class Environment(models.Model):
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:
+            return True
+        else:
+            return False
+
+    def is_cpw(self):
+        if self.name == ENVIRONMENT_NAME_CPW:
             return True
         else:
             return False

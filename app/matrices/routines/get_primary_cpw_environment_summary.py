@@ -28,18 +28,14 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
 from django.apps import apps
-
 
 CPW_ENVIRONMENT = 'CPW'
 
-"""
-    Get the Primary CPW Environment Row
-"""
+
+#
+#    Get the Primary CPW Environment Row
+#
 def get_primary_cpw_environment_summary():
 
     EnvironmentSummary = apps.get_model('matrices', 'EnvironmentSummary')

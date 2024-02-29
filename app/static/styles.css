@@ -11,9 +11,7 @@ body {
 .page-container {
   font-family: Verdana, Geneva, sans-serif;
   height: 100vh;
-  /*    height: 1fr; */
   width: 100vw;
-  /*    width: 1fr; */
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 174px auto 123px;
@@ -22,28 +20,22 @@ body {
 }
 
 .page-header {
-  /*border-bottom: 1px solid lightgrey;*/
 }
 
 .page-body {
-  /*  border-right: 1px solid lightgrey; */
   display: grid;
   grid-template-columns: 125px auto;
   overflow: hidden;
 }
 
 .page-sidebar {
-  /* border-right: 1px solid lightgrey; */
-  /* overflow-y: scroll; */
 }
 
 .page-content {
-  /*  border-right: 1px solid lightgrey; */
   overflow-y: scroll;
 }
 
 .page-footer {
-  /* border-top: 1px solid lightgrey; */
 }
 
 
@@ -67,22 +59,14 @@ body {
   display: grid;
   grid-template-columns: 125px 170px 170px 170px 170px 170px auto 180px 170px auto;
   grid-template-rows: auto auto auto auto auto;
-  background-color: #CA03FC;
-  /* SALMON PINK */
-  /*border: 1px solid LightGray;*/
 }
 
 .grid-container-header>div {
   text-align: left;
-  background-color: #CA03FC;
-  /* SALMON PINK */
-  /*border: 1px solid LightGray;*/
 }
 
 .grid-item-header-logo {
   padding: 15px 0px 0px 0px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
   grid-row-start: 1;
   grid-row-end: 4;
 }
@@ -99,8 +83,6 @@ body {
 
 .grid-item-header-title {
   padding: 25px 5px 5px 5px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
   font-size: 40px;
   grid-column-start: 2;
   grid-column-end: 8;
@@ -116,55 +98,34 @@ body {
 }
 
 .grid-item-header-bench {
-  /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
   grid-column-start: 2;
 }
 
 .grid-item-header-collection {
-  /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
 }
 
 .grid-item-header-image {
-  /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
 }
 
 .grid-item-header-source {
-  /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
 }
 
 .grid-item-header-about {
-  /* padding: 5px 5px 15px 5px; */
   padding: 0px 0px 0px 0px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
   grid-column-start: 6;
   grid-column-end: 10;
 }
 
 .grid-item-header-user {
-  /* padding: 5px 5px 15px 5px; */
   padding: 30px 0px 0px 15px;
-  /* padding: 40px; */
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
 }
 
 .grid-item-header-search {
   padding: 30px 15px 0px 15px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
 }
 
 .grid-item-header-search input[type=text] {
@@ -181,22 +142,18 @@ body {
 
 .grid-item-header-breadcrumb {
   padding: 5px 5px 15px 5px;
-  border: 1px solid #CA03FC;
-  /* SALMON PINK */
   grid-column-start: 2;
   grid-column-end: 10;
 }
 
 .grid-item-header-logo-under {
   padding: 15px 0px 0px 0px;
-  /* border: 1px solid Gray; */
   grid-row-start: 4;
   grid-row-end: 5;
 }
 
 .grid-item-header-breadcrumb-under {
   padding: 5px 5px 15px 5px;
-  /* border: 1px solid Gray; */
   grid-column-start: 2;
   grid-column-end: 10;
 }
@@ -220,8 +177,6 @@ body {
 /* THE HEADER MENUS */
 
 .header-drop-button {
-  background-color: #CA03FC;
-  /* SALMON PINK */
   padding: 8px 15px 12px 5px;
   font-family: Verdana, Geneva, sans-serif;
   font-size: 16px;
@@ -428,7 +383,6 @@ body {
   background-color: #CCFFCC;
 }
 
-
 /* GENERIC MENUS */
 
 .generic-drop-button {
@@ -487,8 +441,6 @@ body {
 
 ul.breadcrumb {
   list-style: none;
-  background-color: #CA03FC;
-  /* SALMON PINK */
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 0px 0px;
 }
@@ -791,7 +743,6 @@ ul.breadcrumb li+li:before {
   border: 0px solid Black;
 }
 
-
 /* Closable button inside the container tab */
 
 .closebtn {
@@ -979,7 +930,6 @@ div.bench-popup>dd {
 
 .home-grid-container {
   display: grid;
-  /*grid-template-columns: 78px 366px 22px 366px 22px 366px 78px;*/
   grid-template-columns: 350px 350px 350px;
   padding: 0px 0px 0px 0px;
 }
@@ -1312,7 +1262,6 @@ label {
 }
 
 .form-container {
-  /*border-radius: 5px;*/
   background-color: LightGray;
   padding: 5px 5px 5px 5px;
 }
@@ -1628,7 +1577,6 @@ textarea.form-control {
 .tooltip {
   position: relative;
   display: inline-block;
-  /*border-bottom: 1px dotted black;*/
 }
 
 .tooltip .tooltiptext {
@@ -1664,11 +1612,9 @@ textarea.form-control {
   opacity: 1;
 }
 
-
 .tooltipcolumn {
   position: relative;
   display: inline-block;
-  /*border-bottom: 1px dotted black;*/
 }
 
 .tooltipcolumn .tooltipcolumntext {
@@ -1708,7 +1654,6 @@ textarea.form-control {
 .tooltiprow {
   position: relative;
   display: inline-block;
-  /*border-bottom: 1px dotted black;*/
 }
 
 .tooltiprow .tooltiprowtext {

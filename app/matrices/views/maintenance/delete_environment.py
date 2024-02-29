@@ -38,6 +38,7 @@ from django.urls import reverse
 
 from matrices.models import Environment
 
+
 #
 # DELETE AN ENVIRONMENT
 #
@@ -50,7 +51,8 @@ def delete_environment(request, environment_id):
 
         if environment.name == 'CPW':
 
-            messages.error(request, 'CPW_WEB:0510 Environment Location ' + environment.name + ' NOT Deleted - CANNOT Delete the Primary Environment!')
+            messages.error(request, 'CPW_WEB:0510 Environment Location ' + environment.name + ' NOT Deleted - '
+                           'CANNOT Delete the Primary Environment!')
 
         else:
 

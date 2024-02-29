@@ -40,6 +40,7 @@ from matrices.models import Location
 
 from matrices.routines import exists_environment_for_location
 
+
 #
 # DELETE A TYPE OF ENVIRONMENT
 #
@@ -52,7 +53,8 @@ def delete_location(request, location_id):
 
         if exists_environment_for_location(location):
 
-            messages.error(request, 'CPW_WEB:0510 Environment Location ' + location.name + ' NOT Deleted - Environments still exist!')
+            messages.error(request, 'CPW_WEB:0510 Environment Location ' + location.name + ' NOT Deleted - '
+                           'Environments still exist!')
 
         else:
 

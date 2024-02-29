@@ -30,10 +30,7 @@
 ###
 from __future__ import unicode_literals
 
-from datetime import datetime
-
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404

@@ -28,12 +28,6 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from django.shortcuts import get_object_or_404
-
 from django.apps import apps
 
 from . import bench_list_by_user_and_direction
@@ -45,12 +39,10 @@ from matrices.routines.get_primary_cpw_environment_summary import get_primary_cp
 SERVER_IDR = 'idr.openmicroscopy.org'
 
 
-"""
-    Get the Data to Populate Base.html (The Header Template)
-"""
+#
+#    Get the Data to Populate Base.html (The Header Template)
+#
 def get_header_data(a_user):
-
-    Collection = apps.get_model('matrices', 'Collection')
 
     image_list = list()
     hidden_image_list = list()
@@ -69,7 +61,7 @@ def get_header_data(a_user):
             server_list = Server.objects.filter(url_server=SERVER_IDR).order_by('id')
 
         else:
-            
+
             server_list = Server.objects.all().order_by('id')
 
         matrix_list = bench_list_by_user_and_direction(a_user, '', '', '', '', '', '', '', '', '', '')
@@ -79,7 +71,11 @@ def get_header_data(a_user):
         image_list = get_images_for_collection_summary(collection_summary_list)
         hidden_image_list = get_hidden_images_for_collection_summary(collection_summary_list)
 
-
-    data = { 'environment': environment_summary, 'collection_list': collection_summary_list, 'matrix_list': matrix_list, 'server_list': server_list, 'image_list': image_list, 'hidden_image_list': hidden_image_list }
+    data = {'environment_summary': environment_summary,
+            'collection_list': collection_summary_list,
+            'matrix_list': matrix_list,
+            'server_list': server_list,
+            'image_list': image_list,
+            'hidden_image_list': hidden_image_list}
 
     return data

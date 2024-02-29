@@ -28,27 +28,16 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
-
-from random import randint
 
 
-"""
-    The LOCATION Model
-"""
+#
+#    The LOCATION Model
+#
 class Location(models.Model):
     name = models.CharField(max_length=25, blank=False, unique=True, default='')
+    colour = models.CharField(max_length=6, blank=False, default='FFFFFF')
     owner = models.ForeignKey(User, related_name='locations', on_delete=models.DO_NOTHING)
 
     @classmethod

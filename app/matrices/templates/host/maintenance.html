@@ -677,8 +677,10 @@ The maintenance template
 				<th width="150px">Action</th>
 				<th width="100px">Owner</th>
 				<th>Name</th>
+				<th>Colour</th>
 			</tr>
 			<tr>
+				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -704,6 +706,7 @@ The maintenance template
 
 				<td>{{ location.owner.username }}</td>
 				<td>{{ location.name }}</td>
+				<td>{{ location.colour }}</td>
 			</tr>
 
 		{% if forloop.last %}
@@ -720,6 +723,7 @@ The maintenance template
 
 			{% endif %}
 
+				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			</tr>

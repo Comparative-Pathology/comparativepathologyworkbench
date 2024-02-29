@@ -51,7 +51,7 @@ def view_environment(request, environment_id):
 
         environment = get_object_or_404(Environment, pk=environment_id)
 
-        data.update({ 'environment_id': environment_id, 'environment': environment })
+        data.update({'environment_id': environment_id, 'environment': environment})
 
         return render(request, 'maintenance/detail_environment.html', data)
 

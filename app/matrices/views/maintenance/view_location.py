@@ -39,6 +39,7 @@ from matrices.models import Location
 
 from matrices.routines import get_header_data
 
+
 #
 # VIEW AN ENVIRONMENT LOCATION
 #
@@ -51,7 +52,7 @@ def view_location(request, location_id):
 
         location = get_object_or_404(Location, pk=location_id)
 
-        data.update({ 'location_id': location_id, 'location': location })
+        data.update({'location_id': location_id, 'location': location})
 
         return render(request, 'maintenance/detail_location.html', data)
 

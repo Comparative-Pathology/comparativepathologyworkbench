@@ -30,6 +30,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+ENVIRONMENT_NAME_CPW = 'CPW'
+
 ENVIRONMENT_CZI = 'CZI'
 ENVIRONMENT_CANADA = 'CANADA'
 ENVIRONMENT_COELIAC = 'COELIAC'
@@ -44,6 +46,7 @@ class EnvironmentSummary(models.Model):
     environment_id = models.IntegerField(default=0, blank=False)
     environment_name = models.CharField(max_length=50, blank=False, unique=True)
     environment_location = models.CharField(max_length=25, blank=False, unique=True)
+    environment_colour = models.CharField(max_length=6, blank=False)
     environment_wordpress_active = models.BooleanField(default=False)
 
     class Meta:
@@ -55,6 +58,12 @@ class EnvironmentSummary(models.Model):
 
     def __repr__(self):
         return f"{self.environment_id}, {self.environment_name}, {self.environment_location}"
+
+    def is_cpw(self):
+        if self.environment_name == ENVIRONMENT_NAME_CPW:
+            return True
+        else:
+            return False
 
     def is_czi(self):
         if self.environment_location == ENVIRONMENT_CZI:

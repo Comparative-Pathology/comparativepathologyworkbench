@@ -37,16 +37,18 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
-from matrices.forms.locationform import LocationForm
 from matrices.forms import EnvironmentForm
 
 from matrices.models import Environment
 
 from matrices.routines import get_header_data
-
 from matrices.routines import exists_primary_environment
 
+
+ENVIRONMENT_NAME_CPW = 'CPW'
+
 HTTP_POST = 'POST'
+
 
 #
 # EDIT AN ENVIRONMENT
@@ -68,9 +70,9 @@ def edit_environment(request, environment_id):
 
             if form.is_valid():
 
-                if environment_old_name == 'CPW':
+                if environment_old_name == ENVIRONMENT_NAME_CPW:
 
-                    if environment.name == 'CPW':
+                    if environment.is_cpw():
 
                         environment = form.save(commit=False)
 
@@ -82,18 +84,22 @@ def edit_environment(request, environment_id):
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0140 Edit Environment - CANNOT Change the name of the Primary Environment!")
-                        form.add_error(None, "CPW_WEB:0140 Edit Environment - CANNOT Change the name of the Primary Environment")
-                
+                        messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the '
+                                       'Primary Environment!')
+                        form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the Primary '
+                                       'Environment')
+
                 else:
 
                     if exists_primary_environment():
 
-                        if environment.name == 'CPW':
+                        if environment.name == ENVIRONMENT_NAME_CPW:
 
-                            messages.error(request, "CPW_WEB:0140 Edit Environment - CANNOT Change to the name of the Primary Environment!")
-                            form.add_error(None, "CPW_WEB:0140 Edit Environment - CANNOT Change to the name of the Primary Environment")
-                        
+                            messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of '
+                                           'the Primary Environment!')
+                            form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of the '
+                                           'Primary Environment')
+
                         else:
 
                             environment = form.save(commit=False)
@@ -103,7 +109,7 @@ def edit_environment(request, environment_id):
                             environment.save()
 
                             messages.success(request, 'Environment ' + environment.name + ' Updated!')
-                    
+
                     else:
 
                         environment = form.save(commit=False)
@@ -114,21 +120,20 @@ def edit_environment(request, environment_id):
 
                         messages.success(request, 'Environment ' + environment.name + ' Updated!')
 
-
                 return HttpResponseRedirect(reverse('maintenance', args=()))
 
             else:
 
-                messages.error(request, "CPW_WEB:0140 Edit Environment - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0140 Edit Environment - Form is Invalid!")
+                messages.error(request, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
+                form.add_error(None, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
 
-                data.update({ 'form': form, 'environment': environment })
+                data.update({'form': form, 'environment': environment})
 
         else:
 
             form = EnvironmentForm(instance=environment)
 
-            data.update({ 'form': form, 'environment': environment })
+            data.update({'form': form, 'environment': environment})
 
         return render(request, 'maintenance/edit_environment.html', data)
 

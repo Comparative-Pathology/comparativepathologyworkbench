@@ -52,7 +52,7 @@ GROUP BY a.id, b.username
 ORDER BY a.id);
 
 CREATE OR REPLACE VIEW matrices_environment_summary AS
-SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS environment_id, a.name AS environment_name, b.name AS environment_location, a.wordpress_active AS environment_wordpress_active
+SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS environment_id, a.name AS environment_name, b.name AS environment_location, b.colour AS environment_colour, a.wordpress_active AS environment_wordpress_active
 FROM public.matrices_environment a,
 public.matrices_location b
 where a.name = 'CPW'

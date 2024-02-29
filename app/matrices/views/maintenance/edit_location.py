@@ -45,6 +45,7 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
 # EDIT A ENVIRONMENT LOCATION
 #
@@ -78,13 +79,13 @@ def edit_location(request, location_id):
                 messages.error(request, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
 
-                data.update({ 'form': form, 'location': location })
+                data.update({'form': form, 'location': location})
 
         else:
 
             form = LocationForm(instance=location)
 
-            data.update({ 'form': form, 'location': location })
+            data.update({'form': form, 'location': location})
 
         return render(request, 'maintenance/edit_location.html', data)
 

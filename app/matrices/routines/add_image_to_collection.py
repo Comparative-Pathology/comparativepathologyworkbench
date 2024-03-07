@@ -30,9 +30,6 @@
 ###
 from __future__ import unicode_literals
 
-import os
-import time
-
 from datetime import datetime
 
 from omero.gateway import BlitzGateway
@@ -40,7 +37,6 @@ from io import BytesIO
 from PIL import Image as ImageOME
 
 from django.apps import apps
-from django.conf import settings
 from django.contrib.auth.models import User
 
 from decouple import config
@@ -52,6 +48,7 @@ from matrices.routines.get_images_for_id_server_owner_roi import get_images_for_
 from matrices.routines.get_an_ebi_sca_experiment_id_from_chart_id import get_an_ebi_sca_experiment_id_from_chart_id
 from matrices.routines.get_an_ebi_sca_parameters_from_chart_id import get_an_ebi_sca_parameters_from_chart_id
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+
 
 #
 # ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
@@ -80,6 +77,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
     image_key = ''
     document_key = ''
 
+    tag_str_list = list()
 
     if server.is_cpw():
 
@@ -164,7 +162,13 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
             image_ome = conn.getObject("Image", str(image_id))
 
-            if image_ome != None:
+            if image_ome is not None:
+
+                for tag in image_ome.listAnnotations():
+
+                    tag_str_name = str(tag.getTextValue())
+
+                    tag_str_list.append(tag_str_name)
 
                 img_data = image_ome.getThumbnail(300)
                 rendered_thumb = ImageOME.open(BytesIO(img_data))
@@ -249,5 +253,9 @@ def add_image_to_collection(credential, server, image_id, roi_id):
                     collection = get_active_collection_for_user(user)
 
                     Collection.assign_image(image_out, collection)
+
+    for tag_str_name in tag_str_list:
+
+        image_out.tags.add(tag_str_name)
 
     return image_out

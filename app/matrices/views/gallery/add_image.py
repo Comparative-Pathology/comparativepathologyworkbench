@@ -41,7 +41,6 @@ from matrices.models import Server
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_credential_for_user
-from matrices.routines import get_header_data
 from matrices.routines import add_image_to_collection
 
 
@@ -50,8 +49,6 @@ from matrices.routines import add_image_to_collection
 #
 @login_required
 def add_image(request, server_id, image_id, roi_id, path_from, identifier):
-
-    data = get_header_data(request.user)
 
     if credential_exists(request.user):
 

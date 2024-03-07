@@ -42,6 +42,7 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import add_image_to_collection
 
+
 #
 # Add ALL the FILTERED images from a Dataset to a Collection
 #
@@ -78,7 +79,8 @@ def add_dataset_all_filtered(request, server_id, dataset_id):
 
         else:
 
-            messages.error(request, "CPW_WEB:0430 Add Dataset - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0430 Add Dataset - You have no Active Image Collection; Please "
+                           "create a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
 

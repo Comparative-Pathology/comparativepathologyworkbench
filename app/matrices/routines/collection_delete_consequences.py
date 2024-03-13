@@ -28,15 +28,9 @@
 ###
 from __future__ import unicode_literals
 
-
-import base64, hashlib
 import subprocess
 
 from django.apps import apps
-from django.conf import settings
-from django.db.models import Q
-
-from os import urandom
 
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.get_collections_for_image import get_collections_for_image
@@ -48,9 +42,9 @@ from matrices.routines.get_users_for_last_used_collection import get_users_for_l
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
-"""
-    Consequential Actions for Collection Deletes
-"""
+#
+#   Consequential Actions for Collection Deletes
+#
 def collection_delete_consequences(a_user, a_collection):
 
     Collection = apps.get_model('matrices', 'Collection')
@@ -59,66 +53,88 @@ def collection_delete_consequences(a_user, a_collection):
 
     images = a_collection.get_all_images()
 
+    collection_delete_flag = True
+
     for image in images:
 
         collection_list = get_collections_for_image(image)
 
-        delete_flag = False
+        delete_flag = True
 
         for collection_other in collection_list:
 
             if a_collection != collection_other:
 
-                delete_flag = True
+                delete_flag = False
 
-        if delete_flag is False:
+        if image.exists_image_links():
 
-            if not exists_image_in_cells(image):
+            collection_delete_flag = False
 
-                Collection.unassign_image(image, a_collection)
+        else:
 
-                if image.server.is_ebi_sca() or image.server.is_cpw():
+            if delete_flag is False:
 
-                    image_path = environment.document_root + '/' + image.name
+                if exists_image_in_cells(image):
 
-                    rm_command = 'rm ' + str(image_path)
-                    rm_escaped = rm_command.replace("(","\(").replace(")","\)")
+                    collection_delete_flag = False
 
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                               universal_newlines=True)
+                else:
 
-                if image.server.is_omero547() and not image.server.is_idr():
+                    Collection.unassign_image(image, a_collection)
 
-                    image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
+                    if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                    rm_command = 'rm ' + str(image_path)
-                    rm_escaped = rm_command.replace("(","\(").replace(")","\)")
+                        image_path = environment.document_root + '/' + image.name
 
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                               universal_newlines=True)
+                        rm_command = 'rm ' + str(image_path)
+                        rm_escaped = rm_command.replace("(","\(").replace(")","\)")
 
-                image.delete()
+                        process = subprocess.Popen(rm_escaped,
+                                                   shell=True,
+                                                   stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE,
+                                                   universal_newlines=True)
 
-    if exists_bench_for_last_used_collection(a_collection):
+                    if image.server.is_omero547() and not image.server.is_idr():
 
-        matrix_list = get_benches_for_last_used_collection(a_collection)
+                        image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
-        for matrix in matrix_list:
+                        rm_command = 'rm ' + str(image_path)
+                        rm_escaped = rm_command.replace("(","\(").replace(")","\)")
 
-            matrix.set_no_last_used_collection()
+                        process = subprocess.Popen(rm_escaped,
+                                                   shell=True,
+                                                   stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE,
+                                                   universal_newlines=True)
 
-            matrix.save()
+                    image.delete()
 
-    if exists_user_for_last_used_collection(a_collection):
+    if collection_delete_flag is True:
 
-        user_list = get_users_for_last_used_collection(a_collection)
+        if exists_bench_for_last_used_collection(a_collection):
 
-        for user in user_list:
+            matrix_list = get_benches_for_last_used_collection(a_collection)
 
-            user.profile.set_last_used_collection(None)
-            user.save()
+            for matrix in matrix_list:
 
-    if a_collection == get_active_collection_for_user(a_user):
+                matrix.set_no_last_used_collection()
 
-        a_user.profile.set_active_collection(None)
-        a_user.save()
+                matrix.save()
+
+        if exists_user_for_last_used_collection(a_collection):
+
+            user_list = get_users_for_last_used_collection(a_collection)
+
+            for user in user_list:
+
+                user.profile.set_last_used_collection(None)
+                user.save()
+
+        if a_collection == get_active_collection_for_user(a_user):
+
+            a_user.profile.set_active_collection(None)
+            a_user.save()
+
+    return collection_delete_flag

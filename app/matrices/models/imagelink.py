@@ -28,30 +28,15 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
-
-from random import randint
-
-from requests.exceptions import HTTPError
 
 from matrices.models import Image
 from matrices.models import Artefact
 
 
-"""
-    IMAGE
-"""
+#
+#   IMAGE
+#
 class ImageLink(models.Model):
     parent_image = models.ForeignKey(Image, related_name='parent', on_delete=models.DO_NOTHING)
     child_image = models.ForeignKey(Image, related_name='child', on_delete=models.DO_NOTHING)
@@ -66,7 +51,6 @@ class ImageLink(models.Model):
     def set_artefact(self, a_artefact):
         self.artefact = a_artefact
 
-
     @classmethod
     def create(cls, parent_image, child_image, artefact):
         return cls(parent_image=parent_image, child_image=child_image, artefact=artefact)
@@ -76,7 +60,6 @@ class ImageLink(models.Model):
 
     def __repr__(self):
         return f"{self.id}, {self.parent_image.id}, {self.child_image.id}, {self.artefact.id}"
-
 
     def is_duplicate(self, a_parent_image, a_child_image, a_artefact):
         if self.parent_image == a_parent_image and self.child_image == a_child_image and self.artefact == a_artefact:

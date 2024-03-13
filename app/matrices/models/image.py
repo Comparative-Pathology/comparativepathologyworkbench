@@ -42,11 +42,9 @@ from matrices.routines.get_child_image_links_for_image import get_child_image_li
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
-"""
-    IMAGE
-"""
-
-
+#
+#   IMAGE
+#
 class Image(models.Model):
     identifier = models.IntegerField(default=0)
     name = models.CharField(max_length=255, blank=False, default='')

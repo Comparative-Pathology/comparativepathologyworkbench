@@ -28,16 +28,12 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
-
 from django.apps import apps
 
-from os import urandom
 
-
-"""
-    Get the Parent Image Links for a particular Image
-"""
+#
+#   Get the Parent Image Links for a particular Image
+#
 def get_parent_image_links_for_image(a_image):
 
     ImageLink = apps.get_model('matrices', 'ImageLink')

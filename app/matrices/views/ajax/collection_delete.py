@@ -40,8 +40,7 @@ from matrices.models import Collection
 
 from matrices.routines import collection_delete_consequences
 from matrices.routines import credential_exists
-from matrices.routines import exists_active_collection_for_user
-from matrices.routines import get_active_collection_for_user
+
 
 #
 # DELETE A COLLECTION
@@ -61,15 +60,20 @@ def collection_delete(request, collection_id):
 
         raise PermissionDenied
 
-
     collection = get_object_or_404(Collection, pk=collection_id)
 
     object_id = collection.id
 
-    collection_delete_consequences(request.user, collection)
+    collection_delete_flag = collection_delete_consequences(request.user, collection)
 
-    messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' DELETED!')
+    if collection_delete_flag is True:
 
-    collection.delete()
+        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' DELETED!')
+
+        collection.delete()
+
+    else:
+
+        messages.error(request, 'Collection ' + "{:06d}".format(collection.id) + ' NOT Deleted!')
 
     return JsonResponse({'object_id': object_id})

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         maintenance.py
+# \file         edit_gateway.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,61 +25,74 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the maintenance view routine
+# This file contains the edit_type view routine
 #
 ###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
-from matrices.models import Type
-from matrices.models import Environment
-from matrices.models import Location
-from matrices.models import Protocol
-from matrices.models import Command
-from matrices.models import Blog
-from matrices.models import Authority
-from matrices.models import CollectionAuthority
+from matrices.forms import GatewayForm
+
 from matrices.models import Gateway
 
 from matrices.routines import get_header_data
 
+HTTP_POST = 'POST'
+
 #
-# SHOW THE MAINTENANCE PAGE
+#   EDIT A GATEWAY
 #
 @login_required
-def maintenance(request):
+def edit_gateway(request, gateway_id):
 
     if request.user.is_superuser:
 
         data = get_header_data(request.user)
 
-        type_list = Type.objects.all()
-        environment_list = Environment.objects.all()
-        location_list = Location.objects.all()
-        protocol_list = Protocol.objects.all()
-        command_list = Command.objects.all()
-        blog_list = Blog.objects.all()
-        authority_list = Authority.objects.all()
-        collection_authority_list = CollectionAuthority.objects.all()
-        gateway_list = Gateway.objects.all()
+        gateway = get_object_or_404(Gateway, pk=gateway_id)
 
-        data.update({
-            'environment_list': environment_list,
-            'location_list': location_list,
-            'type_list': type_list,
-            'protocol_list': protocol_list,
-            'command_list': command_list,
-            'blog_list': blog_list,
-            'authority_list': authority_list,
-            'collection_authority_list': collection_authority_list,
-            'gateway_list': gateway_list,
-        })
+        if request.method == HTTP_POST:
 
-        return render(request, 'host/maintenance.html', data)
+            form = GatewayForm(request.POST, instance=gateway)
+
+            if form.is_valid():
+
+                gateway = form.save(commit=False)
+
+                gateway.set_owner(request.user)
+
+                gateway.save()
+
+                messages.success(request, 'OMERO Gateway ' + gateway.name + ' Updated!')
+
+                return HttpResponseRedirect(reverse('maintenance', args=()))
+
+            else:
+
+                messages.error(request, "CPW_WEB:0140 Edit OMERO Gateway - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0140 Edit OMERO Gateway - Form is Invalid!")
+
+                data.update({
+                    'form': form,
+                    'gateway': gateway
+                })
+
+        else:
+
+            form = GatewayForm(instance=gateway)
+
+            data.update({
+                'form': form,
+                'gateway': gateway
+            })
+
+        return render(request, 'maintenance/edit_gateway.html', data)
 
     else:
 

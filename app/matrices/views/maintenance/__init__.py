@@ -73,6 +73,7 @@ from .delete_bench_authority import delete_bench_authority
 from .delete_blog_command import delete_blog_command
 from .delete_collection_authority import delete_collection_authority
 from .delete_command import delete_command
+from .delete_gateway import delete_gateway
 from .delete_protocol import delete_protocol
 from .delete_type import delete_type
 from .delete_location import delete_location
@@ -81,6 +82,7 @@ from .edit_bench_authority import edit_bench_authority
 from .edit_blog_command import edit_blog_command
 from .edit_collection_authority import edit_collection_authority
 from .edit_command import edit_command
+from .edit_gateway import edit_gateway
 from .edit_protocol import edit_protocol
 from .edit_type import edit_type
 from .edit_location import edit_location
@@ -89,6 +91,7 @@ from .new_bench_authority import new_bench_authority
 from .new_blog_command import new_blog_command
 from .new_collection_authority import new_collection_authority
 from .new_command import new_command
+from .new_gateway import new_gateway
 from .new_protocol import new_protocol
 from .new_type import new_type
 from .new_location import new_location
@@ -97,6 +100,7 @@ from .view_bench_authority import view_bench_authority
 from .view_blog_command import view_blog_command
 from .view_collection_authority import view_collection_authority
 from .view_command import view_command
+from .view_gateway import view_gateway
 from .view_protocol import view_protocol
 from .view_type import view_type
 from .view_location import view_location

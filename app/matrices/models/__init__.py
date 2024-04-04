@@ -50,3 +50,4 @@ from .imagelink import ImageLink
 from .environment import Environment
 from .environmentsummary import EnvironmentSummary
 from .location import Location
+from .gateway import Gateway

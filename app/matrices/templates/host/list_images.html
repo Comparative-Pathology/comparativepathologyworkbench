@@ -393,7 +393,7 @@ The list images template (with Search)
 	</td>
     <td colspan="6">
 		{% for tag in image_summary.get_tags %}
-		<a href="{% url 'list_images' collection_id tag.id %}" class="badge badge-info">#{{ tag.name }}</a>
+		<a href="{% url 'list_images' collection_id tag.id %}" class="badge badge-info">{{ tag.name }}</a>
 		{% endfor %}
 	</td>
   </tr>

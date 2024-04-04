@@ -41,22 +41,18 @@ from matrices.models import Server
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
+from matrices.routines import get_primary_cpw_environment
 
 
 #
-# SHOW THE AVAILABLE IMAGES
-#  WITHIN THE AVAILABLE DATASETS
-#  WITHIN THE AVAILABLE PROJECTS
-#  WITHIN THE AVAILABLE GROUPS
-#   FROM AN OMERO IMAGING SERVER
+#   Show Dataset Filtered View routine
 #
 @login_required()
 def show_dataset_filtered(request, server_id, dataset_id):
-    """
-    Show a dataset
-    """
 
     data = get_header_data(request.user)
+
+    environment = get_primary_cpw_environment()
 
     if credential_exists(request.user):
 
@@ -66,13 +62,26 @@ def show_dataset_filtered(request, server_id, dataset_id):
 
             image_flag = True
 
-        data.update({ 'image_flag': image_flag, 'add_from': "show_dataset" })
+        data.update({
+            'image_flag': image_flag,
+            'add_from': "show_dataset"
+        })
 
         server = get_object_or_404(Server, pk=server_id)
 
         if server.is_omero547():
 
-            server_data = server.get_imaging_server_dataset_json(dataset_id, True)
+            server_data = {}
+
+            if environment.is_web_gateway() or server.is_idr():
+
+                server_data = server.get_imaging_server_dataset_json(dataset_id, True)
+
+            else:
+
+                if environment.is_blitz_gateway():
+
+                    server_data = server.get_imaging_server_dataset_json_blitz(dataset_id, True)
 
             data.update(server_data)
 

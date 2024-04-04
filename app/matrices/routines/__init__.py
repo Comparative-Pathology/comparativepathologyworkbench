@@ -74,6 +74,7 @@ from .exists_image_in_cells import exists_image_in_cells
 from .exists_image_in_table import exists_image_in_table
 from .exists_image_in_image_list import exists_image_in_image_list
 from .exists_image_on_webserver import exists_image_on_webserver
+from .exists_environment_for_gateway import exists_environment_for_gateway
 from .exists_environment_for_location import exists_environment_for_location
 from .exists_primary_environment import exists_primary_environment
 from .exists_read_for_bench_and_user import exists_read_for_bench_and_user

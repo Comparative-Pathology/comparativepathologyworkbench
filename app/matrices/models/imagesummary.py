@@ -58,9 +58,9 @@ SERVER_EBI_SCA = 'EBI_SCA'
 SERVER_CPW = 'CPW'
 
 
-"""
-    IMAGE SUMMARY (a VIEW for ALL Images)
-"""
+#
+#   IMAGE SUMMARY (a VIEW for ALL Images)
+#
 class ImageSummary(models.Model):
     image_id = models.IntegerField(default=0, blank=False)
     image_identifier = models.IntegerField(default=0)

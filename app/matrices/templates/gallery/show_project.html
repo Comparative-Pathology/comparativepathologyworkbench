@@ -46,6 +46,13 @@ The show project template
 
 	{% endif %}
 
+	{% if prev_page != next_page %}
+
+			<li><a href="{% url 'webgallery_show_project' server.id project.id prev_page %}">Previous Page</a></li>
+			<li><a href="{% url 'webgallery_show_project' server.id project.id next_page %}">Next Page</a></li>
+	
+	{% endif %}
+
 {% endblock %}
 
 {% block details %}
@@ -85,7 +92,7 @@ The show project template
 
 	{% if dataset_list %}
 
-		    <p>Project contains {{ project.datasetCount }} datasets:</p>
+		    <p>Project contains {{ project.datasetCount }} datasets - Showing Datasets {{ dataset_start }} to {{ dataset_end }}:</p>
 
 	    	<hr>
 
@@ -117,7 +124,11 @@ The show project template
 
 						<br />
 
+			{% if dataset.randomImageID != '' %}
+
 						<a href="{% url 'webgallery_show_image' server.id dataset.randomImageID %}"><img alt="{{ dataset.randomImageName }}" title="{{ dataset.randomImageName }}" src="{{ dataset.randomImageBEURL }}"/></a>
+
+			{% endif %}
 
 						<br />
 

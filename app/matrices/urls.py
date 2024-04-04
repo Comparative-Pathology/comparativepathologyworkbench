@@ -178,7 +178,7 @@ urlpatterns = [
          name='webgallery_show_imaging_server'),
     path('show_group/<int:server_id>/<int:group_id>/', matrices_views.gallery.show_group,
          name='webgallery_show_group'),
-    path('show_project/<int:server_id>/<int:project_id>/', matrices_views.gallery.show_project,
+    path('show_project/<int:server_id>/<int:project_id>/<int:page_id>/', matrices_views.gallery.show_project,
          name='webgallery_show_project'),
     path('show_dataset/<int:server_id>/<int:dataset_id>/', matrices_views.gallery.show_dataset,
          name='webgallery_show_dataset'),
@@ -276,6 +276,11 @@ urlpatterns = [
     path('new_location/', matrices_views.maintenance.new_location, name='new_location'),
     path('edit_location/<int:location_id>/', matrices_views.maintenance.edit_location, name='edit_location'),
     path('delete_location/<int:location_id>/', matrices_views.maintenance.delete_location, name='delete_location'),
+
+    path('detail_gateway/<int:gateway_id>/', matrices_views.maintenance.view_gateway, name='detail_gateway'),
+    path('new_gateway/', matrices_views.maintenance.new_gateway, name='new_gateway'),
+    path('edit_gateway/<int:gateway_id>/', matrices_views.maintenance.edit_gateway, name='edit_gateway'),
+    path('delete_gateway/<int:gateway_id>/', matrices_views.maintenance.delete_gateway, name='delete_gateway'),
 
     path('detail_environment/<int:environment_id>/', matrices_views.maintenance.view_environment,
          name='detail_environment'),

@@ -29,13 +29,12 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Environment
 from matrices.models import Protocol
 from matrices.models import Location
+from matrices.models import Gateway
 
 
 class EnvironmentForm(forms.ModelForm):
@@ -47,9 +46,10 @@ class EnvironmentForm(forms.ModelForm):
                   'maximum_cell_height', 'minimum_cell_width', 'maximum_cell_width', 'maximum_initial_columns',
                   'minimum_initial_columns', 'maximum_initial_rows', 'minimum_initial_rows', 'maximum_rest_columns',
                   'minimum_rest_columns', 'maximum_rest_rows', 'minimum_rest_rows', 'maximum_bench_count',
-                  'maximum_collection_count', )
+                  'maximum_collection_count', 'gateway', 'gateway_port', 'gateway_pagination')
         location = forms.ModelChoiceField(queryset=Location.objects.all())
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
+        gateway = forms.ModelChoiceField(queryset=Gateway.objects.all())
 
     def __init__(self, *args, **kwargs):
 
@@ -57,3 +57,4 @@ class EnvironmentForm(forms.ModelForm):
 
         self.fields['location'].label_from_instance = lambda obj: "{0}".format(obj.name)
         self.fields['protocol'].label_from_instance = lambda obj: "{0}".format(obj.name)
+        self.fields['gateway'].label_from_instance = lambda obj: "{0}".format(obj.name)

@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         imagesummarysearchform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -30,9 +29,6 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.contrib.auth.models import User
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Image
 from matrices.models import Server
@@ -44,40 +40,72 @@ from taggit.models import Tag
 from matrices.routines import collection_list_by_user_and_direction
 from matrices.routines import bench_list_by_user_and_direction
 
-CHOICES = (('10', '10'), ('1', '1'), ('5', '5'), ('25', '25'), ('50', '50'), ('100', '100'))
+PAGE_CHOICES = (('10', '10'),
+                ('1', '1'),
+                ('5', '5'),
+                ('25', '25'),
+                ('50', '50'),
+                ('100', '100'))
 
 
+#
+#   The ImageSummary Search Form
+#
 class ImageSummarySearchForm(forms.ModelForm):
-    name = forms.CharField(max_length=50, required=False)
+
+    name = forms.CharField(max_length=50,
+                           required=False)
+
     roi = forms.IntegerField(required=False)
-    comment = forms.CharField(max_length=50, required=False)
-    hidden = forms.BooleanField(initial=False, required=False)
-    owner = forms.ModelChoiceField(queryset=User.objects.all().order_by('id'), required=False, empty_label="(All Owners)")
-    source = forms.ModelChoiceField(queryset=Server.objects.all().order_by('id'), required=False, empty_label="(All Sources)")
-    collection = forms.ModelChoiceField(queryset=Collection.objects.all().order_by('id'), required=False, empty_label="(All Collections)")
-    bench = forms.ModelChoiceField(queryset=Matrix.objects.all().order_by('id'), required=False, empty_label="(All Benches)", )
-    tag = forms.ModelChoiceField(queryset=None, required=False, empty_label="(All Tags)", to_field_name="id")
-    paginate_by = forms.ChoiceField(widget=forms.Select, choices=CHOICES, required=False)
+
+    comment = forms.CharField(max_length=50,
+                              required=False)
+
+    hidden = forms.BooleanField(initial=False,
+                                required=False)
+
+    owner = forms.ModelChoiceField(queryset=User.objects.all().order_by('id'),
+                                   required=False,
+                                   empty_label="(All Owners)")
+
+    source = forms.ModelChoiceField(queryset=Server.objects.all().order_by('id'),
+                                    required=False,
+                                    empty_label="(All Sources)")
+
+    collection = forms.ModelChoiceField(queryset=Collection.objects.all().order_by('id'),
+                                        required=False,
+                                        empty_label="(All Collections)")
+
+    bench = forms.ModelChoiceField(queryset=Matrix.objects.all().order_by('id'),
+                                   required=False,
+                                   empty_label="(All Benches)", )
+
+    tag = forms.ModelChoiceField(queryset=None,
+                                 required=False,
+                                 empty_label="(All Tags)",
+                                 to_field_name="id")
+
+    paginate_by = forms.ChoiceField(widget=forms.Select,
+                                    choices=PAGE_CHOICES,
+                                    required=False)
 
     class Meta:
         model = Image
         fields = ('name',
-                'comment',
-                'roi',
-                'hidden',
-                'source',
-                'collection',
-                'bench',
-                'paginate_by',
-                'owner',
-                'tag',
-                )
+                  'comment',
+                  'roi',
+                  'hidden',
+                  'source',
+                  'collection',
+                  'bench',
+                  'paginate_by',
+                  'owner',
+                  'tag',
+                  )
 
     def __init__(self, *args, **kwargs):
 
         request = kwargs.pop('request')
-
-        query_tag_id = request.GET.get('tag', '')
 
         full_path = request.get_full_path()[1:-1]
 
@@ -94,7 +122,7 @@ class ImageSummarySearchForm(forms.ModelForm):
                 parameter_1 = full_path_array[1]
 
                 if parameter_1[0] != '?':
-                        
+
                     param_collection_id = full_path_array[1]
 
             if len(full_path_array) >= 3:
@@ -104,7 +132,7 @@ class ImageSummarySearchForm(forms.ModelForm):
                 parameter_2 = full_path_array[2]
 
                 if parameter_2[0] != '?':
-                        
+
                     param_tag_id = full_path_array[2]
 
         dict_args = args[0]
@@ -112,13 +140,20 @@ class ImageSummarySearchForm(forms.ModelForm):
         super(ImageSummarySearchForm, self).__init__(*args, **kwargs)
 
         self.fields['source'].label_from_instance = lambda obj: "{0}".format(obj.name)
-        self.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}, {2}".format(obj.id, obj.owner.username, obj.title)
-        self.fields['bench'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id, obj.title)
-
+        self.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}, {2}".format(obj.id,
+                                                                                               obj.owner.username,
+                                                                                               obj.title)
+        self.fields['bench'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id,
+                                                                                         obj.title)
 
         # Update the Collection Selection Box to Only show Collections that the user has access to
-        collection_summary_queryset = collection_list_by_user_and_direction(request.user, 'collection_id', '', '', '', '', '')
-
+        collection_summary_queryset = collection_list_by_user_and_direction(request.user,
+                                                                            'collection_id',
+                                                                            '',
+                                                                            '',
+                                                                            '',
+                                                                            '',
+                                                                            '')
 
         collection_queryset = Collection.objects.none()
 
@@ -139,7 +174,6 @@ class ImageSummarySearchForm(forms.ModelForm):
 
         self.fields['collection'].queryset = collection_queryset
 
-
         # Update the Bench Selection Box to Only show Benches that the user has access to
         bench_summary_queryset = bench_list_by_user_and_direction(request.user, '', '', '', '', '', '', '', '', '', '')
 
@@ -158,7 +192,6 @@ class ImageSummarySearchForm(forms.ModelForm):
         # Update the Tag Selection Box to show all available Tags
         tag_queryset = Tag.objects.all()
         self.fields['tag'].queryset = tag_queryset
-
 
         if not request.user.is_superuser:
 

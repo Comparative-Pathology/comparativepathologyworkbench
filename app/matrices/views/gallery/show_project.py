@@ -40,21 +40,18 @@ from matrices.models import Server
 
 from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+from matrices.routines import get_primary_cpw_environment
 
 
 #
-# SHOW THE AVAILABLE DATASETS
-#  WITHIN THE AVAILABLE PROJECTS
-#  WITHIN THE AVAILABLE GROUPS
-#   FROM AN OMERO IMAGING SERVER
+#   Show Project View routine
 #
 @login_required()
-def show_project(request, server_id, project_id):
-    """
-    Show a project
-    """
+def show_project(request, server_id, project_id, page_id):
 
     data = get_header_data(request.user)
+
+    environment = get_primary_cpw_environment()
 
     if credential_exists(request.user):
 
@@ -62,7 +59,21 @@ def show_project(request, server_id, project_id):
 
         if server.is_omero547():
 
-            server_data = server.get_imaging_server_project_json(project_id)
+            server_data = {}
+
+            if environment.is_web_gateway() or server.is_idr():
+
+                server_data = server.get_imaging_server_project_json(project_id,
+                                                                     page_id,
+                                                                     environment.gateway_pagination)
+            else:
+
+                if environment.is_blitz_gateway():
+
+                    server_data = server.get_imaging_server_project_json_blitz(project_id,
+                                                                               page_id,
+                                                                               environment.gateway_pagination,
+                                                                               environment.gateway_port)
 
             data.update(server_data)
 

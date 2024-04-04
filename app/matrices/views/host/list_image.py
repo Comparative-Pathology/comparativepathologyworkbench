@@ -47,6 +47,7 @@ from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import image_list_by_user_and_direction
 
+
 #
 # The list_images VIEW
 #
@@ -77,7 +78,6 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                            'image_matrix_id': {'default_direction': '', 'verbose_name': 'Bench'}
                            }
 
-
     default_sort_field = 'image_name'
 
     paginate_by = 7
@@ -87,7 +87,6 @@ class ImageListView(LoginRequiredMixin, SortableListView):
     model = ImageSummary
 
     context_object_name = 'image_summary_list'
-
 
     def get_queryset(self):
 
@@ -106,16 +105,16 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         out_tag_id = ''
 
         # Does the URL contain a Collection Id and a Tag Id
-        if self.kwargs != None and self.kwargs != {}:
+        if self.kwargs is not None and self.kwargs != {}:
 
             for key in self.kwargs:
 
                 if key == 'collection_id':
-                    
+
                     kwargs_collection_id = self.kwargs['collection_id']
 
                 if key == 'tag_id':
-                    
+
                     kwargs_tag_id = self.kwargs['tag_id']
 
         # Get the URL GET Parameters
@@ -130,7 +129,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         self.query_bench_id = self.request.GET.get('bench', '')
 
         # Set the Sort Parameter
-        if self.request.GET.get('sort', None) == None:
+        if self.request.GET.get('sort', None) is None:
 
             sort_parameter = 'image_name'
 
@@ -141,7 +140,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
             if sort_parameter == "image_source":
 
                 sort_parameter = "image_server_id"
-        
+
             if sort_parameter == "-image_source":
 
                 sort_parameter = "-image_server_id"
@@ -168,48 +167,53 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
         # If there isn't a URL Collection Id, use the GET Collection Id
         if kwargs_collection_id == '':
-        
+
             search_collection_id = self.query_collection_id
-        
+
         else:
 
             search_collection_id = kwargs_collection_id
 
         # If there isn't a URL Tag Id, use the GET Tag Id
         if kwargs_tag_id == '':
-        
+
             search_tag_id = self.query_tag_id
-        
+
         else:
 
             search_tag_id = kwargs_tag_id
 
         # Check for Zero Collection id
         if search_collection_id == '0':
-        
+
             out_collection_id = ''
-        
+
         else:
 
             out_collection_id = search_collection_id
 
         # Check for Zero Tag Id
         if search_tag_id == '0':
-        
+
             out_tag_id = ''
-        
+
         else:
 
             out_tag_id = search_tag_id
 
-        return image_list_by_user_and_direction(self.request.user, sort_parameter, self.query_name, self.query_source, self.query_roi, self.query_comment, \
-                                        self.query_hidden, self.query_owner, out_collection_id, self.query_bench_id, out_tag_id )
-
+        return image_list_by_user_and_direction(self.request.user,
+                                                sort_parameter,
+                                                self.query_name,
+                                                self.query_source,
+                                                self.query_roi,
+                                                self.query_comment,
+                                                self.query_hidden,
+                                                self.query_owner,
+                                                out_collection_id,
+                                                self.query_bench_id,
+                                                out_tag_id)
 
     def get_context_data(self, **kwargs):
-
-        collection_id = ''
-        tag_id = ''
 
         # URL Parameters
         kwargs_collection_id = ''
@@ -222,32 +226,32 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         context = super().get_context_data(**kwargs)
 
         # Does the URL contain a Collection Id and a Tag Id
-        if self.kwargs != None and self.kwargs != {}:
-                
+        if self.kwargs is not None and self.kwargs != {}:
+
             for key in self.kwargs:
 
                 if key == 'collection_id':
-                    
+
                     kwargs_collection_id = self.kwargs['collection_id']
 
                 if key == 'tag_id':
-        
+
                     kwargs_tag_id = self.kwargs['tag_id']            
-        
+
         # If there isn't a URL Collection Id, use the GET Collection Id
         if kwargs_collection_id == '':
-        
+
             search_collection_id = self.query_collection_id
-        
+
         else:
 
             search_collection_id = kwargs_collection_id
 
         # If there isn't a URL Tag Id, use the GET Tag Id
         if kwargs_tag_id == '':
-        
+
             search_tag_id = self.query_tag_id
-        
+
         else:
 
             search_tag_id = kwargs_tag_id
@@ -286,18 +290,18 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         allBoolean = True
         tagBoolean = True
 
-        if tag is None: 
-            
+        if tag is None:
+
             if collection is None:
 
                 allBoolean = True
                 tagBoolean = False
 
             else:
-                
+
                 allBoolean = False
                 tagBoolean = False
-        
+
         else:
 
             if collection is None:
@@ -310,7 +314,6 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                 allBoolean = False
                 tagBoolean = True
 
-
         data = get_header_data(self.request.user)
 
         readBoolean = False
@@ -319,19 +322,33 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             readBoolean = True
 
-        data_dict = { 'name': self.query_name, 'source': self.query_source, 'roi': self.query_roi, 'comment': self.query_comment, 'hidden': self.query_hidden, \
-                    'owner': self.query_owner, 'collection': self.query_collection_id, 'bench': self.query_bench_id, 'tag': self.query_tag_id, 'paginate_by': self.query_paginate_by }
+        data_dict = {'name': self.query_name,
+                     'source': self.query_source,
+                     'roi': self.query_roi,
+                     'comment': self.query_comment,
+                     'hidden': self.query_hidden,
+                     'owner': self.query_owner,
+                     'collection': self.query_collection_id,
+                     'bench': self.query_bench_id,
+                     'tag': self.query_tag_id,
+                     'paginate_by': self.query_paginate_by}
 
         form = ImageSummarySearchForm(data_dict, request=self.request)
 
-        data.update({ 'form': form, 'tagBoolean': tagBoolean, 'allBoolean': allBoolean, 'readBoolean': readBoolean, 'collection_id': int_collection_id, \
-                        'tag': tag, 'collection': collection, 'tag_id': int_tag_id, \
-                        'collection_image_list': collection_image_list, 'collection_hidden_image_list': collection_hidden_image_list })
+        data.update({'form': form,
+                     'tagBoolean': tagBoolean,
+                     'allBoolean': allBoolean,
+                     'readBoolean': readBoolean,
+                     'collection_id': int_collection_id,
+                     'tag': tag,
+                     'collection': collection,
+                     'tag_id': int_tag_id,
+                     'collection_image_list': collection_image_list,
+                     'collection_hidden_image_list': collection_hidden_image_list})
 
         context.update(data)
 
         return context
-
 
     def get_paginate_by(self, queryset):
 

@@ -63,3 +63,4 @@ from .searchurlform import SearchUrlForm
 from .serverform import ServerForm
 from .signupform import SignUpForm
 from .typeform import TypeForm
+from .gatewayform import GatewayForm

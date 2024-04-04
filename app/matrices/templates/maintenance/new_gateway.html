@@ -1,5 +1,5 @@
 <!--
-\file         show_wordpress.html
+\file         new_type.html
 \author       Mike Wicks
 \date         March 2021
 \version      $Id$
@@ -23,7 +23,7 @@ License along with this program; if not, write to the Free
 Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA  02110-1301, USA.
 \brief
-The show wordpress (server) template
+The new type template
 -->
 
 {% extends 'includes/base.html' %}
@@ -36,10 +36,8 @@ The show wordpress (server) template
 
 <!-- Breadcrumb Menu -->
 
-			<li><a href="{% url 'list_imaging_hosts' %}">Sources</a></li>
-			<li><a href="{% url 'webgallery_show_wordpress' server.id 1 %}">{{ dataset.name }}</a></li>
-			<li><a href="{% url 'webgallery_show_wordpress' server.id dataset.prev_page %}">Previous Page</a></li>
-			<li><a href="{% url 'webgallery_show_wordpress' server.id dataset.next_page %}">Next Page</a></li>
+			<li><a href="{% url 'maintenance' %}">Maintenance</a></li>
+			<li>NEW OMERO Gateway</li>
 
 {% endblock %}
 
@@ -59,41 +57,27 @@ The show wordpress (server) template
 <!-- Page Content -->
 <div class="page-content">
 
-	<h1>{{ dataset.name }}</h1>
-
-	<br />
-
-	<p>{{ dataset.name }} contains {{ dataset.imageCount }} images, so far</p>
+	<h1>NEW OMERO Gateway</h1>
 
 	<hr>
 
-	<div class="row justify-content-center">
+	<br />
 
-	<ul class="image-list">
+	<form method="POST" class="post-form">
 
-{% for image in images %}
+{% csrf_token %}
 
-		<li>
+{% include 'includes/form.html' %}
 
-			<div class="card-image-gallery">
+		<br />
 
-				<div class="card-container-gallery">
+		<button type="submit" class="button button-delete">Save</button>
 
-					<h5>{{ image.name|truncatechars:15 }}</h5>
+	</form>
 
-				</div>
+	<br />
 
-				<br />
-
-			<a href="{% url 'webgallery_show_wordpress_image' server.id image.id %}"><img title="{{ image.name }}" src="{{ image.thumbnail_url  }}" ></a>
-
-			</div>
-
-		</li>
-
-{% endfor %}
-
-	</ul>
+	<a href="{% url 'maintenance' %}"><button class="button button-add">CANCEL</button></a>
 
 </div><!-- End of page-content -->
 

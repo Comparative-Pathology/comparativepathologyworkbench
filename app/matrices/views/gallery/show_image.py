@@ -36,41 +36,27 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from omero.gateway import BlitzGateway
-from io import BytesIO
-from PIL import Image as ImageOME
-
-from decouple import config
-
 from matrices.models import Server
 
-from matrices.routines.aescipher import AESCipher
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines.exists_image_for_id_server_roi import exists_image_for_id_server_roi
 from matrices.routines.get_images_for_id_server_roi import get_images_for_id_server_roi
+from matrices.routines import get_primary_cpw_environment
 
 
 #
-# SHOW THE IMAGE
-#  WITHIN THE AVAILABLE IMAGES
-#  WITHIN THE AVAILABLE DATASETS
-#  WITHIN THE AVAILABLE PROJECTS
-#  WITHIN THE AVAILABLE GROUPS
-#   FROM AN OMERO IMAGING SERVER
+#   Show Image View routine
 #
 @login_required()
 def show_image(request, server_id, image_id):
-    """
-    Show an image
-    """
 
     data = get_header_data(request.user)
 
-    local_image = None
+    environment = get_primary_cpw_environment()
 
-    tag_list = list()
+    local_image = None
 
     if credential_exists(request.user):
 
@@ -92,34 +78,21 @@ def show_image(request, server_id, image_id):
 
                 local_image = existing_image_list[0]
 
-            if not server.is_idr():
+            server_data = {}
 
-                password = ''
+            if environment.is_web_gateway() or server.is_idr():
 
-                conn = None
+                server_data = server.get_imaging_server_image_json(image_id)
 
-                cipher = AESCipher(config('CPW_CIPHER_STRING'))
-                byte_password = cipher.decrypt(server.pwd)
-                password = byte_password.decode('utf-8')
+            else:
 
-                conn = BlitzGateway(server.uid, password, host=server.url_server, port=4064, secure=True)
-                conn.connect()
+                if environment.is_blitz_gateway():
 
-                image_ome = conn.getObject("Image", str(image_id))
-
-                if image_ome is not None:
-
-                    for tag in image_ome.listAnnotations():
-
-                        tag_list.append(str(tag.getTextValue()))
-
-                conn.close()
-
-            server_data = server.get_imaging_server_image_json(image_id)
+                    server_data = server.get_imaging_server_image_json_blitz(image_id)
 
             data.update(server_data)
 
-            data.update({'local_image': local_image, 'tag_list': tag_list})
+            data.update({'local_image': local_image})
 
             return render(request, 'gallery/show_image.html', data)
 

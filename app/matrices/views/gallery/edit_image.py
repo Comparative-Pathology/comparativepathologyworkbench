@@ -44,19 +44,22 @@ from matrices.routines import get_header_data
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_an_ebi_sca_experiment_id_from_chart_id
 from matrices.routines import get_an_ebi_sca_parameters_from_chart_id
+from matrices.routines import get_primary_cpw_environment
 
 
+#
+#   Edit an image
+#
 @login_required()
 def edit_image(request, image_id):
-    """
-    Edit an image
-    """
 
     data = get_header_data(request.user)
 
     local_image = get_object_or_404(Image, pk=image_id)
 
     credential = get_credential_for_user(request.user)
+
+    environment = get_primary_cpw_environment()
 
     common_tags = Image.tags.most_common()
     used_tags = local_image.tags.all()
@@ -84,7 +87,17 @@ def edit_image(request, image_id):
 
         if server.is_omero547():
 
-            server_data = server.get_imaging_server_image_json(local_image.identifier)
+            server_data = {}
+
+            if environment.is_web_gateway() or server.is_idr():
+
+                server_data = server.get_imaging_server_image_json(local_image.identifier)
+
+            else:
+
+                if environment.is_blitz_gateway():
+
+                    server_data = server.get_imaging_server_image_json_blitz(local_image.identifier)
 
             data.update(server_data)
 

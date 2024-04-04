@@ -63,7 +63,7 @@ The show (imaging) server template
 
 {% if group_list %}
 
-	<p>Server at {{ server.url_server }} contains {{ group_count }} Groups:</p>
+	<p>User "{{ server.uid }}" is a member of {{ group_count }} Default Group:</p>
 
 	<hr>
 
@@ -85,13 +85,6 @@ The show (imaging) server template
 						<dt>Datasets</dt>
 						<dd>{{ group.datasetCount }}</dd>
 
-		{% if group.imageCount != 0  %}
-
-						<!-- <dt>Images</dt> -->
-						<!-- <dd>{{ group.imageCount }}</dd> -->
-
-		{% endif %}
-
 					</dl>
 
 					<br />
@@ -99,12 +92,6 @@ The show (imaging) server template
 					<a href="{% url 'webgallery_show_group' server.id group.id %}"><button class="button button-view"><i class="fas fa-eye"></i></button></a>
 
 					<br />
-
-		{% if group.randomImageName != 'NONE'  %}
-
-					<!-- <a href="{% url 'webgallery_show_image' server.id group.randomImageID %}"><img class="card-image" alt="{{ group.randomImageName }}" title="{{ group.randomImageName }}" src="{{ group.randomImageBEURL }}"/></a> -->
-
-		{% endif %}
 
 				</div>
 

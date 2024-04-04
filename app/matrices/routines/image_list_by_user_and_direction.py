@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-###!
 # \file         image_list_by_user_and_direction.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -63,7 +62,7 @@ def image_list_by_user_and_direction(a_user,
     if str(a_query_collection_id).isdigit():
 
         search_collection_id = int(a_query_collection_id)
-    
+
     if str(a_query_tag_id).isdigit():
 
         search_tag_id = int(a_query_tag_id)
@@ -71,7 +70,7 @@ def image_list_by_user_and_direction(a_user,
     if str(a_query_matrix_id).isdigit():
 
         search_bench_id = int(a_query_matrix_id)
-    
+
     ImageSummary = apps.get_model('matrices', 'ImageSummary')
     Collection = apps.get_model('matrices', 'Collection')
     Matrix = apps.get_model('matrices', 'Matrix')
@@ -139,7 +138,7 @@ def image_list_by_user_and_direction(a_user,
             if i == 0:
 
                 str_iregex = re.escape(str_array[i])
-        
+
             else:
 
                 str_iregex = str_iregex + r".*" + re.escape(str_array[i])
@@ -147,7 +146,7 @@ def image_list_by_user_and_direction(a_user,
     if '*' in a_query_name:
 
         if a_user.is_superuser:
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -159,7 +158,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -170,7 +169,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -181,7 +180,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -191,7 +190,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -202,7 +201,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -212,7 +211,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -222,7 +221,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -231,7 +230,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -242,7 +241,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -252,7 +251,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -262,7 +261,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -271,7 +270,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -281,7 +280,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -290,7 +289,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -299,7 +298,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -307,7 +306,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -318,7 +317,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -328,7 +327,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -338,7 +337,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -347,7 +346,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -357,7 +356,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -366,7 +365,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -375,7 +374,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -383,7 +382,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -393,7 +392,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -402,7 +401,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -411,7 +410,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -419,7 +418,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -428,7 +427,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -436,7 +435,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -444,14 +443,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -462,7 +461,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -472,7 +471,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -482,7 +481,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -491,7 +490,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -501,7 +500,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -510,7 +509,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -519,7 +518,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -527,7 +526,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -537,7 +536,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -546,7 +545,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -555,7 +554,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -563,7 +562,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -572,7 +571,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -580,7 +579,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -588,14 +587,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -605,7 +604,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -614,7 +613,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -623,7 +622,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -631,7 +630,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -640,7 +639,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -648,7 +647,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -656,14 +655,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -672,7 +671,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -680,7 +679,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -688,14 +687,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -703,34 +702,34 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .order_by(sort_parameter)
-    
-    
+
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -741,7 +740,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -751,7 +750,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -761,7 +760,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -770,7 +769,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -780,7 +779,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -789,7 +788,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -798,7 +797,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -806,7 +805,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -816,7 +815,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -825,7 +824,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -834,7 +833,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -842,7 +841,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -851,7 +850,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -859,7 +858,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -867,14 +866,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -884,7 +883,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -893,7 +892,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -902,7 +901,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -910,7 +909,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -919,7 +918,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -927,7 +926,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -935,14 +934,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -951,7 +950,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -959,7 +958,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -967,14 +966,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -982,27 +981,27 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1012,7 +1011,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1021,7 +1020,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1030,7 +1029,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1038,7 +1037,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1047,7 +1046,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1055,7 +1054,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1063,14 +1062,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1079,7 +1078,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1087,7 +1086,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1095,14 +1094,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1110,27 +1109,27 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1139,7 +1138,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1147,7 +1146,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1155,14 +1154,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1170,27 +1169,27 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1198,53 +1197,53 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .order_by(sort_parameter)
-    
+
         else:
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1256,7 +1255,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1267,7 +1266,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1278,7 +1277,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1288,7 +1287,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1299,7 +1298,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1309,7 +1308,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1319,7 +1318,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1328,7 +1327,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1339,7 +1338,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1349,7 +1348,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1359,7 +1358,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1368,7 +1367,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1378,7 +1377,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1387,7 +1386,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1396,7 +1395,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1404,7 +1403,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1415,7 +1414,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1425,7 +1424,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1435,7 +1434,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1444,7 +1443,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1454,7 +1453,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1463,7 +1462,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1472,7 +1471,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1480,7 +1479,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1490,7 +1489,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1499,7 +1498,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1508,7 +1507,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1516,7 +1515,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1525,7 +1524,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1533,7 +1532,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1541,14 +1540,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1559,7 +1558,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1569,7 +1568,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1579,7 +1578,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1588,7 +1587,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1598,7 +1597,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1607,7 +1606,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1616,7 +1615,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1624,7 +1623,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1634,7 +1633,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1643,7 +1642,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1652,7 +1651,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1660,7 +1659,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1669,7 +1668,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1677,7 +1676,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1685,14 +1684,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1702,7 +1701,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1711,7 +1710,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1720,7 +1719,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1728,7 +1727,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1737,7 +1736,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1745,7 +1744,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1753,14 +1752,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1769,7 +1768,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1777,7 +1776,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1785,14 +1784,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1800,31 +1799,31 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
     else:
-    
+
         if a_user.is_superuser:
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1836,7 +1835,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1847,7 +1846,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1858,7 +1857,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1868,7 +1867,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1879,7 +1878,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1889,7 +1888,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1899,7 +1898,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1908,7 +1907,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1919,7 +1918,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1929,7 +1928,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1939,7 +1938,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1948,7 +1947,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1958,7 +1957,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1967,7 +1966,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1976,7 +1975,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1984,7 +1983,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -1995,7 +1994,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2005,7 +2004,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2015,7 +2014,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2024,7 +2023,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2034,7 +2033,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2043,7 +2042,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2052,7 +2051,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2060,7 +2059,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2070,7 +2069,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2079,7 +2078,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2088,7 +2087,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2096,7 +2095,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2105,7 +2104,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2113,7 +2112,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2121,14 +2120,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2139,7 +2138,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2149,7 +2148,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2159,7 +2158,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2168,7 +2167,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2178,7 +2177,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2187,7 +2186,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2196,7 +2195,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2204,7 +2203,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2214,7 +2213,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2223,7 +2222,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2232,7 +2231,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2240,7 +2239,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2249,7 +2248,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2257,7 +2256,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2265,14 +2264,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2282,7 +2281,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2291,7 +2290,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2300,7 +2299,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2308,7 +2307,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2317,7 +2316,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2325,7 +2324,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2333,14 +2332,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2349,7 +2348,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2357,7 +2356,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2365,14 +2364,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2380,33 +2379,33 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .order_by(sort_parameter)
-                
+         
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2417,7 +2416,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2427,7 +2426,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2437,7 +2436,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2446,7 +2445,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2456,7 +2455,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2465,7 +2464,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2474,7 +2473,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2482,7 +2481,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2492,7 +2491,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2501,7 +2500,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2510,7 +2509,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2518,7 +2517,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2527,7 +2526,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2535,7 +2534,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2543,14 +2542,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2560,7 +2559,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2569,7 +2568,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2578,7 +2577,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2586,7 +2585,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2595,7 +2594,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2603,7 +2602,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2611,14 +2610,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2627,7 +2626,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2635,7 +2634,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2643,14 +2642,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2658,27 +2657,27 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2688,7 +2687,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2697,7 +2696,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2706,7 +2705,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2714,7 +2713,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2723,7 +2722,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2731,7 +2730,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2739,14 +2738,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2755,7 +2754,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2763,7 +2762,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2771,14 +2770,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2786,27 +2785,27 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2815,7 +2814,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2823,7 +2822,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2831,14 +2830,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2846,27 +2845,27 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2874,53 +2873,53 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .order_by(sort_parameter)
-    
+
         else:
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2932,7 +2931,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2943,7 +2942,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2954,7 +2953,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2964,7 +2963,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2975,7 +2974,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2985,7 +2984,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -2995,7 +2994,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3004,7 +3003,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3015,7 +3014,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3025,7 +3024,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3035,7 +3034,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3044,7 +3043,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3054,7 +3053,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3063,7 +3062,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3072,7 +3071,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3080,7 +3079,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3091,7 +3090,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3101,7 +3100,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3111,7 +3110,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3120,7 +3119,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3130,7 +3129,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3139,7 +3138,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3148,7 +3147,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3156,7 +3155,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3166,7 +3165,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3175,7 +3174,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3184,7 +3183,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3192,7 +3191,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3201,7 +3200,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3209,7 +3208,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3217,14 +3216,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3235,7 +3234,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3245,7 +3244,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3255,7 +3254,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3264,7 +3263,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3274,7 +3273,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3283,7 +3282,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3292,7 +3291,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3300,7 +3299,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3310,7 +3309,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3319,7 +3318,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3328,7 +3327,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3336,7 +3335,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3345,7 +3344,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3353,7 +3352,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3361,14 +3360,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3378,7 +3377,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3387,7 +3386,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3396,7 +3395,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3404,7 +3403,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3413,7 +3412,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3421,7 +3420,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3429,14 +3428,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3445,7 +3444,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3453,7 +3452,7 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3461,14 +3460,14 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_collection_id=str_query_collection)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
@@ -3476,29 +3475,29 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix != '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
             if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
                str_query_matrix == '' and str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_id__in=list_of_image_ids)\
                     .order_by(sort_parameter)
-    
+
     if tag is not None:
-            
+
         for imagesummary in queryset:
 
             if imagesummary.has_this_tag(tag):

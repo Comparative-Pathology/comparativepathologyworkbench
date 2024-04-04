@@ -122,69 +122,71 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
     if server.is_omero547():
 
-        wp_data = server.get_imaging_server_image_json(image_id)
+        if environment.is_web_gateway() or server.is_idr():
 
-        group = wp_data['group']
-        group_name = group['name']
+            wp_data = server.get_imaging_server_image_json(image_id)
 
-        projects = wp_data['projects']
-        project = projects[0]
-        project_name = project['name']
+            group = wp_data['group']
+            group_name = group['name']
 
-        datasets = wp_data['datasets']
-        dataset = datasets[0]
-        dataset_name = dataset['name']
+            projects = wp_data['projects']
+            project = projects[0]
+            project_name = project['name']
 
-        json_image = wp_data['image']
-        image_name = json_image['name']
+            datasets = wp_data['datasets']
+            dataset = datasets[0]
+            dataset_name = dataset['name']
 
-        full_image_name = group_name + "/" + project_name + "/" + dataset_name + "/" + image_name
+            json_image = wp_data['image']
+            image_name = json_image['name']
 
-        image_viewer_url = json_image['viewer_url']
-        image_birdseye_url = ''
+            full_image_name = group_name + "/" + project_name + "/" + dataset_name + "/" + image_name
 
-        if server.is_idr():
+            image_viewer_url = json_image['viewer_url']
+            image_birdseye_url = ''
 
             image_birdseye_url = json_image['birdseye_url']
 
         else:
 
-            password = ''
+            if environment.is_blitz_gateway():
 
-            conn = None
+                password = ''
 
-            cipher = AESCipher(config('CPW_CIPHER_STRING'))
-            byte_password = cipher.decrypt(server.pwd)
-            password = byte_password.decode('utf-8')
+                conn = None
 
-            conn = BlitzGateway(server.uid, password, host=server.url_server, port=4064, secure=True)
-            conn.connect()
+                cipher = AESCipher(config('CPW_CIPHER_STRING'))
+                byte_password = cipher.decrypt(server.pwd)
+                password = byte_password.decode('utf-8')
 
-            image_ome = conn.getObject("Image", str(image_id))
+                conn = BlitzGateway(server.uid, password, host=server.url_server, port=4064, secure=True)
+                conn.connect()
 
-            if image_ome is not None:
+                image_ome = conn.getObject("Image", str(image_id))
 
-                for tag in image_ome.listAnnotations():
+                if image_ome is not None:
 
-                    tag_str_name = str(tag.getTextValue())
+                    for tag in image_ome.listAnnotations():
 
-                    tag_str_list.append(tag_str_name)
+                        tag_str_name = str(tag.getTextValue())
 
-                img_data = image_ome.getThumbnail(300)
-                rendered_thumb = ImageOME.open(BytesIO(img_data))
+                        tag_str_list.append(tag_str_name)
 
-                now = datetime.now()
-                date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
+                    img_data = image_ome.getThumbnail(300)
+                    rendered_thumb = ImageOME.open(BytesIO(img_data))
 
-                new_chart_id = date_time + '_' + str(image_id) + '_' + 'thumbnail.jpg'
+                    now = datetime.now()
+                    date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
-                image_birdseye_url = 'http://' + environment.web_root + '/' + new_chart_id
+                    new_chart_id = date_time + '_' + str(image_id) + '_' + 'thumbnail.jpg'
 
-                new_full_path = environment.document_root + '/' + new_chart_id
+                    image_birdseye_url = 'http://' + environment.web_root + '/' + new_chart_id
 
-                rendered_thumb.save(new_full_path)
+                    new_full_path = environment.document_root + '/' + new_chart_id
 
-            conn.close()
+                    rendered_thumb.save(new_full_path)
+
+                conn.close()
 
     if server.is_wordpress():
 

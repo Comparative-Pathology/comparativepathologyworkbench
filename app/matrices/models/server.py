@@ -28,25 +28,24 @@
 ###
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib
+import requests
+import base64
 
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 from django.apps import apps
+
+import omero
+from omero.gateway import BlitzGateway
 
 from random import randint
 
-from requests.exceptions import HTTPError
 from decouple import config
 
 from matrices.routines import AESCipher
 
 from matrices.models import Type
+
 
 CMD_API_WORDPRESS_IMAGE = 'WordpressImage'
 CMD_API_WORDPRESS_IMAGES = 'WordpressImages'
@@ -77,9 +76,9 @@ SERVER_CPW = 'CPW'
 SERVER_IDR = 'idr.openmicroscopy.org'
 
 
-"""
-    SERVER
-"""
+#
+#   Class SERVER
+#
 class Server(models.Model):
     name = models.CharField(max_length=50, blank=False, unique=True)
     url_server = models.CharField(max_length=50, blank=False, default='')
@@ -97,8 +96,8 @@ class Server(models.Model):
         return f"{self.uid}@{self.url_server}"
 
     def __repr__(self):
-        return f"{self.id}, {self.name}, {self.url_server}, {self.uid}, {self.pwd}, {self.type.id}, {self.owner.id}, {self.accessible}"
-
+        return f"{self.id}, {self.name}, {self.url_server}, {self.uid}, {self.pwd}, {self.type.id}, {self.owner.id}, \
+        {self.accessible}"
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:
@@ -119,13 +118,13 @@ class Server(models.Model):
         self.accessible = False
 
     def is_accessible(self):
-        if self.accessible == True:
+        if self.accessible is True:
             return True
         else:
             return False
 
     def is_not_accessible(self):
-        if self.accessible == False:
+        if self.accessible is False:
             return True
         else:
             return False
@@ -163,26 +162,21 @@ class Server(models.Model):
     def get_uid_and_url(self):
         return f"{self.uid}@{self.url_server}"
 
-
-    """
-        WORDPRESS INTERFACE
-    """
-
-    """
-        Get the JSON Details for the Requested Server
-    """
+    #
+    #   WORDPRESS INTERFACE
+    #
+    #
+    #   Get the JSON Details for the Requested Server
+    #
     def get_wordpress_json(self, credential, page_id):
 
         Command = apps.get_model('matrices', 'Command')
 
-        cipher = AESCipher(config('CPW_CIPHER_STRING'))
-        password = cipher.decrypt(self.pwd)
-
-        user = User.objects.get(username=credential.username)
-
         commandWordpressImages = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGES)
 
-        images_url = commandWordpressImages.protocol.name + '://' + self.url_server + '/' + commandWordpressImages.application + '/' + commandWordpressImages.preamble + str(page_id) + commandWordpressImages.postamble + str(credential.wordpress)
+        images_url = commandWordpressImages.protocol.name + '://' + self.url_server + '/' + \
+            commandWordpressImages.application + '/' + commandWordpressImages.preamble + str(page_id) + \
+            commandWordpressImages.postamble + str(credential.wordpress)
 
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -238,7 +232,6 @@ class Server(models.Model):
                 page_count = int(page_id) * 35
                 image_total = ( ( int(page_id) - 1 ) * 35 ) + image_count
 
-
                 if image_count < 35:
 
                     next_page = '1'
@@ -259,7 +252,6 @@ class Server(models.Model):
 
                     prev_page = int(page_id) - 1
 
-
                 dataset = ({
                     'id': '0',
                     'name': 'Your WordPress Media Library',
@@ -268,7 +260,13 @@ class Server(models.Model):
                     'next_page': next_page
                 })
 
-                data = { 'server': self, 'group': group, 'projects': project_list, 'dataset': dataset, 'images': images_list }
+                data = {
+                    'server': self,
+                    'group': group,
+                    'projects': project_list,
+                    'dataset': dataset,
+                    'images': images_list
+                }
 
             else:
 
@@ -288,7 +286,12 @@ class Server(models.Model):
                     'next_page': next_page
                 })
 
-                data = { 'server': self, 'group': group, 'projects': project_list, 'dataset': dataset }
+                data = {
+                    'server': self,
+                    'group': group,
+                    'projects': project_list,
+                    'dataset': dataset
+                }
 
         except Exception as e:
 
@@ -314,29 +317,26 @@ class Server(models.Model):
                     'next_page': next_page
             })
 
-            data = { 'server': self, 'group': group, 'projects': project_list, 'dataset': dataset }
+            data = {
+                'server': self,
+                'group': group,
+                'projects': project_list,
+                'dataset': dataset
+            }
 
         return data
 
-
-
-    """
-        Get the JSON Details for the Requested Image
-    """
+    #
+    #   Get the JSON Details for the Requested Image
+    #
     def get_wordpress_image_json(self, credential, image_id):
 
         Command = apps.get_model('matrices', 'Command')
 
-        userid = self.uid
-
-        cipher = AESCipher(config('CPW_CIPHER_STRING'))
-        password = cipher.decrypt(self.pwd)
-
-        user = User.objects.get(username=credential.username)
-
         commandWordpressImage = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGE)
 
-        image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + str(image_id)
+        image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + \
+            commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + str(image_id)
 
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -385,7 +385,13 @@ class Server(models.Model):
                 datasets = []
                 projects = []
 
-                data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image }
+                data = {
+                    'server': self,
+                    'group': group,
+                    'projects': projects,
+                    'datasets': datasets,
+                    'image': image
+                }
 
             else:
 
@@ -404,7 +410,13 @@ class Server(models.Model):
                 datasets = []
                 projects = []
 
-                data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image }
+                data = {
+                    'server': self,
+                    'group': group,
+                    'projects': projects,
+                    'datasets': datasets,
+                    'image': image
+                }
 
         except Exception as e:
 
@@ -421,21 +433,25 @@ class Server(models.Model):
             })
 
             group = ''
-            project_list = []
             datasets = []
             projects = []
 
-            data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image }
+            data = {
+                'server': self,
+                'group': group,
+                'projects': projects,
+                'datasets': datasets,
+                'image': image
+            }
 
         return data
 
-
-    """
-        EBI INTERFACE
-    """
-    """
-        Get the JSON Details for the Requested Server
-    """
+    #
+    #   EBI INTERFACE
+    #
+    #
+    #   Get the JSON Details for the Requested Server
+    #
     def get_ebi_server_experiment_metadata(self, an_experiment_id):
 
         experiments_url = 'json/experiments'
@@ -495,7 +511,6 @@ class Server(models.Model):
 
                             technologyType = technologyType + ', ' + a
 
-
                 if 'experimentalFactors' in p:
 
                     for b in p['experimentalFactors']:
@@ -508,7 +523,6 @@ class Server(models.Model):
 
                             experimentalFactors = experimentalFactors + ', ' + b
 
-
                 if 'experimentProject' in p:
 
                     for c in p['experimentProject']:
@@ -520,7 +534,6 @@ class Server(models.Model):
                         else:
 
                             experimentProject = experimentProject + ', ' + c
-
 
                 experiment_metadata = ({
                     'experimentType': p['experimentType'],
@@ -539,14 +552,13 @@ class Server(models.Model):
 
         return experiment_metadata
 
-
-    """
-        Get the JSON Details for the Requested Server
-    """
+    #
+    #   Get the JSON Details for the Requested Server
+    #
     def get_ebi_server_json(self):
 
         experiments_url = 'json/experiments'
-        
+
         full_experiments_url = 'https://' + self.url_server + '/' + experiments_url + '/'
 
         session = requests.Session()
@@ -574,24 +586,30 @@ class Server(models.Model):
 
             experiment_list.append(experiment)
 
-        data = { 'server': self, 'experiment_list': experiment_list  }
+        data = {
+            'server': self,
+            'experiment_list': experiment_list
+        }
 
         return data
 
-
-    """
-        Get the JSON Details for the Requested Server
-    """
+    #
+    #   Get the JSON Details for the Requested Server
+    #
     def get_ebi_widget_json(self):
 
-        data = { 'server': self }
+        data = {
+            'server': self
+        }
 
         return data
 
-
-    """
-        Get the JSON Details for the Requested Server
-    """
+    #
+    #   OMERO INTERFACE
+    #
+    #
+    #   Get the JSON Details for the Requested Server
+    #
     def get_imaging_server_json(self):
 
         Command = apps.get_model('matrices', 'Command')
@@ -602,7 +620,6 @@ class Server(models.Model):
         commandProjects = Command.objects.filter(type=self.type).get(name=CMD_API_PROJECTS)
         commandGroupProjects = Command.objects.filter(type=self.type).get(name=CMD_API_GROUP_PROJECTS)
         commandGroupDatasets = Command.objects.filter(type=self.type).get(name=CMD_API_GROUP_DATASETS)
-        commandGroupImages = Command.objects.filter(type=self.type).get(name=CMD_API_GROUP_IMAGES)
         commandDatasetImages = Command.objects.filter(type=self.type).get(name=CMD_API_DATASET_IMAGES)
 
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
@@ -612,18 +629,24 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        projects_url = commandProjects.protocol.name + '://' + self.url_server + '/' + commandProjects.application + '/' + commandProjects.preamble
-        group_projects_url = commandGroupProjects.protocol.name + '://' + self.url_server + '/' + commandGroupProjects.application + '/' + commandGroupProjects.preamble
-        datasets_url = commandGroupDatasets.protocol.name + '://' + self.url_server + '/' + commandGroupDatasets.application + '/' + commandGroupDatasets.preamble
-        images_url = commandGroupImages.protocol.name + '://' + self.url_server + '/' + commandGroupImages.application + '/' + commandGroupImages.preamble
-        dataset_images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + commandDatasetImages.application + '/' + commandDatasetImages.preamble
+        projects_url = commandProjects.protocol.name + '://' + self.url_server + '/' + commandProjects.application + \
+            '/' + commandProjects.preamble
+        group_projects_url = commandGroupProjects.protocol.name + '://' + self.url_server + '/' + \
+            commandGroupProjects.application + '/' + commandGroupProjects.preamble
+        datasets_url = commandGroupDatasets.protocol.name + '://' + self.url_server + '/' + \
+            commandGroupDatasets.application + '/' + commandGroupDatasets.preamble
+        dataset_images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetImages.application + '/' + commandDatasetImages.preamble
 
         session = requests.Session()
         session.timeout = 10
 
         if self.id == 33:
+
             session.verify = False
+
         else:
+
             session.verify = True
 
         try:
@@ -636,7 +659,11 @@ class Server(models.Model):
             group_count = 0
             group_list = []
 
-            data = { 'server': self, 'group_list': group_list, 'group_count': group_count }
+            data = {
+                'server': self,
+                'group_list': group_list,
+                'group_count': group_count
+            }
 
             return data
 
@@ -691,9 +718,7 @@ class Server(models.Model):
 
                 memberOfGroup_list = new_group_list
 
-
         group_list = list()
-
 
         if userid != "":
 
@@ -710,7 +735,11 @@ class Server(models.Model):
                 group_count = 0
                 group_list = []
 
-                data = { 'server': self, 'group_list': group_list, 'group_count': group_count }
+                data = {
+                    'server': self,
+                    'group_list': group_list,
+                    'group_count': group_count
+                }
 
                 return data
 
@@ -722,7 +751,6 @@ class Server(models.Model):
         for mog in memberOfGroup_list:
 
             group_project_url = group_projects_url + str(mog)
-            image_url = images_url + str(mog) + commandGroupImages.postamble
             dataset_url = datasets_url + str(mog) + commandGroupDatasets.postamble
 
             payload = {'limit': 100}
@@ -781,7 +809,8 @@ class Server(models.Model):
 
                                     datasetId = d['@id']
 
-                                    dataset_image_url = dataset_images_url + '/' + str(datasetId) + '/' + commandDatasetImages.postamble
+                                    dataset_image_url = dataset_images_url + '/' + str(datasetId) + '/' + \
+                                        commandDatasetImages.postamble
 
                                     payload = {'limit': 300}
                                     dataset_image_rsp = session.get(dataset_image_url, params=payload)
@@ -809,7 +838,9 @@ class Server(models.Model):
 
                                                 count = count + 1
 
-                                        randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + '/' + commandBirdsEye.postamble
+                                        randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + \
+                                            '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + \
+                                            str(randImageID) + '/' + commandBirdsEye.postamble
 
                     group = ({
                             'id': groupId,
@@ -823,7 +854,6 @@ class Server(models.Model):
                             })
 
                     group_list.append(group)
-
 
         prevgroup = ''
 
@@ -846,14 +876,82 @@ class Server(models.Model):
         for group in new_group_list:
             group_count = group_count + 1
 
-        data = { 'server': self, 'group_list': new_group_list, 'group_count': group_count }
+        data = {
+            'server': self,
+            'group_list': new_group_list,
+            'group_count': group_count
+        }
 
         return data
 
+    #
+    #   Get the JSON Details for the Requested Server via the Blitz Gateway
+    #
+    def get_imaging_server_json_blitz(self):
 
-    """
-        Get the JSON Details for the Requested Group
-    """
+        conn = None
+
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
+        byte_password = cipher.decrypt(self.pwd)
+        password = byte_password.decode('utf-8')
+
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn.connect()
+
+        groupCount = 0
+
+        group_list = list()
+
+        group = conn.getGroupFromContext()
+        group_ctx_id = str(group.getId())
+
+        for group_ome in conn.getGroupsMemberOf():
+
+            group_ome_id = str(group_ome.getId())
+            group_ome_name = str(group_ome.getName())
+
+            if group_ctx_id == group_ome_id:
+
+                projectCount = 0
+
+                projects = conn.getObjects("Project", opts={'group': group_ome_id})
+
+                projectCount = len(list(projects))
+
+                datasetCount = 0
+
+                for project_ome in conn.getObjects("Project", opts={'group': group_ome_id}):
+
+                    datasets = project_ome.listChildren()
+
+                    thisDatasetCount = len(list(datasets))
+
+                    datasetCount = datasetCount + thisDatasetCount
+
+                group = ({
+                    'id': group_ome_id,
+                    'name': group_ome_name,
+                    'projectCount': projectCount,
+                    'datasetCount': datasetCount
+                })
+
+                groupCount = groupCount + 1
+
+                group_list.append(group)
+
+        conn.close()
+
+        data = {
+            'server': self,
+            'group_list': group_list,
+            'group_count': groupCount
+        }
+
+        return data
+
+    #
+    #   Get the JSON Details for the Requested Group
+    #
     def get_imaging_server_group_json(self, group_id):
 
         Command = apps.get_model('matrices', 'Command')
@@ -863,7 +961,6 @@ class Server(models.Model):
         commandLogin = Command.objects.filter(type=self.type).get(name=CMD_API_LOGIN)
 
         commandGroupProjects = Command.objects.filter(type=self.type).get(name=CMD_API_GROUP_PROJECTS)
-        commandProjects = Command.objects.filter(type=self.type).get(name=CMD_API_PROJECTS)
         commandProjectsDatasets = Command.objects.filter(type=self.type).get(name=CMD_API_PROJECT_DATASETS)
 
         commandDatasetImages = Command.objects.filter(type=self.type).get(name=CMD_API_DATASET_IMAGES)
@@ -873,17 +970,22 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        groups_url = commandGroupProjects.protocol.name + '://' + self.url_server + '/' + commandGroupProjects.application + '/' + commandGroupProjects.preamble
-        projects_url = commandProjects.protocol.name + '://' + self.url_server + '/' + commandProjects.application + '/' + commandProjects.preamble + '/'
-        datasets_url = commandProjectsDatasets.protocol.name + '://' + self.url_server + '/' + commandProjectsDatasets.application + '/' + commandProjectsDatasets.preamble + '/'
+        groups_url = commandGroupProjects.protocol.name + '://' + self.url_server + '/' + \
+            commandGroupProjects.application + '/' + commandGroupProjects.preamble
+        datasets_url = commandProjectsDatasets.protocol.name + '://' + self.url_server + '/' + \
+            commandProjectsDatasets.application + '/' + commandProjectsDatasets.preamble + '/'
 
-        images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
+        images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
 
         session = requests.Session()
 
         if self.id == 33:
+
             session.verify = False
+
         else:
+
             session.verify = True
 
         try:
@@ -893,10 +995,13 @@ class Server(models.Model):
 
             print("Exception e : " + str(e))
 
-            group_count = 0
             group_list = []
 
-            data = { 'server': self, 'project_list': project_list, 'group': group }
+            data = {
+                'server': self,
+                'project_list': project_list,
+                'group': group
+            }
 
             return data
 
@@ -911,8 +1016,6 @@ class Server(models.Model):
         memberOfGroup_list = list()
 
         group_list = list()
-
-        groupCount = 0
 
         if userid == "":
 
@@ -953,7 +1056,6 @@ class Server(models.Model):
 
                 memberOfGroup_list = new_group_list
 
-
         if userid != "":
 
             payload = {'username': userid, 'password': password, 'server': 1}
@@ -967,10 +1069,13 @@ class Server(models.Model):
 
             except AssertionError:
 
-                groupCount = 0
                 group_list = []
 
-                data = { 'server': self, 'project_list': project_list, 'group': group }
+                data = {
+                    'server': self,
+                    'project_list': project_list,
+                    'group': group
+                }
 
                 return data
 
@@ -1007,7 +1112,7 @@ class Server(models.Model):
                         'id': groupdetails['@id'],
                         'name': groupdetails['Name'],
                         'projectCount': projectCount
-                        })
+                    })
 
                     group_list.append(group)
 
@@ -1039,6 +1144,7 @@ class Server(models.Model):
                         if datasetMetaCount > 0:
 
                             for d in dataset_data['data']:
+
                                 dataset_id = d['@id']
                                 num_images = d['omero:childCount']
                                 imageCount = imageCount + num_images
@@ -1066,7 +1172,9 @@ class Server(models.Model):
 
                                         count = count + 1
 
-                                    randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + '/' + commandBirdsEye.postamble
+                                    randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server \
+                                        + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + \
+                                        str(randImageID) + '/' + commandBirdsEye.postamble
 
                     project = ({
                         'id': project_id,
@@ -1081,7 +1189,9 @@ class Server(models.Model):
                     project_list.append(project)
 
         project_count = 0
+
         for project in project_list:
+
             project_count = project_count + 1
 
         if group_list == []:
@@ -1096,15 +1206,108 @@ class Server(models.Model):
 
             group = group_list[0]
 
-        data = { 'server': self, 'project_count': project_count, 'project_list': project_list, 'group': group }
+        data = {
+            'server': self,
+            'project_count': project_count,
+            'project_list': project_list,
+            'group': group
+        }
 
         return data
 
+    #
+    #   Get the JSON Details for the Requested Group via the Blitz Gateway
+    #
+    def get_imaging_server_group_json_blitz(self, group_id):
 
-    """
-        Get the JSON Details for the Requested Project
-    """
-    def get_imaging_server_project_json(self, project_id):
+        Command = apps.get_model('matrices', 'Command')
+
+        commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
+
+        conn = None
+
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
+        byte_password = cipher.decrypt(self.pwd)
+        password = byte_password.decode('utf-8')
+
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn.connect()
+
+        project_list = list()
+
+        group_ome_id = ''
+        group_ome_name = ''
+
+        for g in conn.getGroupsMemberOf():
+
+            if g.getId() == group_id:
+
+                group_ome_id = g.getId()
+                group_ome_name = g.getName()
+
+        group = ({
+            'id': group_ome_id,
+            'name': group_ome_name
+        })
+
+        projectCount = 0
+
+        for project_ome in conn.getObjects("Project", opts={'group': group_id}):
+
+            imageCount = 0
+            datasetCount = 0
+
+            projectCount = projectCount + 1
+
+            project_ome_id = project_ome.getId()
+            project_ome_name = project_ome.getName()
+
+            for dataset_ome in project_ome.listChildren():
+
+                datasetCount = datasetCount + 1
+
+                randImageIndex = 0
+
+                for image_ome in dataset_ome.listChildren():
+
+                    if imageCount == randImageIndex:
+
+                        randImageID = str(image_ome.getId())
+                        randImageName = str(image_ome.getName())
+
+                        randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                            commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + \
+                            '/' + commandBirdsEye.postamble
+
+                    imageCount = imageCount + 1
+
+            project = ({
+                'id': project_ome_id,
+                'name': project_ome_name,
+                'datasetCount': datasetCount,
+                'imageCount': imageCount,
+                'randomImageID': randImageID,
+                'randomImageName': randImageName,
+                'randomImageBEURL': randomImageBEURL
+            })
+
+            project_list.append(project)
+
+        conn.close()
+
+        data = {
+            'server': self,
+            'project_count': projectCount,
+            'project_list': project_list,
+            'group': group
+        }
+
+        return data
+
+    #
+    #   Get the JSON Details for the Requested Project
+    #
+    def get_imaging_server_project_json(self, project_id, page_id, pagination_amt):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1122,15 +1325,20 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        projects_url = commandProjects.protocol.name + '://' + self.url_server + '/' + commandProjects.application + '/' + commandProjects.preamble + '/'
-        datasets_url = commandProjectsDatasets.protocol.name + '://' + self.url_server + '/' + commandProjectsDatasets.application + '/' + commandProjectsDatasets.preamble + '/'
+        projects_url = commandProjects.protocol.name + '://' + self.url_server + '/' + commandProjects.application + \
+            '/' + commandProjects.preamble + '/'
 
-        images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
+        images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
 
         session = requests.Session()
+
         if self.id == 33:
+
             session.verify = False
+
         else:
+
             session.verify = True
 
         try:
@@ -1144,7 +1352,12 @@ class Server(models.Model):
             project = ''
             dataset_list = []
 
-            data = { 'server': self, 'group': group, 'project': project, 'dataset_list': dataset_list }
+            data = {
+                'server': self,
+                'group': group,
+                'project': project,
+                'dataset_list': dataset_list
+            }
 
             return data
 
@@ -1165,18 +1378,19 @@ class Server(models.Model):
             assert r.status_code == 200
             assert login_rsp['success']
 
+        limit_str = '&limit=' + str(pagination_amt)
+        offset = pagination_amt * (int(page_id) - 1)
+        offset_str = '&offset=' + str(offset)
 
-        project_url = projects_url + str(project_id) + '/' + commandProjects.postamble
-        dataset_url = projects_url + str(project_id) + '/' + commandProjectsDatasets.postamble
+        project_url = projects_url + str(project_id) + '/' + commandProjects.postamble + limit_str + offset_str
+        dataset_url = projects_url + str(project_id) + '/' + commandProjectsDatasets.postamble + limit_str + offset_str
 
         dataset_list = list()
 
-        payload = {'limit': 300}
-        datasets_data = session.get(dataset_url, params=payload).json()
+        datasets_data = session.get(dataset_url).json()
         assert len(datasets_data['data']) < 1000
 
-        payload = {'limit': 300}
-        project_data = session.get(project_url, params=payload).json()
+        project_data = session.get(project_url).json()
 
         if 'message' in project_data:
 
@@ -1224,11 +1438,17 @@ class Server(models.Model):
 
             ddata = datasets_data['data']
 
+            dataset_count = 0
+
             for d in ddata:
 
                 dataset_id = d['@id']
                 datasetName = d['Name']
                 imageCount = d['omero:childCount']
+
+                randImageID = ''
+                randImageName = ''
+                randomImageBEURL = ''
 
                 image_url = images_url + str(dataset_id) + '/' + commandDatasetImages.postamble
 
@@ -1247,7 +1467,9 @@ class Server(models.Model):
 
                     count = count + 1
 
-                randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + '/' + commandBirdsEye.postamble
+                randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                    commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + \
+                    str(randImageID) + '/' + commandBirdsEye.postamble
 
                 dataset = ({
                     'id': dataset_id,
@@ -1256,18 +1478,197 @@ class Server(models.Model):
                     'randomImageID': randImageID,
                     'randomImageName': randImageName,
                     'randomImageBEURL': randomImageBEURL
-                    })
+                })
+
+                dataset_count = dataset_count + 1
 
                 dataset_list.append(dataset)
 
-        data = { 'server': self, 'group': group, 'project': project, 'dataset_list': dataset_list }
+        prev_page = '1'
+        next_page = '1'
+
+        page_count = int(page_id) * pagination_amt
+
+        dataset_total = ((int(page_id) - 1) * pagination_amt) + dataset_count
+
+        if dataset_count < pagination_amt:
+
+            next_page = '1'
+
+        if dataset_total % pagination_amt == 0:
+
+            next_page = int(page_id) + 1
+
+        else:
+
+            next_page = '1'
+
+        if int(page_id) == 1:
+
+            prev_page = page_id
+
+        else:
+
+            prev_page = int(page_id) - 1
+
+        dataset_start = offset + 1
+        dataset_end = offset + pagination_amt
+
+        if dataset_end > dataset_total:
+
+            dataset_end = dataset_total
+
+        data = {
+            'server': self,
+            'group': group,
+            'project': project,
+            'dataset_list': dataset_list,
+            'prev_page': str(prev_page),
+            'next_page': str(next_page),
+            'dataset_start': dataset_start,
+            'dataset_end': dataset_end
+        }
 
         return data
 
+    #
+    #   Get the JSON Details for the Requested Project via Blitz Gateway
+    #
+    def get_imaging_server_project_json_blitz(self, project_id, page_id, pagination_amt, gateway_port):
 
-    """
-        Get the JSON Details for the Requested Dataset
-    """
+        Command = apps.get_model('matrices', 'Command')
+
+        commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
+
+        conn = None
+
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
+        byte_password = cipher.decrypt(self.pwd)
+        password = byte_password.decode('utf-8')
+
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=gateway_port, secure=True)
+        conn.connect()
+
+        group = ({
+            'id': str(conn.getEventContext().groupId),
+            'name': str(conn.getEventContext().groupName)
+        })
+
+        limit_str = str(pagination_amt)
+        offset = pagination_amt * (int(page_id) - 1)
+        offset_str = str(offset)
+
+        project_ome = conn.getObject("Project", str(project_id))
+
+        datasets_ome = project_ome.listChildren()
+
+        datasets_ome_count = 0
+
+        for dataset_ome in datasets_ome:
+
+            datasets_ome_count = datasets_ome_count + 1
+
+        dataset_list = list()
+
+        dataset_count = 0
+
+        datasets_ome = conn.getObjects("Dataset", opts={'project': str(project_id),
+                                                        'order_by': 'lower(obj.name)',
+                                                        'limit': limit_str,
+                                                        'offset': offset_str})
+
+        for dataset_ome in datasets_ome:
+
+            dataset_id = dataset_ome.getId()
+            datasetName = dataset_ome.getName()
+
+            randImageIndex = 0
+            imageCount = 0
+
+            for image_ome in dataset_ome.listChildren():
+
+                if imageCount == randImageIndex:
+
+                    randImageID = str(image_ome.getId())
+                    randImageName = str(image_ome.getName())
+
+                imageCount = imageCount + 1
+
+            randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + \
+                '/' + commandBirdsEye.postamble
+
+            dataset = ({
+                'id': dataset_id,
+                'name': datasetName,
+                'imageCount': str(imageCount),
+                'randomImageID': randImageID,
+                'randomImageName': randImageName,
+                'randomImageBEURL': randomImageBEURL
+            })
+
+            dataset_count = dataset_count + 1
+
+            dataset_list.append(dataset)
+
+        project = ({
+            'id': project_ome.getId(),
+            'name': project_ome.getName(),
+            'datasetCount': str(datasets_ome_count)
+        })
+
+        conn.close()
+
+        prev_page = '1'
+        next_page = '1'
+
+        page_count = int(page_id) * pagination_amt
+
+        dataset_total = ((int(page_id) - 1) * pagination_amt) + dataset_count
+
+        if dataset_count < pagination_amt:
+
+            next_page = '1'
+
+        if dataset_total % pagination_amt == 0:
+
+            next_page = int(page_id) + 1
+
+        else:
+
+            next_page = '1'
+
+        if int(page_id) == 1:
+
+            prev_page = page_id
+
+        else:
+
+            prev_page = int(page_id) - 1
+
+        dataset_start = offset + 1
+        dataset_end = offset + pagination_amt
+
+        if dataset_end > dataset_total:
+
+            dataset_end = dataset_total
+
+        data = {
+            'server': self,
+            'group': group,
+            'project': project,
+            'dataset_list': dataset_list,
+            'prev_page': str(prev_page),
+            'next_page': str(next_page),
+            'dataset_start': dataset_start,
+            'dataset_end': dataset_end
+        }
+
+        return data
+
+    #
+    #   Get the JSON Details for the Requested Dataset
+    #
     def get_imaging_server_dataset_json(self, dataset_id, filter):
 
         Command = apps.get_model('matrices', 'Command')
@@ -1278,8 +1679,11 @@ class Server(models.Model):
         password = cipher.decrypt(self.pwd)
 
         if userid == "":
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+
         else:
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
 
         commandAPI = Command.objects.filter(type=self.type).get(name=CMD_API_API)
@@ -1297,14 +1701,21 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        datasets_url = commandDataset.protocol.name + '://' + self.url_server + '/' + commandDataset.application + '/' + commandDataset.preamble + '/'
-        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
-        images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
+        datasets_url = commandDataset.protocol.name + '://' + self.url_server + '/' + \
+            commandDataset.application + '/' + commandDataset.preamble + '/'
+        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
+        images_url = commandDatasetImages.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetImages.application + '/' + commandDatasetImages.preamble + '/'
 
         session = requests.Session()
+
         if self.id == 33:
+        
             session.verify = False
+        
         else:
+        
             session.verify = True
 
         try:
@@ -1319,7 +1730,13 @@ class Server(models.Model):
             images_list = []
             project_list = []
 
-            data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset }
+            data = {
+                'server': self,
+                'group': group,
+                'projects': project_list,
+                'images': images_list,
+                'dataset': dataset
+            }
 
             return data
 
@@ -1335,10 +1752,9 @@ class Server(models.Model):
             assert r.status_code == 200
             assert login_rsp['success']
 
-
         dataset_url = datasets_url + str(dataset_id) + '/' + commandDataset.postamble
         projects_url = projects_url + str(dataset_id) + '/' + commandDatasetProjects.postamble
-        images_url = datasets_url + str(dataset_id) + '/'+ commandDatasetImages.postamble
+        images_url = datasets_url + str(dataset_id) + '/' + commandDatasetImages.postamble
 
         project_list = list()
         images_list = list()
@@ -1397,6 +1813,7 @@ class Server(models.Model):
             groupname = ''
 
             for p in pdata:
+
                 project = ({'id': p['@id'], 'name': p['Name']})
                 project_list.append(project)
                 omerodetails = p['omero:details']
@@ -1417,12 +1834,21 @@ class Server(models.Model):
                 image_name = i['Name']
 
                 if userid == "":
-                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
-                else:
-                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + image_id
 
-                image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + commandBirdsEye.postamble
-                image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                        commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
+
+                else:
+
+                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                        commandViewer.application + '/' + commandViewer.preamble + image_id
+
+                image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                    commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + \
+                    commandBirdsEye.postamble
+
+                image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + \
+                    commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
 
                 image = ({
                     'id': image_id,
@@ -1430,9 +1856,9 @@ class Server(models.Model):
                     'viewer_url': image_viewer_url,
                     'birdseye_url': image_birdseye_url,
                     'thumbnail_url': image_thumbnail_url
-                    })
+                })
 
-                if filter == True:
+                if filter is True:
 
                     substring1 = "[macro image]"
                     substring2 = "[macro mask image]"
@@ -1447,16 +1873,138 @@ class Server(models.Model):
 
                     images_list.append(image)
 
-
-
-        data = { 'server': self, 'group': group, 'projects': project_list, 'images': images_list, 'dataset': dataset, 'filteredimagecount': filteredImageCount  }
+        data = {
+            'server': self,
+            'group': group,
+            'projects': project_list,
+            'images': images_list,
+            'dataset': dataset,
+            'filteredimagecount': filteredImageCount
+        }
 
         return data
 
+    #
+    #   Get the JSON Details for the Requested Dataset via the Blitz Gateway
+    #
+    def get_imaging_server_dataset_json_blitz(self, dataset_id, filter):
 
-    """
-        Get the JSON Details for the Requested Image
-    """
+        Command = apps.get_model('matrices', 'Command')
+
+        userid = self.uid
+
+        if userid == "":
+
+            commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+
+        else:
+
+            commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
+
+        commandThumbnail = Command.objects.filter(type=self.type).get(name=CMD_API_THUMBNAIL)
+        commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
+
+        conn = None
+
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
+        byte_password = cipher.decrypt(self.pwd)
+        password = byte_password.decode('utf-8')
+
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn.connect()
+
+        group = ({
+            'id': str(conn.getEventContext().groupId),
+            'name': str(conn.getEventContext().groupName)
+        })
+
+        dataset_ome = conn.getObject("Dataset", str(dataset_id))
+
+        projects_list = list()
+
+        project_ome = dataset_ome.getParent()
+
+        project = ({
+            'id': project_ome.getId(),
+            'name': project_ome.getName()
+        })
+
+        projects_list.append(project)
+
+        filteredImageCount = 0
+        unfilteredImageCount = 0
+
+        images_list = list()
+
+        for image_ome in dataset_ome.listChildren():
+
+            image_id = str(image_ome.getId())
+            image_name = str(image_ome.getName())
+
+            if userid == "":
+
+                image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                    commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
+
+            else:
+
+                image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                    commandViewer.application + '/' + commandViewer.preamble + image_id
+
+            image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + \
+                commandBirdsEye.postamble
+
+            image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + \
+                commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+
+            image = ({
+                'id': image_id,
+                'name': image_name,
+                'viewer_url': image_viewer_url,
+                'birdseye_url': image_birdseye_url,
+                'thumbnail_url': image_thumbnail_url
+            })
+
+            unfilteredImageCount = unfilteredImageCount + 1
+
+            if filter is True:
+
+                substring1 = "[macro image]"
+                substring2 = "[macro mask image]"
+
+                if substring1 not in image_name and substring2 not in image_name:
+
+                    filteredImageCount = filteredImageCount + 1
+
+                    images_list.append(image)
+
+            else:
+
+                images_list.append(image)
+
+        dataset = ({
+            'id': dataset_ome.getId(),
+            'name': dataset_ome.getName(),
+            'imageCount': str(unfilteredImageCount)
+        })
+
+        conn.close()
+
+        data = {
+            'server': self,
+            'group': group,
+            'projects': projects_list,
+            'images': images_list,
+            'dataset': dataset,
+            'filteredimagecount': filteredImageCount
+        }
+
+        return data
+
+    #
+    #   Get the JSON Details for the Requested Image
+    #
     def get_imaging_server_image_json(self, image_id):
 
         Command = apps.get_model('matrices', 'Command')
@@ -1479,8 +2027,11 @@ class Server(models.Model):
         commandViewer = ''
 
         if userid == "":
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+
         else:
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
 
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
@@ -1490,32 +2041,50 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + '/' + commandImages.preamble + '/'
-        datasets_url = commandImageDatasets.protocol.name + '://' + self.url_server + '/' + commandImageDatasets.application + '/' + commandImageDatasets.preamble + '/'
-        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
+        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + \
+            '/' + commandImages.preamble + '/'
+        datasets_url = commandImageDatasets.protocol.name + '://' + self.url_server + '/' + \
+            commandImageDatasets.application + '/' + commandImageDatasets.preamble + '/'
+        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + \
+            commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
 
-        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
+        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
 
         if userid == "":
-            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+
         else:
-            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + str(image_id)
 
-        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + commandBirdsEye.postamble
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + str(image_id)
 
-        image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + commandRegion.postamble
+        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+            commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + \
+            commandBirdsEye.postamble
+
+        image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + \
+            commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + \
+            commandRegion.postamble
 
         roi_list = list()
         datasets_list = list()
         projects_list = list()
 
         session = requests.Session()
+
         if self.id == 33:
+
             session.verify = False
+
         else:
+
             session.verify = True
 
         try:
+
             r = session.get(api_url)
 
         except Exception as e:
@@ -1525,7 +2094,14 @@ class Server(models.Model):
             group_count = 0
             group_list = []
 
-            data = { 'server': self, 'group': group, 'projects': projects_list, 'datasets': datasets_list, 'image': image, 'rois': roi_list }
+            data = {
+                'server': self,
+                'group': group,
+                'projects': projects_list,
+                'datasets': datasets_list,
+                'image': image,
+                'rois': roi_list
+            }
 
             return data
 
@@ -1533,13 +2109,13 @@ class Server(models.Model):
         session.headers.update({'X-CSRFToken': token, 'Referer': login_url})
 
         if userid != "":
+
             payload = {'username': userid, 'password': password, 'server': 1}
 
             r = session.post(login_url, data=payload)
             login_rsp = r.json()
             assert r.status_code == 200
             assert login_rsp['success']
-
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
@@ -1552,8 +2128,6 @@ class Server(models.Model):
         image_data = session.get(image_url, params=payload).json()
 
         if 'message' in image_data:
-
-            message = image_data['message']
 
             group = ({
                 'id': 0,
@@ -1622,8 +2196,8 @@ class Server(models.Model):
 
                         coordX = str(intNewCoordX)
                         coordY = str(intNewCoordY)
-                        width = str( 3192 )
-                        height = str( 3192 )
+                        width = str(3192)
+                        height = str(3192)
 
                     if type == 'Rectangle':
 
@@ -1744,7 +2318,18 @@ class Server(models.Model):
                     shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
                     viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
 
-                    shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'viewer_url': viewer_url, 'x': coordX, 'y': coordY, 'centre_x': centreX, 'centre_y': centreY, 'width': width, 'height': height })
+                    shape = ({
+                        'id': shape_id,
+                        'type': type,
+                        'shape_url': shape_url,
+                        'viewer_url': viewer_url,
+                        'x': coordX,
+                        'y': coordY,
+                        'centre_x': centreX,
+                        'centre_y': centreY,
+                        'width': width,
+                        'height': height
+                    })
 
                     shape_list.append(shape)
 
@@ -1849,14 +2434,258 @@ class Server(models.Model):
 
                 datasets_list.append(dataset)
 
-        data = { 'server': self, 'group': group, 'projects': projects_list, 'datasets': datasets_list, 'image': image, 'rois': roi_list }
+                password = ''
+
+        tag_list = list()
+
+        data = {
+            'server': self,
+            'group': group,
+            'projects': projects_list,
+            'datasets': datasets_list,
+            'image': image,
+            'rois': roi_list,
+            'tag_list': tag_list
+        }
 
         return data
 
+    #
+    #   Get the JSON Details for the Requested Image via the Blitz Gateway
+    #
+    def get_imaging_server_image_json_blitz(self, image_id):
 
-    """
-        Get the JSON Details for the Requested Image ROI
-    """
+        Command = apps.get_model('matrices', 'Command')
+
+        userid = self.uid
+
+        commandViewer = ''
+        image_viewer_url = ''
+
+        if userid == "":
+
+            commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+
+        else:
+
+            commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
+
+        if userid == "":
+
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+
+        else:
+
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + str(image_id)
+
+        commandRegion = Command.objects.filter(type=self.type).get(name=CMD_API_REGION)
+
+        image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + \
+            commandRegion.application + '/' + commandRegion.preamble + '/' + \
+            str(image_id) + '/' + commandRegion.postamble
+
+        conn = None
+
+        cipher = AESCipher(config('CPW_CIPHER_STRING'))
+        byte_password = cipher.decrypt(self.pwd)
+        password = byte_password.decode('utf-8')
+
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn.connect()
+
+        image_ome = conn.getObject("Image", str(image_id))
+
+        image = ({
+            'id': image_id,
+            'name': str(image_ome.getName()),
+            'description': str(image_ome.getDescription()),
+            'sizeX': image_ome.getSizeX(),
+            'sizeY': image_ome.getSizeY(),
+            'pixeltype': '',
+            'pixelsizeX': image_ome.getPixelSizeX(),
+            'pixelsizeY': image_ome.getPixelSizeY(),
+            'sizeZ': image_ome.getSizeZ(),
+            'sizeT': image_ome.getSizeT(),
+            'roi_count': 0,
+            'viewer_url': '',
+            'birdseye_url': ''
+        })
+
+        group = ({
+            'id': image_ome.getDetails().getGroup().getId(),
+            'name': image_ome.getDetails().getGroup().getName()
+        })
+
+        datasets_list = list()
+
+        dataset_ome = image_ome.getParent()
+
+        dataset = ({
+            'id': dataset_ome.getId(),
+            'name': dataset_ome.getName()
+        })
+
+        datasets_list.append(dataset)
+
+        projects_list = list()
+
+        project_ome = dataset_ome.getParent()
+
+        project = ({
+            'id': project_ome.getId(),
+            'name': project_ome.getName()
+        })
+
+        projects_list.append(project)
+
+        tag_list = list()
+
+        for tag in image_ome.listAnnotations():
+
+            tag_list.append(str(tag.getTextValue()))
+
+        roi_service = conn.getRoiService()
+        result = roi_service.findByImage(image_id, None)
+
+        roi_list = list()
+
+        for roi in result.rois:
+
+            roi_id = roi.getId().getValue()
+
+            shape_list = list()
+
+            for s in roi.copyShapes():
+
+                shape_id = s.getId().getValue()
+
+                type = ''
+                coordX = ''
+                coordY = ''
+                centreX = ''
+                centreY = ''
+                width = '0'
+                height = '0'
+
+                if isinstance(s, omero.model.RectangleI):
+
+                    type = 'Rectangle'
+
+                    centreX = s.getX().getValue()
+                    centreY = s.getY().getValue()
+                    intCoordX = int(s.getX().getValue())
+                    intCoordY = int(s.getY().getValue())
+                    intWidth = int(s.getWidth().getValue())
+                    intHeight = int(s.getHeight().getValue())
+
+                    coordX = str(intCoordX)
+                    coordY = str(intCoordY)
+                    width = str(intWidth)
+                    height = str(intHeight)
+
+                elif isinstance(s, omero.model.EllipseI):
+
+                    type = 'Ellipse'
+
+                    centreX = s.getX().getValue()
+                    centreY = s.getY().getValue()
+                    oldCoordX = s.getX().getValue()
+                    oldCoordY = s.getY().getValue()
+                    radiusX = s.getRadiusX().getValue()
+                    radiusY = s.getRadiusY().getValue()
+
+                    intX = int(oldCoordX)
+                    intY = int(oldCoordY)
+                    intRadiusX = int(radiusX)
+                    intRadiusY = int(radiusY)
+                    intWidth = intRadiusX * 2
+                    intHeight = intRadiusY * 2
+                    intCoordX = intX - intRadiusX
+                    intCoordY = intY - intRadiusY
+
+                    coordX = str(intCoordX)
+                    coordY = str(intCoordY)
+                    width = str(intWidth)
+                    height = str(intHeight)
+
+                elif isinstance(s, omero.model.PointI):
+
+                    type = 'Point'
+
+                    centreX = s.getX().getValue()
+                    centreY = s.getY().getValue()
+                    intCoordX = int(s.getX().getValue())
+                    intCoordY = int(s.getY().getValue())
+                    intHalf = 3192 / 2
+                    intWidth = intHalf
+                    intHeight = intHalf
+
+                    intNewCoordX = intCoordX - intWidth
+                    intNewCoordY = intCoordY - intHeight
+
+                    coordX = str(intNewCoordX)
+                    coordY = str(intNewCoordY)
+                    width = str(3192)
+                    height = str(3192)
+
+                if int(width) > 3192 or int(height) > 3192:
+
+                    middleX = int(coordX) + (int(width)/2)
+                    middleY = int(coordY) + (int(height)/2)
+
+                    intX = middleX - (3192/2)
+                    intY = middleY - (3192/2)
+
+                    coordX = str(int(intX))
+                    coordY = str(int(intY))
+
+                    width = "3192"
+                    height = "3192"
+
+                shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
+                viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
+
+                shape = ({
+                    'id': shape_id,
+                    'type': type,
+                    'shape_url': shape_url,
+                    'viewer_url': viewer_url,
+                    'x': coordX,
+                    'y': coordY,
+                    'centre_x': centreX,
+                    'centre_y': centreY,
+                    'width': width,
+                    'height': height
+                })
+
+                shape_list.append(shape)
+
+            roi = ({
+                'id': roi_id,
+                'shapes': shape_list
+            })
+
+            roi_list.append(roi)
+
+        conn.close()
+
+        data = {
+            'server': self,
+            'group': group,
+            'projects': projects_list,
+            'datasets': datasets_list,
+            'image': image,
+            'rois': roi_list,
+            'tag_list': tag_list
+        }
+
+        return data
+
+    #
+    #   Get the JSON Details for the Requested Image ROI
+    #
     def get_imaging_server_image_roi_json(self, image_id, in_roi):
 
         Command = apps.get_model('matrices', 'Command')
@@ -1879,8 +2708,11 @@ class Server(models.Model):
         commandViewer = ''
 
         if userid == "":
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+
         else:
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
 
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
@@ -1890,20 +2722,33 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + '/' + commandImages.preamble + '/'
-        datasets_url = commandImageDatasets.protocol.name + '://' + self.url_server + '/' + commandImageDatasets.application + '/' + commandImageDatasets.preamble + '/'
-        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
+        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + \
+            '/' + commandImages.preamble + '/'
+        datasets_url = commandImageDatasets.protocol.name + '://' + self.url_server + '/' + \
+            commandImageDatasets.application + '/' + commandImageDatasets.preamble + '/'
+        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + \
+            commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
 
-        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
+        projects_url = commandDatasetProjects.protocol.name + '://' + self.url_server + '/' + \
+            commandDatasetProjects.application + '/' + commandDatasetProjects.preamble + '/'
 
         if userid == "":
-            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+
         else:
-            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + str(image_id)
 
-        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + commandBirdsEye.postamble
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + str(image_id)
 
-        image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + commandRegion.postamble
+        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+            commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + \
+            commandBirdsEye.postamble
+
+        image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + \
+            commandRegion.application + '/' + commandRegion.preamble + '/' + str(image_id) + '/' + \
+            commandRegion.postamble
 
         roi_list = list()
         datasets_list = list()
@@ -1912,6 +2757,7 @@ class Server(models.Model):
         session = requests.Session()
 
         try:
+
             r = session.get(api_url)
 
         except Exception as e:
@@ -1921,7 +2767,14 @@ class Server(models.Model):
             group_count = 0
             group_list = []
 
-            data = { 'server': self, 'group': group, 'projects': projects_list, 'datasets': datasets_list, 'image': image, 'rois': roi_list }
+            data = {
+                'server': self,
+                'group': group,
+                'projects': projects_list,
+                'datasets': datasets_list,
+                'image': image,
+                'rois': roi_list
+            }
 
             return data
 
@@ -1929,6 +2782,7 @@ class Server(models.Model):
         session.headers.update({'X-CSRFToken': token, 'Referer': login_url})
 
         if userid != "":
+
             payload = {'username': userid, 'password': password, 'server': 1}
 
             r = session.post(login_url, data=payload)
@@ -1936,9 +2790,7 @@ class Server(models.Model):
             assert r.status_code == 200
             assert login_rsp['success']
 
-
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
-
 
         payload = {'limit': 300}
         rois_data = session.get(rois_url, params=payload).json()
@@ -1990,8 +2842,8 @@ class Server(models.Model):
 
                             coordX = str(intNewCoordX)
                             coordY = str(intNewCoordY)
-                            width = str( 3192 )
-                            height = str( 3192 )
+                            width = str(3192)
+                            height = str(3192)
 
                         if type == 'Rectangle':
 
@@ -2111,10 +2963,20 @@ class Server(models.Model):
                         shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
                         viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
 
-                shape = ({'id': shape_id, 'type': type, 'shape_url': shape_url, 'viewer_url': viewer_url, 'x': coordX, 'y': coordY, 'centre_x': centreX, 'centre_y': centreY, 'width': width, 'height': height })
+                shape = ({
+                    'id': shape_id,
+                    'type': type,
+                    'shape_url': shape_url,
+                    'viewer_url': viewer_url,
+                    'x': coordX,
+                    'y': coordY,
+                    'centre_x': centreX,
+                    'centre_y': centreY,
+                    'width': width,
+                    'height': height
+                })
 
             roi = ({'id': roi_id, 'shape': shape})
-
 
         image_url = images_url + str(image_id)
 
@@ -2154,25 +3016,25 @@ class Server(models.Model):
         group_id = groupdetails['@id']
 
         group = ({
-                    'id': group_id,
-                    'name': groupname,
-                    })
+            'id': group_id,
+            'name': groupname,
+        })
 
         image = ({
-                    'id': image_id,
-                    'name': name,
-                    'description': description,
-                    'sizeX': sizeX,
-                    'sizeY': sizeY,
-                    'pixeltype': pixeltype,
-                    'pixelsizeX': pixelsizeX,
-                    'pixelsizeY': pixelsizeY,
-                    'sizeZ': sizeZ,
-                    'sizeT': sizeT,
-                    'roi_count': roiCount,
-                    'viewer_url': image_viewer_url,
-                    'birdseye_url': image_birdseye_url
-                    })
+            'id': image_id,
+            'name': name,
+            'description': description,
+            'sizeX': sizeX,
+            'sizeY': sizeY,
+            'pixeltype': pixeltype,
+            'pixelsizeX': pixelsizeX,
+            'pixelsizeY': pixelsizeY,
+            'sizeZ': sizeZ,
+            'sizeT': sizeT,
+            'roi_count': roiCount,
+            'viewer_url': image_viewer_url,
+            'birdseye_url': image_birdseye_url
+        })
 
         dataset_url = datasets_url + str(image_id) + '/' + commandImageDatasets.postamble
 
@@ -2186,7 +3048,11 @@ class Server(models.Model):
         projects = list()
 
         for p in ddata:
-            dataset = ({'id': p['@id'], 'name': p['Name']})
+
+            dataset = ({
+                'id': p['@id'],
+                'name': p['Name']
+            })
 
             projects_url = projects_url + str(p['@id']) + '/' + commandDatasetProjects.postamble
 
@@ -2197,19 +3063,30 @@ class Server(models.Model):
             pdata = project_data['data']
 
             for p in pdata:
-                project = ({'id': p['@id'], 'name': p['Name']})
+
+                project = ({
+                    'id': p['@id'],
+                    'name': p['Name']
+                })
+
                 projects.append(project)
 
             datasets.append(dataset)
 
-        data = { 'server': self, 'group': group, 'projects': projects, 'datasets': datasets, 'image': image, 'roi': roi }
+        data = {
+            'server': self,
+            'group': group,
+            'projects': projects,
+            'datasets': datasets,
+            'image': image,
+            'roi': roi
+        }
 
         return data
 
-
-    """
-        Check the JSON Details for the Requested Image on Wordpress
-    """
+    #
+    #   Check the JSON Details for the Requested Image on Wordpress
+    #
     def check_wordpress_image(self, user, image_id):
 
         Credential = apps.get_model('matrices', 'Credential')
@@ -2218,7 +3095,8 @@ class Server(models.Model):
         credential = Credential.objects.get(username=user.username)
         commandWordpressImage = Command.objects.filter(type=self.type).get(name=CMD_API_WORDPRESS_IMAGE)
 
-        image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + str(image_id)
+        image_url = commandWordpressImage.protocol.name + '://' + self.url_server + '/' + \
+            commandWordpressImage.application + '/' + commandWordpressImage.preamble + '/' + str(image_id)
 
         token_str = credential.username + ':' + credential.apppwd
         encoded_token_str = token_str.encode('utf8')
@@ -2294,14 +3172,15 @@ class Server(models.Model):
 
             data = image
 
-        data = { 'image': image }
+        data = {
+            'image': image
+        }
 
         return data
 
-
-    """
-        Check the JSON Details for the Requested Image
-    """
+    #
+    #   Check the JSON Details for the Requested Image
+    #
     def check_imaging_server_image(self, image_id):
 
         Command = apps.get_model('matrices', 'Command')
@@ -2321,8 +3200,11 @@ class Server(models.Model):
         commandViewer = ''
 
         if userid == "":
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_PUBLIC_VIEWER)
+
         else:
+
             commandViewer = Command.objects.filter(type=self.type).get(name=CMD_API_VIEWER)
 
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
@@ -2331,26 +3213,38 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + '/' + commandImages.preamble + '/'
-        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
+        images_url = commandImages.protocol.name + '://' + self.url_server + '/' + commandImages.application + '/' + \
+            commandImages.preamble + '/'
+        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + \
+            commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
 
         if userid == "":
-            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
-        else:
-            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + commandViewer.application + '/' + commandViewer.preamble + str(image_id)
 
-        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + commandBirdsEye.postamble
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + '/' + str(image_id)
+
+        else:
+
+            image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                commandViewer.application + '/' + commandViewer.preamble + str(image_id)
+
+        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+            commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' +\
+            commandBirdsEye.postamble
 
         session = requests.Session()
 
         try:
+
             r = session.get(api_url)
 
         except Exception as e:
 
             print("Exception e : " + str(e))
 
-            data = { 'image': image }
+            data = {
+                'image': image
+            }
 
             return data
 
@@ -2358,13 +3252,13 @@ class Server(models.Model):
         session.headers.update({'X-CSRFToken': token, 'Referer': login_url})
 
         if userid != "":
+
             payload = {'username': userid, 'password': password, 'server': 1}
 
             r = session.post(login_url, data=payload)
             login_rsp = r.json()
             assert r.status_code == 200
             assert login_rsp['success']
-
 
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
@@ -2378,6 +3272,7 @@ class Server(models.Model):
         image_url = images_url + str(image_id)
 
         try:
+
             payload = {'limit': 300}
             image_data = session.get(image_url, params=payload).json()
             assert len(image_data['data']) < 2000
@@ -2400,12 +3295,13 @@ class Server(models.Model):
                 'roi_count': "",
                 'viewer_url': "",
                 'birdseye_url': ""
-                })
+            })
 
-            data = { 'image': image }
+            data = {
+                'image': image
+            }
 
             return data
-
 
         data = image_data['data']
         name = data['Name']
@@ -2421,39 +3317,46 @@ class Server(models.Model):
         physicalsizeY = pixels.get('PhysicalSizeY', '')
 
         if physicalsizeX == '':
+
             pixelsizeX = ''
+
         else:
+
             pixelsizeX = physicalsizeX['Value']
 
         if physicalsizeY == '':
+
             pixelsizeY = ''
+
         else:
+
             pixelsizeY = physicalsizeY['Value']
 
         image = ({
-                    'id': str(image_id),
-                    'name': name,
-                    'description': description,
-                    'sizeX': sizeX,
-                    'sizeY': sizeY,
-                    'pixeltype': pixeltype,
-                    'pixelsizeX': pixelsizeX,
-                    'pixelsizeY': pixelsizeY,
-                    'sizeZ': sizeZ,
-                    'sizeT': sizeT,
-                    'roi_count': roiCount,
-                    'viewer_url': image_viewer_url,
-                    'birdseye_url': image_birdseye_url
-                    })
+            'id': str(image_id),
+            'name': name,
+            'description': description,
+            'sizeX': sizeX,
+            'sizeY': sizeY,
+            'pixeltype': pixeltype,
+            'pixelsizeX': pixelsizeX,
+            'pixelsizeY': pixelsizeY,
+            'sizeZ': sizeZ,
+            'sizeT': sizeT,
+            'roi_count': roiCount,
+            'viewer_url': image_viewer_url,
+            'birdseye_url': image_birdseye_url
+        })
 
-        data = { 'image': image }
+        data = {
+            'image': image
+        }
 
         return data
 
-
-    """
-        Check the JSON Details for the Requested Image ROI
-    """
+    #
+    #   Check the JSON Details for the Requested Image ROI
+    #
     def check_imaging_server_image_roi(self, image_id, in_roi_id):
 
         Command = apps.get_model('matrices', 'Command')
@@ -2473,20 +3376,24 @@ class Server(models.Model):
         token_url = commandToken.protocol.name + '://' + self.url_server + '/' + commandToken.application + '/'
         login_url = commandLogin.protocol.name + '://' + self.url_server + '/' + commandLogin.application + '/'
 
-        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
+        imagerois_url = commandImageROIs.protocol.name + '://' + self.url_server + '/' + \
+            commandImageROIs.application + '/' + commandImageROIs.preamble + '/'
 
         session = requests.Session()
 
-        roi = ({'id': "" })
+        roi = ({'id': ""})
 
         try:
+
             r = session.get(api_url)
 
         except Exception as e:
 
             print("Exception e : " + str(e))
 
-            data = { 'roi': roi }
+            data = {
+                'roi': roi
+            }
 
             return data
 
@@ -2502,7 +3409,6 @@ class Server(models.Model):
             assert r.status_code == 200
             assert login_rsp['success']
 
-
         rois_url = imagerois_url + str(image_id) + '/' + commandImageROIs.postamble
 
         payload = {'limit': 300}
@@ -2515,12 +3421,15 @@ class Server(models.Model):
         rdata = rois_data['data']
 
         for r in rdata:
+            
             roi_id = r['@id']
 
             if in_roi_id == roi_id:
 
-                roi = ({'id': roi_id })
+                roi = ({'id': roi_id})
 
-        data = { 'roi': roi }
+        data = {
+            'roi': roi
+        }
 
         return data

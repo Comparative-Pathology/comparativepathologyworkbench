@@ -51,7 +51,7 @@ The show dataset template
 
 			{% for project in projects %}
 
-			<li><a href="{% url 'webgallery_show_project' server.id project.id %}">{{ project.name|truncatechars:20 }}</a></li>
+			<li><a href="{% url 'webgallery_show_project' server.id project.id 1 %}">{{ project.name|truncatechars:20 }}</a></li>
 
 			{% endfor %}
 

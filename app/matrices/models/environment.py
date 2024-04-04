@@ -40,6 +40,7 @@ from requests.exceptions import HTTPError
 
 from matrices.models.location import Location
 from matrices.models import Protocol
+from matrices.models.gateway import Gateway
 
 ENVIRONMENT_NAME_CPW = 'CPW'
 
@@ -47,6 +48,9 @@ ENVIRONMENT_CZI = 'CZI'
 ENVIRONMENT_CANADA = 'CANADA'
 ENVIRONMENT_COELIAC = 'COELIAC'
 ENVIRONMENT_DEVELOPMENT = 'DEVELOPMENT'
+
+ENVIRONMENT_GATEWAY_BLITZ = 'BLITZ'
+ENVIRONMENT_GATEWAY_WEB = 'WEB'
 
 CMD_BLOG_GET_POST = 'GetPost'
 CMD_BLOG_GET_POST_COMMENTS = 'GetPostComments'
@@ -91,13 +95,18 @@ class Environment(models.Model):
     maximum_bench_count = models.IntegerField(default=10, blank=False)
     maximum_collection_count = models.IntegerField(default=10, blank=False)
 
+    gateway = models.ForeignKey(Gateway, related_name='environments', default='', null=True, on_delete=models.DO_NOTHING)
+    gateway_port = models.IntegerField(default=0, blank=False)
+    gateway_pagination = models.IntegerField(default=50, blank=False)
+
     @classmethod
     def create(cls, name, location, protocol, web_root, document_root, nginx_private_location, wordpress_web_root,
                from_email, date_format,
                owner, minimum_cell_height, maximum_cell_height, minimum_cell_width, maximum_cell_width,
                maximum_initial_columns, minimum_initial_columns, maximum_initial_rows, minimum_initial_rows,
                maximum_rest_columns,  minimum_rest_columns, maximum_rest_rows, minimum_rest_rows, maximum_bench_count,
-               maximum_collection_count):
+               maximum_collection_count, gateway, gateway_port, gateway_pagination):
+
         return cls(name=name, location=location, protocol=protocol, web_root=web_root, document_root=document_root,
                    nginx_private_location=nginx_private_location,
                    wordpress_web_root=wordpress_web_root, from_email=from_email, date_format=date_format, owner=owner,
@@ -107,7 +116,8 @@ class Environment(models.Model):
                    maximum_initial_rows=maximum_initial_rows, minimum_initial_rows=minimum_initial_rows,
                    maximum_rest_columns=maximum_rest_columns, minimum_rest_columns=minimum_rest_columns,
                    maximum_rest_rows=maximum_rest_rows, minimum_rest_rows=minimum_rest_rows,
-                   maximum_bench_count=maximum_bench_count, maximum_collection_count=maximum_collection_count)
+                   maximum_bench_count=maximum_bench_count, maximum_collection_count=maximum_collection_count,
+                   gateway=gateway, gateway_port=gateway_port, gateway_pagination=gateway_pagination)
 
     def __str__(self):
         return f"{self.id}, {self.name}, {self.location.id}, {self.protocol.id}, {self.web_root}, \
@@ -119,7 +129,8 @@ class Environment(models.Model):
                 {self.maximum_initial_rows}, {self.minimum_initial_rows}, \
                 {self.maximum_rest_columns}, {self.minimum_rest_columns}, \
                 {self.maximum_rest_rows}, {self.minimum_rest_rows}, \
-                {self.maximum_bench_count}, {self.maximum_collection_count}"
+                {self.maximum_bench_count}, {self.maximum_collection_count}, {self.gateway.id}, \
+                {self.gateway_port}, {self.gateway_pagination}"
 
     def __repr__(self):
         return f"{self.id}, {self.name}, {self.location.id}, {self.protocol.id}, {self.web_root}, \
@@ -131,7 +142,8 @@ class Environment(models.Model):
                 {self.maximum_initial_rows}, {self.minimum_initial_rows}, \
                 {self.maximum_rest_columns}, {self.minimum_rest_columns}, \
                 {self.maximum_rest_rows}, {self.minimum_rest_rows}, \
-                {self.maximum_bench_count}, {self.maximum_collection_count}"
+                {self.maximum_bench_count}, {self.maximum_collection_count}, {self.gateway.id}, \
+                #{self.gateway_port}, {self.gateway_pagination}"
 
     def get_full_web_root(self):
         return self.protocol.name + '://' + self.web_root
@@ -172,6 +184,18 @@ class Environment(models.Model):
         else:
             return False
 
+    def is_blitz_gateway(self):
+        if self.gateway.name == ENVIRONMENT_GATEWAY_BLITZ:
+            return True
+        else:
+            return False
+
+    def is_web_gateway(self):
+        if self.gateway.name == ENVIRONMENT_GATEWAY_WEB:
+            return True
+        else:
+            return False
+
     def is_wordpress_active(self):
         if self.wordpress_active is True:
             return True
@@ -184,9 +208,9 @@ class Environment(models.Model):
     def set_date_format(self, a_date_format):
         self.date_format = a_date_format
 
-    """
-        Get a Blog Post from Wordpress
-    """
+    #
+    #   Get a Blog Post from Wordpress
+    #
     def get_a_post_from_wordpress(self, post_id):
 
         Credential = apps.get_model('matrices', 'Credential')
@@ -268,9 +292,9 @@ class Environment(models.Model):
 
         return post
 
-    """
-        Post a Blog Post to Wordpress
-    """
+    #
+    #   Post a Blog Post to Wordpress
+    #
     def get_a_post_comments_from_wordpress(self, post_id):
 
         Credential = apps.get_model('matrices', 'Credential')
@@ -359,9 +383,9 @@ class Environment(models.Model):
 
         return comment_list
 
-    """
-        Post a Blog Post to WORDPRESS
-    """
+    #
+    #   Post a Blog Post to WORDPRESS
+    #
     def post_a_post_to_wordpress(self, credential, title, content):
 
         Blog = apps.get_model('matrices', 'Blog')
@@ -430,9 +454,9 @@ class Environment(models.Model):
 
         return post
 
-    """
-        Post a Comment to a Blog Post WORDPRESS
-    """
+    #
+    #   Post a Comment to a Blog Post WORDPRESS
+    #
     def post_a_comment_to_wordpress(self, credential, post_id, content):
 
         Blog = apps.get_model('matrices', 'Blog')
@@ -496,9 +520,9 @@ class Environment(models.Model):
 
         return comment
 
-    """
-        Delete a Blog Post from WORDPRESS
-    """
+    #
+    #   Delete a Blog Post from WORDPRESS
+    #
     def delete_a_post_from_wordpress(self, credential, post_id):
 
         Blog = apps.get_model('matrices', 'Blog')
@@ -539,9 +563,9 @@ class Environment(models.Model):
 
         return response
 
-    """
-        Get the Blog Link Post URL
-    """
+    #
+    #   Get the Blog Link Post URL
+    #
     def get_a_link_url_to_post(self):
 
         Blog = apps.get_model('matrices', 'Blog')

@@ -887,7 +887,7 @@ class Server(models.Model):
     #
     #   Get the JSON Details for the Requested Server via the Blitz Gateway
     #
-    def get_imaging_server_json_blitz(self):
+    def get_imaging_server_json_blitz(self, gateway_port):
 
         conn = None
 
@@ -895,7 +895,7 @@ class Server(models.Model):
         byte_password = cipher.decrypt(self.pwd)
         password = byte_password.decode('utf-8')
 
-        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=gateway_port, secure=True)
         conn.connect()
 
         groupCount = 0
@@ -1218,7 +1218,7 @@ class Server(models.Model):
     #
     #   Get the JSON Details for the Requested Group via the Blitz Gateway
     #
-    def get_imaging_server_group_json_blitz(self, group_id):
+    def get_imaging_server_group_json_blitz(self, group_id, gateway_port):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1230,7 +1230,7 @@ class Server(models.Model):
         byte_password = cipher.decrypt(self.pwd)
         password = byte_password.decode('utf-8')
 
-        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=gateway_port, secure=True)
         conn.connect()
 
         project_list = list()
@@ -1540,6 +1540,10 @@ class Server(models.Model):
 
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
 
+        dataset_list = list()
+
+        dataset_count = 0
+
         conn = None
 
         cipher = AESCipher(config('CPW_CIPHER_STRING'))
@@ -1549,73 +1553,84 @@ class Server(models.Model):
         conn = BlitzGateway(self.uid, password, host=self.url_server, port=gateway_port, secure=True)
         conn.connect()
 
-        group = ({
-            'id': str(conn.getEventContext().groupId),
-            'name': str(conn.getEventContext().groupName)
-        })
-
         limit_str = str(pagination_amt)
         offset = pagination_amt * (int(page_id) - 1)
         offset_str = str(offset)
 
         project_ome = conn.getObject("Project", str(project_id))
 
-        datasets_ome = project_ome.listChildren()
+        if project_ome is None:
 
-        datasets_ome_count = 0
-
-        for dataset_ome in datasets_ome:
-
-            datasets_ome_count = datasets_ome_count + 1
-
-        dataset_list = list()
-
-        dataset_count = 0
-
-        datasets_ome = conn.getObjects("Dataset", opts={'project': str(project_id),
-                                                        'order_by': 'lower(obj.name)',
-                                                        'limit': limit_str,
-                                                        'offset': offset_str})
-
-        for dataset_ome in datasets_ome:
-
-            dataset_id = dataset_ome.getId()
-            datasetName = dataset_ome.getName()
-
-            randImageIndex = 0
-            imageCount = 0
-
-            for image_ome in dataset_ome.listChildren():
-
-                if imageCount == randImageIndex:
-
-                    randImageID = str(image_ome.getId())
-                    randImageName = str(image_ome.getName())
-
-                imageCount = imageCount + 1
-
-            randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
-                commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + \
-                '/' + commandBirdsEye.postamble
-
-            dataset = ({
-                'id': dataset_id,
-                'name': datasetName,
-                'imageCount': str(imageCount),
-                'randomImageID': randImageID,
-                'randomImageName': randImageName,
-                'randomImageBEURL': randomImageBEURL
+            group = ({
+                'id': '',
+                'name': ''
             })
 
-            dataset_count = dataset_count + 1
+            project = ({
+                'id': project_id,
+                'name': "ERROR",
+                'datasetCount': 0,
+            })
 
-            dataset_list.append(dataset)
+        else:
 
-        project = ({
-            'id': project_ome.getId(),
-            'name': project_ome.getName(),
-            'datasetCount': str(datasets_ome_count)
-        })
+            group = ({
+                'id': str(conn.getEventContext().groupId),
+                'name': str(conn.getEventContext().groupName)
+            })
+
+            datasets_ome = project_ome.listChildren()
+
+            datasets_ome_count = 0
+
+            for dataset_ome in datasets_ome:
+
+                datasets_ome_count = datasets_ome_count + 1
+
+            datasets_ome = conn.getObjects("Dataset", opts={'project': str(project_id),
+                                                            'order_by': 'lower(obj.name)',
+                                                            'limit': limit_str,
+                                                            'offset': offset_str})
+
+            for dataset_ome in datasets_ome:
+
+                dataset_id = dataset_ome.getId()
+                datasetName = dataset_ome.getName()
+
+                randImageIndex = 0
+                imageCount = 0
+
+                for image_ome in dataset_ome.listChildren():
+
+                    if imageCount == randImageIndex:
+
+                        randImageID = str(image_ome.getId())
+                        randImageName = str(image_ome.getName())
+
+                    imageCount = imageCount + 1
+
+                randomImageBEURL = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                    commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(randImageID) + \
+                    '/' + commandBirdsEye.postamble
+
+                dataset = ({
+                    'id': dataset_id,
+                    'name': datasetName,
+                    'imageCount': str(imageCount),
+                    'randomImageID': randImageID,
+                    'randomImageName': randImageName,
+                    'randomImageBEURL': randomImageBEURL
+                })
+
+                dataset_count = dataset_count + 1
+
+                dataset_list.append(dataset)
+
+            project = ({
+                'id': project_ome.getId(),
+                'name': project_ome.getName(),
+                'datasetCount': str(datasets_ome_count)
+            })
 
         conn.close()
 
@@ -1887,7 +1902,7 @@ class Server(models.Model):
     #
     #   Get the JSON Details for the Requested Dataset via the Blitz Gateway
     #
-    def get_imaging_server_dataset_json_blitz(self, dataset_id, filter):
+    def get_imaging_server_dataset_json_blitz(self, dataset_id, filter, gateway_port):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -1904,13 +1919,19 @@ class Server(models.Model):
         commandThumbnail = Command.objects.filter(type=self.type).get(name=CMD_API_THUMBNAIL)
         commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
 
+        projects_list = list()
+        images_list = list()
+
+        filteredImageCount = 0
+        unfilteredImageCount = 0
+
         conn = None
 
         cipher = AESCipher(config('CPW_CIPHER_STRING'))
         byte_password = cipher.decrypt(self.pwd)
         password = byte_password.decode('utf-8')
 
-        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=gateway_port, secure=True)
         conn.connect()
 
         group = ({
@@ -1920,74 +1941,90 @@ class Server(models.Model):
 
         dataset_ome = conn.getObject("Dataset", str(dataset_id))
 
-        projects_list = list()
+        if dataset_ome is None:
 
-        project_ome = dataset_ome.getParent()
-
-        project = ({
-            'id': project_ome.getId(),
-            'name': project_ome.getName()
-        })
-
-        projects_list.append(project)
-
-        filteredImageCount = 0
-        unfilteredImageCount = 0
-
-        images_list = list()
-
-        for image_ome in dataset_ome.listChildren():
-
-            image_id = str(image_ome.getId())
-            image_name = str(image_ome.getName())
-
-            if userid == "":
-
-                image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
-                    commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
-
-            else:
-
-                image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
-                    commandViewer.application + '/' + commandViewer.preamble + image_id
-
-            image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
-                commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + \
-                commandBirdsEye.postamble
-
-            image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + \
-                commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
-
-            image = ({
-                'id': image_id,
-                'name': image_name,
-                'viewer_url': image_viewer_url,
-                'birdseye_url': image_birdseye_url,
-                'thumbnail_url': image_thumbnail_url
+            group = ({
+                'id': 0,
+                'name': '',
             })
 
-            unfilteredImageCount = unfilteredImageCount + 1
+            project = ({
+                'id': 0,
+                'name': '',
+                'datasetCount': 0,
+            })
 
-            if filter is True:
+            projects_list.append(project)
 
-                substring1 = "[macro image]"
-                substring2 = "[macro mask image]"
+            dataset = ({
+                'id': dataset_id,
+                'name': "ERROR",
+                'imageCount': 0
+            })
 
-                if substring1 not in image_name and substring2 not in image_name:
+        else:
 
-                    filteredImageCount = filteredImageCount + 1
+            project_ome = dataset_ome.getParent()
+
+            project = ({
+                'id': project_ome.getId(),
+                'name': project_ome.getName()
+            })
+
+            projects_list.append(project)
+
+            for image_ome in dataset_ome.listChildren():
+
+                image_id = str(image_ome.getId())
+                image_name = str(image_ome.getName())
+
+                if userid == "":
+
+                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                        commandViewer.application + '/' + commandViewer.preamble + '/' + image_id
+
+                else:
+
+                    image_viewer_url = commandViewer.protocol.name + '://' + self.url_server + '/' + \
+                        commandViewer.application + '/' + commandViewer.preamble + image_id
+
+                image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+                    commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + image_id + '/' + \
+                    commandBirdsEye.postamble
+
+                image_thumbnail_url = commandThumbnail.protocol.name + '://' + self.url_server + '/' + \
+                    commandThumbnail.application + '/' + commandThumbnail.preamble + '/' + image_id
+
+                image = ({
+                    'id': image_id,
+                    'name': image_name,
+                    'viewer_url': image_viewer_url,
+                    'birdseye_url': image_birdseye_url,
+                    'thumbnail_url': image_thumbnail_url
+                })
+
+                unfilteredImageCount = unfilteredImageCount + 1
+
+                if filter is True:
+
+                    substring1 = "[macro image]"
+                    substring2 = "[macro mask image]"
+
+                    if substring1 not in image_name and substring2 not in image_name:
+
+                        filteredImageCount = filteredImageCount + 1
+
+                        images_list.append(image)
+
+                else:
 
                     images_list.append(image)
 
-            else:
-
-                images_list.append(image)
-
-        dataset = ({
-            'id': dataset_ome.getId(),
-            'name': dataset_ome.getName(),
-            'imageCount': str(unfilteredImageCount)
-        })
+            dataset = ({
+                'id': dataset_ome.getId(),
+                'name': dataset_ome.getName(),
+                'imageCount': str(unfilteredImageCount)
+            })
 
         conn.close()
 
@@ -2453,7 +2490,7 @@ class Server(models.Model):
     #
     #   Get the JSON Details for the Requested Image via the Blitz Gateway
     #
-    def get_imaging_server_image_json_blitz(self, image_id):
+    def get_imaging_server_image_json_blitz(self, image_id, gateway_port):
 
         Command = apps.get_model('matrices', 'Command')
 
@@ -2491,188 +2528,224 @@ class Server(models.Model):
             commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + \
             commandBirdsEye.postamble
 
+        datasets_list = list()
+        projects_list = list()
+        roi_list = list()
+        tag_list = list()
+
         conn = None
 
         cipher = AESCipher(config('CPW_CIPHER_STRING'))
         byte_password = cipher.decrypt(self.pwd)
         password = byte_password.decode('utf-8')
 
-        conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
+        conn = BlitzGateway(self.uid, password, host=self.url_server, port=gateway_port, secure=True)
         conn.connect()
 
         image_ome = conn.getObject("Image", int(image_id))
 
-        image = ({
-            'id': image_id,
-            'name': str(image_ome.getName()),
-            'description': str(image_ome.getDescription()),
-            'sizeX': image_ome.getSizeX(),
-            'sizeY': image_ome.getSizeY(),
-            'pixeltype': '',
-            'pixelsizeX': image_ome.getPixelSizeX(),
-            'pixelsizeY': image_ome.getPixelSizeY(),
-            'sizeZ': image_ome.getSizeZ(),
-            'sizeT': image_ome.getSizeT(),
-            'roi_count': 0,
-            'viewer_url': image_viewer_url,
-            'birdseye_url': image_birdseye_url
-        })
+        if image_ome is None:
 
-        group = ({
-            'id': image_ome.getDetails().getGroup().getId(),
-            'name': image_ome.getDetails().getGroup().getName()
-        })
-
-        datasets_list = list()
-
-        dataset_ome = image_ome.getParent()
-
-        dataset = ({
-            'id': dataset_ome.getId(),
-            'name': dataset_ome.getName()
-        })
-
-        datasets_list.append(dataset)
-
-        projects_list = list()
-
-        project_ome = dataset_ome.getParent()
-
-        project = ({
-            'id': project_ome.getId(),
-            'name': project_ome.getName()
-        })
-
-        projects_list.append(project)
-
-        tag_list = list()
-
-        for tag in image_ome.listAnnotations():
-
-            tag_list.append(str(tag.getTextValue()))
-
-        roi_service = conn.getRoiService()
-        result = roi_service.findByImage(image_ome.getId(), None)
-
-        roi_list = list()
-
-        for roi in result.rois:
-
-            roi_id = roi.getId().getValue()
-
-            shape_list = list()
-
-            for s in roi.copyShapes():
-
-                shape_id = s.getId().getValue()
-
-                type = ''
-                coordX = ''
-                coordY = ''
-                centreX = ''
-                centreY = ''
-                width = '0'
-                height = '0'
-
-                if isinstance(s, omero.model.RectangleI):
-
-                    type = 'Rectangle'
-
-                    centreX = s.getX().getValue()
-                    centreY = s.getY().getValue()
-                    intCoordX = int(s.getX().getValue())
-                    intCoordY = int(s.getY().getValue())
-                    intWidth = int(s.getWidth().getValue())
-                    intHeight = int(s.getHeight().getValue())
-
-                    coordX = str(intCoordX)
-                    coordY = str(intCoordY)
-                    width = str(intWidth)
-                    height = str(intHeight)
-
-                elif isinstance(s, omero.model.EllipseI):
-
-                    type = 'Ellipse'
-
-                    centreX = s.getX().getValue()
-                    centreY = s.getY().getValue()
-                    oldCoordX = s.getX().getValue()
-                    oldCoordY = s.getY().getValue()
-                    radiusX = s.getRadiusX().getValue()
-                    radiusY = s.getRadiusY().getValue()
-
-                    intX = int(oldCoordX)
-                    intY = int(oldCoordY)
-                    intRadiusX = int(radiusX)
-                    intRadiusY = int(radiusY)
-                    intWidth = intRadiusX * 2
-                    intHeight = intRadiusY * 2
-                    intCoordX = intX - intRadiusX
-                    intCoordY = intY - intRadiusY
-
-                    coordX = str(intCoordX)
-                    coordY = str(intCoordY)
-                    width = str(intWidth)
-                    height = str(intHeight)
-
-                elif isinstance(s, omero.model.PointI):
-
-                    type = 'Point'
-
-                    centreX = s.getX().getValue()
-                    centreY = s.getY().getValue()
-                    intCoordX = int(s.getX().getValue())
-                    intCoordY = int(s.getY().getValue())
-                    intHalf = 3192 / 2
-                    intWidth = intHalf
-                    intHeight = intHalf
-
-                    intNewCoordX = intCoordX - intWidth
-                    intNewCoordY = intCoordY - intHeight
-
-                    coordX = str(intNewCoordX)
-                    coordY = str(intNewCoordY)
-                    width = str(3192)
-                    height = str(3192)
-
-                if int(width) > 3192 or int(height) > 3192:
-
-                    middleX = int(coordX) + (int(width)/2)
-                    middleY = int(coordY) + (int(height)/2)
-
-                    intX = middleX - (3192/2)
-                    intY = middleY - (3192/2)
-
-                    coordX = str(int(intX))
-                    coordY = str(int(intY))
-
-                    width = "3192"
-                    height = "3192"
-
-                shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
-                viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
-
-                shape = ({
-                    'id': shape_id,
-                    'type': type,
-                    'shape_url': shape_url,
-                    'viewer_url': viewer_url,
-                    'x': coordX,
-                    'y': coordY,
-                    'centre_x': centreX,
-                    'centre_y': centreY,
-                    'width': width,
-                    'height': height
-                })
-
-                shape_list.append(shape)
-
-            roi = ({
-                'id': roi_id,
-                'shapes': shape_list
+            image = ({
+                'id': image_id,
+                'name': "ERROR",
+                'description': '',
+                'sizeX': 0,
+                'sizeY': 0,
+                'pixeltype': '',
+                'pixelsizeX': 0,
+                'pixelsizeY': 0,
+                'sizeZ': 0,
+                'sizeT': 0,
+                'roi_count': 0,
+                'viewer_url': '',
+                'birdseye_url': ''
             })
 
-            roi_list.append(roi)
+            group = ({
+                'id': '',
+                'name': ''
+            })
+
+            dataset = ({
+                'id': '',
+                'name': ''
+            })
+
+            datasets_list.append(dataset)
+
+            project = ({
+                'id': '',
+                'name': ''
+            })
+
+            projects_list.append(project)
+
+        else:
+
+            image = ({
+                'id': image_id,
+                'name': str(image_ome.getName()),
+                'description': str(image_ome.getDescription()),
+                'sizeX': image_ome.getSizeX(),
+                'sizeY': image_ome.getSizeY(),
+                'pixeltype': '',
+                'pixelsizeX': image_ome.getPixelSizeX(),
+                'pixelsizeY': image_ome.getPixelSizeY(),
+                'sizeZ': image_ome.getSizeZ(),
+                'sizeT': image_ome.getSizeT(),
+                'roi_count': 0,
+                'viewer_url': image_viewer_url,
+                'birdseye_url': image_birdseye_url
+            })
+
+            group = ({
+                'id': image_ome.getDetails().getGroup().getId(),
+                'name': image_ome.getDetails().getGroup().getName()
+            })
+
+            dataset_ome = image_ome.getParent()
+
+            dataset = ({
+                'id': dataset_ome.getId(),
+                'name': dataset_ome.getName()
+            })
+
+            datasets_list.append(dataset)
+
+            project_ome = dataset_ome.getParent()
+
+            project = ({
+                'id': project_ome.getId(),
+                'name': project_ome.getName()
+            })
+
+            projects_list.append(project)
+
+            for tag in image_ome.listAnnotations():
+
+                tag_list.append(str(tag.getTextValue()))
+
+            roi_service = conn.getRoiService()
+            result = roi_service.findByImage(image_ome.getId(), None)
+
+            for roi in result.rois:
+
+                roi_id = roi.getId().getValue()
+
+                shape_list = list()
+
+                for s in roi.copyShapes():
+
+                    shape_id = s.getId().getValue()
+
+                    type = ''
+                    coordX = ''
+                    coordY = ''
+                    centreX = ''
+                    centreY = ''
+                    width = '0'
+                    height = '0'
+
+                    if isinstance(s, omero.model.RectangleI):
+
+                        type = 'Rectangle'
+
+                        centreX = s.getX().getValue()
+                        centreY = s.getY().getValue()
+                        intCoordX = int(s.getX().getValue())
+                        intCoordY = int(s.getY().getValue())
+                        intWidth = int(s.getWidth().getValue())
+                        intHeight = int(s.getHeight().getValue())
+
+                        coordX = str(intCoordX)
+                        coordY = str(intCoordY)
+                        width = str(intWidth)
+                        height = str(intHeight)
+
+                    elif isinstance(s, omero.model.EllipseI):
+
+                        type = 'Ellipse'
+
+                        centreX = s.getX().getValue()
+                        centreY = s.getY().getValue()
+                        oldCoordX = s.getX().getValue()
+                        oldCoordY = s.getY().getValue()
+                        radiusX = s.getRadiusX().getValue()
+                        radiusY = s.getRadiusY().getValue()
+
+                        intX = int(oldCoordX)
+                        intY = int(oldCoordY)
+                        intRadiusX = int(radiusX)
+                        intRadiusY = int(radiusY)
+                        intWidth = intRadiusX * 2
+                        intHeight = intRadiusY * 2
+                        intCoordX = intX - intRadiusX
+                        intCoordY = intY - intRadiusY
+
+                        coordX = str(intCoordX)
+                        coordY = str(intCoordY)
+                        width = str(intWidth)
+                        height = str(intHeight)
+
+                    elif isinstance(s, omero.model.PointI):
+
+                        type = 'Point'
+
+                        centreX = s.getX().getValue()
+                        centreY = s.getY().getValue()
+                        intCoordX = int(s.getX().getValue())
+                        intCoordY = int(s.getY().getValue())
+                        intHalf = 3192 / 2
+                        intWidth = intHalf
+                        intHeight = intHalf
+
+                        intNewCoordX = intCoordX - intWidth
+                        intNewCoordY = intCoordY - intHeight
+
+                        coordX = str(intNewCoordX)
+                        coordY = str(intNewCoordY)
+                        width = str(3192)
+                        height = str(3192)
+
+                    if int(width) > 3192 or int(height) > 3192:
+
+                        middleX = int(coordX) + (int(width)/2)
+                        middleY = int(coordY) + (int(height)/2)
+
+                        intX = middleX - (3192/2)
+                        intY = middleY - (3192/2)
+
+                        coordX = str(int(intX))
+                        coordY = str(int(intY))
+
+                        width = "3192"
+                        height = "3192"
+
+                    shape_url = image_region_url + coordX + ',' + coordY + ',' + width + ',' + height
+                    viewer_url = image_viewer_url + '&X=' + str(centreX) + '&Y=' + str(centreY) + '&ZM=25'
+
+                    shape = ({
+                        'id': shape_id,
+                        'type': type,
+                        'shape_url': shape_url,
+                        'viewer_url': viewer_url,
+                        'x': coordX,
+                        'y': coordY,
+                        'centre_x': centreX,
+                        'centre_y': centreY,
+                        'width': width,
+                        'height': height
+                    })
+
+                    shape_list.append(shape)
+
+                roi = ({
+                    'id': roi_id,
+                    'shapes': shape_list
+                })
+
+                roi_list.append(roi)
 
         conn.close()
 

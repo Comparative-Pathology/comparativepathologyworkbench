@@ -81,7 +81,9 @@ def show_dataset_filtered(request, server_id, dataset_id):
 
                 if environment.is_blitz_gateway():
 
-                    server_data = server.get_imaging_server_dataset_json_blitz(dataset_id, True)
+                    server_data = server.get_imaging_server_dataset_json_blitz(dataset_id,
+                                                                               True,
+                                                                               environment.gateway_port)
 
             data.update(server_data)
 

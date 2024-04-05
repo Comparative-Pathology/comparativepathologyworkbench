@@ -79,7 +79,8 @@ def convert_url_omero_to_cpw(request, a_url):
 
                             if environment.is_blitz_gateway():
 
-                                server_data = server.get_imaging_server_image_json_blitz(str(query_id))
+                                server_data = server.get_imaging_server_image_json_blitz(str(query_id),
+                                                                                         environment.gateway_port)
 
                         image = server_data["image"]
 
@@ -100,7 +101,9 @@ def convert_url_omero_to_cpw(request, a_url):
 
                             if environment.is_blitz_gateway():
 
-                                server_data = server.get_imaging_server_dataset_json_json_blitz(query_id, False)
+                                server_data = server.get_imaging_server_dataset_json_blitz(query_id,
+                                                                                           False,
+                                                                                           environment.gateway_port)
 
                         dataset = server_data["dataset"]
 
@@ -115,13 +118,18 @@ def convert_url_omero_to_cpw(request, a_url):
 
                         if environment.is_web_gateway() or server.is_idr():
 
-                            server_data = server.get_imaging_server_project_json(query_id, False)
+                            server_data = server.get_imaging_server_project_json(query_id,
+                                                                                 1,
+                                                                                 environment.gateway_pagination)
 
                         else:
 
                             if environment.is_blitz_gateway():
 
-                                server_data = server.get_imaging_server_project_json_blitz(query_id, False)
+                                server_data = server.get_imaging_server_project_json_blitz(query_id,
+                                                                                 1,
+                                                                                 environment.gateway_pagination,
+                                                                                 environment.gateway_port)
 
                         project = server_data["project"]
 
@@ -157,7 +165,7 @@ def convert_url_omero_to_cpw(request, a_url):
                 if query_type == "project":
 
                     url_start = protocol + "://" + host
-                    url_end = "/show_project/" + str(first_server.id) + "/" + query_id
+                    url_end = "/show_project/" + str(first_server.id) + "/" + query_id + "/1/"
                     url_string_out = url_start + url_end
 
     return url_string_out

@@ -97,7 +97,8 @@ def edit_image(request, image_id):
 
                 if environment.is_blitz_gateway():
 
-                    server_data = server.get_imaging_server_image_json_blitz(local_image.identifier)
+                    server_data = server.get_imaging_server_image_json_blitz(local_image.identifier,
+                                                                             environment.gateway_port)
 
             data.update(server_data)
 

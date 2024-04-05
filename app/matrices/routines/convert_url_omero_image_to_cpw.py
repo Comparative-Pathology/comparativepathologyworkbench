@@ -79,7 +79,8 @@ def convert_url_omero_image_to_cpw(request, a_url):
 
                             if environment.is_blitz_gateway():
 
-                                server_data = server.get_imaging_server_image_json_blitz(str(query_id))
+                                server_data = server.get_imaging_server_image_json_blitz(str(query_id),
+                                                                                         environment.gateway_port)
 
                         image = server_data["image"]
 

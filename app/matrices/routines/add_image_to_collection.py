@@ -151,7 +151,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
             if environment.is_blitz_gateway():
 
-                wp_data = server.get_imaging_server_image_json_blitz(image_id)
+                wp_data = server.get_imaging_server_image_json_blitz(image_id, environment.gateway_port)
 
                 group = wp_data['group']
                 group_name = group['name']
@@ -182,7 +182,12 @@ def add_image_to_collection(credential, server, image_id, roi_id):
                 byte_password = cipher.decrypt(server.pwd)
                 password = byte_password.decode('utf-8')
 
-                conn = BlitzGateway(server.uid, password, host=server.url_server, port=4064, secure=True)
+                conn = BlitzGateway(server.uid,
+                                    password,
+                                    host=server.url_server,
+                                    port=environment.gateway_port,
+                                    secure=True)
+                
                 conn.connect()
 
                 image_ome = conn.getObject("Image", str(image_id))

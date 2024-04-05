@@ -69,7 +69,7 @@ def show_group(request, server_id, group_id):
 
                 if environment.is_blitz_gateway():
 
-                    server_data = server.get_imaging_server_group_json_blitz(group_id)
+                    server_data = server.get_imaging_server_group_json_blitz(group_id, environment.gateway_port)
 
             data.update(server_data)
 

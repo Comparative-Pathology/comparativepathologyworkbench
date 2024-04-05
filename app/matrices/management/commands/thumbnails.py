@@ -104,7 +104,12 @@ class Command(BaseCommand):
                 byte_password = cipher.decrypt(server.pwd)
                 password = byte_password.decode('utf-8')
 
-                conn = BlitzGateway(server.uid, password, host=server.url_server, port=4064, secure=True)
+                conn = BlitzGateway(server.uid,
+                                    password,
+                                    host=server.url_server,
+                                    port=environment.gateway_port,
+                                    secure=True)
+
                 conn.connect()
 
                 image_list = get_images_for_server(server)

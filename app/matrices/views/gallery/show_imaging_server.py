@@ -75,7 +75,7 @@ def show_imaging_server(request, server_id):
 
                     if environment.is_blitz_gateway():
 
-                        server_data = server.get_imaging_server_json_blitz()
+                        server_data = server.get_imaging_server_json_blitz(environment.gateway_port)
 
                 data.update(server_data)
 

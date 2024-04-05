@@ -91,7 +91,8 @@ def show_image(request, server_id, image_id):
 
                 if environment.is_blitz_gateway():
 
-                    server_data = server.get_imaging_server_image_json_blitz(image_id)
+                    server_data = server.get_imaging_server_image_json_blitz(image_id,
+                                                                             environment.gateway_port)
 
             data.update(server_data)
 

@@ -1711,11 +1711,11 @@ class Server(models.Model):
         session = requests.Session()
 
         if self.id == 33:
-        
+
             session.verify = False
-        
+
         else:
-        
+
             session.verify = True
 
         try:
@@ -2481,10 +2481,15 @@ class Server(models.Model):
                 commandViewer.application + '/' + commandViewer.preamble + str(image_id)
 
         commandRegion = Command.objects.filter(type=self.type).get(name=CMD_API_REGION)
+        commandBirdsEye = Command.objects.filter(type=self.type).get(name=CMD_API_BIRDS_EYE)
 
         image_region_url = commandRegion.protocol.name + '://' + self.url_server + '/' + \
             commandRegion.application + '/' + commandRegion.preamble + '/' + \
             str(image_id) + '/' + commandRegion.postamble
+
+        image_birdseye_url = commandBirdsEye.protocol.name + '://' + self.url_server + '/' + \
+            commandBirdsEye.application + '/' + commandBirdsEye.preamble + '/' + str(image_id) + '/' + \
+            commandBirdsEye.postamble
 
         conn = None
 
@@ -2495,7 +2500,7 @@ class Server(models.Model):
         conn = BlitzGateway(self.uid, password, host=self.url_server, port=4064, secure=True)
         conn.connect()
 
-        image_ome = conn.getObject("Image", str(image_id))
+        image_ome = conn.getObject("Image", int(image_id))
 
         image = ({
             'id': image_id,
@@ -2509,8 +2514,8 @@ class Server(models.Model):
             'sizeZ': image_ome.getSizeZ(),
             'sizeT': image_ome.getSizeT(),
             'roi_count': 0,
-            'viewer_url': '',
-            'birdseye_url': ''
+            'viewer_url': image_viewer_url,
+            'birdseye_url': image_birdseye_url
         })
 
         group = ({
@@ -2547,7 +2552,7 @@ class Server(models.Model):
             tag_list.append(str(tag.getTextValue()))
 
         roi_service = conn.getRoiService()
-        result = roi_service.findByImage(image_id, None)
+        result = roi_service.findByImage(image_ome.getId(), None)
 
         roi_list = list()
 

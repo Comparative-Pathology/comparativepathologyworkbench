@@ -28,25 +28,20 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from django.db.models import Q
-
-from django.apps import apps
-
 from urllib.parse import urlparse
 
 from matrices.routines.exists_server_for_url import exists_server_for_url
 from matrices.routines.get_server_list_for_url import get_server_list_for_url
 from matrices.routines.validate_an_omero_image_url import validate_an_omero_image_url
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
-"""
-    Try to convert an OMERO URL to a CPW Equivalent?
-"""
+#
+#   Try to convert an OMERO URL to a CPW Equivalent?
+#
 def convert_url_omero_image_to_cpw(request, a_url):
+
+    environment = get_primary_cpw_environment()
 
     url_string_out = ""
 
@@ -74,7 +69,17 @@ def convert_url_omero_image_to_cpw(request, a_url):
 
                     if query_type == "image":
 
-                        server_data = server.get_imaging_server_image_json(query_id)
+                        server_data = {}
+
+                        if environment.is_web_gateway() or server.is_idr():
+
+                            server_data = server.get_imaging_server_image_json(query_id)
+
+                        else:
+
+                            if environment.is_blitz_gateway():
+
+                                server_data = server.get_imaging_server_image_json_blitz(str(query_id))
 
                         image = server_data["image"]
 

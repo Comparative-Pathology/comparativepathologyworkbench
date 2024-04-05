@@ -66,7 +66,10 @@ def show_image(request, server_id, image_id):
 
             image_flag = True
 
-        data.update({'image_flag': image_flag, 'add_from': "show_image"})
+        data.update({
+            'image_flag': image_flag,
+            'add_from': "show_image"
+        })
 
         server = get_object_or_404(Server, pk=server_id)
 
@@ -92,7 +95,9 @@ def show_image(request, server_id, image_id):
 
             data.update(server_data)
 
-            data.update({'local_image': local_image})
+            data.update({
+                'local_image': local_image
+            })
 
             return render(request, 'gallery/show_image.html', data)
 

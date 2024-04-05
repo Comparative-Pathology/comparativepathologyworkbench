@@ -201,8 +201,8 @@ urlpatterns = [
     path('add_dataset_all_filtered_new_collection/<int:server_id>/<int:dataset_id>/',
          matrices_views.gallery.add_dataset_all_filtered_new_collection,
          name='webgallery_add_dataset_all_filtered_new_collection'),
-    path('add_image/<int:server_id>/<int:image_id>/\
-         <int:roi_id>/<str:path_from>/<int:identifier>/', matrices_views.gallery.add_image,
+    path('add_image/<int:server_id>/<int:image_id>/<int:roi_id>/<str:path_from>/<int:identifier>/', 
+         matrices_views.gallery.add_image,
          name='webgallery_add_image'),
     path('add_ebi_sca_image/<int:server_id>/<str:image_id>/<str:path_from>/', matrices_views.gallery.add_ebi_sca_image,
          name='webgallery_add_ebi_sca_image'),

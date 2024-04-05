@@ -151,6 +151,29 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
             if environment.is_blitz_gateway():
 
+                wp_data = server.get_imaging_server_image_json_blitz(image_id)
+
+                group = wp_data['group']
+                group_name = group['name']
+
+                projects = wp_data['projects']
+                project = projects[0]
+                project_name = project['name']
+
+                datasets = wp_data['datasets']
+                dataset = datasets[0]
+                dataset_name = dataset['name']
+
+                json_image = wp_data['image']
+                image_name = json_image['name']
+
+                full_image_name = group_name + "/" + project_name + "/" + dataset_name + "/" + image_name
+
+                image_viewer_url = json_image['viewer_url']
+                image_birdseye_url = ''
+
+                image_birdseye_url = json_image['birdseye_url']
+
                 password = ''
 
                 conn = None

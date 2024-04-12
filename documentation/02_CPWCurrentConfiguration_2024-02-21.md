@@ -1,13 +1,13 @@
-#Current Production/CZI CPW Configuration#
+#	Current Production/CZI CPW Configuration	#
 
-##1. Server##
+## 1. Server ##
 
 The system runs using a non-root user, without superuser privileges:
 
 ***"ehgcap"*** on the Server **workbench-czi-cpw.mvm.ed.ac.uk**
 
 
-###Folder Aliases###
+### Folder Aliases ###
 
 There are a number of foder aliases required by the system:
 
@@ -18,13 +18,13 @@ There are a number of foder aliases required by the system:
 3. **/opt/private_media** points to **/home/ehgcap/WWW/private_media**
 
 
-###Static Web Pages##
+### Static Web Pages ###
 
 This system has a set of Static pages which live here:
 
 - **/home/ehgcap/WWW/html/about-cpw**
 
-##2. Webserver (NGINX)##
+## 2. Webserver (NGINX) ##
 
 The NGINX Configuration File lives here: **/etc/nginx/conf.d/czi-ws.conf**
 
@@ -40,7 +40,7 @@ The configuration file contains the following Endpoints:
 
 - **/** points to **/opt/cpw/uwsgi_params**, uwsgi_pass Django
 
-###CPW Application Home Directories###
+### CPW Application Home Directories ###
 
 The CPW is a Django Application and has the following folders
 
@@ -56,11 +56,11 @@ Note the following Softlink:
 
 **/home/ehgcap/Django/comparativepathologyworkbench/app/media** points to **/home/ehgcap/WWW/media**
 
-##3. Database Connection##
+## 3. Database Connection ##
 
 This can be achieved Directly within an Environment File, or via a Connection Service File with a Password File
 
-###A. Environment Variables###
+### A. Environment Variables ###
 
 The Environment file lives here:
 
@@ -91,7 +91,7 @@ These variables are picked up in the python file, **settings.py**, thus:
 	}
 
 
-###B. Connection Service File###
+### B. Connection Service File ###
 
 Alternatively, a Connection Service File with a Password File, can be used (it could be argued that this is a more secure solution).
 
@@ -111,11 +111,23 @@ An example **.pg_service.conf** file:
 	dbname=database
 	user=database_user
 
+These files are picked up in the python file, **settings.py**, thus:
+
+	DATABASES = {
+		'default': {
+			'ENGINE': config('DB_ENGINE'),
+			'ATOMIC_REQUESTS': config('DB_ATOMIC_REQUESTS'),
+			"OPTIONS": {
+				"service": "cpw_service",
+				"passfile": ".cpw_pgpass"
+			}
+		}
+	}
 
 
-##4. The CPW Application##
+## 4. The CPW Application ##
 
-###CPW Environment Record###
+### CPW Environment Record ###
 
 The CPW Environment Record contains many Global variables used by the system.  The following variables must set up correctly to ensure the correct running of the system
 

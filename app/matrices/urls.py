@@ -244,6 +244,7 @@ urlpatterns = [
     path('list_global/', matrices_views.host.list_global, name='list_global'),
     path('list_benches/', matrices_views.host.MatrixListView.as_view(), name='list_benches'),
     path('list_collections/', matrices_views.host.CollectionListView.as_view(), name='list_collections'),
+    path('list_images_simple/', matrices_views.host.ImageSimpleListView.as_view(), name='list_images_simple'),
     path('list_images/', matrices_views.host.ImageListView.as_view(), name='list_images'),
     path('list_images/<int:collection_id>/', matrices_views.host.ImageListView.as_view(), name='list_images'),
     path('list_images/<int:collection_id>/<int:tag_id>/', matrices_views.host.ImageListView.as_view(),

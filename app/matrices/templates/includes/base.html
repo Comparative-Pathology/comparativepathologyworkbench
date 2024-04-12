@@ -298,7 +298,8 @@ The base header and footer include template
                 <a href="{% url 'list_images' user.profile.active_collection.id %}"><button class="button button-delete"><i class="fa fa-bell"></i></button> Current Collection</a>
                 
     {% endif %}
-                <a href="{% url 'list_images' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images</a>
+                <a href="{% url 'list_images_simple' %}"><button class="button button-add"><i class="fa fa-earth-europe"></i></button> All Images <i class="fa fa-search"></i></a>
+                <a href="{% url 'list_images' %}"><button class="button button-info"><i class="fa fa-earth-europe"></i></button> All Images (Adv.) <i class="fa fa-search"></i></a>
 
     {% if user.username != 'guest' %}
 

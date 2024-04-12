@@ -37,11 +37,9 @@ from matrices.routines import collection_list_by_user_and_direction
 from matrices.routines import get_list_of_image_ids_for_collection_summary
 
 
-"""
-    Get All Images for a particular User
-"""
-
-
+#
+#   Get All Images for a particular User
+#
 def image_list_by_user_and_direction(a_user,
                                      a_direction,
                                      a_query_name,
@@ -2405,7 +2403,7 @@ def image_list_by_user_and_direction(a_user,
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .order_by(sort_parameter)
-         
+
             if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
                str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\

@@ -49,6 +49,7 @@ from .editconstrainedprofileform import EditConstrainedProfileForm
 from .environmentform import EnvironmentForm
 from .headerform import HeaderForm
 from .imagesummarysearchform import ImageSummarySearchForm
+from .imagesummarysimplesearchform import ImageSummarySimpleSearchForm
 from .locationform import LocationForm
 from .matrixform import MatrixForm
 from .matrixaddcellform import MatrixAddCellForm

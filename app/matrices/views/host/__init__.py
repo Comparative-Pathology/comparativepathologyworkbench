@@ -53,6 +53,7 @@ from .home import home
 from .list_collection import *
 from .list_global import list_global
 from .list_image import *
+from .list_image_simple import *
 from .list_imaging_hosts import list_imaging_hosts
 from .list_matrix import *
 from .list_bench_authorisation import list_bench_authorisation

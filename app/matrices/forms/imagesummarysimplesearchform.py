@@ -31,7 +31,7 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-PAGE_CHOICES = (('', 'Paginate By ...'),
+PAGE_CHOICES = (('10', 'Paginate By ...'),
                 ('10', '10'),
                 ('1', '1'),
                 ('5', '5'),

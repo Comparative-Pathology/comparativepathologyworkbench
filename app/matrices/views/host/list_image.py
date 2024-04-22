@@ -80,7 +80,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
     default_sort_field = 'image_name'
 
-    paginate_by = 7
+    paginate_by = 10
 
     template_name = 'host/list_images.html'
 

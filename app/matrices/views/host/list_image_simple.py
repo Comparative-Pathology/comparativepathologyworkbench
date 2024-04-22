@@ -71,7 +71,7 @@ class ImageSimpleListView(LoginRequiredMixin, SortableListView):
 
     default_sort_field = 'image_name'
 
-    paginate_by = 7
+    paginate_by = 10
 
     template_name = 'host/list_images_simple.html'
 
@@ -100,13 +100,19 @@ class ImageSimpleListView(LoginRequiredMixin, SortableListView):
             sort_parameter = self.request.GET.get('sort_field', None)
             sort_direction = self.request.GET.get('sort_direction', None)
 
-            if sort_direction == 'ascending':
+            if sort_direction is None:
 
                 sort_direction = ''
 
-            if sort_direction == 'descending':
+            else:
 
-                sort_direction = '-'
+                if sort_direction == 'ascending':
+
+                    sort_direction = ''
+
+                if sort_direction == 'descending':
+
+                    sort_direction = '-'
 
             if sort_parameter == 'name':
 
@@ -145,7 +151,7 @@ class ImageSimpleListView(LoginRequiredMixin, SortableListView):
                 sort_parameter = sort_direction + 'image_matrix_id'
 
         # Set the Pagination Parameter
-        self.query_paginate_by = self.request.GET.get('paginate_by', '')
+        self.query_paginate_by = self.request.GET.get('paginate_by', None)
 
         return image_list_by_user_and_direction(self.request.user,
                                                 sort_parameter,

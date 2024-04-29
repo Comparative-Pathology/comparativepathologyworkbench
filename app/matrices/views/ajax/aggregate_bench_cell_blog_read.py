@@ -56,18 +56,24 @@ def aggregate_bench_cell_blog_read(request, cell_id):
     htmlString = ''
     imageString = ''
 
-    introString = '<table>'\
+    introString = '<table border="0">'\
         '<tr>'\
-            '<th width="100px">Date</th>'\
-            '<th width="100px">Time</th>'\
-            '<th width="100px">Author</th>'\
-            '<th>Post</th>'\
+            '<th style="text-align: left; width: 100px;">Date</th>'\
+            '<th style="text-align: left; width: 100px;">Time</th>'\
+            '<th style="text-align: left; width: 100px;">Author</th>'\
+            '<th style="text-align: left;">Post</th>'\
         '</tr>'\
         '<tr>'\
-            '<td>' + cell_blogpost['date'] + '</td>'\
-            '<td>' + cell_blogpost['time'] + '</td>'\
-            '<td>' + cell_blogpost['author'] + '</td>'\
-            '<td>' + cell_blogpost['content'] + '</td>'\
+            '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['date'] + '</td>'\
+            '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['time'] + '</td>'\
+            '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['author'] + '</td>'\
+            '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['content'] + '</td>'\
+        '</tr>'\
+        '<tr>'\
+            '<td>&nbsp;</td>'\
+            '<td>&nbsp;</td>'\
+            '<td>&nbsp;</td>'\
+            '<td>&nbsp;</td>'\
         '</tr>'
 
     if object.image.viewer_url != '':
@@ -106,19 +112,25 @@ def aggregate_bench_cell_blog_read(request, cell_id):
                 '<td>&nbsp;</td>'\
             '</tr>'\
             '<tr>'\
-                '<th>Date</th>'\
-                '<th>Time</th>'\
-                '<th>Author</th>'\
-                '<th>Comment</th>'\
+                '<th style="text-align: left; width: 100px;">Date</th>'\
+                '<th style="text-align: left; width: 100px;">Time</th>'\
+                '<th style="text-align: left; width: 100px;">Author</th>'\
+                '<th style="text-align: left;">Comment</th>'\
             '</tr>'
 
         for comment in cell_comments['comment_list']:
 
             commentString = '<tr>'\
-                    '<td>' + str(comment['date']) + '</td>'\
-                    '<td>' + str(comment['time']) + '</td>'\
-                    '<td>' + str(comment['author_name']) + '</td>'\
-                    '<td>' + str(comment['content']) + '</td>'\
+                    '<td style="text-align: left; vertical-align: text-top;">' + str(comment['date']) + '</td>'\
+                    '<td style="text-align: left; vertical-align: text-top;">' + str(comment['time']) + '</td>'\
+                    '<td style="text-align: left; vertical-align: text-top;">' + str(comment['author_name']) + '</td>'\
+                    '<td style="text-align: left; vertical-align: text-top;">' + str(comment['content']) + '</td>'\
+                '</tr>'\
+                '<tr>'\
+                    '<td>&nbsp;</td>'\
+                    '<td>&nbsp;</td>'\
+                    '<td>&nbsp;</td>'\
+                    '<td>&nbsp;</td>'\
                 '</tr>'
             
             commentsString = commentsString + commentString
@@ -134,10 +146,10 @@ def aggregate_bench_cell_blog_read(request, cell_id):
                 '<td>&nbsp;</td>'\
             '</tr>'\
             '<tr>'\
-                '<th>Date</th>'\
-                '<th>Time</th>'\
-                '<th>Author</th>'\
-                '<th>Comment</th>'\
+                '<th style="text-align: left; width: 100px;">Date</th>'\
+                '<th style="text-align: left; width: 100px;">Time</th>'\
+                '<th style="text-align: left; width: 100px;">Author</th>'\
+                '<th style="text-align: left;">Comment</th>'\
             '</tr>'\
             '<tr>'\
                 '<td>&nbsp;</td>'\

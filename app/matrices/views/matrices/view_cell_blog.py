@@ -92,11 +92,9 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                         post_id = returned_blogpost['id']
 
-                cell.set_blogpost(post_id)
+                    cell.set_blogpost(post_id)
 
-                cell.save()
-
-                if credential.has_apppwd() and environment.is_wordpress_active():
+                    cell.save()
 
                     blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
@@ -120,15 +118,13 @@ def view_cell_blog(request, matrix_id, cell_id):
 
                             post_id = returned_blogpost['id']
 
-                    cell.set_blogpost(post_id)
+                        cell.set_blogpost(post_id)
 
-                    cell.save()
-
-                    if credential.has_apppwd() and environment.is_wordpress_active():
+                        cell.save()
 
                         blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
-                        comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
+                comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
 
         if request.method == HTTP_POST:
 
@@ -156,8 +152,14 @@ def view_cell_blog(request, matrix_id, cell_id):
 
             form = CommentForm()
 
-        data.update({'form': form, 'matrix_id': matrix_id, 'cell': cell, 'matrix': matrix, 'blogpost': blogpost,
-                     'comment_list': comment_list})
+        data.update({
+            'form': form,
+            'matrix_id': matrix_id,
+            'cell': cell,
+            'matrix': matrix,
+            'blogpost': blogpost,
+            'comment_list': comment_list
+        })
 
         return render(request, 'matrices/detail_cell_blog.html', data)
 

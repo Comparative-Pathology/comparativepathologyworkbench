@@ -92,18 +92,18 @@ The detail matrix (bench) blog template
 
 	<h5>Bench Title: "{{ matrix.title }}"</h5>
 
-	<table>
+	<table border="0">
 		<tr>
-			<th width="100px">Date</th>
-			<th width="100px">Time</th>
-			<th width="100px">Author</th>
-			<th>Post</th>
+			<th style="text-align: left; width: 100px;">Date</th>
+			<th style="text-align: left; width: 100px;">Time</th>
+			<th style="text-align: left; width: 100px;">Author</th>
+			<th style="text-align: left;">Post</th>
 		</tr>
 		<tr>
-			<td>{{ bench_blogpost.date }}</td>
-			<td>{{ bench_blogpost.time }}</td>
-			<td>{{ bench_blogpost.author }}</td>
-			<td>{{ bench_blogpost.content|safe }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_blogpost.date }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_blogpost.time }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_blogpost.author }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_blogpost.content|safe }}</td>
 		</tr>
 
 {% if bench_comment_list %}
@@ -120,19 +120,25 @@ The detail matrix (bench) blog template
 		{% if forloop.first %}
 
 		<tr>
-			<th>Date</th>
-			<th>Time</th>
-			<th>Author</th>
-			<th>Comment</th>
+			<th style="text-align: left; width: 100px;">Date</th>
+			<th style="text-align: left; width: 100px;">Time</th>
+			<th style="text-align: left; width: 100px;">Author</th>
+			<th style="text-align: left;">Comment</th>
 		</tr>
 
 		{% endif %}
 
 		<tr>
-			<td>{{ bench_comment.date }}</td>
-			<td>{{ bench_comment.time }}</td>
-			<td>{{ bench_comment.author_name }}</td>
-			<td>{{ bench_comment.content|safe }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_comment.date }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_comment.time }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_comment.author_name }}</td>
+			<td style="text-align: left; vertical-align: text-top;">{{ bench_comment.content|safe }}</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 
 	{% endfor %}
@@ -147,17 +153,23 @@ The detail matrix (bench) blog template
 		</tr>
 
 		<tr>
-			<th>Date</th>
-			<th>Time</th>
-			<th>Author</th>
-			<th>Comment</th>
+			<th style="text-align: left; width: 100px;">Date</th>
+			<th style="text-align: left; width: 100px;">Time</th>
+			<th style="text-align: left; width: 100px;">Author</th>
+			<th style="text-align: left;">Comment</th>
 		</tr>
 
 		<tr>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			<td>No Bench Comments!</td>
+			<td style="text-align: left; vertical-align: text-top;">No Bench Comments!</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 
 {% endif %}

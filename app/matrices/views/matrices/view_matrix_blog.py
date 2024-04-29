@@ -102,7 +102,7 @@ def view_matrix_blog(request, matrix_id):
 
                         blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-                        comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+                    comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
 
             else:
 
@@ -118,11 +118,9 @@ def view_matrix_blog(request, matrix_id):
 
                         post_id = returned_blogpost['id']
 
-                matrix.set_blogpost(post_id)
+                    matrix.set_blogpost(post_id)
 
-                matrix.save()
-
-                if credential.has_apppwd() and environment.is_wordpress_active():
+                    matrix.save()
 
                     blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
@@ -156,8 +154,15 @@ def view_matrix_blog(request, matrix_id):
 
             form = CommentForm()
 
-        data.update({'form': form, 'matrix': matrix, 'blogpost': blogpost, 'rows': rows, 'columns': columns,
-                     'matrix_cells': matrix_cells, 'comment_list': comment_list})
+        data.update({
+            'form': form,
+            'matrix': matrix,
+            'blogpost': blogpost,
+            'rows': rows,
+            'columns': columns,
+            'matrix_cells': matrix_cells,
+            'comment_list': comment_list
+        })
 
         return render(request, 'matrices/detail_matrix_blog.html', data)
 

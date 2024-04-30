@@ -1,23 +1,49 @@
-# comparativepathologyworkbench
-Comparative Pathology Workbench
+# The Comparative Pathology Workbench #
 
 This repository is for a Python Django project that provides a Workbench for Comparative Pathologists
 
-https://workbench-czi-cpw.mvm.ed.ac.uk/home/
+
+## Live Workbench Systems ##
+### The Edinburgh Helmsley GCA CPW ###
+
+<a href="https://workbench-czi-cpw.mvm.ed.ac.uk/home/">
+https://workbench-czi-cpw.mvm.ed.ac.uk/home/</a>
+
+### The DERMATLAS CPW ###
+
+<a href="https://workbench-canada-cpw.mvm.ed.ac.uk/home/">
+https://workbench-canada-cpw.mvm.ed.ac.uk/home/</a>
+
+### The Coeliac CPW ###
+
+<a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/home/">
+https://workbench-coeliac-cpw.mvm.ed.ac.uk/home/</a>
+
+## Documentation ##
 
 See the following Documents:
+
+### 1 CPW Installation Guide ##
 
 <a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/01_CPWInstallDevelopment_2024-05-01.md">
 01_CPWInstallDevelopment_2024-05-01.md</a>
 
+### 2 Current Live Configuration ###
+
 <a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/02_CPWCurrentConfiguration_2024-05-01.md">
 02_CPWCurrentConfiguration_2024-05-01.md</a>
+
+### 3 WordPress Installation Guide ###
 
 <a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/03_CPWConfigureWordpress_2024-05-01.md">
 03_CPWConfigureWordpress_2024-05-01.md</a>
 
+### 4 CPW Administration Guide ###
+
 <a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/04_CPWAdministration_2024-05-01.md">
 04_CPWAdministration_2024-05-01.md</a>
+
+### 5 Installation Checklist ###
 
 <a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/05_CPWChecklist_2024-05-01.md">
 05_CPWChecklist_2024-05-01.md</a>

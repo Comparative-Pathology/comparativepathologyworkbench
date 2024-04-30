@@ -5,7 +5,22 @@ This repository is for a Python Django project that provides a Workbench for Com
 
 https://workbench-czi-cpw.mvm.ed.ac.uk/home/
 
-See CPW_readme.docx
+See the following Documents:
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/01_CPWInstallDevelopment_2024-05-01.md">
+01_CPWInstallDevelopment_2024-05-01.md</a>
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/02_CPWCurrentConfiguration_2024-05-01.md">
+02_CPWCurrentConfiguration_2024-05-01.md</a>
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/03_CPWConfigureWordpress_2024-05-01.md">
+03_CPWConfigureWordpress_2024-05-01.md</a>
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/04_CPWAdministration_2024-05-01.md">
+04_CPWAdministration_2024-05-01.md</a>
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/05_CPWChecklist_2024-05-01.md">
+05_CPWChecklist_2024-05-01.md</a>
 
 
 ## Acknowledgements and References

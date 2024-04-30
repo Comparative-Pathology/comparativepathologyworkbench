@@ -1,5 +1,11 @@
 #	Current Production/CZI CPW Configuration	#
 
+This document describes the current configuration of the Software for the Comparative Pathology Workbench (CPW), running on the CZI server.
+
+Mike Wicks
+
+1<sup>st</sup> May 2024
+
 ## 1. Server ##
 
 The system runs using a non-root user, without superuser privileges:
@@ -140,3 +146,5 @@ Requests to **/protected** are forwarded by the program **nginx_accel.py**, to *
 - **Document Root** set to **/home/ehgcap/WWW/private_media**
 
 - **NGINX Private Location** set to **private_media**
+
+

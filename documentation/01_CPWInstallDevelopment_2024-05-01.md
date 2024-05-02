@@ -23,6 +23,7 @@ environment and manages packages and environments.
 Configure a local webserver to serve at a non-standard port (ie. Not
 port 80).
 
+
 ## Step 2 -- Set Up and Activate a Virtual Environment ##
 
 Conda requires a "**environment.yml**" that specifies all the required
@@ -47,6 +48,7 @@ You can list available environments, thus:
 You can delete environments, thus:
 
 	conda remove --name test_env --all
+
 
 ## Step 3 -- Configure Software with a Database ##
 
@@ -74,6 +76,7 @@ An example "**.env**" file is shown here:
 	SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 	SESSION_COOKIE_AGE=86400
 
+
 ## Step 4 - Set up an Empty Database ##
 
 Run all Django Migrations, to set up an empty database.
@@ -83,6 +86,7 @@ Run all Django Migrations, to set up an empty database.
 Create Superuser Account
 
 	python manage.py createsuperuser
+
 
 ## Step 5 - Set up Base Data in the Database ##
 
@@ -110,6 +114,7 @@ Run these SQL statements using your chosen Postgres client -- You will
 need to tailor the GRANT statements to match your chosen database name
 and database user.
 
+
 ## Step 7 -- Run the System ##
 
 	python manage.py runserver
@@ -117,6 +122,7 @@ and database user.
 Point a Browser at <http://localhost:8000>
 
 You should now see the CPW Home Page
+
 
 ## Step 8 - POSTSCRIPT ##
 

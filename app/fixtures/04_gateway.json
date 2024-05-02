@@ -1,18 +1,18 @@
 [
-    {
-      "model": "matrices.gateway",
-      "pk": 0,
-      "fields": {
-        "name": "WEB",
-        "owner": 1
-      }
-    },
-    {
-      "model": "matrices.gateway",
-      "pk": 1,
-      "fields": {
-        "name": "BLITZ",
-        "owner": 1
-      }
+  {
+    "model": "matrices.gateway",
+    "pk": 0,
+    "fields": {
+      "name": "WEB",
+      "owner": 1
     }
-  ]
+  },
+  {
+    "model": "matrices.gateway",
+    "pk": 1,
+    "fields": {
+      "name": "BLITZ",
+      "owner": 1
+    }
+  }
+]

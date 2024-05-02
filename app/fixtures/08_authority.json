@@ -1,18 +1,18 @@
 [
-    {
-      "model": "matrices.authority",
-      "pk": 1,
-      "fields": {
-        "name": "EDITOR",
-        "owner": 1
-      }
-    },
-    {
-      "model": "matrices.authority",
-      "pk": 2,
-      "fields": {
-        "name": "VIEWER",
-        "owner": 1
-      }
+  {
+    "model": "matrices.authority",
+    "pk": 1,
+    "fields": {
+      "name": "EDITOR",
+      "owner": 1
     }
-  ]
+  },
+  {
+    "model": "matrices.authority",
+    "pk": 2,
+    "fields": {
+      "name": "VIEWER",
+      "owner": 1
+    }
+  }
+]

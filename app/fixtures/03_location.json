@@ -1,47 +1,47 @@
 [
-    {
-      "model": "matrices.location",
-      "pk": 1,
-      "fields": {
-        "name": "CZI",
-        "colour": "E3F2FD",
-        "owner": 1
-      }
-    },
-    {
-      "model": "matrices.location",
-      "pk": 2,
-      "fields": {
-        "name": "CANADA",
-        "colour": "F5776E",
-        "owner": 1
-      }
-    },
-    {
-      "model": "matrices.location",
-      "pk": 3,
-      "fields": {
-        "name": "COELIAC",
-        "colour": "FCBA03",
-        "owner": 1
-      }
-    },
-    {
-      "model": "matrices.location",
-      "pk": 4,
-      "fields": {
-        "name": "DEVELOPMENT",
-        "colour": "CA03FC",
-        "owner": 1
-      }
-    },
-    {
-      "model": "matrices.location",
-      "pk": 5,
-      "fields": {
-        "name": "EASTERBUSH",
-        "colour": "FE7B00",
-        "owner": 1
-      }
+  {
+    "model": "matrices.location",
+    "pk": 1,
+    "fields": {
+      "name": "CZI",
+      "colour": "E3F2FD",
+      "owner": 1
     }
-  ]
+  },
+  {
+    "model": "matrices.location",
+    "pk": 2,
+    "fields": {
+      "name": "CANADA",
+      "colour": "F5776E",
+      "owner": 1
+    }
+  },
+  {
+    "model": "matrices.location",
+    "pk": 3,
+    "fields": {
+      "name": "COELIAC",
+      "colour": "FCBA03",
+      "owner": 1
+    }
+  },
+  {
+    "model": "matrices.location",
+    "pk": 4,
+    "fields": {
+      "name": "DEVELOPMENT",
+      "colour": "CA03FC",
+      "owner": 1
+    }
+  },
+  {
+    "model": "matrices.location",
+    "pk": 5,
+    "fields": {
+      "name": "EASTERBUSH",
+      "colour": "FE7B00",
+      "owner": 1
+    }
+  }
+]

@@ -56,6 +56,7 @@ from .list_image import *
 from .list_image_simple import *
 from .list_imaging_hosts import list_imaging_hosts
 from .list_matrix import *
+from .list_public_matrix import *
 from .list_bench_authorisation import list_bench_authorisation
 from .list_my_bench_authorisation import list_my_bench_authorisation
 from .list_user_bench_authorisation import list_user_bench_authorisation

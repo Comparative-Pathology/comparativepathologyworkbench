@@ -1,0 +1,325 @@
+<!--
+\file         list_benches.html
+\author       Mike Wicks
+\date         March 2021
+\version      $Id$
+\par
+(C) University of Edinburgh, Edinburgh, UK
+(C) Heriot-Watt University, Edinburgh, UK
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be
+useful but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA  02110-1301, USA.
+\brief
+The list benches template
+-->
+
+{% extends 'includes/base.html' %}
+
+{% load custom %}
+
+{% block breadcrumb %}
+
+<!-- Breadcrumb Menu -->
+
+			<li>Public Benches</li>
+
+{% endblock %}
+
+{% block details %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Body -->
+<div class="page-body">
+
+<!-- Page Side Bar -->
+<div class="page-sidebar">
+</div><!-- End of page-sidebar -->
+
+<!-- Page Content -->
+<div class="page-content">
+
+{% if messages %}
+	{% for message in messages %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+  <div class="panel-alert">
+    <p>{{ message }}</p>
+  </div>
+		{% endif %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+  <div class="panel-success">
+    <p>{{ message }}</p>
+  </div>
+		{% endif %}
+    {% endfor %}
+{% endif %}
+
+  <h1>Public Benches</h1>
+  <p>Search the list of Public Benches</p>
+  <form action="{% url 'list_public_benches' %}" method="get">
+{% include 'includes/form_search_public_benches.html' %}
+    <button class="button button-add" type="submit">Search</button>
+	<button class="button button-delete" onclick="clearForm(this.form);" >Clear</button>
+  </form>
+  <br />
+  <hr>
+  <br />
+
+{% if object_list %}
+	{% for matrix_public_summary in matrix_public_summary_list %}
+		{% if forloop.first %}
+  <table>
+    <tr>
+	  <th>Action</th>
+{% include 'includes/sort_links_table_headings.html' %}
+	</tr>
+	<tr>
+	  <td>&nbsp;</td>
+	  <td width="150px">&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	</tr>
+		{% endif %}
+    <tr id="matrix_public_summary-{{matrix_public_summary.matrix_public_id}}">
+	  <td>
+		<div class="generic-dropdown">
+		  <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
+		  <div class="generic-dropdown-content">
+		    <a href="{% url 'public_matrix' matrix_public_summary.matrix_public_id %}"><i class="fa fa-eye"></i> View</a>
+			<a data-value="{{ matrix_public_summary.matrix_public_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+		  </div><!-- End of generic-dropdown-content -->
+		</div><!-- End of generic-dropdown -->
+	  </td>
+	
+	  <td>CPW:{{ matrix_public_summary.matrix_public_id|stringformat:"06d" }}</td>
+	  <td>{{ matrix_public_summary.matrix_public_title|truncatechars:75 }}</td>
+	  <td>{% userdateformat matrix_public_summary.matrix_public_created date_format %}</td>
+	  <td>{% userdateformat matrix_public_summary.matrix_public_modified date_format %}</td>
+	  <td>{{ matrix_public_summary.matrix_public_owner }}</td>
+	  <td>{{ matrix_public_summary.matrix_public_authorisation_authority }}</td>
+ 	</tr>
+		{% if forloop.last %}
+  	<tr>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+    </tr>
+    <tr>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+    </tr>
+</table>
+		{% endif %}
+	{% endfor %}
+{% include 'includes/pagination.html' %}
+{% else %}
+<p>No Benches are available.</p>
+<p>
+</p>
+{% endif %}
+
+</div><!-- End of page-content -->
+
+</div><!-- End of page-body -->
+
+<script>
+
+	$(function () {
+  		$("#id_created_before").datetimepicker({format: 'd/m/Y H:i',});
+	});
+
+	$(function () {
+  		$("#id_created_after").datetimepicker({format: 'd/m/Y H:i',});
+	});
+
+	$(function () {
+		$("#id_modified_before").datetimepicker({format: 'd/m/Y H:i',});
+	});
+
+	$(function () {
+		$("#id_modified_after").datetimepicker({format: 'd/m/Y H:i',});
+	});
+
+</script>
+
+<script>
+
+	function clearForm(oForm) {
+
+		var elements = oForm.elements;
+
+		oForm.reset();
+
+		for(i=0; i<elements.length; i++) {
+
+			field_type = elements[i].type.toLowerCase();
+
+			switch(field_type) {
+
+				case "text":
+				case "password":
+				case "textarea":
+		    	case "hidden":
+					elements[i].value = "";
+					break;
+
+				case "radio":
+				case "checkbox":
+	  				if (elements[i].checked) {
+	   					elements[i].checked = false;
+					}
+					break;
+
+				case "select-one":
+				case "select-multi":
+	            	elements[i].selectedIndex = -1;
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
+
+</script>
+
+{% endblock %}
+
+{% block extrajs %}
+
+<script language="javascript">
+
+	function open_matrix_public_summary_edit_dialog(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  dialog_edit.options.url = url;
+	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  dialog_edit.open(event);
+	}
+
+	function delete_matrix_public_summary(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  FrontendForms.confirmRemoteAction(
+	    url, {
+	      title: title,
+	      text: 'Are you sure?',
+	      confirmButtonClass: 'btn-danger',
+	      icon: 'question'
+	    },
+	    function (data) {
+
+	      //FrontendForms.reload_page(true);
+	      var row = $('tr#matrix_public_summary-' + data.object_id);
+	      row.remove();
+
+          var benchNum = data.object_id.toString().padStart(6, '0');
+
+	      Swal.fire({
+	        text: 'Bench CPW:' + benchNum + ' has been deleted!',
+	        icon: 'warning'
+	      })
+	    },
+	    data = true // set to any value to obtain POST
+	  );
+	}
+
+
+	$(document).ready(function () {
+
+	  dialog_edit = new Dialog({
+	    dialog_selector: '#dialog_generic',
+	    html: '<h1>Loading ...</h1>',
+	    width: '600px',
+	    min_height: '200px',
+	    button_save_initially_hidden: true,
+	    enable_trace: true,
+	    callback: function (event_name, dialog, params) {
+	      switch (event_name) {
+	        case "submitting":
+	          FrontendForms.overlay_show('.dialog-body');
+	          break;
+	        case "loaded":
+	          FrontendForms.overlay_hide('.dialog-body');
+	          break;
+	        case "submitted":
+	          var object_id = dialog.element.find('input[name=object_id]').val();
+	          // Reload page, with last selection enhanced
+	          var url = new URL(document.location.href);
+	          url.searchParams.set('selected_record', object_id);
+	          FrontendForms.gotourl(url, show_layer=true);
+	          break;
+	      }
+	    }
+	  });
+
+	});
+
+    function onLinkButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+    {% if object_list %}
+    	{% for matrix_public_summary in matrix_public_summary_list %}
+            {% if forloop.first %}
+            var dialogs = [
+            {% endif %}
+            dialog{{ matrix_public_summary.matrix_public_id }},
+            {% if forloop.last %}
+                dialog{{ matrix_public_summary.matrix_public_id }}
+                ];
+                var target = "dialog" + n.toString();
+                eval(target).open(event);
+            {% endif %}
+        {% endfor %}
+	{% endif %}}
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkButtonClicked);
+
+    {% if object_list %}
+		{% for matrix_public_summary in matrix_public_summary_list %}
+        dialog{{ matrix_public_summary.matrix_public_id }} = new Dialog({
+            url: "{% url 'bench_read' matrix_public_summary.matrix_public_id %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_public_summary.matrix_public_id|stringformat:"06d" }} ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+        {% endfor %}
+	{% endif %}
+    });
+
+</script>
+
+{% endblock extrajs %}

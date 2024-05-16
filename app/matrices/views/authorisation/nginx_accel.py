@@ -29,18 +29,16 @@ from __future__ import unicode_literals
 
 import subprocess
 
-from django.contrib.auth.decorators import login_required
-
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines.exists_image_in_public_bench import exists_image_in_public_bench
 
 
 #
-# nginx_accel
+#   nginx_accel
 #
-@login_required
 def nginx_accel(request, image_id):
 
     environment = get_primary_cpw_environment()
@@ -54,7 +52,7 @@ def nginx_accel(request, image_id):
 
     out_list = process.stdout.readlines()
 
-    allowed = True
+    file_exists = True
 
     for output in out_list:
 
@@ -62,18 +60,43 @@ def nginx_accel(request, image_id):
 
         if number != 0:
 
-            allowed = False
+            file_exists = False
 
-    # do your permission things here, and set allowed to True if applicable
-    if allowed:
+    #   do your permission things here, and set file_exists to True if applicable
+    if file_exists:
 
-        response = HttpResponse()
+        if request.user.is_authenticated is True:
 
-        url = '/' + environment.nginx_private_location + '/' + image_id
+            response = HttpResponse()
 
-        response['Content-Type'] = ""
-        response['X-Accel-Redirect'] = url
+            url = '/' + environment.nginx_private_location + '/' + image_id
 
-        return response
+            response['Content-Type'] = ""
+            response['X-Accel-Redirect'] = url
 
-    return HttpResponseForbidden()
+            return response
+
+        else:
+
+            fullwebroot = environment.get_full_web_root() + '/' + image_id
+
+            public_bench_exists = exists_image_in_public_bench(fullwebroot)
+
+            if public_bench_exists is True:
+
+                response = HttpResponse()
+
+                url = '/' + environment.nginx_private_location + '/' + image_id
+
+                response['Content-Type'] = ""
+                response['X-Accel-Redirect'] = url
+
+                return response
+
+            else:
+
+                return HttpResponseForbidden()
+
+    else:
+
+        return HttpResponseForbidden()

@@ -40,10 +40,10 @@ from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Cell
 
+
 #
 # READ A BENCH
 #
-@login_required()
 def bench_cell_blog_read(request, cell_id):
 
     object = get_object_by_uuid_or_404(Cell, cell_id)
@@ -53,33 +53,33 @@ def bench_cell_blog_read(request, cell_id):
     htmlString = ''
 
     introString = '<dl class=\"standard\">'\
-            '<dt>Cell Title</dt>'\
-	        '<dd>' + object.title[:20] + '</dd>'\
-            '<dt>Description</dt>'\
-	        '<dd>' + object.description[:20] + '</dd>'\
-            '</dl>'
+                  '<dt>Cell Title</dt>'\
+                  '<dd>' + object.title[:20] + '</dd>'\
+                  '<dt>Description</dt>'\
+                  '<dd>' + object.description[:20] + '</dd>'\
+                  '</dl>'
 
     commentsString = ''
 
     if cell_comments['comment_list']:
 
         commentsString = '<h3>Commentary</h3>'\
-            '<table>'\
-            '<tr>'\
-	        '<th>Date</th>'\
-	        '<th>Time</th>'\
-	        '<th>Author</th>'\
-	        '<th>Comment</th>'\
-	        '</tr>'
+                         '<table>'\
+                         '<tr>'\
+                         '<th>Date</th>'\
+                         '<th>Time</th>'\
+                         '<th>Author</th>'\
+                         '<th>Comment</th>'\
+                         '</tr>'
 
         for comment in cell_comments['comment_list']:
 
             commentString = '<tr>'\
-                '<td>' + str(comment['date']) + '</td>'\
-	            '<td>' + str(comment['time']) + '</td>'\
-	            '<td>' + str(comment['author_name']) + '</td>'\
-	            '<td>' + str(comment['content'][:50]) + '</td>'\
-	            '</tr>'
+                            '<td>' + str(comment['date']) + '</td>'\
+                            '<td>' + str(comment['time']) + '</td>'\
+                            '<td>' + str(comment['author_name']) + '</td>'\
+                            '<td>' + str(comment['content'][:50]) + '</td>'\
+                            '</tr>'
 
             commentsString = commentsString + commentString
 
@@ -89,8 +89,6 @@ def bench_cell_blog_read(request, cell_id):
 
         commentsString = '<p>There are NO Comments for this Cell!</p>'
 
-
     htmlString = introString + commentsString
-
 
     return HttpResponse(htmlString)

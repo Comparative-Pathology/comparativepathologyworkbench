@@ -27,33 +27,31 @@
 #
 # BENCH MANIPULATION ROUTINES
 #
-# def delete_image(request, image_id):
-# def delete_collection_image(request, collection_id, image_id):
-#
 # def activate_collection(request, collection_id):
-#
-# def view_all_linked_images(request):
-#
-# def view_matrix_blog(request, matrix_id):
-# def view_cell_blog(request, matrix_id, cell_id):
-#
-# def view_matrix(request, matrix_id):
-#
-# def add_cell(request, matrix_id):
-# def clear_cell(request, matrix_id, cell_id):
-# def edit_cell(request, matrix_id, cell_id):
+# def activate_in_collection(request, collection_id):
 # def amend_cell(request, matrix_id, cell_id):
-#
-# def append_column(request, matrix_id):
+# def clear_cell(request, matrix_id, cell_id):
+# def delete_image(request, image_id):
+# def delete_image_link(request, image_link_id):
+# def delete_collection_image(request, collection_id, image_id):
 # def delete_this_column(request, matrix_id, column_id):
-# def delete_last_column(request, matrix_id):
-# def append_row(request, matrix_id):
 # def delete_this_row(request, matrix_id, row_id):
-# def delete_last_row(request, matrix_id):
-#
+# def link_images(request, image_parent_id, image_child_id):
+# def privatise_bench(request, bench_id):
+# def publicise_bench(request, bench_id):
 # def search_image(request, path_from, identifier):
-#
-# def link_images(request):
+# def set_last_used_tag_in_matrix(request, matrix_id, tag_id):
+# def set_no_last_used_tag_in_matrix(request, matrix_id):
+# def view_aggregated_blog(request, matrix_id):
+# def view_all_linked_images(request):
+# def view_cell_blog(request, matrix_id, cell_id):
+# def view_child_image_link(request, image_child_id):
+# def view_image_link(request, image_link_id):
+# def view_matrix_blog(request, matrix_id):
+# def view_public_matrix(request, matrix_id):
+# def view_matrix(request, matrix_id):
+# def view_parent_and_child_image_links(request, image_selected_id):
+# def view_parent_image_link(request, image_parent_id):
 #
 ###
 
@@ -67,15 +65,18 @@ from .delete_collection_image import delete_collection_image
 from .delete_this_column import delete_this_column
 from .delete_this_row import delete_this_row
 from .link_images import link_images
+from .privatise_bench import privatise_bench
+from .publicise_bench import publicise_bench
 from .search_image import search_image
 from .set_last_used_tag_in_matrix import set_last_used_tag_in_matrix
 from .set_no_last_used_tag_in_matrix import set_no_last_used_tag_in_matrix
+from .view_aggregated_blog import view_aggregated_blog
 from .view_all_image_links import view_all_image_links
 from .view_cell_blog import view_cell_blog
-from .view_image_link import view_image_link
-from .view_parent_image_link import view_parent_image_link
 from .view_child_image_link import view_child_image_link
-from .view_parent_and_child_image_links import view_parent_and_child_image_links
+from .view_image_link import view_image_link
 from .view_matrix import view_matrix
+from .view_public_matrix import view_public_matrix
 from .view_matrix_blog import view_matrix_blog
-from .view_aggregated_blog import view_aggregated_blog
+from .view_parent_and_child_image_links import view_parent_and_child_image_links
+from .view_parent_image_link import view_parent_image_link

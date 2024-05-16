@@ -1,21 +1,27 @@
 DROP VIEW matrices_bench_summary;
+DROP VIEW matrices_bench_public_summary;
 DROP VIEW matrices_collection_summary;
 DROP VIEW matrices_environment_summary;
 DROP VIEW matrices_image_summary;
 
 CREATE OR REPLACE VIEW matrices_bench_summary AS
-(SELECT  row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_id, a.title as matrix_title, a.description as matrix_description, a.blogpost as matrix_blogpost, a.created as matrix_created, a.modified as matrix_modified, a.height as matrix_height, a.width as matrix_width, d.username as matrix_owner, b.id as matrix_authorisation_id, e.username as matrix_authorisation_permitted, c.name as matrix_authorisation_authority
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_id, a.title as matrix_title, a.description as matrix_description, a.blogpost as matrix_blogpost, a.created as matrix_created, a.modified as matrix_modified, a.height as matrix_height, a.width as matrix_width, d.username as matrix_owner, a.public as matrix_public, b.id as matrix_authorisation_id, e.username as matrix_authorisation_permitted, c.name as matrix_authorisation_authority
 FROM public.matrices_matrix a, public.matrices_authorisation b, public.matrices_authority c, public.auth_user d, public.auth_user e
 WHERE a.id = b.matrix_id AND c.id = b.authority_id AND d.id = a.owner_id AND e.id = b.permitted_id)
 UNION
-(SELECT  row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_id, a.title as matrix_title, a.description as matrix_description, a.blogpost as matrix_blogpost, a.created as matrix_created, a.modified as matrix_modified, a.height as matrix_height, a.width as matrix_width, b.username as matrix_owner, '0' as matrix_authorisation_id, b.username as matrix_authorisation_permitted, 'OWNER' as matrix_authorisation_authority
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_id, a.title as matrix_title, a.description as matrix_description, a.blogpost as matrix_blogpost, a.created as matrix_created, a.modified as matrix_modified, a.height as matrix_height, a.width as matrix_width, b.username as matrix_owner, a.public as matrix_public, '0' as matrix_authorisation_id, b.username as matrix_authorisation_permitted, 'OWNER' as matrix_authorisation_authority
 FROM public.matrices_matrix a, public.auth_user b
 WHERE b.id = a.owner_id)
 UNION
-(SELECT  row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_id, a.title as matrix_title, a.description as matrix_description, a.blogpost as matrix_blogpost, a.created as matrix_created, a.modified as matrix_modified, a.height as matrix_height, a.width as matrix_width, b.username as matrix_owner, '0' as matrix_authorisation_id, b.username as matrix_authorisation_permitted, 'ADMIN' as matrix_authorisation_authority
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_id, a.title as matrix_title, a.description as matrix_description, a.blogpost as matrix_blogpost, a.created as matrix_created, a.modified as matrix_modified, a.height as matrix_height, a.width as matrix_width, b.username as matrix_owner, a.public as matrix_public, '0' as matrix_authorisation_id, b.username as matrix_authorisation_permitted, 'ADMIN' as matrix_authorisation_authority
 FROM public.matrices_matrix a, public.auth_user b
 WHERE b.id = a.owner_id)
 ORDER BY matrix_id;
+
+CREATE OR REPLACE VIEW matrices_bench_public_summary AS
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id as matrix_public_id, a.title as matrix_public_title, a.description as matrix_public_description, a.blogpost as matrix_public_blogpost, a.created as matrix_public_created, a.modified as matrix_public_modified, a.height as matrix_public_height, a.width as matrix_public_width, b.username as matrix_public_owner, a.public as matrix_public_public
+FROM public.matrices_matrix a, public.auth_user b
+WHERE a.public = True AND b.id = a.owner_id);
 
 CREATE OR REPLACE VIEW matrices_collection_summary AS
 (SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, d.id as collection_authorisation_id, e.username AS collection_authorisation_permitted, f.name AS collection_authorisation_authority

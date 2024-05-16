@@ -31,6 +31,7 @@ from __future__ import unicode_literals
 from django.apps import apps
 
 from . import bench_list_by_user_and_direction
+from . import bench_public_list_by_direction
 from . import collection_list_by_user_and_direction
 from matrices.routines.get_images_for_collection_summary import get_images_for_collection_summary
 from matrices.routines.get_hidden_images_for_collection_summary import get_hidden_images_for_collection_summary
@@ -48,11 +49,16 @@ def get_header_data(a_user):
     hidden_image_list = list()
     server_list = list()
     matrix_list = list()
+    matrix_public_list = list()
     collection_summary_list = list()
 
     environment_summary = get_primary_cpw_environment_summary()
 
-    if not a_user.is_anonymous:
+    if a_user.is_anonymous:
+
+        matrix_public_list = bench_public_list_by_direction('', '', '', '', '', '', '', '', '')
+
+    else:
 
         Server = apps.get_model('matrices', 'Server')
 
@@ -66,6 +72,8 @@ def get_header_data(a_user):
 
         matrix_list = bench_list_by_user_and_direction(a_user, '', '', '', '', '', '', '', '', '', '')
 
+        matrix_public_list = bench_public_list_by_direction('', '', '', '', '', '', '', '', '')
+
         collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '', '')
 
         image_list = get_images_for_collection_summary(collection_summary_list)
@@ -74,6 +82,7 @@ def get_header_data(a_user):
     data = {'environment_summary': environment_summary,
             'collection_list': collection_summary_list,
             'matrix_list': matrix_list,
+            'matrix_public_list': matrix_public_list,
             'server_list': server_list,
             'image_list': image_list,
             'hidden_image_list': hidden_image_list}

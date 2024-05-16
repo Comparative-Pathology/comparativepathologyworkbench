@@ -243,6 +243,7 @@ urlpatterns = [
          name='list_user_collection_authorisation'),
     path('list_global/', matrices_views.host.list_global, name='list_global'),
     path('list_benches/', matrices_views.host.MatrixListView.as_view(), name='list_benches'),
+    path('list_public_benches/', matrices_views.host.MatrixPublicListView.as_view(), name='list_public_benches'),
     path('list_collections/', matrices_views.host.CollectionListView.as_view(), name='list_collections'),
     path('list_images_simple/', matrices_views.host.ImageSimpleListView.as_view(), name='list_images_simple'),
     path('list_images/', matrices_views.host.ImageListView.as_view(), name='list_images'),
@@ -313,6 +314,11 @@ urlpatterns = [
     path('delete_collection_image/<int:collection_id>/<int:image_id>/',
          matrices_views.matrices.delete_collection_image, name='webgallery_delete_collection_image'),
 
+    path('publicise_bench/<int:bench_id>/', matrices_views.matrices.publicise_bench,
+         name='publicise_bench'),
+    path('privatise_bench/<int:bench_id>/', matrices_views.matrices.privatise_bench,
+         name='privatise_bench'),
+
     path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection,
          name='activate_collection'),
     path('activate_in_collection/<int:collection_id>/', matrices_views.matrices.activate_in_collection,
@@ -329,6 +335,7 @@ urlpatterns = [
     path('view_cell_blog/<int:matrix_id>/<int:cell_id>/', matrices_views.matrices.view_cell_blog,
          name='view_cell_blog'),
     path('matrix/<int:matrix_id>/', matrices_views.matrices.view_matrix, name='matrix'),
+    path('public_matrix/<int:matrix_id>/', matrices_views.matrices.view_public_matrix, name='public_matrix'),
     path('clear_cell/<int:matrix_id>/<int:cell_id>/<str:path_from>/', matrices_views.matrices.clear_cell,
          name='clear_cell'),
     path('amend_cell/<int:matrix_id>/<int:cell_id>/', matrices_views.matrices.amend_cell, name='amend_cell'),

@@ -46,6 +46,7 @@ from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_header_data
 
+
 #
 # DISPLAY THE BENCH!
 #
@@ -109,7 +110,8 @@ def view_matrix(request, matrix_id):
                                                                'LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) ' +
                                                                'AS \"next_val\" FROM public.matrices_bench_summary ' +
                                                                'WHERE matrix_authorisation_permitted = %s ' +
-                                                               'AND matrix_authorisation_authority != \'ADMIN\'',
+                                                               'AND matrix_authorisation_authority != \'ADMIN\' ' +
+                                                               'AND matrix_public = False',
                                                                [username])
 
             if username == 'admin':
@@ -118,7 +120,9 @@ def view_matrix(request, matrix_id):
                                                                    'OVER(ORDER BY \"matrix_id\") AS \"prev_val\", ' +
                                                                    'LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) ' +
                                                                    'AS \"next_val\" FROM public.matrices_bench_summary ' +
-                                                                   'WHERE matrix_authorisation_authority = \'OWNER\'')
+                                                                   'WHERE matrix_authorisation_authority = \'OWNER\' ' +
+                                                                   'AND matrix_public = False'
+                                                                   )
 
             next_bench = 0
             previous_bench = 0
@@ -126,20 +130,26 @@ def view_matrix(request, matrix_id):
             lowest_bench = 0
 
             for matrix_summary in matrix_summary_list_qs:
+
                 if matrix_id == matrix_summary.matrix_id:
+
                     previous_bench = matrix_summary.prev_val
                     next_bench = matrix_summary.next_val
 
                 if matrix_summary.prev_val is None:
+
                     lowest_bench = matrix_summary.matrix_id
 
                 if matrix_summary.next_val is None:
+
                     highest_bench = matrix_summary.matrix_id
 
             if previous_bench is None:
+
                 previous_bench = highest_bench
 
             if next_bench is None:
+
                 next_bench = lowest_bench
 
             data.update({'previous_bench': previous_bench,

@@ -36,13 +36,13 @@ The view matrix (bench) template
 
 {% block breadcrumb %}
 <!-- Breadcrumb Menu -->
+
 			<li>
-				<a href="{% url 'list_benches' %}">Workbenches</a>
+				<a href="{% url 'list_public_benches' %}">Public Workbenches</a>
 			</li>
 			<li>
 				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
 			</li>
-	{% if environment_summary.is_wordpress_active %}
 			<li>
 				<a href="{% url 'aggregated_matrix_blog' matrix.id %}">
 				  <div class="tooltip" style="font-size: 12px; width:150px;">
@@ -53,95 +53,14 @@ The view matrix (bench) template
 		    	  </div>
 				</a>
 			</li>
-	{% endif %}
-	{% if matrix.is_private %}
-			<li style="float: right;">
-				<a href="{% url 'matrix' next_bench %}">
-					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #{{ environment_summary.environment_colour }}; border-radius: 5px; color: Black; background-color: #{{ environment_summary.environment_colour }}; font-size: 1em;"><i class="fa fa-arrow-right"></i> Next</button>
-				</a>
-			</li>
-			<li style="float: right;">
-				<a href="{% url 'matrix' previous_bench %}">
-					<button class="button button-add" style="text-align: center; text-decoration: none; border: 1px solid; border-color: #{{ environment_summary.environment_colour }}; border-radius: 5px; color: Black; background-color: #{{ environment_summary.environment_colour }}; font-size: 1em;"><i class="fa fa-arrow-left"></i> Previous</button>
-				</a>
-			</li>
-	{% endif %}
 
 {% endblock %}
 
 {% block content %}
 <!-- Main Data Panel -->
 <div class="page-body">
-{% if matrix.is_public %}
 <div class="page-sidebar">
 </div>
-{% endif %}
-{% if matrix.is_private %}
-<div class="page-sidebar" style="overflow-y: scroll;">
-	{% if readBoolean %}
-	{% else %}
-	{% endif %}
-	{% if updateBoolean %}
-<!-- Selected or Active Image Collection -->
-  <div class="collection-container">
-	<div class="collection-item">
-	  <div class="collection-master">
-		<div class="collection-master-control">
-		  <div class="collection-dropdown">
-			<button class="collection-drop-button"><i class="fas fa-bars"></i></button>
-			<div class="collection-dropdown-content">
-				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
-    	{% if collection_list %}
-			{% for collection in collection_list %}
-				{% if matrix.has_last_used_collection == True %}
-					{% if matrix.last_used_collection.id == collection.collection_id %}
-				<a class="test-font" title="({{ collection.collection_owner }}), {{ collection.collection_title }}" href="{% url 'list_images' matrix.last_used_collection.id %}"><button class="button-mini button-view"><i class="fa fa-eye"></i></button> View Collection</a>
-					{% endif %}
-				{% endif %}
-			{% endfor %}
-			{% if collection_tag_list %}
-				{% if matrix.has_last_used_tag == True %}
-				<a class="test-font" title="Select No Tags!" href="{% url 'set_no_last_used_tag' matrix.id %}">No Tags</a>
-				{% endif %}
-				{% for tag in collection_tag_list %}
-					{% if matrix.last_used_tag != tag %}
-					<a class="test-font" title="Select the Tag {{ tag.name }}" href="{% url 'set_last_used_tag' matrix.id tag.id %}">Tag "{{ tag.name }}"</a>
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-    	{% endif %}
-			</div>
-		  </div>
-		</div>
-	  </div>
-	</div>
-    	{% if collection_image_list %}
-        	{% for image in collection_image_list %}
-		  		{% if updateBoolean %}
-	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
-	  <div class="collection-image">
-	  				{% csrf_token %}
-				{% else %}
-	<div class="collection-item" id="image_{{ image.id }}">
-	  <div class="collection-image">
-	        	{% endif %}
-		<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
-	  </div>
-	</div>
-        	{% endfor %}
-    	{% else %}
-        	{% if matrix.has_last_used_collection == True %}
-	<div class="collection-item">
-	  <div class="collection-image">
-		<button class="basket-button button-info"><i class="fa fa-eye-slash"></i></button>
-	  </div>
-	</div>
-        	{% endif %}
-    	{% endif %}
-  </div>
-	{% endif %}
-</div>
-{% endif %}
 
 <!-- The Bench -->
 <div class="page-content">
@@ -172,33 +91,10 @@ The view matrix (bench) template
           <div class="bench-dropdown">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-				{% if matrix.is_private %}
-					{% if readBoolean %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-						{% if environment_summary.is_wordpress_active %}
-	  		  <a data-value="{{ matrix.id }}" href="#" class="bench-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Bench Commentary</a>
-	  		  <a href="{% url 'aggregated_matrix_blog' matrix.id %}"><i class="fa fa-bullhorn"></i><span class="menu-item">&#9;</span> Aggregated Commentary</a>
-						{% endif %}
-					  	{% if updateBoolean %}
-	  		  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-					  	{% endif %}
-						{% if environment_summary.is_wordpress_active %}
-	  		  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
-						{% endif %}
-					  	{% if updateBoolean %}
-	  		  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-						{% endif %}
-					{% endif %}
-				{% endif %}
-				{% if matrix.is_public %}
-					{% if readBoolean %}
-			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-						{% if environment_summary.is_wordpress_active %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Bench Commentary</a>
-						{% endif %}
-			  		{% endif %}
-				{% endif %}
-	</div><!-- End of bench-dropdown-content -->
+			  <a href="{% url 'aggregated_matrix_blog' matrix.id %}"><i class="fa fa-bullhorn"></i><span class="menu-item">&#9;</span> Aggregated Commentary</a>
+			</div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
         </div><!-- End of master-cell-control -->
       </div><!-- End of master-cell -->
@@ -209,33 +105,15 @@ The view matrix (bench) template
 <!-- The Bottom-Most Row Header Cell -->
 			        {% if matrix.get_max_row == matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="BMRHC_{{ matrix_cell.id }}">
-						{% csrf_token %}
-						{% if matrix.is_private %}
-	  <div class="bottom-right-cell" id="BMRHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="bottom-right-cell" id="BMRHC_{{ matrix_cell.id }}" >
-						{% endif %}
 	  </div><!-- End of bottom-right-cell -->
     </div><!-- End of flex-bench-item -->
     			    {% endif %}
 <!-- The Other Row Header Cells -->
 				    {% if matrix.get_max_row != matrix_cell.ycoordinate %}
-						{% if matrix.is_private %}
-      <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
-	    			    {% endif %}
-						{% if matrix.is_public %}
       <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" >
-	    			    {% endif %}
-						{% csrf_token %}
-						{% if matrix.is_private %}
-		<div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-		  <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" style="top: 27px;" draggable="true" ondragstart="drag(event)" >
-						{% endif %}
-						{% if matrix.is_public %}
 		<div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" >
 		  <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" style="top: 27px;" >
-						{% endif %}
 			{% if matrix_cell.title != '' %}
           <div class="tooltiprow"><i class="fa fa-info-circle"></i>
               <span class="tooltiprowtext" style="margin-left: 22px;">{{ matrix_cell.title }}</span>
@@ -303,29 +181,11 @@ The view matrix (bench) template
                             {% endif %}
                         {% endif %}
         </div>
-						{% if matrix.is_private %}
-		<div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
-          <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 		<div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" >
 		  <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" >
-						{% endif %}
 			<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-						{% if matrix.is_private %}
-							{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
-			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Row Header</a>
-			  <a href="{% url 'add_rows' matrix.id forloop.parentloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Rows to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Rows ...</a>
-			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Row</a>
-							{% endif %}
-						{% endif %}
-						{% if matrix.is_public %}
-							{% if updateBoolean %}
-			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
-							{% endif %}
-						{% endif %}
 			</div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
         </div><!-- End of row-header-cell-control -->
@@ -338,32 +198,15 @@ The view matrix (bench) template
 <!-- The Right-Most Column Header Cell -->
     			    {% if matrix.get_max_column == matrix_cell.xcoordinate %}
     <div class="flex-bench-item" id="RMCHC_{{ matrix_cell.id }}">
-						{% if matrix.is_private %}
-	  <div class="column-header-right-cell" id="RMCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="column-header-right-cell" id="RMCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" >
-						{% endif %}
       </div><!-- End of column-header-right-cell -->
     </div><!-- End of flex-bench-item -->
 				    {% endif %}
 <!-- The Other Column Header Cells -->
 				    {% if matrix.get_max_column != matrix_cell.xcoordinate %}
-						{% if matrix.is_private %}
-    <div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	<div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" >
-						{% endif %}
-						{% csrf_token %}
-						{% if matrix.is_private %}
-	  <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-        <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" >
 	    <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" >
-						{% endif %}
 							{% if matrix_cell.title != '' %}
           <div class="tooltipcolumn"><i class="fa fa-info-circle"></i>
                             {% if matrix.width >= 75 and matrix.width <= 93 %}
@@ -429,29 +272,11 @@ The view matrix (bench) template
                         {% endif %}
 	  	</div><!-- End of column-header-cell-title -->
 
-		  				{% if matrix.is_private %}
-		<div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-		  <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-						{% endif %}
-		  				{% if matrix.is_public %}
 		<div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" >
 		  <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" >
-						{% endif %}
 			<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-						{% if matrix.is_private %}
-							{% if updateBoolean %}
-	  		  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
-	  		  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Column Header</a>
-	  		  <a href="{% url 'add_columns' matrix.id forloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Columns to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Columns ...</a>
-	  		  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Column</a>
-							{% endif %}
-						{% endif %}
-						{% if matrix.is_public %}
-							{% if updateBoolean %}
 	 		 <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
-							{% endif %}
-						{% endif %}
 			</div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
         </div><!-- End of column-header-cell-control -->
@@ -463,24 +288,8 @@ The view matrix (bench) template
 			    {% if not matrix_cell.is_column_header and not matrix_cell.is_row_header %}
 <!-- Ordinary Cells -->
     			    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
-						{% if updateBoolean %}
-							{% if matrix.is_private %}
-	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
-							{% endif %}
-							{% if matrix.is_public %}
-    <div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" >
-							{% endif %}
-							{% csrf_token %}
-						{% else %}
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
-						{% endif %}
-
-						{% if matrix.is_private %}
-	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" >
-						{% endif %}
 		<div id="cell_{{ matrix_cell.id }}" class="cell-title" style="font-size: 12px; width:{{ matrix.width|add:"-62" }}px;">
                         {% if matrix_cell.title != ''%}
 		  <div class="tooltip" style="font-size: 12px;">
@@ -563,35 +372,7 @@ The view matrix (bench) template
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
-						{% if matrix.is_private %}
-							{% if readBoolean %}
-								{% if environment_summary.is_wordpress_active %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Cell Commentary</a>
-								{% endif %}
-								{% if updateBoolean %}
-						  			{% if matrix_cell.has_image %}
-										{% if environment_summary.is_wordpress_active %}
-			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Cell Commentary</a>
-										{% endif %}
-			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
-			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
-			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
-			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
-									{% else %}
-			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
-			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
-			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
-						  			{% endif %}
-								{% endif %}
-							{% endif %}
-						{% endif %}
-						{% if matrix.is_public %}
-							{% if readBoolean %}
-								{% if environment_summary.is_wordpress_active %}
-			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Cell Commentary</a>
-								{% endif %}
-							{% endif %}
-						{% endif %}
 
             </div><!-- End of cell-dropdown-content -->
           </div><!-- End of cell-dropdown -->
@@ -615,39 +396,21 @@ The view matrix (bench) template
 <!-- Right-Most Footer Cells -->
 				    {% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="RMFC_{{ matrix_cell.id }}">
-						{% csrf_token %}
-						{% if matrix.is_private %}
-      <div class="row-footer-cell" style="height:{{ matrix.height }}px;" id="RMFC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="row-footer-cell" style="height:{{ matrix.height }}px;" id="RMFC_{{ matrix_cell.id }}" >
-						{% endif %}
       </div><!-- bottom-right-cell -->
     </div><!-- End of flex-bench-item -->
 				    {% endif %}
 <!-- Bottom-Most Footer Cells -->
 				    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="BMFC_{{ matrix_cell.id }}">
-						{% csrf_token %}
-						{% if matrix.is_private %}
-      <div class="column-footer-cell" style="width:{{ matrix.width }}px;" id="BMFC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="column-footer-cell" style="width:{{ matrix.width }}px;" id="BMFC_{{ matrix_cell.id }}" >
-						{% endif %}
       </div><!-- column-footer-cell -->
     </div><!-- End of flex-bench-item -->
 				    {% endif %}
 <!-- Bottom-Most and Right-Most Footer Cell -->
 				    {% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="BMRMFC_{{ matrix_cell.id }}">
-						{% csrf_token %}
-						{% if matrix.is_private %}
-      <div class="bottom-right-cell" id="BMRMFC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
-						{% endif %}
-						{% if matrix.is_public %}
 	  <div class="bottom-right-cell" id="BMRMFC_{{ matrix_cell.id }}" >
-						{% endif %}
       </div><!-- bottom-right-cell -->
     </div><!-- End of flex-bench-item -->
 				    {% endif %}
@@ -668,491 +431,7 @@ The view matrix (bench) template
 
 <script type="text/javascript">
 
-	function confirmation(question, source_type) {
-
-		var defer = $.Deferred();
-
-		if (source_type == "cell") {
-
-			$('<div></div>')
-				.html(question)
-				.dialog({
-					autoOpen: true,
-					modal: true,
-					title: 'Confirmation',
-					buttons: {
-						"SWAP": function () {
-							defer.resolve("swap");
-							$(this).dialog("close");
-						},
-						"CUT": function () {
-							defer.resolve("overwrite");
-							$(this).dialog("close");
-						},
-						"COPY": function () {
-							defer.resolve("overwrite_leave");
-							$(this).dialog("close");
-						},
-						"CLOSE": function () {
-							$(this).dialog('destroy').remove();
-						}
-					},
-					close: function () {
-						$(this).dialog('destroy').remove();
-					}
-				});
-
-		}
-
-		if (source_type == "image") {
-
-			$('<div></div>')
-				.html(question)
-				.dialog({
-					autoOpen: true,
-					modal: true,
-					title: 'Confirmation',
-					buttons: {
-						"IMPORT": function () {
-							defer.resolve("move");
-							$(this).dialog("close");
-						},
-						"CLOSE": function () {
-							$(this).dialog('destroy').remove();
-						}
-					},
-					close: function () {
-						$(this).dialog('destroy').remove();
-					}
-				});
-		}
-
-		return defer.promise();
-	}
-
-
-	function onclick(source, target, source_type){
-
-		var question = "";
-
-	   	if (source_type == "cell") {
-
-			question = "Do you want to SWAP Cells, CUT or COPY the Source Cell to the Target Cell?";
-		}
-
-		if (source_type == "image") {
-
-			question = "Do you want to IMPORT this Image to this CELL?";
-		}
-
-		//console.log("source_type : " + source_type);
-
-		confirmation(question, source_type).then(function (answer) {
-
-			//console.log("answer : " + answer);
-
-			if (answer == "swap"){
-
-				$.ajax({
-					url: '{% url 'swap_cells' %}',
-					data: {
-							'source': source,
-							'target': target,
-							'source_type': source_type,
-							csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						//console.log("Cell Swap SUCCESS! Source: " + data.source + "  Target: " + data.target);
-						if (data.failure) {
-							alert("Cell Swap Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
-					}
-				});
-			}
-
-			if (answer == "overwrite"){
-
-				$.ajax({
-					url: '{% url 'overwrite_cell' %}',
-					data: {
-						'source': source,
-						'target': target,
-						'source_type': source_type,
-						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						if (data.failure) {
-							alert("Cell Overwrite Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
-					}
-				});
-			}
-
-			if (answer == "move"){
-
-				$.ajax({
-					url: '{% url 'import_image' %}',
-					data: {
-						'source': source,
-						'target': target,
-						'source_type': source_type,
-						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						//console.log("Image Import SUCCESS! Source: " + data.source + "  Target: " + data.target);
-						if (data.failure) {
-							alert("Image Import Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
-					}
-				});
-
-			}
-
-			if (answer == "overwrite_leave"){
-
-				$.ajax({
-					url: '{% url 'overwrite_cell_leave' %}',
-					data: {
-						'source': source,
-						'target': target,
-						'source_type': source_type,
-						csrfmiddlewaretoken: '{{ csrf_token }}'
-					},
-					dataType: 'json',
-					type: 'post',
-					success: function (data) {
-						if (data.failure) {
-							alert("Cell Overwrite and Leave Failed! Source: " + data.source + "  Target: " + data.target);
-						}
-						window.location.reload();
-					}
-				});
-			}
-		});
-	}
-
-
-	function allowDrop(ev){
-		ev.preventDefault();
-	}
-
-	function drag(ev){
-		ev.dataTransfer.setData("Text",ev.target.id);
-	}
-
-	function drop(ev){
-
-		ev.preventDefault();
-
-		var image_id = '';
-		var src = '';
-
-		var image = ev.dataTransfer.getData("text/html")
-		var division = ev.dataTransfer.getData("Text")
-
-		//console.log("image : " + image);
-		//console.log("division : " + division);
-
-		if ( image ) {
-
-			var dropContext = $('<div>').append(image);
-			image_id = $(dropContext).find("img").attr('id');
-			src = document.getElementById(image_id);
-		}
-
-		if ( division ) {
-
-			src = document.getElementById(division);
-		}
-
-		//console.log("src.id : " + src.id);
-
-		var srcParent = src.parentNode;
-
-		var source_array = src.id.split("_",2);
-		var source_id = source_array[1];
-		var source_type = source_array[0];
-
-		//console.log("source_id : " + source_id);
-		//console.log("source_type : " + source_type);
-
-		const data = ev.target;
-
-		//console.log("data : " + data);
-
-		var tgt = ev.target;
-		var target_array = tgt.id.split("_",2);
-		var target_id = target_array[1];
-		var target_type = target_array[0];
-
-		//console.log("target_id : " + target_id);
-		//console.log("target_type : " + target_type);
-
-		//ev.currentTarget.replaceChild(src, tgt);
-		//srcParent.appendChild(tgt);
-
-		onclick(source_id, target_id, source_type);
-
-	}
-
-	function allowColDrop(ev){
-		ev.preventDefault();
-	}
-
-	function dragCol(ev){
-		ev.dataTransfer.setData("Text",ev.target.id);
-	}
-
-	function dropCol(ev){
-
-		ev.preventDefault();
-		var src = document.getElementById(ev.dataTransfer.getData("Text"));
-		var srcParent = src.parentNode;
-
-		//console.log("dropCol");
-
-		var source_array = src.id.split("_",2);
-		var source_id = source_array[1];
-		var source_type = source_array[0];
-		//console.log("source_id : " + source_id);
-		//console.log("source_type : " + source_type);
-
-		var tgt = ev.target;
-		var target_array = tgt.id.split("_",2);
-		var target_id = target_array[1];
-		var target_type = target_array[0];
-
-		//console.log("target_id : " + target_id);
-		//console.log("target_type : " + target_type);
-
-		if (source_type == "OCHC" && target_type != "BMRMFC"){
-
-			//console.log("source type Allowed : " + source_type);
-			//console.log("target type Allowed : " + target_type);
-
-			$.ajax({
-				url: '{% url 'shuffle_columns' %}',
-				data: {
-					'source': source_id,
-					'target': target_id,
-					csrfmiddlewaretoken: '{{ csrf_token }}'
-				},
-				dataType: 'json',
-				type: 'post',
-				success: function (data) {
-					if (data.failure) {
-						alert("Column Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
-					}
-					window.location.reload();
-				}
-			});
-
-		} else {
-
-			//console.log("source type NOT Allowed : " + source_type);
-			//console.log("target type NOT Allowed : " + target_type);
-		}
-
-		if (source_type == "cell" && target_type != "BMRMFC"){
-
-			//console.log("source type Allowed : " + source_type);
-			//console.log("target type Allowed : " + target_type);
-
-			$.ajax({
-				url: '{% url 'shuffle_columns' %}',
-				data: {
-					'source': source_id,
-					'target': target_id,
-					csrfmiddlewaretoken: '{{ csrf_token }}'
-				},
-				dataType: 'json',
-				type: 'post',
-				success: function (data) {
-					if (data.failure) {
-						alert("Column Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
-					}
-					window.location.reload();
-				}
-			});
-
-		} else {
-
-			//console.log("source type NOT Allowed : " + source_type);
-			//console.log("target type NOT Allowed : " + target_type);
-		}
-	}
-
-	function allowRowDrop(ev){
-		ev.preventDefault();
-	}
-
-	function dragRow(ev){
-		ev.dataTransfer.setData("Text",ev.target.id);
-	}
-
-	function dropRow(ev){
-
-		ev.preventDefault();
-		var src = document.getElementById(ev.dataTransfer.getData("Text"));
-		var srcParent = src.parentNode;
-
-		//console.log("dropRow");
-
-		var source_array = src.id.split("_",2);
-		var source_id = source_array[1];
-		var source_type = source_array[0];
-		//console.log("source_id : " + source_id);
-		//console.log("source_type : " + source_type);
-
-		var tgt = ev.target;
-		var target_array = tgt.id.split("_",2);
-		var target_id = target_array[1];
-		var target_type = target_array[0];
-
-		//console.log("target_id : " + target_id);
-		//console.log("target_type : " + target_type);
-
-		if (source_type == "ORHC" && target_type != "BMRMFC"){
-
-			//console.log("source type Allowed : " + source_type);
-			//console.log("target type Allowed : " + target_type);
-
-			$.ajax({
-				url: '{% url 'shuffle_rows' %}',
-				data: {
-					'source': source_id,
-					'target': target_id,
-				  	csrfmiddlewaretoken: '{{ csrf_token }}'
-				},
-				dataType: 'json',
-				type: 'post',
-				success: function (data) {
-					if (data.failure) {
-						alert("Row Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
-					}
-					window.location.reload();
-				}
-			});
-		} else {
-
-			//console.log("source type NOT Allowed : " + source_type);
-			//console.log("target type NOT Allowed : " + target_type);
-		}
-
-		if (source_type == "cell" && target_type != "BMRMFC"){
-
-			//console.log("source type Allowed : " + source_type);
-			//console.log("target type Allowed : " + target_type);
-
-			$.ajax({
-				url: '{% url 'shuffle_rows' %}',
-				data: {
-					'source': source_id,
-					'target': target_id,
-				  	csrfmiddlewaretoken: '{{ csrf_token }}'
-				},
-				dataType: 'json',
-				type: 'post',
-				success: function (data) {
-					if (data.failure) {
-						alert("Row Shuffle Failed! Source: " + data.source + "  Target: " + data.target);
-					}
-					window.location.reload();
-				}
-			});
-		} else {
-
-			//console.log("source type NOT Allowed : " + source_type);
-			//console.log("target type NOT Allowed : " + target_type);
-		}
-	}
-
 	// MAINLINE
-
-	function open_matrix_edit_dialog(event, title) {
-	  event.preventDefault();
-	  var url = $(event.target).attr('href');
-	  dialog_edit.options.url = url;
-	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
-	  dialog_edit.open(event);
-	}
-
-	function open_header_edit_dialog(event, title) {
-	  event.preventDefault();
-	  var url = $(event.target).attr('href');
-	  dialog_edit.options.url = url;
-	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
-	  dialog_edit.open(event);
-	}
-
-	function open_edit_cell_dialog(event, title) {
-	  event.preventDefault();
-	  var url = $(event.target).attr('href');
-	  dialog_edit.options.url = url;
-	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
-	  dialog_edit.open(event);
-	}
-
-	function delete_matrix(event, title) {
-	  event.preventDefault();
-	  var url = $(event.target).attr('href');
-	  FrontendForms.confirmRemoteAction(
-	    url, {
-	      title: title,
-	      text: 'Are you sure?',
-	      confirmButtonClass: 'btn-danger',
-	      icon: 'question'
-	    },
-	    function (data) {
-	      Swal.fire({
-	        text: 'Bench "' + data.object_id + '" has been deleted',
-	        icon: 'warning'
-	      })
-		  var url = "{% url 'list_benches' %}"
-		  FrontendForms.gotourl(url, show_layer=true);
-	    },
-	    data = true // set to any value to obtain POST
-	  );
-	}
-
-
-	$(document).ready(function () {
-	  dialog_edit = new Dialog({
-	    dialog_selector: '#dialog_generic',
-	    html: '<h1>Loading ...</h1>',
-	    width: '600px',
-	    min_height: '200px',
-	    button_save_initially_hidden: true,
-	    enable_trace: true,
-	    callback: function (event_name, dialog, params) {
-	      switch (event_name) {
-	        case "submitting":
-	          FrontendForms.overlay_show('.dialog-body');
-	          break;
-	        case "loaded":
-	          FrontendForms.overlay_hide('.dialog-body');
-	          break;
-	        case "submitted":
-	          var object_id = dialog.element.find('input[name=object_id]').val();
-	          // Reload page, with last selection enhanced
-	          var url = new URL(document.location.href);
-	          url.searchParams.set('selected_record', object_id);
-	          FrontendForms.gotourl(url, show_layer=true);
-	          break;
-	      }
-	    }
-	  });
-	});
-
 
     function onBenchInfoButtonClicked(event) {
         event.preventDefault();

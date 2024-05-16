@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         view_matrix_blog.py
+# \file         privatise_bench.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,46 +25,41 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the view_matrix_blog view routine
+# This file contains the privatise_bench view routine
 #
 ###
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.urls import reverse
 
 from matrices.models import Matrix
 
-from matrices.routines import get_header_data
-from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines import credential_exists
 
 
 #
-# VIEW THE AGGREGATED BLOG ENTRies
+#   Privatise a Bench
 #
-def view_aggregated_blog(request, matrix_id):
+@login_required
+def privatise_bench(request, bench_id):
 
-    environment = get_primary_cpw_environment()
+    if credential_exists(request.user):
 
-    data = get_header_data(request.user)
+        bench = get_object_or_404(Matrix, pk=bench_id)
 
-    matrix = get_object_or_404(Matrix, pk=matrix_id)
+        bench.set_private()
 
-    matrix_cells = matrix.get_matrix_cells_with_blog()
+        bench.save()
 
-    bench_comment_list = list()
+        matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
+        messages.success(request, 'Bench ' + matrix_id_formatted + ' set PRIVATE!')
 
-    bench_blogpost = ''
+        return HttpResponseRedirect(reverse('list_benches', args=()))
 
-    if matrix.has_blogpost():
+    else:
 
-        bench_blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
-
-    bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
-
-    data.update({'matrix': matrix,
-                 'bench_blogpost': bench_blogpost,
-                 'bench_comment_list': bench_comment_list,
-                 'matrix_cells': matrix_cells})
-
-    return render(request, 'matrices/aggregated_matrix_blog.html', data)
+        return HttpResponseRedirect(reverse('home', args=()))

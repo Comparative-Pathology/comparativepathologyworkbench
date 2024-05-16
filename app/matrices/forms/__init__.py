@@ -58,6 +58,7 @@ from .matrixaddcolumnform import MatrixAddColumnForm
 from .matrixdeletecellform import MatrixDeleteCellForm
 from .matrixownerselectionform import MatrixOwnerSelectionForm
 from .matrixsummarysearchform import MatrixSummarySearchForm
+from .matrixpublicsummarysearchform import MatrixPublicSummarySearchForm
 from .newmatrixform import NewMatrixForm
 from .protocolform import ProtocolForm
 from .searchurlform import SearchUrlForm

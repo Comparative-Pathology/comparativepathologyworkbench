@@ -66,8 +66,14 @@ CMD_BLOG_GET_LINK_POST = 'LinkPost'
 class Environment(models.Model):
 
     name = models.CharField(max_length=50, blank=False, unique=True)
-    location = models.ForeignKey(Location, related_name='environments', default=0, on_delete=models.DO_NOTHING)
-    protocol = models.ForeignKey(Protocol, related_name='environments', default=0, on_delete=models.DO_NOTHING)
+    location = models.ForeignKey(Location,
+                                 related_name='environments',
+                                 default=0,
+                                 on_delete=models.DO_NOTHING)
+    protocol = models.ForeignKey(Protocol,
+                                 related_name='environments',
+                                 default=0,
+                                 on_delete=models.DO_NOTHING)
     web_root = models.CharField(max_length=255, blank=False, default='')
     document_root = models.CharField(max_length=255, blank=False, default='')
     nginx_private_location = models.CharField(max_length=255, blank=False, default='')
@@ -75,27 +81,28 @@ class Environment(models.Model):
     wordpress_active = models.BooleanField(default=False)
     from_email = models.CharField(max_length=255, blank=False, default='')
     date_format = models.CharField(max_length=255, blank=False, default='%A, %B %e, %Y')
-    owner = models.ForeignKey(User, related_name='environments', on_delete=models.DO_NOTHING)
-
+    owner = models.ForeignKey(User,
+                              related_name='environments',
+                              on_delete=models.DO_NOTHING)
     minimum_cell_height = models.IntegerField(default=75, blank=False)
     maximum_cell_height = models.IntegerField(default=450, blank=False)
     minimum_cell_width = models.IntegerField(default=75, blank=False)
     maximum_cell_width = models.IntegerField(default=450, blank=False)
-
     maximum_initial_columns = models.IntegerField(default=10, blank=False)
     minimum_initial_columns = models.IntegerField(default=1, blank=False)
     maximum_initial_rows = models.IntegerField(default=10, blank=False)
     minimum_initial_rows = models.IntegerField(default=1, blank=False)
-
     maximum_rest_columns = models.IntegerField(default=1000, blank=False)
     minimum_rest_columns = models.IntegerField(default=3, blank=False)
     maximum_rest_rows = models.IntegerField(default=1000, blank=False)
     minimum_rest_rows = models.IntegerField(default=3, blank=False)
-
     maximum_bench_count = models.IntegerField(default=10, blank=False)
     maximum_collection_count = models.IntegerField(default=10, blank=False)
-
-    gateway = models.ForeignKey(Gateway, related_name='environments', default='', null=True, on_delete=models.DO_NOTHING)
+    gateway = models.ForeignKey(Gateway,
+                                related_name='environments',
+                                default='',
+                                null=True,
+                                on_delete=models.DO_NOTHING)
     gateway_port = models.IntegerField(default=0, blank=False)
     gateway_pagination = models.IntegerField(default=50, blank=False)
 

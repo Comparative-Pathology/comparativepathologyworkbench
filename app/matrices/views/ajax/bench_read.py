@@ -30,10 +30,6 @@
 ###
 from __future__ import unicode_literals
 
-from datetime import datetime
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
@@ -42,10 +38,10 @@ from matrices.models import Matrix
 
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
+
 #
 # READ A BENCH
 #
-@login_required()
 def bench_read(request, bench_id):
 
     environment = get_primary_cpw_environment()
@@ -64,41 +60,45 @@ def bench_read(request, bench_id):
         matrix_link = environment.get_a_link_url_to_post() + object.blogpost
 
         htmlString = '<dl class=\"standard\">'\
-            '<dt>Title</dt>'\
-            '<dd>' + object.title + '</dd>'\
-            '<dt>Description</dt>'\
-            '<dd>' + object.description + '</dd>'\
-            '<dt>Cell Height</dt>'\
-            '<dd>' + str(object.height) + '</dd>'\
-            '<dt>Cell Width</dt>'\
-            '<dd>' + str(object.width) + '</dd>'\
-            '<dt>Owner</dt>'\
-            '<dd>' + object.owner.username + ' (' + object.owner.first_name + ' ' + object.owner.last_name + ')</dd>'\
-            '<dt>Created</dt>'\
-            '<dd>' + date_created + time_created + '</dd>'\
-            '<dt>Last Modified</dt>'\
-            '<dd>' + date_modified + time_modified + '</dd>'\
-            '<dt>Blog Post</dt>'\
-            '<dd><a class=\"btn btn-default\" href=\"' + matrix_link + '\" role=\"button\" target=\"_blank\"><button class=\"button button-view\">View Blog Post ' + object.blogpost + ' &raquo;</button></a></dd>'\
-            '</dl>'
+                     '<dt>Title</dt>'\
+                     '<dd>' + object.title + '</dd>'\
+                     '<dt>Description</dt>'\
+                     '<dd>' + object.description + '</dd>'\
+                     '<dt>Cell Height</dt>'\
+                     '<dd>' + str(object.height) + '</dd>'\
+                     '<dt>Cell Width</dt>'\
+                     '<dd>' + str(object.width) + '</dd>'\
+                     '<dt>Owner</dt>'\
+                     '<dd>' + object.owner.username + ' (' + object.owner.first_name + ' ' + object.owner.last_name +\
+                     ')</dd>'\
+                     '<dt>Created</dt>'\
+                     '<dd>' + date_created + time_created + '</dd>'\
+                     '<dt>Last Modified</dt>'\
+                     '<dd>' + date_modified + time_modified + '</dd>'\
+                     '<dt>Blog Post</dt>'\
+                     '<dd><a class=\"btn btn-default\" href=\"' + matrix_link + \
+                     '\" role=\"button\" target=\"_blank\"><button class=\"button button-view\">View Blog Post ' +\
+                         object.blogpost + ' &raquo;</button></a></dd>'\
+                     '</dl>'
 
     else:
 
         htmlString = '<dl class=\"standard\">'\
-            '<dt>Title</dt>'\
-            '<dd>' + object.title + '</dd>'\
-            '<dt>Description</dt>'\
-            '<dd>' + object.description + '</dd>'\
-            '<dt>Cell Height</dt>'\
-            '<dd>' + str(object.height) + '</dd>'\
-            '<dt>Cell Width</dt>'\
-            '<dd>' + str(object.width) + '</dd>'\
-            '<dt>Owner</dt>'\
-            '<dd>' + object.owner.username + ' (' + object.owner.first_name + ' ' + object.owner.last_name + ')</dd>'\
-            '<dt>Created</dt>'\
-            '<dd>' + date_created + '</dd>'\
-            '<dt>Last Modified</dt>'\
-            '<dd>' + date_modified + '</dd>'\
-            '</dl>'
+                     '<dt>Title</dt>'\
+                     '<dd>' + object.title + '</dd>'\
+                     '<dt>Description</dt>'\
+                     '<dd>' + object.description + '</dd>'\
+                     '<dt>Cell Height</dt>'\
+                     '<dd>' + str(object.height) + '</dd>'\
+                     '<dt>Cell Width</dt>'\
+                     '<dd>' + str(object.width) + '</dd>'\
+                     '<dt>Owner</dt>'\
+                     '<dd>' + object.owner.username + ' (' + object.owner.first_name + ' ' + object.owner.last_name +\
+                         ')</dd>'\
+                     '<dt>Created</dt>'\
+                     '<dd>' + date_created + '</dd>'\
+                     '<dt>Last Modified</dt>'\
+                     '<dd>' + date_modified + '</dd>'\
+                     '</dl>'
 
     return HttpResponse(htmlString)

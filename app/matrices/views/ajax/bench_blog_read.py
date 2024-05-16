@@ -30,20 +30,16 @@
 ###
 from __future__ import unicode_literals
 
-from datetime import datetime
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Matrix
 
+
 #
 # READ A BENCH
 #
-@login_required()
 def bench_blog_read(request, bench_id):
 
     object = get_object_by_uuid_or_404(Matrix, bench_id)
@@ -53,33 +49,33 @@ def bench_blog_read(request, bench_id):
     htmlString = ''
 
     introString = '<dl class=\"standard\">'\
-            '<dt>Bench Title</dt>'\
-	        '<dd>' + object.title + '</dd>'\
-            '<dt>Description</dt>'\
-	        '<dd>' + object.description[:20] + '</dd>'\
-            '</dl>'
+                  '<dt>Bench Title</dt>'\
+                  '<dd>' + object.title + '</dd>'\
+                  '<dt>Description</dt>'\
+                  '<dd>' + object.description[:20] + '</dd>'\
+                  '</dl>'
 
     commentsString = ''
 
     if matrix_comments['comment_list']:
 
         commentsString = '<h3>Commentary</h3>'\
-            '<table>'\
-            '<tr>'\
-	        '<th>Date</th>'\
-	        '<th>Time</th>'\
-	        '<th>Author</th>'\
-	        '<th>Comment</th>'\
-	        '</tr>'
+                         '<table>'\
+                         '<tr>'\
+                         '<th>Date</th>'\
+                         '<th>Time</th>'\
+                         '<th>Author</th>'\
+                         '<th>Comment</th>'\
+                         '</tr>'
 
         for comment in matrix_comments['comment_list']:
 
             commentString = '<tr>'\
-                '<td>' + str(comment['date']) + '</td>'\
-	            '<td>' + str(comment['time']) + '</td>'\
-	            '<td>' + str(comment['author_name']) + '</td>'\
-	            '<td>' + str(comment['content'][:50]) + '</td>'\
-	            '</tr>'
+                            '<td>' + str(comment['date']) + '</td>'\
+                            '<td>' + str(comment['time']) + '</td>'\
+                            '<td>' + str(comment['author_name']) + '</td>'\
+                            '<td>' + str(comment['content'][:50]) + '</td>'\
+                            '</tr>'
 
             commentsString = commentsString + commentString
 
@@ -89,8 +85,6 @@ def bench_blog_read(request, bench_id):
 
         commentsString = '<p>There are NO Comments for this Bench!</p>'
 
-
     htmlString = introString + commentsString
-
 
     return HttpResponse(htmlString)

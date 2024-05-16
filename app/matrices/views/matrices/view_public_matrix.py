@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         view_matrix_blog.py
+# \file         view_public_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,46 +25,41 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the view_matrix_blog view routine
+# This file contains the view_public_matrix view routine
 #
 ###
 from __future__ import unicode_literals
 
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
 from matrices.models import Matrix
 
 from matrices.routines import get_header_data
-from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
 #
-# VIEW THE AGGREGATED BLOG ENTRies
+#   DISPLAY THE PUBLIC BENCH!
 #
-def view_aggregated_blog(request, matrix_id):
+def view_public_matrix(request, matrix_id):
 
-    environment = get_primary_cpw_environment()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+
+        raise PermissionDenied
 
     data = get_header_data(request.user)
 
     matrix = get_object_or_404(Matrix, pk=matrix_id)
 
-    matrix_cells = matrix.get_matrix_cells_with_blog()
+    matrix_cells = matrix.get_matrix()
 
-    bench_comment_list = list()
-
-    bench_blogpost = ''
-
-    if matrix.has_blogpost():
-
-        bench_blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
-
-    bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+    columns = matrix.get_columns()
+    rows = matrix.get_rows()
 
     data.update({'matrix': matrix,
-                 'bench_blogpost': bench_blogpost,
-                 'bench_comment_list': bench_comment_list,
+                 'rows': rows,
+                 'columns': columns,
                  'matrix_cells': matrix_cells})
 
-    return render(request, 'matrices/aggregated_matrix_blog.html', data)
+    return render(request, 'matrices/view_public_matrix.html', data)

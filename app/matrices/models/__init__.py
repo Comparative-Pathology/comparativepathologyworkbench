@@ -44,6 +44,7 @@ from .authorisation import Authorisation
 from .collectionauthority import CollectionAuthority
 from .collectionauthorisation import CollectionAuthorisation
 from .matrixsummary import MatrixSummary
+from .matrixpublicsummary import MatrixPublicSummary
 from .collectionsummary import CollectionSummary
 from .artefact import Artefact
 from .imagelink import ImageLink

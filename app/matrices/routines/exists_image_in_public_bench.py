@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         header_read.py
+# \file         exists_image_in_public_bench.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,51 +24,35 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
-# This file contains the AJAX header_read.py view routine
-#
+# Is there a Public Bench for a particular Image?
 ###
 from __future__ import unicode_literals
 
-from django.http import HttpResponse
+from django.apps import apps
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
-from matrices.models import Cell
+from django.shortcuts import get_object_or_404
 
 
 #
-# READ A HEADER CELL
+#   Is there a Public Bench for a particular Image?
 #
-def header_read(request, bench_id, header_id):
+def exists_image_in_public_bench(image_id):
 
-    object = get_object_by_uuid_or_404(Cell, header_id)
+    Cell = apps.get_model('matrices', 'Cell')
+    Image = apps.get_model('matrices', 'Image')
 
-    htmlString = ''
-    out_title = ''
-    out_description = ''
+    image = Image.objects.get(birdseye_url=image_id)
 
-    if object.title == '':
+    exists_bench = False
 
-        out_title = 'No Title'
+    cell_list = Cell.objects.filter(image=image)
 
-    else:
+    for cell in cell_list:
 
-        out_title = object.title
+        if cell.matrix.is_public():
 
-    if object.description == '':
+            exists_bench = True
 
-        out_description = 'No Description'
+            break
 
-    else:
-
-        out_description = object.description
-
-    htmlString = '<dl class=\"standard\">'\
-                 '<dt>Title</dt>'\
-                 '<dd>' + out_title + '</dd>'\
-                 '<dt>Description</dt>'\
-                 '<dd>' + out_description + '</dd>'\
-                 '</dl>'
-
-    return HttpResponse(htmlString)
+    return exists_bench

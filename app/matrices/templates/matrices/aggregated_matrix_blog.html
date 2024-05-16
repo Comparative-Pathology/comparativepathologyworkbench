@@ -37,7 +37,12 @@ The detail matrix (bench) blog template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
+{% if matrix.is_private %}
 			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+{% endif %}
+{% if matrix.is_public %}
+			<li><a href="{% url 'public_matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+{% endif %}
 			<li>Aggregated Bench and Cell Commentary</li>
 
 {% endblock %}
@@ -176,7 +181,17 @@ The detail matrix (bench) blog template
 
 	</table>
 
+{% if matrix.is_private %}
+
 	<p><a href="{% url 'detail_matrix_blog' matrix.id %}"><button class="button button-delete">Edit &raquo;</button></a></p>
+
+{% endif %}
+
+{% if matrix.is_public %}
+
+	<p></p>
+
+{% endif %}
 
 	<br />
 
@@ -201,8 +216,17 @@ The detail matrix (bench) blog template
 	<p class="test_content_{{matrix_cell.id}}">
 	</p>
 
-    <p><a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}"><button class="button button-delete">Edit &raquo;</button></a></p>
+{% if matrix.is_private %}
 
+	<p><a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}"><button class="button button-delete">Edit &raquo;</button></a></p>
+
+{% endif %}
+
+{% if matrix.is_public %}
+
+	<p></p>
+
+{% endif %}
 
 
 	<br />

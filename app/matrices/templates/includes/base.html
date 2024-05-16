@@ -350,26 +350,8 @@ The base header and footer include template
                 <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project"><button class="button button-info"><i class="fa fa-info-circle"></i></button> About</a>
                 <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project-team"><button class="button button-info"><i class="fa fa-users"></i></button> Contributors</a>
 
-  {% if environment_summary.is_canada %}
-
-                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
-                <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
-
-  {% else %}
-
-    {% if environment_summary.is_coeliac %}
-
-                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
-                <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
-
-    {% else %}
-
                 <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html"><button class="button button-info"><i class="fa fa-question-circle"></i></button> How To</a>
                 <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/guest.html"><button class="button button-delete"><i class="fa fa-question-circle"></i></button> Guest Access</a>
-
-    {% endif %}
-
-  {% endif %}
 
               </div><!-- End of header-dropdown-content -->
             </div><!-- End of header-dropdown -->

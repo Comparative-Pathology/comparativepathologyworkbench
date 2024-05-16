@@ -36,7 +36,6 @@ The home template
 
 <!-- Breadcrumb Menu -->
 
-
 {% endblock %}
 
 {% block details %}
@@ -48,206 +47,209 @@ The home template
 <!-- Page Body -->
 <div class="page-body">
 
-<!-- Page Side Bar -->
-<div class="page-sidebar">
-</div><!-- End of page-sidebar -->
+  <!-- Page Side Bar -->
+  <div class="page-sidebar">
+  </div><!-- End of page-sidebar -->
 
-<!-- Page Content -->
-<div class="page-content">
-	<div class="home-grid-container">
-	  <div class="home-grid-item">
-		  <div class="card">
-		  <div class="card-link">
-  {% if environment_summary.is_canada %}
-			  <a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/howto.html">
-  {% else %}
-    {% if environment_summary.is_coeliac %}
-              <a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/howto.html">
-	{% else %}
-              <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
-	{% endif %}
-  {% endif %}
- 			  <span class="card-link-link"></span></a>
-			<br />
-			<img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-			  <div class="card-container">
-				<h3>How To</h3>
-				<br />
-				<br />
-				<br />
-				<button class="button button-info"><i class="fa fa-question-circle fa-3x"></i></button>
-			  </div>
-			</div>
-		  </div>
-		</div>
-  {% if request.user.username == '' %}
-	  <div class="home-grid-item">
-		<div class="card">
-			<div class="card-link">
-			<a href="{% url 'login' %}">
-			  <span class="card-link-link"></span>
-			  </a>
-			  <br />
-			<img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-			<div class="card-container">
-			<h3>Login</h3>
-			  <br />
-			  <br />
-			  <br />
-			  <button class="button button-add"><i class="fa fa-sign-in-alt fa-3x"></i></button>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  <div class="home-grid-item">
-		<div class="card">
-			<div class="card-link">
-			<a href="{% url 'signup' %}">
-			  <span class="card-link-link"></span>
-			  </a>
-			  <br />
-			<img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-			<div class="card-container">
-			<h3>Sign Up</h3>
-			  <br />
-			  <br />
-			  <br />
-			  <button class="button button-delete"><i class="fa fa-user-plus fa-3x"></i></button>
-			</div>
-		  </div>
-		</div>
-	  </div>
-  {% else %}
-	  {% if credentialExists %}
-	  <div class="home-grid-item">
-		<div class="card">
-			<div class="card-link">
-			  <br />
-			<img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
-			<div class="card-container">
-			<h3>Browse</h3>
-			  <br />
-			  <a href="{% url 'list_collections' %}">
-			  <button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Collections ({{ collection_list|length }}) &raquo;</button>
-			  </a>
-			  <br />
-			  <br />
-			  <a href="{% url 'list_benches' %}">
-			  <button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Benches ({{ matrix_list|length }}) &raquo;</button>
-			  </a>
-			  <br />
-			  <br />
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  {% else %}
-	  <div class="home-grid-item">
-		<div class="card">
-			<div class="card-link">
-			  <br />
-			<img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-			<div class="card-container">
-			   <h3>WARNING!</h3>
-			  <br />
-			  <br />
-			  <br />
-			  <div class="panel-alert">
-				<strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
-			  </div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  {% endif %}
-	  <div class="home-grid-item">
-		<div class="card">
-			<div class="card-link">
-			<a href="{% url 'logout' %}">
-			  <span class="card-link-link"></span>
-			  </a>
-			  <br />
-			  <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-			<div class="card-container">
-			<h3>Logout</h3>
-			  <br />
-			  <br />
-			  <br />
-			  <button class="button button-delete"><i class="fa fa-sign-out-alt fa-3x"></i></button>
-			</div>
-		  </div>
-		</div>
-	  </div>
-  {% endif %}
-	</div><!-- End of home-grid-container -->
-	<div class="home-grid-container">
-	  <div class="home-grid-item">
-		  <div class="card">
-			<div class="card-link">
-			  <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project">
-				  <span class="card-link-link"></span>
-			  </a>
-			  <br />
-			  <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="GCA Logo" height=100px>
-			  <div class="card-container">
-				<h3>The Gut Cell Atlas Project</h3>
-				<br />
-				<br />
-				<br />
-				<button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
-			  </div>
-			</div>
-		  </div>
-		</div>
-	  <div class="home-grid-item">
-		<div class="card">
-			<div class="card-link">
-			<a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project/gut-cell-atlas-project">
-			  <span class="card-link-link"></span>
-			  </a>
-			  <br />
-			<img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="GCA Logo" height=100px>
-			<div class="card-container">
-			  <h3>About</h3>
-			  <br />
-			  <br />
-			  <br />
-			  <button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  <div class="home-grid-item">
-		<div class="card">
-		  <div class="card-link">
-{% if environment_summary.is_canada %}
-			<a href="https://workbench-canada-cpw.mvm.ed.ac.uk/about/guest.html">
+  <!-- Page Content -->
+  <div class="page-content"> 
+
+    <div class="home-grid-container">
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+            <div class="card-container">
+              <h3>Browse Public Data</h3>
+              <br />
+              <br />
+              <br />
+              <a href="{% url 'list_public_benches' %}">
+                <button class="button button-edit" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Benches ({{ matrix_public_list|length }}) &raquo;</button>
+              </a>
+              <br />
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
+{% if request.user.username == '' %}
+
+      <div class="home-grid-item">
+       <div class="card">
+          <div class="card-link">
+            <a href="{% url 'login' %}">
+              <span class="card-link-link"></span>
+            </a>
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+            <div class="card-container">
+              <h3>Login</h3>
+              <br />
+              <br />
+              <br />
+              <button class="button button-add"><i class="fa fa-sign-in-alt fa-3x"></i></button>
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <a href="{% url 'signup' %}">
+              <span class="card-link-link"></span>
+            </a>
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+            <div class="card-container">
+              <h3>Sign Up</h3>
+              <br />
+              <br />
+              <br />
+              <button class="button button-delete"><i class="fa fa-user-plus fa-3x"></i></button>
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
 {% else %}
-  {% if environment_summary.is_coeliac %}
-			<a href="https://workbench-coeliac-cpw.mvm.ed.ac.uk/about/guest.html">
+
+    {% if credentialExists %}
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="Logo" height=100px>
+            <div class="card-container">
+              <h3>Browse Private Data</h3>
+              <br />
+              <a href="{% url 'list_collections' %}">
+                <button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Collections ({{ collection_list|length }}) &raquo;</button>
+              </a>
+              <br />
+              <br />
+              <a href="{% url 'list_benches' %}">
+                <button class="button button-view" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold; font-size: 1em; padding: 14px 12px 17px 12px;">Benches ({{ matrix_list|length }}) &raquo;</button>
+              </a>
+              <br />
+              <br />
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
   {% else %}
-			<a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/guest.html">
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+            <div class="card-container">
+              <h3>WARNING!</h3>
+              <br />
+              <br />
+              <br />
+              <div class="panel-alert">
+                <strong>Danger!</strong> Contact the CPW Administration Team to complete your Account Setup!
+              </div><!-- End of panel-alert -->
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
   {% endif %}
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <a href="{% url 'logout' %}">
+              <span class="card-link-link"></span>
+            </a>
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+            <div class="card-container">
+              <h3>Logout</h3>
+              <br />
+              <br />
+              <br />
+              <button class="button button-delete"><i class="fa fa-sign-out-alt fa-3x"></i></button>
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
 {% endif %}
-			  <span class="card-link-link"></span>
-			</a>
-			<br />
-			<img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
-			<div class="card-container">
-			  <h3>Guest Access Arrangements</h3>
-			  <br />
-			  <br />
-			  <br />
-			  <button class="button button-delete"><i class="fa fa-question-circle fa-3x"></i></button>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  
-	</div><!-- End of home-grid-container -->
+
+    </div><!-- End of home-grid-container -->
+
+    <div class="home-grid-container">
+  
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/howto.html">
+             <span class="card-link-link"></span>
+            </a>
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+            <div class="card-container">
+              <h3>How To</h3>
+              <br />
+              <br />
+              <br />
+              <button class="button button-info"><i class="fa fa-question-circle fa-3x"></i></button>
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <a href="https://workbench-czi-cpw.mvm.ed.ac.uk/about/guest.html">
+              <span class="card-link-link"></span>
+            </a>
+            <br />
+            <img class="card-image" src="{% static 'CPW_Logo.png' %}" alt="CPW Logo" height=100px>
+            <div class="card-container">
+              <h3>Guest Access Arrangements</h3>
+              <br />
+              <br />
+              <br />
+              <button class="button button-delete"><i class="fa fa-question-circle fa-3x"></i></button>
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
+      <div class="home-grid-item">
+        <div class="card">
+          <div class="card-link">
+            <a href="https://www.ed.ac.uk/comparative-pathology/the-gut-cell-atlas-project">
+              <span class="card-link-link"></span>
+            </a>
+            <br />
+            <img class="card-image" src="{% static 'GCA_Logo_RGB_blue_horizontal_cropped.png' %}" alt="GCA Logo" height=100px>
+            <div class="card-container">
+              <h3>The Gut Cell Atlas Project</h3>
+              <br />
+              <br />
+              <br />
+              <button class="button button-info"><i class="fa fa-info-circle fa-3x"></i></button>
+            </div><!-- End of card-container -->
+          </div><!-- End of card-link -->
+        </div><!-- End of card -->
+      </div><!-- End of home-grid-item -->
+
+    </div><!-- End of home-grid-container -->
   
   </div><!-- End of page-content -->
   
-  </div><!-- End of page-body -->
+</div><!-- End of page-body -->
 
 {% endblock %}

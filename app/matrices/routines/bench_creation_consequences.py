@@ -28,33 +28,50 @@
 ###
 from __future__ import unicode_literals
 
-import base64, hashlib
-from os import urandom
-
 from django.apps import apps
-from django.db.models import Q
 
 
-
-"""
-    Consequential Actions for Bench Creation
-"""
-def bench_creation_consequences(a_matrix, a_columns, a_rows):
+#
+#   Consequential Actions for Bench Creation
+#
+def bench_creation_consequences(a_matrix, a_columns, a_rows, a_number_headers):
 
     Cell = apps.get_model('matrices', 'Cell')
 
-    x = 0
+    column = 0
 
-    while x <= a_columns:
+    column_label = ''
+    row_label = ''
 
-        y = 0
+    while column <= a_columns:
 
-        while y <= a_rows:
+        row = 0
 
-            cell = Cell.create(a_matrix, "", "", x, y, "", None)
+        while row <= a_rows:
+
+            if a_number_headers:
+
+                column_label = str(column)
+                row_label = str(row)
+
+                title_label = ''
+
+                if column == 0:
+
+                    title_label = row_label
+
+                if row == 0:
+
+                    title_label = column_label
+
+            else:
+
+                title_label = ''
+
+            cell = Cell.create(a_matrix, title_label, "", column, row, "", None)
 
             cell.save()
 
-            y = y + 1
+            row = row + 1
 
-        x = x + 1
+        column = column + 1

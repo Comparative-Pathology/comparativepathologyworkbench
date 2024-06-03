@@ -25,17 +25,17 @@ body {
 .page-body {
   display: grid;
   grid-template-columns: 125px auto;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .page-sidebar {
 }
 
 .page-content {
-  overflow-y: scroll;
 }
 
 .page-footer {
+  z-index: 0;
 }
 
 

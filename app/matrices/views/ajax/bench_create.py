@@ -30,18 +30,12 @@
 ###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import NewMatrixForm
-
-from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 from matrices.routines import bench_creation_consequences
@@ -52,8 +46,9 @@ from matrices.routines import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
 
+
 #
-# ADD A BENCH
+#   Add a New Bench
 #
 @login_required()
 def bench_create(request):
@@ -98,6 +93,8 @@ def bench_create(request):
                 rows = form.cleaned_data['rows']
                 columns = form.cleaned_data['columns']
 
+                number_headers = form.cleaned_data['number_headers']
+
                 rows = rows + 1
                 columns = columns + 1
 
@@ -121,7 +118,7 @@ def bench_create(request):
 
                             object.save()
 
-                            bench_creation_consequences(object, columns, rows)
+                            bench_creation_consequences(object, columns, rows, number_headers)
 
                             matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
                             messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
@@ -146,7 +143,7 @@ def bench_create(request):
 
                     object.save()
 
-                    bench_creation_consequences(object, columns, rows)
+                    bench_creation_consequences(object, columns, rows, number_headers)
 
                     matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
                     messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')

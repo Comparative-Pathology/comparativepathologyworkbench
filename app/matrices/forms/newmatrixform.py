@@ -29,24 +29,24 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Matrix
 
 from matrices.routines import get_primary_cpw_environment
 
+
+#
+#   New Bench Form
+#
 class NewMatrixForm(forms.ModelForm):
     columns = forms.IntegerField(initial=1)
     rows = forms.IntegerField(initial=1)
+    number_headers = forms.BooleanField(initial=False, required=False)
 
     class Meta:
         model = Matrix
-        fields = ('title', 'description', 'height', 'width' )
+        fields = ('title', 'description', 'height', 'width')
 
     def clean(self):
 
@@ -60,6 +60,7 @@ class NewMatrixForm(forms.ModelForm):
         width = cleaned_data.get("width")
         columns = cleaned_data.get("columns")
         rows = cleaned_data.get("rows")
+        number_headers = cleaned_data.get("number_headers")
 
         if not title:
             msg = "Please Supply a Title!"
@@ -70,33 +71,41 @@ class NewMatrixForm(forms.ModelForm):
             raise ValidationError(msg)
 
         if height < environment.minimum_cell_height:
-            msg = "Bench Cell Height is TOO small! Enter a value GREATER than " + str(environment.minimum_cell_height) + " Pixels"
+            msg = "Bench Cell Height is TOO small! Enter a value GREATER than "
+            + str(environment.minimum_cell_height) + " Pixels"
             raise ValidationError(msg)
 
         if height > environment.maximum_cell_height:
-            msg = "Bench Cell Height is TOO great! Enter a value LESS than " + str(environment.maximum_cell_height) + " Pixels"
+            msg = "Bench Cell Height is TOO great! Enter a value LESS than "
+            + str(environment.maximum_cell_height) + " Pixels"
             raise ValidationError(msg)
 
         if width < environment.minimum_cell_width:
-            msg = "Bench Cell Width is TOO small! Enter a value GREATER than " + str(environment.minimum_cell_width) + " Pixels"
+            msg = "Bench Cell Width is TOO small! Enter a value GREATER than "
+            + str(environment.minimum_cell_width) + " Pixels"
             raise ValidationError(msg)
 
         if width > environment.maximum_cell_width:
-            msg = "Bench Cell Width is TOO great! Enter a value LESS than " + str(environment.maximum_cell_width) + " Pixels"
+            msg = "Bench Cell Width is TOO great! Enter a value LESS than "
+            + str(environment.maximum_cell_width) + " Pixels"
             raise ValidationError(msg)
 
         if rows > environment.maximum_initial_rows:
-            msg = "TOO many Rows! Enter a value LESS than " + str(environment.maximum_initial_rows)
+            msg = "TOO many Rows! Enter a value LESS than "
+            + str(environment.maximum_initial_rows)
             raise ValidationError(msg)
 
         if columns > environment.maximum_initial_columns:
-            msg = "TOO many Columns! Enter a value LESS than " + str(environment.maximum_initial_columns)
+            msg = "TOO many Columns! Enter a value LESS than "
+            + str(environment.maximum_initial_columns)
             raise ValidationError(msg)
 
         if rows < environment.minimum_initial_rows:
-            msg = "TOO few Rows! Enter a value GREATER than " + str(environment.minimum_initial_rows)
+            msg = "TOO few Rows! Enter a value GREATER than "
+            + str(environment.minimum_initial_rows)
             raise ValidationError(msg)
 
         if columns < environment.minimum_initial_columns:
-            msg = "TOO few Columns! Enter a value GREATER than " + str(environment.minimum_initial_columns)
+            msg = "TOO few Columns! Enter a value GREATER than "
+            + str(environment.minimum_initial_columns)
             raise ValidationError(msg)

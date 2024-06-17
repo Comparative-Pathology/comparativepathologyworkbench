@@ -40,6 +40,7 @@ CHOICES = (('10', '10'),
 
 
 class MatrixPublicSummarySearchForm(forms.ModelForm):
+
     title = forms.CharField(max_length=20,
                             required=False)
     description = forms.CharField(max_length=20,
@@ -54,4 +55,3 @@ class MatrixPublicSummarySearchForm(forms.ModelForm):
                   'description',
                   'paginate_by'
                   )
-

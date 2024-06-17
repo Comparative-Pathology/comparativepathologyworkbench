@@ -30,7 +30,6 @@ from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth.models import User
 
-
 PAGE_CHOICES = (('10', 'Paginate By ...'),
                 ('10', '10'),
                 ('1', '1'),
@@ -81,6 +80,7 @@ class ImageSummarySimpleSearchForm(forms.Form):
                                     required=False)
 
     class Meta:
+
         fields = ('name',
                   'sort_field',
                   'sort_direction',

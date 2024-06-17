@@ -1597,7 +1597,7 @@ textarea.form-control {
   position: absolute;
   bottom: 100%;  /* At the top of the tooltip */
   left: 10%;
-  margin-left: -5px;
+  margin-left: 5px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent black transparent;
@@ -1635,7 +1635,7 @@ textarea.form-control {
   position: absolute;
   bottom: 100%;  /* At the top of the tooltipcolumn */
   left: 10%;
-  margin-left: -5px;
+  margin-left: 5px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent black transparent;

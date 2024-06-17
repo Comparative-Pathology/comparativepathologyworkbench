@@ -47,7 +47,7 @@ from matrices.routines import get_primary_cpw_environment
 
 
 #
-# The list_benches VIEW
+#   The list_benches VIEW
 #
 class MatrixListView(LoginRequiredMixin, SortableListView):
 
@@ -81,7 +81,7 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
     default_sort_field = 'matrix_id'
 
-    paginate_by = 7
+    paginate_by = 10
 
     template_name = 'host/list_benches.html'
 
@@ -137,6 +137,10 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
+        if self.query_paginate_by == '':
+
+            self.query_paginate_by = self.paginate_by
+
         return bench_list_by_user_and_direction(self.request.user,
                                                 sort_parameter,
                                                 self.query_title,
@@ -169,7 +173,7 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
                      'modified_after': self.query_modified_after,
                      'owner': self.query_owner,
                      'authority': self.query_authority,
-                     'paginate_by': self.query_paginate_by}
+                     'paginate_by': self.paginate_by}
 
         form = MatrixSummarySearchForm(data_dict)
 
@@ -194,4 +198,4 @@ class MatrixListView(LoginRequiredMixin, SortableListView):
 
     def get_paginate_by(self, queryset):
 
-        return self.request.GET.get("paginate_by", self.paginate_by)
+        return self.request.GET.get("paginate_by", self.query_paginate_by)

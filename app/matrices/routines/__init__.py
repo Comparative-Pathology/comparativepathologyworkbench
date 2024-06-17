@@ -31,6 +31,7 @@ from .add_image_to_collection import add_image_to_collection
 from .aescipher import AESCipher
 from .authorisation_crud_consequences import authorisation_crud_consequences
 from .authorisation_exists_for_bench_and_permitted import authorisation_exists_for_bench_and_permitted
+from .base26 import Base26
 from .bench_creation_consequences import bench_creation_consequences
 from .bench_list_by_user_and_direction import bench_list_by_user_and_direction
 from .bench_public_list_by_direction import bench_public_list_by_direction

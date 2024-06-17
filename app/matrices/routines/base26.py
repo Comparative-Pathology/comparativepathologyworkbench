@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         aescipher.py
+# \file         base26.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,50 +24,41 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# AES Cipher for Encryption and Decryption
+# Convert to and From Base26 (Excel Column Format)
 ###
 from __future__ import unicode_literals
 
-import base64
-import hashlib
-
-from Crypto.Cipher import AES
-from Crypto import Random
+import string
+from functools import reduce
 
 
 #
-#   Lambda functions for Padding and Unpadding
+#   Base26 Class
 #
-BS = 16
-pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
-unpad = lambda s : s[0:-s[-1]]
+class Base26:
 
+    def divmod_excel(n):
 
-#
-#   AES Cipher Class
-#
-class AESCipher:
+        a, b = divmod(n, 26)
 
-    def __init__(self, key):
+        if b == 0:
 
-        self.key = hashlib.sha256(key.encode('utf-8')).digest()
+            return a - 1, b + 26
 
-    def encrypt(self, raw):
+        return a, b
 
-        raw = pad(raw)
-        iv = Random.new().read(AES.block_size)
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+    def to_excel(num):
 
-        encoded = base64.b64encode(iv + cipher.encrypt(raw.encode('utf8')))
+        chars = []
 
-        return encoded
+        while num > 0:
 
-    def decrypt(self, enc):
+            num, d = Base26.divmod_excel(num)
 
-        enc = base64.b64decode(enc)
-        iv = enc[:16]
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+            chars.append(string.ascii_uppercase[d - 1])
 
-        decoded = unpad(cipher.decrypt(enc[16:]))
+        return ''.join(reversed(chars))
 
-        return decoded
+    def from_excel(chars):
+
+        return reduce(lambda r, x: r * 26 + x + 1, map(string.ascii_uppercase.index, chars), 0)

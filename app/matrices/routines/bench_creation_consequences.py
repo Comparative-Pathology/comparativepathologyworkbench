@@ -30,6 +30,8 @@ from __future__ import unicode_literals
 
 from django.apps import apps
 
+from matrices.routines import Base26
+
 
 #
 #   Consequential Actions for Bench Creation
@@ -40,7 +42,6 @@ def bench_creation_consequences(a_matrix, a_columns, a_rows, a_number_headers):
 
     column = 0
 
-    column_label = ''
     row_label = ''
 
     while column <= a_columns:
@@ -51,7 +52,6 @@ def bench_creation_consequences(a_matrix, a_columns, a_rows, a_number_headers):
 
             if a_number_headers:
 
-                column_label = str(column)
                 row_label = str(row)
 
                 title_label = ''
@@ -62,7 +62,7 @@ def bench_creation_consequences(a_matrix, a_columns, a_rows, a_number_headers):
 
                 if row == 0:
 
-                    title_label = column_label
+                    title_label = Base26.to_excel(column)
 
             else:
 

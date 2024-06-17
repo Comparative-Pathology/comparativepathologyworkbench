@@ -29,33 +29,42 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import CollectionSummary
 from matrices.models import CollectionAuthority
 
-CHOICES = (('10', '10'), ('5', '5'), ('25', '25'), ('50', '50'), ('100', '100'))
+CHOICES = (('10', '10'),
+           ('5', '5'),
+           ('25', '25'),
+           ('50', '50'),
+           ('100', '100'))
 
 
 class CollectionSummarySearchForm(forms.ModelForm):
-    title = forms.CharField(max_length=20, required=False)
-    description = forms.CharField(max_length=20, required=False)
-    owner = forms.ModelChoiceField(queryset=User.objects.all(), required=False, empty_label="(All Owners)")
-    authority = forms.ModelChoiceField(queryset=CollectionAuthority.objects.all(), required=False, empty_label="(All Permissions)")
-    paginate_by = forms.ChoiceField(widget=forms.Select, choices=CHOICES, required=False)
+
+    title = forms.CharField(max_length=20,
+                            required=False)
+    description = forms.CharField(max_length=20,
+                                  required=False)
+    owner = forms.ModelChoiceField(queryset=User.objects.all(),
+                                   required=False,
+                                   empty_label="(All Owners)")
+    authority = forms.ModelChoiceField(queryset=CollectionAuthority.objects.all(),
+                                       required=False,
+                                       empty_label="(All Permissions)")
+    paginate_by = forms.ChoiceField(widget=forms.Select,
+                                    choices=CHOICES,
+                                    required=False)
 
     class Meta:
         model = CollectionSummary
         fields = ('title',
-                'description',
-                'owner',
-                'authority',
-                'paginate_by',
-                )
+                  'description',
+                  'owner',
+                  'authority',
+                  'paginate_by',
+                  )
 
     def __init__(self, *args, **kwargs):
 

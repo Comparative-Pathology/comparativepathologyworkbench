@@ -101,6 +101,10 @@ class MatrixPublicListView(SortableListView):
 
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
+        if self.query_paginate_by == '':
+
+            self.query_paginate_by = self.paginate_by
+
         return bench_public_list_by_direction(sort_parameter,
                                               self.query_title,
                                               self.query_description,

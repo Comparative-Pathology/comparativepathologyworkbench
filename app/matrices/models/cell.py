@@ -35,6 +35,7 @@ from matrices.models import Matrix
 from matrices.models import Image
 
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines import Base26
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -75,7 +76,13 @@ class Cell(models.Model):
 
     @classmethod
     def create(cls, matrix, title, description, xcoordinate, ycoordinate, blogpost, image):
-        return cls(matrix=matrix, title=title, description=description, xcoordinate=xcoordinate, ycoordinate=ycoordinate, blogpost=blogpost, image=image)
+        return cls(matrix=matrix,
+                   title=title,
+                   description=description,
+                   xcoordinate=xcoordinate,
+                   ycoordinate=ycoordinate,
+                   blogpost=blogpost,
+                   image=image)
 
     def __str__(self):
         str_image = ""
@@ -85,7 +92,14 @@ class Cell(models.Model):
         else:
             str_image = "None"
 
-        return f"{self.id}, {self.matrix.id}, {self.title}, {self.description}, {self.xcoordinate}, {self.ycoordinate}, {self.blogpost}, {str_image}"
+        return f"{self.id}, \
+                 {self.matrix.id}, \
+                 {self.title}, \
+                 {self.description}, \
+                 {self.xcoordinate}, \
+                 {self.ycoordinate}, \
+                 {self.blogpost}, \
+                 {str_image}"
 
     def __repr__(self):
         str_image = ""
@@ -95,7 +109,14 @@ class Cell(models.Model):
         else:
             str_image = "None"
 
-        return f"{self.id}, {self.matrix.id}, {self.title}, {self.description}, {self.xcoordinate}, {self.ycoordinate}, {self.blogpost}, {str_image}"
+        return f"{self.id}, \
+                 {self.matrix.id}, \
+                 {self.title}, \
+                 {self.description}, \
+                 {self.xcoordinate}, \
+                 {self.ycoordinate}, \
+                 {self.blogpost}, \
+                 {str_image}"
 
     def is_header(self):
         if self.xcoordinate == 0 or self.ycoordinate == 0:
@@ -173,9 +194,12 @@ class Cell(models.Model):
     def subtract_from_y(self, an_amount):
         self.ycoordinate = self.ycoordinate - an_amount
 
-    """
-        Get Matrix Cell Comments
-    """
+    def get_coordinates(self):
+        return Base26.to_excel(self.xcoordinate) + str(self.ycoordinate)
+
+    #
+    #   Get Matrix Cell Comments
+    #
     def get_cell_comments(self):
 
         comment_list = list()
@@ -198,7 +222,7 @@ class Cell(models.Model):
 
             comment_list = []
 
-        if error_flag == True:
+        if error_flag is True:
 
             comment_list = []
 

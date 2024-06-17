@@ -90,7 +90,9 @@ class ImageSummarySearchForm(forms.ModelForm):
                                     required=False)
 
     class Meta:
+
         model = Image
+
         fields = ('name',
                   'comment',
                   'roi',

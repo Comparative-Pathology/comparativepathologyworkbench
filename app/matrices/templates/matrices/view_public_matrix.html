@@ -291,6 +291,10 @@ The view matrix (bench) template
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" >
 		<div id="cell_{{ matrix_cell.id }}" class="cell-title" style="font-size: 12px; width:{{ matrix.width|add:"-62" }}px;">
+      <div class="tooltip" style="color: #CCFFCC;"><i class="fa fa-info-circle"></i>
+				<span class="tooltiptext">{{ matrix_cell.get_coordinates }}</span>
+			</div>
+
                         {% if matrix_cell.title != ''%}
 		  <div class="tooltip" style="font-size: 12px;">
           <!-- <div class="tooltip" style="font-size: 12px; width:{{ matrix.width|add:"-82" }}px;"> -->

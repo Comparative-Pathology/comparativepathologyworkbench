@@ -44,8 +44,9 @@ from matrices.routines import get_header_data
 from matrices.routines import collection_list_by_user_and_direction
 from matrices.routines import get_primary_cpw_environment
 
+
 #
-# The list_collections VIEW
+#   The list_collections VIEW
 #
 class CollectionListView(LoginRequiredMixin, SortableListView):
 
@@ -55,16 +56,20 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
     query_authority = forms.CharField(max_length=12)
     query_paginate_by = forms.CharField(max_length=12)
 
-    allowed_sort_fields = {'collection_id': {'default_direction': '', 'verbose_name': 'Collection Id'},
-                           'collection_title': {'default_direction': '', 'verbose_name': 'Title'},
-                           'collection_image_count': {'default_direction': '', 'verbose_name': 'Images'},
-                           'collection_owner': {'default_direction': '', 'verbose_name': 'Owner'},
-                           'collection_authorisation_authority': {'default_direction': '', 'verbose_name': 'Authority'}
-                           }
+    allowed_sort_fields = {'collection_id': {'default_direction': '',
+                                             'verbose_name': 'Collection Id'},
+                           'collection_title': {'default_direction': '',
+                                                'verbose_name': 'Title'},
+                           'collection_image_count': {'default_direction': '',
+                                                      'verbose_name': 'Images'},
+                           'collection_owner': {'default_direction': '',
+                                                'verbose_name': 'Owner'},
+                           'collection_authorisation_authority': {'default_direction': '',
+                                                                  'verbose_name': 'Authority'}}
 
     default_sort_field = 'collection_id'
 
-    paginate_by = 9
+    paginate_by = 10
 
     template_name = 'host/list_collections.html'
 
@@ -72,12 +77,11 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
     context_object_name = 'collection_summary_list'
 
-
     def get_queryset(self):
 
         sort_parameter = ''
 
-        if self.request.GET.get('sort', None) == None:
+        if self.request.GET.get('sort', None) is None:
 
             sort_parameter = 'collection_id'
 
@@ -91,8 +95,19 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
         self.query_authority = self.request.GET.get('authority', '')
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
-        return collection_list_by_user_and_direction(self.request.user, sort_parameter, self.query_title, self.query_description, self.query_owner, self.query_authority, '')
+        self.query_paginate_by = self.request.GET.get('paginate_by', '')
 
+        if self.query_paginate_by == '':
+
+            self.query_paginate_by = self.paginate_by
+
+        return collection_list_by_user_and_direction(self.request.user,
+                                                     sort_parameter,
+                                                     self.query_title,
+                                                     self.query_description,
+                                                     self.query_owner,
+                                                     self.query_authority,
+                                                     '')
 
     def get_context_data(self, **kwargs):
 
@@ -110,20 +125,26 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
         environment = get_primary_cpw_environment()
 
-        if get_collection_count_for_user(self.request.user) >= environment.maximum_collection_count and self.request.user.username == 'guest':
+        if get_collection_count_for_user(self.request.user) >= environment.maximum_collection_count and \
+           self.request.user.username == 'guest':
 
             createBoolean = False
 
-        data_dict = {'title': self.query_title, 'description': self.query_description, 'owner': self.query_owner, 'authority': self.query_authority, 'paginate_by': self.query_paginate_by }
+        data_dict = {'title': self.query_title,
+                     'description': self.query_description,
+                     'owner': self.query_owner,
+                     'authority': self.query_authority,
+                     'paginate_by': self.query_paginate_by}
 
         form = CollectionSummarySearchForm(data_dict)
 
-        data.update({ 'form': form, 'readBoolean': readBoolean, 'createBoolean': createBoolean  })
+        data.update({'form': form,
+                     'readBoolean': readBoolean,
+                     'createBoolean': createBoolean})
 
         context.update(data)
 
         return context
-
 
     def get_paginate_by(self, queryset):
 

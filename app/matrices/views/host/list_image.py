@@ -49,7 +49,7 @@ from matrices.routines import image_list_by_user_and_direction
 
 
 #
-# The list_images VIEW
+#   The list_images VIEW
 #
 class ImageListView(LoginRequiredMixin, SortableListView):
 
@@ -155,6 +155,10 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
         # Set the Pagination Parameter
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
+
+        if self.query_paginate_by == '':
+
+            self.query_paginate_by = self.paginate_by
 
         # Set the Hidden Parameter
         if self.request.GET.get('hidden', None) == 'on':

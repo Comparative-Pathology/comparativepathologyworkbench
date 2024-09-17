@@ -116,16 +116,16 @@ The view matrix (bench) template
 	  </div>
 	</div>
     	{% if collection_image_list %}
-        	{% for image in collection_image_list %}
+        	{% for collection_image in collection_image_list %}
 		  		{% if updateBoolean %}
-	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ image.id }}">
+	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ collection_image.image_id }}">
 	  <div class="collection-image">
 	  				{% csrf_token %}
 				{% else %}
-	<div class="collection-item" id="image_{{ image.id }}">
+	<div class="collection-item" id="image_{{ collection_image.image_id }}">
 	  <div class="collection-image">
 	        	{% endif %}
-		<a href="{{ image.viewer_url }}" target="_blank"><img id="image_{{ image.id }}" alt="{{ image.name }}" title="{{ image.name }}" class="image-holder" src="{{ image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+		<a href="{{ collection_image.image_viewer_url }}" target="_blank"><img id="image_{{ collection_image.image_id }}" alt="{{ collection_image.image_name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.image_birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 	  </div>
 	</div>
         	{% endfor %}
@@ -319,7 +319,10 @@ The view matrix (bench) template
 			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Row Header</a>
 			  <a href="{% url 'add_rows' matrix.id forloop.parentloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Rows to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Rows ...</a>
 			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Row</a>
-							{% endif %}
+								{% if matrix.has_last_used_collection %}
+			  <a href="{% url 'add_collection_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to ADD a Collection to this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Add Collection to Row</a>
+								{% endif %}
+			  				{% endif %}
 						{% endif %}
 						{% if matrix.is_public %}
 							{% if updateBoolean %}
@@ -445,6 +448,9 @@ The view matrix (bench) template
 	  		  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Column Header</a>
 	  		  <a href="{% url 'add_columns' matrix.id forloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Columns to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Columns ...</a>
 	  		  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Column</a>
+							{% endif %}
+							{% if matrix.has_last_used_collection %}
+			  <a href="{% url 'add_collection_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to ADD a Collection to this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Add Collection to Column</a>
 							{% endif %}
 						{% endif %}
 						{% if matrix.is_public %}
@@ -581,11 +587,17 @@ The view matrix (bench) template
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
 			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
+										{% if matrix.has_last_used_collection %}
+			  <a href="{% url 'add_collection' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Collection to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Collection ...</a>
+										{% endif %}
 									{% else %}
 			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
-						  			{% endif %}
+										{% if matrix.has_last_used_collection %}
+			  <a href="{% url 'add_collection' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Collection to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Collection ...</a>
+			  							{% endif %}
+									{% endif %}
 								{% endif %}
 							{% endif %}
 						{% endif %}

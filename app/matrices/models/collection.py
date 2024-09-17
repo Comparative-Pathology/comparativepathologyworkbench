@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The (Image) Collection Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -35,16 +37,19 @@ from django.contrib.auth.models import User
 from matrices.models import Image
 
 
-"""
-    COLLECTION
-"""
-
-
+#
+#   The Collection Model
+#
 class Collection(models.Model):
-    title = models.CharField(max_length=255, default='')
-    description = models.TextField(max_length=4095, default='')
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    images = models.ManyToManyField(Image, related_name='collections')
+
+    title = models.CharField(max_length=255,
+                             default='')
+    description = models.TextField(max_length=4095,
+                                   default='')
+    owner = models.ForeignKey(User,
+                              on_delete=models.DO_NOTHING)
+    images = models.ManyToManyField(Image,
+                                    related_name='collections')
 
     @classmethod
     def create(cls, title, description, owner):
@@ -99,17 +104,19 @@ class Collection(models.Model):
         return collection_tag_list
 
     def get_images(self):
-
         return self.images.filter(Q(hidden=False))
 
-    def get_hidden_images(self):
+    def get_images_count(self):
+        return self.images.filter(Q(hidden=False)).count()
 
+    def get_hidden_images(self):
         return self.images.filter(Q(hidden=True))
 
-    def get_images_for__tag(self, a_tag):
+    def get_hidden_images_count(self):
+        return self.images.filter(Q(hidden=True)).count()
 
+    def get_images_for__tag(self, a_tag):
         return self.images.filter(Q(hidden=False)).filter(tags__name__in=[a_tag.name])
 
     def get_all_images(self):
-
         return self.images.all()

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_matrix view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -45,10 +45,11 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_header_data
+from matrices.routines import image_list_by_user_and_direction
 
 
 #
-# DISPLAY THE BENCH!
+#   DISPLAY THE BENCH!
 #
 @login_required
 def view_matrix(request, matrix_id):
@@ -87,7 +88,17 @@ def view_matrix(request, matrix_id):
 
                 if matrix.has_last_used_collection():
 
-                    collection_image_list = matrix.last_used_collection.get_images()
+                    collection_image_list = image_list_by_user_and_direction(request.user,
+                                                                             'image_ordering',
+                                                                             '',
+                                                                             '',
+                                                                             '',
+                                                                             '',
+                                                                             False,
+                                                                             '',
+                                                                             matrix.last_used_collection.id,
+                                                                             '',
+                                                                             '')
 
             if matrix.has_last_used_collection():
 

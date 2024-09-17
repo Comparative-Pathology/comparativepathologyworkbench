@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         __init__.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -44,8 +45,8 @@
 # def list_collection_authorisation(request):
 # def list_my_collection_authorisation(request):
 #
-###
-
+# ##
+#
 from .authorisation import authorisation
 from .maintenance import maintenance
 from .home import home

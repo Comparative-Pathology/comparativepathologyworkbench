@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         get_collection_image_ordering_for_collection_and_image_and_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,11 +25,29 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Package Description.
+# Get the CollectionImageOrdering Number for a Collection, Image and User
 # ##
 #
-from .cell import CellViewSet
-from .collection import CollectionViewSet
-from .image import ImageViewSet
-from .matrix import MatrixViewSet
-from .user import UserViewSet
+from __future__ import unicode_literals
+
+from django.apps import apps
+
+
+#
+#   Get the CollectionImageOrdering Number for a Collection, Image and User
+#
+def get_collection_image_ordering_for_collection_and_image_and_user(a_collection, a_image, a_permitted):
+
+    CollectionImageOrder = apps.get_model('matrices', 'CollectionImageOrder')
+
+    ordering = 0
+
+    cio_qs = CollectionImageOrder.objects.filter(collection=a_collection)\
+        .filter(image=a_image)\
+        .filter(permitted=a_permitted)
+
+    for cio in cio_qs:
+
+        ordering = cio.ordering
+
+    return ordering

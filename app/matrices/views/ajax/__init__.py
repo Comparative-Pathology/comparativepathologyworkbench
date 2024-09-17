@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         __init__.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -42,13 +43,14 @@
 # def shuffle_columns(request) - MOVE COLUMN AND PUSH EXISTING COLUMNS TO LEFT OR RIGHT
 # def shuffle_rows(request) - MOVE ROW AND PUSH EXISTING ROWS TO LEFT OR RIGHT
 #
-###
-
+# ##
+#
 from .active_collection_selection import active_collection_selection
 
 from .add_cell import add_cell
 from .add_columns import add_columns
 from .add_rows import add_rows
+from .add_collection import add_collection
 
 from .aggregate_bench_cell_blog_read import aggregate_bench_cell_blog_read
 
@@ -80,6 +82,7 @@ from .collection_update import collection_update
 from .collection_update_owner import collection_update_owner
 from .collection_delete import collection_delete
 from .collection_selection import collection_selection
+from .collection_ordering_selection import collection_ordering_selection
 
 from .delete_cell import delete_cell
 

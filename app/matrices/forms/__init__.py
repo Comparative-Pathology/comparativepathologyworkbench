@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         __init__.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # forms Package Description.
-###
+# ##
+#
 
 from .artefactform import ArtefactForm
 from .authorisationform import AuthorisationForm
@@ -48,6 +50,7 @@ from .editconstraineduserform import EditConstrainedUserForm
 from .editconstrainedprofileform import EditConstrainedProfileForm
 from .environmentform import EnvironmentForm
 from .headerform import HeaderForm
+from .imagesummaryorderingform import ImageSummaryOrderingForm
 from .imagesummarysearchform import ImageSummarySearchForm
 from .imagesummarysimplesearchform import ImageSummarySimpleSearchForm
 from .locationform import LocationForm
@@ -55,6 +58,7 @@ from .matrixform import MatrixForm
 from .matrixaddcellform import MatrixAddCellForm
 from .matrixaddrowform import MatrixAddRowForm
 from .matrixaddcolumnform import MatrixAddColumnForm
+from .matrixaddcollectionform import MatrixAddCollectionForm
 from .matrixdeletecellform import MatrixDeleteCellForm
 from .matrixownerselectionform import MatrixOwnerSelectionForm
 from .matrixsummarysearchform import MatrixSummarySearchForm

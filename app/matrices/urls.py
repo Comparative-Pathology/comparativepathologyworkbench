@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-# ##!
+#
+# ##
 # \file         urls.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # All the URL Paths used by the CPW.
-###
+# ##
+#
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -151,6 +153,12 @@ urlpatterns = [
          name='add_cell'),
     path('delete_cell/<int:matrix_id>/<int:cell_id>/', matrices_views.ajax.delete_cell,
          name='delete_cell'),
+    path('add_collection/<int:matrix_id>/<int:cell_id>/', matrices_views.ajax.add_collection,
+         name='add_collection'),
+
+    path('collection_ordering_selection/<int:collection_id>/<int:image_id>/<int:permitted_id>/', 
+         matrices_views.ajax.collection_ordering_selection,
+         name='collection_ordering_selection'),
 
     #   views/authorisation
     path('detail_user/<int:user_id>/', matrices_views.view_user, name='detail_user'),
@@ -343,6 +351,10 @@ urlpatterns = [
          name='delete_this_column'),
     path('delete_this_row/<int:matrix_id>/<int:row_id>/', matrices_views.matrices.delete_this_row,
          name='delete_this_row'),
+    path('add_collection_column/<int:matrix_id>/<int:column_id>/', matrices_views.matrices.add_collection_column,
+         name='add_collection_column'),
+    path('add_collection_row/<int:matrix_id>/<int:row_id>/', matrices_views.matrices.add_collection_row,
+         name='add_collection_row'),
 
     path('search_image/<str:path_from>/<int:identifier>/', matrices_views.matrices.search_image, name='search_image'),
 

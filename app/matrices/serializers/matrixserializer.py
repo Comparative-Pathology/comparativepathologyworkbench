@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         matrixserializer.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This Serializer provides Create, Read, Update and Delete functions for a Matrix (Bench)
-###
+# ##
+#
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
@@ -147,7 +149,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         matrix_description = ""
 
         # Access the Bench Title Attribute
-        if validated_data.get('title', None) == None:
+        if validated_data.get('title', None) is None:
 
             matrix_title = ""
 
@@ -156,7 +158,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             matrix_title = validated_data.get('title')
 
         # Access the Bench Description Attribute
-        if validated_data.get('description', None) == None:
+        if validated_data.get('description', None) is None:
 
             matrix_description = ""
 
@@ -356,7 +358,6 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                                 # Update the further Image ROI Attribute
                                 image_roi = int(json_roi['id'])
-
 
                         # Does the Image already exist in the Database?
                         #  Yes

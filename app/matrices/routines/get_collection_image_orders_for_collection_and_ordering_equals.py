@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         get_collection_image_orders_for_collection_and_ordering_equals.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,11 +25,20 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Package Description.
+# Are there CollectionImageOrders for a given Collection, and a supplied Ordering?
 # ##
 #
-from .cell import CellViewSet
-from .collection import CollectionViewSet
-from .image import ImageViewSet
-from .matrix import MatrixViewSet
-from .user import UserViewSet
+from __future__ import unicode_literals
+
+from django.apps import apps
+
+
+#
+#   Return the CollectionImageOrders for a given Collection, above a supplied Ordering
+#
+def get_collection_image_orders_for_collection_and_ordering_equals(a_collection, a_ordering):
+
+    CollectionImageOrder = apps.get_model('matrices', 'CollectionImageOrder')
+
+    return CollectionImageOrder.objects.filter(collection=a_collection)\
+        .filter(ordering=a_ordering)

@@ -45,7 +45,7 @@ from matrices.routines import add_image_to_collection
 
 
 #
-# ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
+#   ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
 #
 @login_required
 def add_image(request, server_id, image_id, roi_id, path_from, identifier):

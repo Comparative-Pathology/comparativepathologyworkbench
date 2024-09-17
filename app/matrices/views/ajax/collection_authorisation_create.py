@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_authorisation_create.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX collection_authorisation_create view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
@@ -36,10 +36,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
-from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
@@ -47,16 +43,17 @@ from matrices.forms import CollectionAuthorisationForm
 
 from matrices.models import Collection
 from matrices.models import CollectionAuthority
-from matrices.models import CollectionAuthorisation
+from matrices.models import CollectionImageOrder
 
 from matrices.routines import collection_authorisation_create_update_consequences
 from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_collection_and_user
+from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 from matrices.routines import simulate_network_latency
 
 
 #
-# ADD A COLLECTION AUTHORISATION
+#   ADD A COLLECTION AUTHORISATION
 #
 @login_required()
 def collection_authorisation_create(request, collection_id=None):
@@ -76,7 +73,6 @@ def collection_authorisation_create(request, collection_id=None):
     if not credential_exists(request.user):
 
         raise PermissionDenied
-
 
     object = None
 
@@ -104,14 +100,26 @@ def collection_authorisation_create(request, collection_id=None):
 
             collection_authorisation_create_update_consequences(permitted, collection)
 
+            collection_image_order_list = \
+                get_collection_image_orders_for_collection_and_permitted_orderedby_ordering(collection, request.user)
+
+            for collection_image_order in collection_image_order_list:
+
+                collectionimageorder = CollectionImageOrder.create(collection,
+                                                                   collection_image_order.image,
+                                                                   permitted,
+                                                                   collection_image_order.ordering)
+
+                collectionimageorder.save()
+
             object.save()
 
-            messages.success(request, 'Collection Authorisation ' + str(object.id) + ' ADDED for Collection '+ '{num:06d}'.format(num=object.collection.id))
+            messages.success(request, 'Collection Authorisation ' + str(object.id) +
+                             ' ADDED for Collection ' + '{num:06d}'.format(num=object.collection.id))
 
     else:
 
         form = CollectionAuthorisationForm()
-
 
     if collection_id is None:
 
@@ -131,18 +139,17 @@ def collection_authorisation_create(request, collection_id=None):
 
             raise PermissionDenied
 
-
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
         form.fields['collection'].initial = collection_id
 
     form.fields['authority'] = forms.ModelChoiceField(CollectionAuthority.objects.all())
     form.fields['authority'].label_from_instance = lambda obj: "{0}".format(obj.name)
 
-    form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id).exclude(is_superuser=True))
+    form.fields['permitted'] = forms.ModelChoiceField(User.objects.exclude(id=request.user.id)
+                                                      .exclude(is_superuser=True))
     form.fields['permitted'].label_from_instance = lambda obj: "{0}".format(obj.username)
 
     form.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}".format(obj.id, obj.title)
-
 
     return render(request, template_name, {
         'form': form,

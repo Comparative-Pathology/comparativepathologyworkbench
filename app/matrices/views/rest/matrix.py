@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 #
+# ##
 # \file         matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -26,7 +27,8 @@
 # \brief
 # The Matrix View Set automatically provides `list`, `create`, `retrieve`,
 # `update` and `destroy` actions.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db.models import Q
@@ -82,7 +84,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
         order_parameter = 'matrix_id'
         order_parameter_2 = 'id'
 
-        if self.request.query_params.get('sort', None) == None:
+        if self.request.query_params.get('sort', None) is None:
 
             sort_parameter = 'matrix_id'
 

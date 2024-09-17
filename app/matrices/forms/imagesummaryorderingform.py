@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         imagesummaryorderingform.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,11 +25,32 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Package Description.
+# Form for searching Image Orderings.
 # ##
 #
-from .cell import CellViewSet
-from .collection import CollectionViewSet
-from .image import ImageViewSet
-from .matrix import MatrixViewSet
-from .user import UserViewSet
+from __future__ import unicode_literals
+
+from django import forms
+
+
+#
+#   The ImageSummaryOrdering Search Form
+#
+class ImageSummaryOrderingForm(forms.Form):
+
+    ordering = forms.ChoiceField(choices=(), required=True)
+
+    def __init__(self, ordering_list, *args, **kwargs):
+
+        if 'init_ordering' in kwargs:
+
+            init_val = kwargs.pop('init_ordering')
+
+        else:
+
+            init_val = 1  # fallback value if kwarg is not provided
+
+        super(ImageSummaryOrderingForm, self).__init__(*args, **kwargs)
+
+        self.fields['ordering'].choices = ordering_list
+        self.initial['ordering'] = init_val

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         exists_update_for_collection_and_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,23 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Can the supplied User UPDATE the supplied Collection?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 from django.db.models import Q
 
 
-"""
-    Get the Collection Authorisation for a particular Collection and particular User
-"""
+#
+#   Get the Collection Authorisation for a particular Collection and particular User
+#
 def exists_update_for_collection_and_user(a_collection, a_user):
-
-    CollectionAuthority = apps.get_model('matrices', 'CollectionAuthority')
 
     CollectionAuthorisation = apps.get_model('matrices', 'CollectionAuthorisation')
 
@@ -61,7 +57,8 @@ def exists_update_for_collection_and_user(a_collection, a_user):
 
             if CollectionAuthorisation.objects.filter(Q(collection=a_collection) & Q(permitted=a_user)).exists():
 
-                collection_authorisation = CollectionAuthorisation.objects.get(Q(collection=a_collection) & Q(permitted=a_user))
+                collection_authorisation = CollectionAuthorisation.objects.get(Q(collection=a_collection) & 
+                                                                               Q(permitted=a_user))
 
                 if collection_authorisation.collection_authority.is_owner():
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         imagesummary.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,24 +26,11 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Image Summary Model - for a VIEW not a table ;-)
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
-from django.apps import apps
-from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
-
-from random import randint
 
 from matrices.models import Image
 
@@ -84,34 +72,42 @@ class ImageSummary(models.Model):
     image_matrix_title = models.CharField(max_length=255, default='')
     image_matrix_owner = models.CharField(max_length=50, default='')
     image_tags = models.CharField(max_length=4096, default='')
+    image_ordering = models.IntegerField(default=0, blank=False)
+    image_ordering_permitted = models.CharField(max_length=50, default='')
+    image_ordering_permitted_id = models.IntegerField(default=0, blank=False)
 
     class Meta:
         managed = False
         db_table = 'matrices_image_summary'
 
     def __str__(self):
-        return f"{self.image_id}, {self.image_identifier}, {self.image_name}, {self.image_viewer_url}, {self.image_birdseye_url}, {self.image_server}, \
-                {self.image_server_id}, {self.image_server_url_server}, {self.image_server_uid}, {self.image_server_accesible}, {self.image_server_type_name}, \
+        return f"{self.image_id}, {self.image_identifier}, {self.image_name}, {self.image_viewer_url}, \
+                {self.image_birdseye_url}, {self.image_server}, \
+                {self.image_server_id}, {self.image_server_url_server}, {self.image_server_uid}, \
+                {self.image_server_accesible}, {self.image_server_type_name}, \
                 {self.image_roi}, {self.image_comment}, {self.image_hidden}, {self.image_owner}, \
                 {self.image_collection_id}, {self.image_collection_title}, {self.image_collection_owner}, \
-                {self.image_matrix_id}, {self.image_matrix_title}, {self.image_matrix_owner}, {self.image_tags}"
+                {self.image_matrix_id}, {self.image_matrix_title}, {self.image_matrix_owner}, {self.image_tags}, \
+                {self.image_ordering}, {self.image_ordering_permitted}, {self.image_ordering_permitted_id}"
 
     def __repr__(self):
-        return f"{self.image_id}, {self.image_identifier}, {self.image_name}, {self.image_viewer_url}, {self.image_birdseye_url}, {self.image_server}, \
-                {self.image_server_id}, {self.image_server_url_server}, {self.image_server_uid}, {self.image_server_accesible}, {self.image_server_type_name}, \
+        return f"{self.image_id}, {self.image_identifier}, {self.image_name}, {self.image_viewer_url}, \
+                {self.image_birdseye_url}, {self.image_server}, \
+                {self.image_server_id}, {self.image_server_url_server}, {self.image_server_uid}, \
+                {self.image_server_accesible}, {self.image_server_type_name}, \
                 {self.image_roi}, {self.image_comment}, {self.image_hidden}, {self.image_owner}, \
                 {self.image_collection_id}, {self.image_collection_title}, {self.image_collection_owner}, \
-                {self.image_matrix_id}, {self.image_matrix_title}, , {self.image_matrix_owner}, {self.image_tags}"
-
+                {self.image_matrix_id}, {self.image_matrix_title}, {self.image_matrix_owner}, {self.image_tags}, \
+                {self.image_ordering}, {self.image_ordering_permitted}, {self.image_ordering_permitted_id}"
 
     def is_accessible(self):
-        if self.image_server_accesible == True:
+        if self.image_server_accesible is True:
             return True
         else:
             return False
 
     def is_not_accessible(self):
-        if self.image_server_accesible == False:
+        if self.image_server_accesible is False:
             return True
         else:
             return False
@@ -171,9 +167,9 @@ class ImageSummary(models.Model):
                 tag_attribute_array = tag.split(',')
 
                 list_of_tag_ids.append(tag_attribute_array[0])
-        
+
             tag_queryset = Tag.objects.filter(id__in=list_of_tag_ids).order_by('id')
-        
+
         return tag_queryset
 
     def has_this_tag(self, a_tag):

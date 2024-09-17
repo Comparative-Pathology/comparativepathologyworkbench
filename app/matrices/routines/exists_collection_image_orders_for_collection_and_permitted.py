@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         exists_collection_image_orders_for_collection_and_permitted.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,11 +25,20 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Package Description.
+# Is there a Collection for a particular User and a particular Title?
 # ##
 #
-from .cell import CellViewSet
-from .collection import CollectionViewSet
-from .image import ImageViewSet
-from .matrix import MatrixViewSet
-from .user import UserViewSet
+from __future__ import unicode_literals
+
+from django.apps import apps
+
+
+#
+#   Is there a CollectionImageOrder for a given Collection, Image and Permitted (User)?
+#
+def exists_collection_image_orders_for_collection_and_permitted(a_collection, a_permitted):
+
+    CollectionImageOrder = apps.get_model('matrices', 'CollectionImageOrder')
+
+    return CollectionImageOrder.objects.filter(collection=a_collection)\
+        .filter(permitted=a_permitted).exists()

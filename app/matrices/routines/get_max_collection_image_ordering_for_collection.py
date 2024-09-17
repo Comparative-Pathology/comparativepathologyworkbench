@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         get_max_collection_image_ordering_for_collection.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,11 +25,32 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Package Description.
+# Get the Maximum ordering for a Particular Collection
 # ##
 #
-from .cell import CellViewSet
-from .collection import CollectionViewSet
-from .image import ImageViewSet
-from .matrix import MatrixViewSet
-from .user import UserViewSet
+from __future__ import unicode_literals
+
+from django.apps import apps
+
+from django.db.models import Max
+
+
+#
+#   Count the Collections for a particular User
+#
+def get_max_collection_image_ordering_for_collection(a_collection_id):
+
+    CollectionImageOrder = apps.get_model('matrices', 'CollectionImageOrder')
+
+    max_ordering = 0
+
+    cio_qs = CollectionImageOrder.objects.values("collection_id")\
+        .annotate(Max("ordering"))\
+        .order_by("collection_id")\
+        .filter(collection_id=a_collection_id)
+
+    for cio_summary in cio_qs:
+
+        max_ordering = cio_summary.get("ordering__max")
+
+    return max_ordering

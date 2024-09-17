@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -26,18 +27,16 @@
 # \brief
 # The Collection View Set automatically provides `list`, `create`, `retrieve`,
 # `update` and `destroy` actions.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 import subprocess
 
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 
-from rest_framework import permissions, renderers, viewsets
-from rest_framework.decorators import action
+from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from matrices.models import Collection
 from matrices.models import Artefact
@@ -54,10 +53,11 @@ from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_benches_for_last_used_collection
 from matrices.routines import get_users_for_last_used_collection
 
+
 #
-# COLLECTION REST INTERFACE ROUTINES
+#   COLLECTION REST INTERFACE ROUTINES
 #
-class  CollectionViewSet(viewsets.ModelViewSet):
+class CollectionViewSet(viewsets.ModelViewSet):
     """A ViewSet of Collections
 
     This viewset automatically provides:
@@ -68,13 +68,11 @@ class  CollectionViewSet(viewsets.ModelViewSet):
 
     """
 
-
     queryset = Collection.objects.all()
 
-    permission_classes = [ CollectionIsReadOnlyOrIsAdminOrIsOwner ]
+    permission_classes = [CollectionIsReadOnlyOrIsAdminOrIsOwner]
 
     serializer_class = CollectionSerializer
-
 
     def list(self, request, *args, **kwargs):
         """List Collections.
@@ -86,11 +84,10 @@ class  CollectionViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         return Response(data='Collection LIST Not Available')
-
 
     def partial_update(self, request, *args, **kwargs):
         """Partial Update Collection.
@@ -102,11 +99,10 @@ class  CollectionViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         return Response(data='Collection PARTIAL UPDATE Not Available')
-
 
     def destroy(self, request, *args, **kwargs):
         """Destroy Collection.
@@ -118,7 +114,7 @@ class  CollectionViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         responseMsg = 'Collection  Deletion Response Message'
@@ -135,13 +131,12 @@ class  CollectionViewSet(viewsets.ModelViewSet):
         # Check each Image in the Collection
         for image in image_list:
 
-
             # Check if the Image is still referenced in a Cell
             #  Yes
             if exists_image_in_cells(image):
 
                 boolAllowDelete = False
-                
+
                 #  Image Deletion is NOT allowed for Images still referenced in a Bench
                 responseMsg = 'Collection Deletion NOT Allowed - Image still referenced in a Bench!'
 
@@ -181,7 +176,7 @@ class  CollectionViewSet(viewsets.ModelViewSet):
 
                                         rm_command = 'rm ' + str(artefact.location)
                                         rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
-    
+
                                         # Delete the located file for this artefact
                                         process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
@@ -195,7 +190,6 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                                 else:
 
                                     boolAllowDelete = False
-
 
                         # Does the Image have any Parent Image Links ... ?
                         #  Yes
@@ -236,7 +230,7 @@ class  CollectionViewSet(viewsets.ModelViewSet):
 
                     #  Can we delete this image ... ?
                     #  Yes ... 
-                    if boolAllowDelete == True:
+                    if boolAllowDelete is True:
 
                         #  Process all the Collections that hold this image
                         for collection in list_collections:
@@ -248,12 +242,12 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                         image.delete()
 
                         responseMsg = 'Image Delete Success!'
-                
+
                     #  No ... 
                     else:
 
                         boolAllowDelete = False
-                        
+
                         #  Image Links have NOT been able to be deleted for this image!
                         responseMsg = 'Collection Deletion NOT Allowed - Image Links NOT Deleted!'
 
@@ -261,13 +255,13 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                 else:
 
                     boolAllowDelete = False
-                
+
                     #  Image Deletion is NOT allowed for NON WordPress/OMERO served Images
                     responseMsg = 'Collection Deletion NOT Allowed - Image Server is NOT OMERO or WordPress!'
 
         #  Can we delete this image ... ?
         #  Yes ... 
-        if boolAllowDelete == True:
+        if boolAllowDelete is True:
 
             # Has this Collection been Last Used in a Bench ... ?
             #  Yes
@@ -285,7 +279,6 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                     # Update the Bench
                     matrix.save()
 
-
             # Has this Collection been Last Used by a User ... ?
             #  Yes
             if exists_user_for_last_used_collection(collection):
@@ -302,7 +295,6 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                     # Update the User
                     user.save()
 
-
             # Is this Collection the User's Active Collection ... ?
             #  Yes
             if collection == get_active_collection_for_user(request.user):
@@ -312,7 +304,6 @@ class  CollectionViewSet(viewsets.ModelViewSet):
 
                 # Update the User
                 request.user.save()
-
 
             # Does the User have an Active Collection ... ?
             #  Yes
@@ -330,11 +321,10 @@ class  CollectionViewSet(viewsets.ModelViewSet):
 
                 #  No
                 else:
-                
+
                     # Delete the Collection
                     collection.delete()
                     responseMsg = 'Collection Delete Success!'
-
 
             #  No
             else:
@@ -343,6 +333,4 @@ class  CollectionViewSet(viewsets.ModelViewSet):
                 collection.delete()
                 responseMsg = 'Collection Delete Success!'
 
-
         return Response(data=responseMsg)
-

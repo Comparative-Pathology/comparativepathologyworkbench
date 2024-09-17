@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Image Model - should really be "Thing" ;-)
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -43,17 +45,29 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 
 
 #
-#   IMAGE
+#   The Image Model
 #
 class Image(models.Model):
+
     identifier = models.IntegerField(default=0)
-    name = models.CharField(max_length=255, blank=False, default='')
-    server = models.ForeignKey(Server, related_name='images', default=0, on_delete=models.CASCADE)
-    viewer_url = models.CharField(max_length=255, blank=False, default='')
-    birdseye_url = models.CharField(max_length=255, blank=False, default='')
-    owner = models.ForeignKey(User, related_name='owner', on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=255,
+                            blank=False,
+                            default='')
+    server = models.ForeignKey(Server,
+                               related_name='images',
+                               default=0,
+                               on_delete=models.CASCADE)
+    viewer_url = models.CharField(max_length=255,
+                                  blank=False,
+                                  default='')
+    birdseye_url = models.CharField(max_length=255,
+                                    blank=False,
+                                    default='')
+    owner = models.ForeignKey(User, related_name='owner',
+                              on_delete=models.DO_NOTHING)
     roi = models.IntegerField(default=0)
-    comment = models.TextField(max_length=4095, default='')
+    comment = models.TextField(max_length=4095,
+                               default='')
     hidden = models.BooleanField(default=False)
 
     tags = TaggableManager()
@@ -87,7 +101,7 @@ class Image(models.Model):
 
     @classmethod
     def create(cls, identifier, name, server, viewer_url, birdseye_url, roi, owner, comment, hidden):
-        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url, 
+        return cls(identifier=identifier, name=name, server=server, viewer_url=viewer_url, birdseye_url=birdseye_url,
                    roi=roi, owner=owner, comment=comment, hidden=hidden)
 
     def __str__(self):
@@ -116,7 +130,7 @@ class Image(models.Model):
         else:
             return True
 
-    def is_duplicate(self, a_identifier, a_name, a_server, a_viewer_url, a_birdseye_url, a_roi, a_owner, a_comment, 
+    def is_duplicate(self, a_identifier, a_name, a_server, a_viewer_url, a_birdseye_url, a_roi, a_owner, a_comment,
                      a_hidden):
 
         if self.identifier == a_identifier and self.name == a_name and self.server == a_server and \
@@ -163,14 +177,12 @@ class Image(models.Model):
         return local_image_name
 
     def has_tags(self):
-
         if self.tags.all() is None:
             return False
         else:
             return True
 
     def get_tags(self):
-
         return self.tags.all()
 
     def has_this_tag(self, a_tag):

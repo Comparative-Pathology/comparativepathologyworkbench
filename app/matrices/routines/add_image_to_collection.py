@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         add_image_to_collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the add_image_to_collection routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from datetime import datetime
@@ -48,16 +48,20 @@ from matrices.routines.get_images_for_id_server_owner_roi import get_images_for_
 from matrices.routines.get_an_ebi_sca_experiment_id_from_chart_id import get_an_ebi_sca_experiment_id_from_chart_id
 from matrices.routines.get_an_ebi_sca_parameters_from_chart_id import get_an_ebi_sca_parameters_from_chart_id
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines.get_max_collection_image_ordering_for_collection \
+    import get_max_collection_image_ordering_for_collection
 
 
 #
-# ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
+#   ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
 #
 def add_image_to_collection(credential, server, image_id, roi_id):
 
     Image = apps.get_model('matrices', 'Image')
     Collection = apps.get_model('matrices', 'Collection')
     Document = apps.get_model('matrices', 'Document')
+    CollectionImageOrder = apps.get_model('matrices', 'CollectionImageOrder')
+    CollectionAuthorisation = apps.get_model('matrices', 'CollectionAuthorisation')
 
     environment = get_primary_cpw_environment()
 
@@ -187,7 +191,7 @@ def add_image_to_collection(credential, server, image_id, roi_id):
                                     host=server.url_server,
                                     port=environment.gateway_port,
                                     secure=True)
-                
+
                 conn.connect()
 
                 image_ome = conn.getObject("Image", str(image_id))
@@ -254,6 +258,28 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
         Collection.assign_image(image_out, collection)
 
+        max_ordering = get_max_collection_image_ordering_for_collection(collection.id)
+
+        max_ordering = max_ordering + 1
+
+        collectionimageorder = CollectionImageOrder.create(collection,
+                                                           image_out,
+                                                           user,
+                                                           max_ordering)
+
+        collectionimageorder.save()
+
+        collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__id=collection.id)
+
+        for collection_authorisation in collection_authorisation_list:
+
+            collectionimageorder = CollectionImageOrder.create(collection,
+                                                               image_out,
+                                                               collection_authorisation.permitted,
+                                                               max_ordering)
+
+            collectionimageorder.save()
+
     else:
 
         json_rois = wp_data['rois']
@@ -283,6 +309,29 @@ def add_image_to_collection(credential, server, image_id, roi_id):
                     collection = get_active_collection_for_user(user)
 
                     Collection.assign_image(image_out, collection)
+
+                    max_ordering = get_max_collection_image_ordering_for_collection(collection.id)
+
+                    max_ordering = max_ordering + 1
+
+                    collectionimageorder = CollectionImageOrder.create(collection,
+                                                                       image_out,
+                                                                       user,
+                                                                       max_ordering)
+
+                    collectionimageorder.save()
+
+                    collection_authorisation_list = \
+                        CollectionAuthorisation.objects.filter(collection__id=collection.id)
+
+                    for collection_authorisation in collection_authorisation_list:
+
+                        collectionimageorder = CollectionImageOrder.create(collection,
+                                                                           image_out,
+                                                                           collection_authorisation.permitted,
+                                                                           max_ordering)
+
+                        collectionimageorder.save()
 
     for tag_str_name in tag_str_list:
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         __init__.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,8 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # routines Package Description.
-###
-
+# ##
+#
 from .add_image_to_collection import add_image_to_collection
 from .aescipher import AESCipher
 from .authorisation_crud_consequences import authorisation_crud_consequences
@@ -68,6 +69,10 @@ from .exists_collection_for_user import exists_collection_for_user
 from .exists_collections_for_image import exists_collections_for_image
 from .exists_collection_for_image import exists_collection_for_image
 from .exists_collection_for_user_and_title import exists_collection_for_user_and_title
+from .exists_collection_image_orders_for_collection_and_permitted \
+    import exists_collection_image_orders_for_collection_and_permitted
+from .exists_collection_image_orders_for_collection_and_image_and_permitted \
+    import exists_collection_image_orders_for_collection_and_image_and_permitted
 from .exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi
 from .exists_image_for_id_server_roi import exists_image_for_id_server_roi
 from .exists_image_for_user import exists_image_for_user
@@ -102,6 +107,16 @@ from .get_benches_for_last_used_collection import get_benches_for_last_used_coll
 from .get_cells_for_image import get_cells_for_image
 from .get_collection_authority_for_collection_and_user_and_requester \
     import get_collection_authority_for_collection_and_user_and_requester
+from .get_collection_image_orders_for_collection_and_image_and_permitted \
+    import get_collection_image_orders_for_collection_and_image_and_permitted
+from .get_collection_image_ordering_for_collection_and_image_and_user \
+    import get_collection_image_ordering_for_collection_and_image_and_user
+from .get_collection_image_orders_for_collection_and_ordering_above \
+    import get_collection_image_orders_for_collection_and_ordering_above
+from .get_collection_image_orders_for_collection_and_ordering_equals \
+    import get_collection_image_orders_for_collection_and_ordering_equals
+from .get_collection_image_orders_for_collection_and_permitted_orderedby_ordering \
+    import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 from .get_collections_for_image import get_collections_for_image
 from .get_collection_count_for_user import get_collection_count_for_user
 from .get_collection_for_user_and_title import get_collection_for_user_and_title
@@ -115,6 +130,7 @@ from .get_images_for_id_server_roi import get_images_for_id_server_roi
 from .get_images_for_user import get_images_for_user
 from .get_images_for_server import get_images_for_server
 from .get_list_of_image_ids_for_collection_summary import get_list_of_image_ids_for_collection_summary
+from .get_max_collection_image_ordering_for_collection import get_max_collection_image_ordering_for_collection
 from .get_bench_count_for_user import get_bench_count_for_user
 from .get_parent_image_links_for_image import get_parent_image_links_for_image
 from .get_child_image_links_for_image import get_child_image_links_for_image

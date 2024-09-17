@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         __init__.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -53,10 +54,12 @@
 # def view_parent_and_child_image_links(request, image_selected_id):
 # def view_parent_image_link(request, image_parent_id):
 #
-###
-
+# ##
+#
 from .activate_collection import activate_collection
 from .activate_in_collection import activate_in_collection
+from .add_collection_column import add_collection_column
+from .add_collection_row import add_collection_row
 from .amend_cell import amend_cell
 from .clear_cell import clear_cell
 from .delete_image import delete_image

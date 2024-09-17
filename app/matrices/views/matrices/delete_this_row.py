@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_this_row.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,17 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_this_row view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import subprocess
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -52,7 +50,7 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 
 
 #
-# DELETE THE GIVEN ROW IN THE BENCH
+#   DELETE THE GIVEN ROW IN THE BENCH
 #
 @login_required
 def delete_this_row(request, matrix_id, row_id):
@@ -132,7 +130,7 @@ def delete_this_row(request, matrix_id, row_id):
 
                                 delete_flag = False
 
-                        if delete_flag == True:
+                        if delete_flag is True:
 
                             image = oldCell.image
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_authorisation_delete.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX collection_authorisation_delete view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -38,7 +38,7 @@ from django.shortcuts import get_object_or_404
 
 from matrices.models import Collection
 from matrices.models import CollectionAuthorisation
-from matrices.models import Matrix
+from matrices.models import CollectionImageOrder
 
 from matrices.routines import collection_authorisation_delete_consequences
 from matrices.routines import credential_exists
@@ -46,7 +46,7 @@ from matrices.routines import exists_update_for_collection_and_user
 
 
 #
-# DELETE A COLLECTION AUTHORISATION
+#   DELETE A COLLECTION AUTHORISATION
 #
 @login_required()
 def collection_authorisation_delete(request, collection_authorisation_id):
@@ -67,7 +67,6 @@ def collection_authorisation_delete(request, collection_authorisation_id):
 
         raise PermissionDenied
 
-
     collection_authorisation = get_object_or_404(CollectionAuthorisation, pk=collection_authorisation_id)
     collection = get_object_or_404(Collection, pk=collection_authorisation.collection.id)
 
@@ -75,6 +74,12 @@ def collection_authorisation_delete(request, collection_authorisation_id):
 
         raise PermissionDenied
 
+    collection_image_ordering_list = CollectionImageOrder.objects.filter(collection=collection)\
+                                                                 .filter(permitted=collection_authorisation.permitted)
+
+    for collection_image_ordering in collection_image_ordering_list:
+
+        collection_image_ordering.delete()
 
     collection_authorisation_delete_consequences(collection_authorisation.permitted, collection)
 

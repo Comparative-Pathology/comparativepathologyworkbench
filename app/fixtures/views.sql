@@ -66,15 +66,19 @@ AND a.location_id = b.id
 ORDER BY a.id ASC;
 
 CREATE OR REPLACE VIEW matrices_image_summary AS
-(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS image_id, a.identifier AS image_identifier, a.name AS image_name, 
+(
+SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS image_id, a.identifier AS image_identifier, a.name AS image_name, 
 a.viewer_url AS image_viewer_url, a.birdseye_url AS image_birdseye_url, f.name AS image_server, f.id AS image_server_id, f.url_server AS image_server_url_server, 
 f.uid AS image_server_uid, f.accessible AS image_server_accesible, h.name AS image_server_type_name, a.roi AS image_roi, a.comment AS image_comment, 
 a.hidden AS image_hidden, g.username AS image_owner, e.id AS image_collection_id, e.title AS image_collection_title, i.username AS image_collection_owner, 
-0 AS image_matrix_id, 'NONE' AS image_matrix_title, 'NONE' AS image_matrix_owner, array_to_string(ARRAY(SELECT z.id || ',' || z.name || ',' || z.slug
+0 AS image_matrix_id, 'NONE' AS image_matrix_title, 'NONE' AS image_matrix_owner, array_to_string(ARRAY(
+SELECT z.id || ',' || z.name || ',' || z.slug
 FROM public.matrices_image x
 JOIN public.taggit_taggeditem y ON y.object_id = x.id
 JOIN public.taggit_tag z ON y.tag_id = z.id
-WHERE x.id = a.id), '|') AS image_tags
+WHERE x.id = a.id), '|'
+) AS image_tags,
+j.ordering AS image_ordering, k.username AS image_ordering_permitted, k.id AS image_ordering_permitted_id
 FROM public.matrices_image a 
 LEFT JOIN public.matrices_cell b ON a.id = b.image_id
 JOIN public.matrices_collection_images d ON d.image_id = a.id
@@ -83,18 +87,25 @@ JOIN public.matrices_server f ON a.server_id = f.id
 JOIN public.auth_user g ON a.owner_id = g.id
 JOIN public.matrices_type h ON f.type_id = h.id
 JOIN public.auth_user i ON e.owner_id = i.id
+JOIN public.matrices_collectionimageorder j ON a.id = j.image_id
+JOIN public.auth_user k ON k.id = j.permitted_id
 WHERE b.image_id IS NULL
-ORDER BY a.id ASC)
+ORDER BY a.id ASC
+)
 UNION
-(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS image_id, a.identifier AS image_identifier, a.name AS image_name, 
+(
+SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS image_id, a.identifier AS image_identifier, a.name AS image_name, 
 a.viewer_url AS image_viewer_url, a.birdseye_url AS image_birdseye_url, f.name AS image_server, f.id AS image_server_id, f.url_server AS image_server_url_server, 
 f.uid AS image_server_uid, f.accessible AS image_server_accesible, h.name AS image_server_type_name, a.roi AS image_roi, a.comment AS image_comment, 
 a.hidden AS image_hidden, g.username AS image_owner, e.id AS image_collection_id, e.title AS image_collection_title, i.username AS image_collection_owner, 
-c.id AS image_matrix_id, c.title AS image_matrix_title, j.username AS image_matrix_owner, array_to_string(ARRAY(SELECT z.id || ',' || z.name || ',' || z.slug
+c.id AS image_matrix_id, c.title AS image_matrix_title, i.username AS image_matrix_owner, array_to_string(ARRAY(
+SELECT z.id || ',' || z.name || ',' || z.slug
 FROM public.matrices_image x
 JOIN public.taggit_taggeditem y ON y.object_id = x.id
 JOIN public.taggit_tag z ON y.tag_id = z.id
-WHERE x.id = a.id), '|') AS image_tags
+WHERE x.id = a.id), '|'
+) AS image_tags,
+j.ordering AS image_ordering, k.username AS image_ordering_permitted, k.id AS image_ordering_permitted_id
 FROM public.matrices_image a 
 JOIN public.matrices_cell b ON a.id = b.image_id
 JOIN public.matrices_matrix c ON b.matrix_id = c.id
@@ -104,8 +115,10 @@ JOIN public.matrices_server f ON a.server_id = f.id
 JOIN public.auth_user g ON a.owner_id = g.id
 JOIN public.matrices_type h ON f.type_id = h.id
 JOIN public.auth_user i ON e.owner_id = i.id
-JOIN public.auth_user j ON c.owner_id = j.id
-ORDER BY a.id ASC);
+JOIN public.matrices_collectionimageorder j ON a.id = j.image_id
+JOIN public.auth_user k ON k.id = j.permitted_id
+ORDER BY a.id ASC
+);
 
 GRANT ALL ON ALL TABLES IN SCHEMA public TO workbench_czi_user;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO workbench_czi_user;

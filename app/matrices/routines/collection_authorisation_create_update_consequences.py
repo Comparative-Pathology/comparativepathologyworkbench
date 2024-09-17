@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_authorisation_create_update_consequences.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,29 +26,27 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Consequential Actions for Collection Authorisation Creates and Updates
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
 from django.db.models import Q
-
-from os import urandom
 
 from django.apps import apps
 
 from matrices.routines import collection_authorisation_exists_for_collection_and_permitted
 
 
-"""
-    Consequential Actions for Collection Authorisation Creates and Updates
-"""
+#
+#   Consequential Actions for Collection Authorisation Creates and Updates
+#
 def collection_authorisation_create_update_consequences(a_permitted, a_collection):
 
     CollectionAuthorisation = apps.get_model('matrices', 'CollectionAuthorisation')
 
     if collection_authorisation_exists_for_collection_and_permitted(a_collection, a_permitted):
 
-        collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=a_collection) & Q(permitted=a_permitted))
+        collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=a_collection) &
+                                                                           Q(permitted=a_permitted))
 
         collection_authorisation_old.delete()

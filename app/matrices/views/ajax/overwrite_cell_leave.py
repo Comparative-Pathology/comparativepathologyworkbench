@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         overwrite_cell_leave.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the overwrite_cell_leave view routine - COPY
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -39,6 +39,8 @@ from django.shortcuts import get_object_or_404
 from matrices.models import Collection
 from matrices.models import Cell
 from matrices.models import Image
+from matrices.models import CollectionImageOrder
+from matrices.models import CollectionAuthorisation
 
 from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
@@ -46,14 +48,14 @@ from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines.get_max_collection_image_ordering_for_collection \
+    import get_max_collection_image_ordering_for_collection
 
 WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# OVERWRITE A TARGET CELL AND LEAVE SOURCE IN PLACE - COPY
-#
-#  Overwrites Target Cell with Source Cell, Source Cell is left in place - COPY
+#   Overwrites Target Cell with Source Cell, Source Cell is left in place - COPY
 #
 @login_required()
 def overwrite_cell_leave(request):
@@ -195,6 +197,29 @@ def overwrite_cell_leave(request):
                 target_cell.image = imageNew
 
                 Collection.assign_image(imageNew, matrix.last_used_collection)
+
+                max_ordering = get_max_collection_image_ordering_for_collection(matrix.last_used_collection.id)
+
+                max_ordering = max_ordering + 1
+
+                collectionimageorder = CollectionImageOrder.create(matrix.last_used_collection,
+                                                                   imageNew,
+                                                                   user,
+                                                                   max_ordering)
+
+                collectionimageorder.save()
+
+                collection_authorisation_list = CollectionAuthorisation.object\
+                    .filter(collection__id=matrix.last_used_collection.id)
+
+                for collection_authorisation in collection_authorisation_list:
+
+                    collectionimageorder = CollectionImageOrder.create(matrix.last_used_collection,
+                                                                       imageNew,
+                                                                       collection_authorisation.permitted,
+                                                                       max_ordering)
+
+                    collectionimageorder.save()
 
             target_cell.blogpost = source_cell.blogpost
 

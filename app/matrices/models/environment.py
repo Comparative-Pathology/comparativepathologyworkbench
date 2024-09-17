@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+#
+# ##
 # \file         environment.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Environment Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 import json
@@ -61,11 +64,12 @@ CMD_BLOG_GET_LINK_POST = 'LinkPost'
 
 
 #
-#    The Environment Model
+#   The Environment Model
 #
 class Environment(models.Model):
 
-    name = models.CharField(max_length=50, blank=False, unique=True)
+    name = models.CharField(max_length=50,
+                            blank=False,unique=True)
     location = models.ForeignKey(Location,
                                  related_name='environments',
                                  default=0,
@@ -74,37 +78,65 @@ class Environment(models.Model):
                                  related_name='environments',
                                  default=0,
                                  on_delete=models.DO_NOTHING)
-    web_root = models.CharField(max_length=255, blank=False, default='')
-    document_root = models.CharField(max_length=255, blank=False, default='')
-    nginx_private_location = models.CharField(max_length=255, blank=False, default='')
-    wordpress_web_root = models.CharField(max_length=255, blank=False, default='')
+    web_root = models.CharField(max_length=255,
+                                blank=False,
+                                default='')
+    document_root = models.CharField(max_length=255,
+                                     blank=False,
+                                     default='')
+    nginx_private_location = models.CharField(max_length=255,
+                                              blank=False,
+                                              default='')
+    wordpress_web_root = models.CharField(max_length=255,
+                                          blank=False,
+                                          default='')
     wordpress_active = models.BooleanField(default=False)
-    from_email = models.CharField(max_length=255, blank=False, default='')
-    date_format = models.CharField(max_length=255, blank=False, default='%A, %B %e, %Y')
+    from_email = models.CharField(max_length=255,
+                                  blank=False,
+                                  default='')
+    date_format = models.CharField(max_length=255,
+                                   blank=False,
+                                   default='%A, %B %e, %Y')
     owner = models.ForeignKey(User,
                               related_name='environments',
                               on_delete=models.DO_NOTHING)
-    minimum_cell_height = models.IntegerField(default=75, blank=False)
-    maximum_cell_height = models.IntegerField(default=450, blank=False)
-    minimum_cell_width = models.IntegerField(default=75, blank=False)
-    maximum_cell_width = models.IntegerField(default=450, blank=False)
-    maximum_initial_columns = models.IntegerField(default=10, blank=False)
-    minimum_initial_columns = models.IntegerField(default=1, blank=False)
-    maximum_initial_rows = models.IntegerField(default=10, blank=False)
-    minimum_initial_rows = models.IntegerField(default=1, blank=False)
-    maximum_rest_columns = models.IntegerField(default=1000, blank=False)
-    minimum_rest_columns = models.IntegerField(default=3, blank=False)
-    maximum_rest_rows = models.IntegerField(default=1000, blank=False)
-    minimum_rest_rows = models.IntegerField(default=3, blank=False)
-    maximum_bench_count = models.IntegerField(default=10, blank=False)
-    maximum_collection_count = models.IntegerField(default=10, blank=False)
+    minimum_cell_height = models.IntegerField(default=75,
+                                              blank=False)
+    maximum_cell_height = models.IntegerField(default=450,
+                                              blank=False)
+    minimum_cell_width = models.IntegerField(default=75,
+                                             blank=False)
+    maximum_cell_width = models.IntegerField(default=450,
+                                             blank=False)
+    maximum_initial_columns = models.IntegerField(default=10,
+                                                  blank=False)
+    minimum_initial_columns = models.IntegerField(default=1,
+                                                  blank=False)
+    maximum_initial_rows = models.IntegerField(default=10,
+                                               blank=False)
+    minimum_initial_rows = models.IntegerField(default=1,
+                                               blank=False)
+    maximum_rest_columns = models.IntegerField(default=1000,
+                                               blank=False)
+    minimum_rest_columns = models.IntegerField(default=3,
+                                               blank=False)
+    maximum_rest_rows = models.IntegerField(default=1000,
+                                            blank=False)
+    minimum_rest_rows = models.IntegerField(default=3,
+                                            blank=False)
+    maximum_bench_count = models.IntegerField(default=10,
+                                              blank=False)
+    maximum_collection_count = models.IntegerField(default=10,
+                                                   blank=False)
     gateway = models.ForeignKey(Gateway,
                                 related_name='environments',
                                 default='',
                                 null=True,
                                 on_delete=models.DO_NOTHING)
-    gateway_port = models.IntegerField(default=0, blank=False)
-    gateway_pagination = models.IntegerField(default=50, blank=False)
+    gateway_port = models.IntegerField(default=0,
+                                       blank=False)
+    gateway_pagination = models.IntegerField(default=50,
+                                             blank=False)
 
     @classmethod
     def create(cls, name, location, protocol, web_root, document_root, nginx_private_location, wordpress_web_root,
@@ -360,31 +392,34 @@ class Environment(models.Model):
             for c in data:
 
                 comment_id = c['id']
+                post = c['post']
 
-                datetime = c['date']
-                splitdatetime = datetime.split("T")
+                if int(post) == int(post_id):
 
-                date = splitdatetime[0]
-                time = splitdatetime[1]
+                    datetime = c['date']
+                    splitdatetime = datetime.split("T")
 
-                author = c['author']
-                content = c['content']
-                link = c['link']
-                content_rendered = content['rendered']
+                    date = splitdatetime[0]
+                    time = splitdatetime[1]
 
-                credential = Credential.objects.get(wordpress=str(author))
+                    author = c['author']
+                    content = c['content']
+                    link = c['link']
+                    content_rendered = content['rendered']
 
-                comment = {'id': str(comment_id),
-                           'date': date,
-                           'time': time,
-                           'author': str(author),
-                           'author_name': credential.username,
-                           'content': content_rendered[:-5][3:].rstrip(),
-                           'url': link,
-                           'status': 'Success!'
-                           }
+                    credential = Credential.objects.get(wordpress=str(author))
 
-                comment_list.append(comment)
+                    comment = {'id': str(comment_id),
+                               'date': date,
+                               'time': time,
+                               'author': str(author),
+                               'author_name': credential.username,
+                               'content': content_rendered[:-5][3:].rstrip(),
+                               'url': link,
+                               'status': 'Success!'
+                               }
+
+                    comment_list.append(comment)
 
             comment_list.reverse()
 

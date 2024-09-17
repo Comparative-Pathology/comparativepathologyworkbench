@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         __init__.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # models Package Description.
-###
+# ##
+#
 from .type import Type
 from .server import Server
 from .image import Image
@@ -43,6 +45,7 @@ from .authority import Authority
 from .authorisation import Authorisation
 from .collectionauthority import CollectionAuthority
 from .collectionauthorisation import CollectionAuthorisation
+from .collectionimageorder import CollectionImageOrder
 from .matrixsummary import MatrixSummary
 from .matrixpublicsummary import MatrixPublicSummary
 from .collectionsummary import CollectionSummary

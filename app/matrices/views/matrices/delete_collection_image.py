@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_collection_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_collection_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import subprocess
 
-
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -48,10 +46,18 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_image_in_cells
 from matrices.routines import get_header_data
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines.exists_collection_image_orders_for_collection_and_image_and_permitted \
+    import exists_collection_image_orders_for_collection_and_image_and_permitted
+from matrices.routines.get_collection_image_ordering_for_collection_and_image_and_user \
+    import get_collection_image_ordering_for_collection_and_image_and_user
+from matrices.routines.get_collection_image_orders_for_collection_and_ordering_equals \
+    import get_collection_image_orders_for_collection_and_ordering_equals
+from matrices.routines.get_collection_image_orders_for_collection_and_ordering_above \
+    import get_collection_image_orders_for_collection_and_ordering_above
 
 
 #
-# DELETE AN IMAGE FROM THE COLLECTION SUPPLIED
+#   DELETE AN IMAGE FROM THE COLLECTION SUPPLIED
 #
 @login_required
 def delete_collection_image(request, collection_id, image_id):
@@ -130,11 +136,35 @@ def delete_collection_image(request, collection_id, image_id):
 
                             boolAllowDelete = False
 
-            if boolAllowDelete == True:
+            if boolAllowDelete is True:
 
                 for collection in list_collections:
 
                     Collection.unassign_image(image, collection)
+
+                    if exists_collection_image_orders_for_collection_and_image_and_permitted(collection,
+                                                                                             image,
+                                                                                             request.user):
+
+                        ordering = get_collection_image_ordering_for_collection_and_image_and_user(collection,
+                                                                                                   image,
+                                                                                                   request.user)
+
+                        collection_image_order_delete_list = \
+                            get_collection_image_orders_for_collection_and_ordering_equals(collection, ordering)
+
+                        for collection_image_order_delete in collection_image_order_delete_list:
+
+                            collection_image_order_delete.delete()
+
+                        collection_image_order_update_list = \
+                            get_collection_image_orders_for_collection_and_ordering_above(collection, ordering)
+
+                        for collection_image_order_update in collection_image_order_update_list:
+
+                            collection_image_order_update.decrement_ordering()
+
+                            collection_image_order_update.save()
 
                 messages.success(request, 'Image ' + str(image.id) + ' DELETED from the Workbench!')
 

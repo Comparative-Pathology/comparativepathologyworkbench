@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_authorisation_exists_for_collection_and_permitted.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there a Collection Authorisation for a particular Collection and a particular User?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Is there a Collection Authorisation for a particular Collection and a particular User?
-"""
+#
+#   Is there a Collection Authorisation for a particular Collection and a particular User?
+#
 def collection_authorisation_exists_for_collection_and_permitted(a_collection, a_user):
 
     CollectionAuthorisation = apps.get_model('matrices', 'CollectionAuthorisation')

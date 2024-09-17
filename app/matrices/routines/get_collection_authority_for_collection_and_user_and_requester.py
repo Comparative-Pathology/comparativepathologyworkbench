@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_collection_authority_for_collection_and_user_and_requester.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,20 +26,17 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Collection Authorisation for a particular Collection and particular User
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 from django.db.models import Q
 
 
-"""
-    Get the Collection Authorisation for a particular Collection and particular User
-"""
+#
+#   Get the Collection Authorisation for a particular Collection and particular User
+#
 def get_collection_authority_for_collection_and_user_and_requester(a_collection, a_user):
 
     CollectionAuthority = apps.get_model('matrices', 'CollectionAuthority')
@@ -61,7 +59,8 @@ def get_collection_authority_for_collection_and_user_and_requester(a_collection,
 
             if CollectionAuthorisation.objects.filter(Q(collection=a_collection) & Q(permitted=a_user)).exists():
 
-                collection_authorisation = CollectionAuthorisation.objects.get(Q(collection=a_collection) & Q(permitted=a_user))
+                collection_authorisation = CollectionAuthorisation.objects.get(Q(collection=a_collection) & 
+                                                                               Q(permitted=a_user))
 
                 if collection_authorisation.collection_authority.is_owner():
 

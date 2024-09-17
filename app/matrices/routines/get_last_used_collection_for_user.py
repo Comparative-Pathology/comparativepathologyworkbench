@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_last_used_collection_for_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,25 +26,20 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Active Collection(s) for a particular User
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from os import urandom
-
-from django.apps import apps
-
-
-"""
-    Get the Last Used Collection(s) for a particular User
-"""
+#
+#   Get the Last Used Collection(s) for a particular User
+#
 def get_last_used_collection_for_user(a_user):
 
-    if a_user.profile.last_used_collection == None:
+    if a_user.profile.last_used_collection is None:
 
         return a_user.profile.active_collection
 
     else:
-        
+
         return a_user.profile.last_used_collection

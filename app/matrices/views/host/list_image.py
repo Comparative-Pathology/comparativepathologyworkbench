@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # The list_images VIEW
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
@@ -68,6 +68,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
     query_paginate_by = forms.CharField(max_length=12)
 
     allowed_sort_fields = {'image_name': {'default_direction': '', 'verbose_name': 'Name'},
+                           'image_ordering': {'default_direction': '', 'verbose_name': 'Ordering'},
                            'image_comment': {'default_direction': '', 'verbose_name': 'Comment'},
                            'image_roi': {'default_direction': '', 'verbose_name': 'ROI'},
                            'image_hidden': {'default_direction': '', 'verbose_name': 'Hidden?'},
@@ -131,7 +132,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         # Set the Sort Parameter
         if self.request.GET.get('sort', None) is None:
 
-            sort_parameter = 'image_name'
+            sort_parameter = 'image_ordering'
 
         else:
 

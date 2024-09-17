@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_matrix_blog.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_matrix_blog view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404
@@ -40,7 +40,7 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 
 
 #
-# VIEW THE AGGREGATED BLOG ENTRies
+#   VIEW THE AGGREGATED BLOG ENTRies
 #
 def view_aggregated_blog(request, matrix_id):
 
@@ -60,7 +60,7 @@ def view_aggregated_blog(request, matrix_id):
 
         bench_blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-    bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+        bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
 
     data.update({'matrix': matrix,
                  'bench_blogpost': bench_blogpost,

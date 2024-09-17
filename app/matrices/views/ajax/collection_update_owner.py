@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_update_owner.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX collection_update_owner view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -41,16 +41,20 @@ from frontend_forms.utils import get_object_by_uuid_or_404
 from matrices.forms import CollectionOwnerSelectionForm
 
 from matrices.models import Collection
+from matrices.models import CollectionAuthority
 from matrices.models import CollectionAuthorisation
+from matrices.models import CollectionImageOrder
 
 from matrices.routines import credential_exists
 from matrices.routines import simulate_network_latency
 from matrices.routines import collection_authorisation_exists_for_collection_and_permitted
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 
+from matrices.routines import exists_collection_image_orders_for_collection_and_permitted
+from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 
 #
-# Re-Allocate the Collectio Owner
+#   Re-Allocate the Collectio Owner
 #
 @login_required()
 def collection_update_owner(request, collection_id):
@@ -68,7 +72,7 @@ def collection_update_owner(request, collection_id):
         raise PermissionDenied
 
     collection = get_object_by_uuid_or_404(Collection, collection_id)
-    old_owner = collection.owner
+    existing_owner = collection.owner
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -84,23 +88,70 @@ def collection_update_owner(request, collection_id):
 
             new_owner = object.owner
 
-            if collection == get_active_collection_for_user(old_owner):
+            if collection == get_active_collection_for_user(existing_owner):
 
-                old_owner.profile.set_active_collection(None)
-                old_owner.save()
+                existing_owner.profile.set_active_collection(None)
+                existing_owner.save()
 
-            if not collection_authorisation_exists_for_collection_and_permitted(collection, old_owner):
+            if not collection_authorisation_exists_for_collection_and_permitted(collection, existing_owner):
 
-                collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection) &
-                                                                                   Q(permitted=new_owner))
+                redundant_collection_authority = ''
 
-                collection_authorisation_new = \
+                if collection_authorisation_exists_for_collection_and_permitted(collection, new_owner):
+
+                    collection_authorisation_redundant = CollectionAuthorisation.objects.get(Q(collection=collection) &
+                                                                                             Q(permitted=new_owner))
+
+                    redundant_collection_authority = collection_authorisation_redundant.collection_authority
+
+                    collection_authorisation_redundant.delete()
+
+                else:
+
+                    redundant_collection_authority = CollectionAuthority.objects.get(Q(name='VIEWER'))
+
+                collection_authorisation_replacement = \
                     CollectionAuthorisation.create(collection,
-                                                   old_owner,
-                                                   collection_authorisation_old.collection_authority)
+                                                   existing_owner,
+                                                   redundant_collection_authority)
 
-                collection_authorisation_old.delete()
-                collection_authorisation_new.save()
+                collection_authorisation_replacement.save()
+
+                if exists_collection_image_orders_for_collection_and_permitted(collection, new_owner):
+
+                    collection_image_ordering_redundant_list = \
+                        get_collection_image_orders_for_collection_and_permitted_orderedby_ordering(collection,
+                                                                                                    existing_owner)
+
+                    for collection_image_ordering_redundant in collection_image_ordering_redundant_list:
+
+                        collectionimageorder_replacement = \
+                            CollectionImageOrder.create(collection,
+                                                        collection_image_ordering_redundant.image,
+                                                        existing_owner,
+                                                        collection_image_ordering_redundant.ordering)
+
+                        collectionimageorder_replacement.save()
+
+                    for collection_image_ordering_redundant in collection_image_ordering_redundant_list:
+
+                        collection_image_ordering_redundant.delete()
+
+                else:
+
+                    collection_image_ordering_redundant_list = \
+                        get_collection_image_orders_for_collection_and_permitted_orderedby_ordering(collection,
+                                                                                                    existing_owner)
+
+                    for collection_image_ordering_redundant in collection_image_ordering_redundant_list:
+
+                        collectionimageorder_replacement = \
+                            CollectionImageOrder.create(collection,
+                                                        collection_image_ordering_redundant.image,
+                                                        new_owner,
+                                                        collection_image_ordering_redundant.ordering)
+
+                        collectionimageorder_replacement.save()
 
             image_list = collection.get_all_images()
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collectionauthorisationform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for adding/editing Collection Auhorisations.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Collection
 from matrices.models import CollectionAuthority
@@ -45,7 +43,7 @@ from matrices.routines import collection_authorisation_exists_for_collection_and
 
 
 #
-# COLLECTION AUTHORISATION FORM
+#   COLLECTION AUTHORISATION FORM
 #
 class CollectionAuthorisationForm(forms.ModelForm):
 
@@ -56,7 +54,6 @@ class CollectionAuthorisationForm(forms.ModelForm):
     class Meta:
         model = CollectionAuthorisation
         fields = ('collection', 'permitted', 'authority', )
-
 
     def clean(self):
 
@@ -80,9 +77,11 @@ class CollectionAuthorisationForm(forms.ModelForm):
 
         if collection_authorisation_exists_for_collection_and_permitted(collection, permitted):
 
-            collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection) & Q(permitted=permitted))
+            collection_authorisation_old = CollectionAuthorisation.objects.get(Q(collection=collection) & \
+                                                                               Q(permitted=permitted))
 
             if collection_authorisation_old.collection_authority == authority:
 
-                msg = 'A Collection Authorisation for \"' + str(permitted.username) + '\" and ' + str(authority.name) + ' already exists for Collection ' + '{num:06d}'.format(num=collection.id)
+                msg = 'A Collection Authorisation for \"' + str(permitted.username) + '\" and ' + \
+                    str(authority.name) + ' already exists for Collection ' + '{num:06d}'.format(num=collection.id)
                 raise ValidationError(msg)

@@ -317,19 +317,20 @@ The list images template (with Search)
         {% if image_summary.is_cpw %}
               <a class="link-button btn btn-primary" href="{% url 'webgallery_show_cpw_image' image_summary.image_server_id image_summary.image_name %}"><i class="fa fa-info"></i> Image Info.</a>
         {% endif %}
+			  <a href="{% url 'collection_ordering_selection' image_summary.image_collection_id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_summary.image_collection_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
 			  <a class="link-button btn btn-primary" href="{% url 'webgallery_edit_image' image_summary.image_id %}"><i class="fa fa-edit"></i> Tag Image</a>
 		{% if image_summary.image_owner == user.username or user.username == 'admin' %}
-				<a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_summary.image_collection_id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
+			  <a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_summary.image_collection_id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
 		{% endif %}
 
 		{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
-				<a class="link-button btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
+			  <a class="link-button btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
 		{% endif %}
 
-                <a class="link-button btn btn-primary" href="{% url 'list_images' image_summary.image_collection_id %}"><i class="fa fa-eye"></i> View Collection "{{ image_summary.image_collection_id|stringformat:"06d" }}"</a>
+              <a class="link-button btn btn-primary" href="{% url 'list_images' image_summary.image_collection_id %}"><i class="fa fa-eye"></i> View Collection "{{ image_summary.image_collection_id|stringformat:"06d" }}"</a>
 
         {% if image_summary.image_matrix_id != 0 %}
-                <a class="link-button btn btn-primary" href="{% url 'matrix' image_summary.image_matrix_id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"</a>
+              <a class="link-button btn btn-primary" href="{% url 'matrix' image_summary.image_matrix_id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"</a>
     	{% endif %}
 
             </div><!-- End of generic-dropdown-content -->
@@ -385,8 +386,21 @@ The list images template (with Search)
 	{% endif %}
   </tr>
 
-    {% if image_summary.has_tags %}
   <tr id="image_summary-{{image_summary.image_id}}-F">
+    <td colspan="1">&nbsp;</td>
+    {% if user.is_superuser %}
+	<td><strong>Ordering:</strong></td>
+	<td colspan="2">{{ image_summary.image_ordering }}</td>
+	<td><strong>Ordering Permitted:</strong></td>
+	<td colspan="3">{{ image_summary.image_ordering_permitted }}</td>
+	{% else %}
+	<td><strong>Ordering:</strong></td>
+	<td colspan="6">{{ image_summary.image_ordering }}</td>
+	{% endif %}
+  </tr>
+
+    {% if image_summary.has_tags %}
+  <tr id="image_summary-{{image_summary.image_id}}-G">
     <td colspan="3">&nbsp;
 	</td>
     <td><strong>Tags:</strong>
@@ -398,17 +412,13 @@ The list images template (with Search)
 	</td>
   </tr>
   {% else %}
-  <tr id="image_summary-{{image_summary.image_id}}-F">
+  <tr id="image_summary-{{image_summary.image_id}}-H">
     <td colspan="10">&nbsp;
 	</td>
   </tr>
   {% endif %}
 
-  <tr id="image_summary-{{image_summary.image_id}}-G">
-	<td colspan="10">&nbsp;</td>
-  </tr>
-	
-  <tr id="image_summary-{{image_summary.image_id}}-H">
+  <tr id="image_summary-{{image_summary.image_id}}-I">
     <td colspan="10" style="border-bottom:2px solid Black;">&nbsp;</td>
   </tr>
 		{% if forloop.last %}
@@ -468,5 +478,84 @@ The list images template (with Search)
 {% endblock %}
 
 {% block extrajs %}
+
+<script language="javascript">
+
+	function open_image_ordering_edit_dialog(event, title) {
+	  event.preventDefault();
+	  var url = $(event.target).attr('href');
+	  dialog_edit.options.url = url;
+	  dialog_edit.options.title = '<i class="fa fa-calculator"></i> ' + title;
+	  dialog_edit.open(event);
+	}
+
+	$(document).ready(function () {
+
+	  dialog_edit = new Dialog({
+	    dialog_selector: '#dialog_generic',
+	    html: '<h1>Loading ...</h1>',
+	    width: '600px',
+	    min_height: '200px',
+	    button_save_initially_hidden: true,
+	    enable_trace: true,
+	    callback: function (event_name, dialog, params) {
+	      switch (event_name) {
+	        case "submitting":
+	          FrontendForms.overlay_show('.dialog-body');
+	          break;
+	        case "loaded":
+	          FrontendForms.overlay_hide('.dialog-body');
+	          break;
+	        case "submitted":
+	          var object_id = dialog.element.find('input[name=object_id]').val();
+	          // Reload page, with last selection enhanced
+	          var url = new URL(document.location.href);
+	          FrontendForms.gotourl(url, show_layer=true);
+	          break;
+	      }
+	    }
+	  });
+
+	});
+
+    function onLinkButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+    {% if image_summary_list %}
+    	{% for image_summary in image_summary_list %}
+            {% if forloop.first %}
+            var dialogs = [
+            {% endif %}
+            dialog{{ image_summary.image_id }},
+            {% if forloop.last %}
+                dialog{{ image_summary.image_id }}
+                ];
+                var target = "dialog" + n.toString();
+                eval(target).open(event);
+            {% endif %}
+        {% endfor %}
+	{% endif %}}
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkButtonClicked);
+
+    {% if image_summary_list %}
+		{% for image_summary in image_summary_list %}
+        dialog{{ image_summary.image_id }} = new Dialog({
+            url: "{% url 'collection_ordering_selection' image_summary.image_collection_id image_summary.image_id image_summary.image_ordering_permitted_id %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Image {{ image_summary.image_id }} ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+        {% endfor %}
+	{% endif %}
+    });
+
+</script>
 
 {% endblock extrajs %}

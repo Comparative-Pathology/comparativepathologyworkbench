@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         collectionauthorisation.py
+# \file         collectionimageorder.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,7 +25,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# The Collection Authorisation Model.
+# The Collection Image Order Model.
 # ##
 #
 from __future__ import unicode_literals
@@ -34,45 +34,55 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from matrices.models import Collection
-from matrices.models import CollectionAuthority
+from matrices.models import Image
 
 
 #
-#   The Colleciton Authorisation Model (for Collections)
+#   The Collection Image Order Model (for Collections, Images and Users)
 #
-class CollectionAuthorisation(models.Model):
+class CollectionImageOrder(models.Model):
 
     collection = models.ForeignKey(Collection,
-                                   related_name='collectionauthorisations',
+                                   related_name='collectionimageorders',
                                    on_delete=models.CASCADE)
+    image = models.ForeignKey(Image,
+                              related_name='collectionimageorders',
+                              on_delete=models.CASCADE)
     permitted = models.ForeignKey(User,
-                                  related_name='collectionauthorisations',
+                                  related_name='collectionimageorders',
                                   on_delete=models.DO_NOTHING)
-    collection_authority = models.ForeignKey(CollectionAuthority,
-                                             related_name='collectionauthorisations',
-                                             on_delete=models.DO_NOTHING)
+    ordering = models.IntegerField(default=0)
 
     @classmethod
-    def create(cls, collection, permitted, collection_authority):
-        return cls(collection=collection, permitted=permitted, collection_authority=collection_authority)
+    def create(cls, collection, image, permitted, ordering):
+        return cls(collection=collection, image=image, permitted=permitted, ordering=ordering)
 
     def __str__(self):
-        return f"{self.id}, {self.collection.id}, {self.permitted.id}, {self.collection_authority.id}"
+        return f"{self.id}, {self.collection.id}, {self.image.id}, {self.permitted.id}, {self.ordering}"
 
     def __repr__(self):
-        return f"{self.id}, {self.collection.id}, {self.permitted.id}, {self.collection_authority.id}"
+        return f"{self.id}, {self.collection.id}, {self.image.id}, {self.permitted.id}, {self.ordering}"
 
     def set_collection(self, a_collection):
         self.collection = a_collection
 
+    def set_image(self, a_image):
+        self.image = a_image
+
     def set_permitted(self, a_user):
         self.permitted = a_user
 
-    def set_collection_authority(self, a_collection_authority):
-        self.collection_authority = a_collection_authority
+    def set_ordering(self, a_ordering):
+        self.ordering = a_ordering
 
     def is_collection(self, a_collection):
         if self.collection == a_collection:
+            return True
+        else:
+            return False
+
+    def is_image(self, a_image):
+        if self.image == a_image:
             return True
         else:
             return False
@@ -83,8 +93,8 @@ class CollectionAuthorisation(models.Model):
         else:
             return False
 
-    def is_collection_authority(self, a_collection_authority):
-        if self.collection_authority == a_collection_authority:
-            return True
-        else:
-            return False
+    def decrement_ordering(self):
+        self.ordering = self.ordering - 1
+
+    def increment_ordering(self):
+        self.ordering = self.ordering + 1

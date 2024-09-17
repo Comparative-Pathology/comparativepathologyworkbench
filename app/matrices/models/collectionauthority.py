@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collectionauthority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,23 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Collection Authority Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
-
-from random import randint
 
 AUTHORITY_NONE = 'NONE'
 AUTHORITY_VIEWER = 'VIEWER'
@@ -49,12 +39,18 @@ AUTHORITY_OWNER = 'OWNER'
 AUTHORITY_ADMIN = 'ADMIN'
 
 
-"""
-    COLLECTION AUTHORITY (for Collection Authorisations)
-"""
+#
+#   The Collection Authority Model (for Collection Authorisations)
+#
 class CollectionAuthority(models.Model):
-    name = models.CharField(max_length=12, blank=False, unique=True, default='')
-    owner = models.ForeignKey(User, related_name='collectionauthorities', on_delete=models.DO_NOTHING)
+
+    name = models.CharField(max_length=12,
+                            blank=False,
+                            unique=True,
+                            default='')
+    owner = models.ForeignKey(User,
+                              related_name='collectionauthorities',
+                              on_delete=models.DO_NOTHING)
 
     @classmethod
     def create(cls, name, owner):

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -26,18 +27,16 @@
 # \brief
 # The Image View Set automatically provides `list`, `create`, `retrieve`,
 # `update` and `destroy` actions.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 import subprocess
 
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 
-from rest_framework import permissions, renderers, viewsets
-from rest_framework.decorators import action
+from rest_framework import permissions, viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from matrices.models import Collection
 from matrices.models import Image
@@ -66,9 +65,8 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
 
     # Check that the user is allowed permission to use the Image View Set
-    permission_classes = ( permissions.IsAuthenticated,
-                           ImageIsReadOnlyOrIsAdminOrIsOwner )
-
+    permission_classes = (permissions.IsAuthenticated,
+                          ImageIsReadOnlyOrIsAdminOrIsOwner)
 
     def partial_update(self, request, *args, **kwargs):
         """Partial Update Image.
@@ -80,11 +78,10 @@ class ImageViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         return Response(data='Image PARTIAL UPDATE Not Available')
-
 
     def list(self, request, *args, **kwargs):
         """List Images.
@@ -96,11 +93,10 @@ class ImageViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         return Response(data='Image LIST Not Available')
-
 
     def destroy(self, request, *args, **kwargs):
         """Destroy Image.
@@ -112,7 +108,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         Returns:
 
         Raises:
-          
+
         """
 
         image = self.get_object()
@@ -162,7 +158,11 @@ class ImageViewSet(viewsets.ModelViewSet):
                                     rm_command = 'rm ' + str(artefact.location)
 
                                     # Delete the located file for this artefact
-                                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                    process = subprocess.Popen(rm_command,
+                                                               shell=True,
+                                                               stdout=subprocess.PIPE,
+                                                               stderr=subprocess.PIPE,
+                                                               universal_newlines=True)
 
                                 # Delete the Image Link
                                 image_link.delete()
@@ -174,7 +174,6 @@ class ImageViewSet(viewsets.ModelViewSet):
                             else:
 
                                 boolAllowDelete = False
-
 
                     # Does the Image have any Parent Image Links ... ?
                     #  Yes
@@ -214,7 +213,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
                 #  Can we delete this image ... ?
                 #  Yes ... 
-                if boolAllowDelete == True:
+                if boolAllowDelete is True:
 
                     #  Get all the collections that have this Image
                     list_collections = image.collections.all()
@@ -229,7 +228,7 @@ class ImageViewSet(viewsets.ModelViewSet):
                     image.delete()
 
                     responseMsg = 'Image Delete Success!'
-                
+
                 #  No ... 
                 else:
 
@@ -238,9 +237,8 @@ class ImageViewSet(viewsets.ModelViewSet):
 
             #  No
             else:
-                
+
                 #  Image Deletion is NOT allowed for NON WordPress/OMERO served Images
                 responseMsg = 'Image Deletion NOT Allowed - Image Server is NOT OMERO or WordPress!'
-
 
         return Response(data=responseMsg)

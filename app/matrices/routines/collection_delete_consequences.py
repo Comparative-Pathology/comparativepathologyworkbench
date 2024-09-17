@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_delete_consequences.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Consequential Actions for Collection Deletes
-###
+# ##
+#
 from __future__ import unicode_literals
 
 import subprocess
@@ -40,6 +42,14 @@ from matrices.routines.get_benches_for_last_used_collection import get_benches_f
 from matrices.routines.exists_user_for_last_used_collection import exists_user_for_last_used_collection
 from matrices.routines.get_users_for_last_used_collection import get_users_for_last_used_collection
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines.exists_collection_image_orders_for_collection_and_image_and_permitted \
+    import exists_collection_image_orders_for_collection_and_image_and_permitted
+from matrices.routines.get_collection_image_ordering_for_collection_and_image_and_user \
+    import get_collection_image_ordering_for_collection_and_image_and_user
+from matrices.routines.get_collection_image_orders_for_collection_and_ordering_equals \
+    import get_collection_image_orders_for_collection_and_ordering_equals
+from matrices.routines.get_collection_image_orders_for_collection_and_ordering_above \
+    import get_collection_image_orders_for_collection_and_ordering_above
 
 
 #
@@ -82,6 +92,30 @@ def collection_delete_consequences(a_user, a_collection):
                 else:
 
                     Collection.unassign_image(image, a_collection)
+
+                    if exists_collection_image_orders_for_collection_and_image_and_permitted(a_collection,
+                                                                                             image,
+                                                                                             a_user):
+
+                        ordering = get_collection_image_ordering_for_collection_and_image_and_user(a_collection,
+                                                                                                   image,
+                                                                                                   a_user)
+
+                        collection_image_order_delete_list = \
+                            get_collection_image_orders_for_collection_and_ordering_equals(a_collection, ordering)
+
+                        for collection_image_order_delete in collection_image_order_delete_list:
+
+                            collection_image_order_delete.delete()
+
+                        collection_image_order_update_list = \
+                            get_collection_image_orders_for_collection_and_ordering_above(a_collection, ordering)
+
+                        for collection_image_order_update in collection_image_order_update_list:
+
+                            collection_image_order_update.decrement_ordering()
+
+                            collection_image_order_update.save()
 
                     if image.server.is_ebi_sca() or image.server.is_cpw():
 

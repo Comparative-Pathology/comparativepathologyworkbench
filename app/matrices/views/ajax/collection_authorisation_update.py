@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_authorisation_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX collection_authorisation_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
@@ -36,10 +36,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
-from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
@@ -48,14 +44,16 @@ from matrices.forms import CollectionAuthorisationForm
 from matrices.models import Collection
 from matrices.models import CollectionAuthorisation
 from matrices.models import CollectionAuthority
+from matrices.models import CollectionImageOrder
 
 from matrices.routines import collection_authorisation_create_update_consequences
 from matrices.routines import credential_exists
 from matrices.routines import simulate_network_latency
 from matrices.routines import exists_update_for_collection_and_user
+from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 
 #
-# EDIT A COLLECTION AUTHORISATION
+#   EDIT A COLLECTION AUTHORISATION
 #
 @login_required()
 def collection_authorisation_update(request, collection_authorisation_id, collection_id=None):
@@ -76,8 +74,9 @@ def collection_authorisation_update(request, collection_authorisation_id, collec
 
         raise PermissionDenied
 
-
     object = get_object_by_uuid_or_404(CollectionAuthorisation, collection_authorisation_id)
+
+    old_permitted = object.permitted
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -103,14 +102,36 @@ def collection_authorisation_update(request, collection_authorisation_id, collec
 
             collection_authorisation_create_update_consequences(permitted, collection)
 
+            if old_permitted != permitted:
+
+                collection_image_order_list = \
+                    get_collection_image_orders_for_collection_and_permitted_orderedby_ordering(collection,
+                                                                                                request.user)
+
+                for collection_image_order in collection_image_order_list:
+
+                    collectionimageorder = CollectionImageOrder.create(collection,
+                                                                       collection_image_order.image,
+                                                                       permitted,
+                                                                       collection_image_order.ordering)
+
+                    collectionimageorder.save()
+
+                collection_image_ordering_list = CollectionImageOrder.objects.filter(collection=collection)\
+                                                                             .filter(permitted=old_permitted)
+
+                for collection_image_ordering in collection_image_ordering_list:
+
+                    collection_image_ordering.delete()
+
             object.save()
 
-            messages.success(request, 'CollectionAuthorisation ' + str(object.id) + ' Updated for Collection ' + '{num:06d}'.format(num=object.collection.id))
+            messages.success(request, 'CollectionAuthorisation ' + str(object.id) + ' Updated for Collection ' +
+                             '{num:06d}'.format(num=object.collection.id))
 
     else:
 
         form = CollectionAuthorisationForm(instance=object)
-
 
     if collection_id is None:
 
@@ -130,7 +151,6 @@ def collection_authorisation_update(request, collection_authorisation_id, collec
 
             raise PermissionDenied
 
-
         form.fields['collection'] = forms.ModelChoiceField(Collection.objects.filter(id=collection_id))
         form.fields['collection'].initial = collection_id
 
@@ -143,7 +163,6 @@ def collection_authorisation_update(request, collection_authorisation_id, collec
     form.fields['permitted'].label_from_instance = lambda obj: "{0}".format(obj.username)
 
     form.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}".format(obj.id, obj.title)
-
 
     return render(request, template_name, {
         'form': form,

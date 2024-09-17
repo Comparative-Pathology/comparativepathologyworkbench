@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_collection_authorisation.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the list_collection_authorisation view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -43,7 +43,7 @@ from matrices.routines import get_header_data
 
 
 #
-# LIST ALL PERMISSIONS FOR ALL COLLECTIONS
+#   LIST ALL PERMISSIONS FOR ALL COLLECTIONS
 #
 @login_required
 def list_collection_authorisation(request, collection_id=None):
@@ -51,7 +51,6 @@ def list_collection_authorisation(request, collection_id=None):
     if request.user.username == 'guest':
 
         raise PermissionDenied
-
 
     data = get_header_data(request.user)
 
@@ -69,7 +68,9 @@ def list_collection_authorisation(request, collection_id=None):
             collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__id=collection_id)
             text_flag = "Permissions for Collection:" + format(int(collection_id), '06d')
 
-        data.update({ 'collection_id': collection_id, 'text_flag': text_flag, 'collection_authorisation_list': collection_authorisation_list })
+        data.update({'collection_id': collection_id,
+                     'text_flag': text_flag,
+                     'collection_authorisation_list': collection_authorisation_list})
 
         return render(request, 'host/list_collection_authorisation.html', data)
 

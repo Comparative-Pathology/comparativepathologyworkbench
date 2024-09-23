@@ -73,83 +73,114 @@ The base header and footer include template
 
   <style>
 
-    tr.selected {
-      background-color: #ffff99 !important;
+tr.selected {
+    background-color: #ffff99 !important;
+}
+
+tr.active {
+    background-color: #f5569f !important;
     }
 
-    tr.active {
-      background-color: #f5569f !important;
-    }
+.grid-container-header {
+    background-color: #{{ environment_summary.environment_colour }};
+}
+  
+.grid-container-header>div {
+    background-color: #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-logo {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-title {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-bench {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-collection {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-image {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-source {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-about {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-user {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-search {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.grid-item-header-breadcrumb {
+    border: 1px solid #{{ environment_summary.environment_colour }};
+}
+  
+.header-drop-button {
+    background-color: #{{ environment_summary.environment_colour }};
+}
+  
+ul.breadcrumb {
+    background-color: #{{ environment_summary.environment_colour }};
+}
 
-  .grid-container-header {
-    background-color: #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-container-header>div {
-    background-color: #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-logo {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-title {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-bench {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-collection {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-image {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-source {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-about {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-user {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-search {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .grid-item-header-breadcrumb {
-    border: 1px solid #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  .header-drop-button {
-    background-color: #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
-  
-  ul.breadcrumb {
-    background-color: #{{ environment_summary.environment_colour }};
-    /* PURPLE */
-  }
+#page-content-loading {
+    position: fixed;
+    display: none;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.7);
+    z-index:9999;
+}
+
+@-webkit-keyframes spin {
+	from {-webkit-transform:rotate(0deg);}
+	to {-webkit-transform:rotate(360deg);}
+}
+
+@keyframes spin {
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
+}
+
+#page-content-loading::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 48%;
+    top: 40%;
+    width: 120px;
+    height: 120px;
+  	border: 16px solid #f3f3f3;
+	  border-radius: 50%;
+	  border-top: 16px solid blue;
+	  border-right: 16px solid green;
+	  border-bottom: 16px solid red;
+	  border-left: 16px solid pink;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin .8s linear infinite;
+}
+
+#page-content-loaded {
+  display: block;
+  /*text-align: center;*/
+}
 
 </style>
 
@@ -409,7 +440,7 @@ The base header and footer include template
     </div><!-- End of page-footer -->
   </div><!-- End of page-container -->
 
-<!-- block modals -->
+x<!-- block modals -->
 {% block modals %}
 
 {% include 'frontend_forms/dialogs.html' %}
@@ -421,7 +452,52 @@ The base header and footer include template
 {% block extrajs %}
 
 {% endblock extrajs %}
-<!-- END hblock extrajs -->
+<!-- END block extrajs -->
+
+<script>
+
+	function activateSpinner() {
+
+		const prom = (func) => new Promise((resolve) => {
+			setTimeout(() => {
+  				func();
+  				resolve();
+			},5000);
+		});
+
+		var isPerformanceSupported = (
+	    	window.performance &&
+	    	window.performance.now &&
+    		window.performance.timing &&
+    		window.performance.timing.navigationStart
+		);
+
+		var timeStampInMs = (
+    		isPerformanceSupported ?
+    		window.performance.now() +
+    		window.performance.timing.navigationStart :
+		    Date.now()
+		);
+
+		document.getElementById('page-content-loading').style.display = "block";
+	  //document.getElementById('page-content-loaded').style.display = "none";
+		
+		console.log(timeStampInMs, Date.now());
+
+		(async () => 
+		{
+		let func = () => {
+        document.getElementById('page-content-loading').style.display = "none";
+	    	//document.getElementById('page-content-loaded').style.display = "block";
+
+			  console.log(timeStampInMs, Date.now());
+		}
+    	  await prom(func);
+		}
+		)();
+	}
+
+</script>
 
 </body>
 

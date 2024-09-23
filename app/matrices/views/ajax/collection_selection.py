@@ -41,15 +41,10 @@ from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from matrices.routines import simulate_network_latency
-
 from matrices.forms import CollectionSummarySelectionForm
 
-from matrices.models import Matrix
-from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 
 
 #
@@ -70,15 +65,12 @@ def collection_selection(request, user_id):
 
         raise PermissionDenied
 
-
     object = get_object_by_uuid_or_404(User, user_id)
     collection = object.profile.last_used_collection
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionSummarySelectionForm(instance=object, initial={'last_used_collection': collection }, data=request.POST, request=request)
 

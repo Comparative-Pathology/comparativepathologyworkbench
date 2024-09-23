@@ -30,23 +30,18 @@
 ###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from matrices.routines import simulate_network_latency
-
 from matrices.forms import HeaderForm
 
 from matrices.models import Cell
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -69,14 +64,11 @@ def header_update(request, bench_id, header_id):
 
         raise PermissionDenied
 
-
     object = get_object_by_uuid_or_404(Cell, header_id)
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = HeaderForm(instance=object, data=request.POST)
 
@@ -92,7 +84,6 @@ def header_update(request, bench_id, header_id):
     else:
 
         form = HeaderForm(instance=object)
-
 
     return render(request, template_name, {
         'form': form,

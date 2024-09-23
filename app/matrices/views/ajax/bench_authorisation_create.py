@@ -48,7 +48,6 @@ from matrices.models import Authorisation
 from matrices.routines import authorisation_crud_consequences
 from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
-from matrices.routines import simulate_network_latency
 
 
 #
@@ -73,14 +72,12 @@ def bench_authorisation_create(request, bench_id=None):
 
         raise PermissionDenied
 
-
     object = None
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
 
-        simulate_network_latency()
 
         form = AuthorisationForm(instance=object, data=request.POST)
 
@@ -129,7 +126,6 @@ def bench_authorisation_create(request, bench_id=None):
 
             raise PermissionDenied
 
-
         form.fields['bench'] = forms.ModelChoiceField(Matrix.objects.filter(id=bench_id))
         form.fields['bench'].initial = bench_id
 
@@ -140,7 +136,6 @@ def bench_authorisation_create(request, bench_id=None):
     form.fields['permitted'].label_from_instance = lambda obj: "{0}".format(obj.username)
 
     form.fields['bench'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id, obj.title)
-
 
     return render(request, template_name, {
         'form': form,

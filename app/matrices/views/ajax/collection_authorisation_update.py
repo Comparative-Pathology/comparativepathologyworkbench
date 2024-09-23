@@ -48,7 +48,6 @@ from matrices.models import CollectionImageOrder
 
 from matrices.routines import collection_authorisation_create_update_consequences
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 from matrices.routines import exists_update_for_collection_and_user
 from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 
@@ -81,8 +80,6 @@ def collection_authorisation_update(request, collection_authorisation_id, collec
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionAuthorisationForm(instance=object, data=request.POST)
 

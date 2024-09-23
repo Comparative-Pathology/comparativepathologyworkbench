@@ -49,8 +49,6 @@ from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_cells_for_image
 from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
-from matrices.routines import simulate_network_latency
-
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -89,8 +87,6 @@ def delete_cell(request, matrix_id, cell_id):
             template_name = 'frontend_forms/generic_form_inner.html'
 
             if request.method == 'POST':
-
-                simulate_network_latency()
 
                 form = MatrixDeleteCellForm(data=request.POST)
 

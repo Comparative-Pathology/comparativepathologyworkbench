@@ -326,6 +326,8 @@ urlpatterns = [
          name='publicise_bench'),
     path('privatise_bench/<int:bench_id>/', matrices_views.matrices.privatise_bench,
          name='privatise_bench'),
+    path('renumber_bench/<int:bench_id>/', matrices_views.matrices.renumber_bench,
+         name='renumber_bench'),
 
     path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection,
          name='activate_collection'),

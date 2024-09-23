@@ -30,24 +30,18 @@
 ###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from matrices.routines import simulate_network_latency
-
 from matrices.forms import CollectionSummarySelectionForm
 
 from matrices.models import Matrix
-from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 
 
 #
@@ -68,16 +62,12 @@ def bench_collection_update(request, bench_id):
 
         raise PermissionDenied
 
-
     object = get_object_by_uuid_or_404(Matrix, bench_id)
     collection = object.last_used_collection
-
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionSummarySelectionForm(instance=object, initial={'last_used_collection': collection }, data=request.POST, request=request)
 
@@ -97,7 +87,6 @@ def bench_collection_update(request, bench_id):
     else:
 
         form = CollectionSummarySelectionForm(instance=object, request=request, initial={'last_used_collection': collection } )
-
 
     return render(request, template_name, {
         'form': form,

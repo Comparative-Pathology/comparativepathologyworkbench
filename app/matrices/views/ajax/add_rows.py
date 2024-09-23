@@ -44,7 +44,6 @@ from matrices.models import Matrix
 from matrices.models import Cell
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 
 
@@ -77,8 +76,6 @@ def add_rows(request, matrix_id, row_id):
             template_name = 'frontend_forms/generic_form_inner.html'
 
             if request.method == 'POST':
-
-                simulate_network_latency()
 
                 form = MatrixAddRowForm(data=request.POST)
 

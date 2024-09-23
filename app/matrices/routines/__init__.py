@@ -144,7 +144,6 @@ from .get_user_from_username import get_user_from_username
 from .get_users_for_last_used_collection import get_users_for_last_used_collection
 from .image_list_by_user_and_direction import image_list_by_user_and_direction
 from .validate_a_cpw_url import validate_a_cpw_url
-from .simulate_network_latency import simulate_network_latency
 from .validate_an_ebi_sca_url import validate_an_ebi_sca_url
 from .validate_an_ebi_sca_image import validate_an_ebi_sca_image
 from .validate_an_omero_image_url import validate_an_omero_image_url

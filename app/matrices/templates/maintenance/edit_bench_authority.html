@@ -56,6 +56,10 @@ The edit bench authority template
 </div><!-- End of page-sidebar -->
 
 <!-- Page Content -->
+<div style="display:none;" id="page-content-loading"></div>
+
+<div style="display:block;" id="page-content-loaded">
+
 <div class="page-content">
 
 	<h1>EDIT Bench Authority {{ authority.id }}</h1>
@@ -64,7 +68,7 @@ The edit bench authority template
 
 	<br />
 
-	<form method="POST" class="post-form">
+	<form id="myForm" method="POST" class="post-form" onsubmit="activateSpinner()">
 
 {% csrf_token %}
 
@@ -79,9 +83,18 @@ The edit bench authority template
 	<br />
 
 	<a href="{% url 'maintenance' %}"><button class="button button-add">CANCEL</button></a>
+	
+	<a href="#" onclick="activateSpinner()"><button class="button button-delete">CLICK HERE!!!</button></a>
+
 
 </div><!-- End of page-content -->
+
+</div><!-- End of page-content-loaded -->
 
 </div><!-- End of page-body -->
 
 {% endblock %}
+
+{% block extrajs %}
+
+{% endblock extrajs %}

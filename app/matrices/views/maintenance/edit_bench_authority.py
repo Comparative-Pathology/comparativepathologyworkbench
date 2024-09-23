@@ -30,6 +30,8 @@
 ###
 from __future__ import unicode_literals
 
+import time
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -45,8 +47,9 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
-# EDIT A BENCH AUTHORITY
+#   EDIT A BENCH AUTHORITY
 #
 @login_required
 def edit_bench_authority(request, bench_authority_id):
@@ -58,6 +61,8 @@ def edit_bench_authority(request, bench_authority_id):
         authority = get_object_or_404(Authority, pk=bench_authority_id)
 
         if request.method == HTTP_POST:
+
+            time.sleep(3.0)
 
             form = AuthorityForm(request.POST, instance=authority)
 

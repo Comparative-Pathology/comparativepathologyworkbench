@@ -44,7 +44,6 @@ from matrices.models import Matrix
 from matrices.models import Authorisation
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 from matrices.routines import authorisation_exists_for_bench_and_permitted
 
 
@@ -72,8 +71,6 @@ def bench_update_owner(request, bench_id):
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = MatrixOwnerSelectionForm(instance=bench, data=request.POST)
 

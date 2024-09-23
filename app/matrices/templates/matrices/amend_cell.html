@@ -40,7 +40,7 @@ The amend cell template
 
 			<li><a href="{% url 'list_benches' %}">Benches</a></li>
 			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
-			<li>Edit Cell</li>
+			<li>Edit Cell: {{ cell.get_coordinates }}</li>
 
 {% endblock %}
 
@@ -126,7 +126,7 @@ The amend cell template
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
-  <h1>CELL - CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"; Column {{ cell.xcoordinate }}, Row {{ cell.ycoordinate }}</h1>
+  <h1>CELL - CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"; {{ cell.get_coordinates }}</h1>
   <p>Amend the Cell Details</p>
   <hr>
   <br />

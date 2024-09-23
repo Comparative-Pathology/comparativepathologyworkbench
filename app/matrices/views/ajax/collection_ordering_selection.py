@@ -45,7 +45,6 @@ from matrices.models import CollectionImageOrder
 from matrices.models import Image
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 
 
 #
@@ -102,8 +101,6 @@ def collection_ordering_selection(request, collection_id, image_id, permitted_id
         cio_for_update = cio_selected
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = ImageSummaryOrderingForm(my_ordering_list, init_ordering=my_init_ordering, data=request.POST)
 

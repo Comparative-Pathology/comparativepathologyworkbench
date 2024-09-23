@@ -30,9 +30,7 @@
 ###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
@@ -44,7 +42,6 @@ from matrices.forms import CollectionForm
 from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 
 
 #
@@ -65,14 +62,11 @@ def collection_update(request, collection_id):
 
         raise PermissionDenied
 
-
     object = get_object_by_uuid_or_404(Collection, collection_id)
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionForm(instance=object, data=request.POST, request=request)
 
@@ -89,7 +83,6 @@ def collection_update(request, collection_id):
     else:
 
         form = CollectionForm(instance=object, request=request)
-
 
     return render(request, template_name, {
         'form': form,

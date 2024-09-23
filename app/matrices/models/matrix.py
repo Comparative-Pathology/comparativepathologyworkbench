@@ -408,6 +408,15 @@ class Matrix(models.Model):
         return Cell.objects.filter(matrix=self.id).filter(ycoordinate=a_row)
 
     #
+    #   Returns the Row Headers Cells of this Bench
+    #
+    def get_row_header_cells(self):
+
+        Cell = apps.get_model('matrices', 'Cell')
+
+        return Cell.objects.filter(matrix=self.id).filter(xcoordinate=0).order_by('ycoordinate')
+
+    #
     #   Returns ALL the Columns of this Bench
     #
     def get_columns(self):
@@ -424,6 +433,15 @@ class Matrix(models.Model):
         Cell = apps.get_model('matrices', 'Cell')
 
         return Cell.objects.filter(matrix=self.id).filter(xcoordinate=a_column)
+
+    #
+    #   Returns the Column Header Cells of this Bench
+    #
+    def get_column_header_cells(self):
+
+        Cell = apps.get_model('matrices', 'Cell')
+
+        return Cell.objects.filter(matrix=self.id).filter(ycoordinate=0).order_by('xcoordinate')
 
     #
     #   Returns the total number of Rows of this Bench

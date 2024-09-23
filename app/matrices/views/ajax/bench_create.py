@@ -41,7 +41,6 @@ from matrices.routines import credential_exists
 from matrices.routines import bench_creation_consequences
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_bench_count_for_user
-from matrices.routines import simulate_network_latency
 from matrices.routines import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
@@ -73,8 +72,6 @@ def bench_create(request):
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = NewMatrixForm(instance=object, data=request.POST)
 

@@ -35,13 +35,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
-
-from matrices.routines import simulate_network_latency
 
 from matrices.forms import CollectionActiveSummarySelectionForm
 
@@ -49,7 +46,6 @@ from matrices.models import Matrix
 from matrices.models import Collection
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 
 
 #
@@ -70,15 +66,12 @@ def active_collection_selection(request, user_id):
 
         raise PermissionDenied
 
-
     object = get_object_by_uuid_or_404(User, user_id)
     collection = object.profile.active_collection
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionActiveSummarySelectionForm(instance=object, initial={'active_collection': collection }, data=request.POST, request=request)
 

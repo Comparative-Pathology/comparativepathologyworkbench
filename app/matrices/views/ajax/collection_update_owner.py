@@ -46,7 +46,6 @@ from matrices.models import CollectionAuthorisation
 from matrices.models import CollectionImageOrder
 
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 from matrices.routines import collection_authorisation_exists_for_collection_and_permitted
 from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 
@@ -77,8 +76,6 @@ def collection_update_owner(request, collection_id):
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionOwnerSelectionForm(instance=collection, data=request.POST)
 

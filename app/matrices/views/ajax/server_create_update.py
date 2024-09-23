@@ -31,7 +31,6 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
@@ -46,7 +45,6 @@ from matrices.forms import ServerForm
 
 from matrices.routines import AESCipher
 from matrices.routines import credential_exists
-from matrices.routines import simulate_network_latency
 from matrices.routines import exists_server_for_uid_url
 
 
@@ -72,7 +70,6 @@ def server_create_update(request, server_id=None):
 
         raise PermissionDenied
 
-
     object = None
 
     if server_id is None:
@@ -91,17 +88,14 @@ def server_create_update(request, server_id=None):
 
                 raise PermissionDenied
 
-
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
 
-        simulate_network_latency()
-
         form = ServerForm(instance=object, data=request.POST)
 
         if form.is_valid():
-            
+
             object = form.save(commit=False)
 
             cipher = AESCipher(config('CPW_CIPHER_STRING'))
@@ -119,9 +113,9 @@ def server_create_update(request, server_id=None):
 
                     messages.error(request, "CPW_WEB:0610 NEW Server - A Server already Exist for that User Id and URL!")
                     form.add_error(None, "CPW_WEB:0610 NEW Server - A Server already Exist for that User Id and URL!")
-        
+
                 else:
-                    
+
                     object.save()
 
                     messages.success(request, 'Server ' + str(object.id) + ' Added!')
@@ -131,7 +125,7 @@ def server_create_update(request, server_id=None):
                 # "Change" mode
 
                 object.save()
-                
+
                 messages.success(request, 'Server ' + str(object.id) + ' Updated!')
 
     else:

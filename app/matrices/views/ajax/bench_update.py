@@ -37,8 +37,6 @@ from django.shortcuts import render
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
-from matrices.routines import simulate_network_latency
-
 from matrices.forms import MatrixForm
 
 from matrices.models import Matrix
@@ -77,8 +75,6 @@ def bench_update(request, bench_id):
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = MatrixForm(instance=object, data=request.POST)
 

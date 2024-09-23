@@ -50,7 +50,6 @@ from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_credential_for_user
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_primary_cpw_environment
-from matrices.routines import simulate_network_latency
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -92,8 +91,6 @@ def add_collection(request, matrix_id, cell_id):
             template_name = 'frontend_forms/generic_form_inner.html'
 
             if request.method == 'POST':
-
-                simulate_network_latency()
 
                 form = MatrixAddCollectionForm(data=request.POST)
 

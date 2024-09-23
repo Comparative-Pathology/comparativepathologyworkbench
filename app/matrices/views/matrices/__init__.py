@@ -70,6 +70,7 @@ from .delete_this_row import delete_this_row
 from .link_images import link_images
 from .privatise_bench import privatise_bench
 from .publicise_bench import publicise_bench
+from .renumber_bench import renumber_bench
 from .search_image import search_image
 from .set_last_used_tag_in_matrix import set_last_used_tag_in_matrix
 from .set_no_last_used_tag_in_matrix import set_no_last_used_tag_in_matrix

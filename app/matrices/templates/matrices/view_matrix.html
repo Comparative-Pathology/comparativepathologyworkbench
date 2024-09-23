@@ -186,6 +186,7 @@ The view matrix (bench) template
 	  		  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
 						{% endif %}
 					  	{% if updateBoolean %}
+			  <a href="{% url 'renumber_bench' matrix.id %}" onclick="return confirm('Are you sure you want to RENUMBER this Bench ... ? (ALL Headings will be OVERWRITTEN!!)')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Renumber Headings</a>
 	  		  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 						{% endif %}
 					{% endif %}
@@ -573,6 +574,7 @@ The view matrix (bench) template
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
+			  <a href=""><span class="menu-item">&#9;</span>{{ matrix_cell.get_coordinates }}</a>
 						{% if matrix.is_private %}
 							{% if readBoolean %}
 								{% if environment_summary.is_wordpress_active %}

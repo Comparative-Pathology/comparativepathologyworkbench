@@ -39,7 +39,6 @@ from matrices.forms import CollectionCreateForm
 
 from matrices.routines import credential_exists
 from matrices.routines import get_collection_count_for_user
-from matrices.routines import simulate_network_latency
 from matrices.routines import get_primary_cpw_environment
 
 
@@ -67,8 +66,6 @@ def collection_create(request):
     environment = get_primary_cpw_environment()
 
     if request.method == 'POST':
-
-        simulate_network_latency()
 
         form = CollectionCreateForm(instance=object, data=request.POST, request=request)
 

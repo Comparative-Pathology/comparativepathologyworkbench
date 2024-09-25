@@ -328,6 +328,8 @@ urlpatterns = [
          name='privatise_bench'),
     path('renumber_bench/<int:bench_id>/', matrices_views.matrices.renumber_bench,
          name='renumber_bench'),
+    path('unnumber_bench/<int:bench_id>/', matrices_views.matrices.unnumber_bench,
+         name='unnumber_bench'),
 
     path('activate_collection/<int:collection_id>/', matrices_views.matrices.activate_collection,
          name='activate_collection'),

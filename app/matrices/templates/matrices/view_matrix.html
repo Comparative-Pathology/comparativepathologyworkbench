@@ -187,6 +187,7 @@ The view matrix (bench) template
 						{% endif %}
 					  	{% if updateBoolean %}
 			  <a href="{% url 'renumber_bench' matrix.id %}" onclick="return confirm('Are you sure you want to RENUMBER this Bench ... ? (ALL Headings will be OVERWRITTEN!!)')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Renumber Headings</a>
+			  <a href="{% url 'unnumber_bench' matrix.id %}" onclick="return confirm('Are you sure you want to RESTORE this Bench ... ? (ALL Headings will be OVERWRITTEN!!)')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Restore Headings</a>
 	  		  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 						{% endif %}
 					{% endif %}
@@ -314,6 +315,7 @@ The view matrix (bench) template
 						{% endif %}
 			<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
+				<a href=""><span class="menu-item">&#9;</span>Row {{ matrix_cell.ycoordinate }}</a>
 						{% if matrix.is_private %}
 							{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
@@ -443,6 +445,7 @@ The view matrix (bench) template
 						{% endif %}
 			<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
+				<a href=""><span class="menu-item">&#9;</span>Column {{ matrix_cell.xcoordinate }}</a>
 						{% if matrix.is_private %}
 							{% if updateBoolean %}
 	  		  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
@@ -574,7 +577,7 @@ The view matrix (bench) template
           <div id="cell_{{ matrix_cell.id }}" class="cell-dropdown">
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
-			  <a href=""><span class="menu-item">&#9;</span>{{ matrix_cell.get_coordinates }}</a>
+			  <a href=""><span class="menu-item">&#9;</span>Cell {{ matrix_cell.get_coordinates }}</a>
 						{% if matrix.is_private %}
 							{% if readBoolean %}
 								{% if environment_summary.is_wordpress_active %}

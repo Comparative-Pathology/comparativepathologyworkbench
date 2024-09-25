@@ -74,6 +74,7 @@ from .renumber_bench import renumber_bench
 from .search_image import search_image
 from .set_last_used_tag_in_matrix import set_last_used_tag_in_matrix
 from .set_no_last_used_tag_in_matrix import set_no_last_used_tag_in_matrix
+from .unnumber_bench import unnumber_bench
 from .view_aggregated_blog import view_aggregated_blog
 from .view_all_image_links import view_all_image_links
 from .view_cell_blog import view_cell_blog

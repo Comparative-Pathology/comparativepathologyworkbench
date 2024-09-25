@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###!
-# \file         renumber_bench.py
+# \file         unnumber_bench.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,7 +25,7 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the renumber_bench view routine
+# This file contains the unnumber_bench view routine
 #
 ###
 from __future__ import unicode_literals
@@ -40,14 +40,12 @@ from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 
-from matrices.routines import Base26
-
 
 #
-#   Renumber the Headings in a Bench
+#   Restore the Headings in a Bench
 #
 @login_required
-def renumber_bench(request, bench_id):
+def unnumber_bench(request, bench_id):
 
     if credential_exists(request.user):
 
@@ -60,25 +58,20 @@ def renumber_bench(request, bench_id):
         column_header_cells = bench.get_column_header_cells()
 
         row = 0
-        title_label = ''
-
         for row_header_cell in row_header_cells:
 
             if row_header_cell.ycoordinate > 0:
 
                 if row < max_row_index:
 
-                    title_label = str(row)
-
-                    row_header_cell.comment = row_header_cell.title
-                    row_header_cell.title = title_label
+                    row_header_cell.title = row_header_cell.comment
+                    row_header_cell.comment = ''
 
                     row_header_cell.save()
 
             row = row + 1
 
         column = 0
-        title_label = ''
 
         for column_header_cell in column_header_cells:
 
@@ -86,17 +79,15 @@ def renumber_bench(request, bench_id):
 
                 if column < max_column_index:
 
-                    title_label = Base26.to_excel(column)
-
-                    column_header_cell.comment = column_header_cell.title
-                    column_header_cell.title = title_label
+                    column_header_cell.title = column_header_cell.comment
+                    column_header_cell.comment = ''
 
                     column_header_cell.save()
 
             column = column + 1
 
         matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
-        messages.success(request, 'Bench ' + matrix_id_formatted + ' Headers Renumbered')
+        messages.success(request, 'Bench ' + matrix_id_formatted + ' Headers Restored')
 
         return HttpResponseRedirect(reverse('matrix', args=(bench_id,)))
 

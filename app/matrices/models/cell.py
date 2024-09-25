@@ -47,6 +47,7 @@ class Cell(models.Model):
 
     matrix = models.ForeignKey(Matrix, related_name='bench_cells', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, default='', blank=True)
+    comment = models.CharField(max_length=255, default='', blank=True)
     description = models.TextField(max_length=4095, default='', blank=True)
     xcoordinate = models.IntegerField(default=0)
     ycoordinate = models.IntegerField(default=0)
@@ -58,6 +59,9 @@ class Cell(models.Model):
 
     def set_title(self, a_title):
         self.title = a_title
+
+    def set_comment(self, a_comment):
+        self.comment = a_comment
 
     def set_description(self, a_description):
         self.description = a_description
@@ -75,9 +79,10 @@ class Cell(models.Model):
         self.image = an_image
 
     @classmethod
-    def create(cls, matrix, title, description, xcoordinate, ycoordinate, blogpost, image):
+    def create(cls, matrix, title, comment, description, xcoordinate, ycoordinate, blogpost, image):
         return cls(matrix=matrix,
                    title=title,
+                   comment=comment,
                    description=description,
                    xcoordinate=xcoordinate,
                    ycoordinate=ycoordinate,
@@ -95,6 +100,7 @@ class Cell(models.Model):
         return f"{self.id}, \
                  {self.matrix.id}, \
                  {self.title}, \
+                 {self.comment}, \
                  {self.description}, \
                  {self.xcoordinate}, \
                  {self.ycoordinate}, \
@@ -112,6 +118,7 @@ class Cell(models.Model):
         return f"{self.id}, \
                  {self.matrix.id}, \
                  {self.title}, \
+                 {self.comment}, \
                  {self.description}, \
                  {self.xcoordinate}, \
                  {self.ycoordinate}, \
@@ -243,6 +250,7 @@ class Cell(models.Model):
                 'matrix_id': self.matrix.id,
                 'matrix_title': self.matrix.title,
                 'title': self.title,
+                'comment': self.comment,
                 'description': self.description,
                 'xcoordinate': self.xcoordinate,
                 'ycoordinate': self.ycoordinate,

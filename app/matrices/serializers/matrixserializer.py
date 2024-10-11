@@ -213,6 +213,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                 # Define Cell Attributes
                 cell_title = ""
+                cell_comment = ""
                 cell_description = ""
                 cell_xcoordinate = 0
                 cell_ycoordinate = 0
@@ -234,6 +235,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         # Create a Default Cell Object
                         cell = Cell.create(matrix,
                                            cell_title,
+                                           cell_comment,
                                            cell_description,
                                            cell_xcoordinate,
                                            cell_ycoordinate,
@@ -270,6 +272,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                     # Get the Cell Attributes
                     cell_title = cell_data.get('title')
+                    cell_comment = ''
                     cell_description = cell_data.get('description')
                     cell_xcoordinate = cell_data.get('xcoordinate')
                     cell_ycoordinate = cell_data.get('ycoordinate')
@@ -438,6 +441,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     # Create a new Cell Object
                     cell_in = Cell.create(matrix,
                                           cell_title,
+                                          cell_comment,
                                           cell_description,
                                           cell_xcoordinate,
                                           cell_ycoordinate,
@@ -1388,6 +1392,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             # Extract the Cell Attributes
             cell_id = cell_data.get('id', 0)
             cell_title = cell_data.get('title')
+            cell_comment = ''
             cell_description = cell_data.get('description')
             cell_xcoordinate = cell_data.get('xcoordinate')
             cell_ycoordinate = cell_data.get('ycoordinate')
@@ -1586,6 +1591,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 # Create a New Cell Object
                 cell = Cell.create(an_instance,
                                    cell_title,
+                                   cell_comment,
                                    cell_description,
                                    cell_xcoordinate,
                                    cell_ycoordinate,

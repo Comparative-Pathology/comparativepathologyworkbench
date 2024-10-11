@@ -134,7 +134,7 @@ def shuffle_rows(request):
 
                 for i, column in enumerate(columns):
 
-                    cell = Cell.create(matrix, "", "", i, nextRow, "", None)
+                    cell = Cell.create(matrix, "", "", "", i, nextRow, "", None)
 
                     cell.save()
 

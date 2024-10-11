@@ -118,7 +118,7 @@ def add_collection_row(request, matrix_id, row_id):
 
                     for i, row in enumerate(rows):
 
-                        cell = Cell.create(matrix, "", "", column, i, "", None)
+                        cell = Cell.create(matrix, "", "", "", column, i, "", None)
                         cell.save()
 
                 matrix.save()

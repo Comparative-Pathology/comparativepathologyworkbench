@@ -118,7 +118,7 @@ def add_collection_column(request, matrix_id, column_id):
 
                     for i, column in enumerate(columns):
 
-                        cell = Cell.create(matrix, "", "", i, row, "", None)
+                        cell = Cell.create(matrix, "", "", "", i, row, "", None)
                         cell.save()
 
                 matrix.save()

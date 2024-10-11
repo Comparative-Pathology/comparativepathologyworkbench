@@ -90,7 +90,7 @@ def overwrite_cell(request):
 
                 for i, column in enumerate(columns):
 
-                    cell = Cell.create(matrix, "", "", i, nextRow, "", None)
+                    cell = Cell.create(matrix, "", "", "", i, nextRow, "", None)
 
                     cell.save()
 
@@ -103,7 +103,7 @@ def overwrite_cell(request):
 
                 for i, row in enumerate(rows):
 
-                    cell = Cell.create(matrix, "", "", nextColumn, i, "", None)
+                    cell = Cell.create(matrix, "", "", "", nextColumn, i, "", None)
 
                     cell.save()
 

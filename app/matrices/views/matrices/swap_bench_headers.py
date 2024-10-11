@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-###!
-# \file         unnumber_bench.py
+#
+# ##
+# \file         swap_bench_headers.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,9 +26,10 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 #
-# This file contains the unnumber_bench view routine
+# This file contains the renumber_bench view routine
 #
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -40,12 +42,14 @@ from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 
+from matrices.routines import Base26
+
 
 #
-#   Restore the Headings in a Bench
+#   Swap the Headings in a Bench
 #
 @login_required
-def unnumber_bench(request, bench_id):
+def swap_bench_headers(request, bench_id):
 
     if credential_exists(request.user):
 
@@ -58,20 +62,38 @@ def unnumber_bench(request, bench_id):
         column_header_cells = bench.get_column_header_cells()
 
         row = 0
+        title_label = ''
+        row_comment_flag = False
+        column_comment_flag = False
+
         for row_header_cell in row_header_cells:
 
             if row_header_cell.ycoordinate > 0:
 
                 if row < max_row_index:
 
-                    row_header_cell.title = row_header_cell.comment
-                    row_header_cell.comment = ''
+                    title_label = str(row)
+
+                    if row_header_cell.comment == title_label:
+
+                        row_comment_flag = True
+
+                    if row_comment_flag is True:
+
+                        row_header_cell.comment = row_header_cell.title
+                        row_header_cell.title = title_label
+
+                    else:
+
+                        row_header_cell.title = row_header_cell.comment
+                        row_header_cell.comment = title_label
 
                     row_header_cell.save()
 
             row = row + 1
 
         column = 0
+        title_label = ''
 
         for column_header_cell in column_header_cells:
 
@@ -79,15 +101,28 @@ def unnumber_bench(request, bench_id):
 
                 if column < max_column_index:
 
-                    column_header_cell.title = column_header_cell.comment
-                    column_header_cell.comment = ''
+                    title_label = Base26.to_excel(column)
+
+                    if column_header_cell.comment == title_label:
+
+                        column_comment_flag = True
+
+                    if column_comment_flag is True:
+
+                        column_header_cell.comment = column_header_cell.title
+                        column_header_cell.title = title_label
+
+                    else:
+
+                        column_header_cell.title = column_header_cell.comment
+                        column_header_cell.comment = title_label
 
                     column_header_cell.save()
 
             column = column + 1
 
         matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
-        messages.success(request, 'Bench ' + matrix_id_formatted + ' Headers Restored')
+        messages.success(request, 'Bench ' + matrix_id_formatted + ' Headers Switched!')
 
         return HttpResponseRedirect(reverse('matrix', args=(bench_id,)))
 

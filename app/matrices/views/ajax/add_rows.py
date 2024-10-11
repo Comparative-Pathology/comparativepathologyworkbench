@@ -103,7 +103,7 @@ def add_rows(request, matrix_id, row_id):
 
                             for i, column in enumerate(columns):
 
-                                cell = Cell.create(matrix, "", "", i, row, "", None)
+                                cell = Cell.create(matrix, "", "", "", i, row, "", None)
                                 cell.save()
 
                         matrix.save()
@@ -129,7 +129,7 @@ def add_rows(request, matrix_id, row_id):
 
                             for i, column in enumerate(columns):
 
-                                cell = Cell.create(matrix, "", "", i, row, "", None)
+                                cell = Cell.create(matrix, "", "", "", i, row, "", None)
                                 cell.save()
 
                         matrix.save()

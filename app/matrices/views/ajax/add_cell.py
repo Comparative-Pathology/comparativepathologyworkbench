@@ -94,7 +94,7 @@ def add_cell(request, matrix_id, cell_id):
 
                         for i, row in enumerate(rows):
 
-                            newCell = Cell.create(matrix, "", "", nextColumn, i, "", None)
+                            newCell = Cell.create(matrix, "", "", "", nextColumn, i, "", None)
 
                             newCell.save()
 
@@ -125,7 +125,7 @@ def add_cell(request, matrix_id, cell_id):
 
                         for i, column in enumerate(columns):
 
-                            newCell = Cell.create(matrix, "", "", i, nextRow, "", None)
+                            newCell = Cell.create(matrix, "", "", "", i, nextRow, "", None)
 
                             newCell.save()
 

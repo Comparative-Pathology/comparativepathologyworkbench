@@ -115,7 +115,7 @@ class Collection(models.Model):
     def get_hidden_images_count(self):
         return self.images.filter(Q(hidden=True)).count()
 
-    def get_images_for__tag(self, a_tag):
+    def get_images_for_tag(self, a_tag):
         return self.images.filter(Q(hidden=False)).filter(tags__name__in=[a_tag.name])
 
     def get_all_images(self):

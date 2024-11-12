@@ -85,6 +85,8 @@ def image_list_by_user_and_direction(a_user,
     str_query_owner = ''
 
     tag = None
+    collection = None
+    matrix = None
 
     collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '', '')
 
@@ -148,1176 +150,250 @@ def image_list_by_user_and_direction(a_user,
 
         if a_user.is_superuser:
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
                     .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .order_by(sort_parameter)
 
         else:
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -1327,8 +403,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -1337,73 +413,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -1412,8 +423,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -1421,73 +432,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_roi=a_query_roi)\
@@ -1496,8 +442,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_roi=a_query_roi)\
@@ -1505,67 +451,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__iregex=str_iregex)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_server=str_query_source)\
@@ -1573,81 +460,16 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__iregex=str_iregex)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
@@ -1656,8 +478,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
@@ -1665,67 +487,8 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
@@ -1733,75 +496,16 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
@@ -1809,77 +513,24 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
@@ -1889,1181 +540,251 @@ def image_list_by_user_and_direction(a_user,
 
         if a_user.is_superuser:
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
                     .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_owner=str_query_owner)\
-                    .order_by(sort_parameter)
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '' and str_query_owner == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_owner=str_query_owner)\
                     .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '' and str_query_owner == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '' and str_query_owner == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .order_by(sort_parameter)
 
         else:
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -3073,9 +794,30 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -3084,80 +826,28 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -3166,9 +856,28 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_comment__icontains=a_query_comment)\
@@ -3176,80 +885,26 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_roi=a_query_roi)\
@@ -3258,9 +913,28 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_roi=a_query_roi)\
@@ -3268,74 +942,26 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_name__icontains=a_query_name)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_server=str_query_source)\
@@ -3343,89 +969,50 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_name__icontains=a_query_name)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_name__icontains=a_query_name)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name != '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_name__icontains=a_query_name)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
@@ -3434,9 +1021,28 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_roi=a_query_roi)\
@@ -3444,74 +1050,26 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_comment__icontains=a_query_comment)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_server=str_query_source)\
@@ -3519,83 +1077,50 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_comment__icontains=a_query_comment)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment != '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_comment__icontains=a_query_comment)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_roi=a_query_roi)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_server=str_query_source)\
@@ -3603,96 +1128,159 @@ def image_list_by_user_and_direction(a_user,
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_roi=a_query_roi)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix != '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi != '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_matrix_id=str_query_matrix)\
+                    .filter(image_roi=a_query_roi)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection != '' and \
-               str_query_matrix == '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_collection_id=str_query_collection)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source != '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_server=str_query_source)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix != '' and str_query_source == '':
-                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
-                    .filter(image_matrix_id=str_query_matrix)\
-                    .filter(image_id__in=list_of_image_ids)\
-                    .filter(image_ordering_permitted=a_user.username)\
-                    .order_by(sort_parameter)
-
-
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source != '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_server=str_query_source)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
 
-            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and str_query_collection == '' and \
-               str_query_matrix == '' and str_query_source == '':
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source != '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_server=str_query_source)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
                 queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
                     .filter(image_id__in=list_of_image_ids)\
                     .filter(image_ordering_permitted=a_user.username)\
                     .order_by(sort_parameter)
 
-    if tag is not None:
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+            if a_query_name == '' and a_query_comment == '' and a_query_roi == '' and \
+               str_query_source == '':
+                queryset = ImageSummary.objects.filter(image_hidden=a_query_hidden)\
+                    .filter(image_id__in=list_of_image_ids)\
+                    .filter(image_ordering_permitted=a_user.username)\
+                    .order_by(sort_parameter)
+
+    if tag is None and collection is None and matrix is not None:
+
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_matrix(matrix):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
+
+    if tag is None and collection is not None and matrix is None:
+
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_collection(collection):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
+
+    if tag is None and collection is not None and matrix is not None:
+
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_collection(collection) and imagesummary.has_this_matrix(matrix):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
+
+    if tag is not None and collection is None and matrix is None:
 
         for imagesummary in queryset:
 
             if imagesummary.has_this_tag(tag):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
+
+    if tag is not None and collection is None and matrix is not None:
+
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_tag(tag) and imagesummary.has_this_matrix(matrix):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
+
+    if tag is not None and collection is not None and matrix is None:
+
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_tag(tag) and imagesummary.has_this_collection(collection):
+
+                queryset_out.append(imagesummary)
+
+        queryset = queryset_out
+
+    if tag is not None and collection is not None and matrix is not None:
+
+        for imagesummary in queryset:
+
+            if imagesummary.has_this_tag(tag) and imagesummary.has_this_collection(collection) and \
+               imagesummary.has_this_matrix(matrix):
 
                 queryset_out.append(imagesummary)
 

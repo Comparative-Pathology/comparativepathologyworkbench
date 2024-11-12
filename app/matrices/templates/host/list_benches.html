@@ -98,10 +98,14 @@ The list benches template
 	  <td>&nbsp;</td>
 	</tr>
 		{% endif %}
-		{% if matrix_summary.is_public %}
-    <tr id="matrix_summary-{{matrix_summary.matrix_id}}" class="active">
+		{% if matrix_summary.is_locked %}
+    <tr id="matrix_summary-{{matrix_summary.matrix_id}}" class="locked">
 		{% else %}
+			{% if matrix_summary.is_public %}
+    <tr id="matrix_summary-{{matrix_summary.matrix_id}}" class="active">
+			{% else %}
 	<tr id="matrix_summary-{{matrix_summary.matrix_id}}" class="{% if request.GET.selected_record == matrix_summary.matrix_id|stringformat:'s' %}selected{% endif %}">
+			{% endif %}
 		{% endif %}
 		{% if readBoolean %}
  	  <td>

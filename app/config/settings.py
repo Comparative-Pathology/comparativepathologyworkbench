@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         settings.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -26,10 +27,10 @@
 # \brief
 # This exposes the WSGI callable as a module-level variable named
 # ``application``. from "config.settings"
-###
-"""
-Django settings for comparativepathologyworkbench project.
-"""
+# \brief
+# Django settings for comparativepathologyworkbench project.
+# ##
+#
 import os
 
 from decouple import config, Csv
@@ -37,6 +38,13 @@ from decouple import config, Csv
 import ckeditor.configs
 
 from pathlib import Path
+
+# CELERY SETTINGS
+BROKER_URL = config('BROKER_URL')
+RESULTS_URL = config('RESULTS_URL')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -69,6 +77,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'frontend_forms',
     'taggit',
+    'background',
 ]
 
 MIDDLEWARE = [

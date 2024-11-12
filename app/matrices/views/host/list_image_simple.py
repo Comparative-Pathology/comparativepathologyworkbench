@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+#
+# ##
 # \file         list_image_simple.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -23,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # The list_images_simple VIEW
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
@@ -136,7 +137,7 @@ class ImageSimpleListView(LoginRequiredMixin, SortableListView):
 
             if sort_parameter == 'tag':
 
-                sort_parameter = sort_direction + 'image_tags'
+                sort_parameter = sort_direction + 'image_tag_ids'
 
             if sort_parameter == 'source':
 
@@ -144,26 +145,28 @@ class ImageSimpleListView(LoginRequiredMixin, SortableListView):
 
             if sort_parameter == 'collection':
 
-                sort_parameter = sort_direction + 'image_collection_id'
+                sort_parameter = sort_direction + 'image_collection_ids'
 
             if sort_parameter == 'bench':
 
-                sort_parameter = sort_direction + 'image_matrix_id'
+                sort_parameter = sort_direction + 'image_matrix_ids'
 
         # Set the Pagination Parameter
         self.query_paginate_by = self.request.GET.get('paginate_by', None)
 
-        return image_list_by_user_and_direction(self.request.user,
-                                                sort_parameter,
-                                                self.query_name,
-                                                '',
-                                                '',
-                                                '',
-                                                False,
-                                                self.query_owner,
-                                                '',
-                                                '',
-                                                '')
+        images = image_list_by_user_and_direction(self.request.user,
+                                                  sort_parameter,
+                                                  self.query_name,
+                                                  '',
+                                                  '',
+                                                  '',
+                                                  False,
+                                                  self.query_owner,
+                                                  '',
+                                                  '',
+                                                  '')
+
+        return images
 
     def get_context_data(self, **kwargs):
 

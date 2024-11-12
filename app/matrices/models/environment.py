@@ -69,7 +69,7 @@ CMD_BLOG_GET_LINK_POST = 'LinkPost'
 class Environment(models.Model):
 
     name = models.CharField(max_length=50,
-                            blank=False,unique=True)
+                            blank=False, unique=True)
     location = models.ForeignKey(Location,
                                  related_name='environments',
                                  default=0,
@@ -137,6 +137,11 @@ class Environment(models.Model):
                                        blank=False)
     gateway_pagination = models.IntegerField(default=50,
                                              blank=False)
+    background_processing = models.BooleanField(default=False)
+    window_refresh_time = models.IntegerField(default=10,
+                                              blank=False)
+    task_pause_time = models.IntegerField(default=5,
+                                          blank=False)
 
     @classmethod
     def create(cls, name, location, protocol, web_root, document_root, nginx_private_location, wordpress_web_root,
@@ -144,7 +149,8 @@ class Environment(models.Model):
                owner, minimum_cell_height, maximum_cell_height, minimum_cell_width, maximum_cell_width,
                maximum_initial_columns, minimum_initial_columns, maximum_initial_rows, minimum_initial_rows,
                maximum_rest_columns,  minimum_rest_columns, maximum_rest_rows, minimum_rest_rows, maximum_bench_count,
-               maximum_collection_count, gateway, gateway_port, gateway_pagination):
+               maximum_collection_count, gateway, gateway_port, gateway_pagination, background_processing,
+               window_refresh_time, task_pause_time):
 
         return cls(name=name, location=location, protocol=protocol, web_root=web_root, document_root=document_root,
                    nginx_private_location=nginx_private_location,
@@ -156,7 +162,9 @@ class Environment(models.Model):
                    maximum_rest_columns=maximum_rest_columns, minimum_rest_columns=minimum_rest_columns,
                    maximum_rest_rows=maximum_rest_rows, minimum_rest_rows=minimum_rest_rows,
                    maximum_bench_count=maximum_bench_count, maximum_collection_count=maximum_collection_count,
-                   gateway=gateway, gateway_port=gateway_port, gateway_pagination=gateway_pagination)
+                   gateway=gateway, gateway_port=gateway_port, gateway_pagination=gateway_pagination,
+                   background_processing=background_processing,
+                   window_refresh_time=window_refresh_time, task_pause_time=task_pause_time)
 
     def __str__(self):
         return f"{self.id}, {self.name}, {self.location.id}, {self.protocol.id}, {self.web_root}, \
@@ -169,7 +177,8 @@ class Environment(models.Model):
                 {self.maximum_rest_columns}, {self.minimum_rest_columns}, \
                 {self.maximum_rest_rows}, {self.minimum_rest_rows}, \
                 {self.maximum_bench_count}, {self.maximum_collection_count}, {self.gateway.id}, \
-                {self.gateway_port}, {self.gateway_pagination}"
+                {self.gateway_port}, {self.gateway_pagination}, {self.background_processing}, \
+                {self.window_refresh_time}, {self.task_pause_time}"
 
     def __repr__(self):
         return f"{self.id}, {self.name}, {self.location.id}, {self.protocol.id}, {self.web_root}, \
@@ -182,7 +191,14 @@ class Environment(models.Model):
                 {self.maximum_rest_columns}, {self.minimum_rest_columns}, \
                 {self.maximum_rest_rows}, {self.minimum_rest_rows}, \
                 {self.maximum_bench_count}, {self.maximum_collection_count}, {self.gateway.id}, \
-                #{self.gateway_port}, {self.gateway_pagination}"
+                {self.gateway_port}, {self.gateway_pagination}, {self.background_processing}, \
+                {self.window_refresh_time}, {self.task_pause_time}"
+
+    def get_window_refresh_time_milliseconds(self):
+        return self.window_refresh_time * 1000
+
+    def get_task_pause_time_milliseconds(self):
+        return self.task_pause_time * 1000
 
     def get_full_web_root(self):
         return self.protocol.name + '://' + self.web_root
@@ -237,6 +253,18 @@ class Environment(models.Model):
 
     def is_wordpress_active(self):
         if self.wordpress_active is True:
+            return True
+        else:
+            return False
+
+    def is_background_processing(self):
+        if self.background_processing is True:
+            return True
+        else:
+            return False
+
+    def is_foreground_processing(self):
+        if self.background_processing is False:
             return True
         else:
             return False

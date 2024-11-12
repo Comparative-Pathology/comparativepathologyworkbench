@@ -43,11 +43,20 @@ ENVIRONMENT_DEVELOPMENT = 'DEVELOPMENT'
 #
 class EnvironmentSummary(models.Model):
 
-    environment_id = models.IntegerField(default=0, blank=False)
-    environment_name = models.CharField(max_length=50, blank=False, unique=True)
-    environment_location = models.CharField(max_length=25, blank=False, unique=True)
-    environment_colour = models.CharField(max_length=6, blank=False)
+    environment_id = models.IntegerField(default=0,
+                                         blank=False)
+    environment_name = models.CharField(max_length=50,
+                                        blank=False,
+                                        unique=True)
+    environment_location = models.CharField(max_length=25,
+                                            blank=False,
+                                            unique=True)
+    environment_colour = models.CharField(max_length=6,
+                                          blank=False)
     environment_wordpress_active = models.BooleanField(default=False)
+    environment_background_processing = models.BooleanField(default=False)
+    environment_window_refresh_time_milliseconds = models.IntegerField(default=0,
+                                                                       blank=False)
 
     class Meta:
         managed = False
@@ -91,6 +100,12 @@ class EnvironmentSummary(models.Model):
 
     def is_wordpress_active(self):
         if self.environment_wordpress_active is True:
+            return True
+        else:
+            return False
+
+    def is_background_processing(self):
+        if self.environment_background_processing is True:
             return True
         else:
             return False

@@ -59,7 +59,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
     query_comment = forms.CharField(max_length=25)
     query_hidden = forms.BooleanField()
     query_owner = forms.CharField(max_length=25)
-    query_collection_id = forms.CharField(max_length=25)
+    query_collection_ids = forms.CharField(max_length=25)
     query_matrix_id = forms.CharField(max_length=25)
     query_tag_id = forms.CharField(max_length=25)
 
@@ -73,10 +73,10 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                            'image_roi': {'default_direction': '', 'verbose_name': 'ROI'},
                            'image_hidden': {'default_direction': '', 'verbose_name': 'Hidden?'},
                            'image_owner': {'default_direction': '', 'verbose_name': 'Owner'},
-                           'image_tag_id': {'default_direction': '', 'verbose_name': 'Tag'},
+                           'image_tag_ids': {'default_direction': '', 'verbose_name': 'Tag'},
                            'image_source': {'default_direction': '', 'verbose_name': 'Source'},
-                           'image_collection_id': {'default_direction': '', 'verbose_name': 'Collection'},
-                           'image_matrix_id': {'default_direction': '', 'verbose_name': 'Bench'}
+                           'image_collection_ids': {'default_direction': '', 'verbose_name': 'Collection'},
+                           'image_matrix_ids': {'default_direction': '', 'verbose_name': 'Bench'}
                            }
 
     default_sort_field = 'image_name'
@@ -125,7 +125,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         self.query_comment = self.request.GET.get('comment', '')
         self.query_hidden = self.request.GET.get('hidden', '')
         self.query_owner = self.request.GET.get('owner', '')
-        self.query_collection_id = self.request.GET.get('collection', '')
+        self.query_collection_ids = self.request.GET.get('collection', '')
         self.query_tag_id = self.request.GET.get('tag', '')
         self.query_bench_id = self.request.GET.get('bench', '')
 
@@ -148,11 +148,27 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             if sort_parameter == "image_tag_id":
 
-                sort_parameter = "image_tags"
+                sort_parameter = "image_tag_ids"
 
             if sort_parameter == "-image_tag_id":
 
-                sort_parameter = "-image_tags"
+                sort_parameter = "-image_tag_ids"
+
+            if sort_parameter == "image_collection_id":
+
+                sort_parameter = "image_collection_ids"
+
+            if sort_parameter == "-image_collection_id":
+
+                sort_parameter = "-image_collection_ids"
+
+            if sort_parameter == "image_bench_id":
+
+                sort_parameter = "image_bench_ids"
+
+            if sort_parameter == "-image_bench_id":
+
+                sort_parameter = "-image_bench_ids"
 
         # Set the Pagination Parameter
         self.query_paginate_by = self.request.GET.get('paginate_by', '')
@@ -173,7 +189,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         # If there isn't a URL Collection Id, use the GET Collection Id
         if kwargs_collection_id == '':
 
-            search_collection_id = self.query_collection_id
+            search_collection_id = self.query_collection_ids
 
         else:
 
@@ -246,7 +262,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         # If there isn't a URL Collection Id, use the GET Collection Id
         if kwargs_collection_id == '':
 
-            search_collection_id = self.query_collection_id
+            search_collection_id = self.query_collection_ids
 
         else:
 
@@ -333,7 +349,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                      'comment': self.query_comment,
                      'hidden': self.query_hidden,
                      'owner': self.query_owner,
-                     'collection': self.query_collection_id,
+                     'collection': self.query_collection_ids,
                      'bench': self.query_bench_id,
                      'tag': self.query_tag_id,
                      'paginate_by': self.query_paginate_by}

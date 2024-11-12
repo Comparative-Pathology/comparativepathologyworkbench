@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         lock_bench_task.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,9 +25,27 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# config Package Description.
+# The lock_bench_task Task.
 # ##
 #
 from __future__ import absolute_import
 
-from .celery import app as celery_app
+from matrices.models import Matrix
+
+from celery import shared_task
+
+
+@shared_task
+def lock_bench_task(matrix_id):
+
+    matrix = Matrix.objects.get(id=matrix_id)
+
+    out_message = ""
+
+    matrix.set_locked()
+    matrix.save()
+
+    out_message = "Task lock_bench : Bench CPW:{0:06d} lock: {1} Complete!!"\
+        .format(matrix.id, matrix.locked)
+
+    return out_message

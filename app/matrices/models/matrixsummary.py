@@ -46,6 +46,7 @@ class MatrixSummary(models.Model):
     matrix_width = models.IntegerField(default=0, blank=False)
     matrix_owner = models.CharField(max_length=50, default='')
     matrix_public = models.BooleanField(default=False)
+    matrix_locked = models.BooleanField(default=False)
     matrix_authorisation_id = models.IntegerField(default=0, blank=False)
     matrix_authorisation_permitted = models.CharField(max_length=50, default='')
     matrix_authorisation_authority = models.CharField(max_length=12, default='')
@@ -66,6 +67,7 @@ class MatrixSummary(models.Model):
             {self.matrix_width}, \
             {self.matrix_owner}, \
             {self.matrix_public}, \
+            {self.matrix_locked}, \
             {self.matrix_authorisation_id}, \
             {self.matrix_authorisation_permitted}, \
             {self.matrix_authorisation_authority}"
@@ -82,9 +84,30 @@ class MatrixSummary(models.Model):
             {self.matrix_width}, \
             {self.matrix_owner}, \
             {self.matrix_public}, \
+            {self.matrix_locked}, \
             {self.matrix_authorisation_id}, \
             {self.matrix_authorisation_permitted}, \
             {self.matrix_authorisation_authority}"
+
+    #
+    #   If this Bench is Locked, then True, else False
+    #
+    def is_locked(self):
+
+        if self.matrix_locked is True:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Bench is NOT Locked, then True, else False
+    #
+    def is_not_locked(self):
+
+        if self.matrix_locked is False:
+            return True
+        else:
+            return False
 
     #
     #   If this Bench is Public, then True, else False
@@ -102,6 +125,26 @@ class MatrixSummary(models.Model):
     def is_not_public(self):
 
         if self.matrix_public is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Bench is Unlocked, then True, else False
+    #
+    def is_unlocked(self):
+
+        if self.matrix_locked is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Bench is NOT Locked, then True, else False
+    #
+    def is_not_unlocked(self):
+
+        if self.matrix_locked is True:
             return True
         else:
             return False
@@ -125,3 +168,4 @@ class MatrixSummary(models.Model):
             return True
         else:
             return False
+

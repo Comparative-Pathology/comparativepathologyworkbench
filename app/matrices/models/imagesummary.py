@@ -30,6 +30,7 @@
 #
 from __future__ import unicode_literals
 
+from django.apps import apps
 from django.db import models
 
 from matrices.models import Image
@@ -38,12 +39,6 @@ from taggit.models import Tag
 
 from matrices.routines.exists_parent_image_links_for_image import exists_parent_image_links_for_image
 from matrices.routines.exists_child_image_links_for_image import exists_child_image_links_for_image
-
-
-SERVER_WORDPRESS = 'WORDPRESS'
-SERVER_OMERO_547 = 'OMERO_5.4.7'
-SERVER_EBI_SCA = 'EBI_SCA'
-SERVER_CPW = 'CPW'
 
 
 #
@@ -56,85 +51,59 @@ class ImageSummary(models.Model):
     image_viewer_url = models.CharField(max_length=255, blank=False, default='')
     image_birdseye_url = models.CharField(max_length=255, blank=False, default='')
     image_server = models.CharField(max_length=50, blank=False, default='')
-    image_server_id = models.IntegerField(default=0, blank=False)
-    image_server_url_server = models.CharField(max_length=50, blank=False, default='')
-    image_server_uid = models.CharField(max_length=50, blank=True, default='')
-    image_server_accesible = models.BooleanField(default=False)
-    image_server_type_name = models.CharField(max_length=12, blank=False, unique=True, default='')
     image_roi = models.IntegerField(default=0)
     image_comment = models.TextField(max_length=4095, default='')
     image_hidden = models.BooleanField(default=False)
     image_owner = models.CharField(max_length=50, default='')
-    image_collection_id = models.IntegerField(default=0, blank=False)
-    image_collection_title = models.CharField(max_length=255, default='')
-    image_collection_owner = models.CharField(max_length=50, default='')
-    image_matrix_id = models.IntegerField(default=0, blank=False)
-    image_matrix_title = models.CharField(max_length=255, default='')
-    image_matrix_owner = models.CharField(max_length=50, default='')
-    image_tags = models.CharField(max_length=4096, default='')
     image_ordering = models.IntegerField(default=0, blank=False)
     image_ordering_permitted = models.CharField(max_length=50, default='')
     image_ordering_permitted_id = models.IntegerField(default=0, blank=False)
+    image_server_id = models.IntegerField(default=0, blank=False)
+    image_collection_ids = models.CharField(max_length=255, blank=False, default='')
+    image_matrix_ids = models.CharField(max_length=255, blank=False, default='')
+    image_tag_ids = models.CharField(max_length=255, blank=False, default='')
 
     class Meta:
         managed = False
         db_table = 'matrices_image_summary'
 
     def __str__(self):
-        return f"{self.image_id}, {self.image_identifier}, {self.image_name}, {self.image_viewer_url}, \
-                {self.image_birdseye_url}, {self.image_server}, \
-                {self.image_server_id}, {self.image_server_url_server}, {self.image_server_uid}, \
-                {self.image_server_accesible}, {self.image_server_type_name}, \
-                {self.image_roi}, {self.image_comment}, {self.image_hidden}, {self.image_owner}, \
-                {self.image_collection_id}, {self.image_collection_title}, {self.image_collection_owner}, \
-                {self.image_matrix_id}, {self.image_matrix_title}, {self.image_matrix_owner}, {self.image_tags}, \
-                {self.image_ordering}, {self.image_ordering_permitted}, {self.image_ordering_permitted_id}"
+        return f"{self.image_id}, \
+                {self.image_identifier}, \
+                {self.image_name}, \
+                {self.image_viewer_url}, \
+                {self.image_birdseye_url}, \
+                {self.image_server}, \
+                {self.image_roi}, \
+                {self.image_comment}, \
+                {self.image_hidden}, \
+                {self.image_owner}, \
+                {self.image_ordering}, \
+                {self.image_ordering_permitted}, \
+                {self.image_ordering_permitted_id}, \
+                {self.image_server_id}, \
+                {self.image_collection_ids}, \
+                {self.image_matrix_ids}, \
+                {self.image_tag_ids}"
 
     def __repr__(self):
-        return f"{self.image_id}, {self.image_identifier}, {self.image_name}, {self.image_viewer_url}, \
-                {self.image_birdseye_url}, {self.image_server}, \
-                {self.image_server_id}, {self.image_server_url_server}, {self.image_server_uid}, \
-                {self.image_server_accesible}, {self.image_server_type_name}, \
-                {self.image_roi}, {self.image_comment}, {self.image_hidden}, {self.image_owner}, \
-                {self.image_collection_id}, {self.image_collection_title}, {self.image_collection_owner}, \
-                {self.image_matrix_id}, {self.image_matrix_title}, {self.image_matrix_owner}, {self.image_tags}, \
-                {self.image_ordering}, {self.image_ordering_permitted}, {self.image_ordering_permitted_id}"
-
-    def is_accessible(self):
-        if self.image_server_accesible is True:
-            return True
-        else:
-            return False
-
-    def is_not_accessible(self):
-        if self.image_server_accesible is False:
-            return True
-        else:
-            return False
-
-    def is_wordpress(self):
-        if self.image_server_type_name == SERVER_WORDPRESS:
-            return True
-        else:
-            return False
-
-    def is_omero547(self):
-        if self.image_server_type_name == SERVER_OMERO_547:
-            return True
-        else:
-            return False
-
-    def is_ebi_sca(self):
-        if self.image_server_type_name == SERVER_EBI_SCA:
-            return True
-        else:
-            return False
-
-    def is_cpw(self):
-        if self.image_server_type_name == SERVER_CPW:
-            return True
-        else:
-            return False
+        return f"{self.image_id}, \
+                {self.image_identifier}, \
+                {self.image_name}, \
+                {self.image_viewer_url}, \
+                {self.image_birdseye_url}, \
+                {self.image_server}, \
+                {self.image_roi}, \
+                {self.image_comment}, \
+                {self.image_hidden}, \
+                {self.image_owner}, \
+                {self.image_ordering}, \
+                {self.image_ordering_permitted}, \
+                {self.image_ordering_permitted_id}, \
+                {self.image_server_id}, \
+                {self.image_collection_ids}, \
+                {self.image_matrix_ids}, \
+                {self.image_tag_ids}"
 
     def exists_parent_image_links(self):
         image = Image.objects.get(pk=int(self.image_id))
@@ -147,7 +116,7 @@ class ImageSummary(models.Model):
         return exists_child_image_links_for_image(image)
 
     def has_tags(self):
-        if self.image_tags == '':
+        if self.image_tag_ids == '':
             return False
         else:
             return True
@@ -158,15 +127,13 @@ class ImageSummary(models.Model):
 
         tag_queryset = None
 
-        if self.image_tags != '':
+        if self.image_tag_ids != '':
 
-            tag_array = self.image_tags.split('|')
+            tag_id_array = self.image_tag_ids.split('|')
 
-            for tag in tag_array:
+            for tag_id in tag_id_array:
 
-                tag_attribute_array = tag.split(',')
-
-                list_of_tag_ids.append(tag_attribute_array[0])
+                list_of_tag_ids.append(tag_id)
 
             tag_queryset = Tag.objects.filter(id__in=list_of_tag_ids).order_by('id')
 
@@ -187,3 +154,119 @@ class ImageSummary(models.Model):
                     tag_present = True
 
         return tag_present
+
+    def has_collections(self):
+        if self.image_collection_ids == '':
+            return False
+        else:
+            return True
+
+    def get_collections(self):
+
+        Collection = apps.get_model('matrices', 'Collection')
+
+        list_of_collection_ids = []
+
+        collection_queryset = None
+
+        if self.image_collection_ids != '':
+
+            collection_id_array = self.image_collection_ids.split('|')
+
+            for collection_id in collection_id_array:
+
+                list_of_collection_ids.append(collection_id)
+
+            collection_queryset = Collection.objects.filter(id__in=list_of_collection_ids).order_by('id')
+
+        return collection_queryset
+
+    def has_this_collection(self, a_collection):
+
+        collection_present = False
+
+        if self.has_collections():
+
+            collection_queryset = self.get_collections()
+
+            for collection in collection_queryset:
+
+                if collection == a_collection:
+
+                    collection_present = True
+
+        return collection_present
+
+    def has_matrices(self):
+        if self.image_matrix_ids == '':
+            return False
+        else:
+            return True
+
+    def get_matrices(self):
+
+        Matrix = apps.get_model('matrices', 'Matrix')
+
+        list_of_matrix_ids = []
+
+        matrix_queryset = None
+
+        if self.image_matrix_ids != '':
+
+            matrix_id_array = self.image_matrix_ids.split('|')
+
+            for matrix_id in matrix_id_array:
+
+                list_of_matrix_ids.append(matrix_id)
+
+            matrix_queryset = Matrix.objects.filter(id__in=list_of_matrix_ids).order_by('id')
+
+        return matrix_queryset
+
+    def has_this_matrix(self, a_matrix):
+
+        matrix_present = False
+
+        if self.has_matrices():
+
+            matrix_queryset = self.get_matrices()
+
+            for matrix in matrix_queryset:
+
+                if matrix == a_matrix:
+
+                    matrix_present = True
+
+        return matrix_present
+
+    def get_server(self):
+
+        Server = apps.get_model('matrices', 'Server')
+
+        server = Server.objects.get(pk=int(self.image_server_id))
+
+        return server
+
+    def is_wordpress(self):
+
+        server = self.get_server()
+
+        return server.is_wordpress()
+
+    def is_omero547(self):
+
+        server = self.get_server()
+
+        return server.is_omero547()
+
+    def is_ebi_sca(self):
+
+        server = self.get_server()
+
+        return server.is_ebi_sca()
+
+    def is_cpw(self):
+
+        server = self.get_server()
+
+        return server.is_cpw()

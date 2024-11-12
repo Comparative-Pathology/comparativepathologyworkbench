@@ -29,7 +29,6 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Environment
 from matrices.models import Protocol
@@ -46,7 +45,8 @@ class EnvironmentForm(forms.ModelForm):
                   'maximum_cell_height', 'minimum_cell_width', 'maximum_cell_width', 'maximum_initial_columns',
                   'minimum_initial_columns', 'maximum_initial_rows', 'minimum_initial_rows', 'maximum_rest_columns',
                   'minimum_rest_columns', 'maximum_rest_rows', 'minimum_rest_rows', 'maximum_bench_count',
-                  'maximum_collection_count', 'gateway', 'gateway_port', 'gateway_pagination')
+                  'maximum_collection_count', 'gateway', 'gateway_port', 'gateway_pagination', 'background_processing',
+                  'window_refresh_time', 'task_pause_time')
         location = forms.ModelChoiceField(queryset=Location.objects.all())
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
         gateway = forms.ModelChoiceField(queryset=Gateway.objects.all())

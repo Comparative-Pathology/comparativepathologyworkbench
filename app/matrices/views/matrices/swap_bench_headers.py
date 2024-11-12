@@ -121,8 +121,15 @@ def swap_bench_headers(request, bench_id):
 
             column = column + 1
 
-        matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
-        messages.success(request, 'Bench ' + matrix_id_formatted + ' Headers Switched!')
+        if column_comment_flag is True and row_comment_flag is True:
+
+            matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
+            messages.success(request, 'Bench ' + matrix_id_formatted + ' showing Header Numbers!')
+
+        else:
+
+            matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
+            messages.success(request, 'Bench ' + matrix_id_formatted + ' showing Header Titles!')
 
         return HttpResponseRedirect(reverse('matrix', args=(bench_id,)))
 

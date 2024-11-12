@@ -137,6 +137,7 @@ class Command(BaseCommand):
                                 out_message = "Bench CPW:{0:06d} has NEW Blogpost: {1}!!"\
                                     .format(matrix.id, post_id)
                                 self.stdout.write(self.style.SUCCESS(out_message))
+
             else:
 
                 benchNoBlogCount = benchNoBlogCount + 1

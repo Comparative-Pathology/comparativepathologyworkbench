@@ -59,6 +59,7 @@ class Matrix(models.Model):
         last_used_collection: The Collecion (Colleciton Model) last used to updte this Bench.
         last_used_tag: The Tag (Tag Model) last used to updte this Bench.
         public: Indicates if the Bench is Public (True) or Private (False).
+        locked: Indicates if the Bench is Locked (True) or Unlocked (False).
 
     """
 
@@ -81,6 +82,7 @@ class Matrix(models.Model):
                                       null=True,
                                       on_delete=models.DO_NOTHING)
     public = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Bench'
@@ -123,6 +125,7 @@ class Matrix(models.Model):
             {self.width}, \
             {self.owner.id}, \
             {self.public}, \
+            {self.locked}, \
             {str_last_used_collection}"
 
     #
@@ -238,6 +241,26 @@ class Matrix(models.Model):
             return True
 
     #
+    #   If this Bench is Locked, then True, else False
+    #
+    def is_locked(self):
+
+        if self.locked is True:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Bench is NOT Locked, then True, else False
+    #
+    def is_not_locked(self):
+
+        if self.locked is False:
+            return True
+        else:
+            return False
+
+    #
     #   If this Bench is Public, then True, else False
     #
     def is_public(self):
@@ -253,6 +276,26 @@ class Matrix(models.Model):
     def is_not_public(self):
 
         if self.public is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Bench is Unlocked, then True, else False
+    #
+    def is_unlocked(self):
+
+        if self.locked is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Bench is NOT Locked, then True, else False
+    #
+    def is_not_unlocked(self):
+
+        if self.locked is True:
             return True
         else:
             return False
@@ -276,6 +319,20 @@ class Matrix(models.Model):
             return True
         else:
             return False
+
+    #
+    #   Sets the Locked field of the Bench to True
+    #
+    def set_locked(self):
+
+        self.locked = True
+
+    #
+    #   Sets the Locked field of the Bench to False
+    #
+    def set_unlocked(self):
+
+        self.locked = False
 
     #
     #   Sets the public field of the Bench to True

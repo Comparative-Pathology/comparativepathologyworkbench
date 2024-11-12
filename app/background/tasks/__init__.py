@@ -25,9 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# config Package Description.
+# tasks Package Description.
 # ##
 #
-from __future__ import absolute_import
+from .lock_bench_task import lock_bench_task
+from .unlock_bench_task import unlock_bench_task
+from .add_collection_row_task import add_collection_row_task
+from .add_collection_column_task import add_collection_column_task
+from .add_collection_column_cell_task import add_collection_column_cell_task
+from .add_collection_row_cell_task import add_collection_row_cell_task
 
-from .celery import app as celery_app

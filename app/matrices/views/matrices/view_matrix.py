@@ -46,6 +46,7 @@ from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_header_data
 from matrices.routines import image_list_by_user_and_direction
+from matrices.routines import Base26
 
 
 #
@@ -80,13 +81,13 @@ def view_matrix(request, matrix_id):
             collection_image_list = list()
             collection_tag_list = list()
 
-            if matrix.has_last_used_tag():
+            if matrix.has_last_used_collection():
 
-                collection_image_list = matrix.last_used_collection.get_images_for__tag(matrix.last_used_tag)
+                if matrix.has_last_used_tag():
 
-            else:
+                    collection_image_list = matrix.last_used_collection.get_images_for_tag(matrix.last_used_tag)
 
-                if matrix.has_last_used_collection():
+                else:
 
                     collection_image_list = image_list_by_user_and_direction(request.user,
                                                                              'image_ordering',
@@ -163,6 +164,54 @@ def view_matrix(request, matrix_id):
 
                 next_bench = lowest_bench
 
+            row_header_cells = matrix.get_row_header_cells()
+            column_header_cells = matrix.get_column_header_cells()
+
+            max_row_index = matrix.get_max_row()
+            max_column_index = matrix.get_max_column()
+
+            row = 0
+            column = 0
+
+            title_label = ''
+
+            row_comment_flag = False
+            column_comment_flag = False
+
+            for row_header_cell in row_header_cells:
+
+                if row_header_cell.ycoordinate > 0:
+
+                    if row < max_row_index:
+
+                        title_label = str(row)
+
+                        if row_header_cell.comment == title_label:
+
+                            row_comment_flag = True
+
+                            break
+
+                row = row + 1
+
+            title_label = ''
+
+            for column_header_cell in column_header_cells:
+
+                if column_header_cell.xcoordinate > 0:
+
+                    if column < max_column_index:
+
+                        title_label = Base26.to_excel(column)
+
+                        if column_header_cell.comment == title_label:
+
+                            column_comment_flag = True
+
+                            break
+
+                column = column + 1
+
             data.update({'previous_bench': previous_bench,
                          'next_bench': next_bench,
                          'collection_tag_list': collection_tag_list,
@@ -170,6 +219,8 @@ def view_matrix(request, matrix_id):
                          'view_matrix': view_matrix,
                          'readBoolean': readBoolean,
                          'updateBoolean': updateBoolean,
+                         'row_comment_flag': row_comment_flag,
+                         'column_comment_flag': column_comment_flag,
                          'matrix': matrix,
                          'rows': rows,
                          'columns': columns,

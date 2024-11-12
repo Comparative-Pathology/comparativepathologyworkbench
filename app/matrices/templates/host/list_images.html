@@ -296,7 +296,7 @@ The list images template (with Search)
 {% include 'includes/sort_links_table_headings.html' %}
   </tr>
   <tr>
-    <td colspan="10" style="border-bottom:2px solid Black;">&nbsp;</td>
+    <td colspan="11" style="border-bottom:2px solid Black;">&nbsp;</td>
   </tr>
 		{% endif %}
   <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-A">
@@ -317,23 +317,23 @@ The list images template (with Search)
         {% if image_summary.is_cpw %}
               <a class="link-button btn btn-primary" href="{% url 'webgallery_show_cpw_image' image_summary.image_server_id image_summary.image_name %}"><i class="fa fa-info"></i> Image Info.</a>
         {% endif %}
-			  <a class="link-button btn btn-primary" href="{% url 'collection_ordering_selection' image_summary.image_collection_id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_summary.image_collection_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
 			  <a class="link-button btn btn-primary" href="{% url 'webgallery_edit_image' image_summary.image_id %}"><i class="fa fa-edit"></i> Tag Image</a>
-		{% if image_summary.image_owner == user.username or user.username == 'admin' %}
-			  <a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_summary.image_collection_id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
-		{% endif %}
-
-		{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
+		{% for image_collection in image_summary.get_collections %}
+			{% if image_summary.image_owner == user.username or user.username == 'admin' %}
+			  <a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_collection.id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
+			{% endif %}
+			{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
 			  <a class="link-button btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
+			{% endif %}
+			  <a class="link-button btn btn-primary" href="{% url 'collection_ordering_selection' image_collection.id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_collection.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
+              <a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.id|stringformat:"06d" }}"</a>
+		{% endfor %}
+	    {% if image_summary.has_matrices %}
+			{% for image_matrix in image_summary.get_matrices %}
+			<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_matrix.id|stringformat:"06d" }}"</a>
+			{% endfor %}
 		{% endif %}
-
-              <a class="link-button btn btn-primary" href="{% url 'list_images' image_summary.image_collection_id %}"><i class="fa fa-eye"></i> View Collection "{{ image_summary.image_collection_id|stringformat:"06d" }}"</a>
-
-        {% if image_summary.image_matrix_id != 0 %}
-              <a class="link-button btn btn-primary" href="{% url 'matrix' image_summary.image_matrix_id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"</a>
-    	{% endif %}
-
-            </div><!-- End of generic-dropdown-content -->
+			</div><!-- End of generic-dropdown-content -->
         </div><!-- End of generic-dropdown -->
     </td>
 	{% else %}
@@ -358,33 +358,49 @@ The list images template (with Search)
 	{% endif %}
   </tr>
 
-<tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-C">
+  <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-C">
 	<td colspan="1">&nbsp;</td>
-	<td><strong>ROI:</strong></td>
-	<td colspan="2">{{ image_summary.image_roi }}</td>
+	<td><strong>Owner:</strong></td>
+	<td colspan="1">{{ image_summary.image_owner }}</td>
 	<td><strong>Server:</strong></td>
-	<td colspan="3">{{ image_summary.image_server }}</td>
+	<td colspan="1">{{ image_summary.image_server }}</td>
+	<td><strong>ROI:</strong></td>
+	<td colspan="1">{{ image_summary.image_roi }}</td>
+	<td><strong>Hidden:</strong></td>
+	<td colspan="1">{{ image_summary.image_hidden }}</td>
   </tr>
 
+  {% for image_collection in image_summary.get_collections %}
   <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-D">
     <td colspan="1">&nbsp;</td>
-	<td><strong>Hidden:</strong></td>
-	<td colspan="2">{{ image_summary.image_hidden }}</td>
+	{% if forloop.first %}
 	<td><strong>Collection:</strong></td>
-	<td colspan="3">"{{ image_summary.image_collection_id|stringformat:"06d" }}"; "{{ image_summary.image_collection_title }}"; (Owned By {{ image_summary.image_collection_owner }}) <a href="{% url 'list_images' image_summary.image_collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+	{% else %}
+	<td>&nbsp;</td>
+	{% endif %}
+	<td colspan="7"><a href="{% url 'list_images' image_collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a> "{{ image_collection.id|stringformat:"06d" }}"; "{{ image_collection.title }}"; (Owned By {{ image_collection.owner }})</td>
   </tr>
+  {% endfor %}
 
+  {% if image_summary.has_matrices %}
+	  {% for image_matrix in image_summary.get_matrices %}
   <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-E">
     <td colspan="1">&nbsp;</td>
-	<td><strong>Owner:</strong></td>
-	<td colspan="2">{{ image_summary.image_owner }}</td>
+	{% if forloop.first %}
 	<td><strong>Bench:</strong></td>
-    {% if image_summary.image_matrix_id == 0 %}
-	<td colspan="3">Image NOT Used in a Bench!</td>
 	{% else %}
-	<td colspan="3">"CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"; "{{ image_summary.image_matrix_title }}"; (Owned By {{ image_summary.image_matrix_owner }}) <a href="{% url 'matrix' image_summary.image_matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+	<td>&nbsp;</td>
 	{% endif %}
+	<td colspan="7"><a href="{% url 'matrix' image_matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a> "CPW:{{ image_matrix.id|stringformat:"06d" }}"; "{{ image_matrix.title }}"; (Owned By {{ image_matrix.owner }})</td>
   </tr>
+	  {% endfor %}
+  {% else %}
+  <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-E">
+    <td colspan="1">&nbsp;</td>
+	<td><strong>Bench:</strong></td>
+	<td colspan="7">Image NOT Used in a Bench!</td>
+  </tr>
+  {% endif %}
 
   <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-F">
     <td colspan="1">&nbsp;</td>
@@ -395,7 +411,7 @@ The list images template (with Search)
 	<td colspan="3">{{ image_summary.image_ordering_permitted }}</td>
 	{% else %}
 	<td><strong>Ordering:</strong></td>
-	<td colspan="6">{{ image_summary.image_ordering }}</td>
+	<td colspan="7">{{ image_summary.image_ordering }}</td>
 	{% endif %}
   </tr>
 
@@ -405,7 +421,7 @@ The list images template (with Search)
 	</td>
     <td><strong>Tags:</strong>
 	</td>
-    <td colspan="6">
+    <td colspan="7">
 		{% for tag in image_summary.get_tags %}
 		<a href="{% url 'list_images' collection_id tag.id %}" class="badge badge-info">{{ tag.name }}</a>
 		{% endfor %}
@@ -419,7 +435,7 @@ The list images template (with Search)
   {% endif %}
 
   <tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-I">
-    <td colspan="10" style="border-bottom:2px solid Black;">&nbsp;</td>
+    <td colspan="11" style="border-bottom:2px solid Black;">&nbsp;</td>
   </tr>
 		{% if forloop.last %}
 </table>

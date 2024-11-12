@@ -76,8 +76,12 @@ The view matrix (bench) template
 <div class="page-sidebar">
 </div>
 {% endif %}
-{% if matrix.is_private %}
-<div class="page-sidebar" style="overflow-y: scroll;">
+{% if matrix.is_private and matrix.is_locked %}
+<div class="page-sidebar">
+</div>
+{% endif %}
+{% if matrix.is_private and matrix.is_unlocked %}
+<div class="page-sidebar" style="overflow-y: scroll; overflow-x: scroll;">
 	{% if readBoolean %}
 	{% else %}
 	{% endif %}
@@ -101,11 +105,11 @@ The view matrix (bench) template
 			{% endfor %}
 			{% if collection_tag_list %}
 				{% if matrix.has_last_used_tag == True %}
-				<a class="test-font" title="Select No Tags!" href="{% url 'set_no_last_used_tag' matrix.id %}">No Tags</a>
+				<a class="test-font" title="Select No Tags!" href="{% url 'set_no_last_used_tag' matrix.id %}"><button class="button-mini button-delete"><i class="fa fa-x"></i></button> No Tags</a>
 				{% endif %}
 				{% for tag in collection_tag_list %}
 					{% if matrix.last_used_tag != tag %}
-					<a class="test-font" title="Select the Tag {{ tag.name }}" href="{% url 'set_last_used_tag' matrix.id tag.id %}">Tag "{{ tag.name }}"</a>
+					<a class="test-font" title="Select the Tag {{ tag.name }}" href="{% url 'set_last_used_tag' matrix.id tag.id %}"><button class="button-mini button-add"><i class="fa fa-check"></i></button> Tag "{{ tag.name|truncatechars:10 }}"</a>
 					{% endif %}
 				{% endfor %}
 			{% endif %}
@@ -118,14 +122,20 @@ The view matrix (bench) template
     	{% if collection_image_list %}
         	{% for collection_image in collection_image_list %}
 		  		{% if updateBoolean %}
-	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ collection_image.image_id }}">
+	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ collection_image.identifier }}">
 	  <div class="collection-image">
 	  				{% csrf_token %}
 				{% else %}
-	<div class="collection-item" id="image_{{ collection_image.image_id }}">
+	<div class="collection-item" id="image_{{ collection_image.identifier }}">
 	  <div class="collection-image">
 	        	{% endif %}
-		<a href="{{ collection_image.image_viewer_url }}" target="_blank"><img id="image_{{ collection_image.image_id }}" alt="{{ collection_image.image_name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.image_birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+				{% if matrix.has_last_used_collection == True %}
+					{% if matrix.has_last_used_tag == True %}
+		<a href="{{ collection_image.viewer_url }}" target="_blank"><img id="image_{{ collection_image.identifier }}" alt="{{ collection_image.name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+					{% else %}
+		<a href="{{ collection_image.image_viewer_url }}" target="_blank"><img id="image_{{ collection_image.image_identifier }}" alt="{{ collection_image.image_name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.image_birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+					{% endif %}
+	        	{% endif %}
 	  </div>
 	</div>
         	{% endfor %}
@@ -158,6 +168,13 @@ The view matrix (bench) template
 		</div>
 		{% endif %}
     {% endfor %}
+{% else %}
+{% if matrix.is_private and matrix.is_locked %}
+<div class="panel-alert">
+	<p>Bench CPW:{{ matrix.id|stringformat:"06d" }} is LOCKED pending Update!!</p>
+</div>
+{% endif %}
+
 {% endif %}
 
 {% if rows %}
@@ -172,7 +189,7 @@ The view matrix (bench) template
           <div class="bench-dropdown">
             <button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
-				{% if matrix.is_private %}
+				{% if matrix.is_private and matrix.is_unlocked %}
 					{% if readBoolean %}
 			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
 						{% if environment_summary.is_wordpress_active %}
@@ -186,8 +203,12 @@ The view matrix (bench) template
 	  		  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
 						{% endif %}
 					  	{% if updateBoolean %}
-			  <a href="{% url 'swap_bench_headers' matrix.id %}" onclick="return confirm('Are you sure you want to SWAP Bench Headers ... ?')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Swap Headings</a>
-	  		  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+						  	{% if row_comment_flag and column_comment_flag %}
+			  <a href="{% url 'swap_bench_headers' matrix.id %}" onclick="return confirm('Are you sure you want to Show Heading Numbers ... ?')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Show Heading Numbers</a>
+							  {% else %}
+			  <a href="{% url 'swap_bench_headers' matrix.id %}" onclick="return confirm('Are you sure you want to Show Heading Titles ... ?')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Show Heading Titles</a>
+							{% endif %}
+			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 						{% endif %}
 					{% endif %}
 				{% endif %}
@@ -199,7 +220,15 @@ The view matrix (bench) template
 						{% endif %}
 			  		{% endif %}
 				{% endif %}
-	</div><!-- End of bench-dropdown-content -->
+				{% if matrix.is_private and matrix.is_locked %}
+					{% if readBoolean %}
+			  <a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+						{% if environment_summary.is_wordpress_active %}
+			  <a data-value="{{ matrix.id }}" href="#" class="bench-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Bench Commentary</a>
+						{% endif %}
+			  		{% endif %}
+				{% endif %}
+			</div><!-- End of bench-dropdown-content -->
           </div><!-- End of bench-dropdown -->
         </div><!-- End of master-cell-control -->
       </div><!-- End of master-cell -->
@@ -211,10 +240,13 @@ The view matrix (bench) template
 			        {% if matrix.get_max_row == matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="BMRHC_{{ matrix_cell.id }}">
 						{% csrf_token %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 	  <div class="bottom-right-cell" id="BMRHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="bottom-right-cell" id="BMRHC_{{ matrix_cell.id }}" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="bottom-right-cell" id="BMRHC_{{ matrix_cell.id }}" >
 						{% endif %}
 	  </div><!-- End of bottom-right-cell -->
@@ -222,18 +254,25 @@ The view matrix (bench) template
     			    {% endif %}
 <!-- The Other Row Header Cells -->
 				    {% if matrix.get_max_row != matrix_cell.ycoordinate %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
       <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 	    			    {% endif %}
 						{% if matrix.is_public %}
       <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" >
 	    			    {% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
+      <div class="flex-bench-item" id="ORHC_{{ matrix_cell.id }}" >
+	    			    {% endif %}
 						{% csrf_token %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 		<div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 		  <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" style="top: 27px;" draggable="true" ondragstart="drag(event)" >
 						{% endif %}
 						{% if matrix.is_public %}
+		<div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" >
+		  <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" style="top: 27px;" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 		<div class="row-header-cell" style="height:{{ matrix.height }}px;" id="ORHC_{{ matrix_cell.id }}" >
 		  <div class="row-header-cell-title" id="ORHC_{{ matrix_cell.id }}" style="top: 27px;" >
 						{% endif %}
@@ -304,7 +343,7 @@ The view matrix (bench) template
                             {% endif %}
                         {% endif %}
         </div>
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 		<div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
           <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 						{% endif %}
@@ -312,10 +351,14 @@ The view matrix (bench) template
 		<div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" >
 		  <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" >
 						{% endif %}
-			<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
+						{% if matrix.is_private and matrix.is_locked %}
+		<div class="row-header-cell-control" id="ORHC_{{ matrix_cell.id }}" >
+		  <div class="bench-dropdown" id="ORHC_{{ matrix_cell.id }}" >
+						{% endif %}
+						<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
 				<a href=""><span class="menu-item">&#9;</span>Row {{ matrix_cell.ycoordinate }}</a>
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 							{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
 			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Row Header</a>
@@ -327,6 +370,11 @@ The view matrix (bench) template
 			  				{% endif %}
 						{% endif %}
 						{% if matrix.is_public %}
+							{% if updateBoolean %}
+			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
+							{% endif %}
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 							{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
 							{% endif %}
@@ -343,10 +391,13 @@ The view matrix (bench) template
 <!-- The Right-Most Column Header Cell -->
     			    {% if matrix.get_max_column == matrix_cell.xcoordinate %}
     <div class="flex-bench-item" id="RMCHC_{{ matrix_cell.id }}">
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 	  <div class="column-header-right-cell" id="RMCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="column-header-right-cell" id="RMCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="column-header-right-cell" id="RMCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" >
 						{% endif %}
       </div><!-- End of column-header-right-cell -->
@@ -354,18 +405,25 @@ The view matrix (bench) template
 				    {% endif %}
 <!-- The Other Column Header Cells -->
 				    {% if matrix.get_max_column != matrix_cell.xcoordinate %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
     <div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 						{% endif %}
 						{% if matrix.is_public %}
 	<div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" >
 						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
+	<div class="flex-bench-item" id="OCHC_{{ matrix_cell.id }}" >
+						{% endif %}
 						{% csrf_token %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 	  <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
         <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" >
+	    <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="column-header-cell" style="width:{{ matrix.width }}px;" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" >
 	    <div class="column-header-cell-title" style="width:{{ matrix.width|add:"-62"  }}px;" id="OCHC_{{ matrix_cell.id }}" >
 						{% endif %}
@@ -434,7 +492,7 @@ The view matrix (bench) template
                         {% endif %}
 	  	</div><!-- End of column-header-cell-title -->
 
-		  				{% if matrix.is_private %}
+		  				{% if matrix.is_private and matrix.is_unlocked %}
 		<div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 		  <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 						{% endif %}
@@ -442,10 +500,14 @@ The view matrix (bench) template
 		<div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" >
 		  <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" >
 						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
+		<div class="column-header-cell-control" id="OCHC_{{ matrix_cell.id }}" >
+		  <div class="bench-dropdown" id="OCHC_{{ matrix_cell.id }}" >
+						{% endif %}
 			<button class="bench-drop-button"><i class="fas fa-bars"></i></button>
             <div class="bench-dropdown-content">
 				<a href=""><span class="menu-item">&#9;</span>Column {{ matrix_cell.xcoordinate }}</a>
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 							{% if updateBoolean %}
 	  		  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
 	  		  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Column Header</a>
@@ -457,6 +519,11 @@ The view matrix (bench) template
 							{% endif %}
 						{% endif %}
 						{% if matrix.is_public %}
+							{% if updateBoolean %}
+	 		 <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
+							{% endif %}
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 							{% if updateBoolean %}
 	 		 <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
 							{% endif %}
@@ -473,10 +540,13 @@ The view matrix (bench) template
 <!-- Ordinary Cells -->
     			    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
 						{% if updateBoolean %}
-							{% if matrix.is_private %}
+							{% if matrix.is_private and matrix.is_unlocked %}
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" draggable="true" ondragstart="drag(event)">
 							{% endif %}
 							{% if matrix.is_public %}
+    <div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" >
+							{% endif %}
+							{% if matrix.is_private and matrix.is_locked %}
     <div class="flex-bench-item" id="cell_{{ matrix_cell.id }}" >
 							{% endif %}
 							{% csrf_token %}
@@ -484,10 +554,13 @@ The view matrix (bench) template
 	<div class="flex-bench-item" id="cell_{{ matrix_cell.id }}">
 						{% endif %}
 
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" ondrop="drop(event)" ondragover="allowDrop(event)" >
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="cell" id="cell_{{ matrix_cell.id }}" style="width:{{ matrix.width }}px; height:{{ matrix.height }}px;" >
 						{% endif %}
 		<div id="cell_{{ matrix_cell.id }}" class="cell-title" style="font-size: 12px; width:{{ matrix.width|add:"-62" }}px;">
@@ -577,7 +650,7 @@ The view matrix (bench) template
             <button class="cell-drop-button"><i class="fas fa-bars"></i></button>
             <div class="cell-dropdown-content">
 			  <a href=""><span class="menu-item">&#9;</span>Cell {{ matrix_cell.get_coordinates }}</a>
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
 							{% if readBoolean %}
 								{% if environment_summary.is_wordpress_active %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Cell Commentary</a>
@@ -612,6 +685,13 @@ The view matrix (bench) template
 								{% endif %}
 							{% endif %}
 						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
+							{% if readBoolean %}
+								{% if environment_summary.is_wordpress_active %}
+			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-blog-button btn btn-primary"><i class="fa fa-eye"></i> View Cell Commentary</a>
+								{% endif %}
+							{% endif %}
+						{% endif %}
 
             </div><!-- End of cell-dropdown-content -->
           </div><!-- End of cell-dropdown -->
@@ -636,10 +716,13 @@ The view matrix (bench) template
 				    {% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row != matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="RMFC_{{ matrix_cell.id }}">
 						{% csrf_token %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
       <div class="row-footer-cell" style="height:{{ matrix.height }}px;" id="RMFC_{{ matrix_cell.id }}" ondrop="dropCol(event)" ondragover="allowColDrop(event)">
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="row-footer-cell" style="height:{{ matrix.height }}px;" id="RMFC_{{ matrix_cell.id }}" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="row-footer-cell" style="height:{{ matrix.height }}px;" id="RMFC_{{ matrix_cell.id }}" >
 						{% endif %}
       </div><!-- bottom-right-cell -->
@@ -649,10 +732,13 @@ The view matrix (bench) template
 				    {% if matrix.get_max_column != matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="BMFC_{{ matrix_cell.id }}">
 						{% csrf_token %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
       <div class="column-footer-cell" style="width:{{ matrix.width }}px;" id="BMFC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="column-footer-cell" style="width:{{ matrix.width }}px;" id="BMFC_{{ matrix_cell.id }}" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="column-footer-cell" style="width:{{ matrix.width }}px;" id="BMFC_{{ matrix_cell.id }}" >
 						{% endif %}
       </div><!-- column-footer-cell -->
@@ -662,10 +748,13 @@ The view matrix (bench) template
 				    {% if matrix.get_max_column == matrix_cell.xcoordinate and matrix.get_max_row == matrix_cell.ycoordinate %}
     <div class="flex-bench-item" id="BMRMFC_{{ matrix_cell.id }}">
 						{% csrf_token %}
-						{% if matrix.is_private %}
+						{% if matrix.is_private and matrix.is_unlocked %}
       <div class="bottom-right-cell" id="BMRMFC_{{ matrix_cell.id }}" ondrop="dropRow(event)" ondragover="allowRowDrop(event)">
 						{% endif %}
 						{% if matrix.is_public %}
+	  <div class="bottom-right-cell" id="BMRMFC_{{ matrix_cell.id }}" >
+						{% endif %}
+						{% if matrix.is_private and matrix.is_locked %}
 	  <div class="bottom-right-cell" id="BMRMFC_{{ matrix_cell.id }}" >
 						{% endif %}
       </div><!-- bottom-right-cell -->
@@ -1329,5 +1418,17 @@ The view matrix (bench) template
 	});
 
 </script>
+
+{% if matrix.is_private and matrix.is_locked %}
+
+<script language="javascript">
+
+	setTimeout(function(){
+	   window.location.reload(1);
+	}, {{ environment_summary.environment_window_refresh_time_milliseconds }});
+
+</script>
+
+{% endif %}
 
 {% endblock extrajs %}

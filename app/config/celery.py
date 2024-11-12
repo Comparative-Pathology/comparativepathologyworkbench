@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-#
+# 
 # ##
-# \file         __init__.py
+# \file         celery.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,9 +25,26 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# config Package Description.
+# The Celery Package
 # ##
 #
 from __future__ import absolute_import
 
-from .celery import app as celery_app
+import os
+from celery import Celery
+from . import settings
+
+from decouple import config
+
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
+app = Celery('matrices_background')
+
+# Using a string here means the worker will not have to
+# pickle the object when using Windows.
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+app.conf.broker_url = config('BROKER_URL')
+app.conf.result_backend = config('RESULTS_URL')

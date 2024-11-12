@@ -46,6 +46,7 @@ class MatrixPublicSummary(models.Model):
     matrix_public_width = models.IntegerField(default=0, blank=False)
     matrix_public_owner = models.CharField(max_length=50, default='')
     matrix_public_public = models.BooleanField(default=False)
+    matrix_public_locked = models.BooleanField(default=False)
 
     class Meta:
         managed = False
@@ -62,7 +63,8 @@ class MatrixPublicSummary(models.Model):
             {self.matrix_public_height}, \
             {self.matrix_public_width}, \
             {self.matrix_public_owner}, \
-            {self.matrix_public_public}"
+            {self.matrix_public_public}, \
+            {self.matrix_public_locked}"
 
     def __repr__(self):
 
@@ -75,4 +77,5 @@ class MatrixPublicSummary(models.Model):
             {self.matrix_public_height}, \
             {self.matrix_public_width}, \
             {self.matrix_public_owner}, \
-            {self.matrix_public_public}"
+            {self.matrix_public_public}, \
+            {self.matrix_public_locked}"

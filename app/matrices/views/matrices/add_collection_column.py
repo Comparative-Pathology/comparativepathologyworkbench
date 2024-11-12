@@ -46,6 +46,8 @@ from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines import get_header_data
 
+from background.tasks import add_collection_column_task
+
 WORDPRESS_SUCCESS = 'Success!'
 
 
@@ -67,176 +69,192 @@ def add_collection_column(request, matrix_id, column_id):
 
         if exists_update_for_bench_and_user(matrix, request.user):
 
-            collection = Collection.objects.get(id=matrix.last_used_collection.id)
+            if environment.is_background_processing():
 
-            collection_image_count = collection.get_images_count()
-
-            cells = Cell.objects.filter(matrix=matrix_id, xcoordinate=int(column_id)).order_by('ycoordinate')
-
-            cell_count_minus_footer = len(cells) - 1
-
-            free_cell_count = 0
-
-            for cell in cells:
-
-                if cell.has_image():
-
-                    break
-
-                else:
-
-                    if not cell.is_header():
-
-                        free_cell_count = free_cell_count + 1
-
-            if free_cell_count == cell_count_minus_footer:
-
-                # Deduct 1 for the Footer cell only
-                free_cell_count = free_cell_count - 1
-
-            row_id = free_cell_count
-
-            rows_to_add = 0
-
-            if collection_image_count > free_cell_count:
-
-                # the collection is too big for the available cells
-                rows_to_add = collection_image_count - free_cell_count
-
-                oldCells = Cell.objects.filter(matrix=matrix_id).filter(ycoordinate__gt=row_id)
-                columns = matrix.get_columns()
-
-                for oldcell in oldCells:
-
-                    oldcell.add_to_y(rows_to_add)
-                    oldcell.save()
-
-                max_row_id = int(row_id) + rows_to_add + 1
-                new_row_id = int(row_id) + 1
-
-                for row in range(new_row_id, max_row_id):
-
-                    for i, column in enumerate(columns):
-
-                        cell = Cell.create(matrix, "", "", "", i, row, "", None)
-                        cell.save()
-
+                matrix.set_locked()
                 matrix.save()
 
-                imageCells = Cell.objects.filter(matrix=matrix_id)\
-                                         .filter(xcoordinate=column_id)\
-                                         .filter(ycoordinate__gt=0)\
-                                         .filter(ycoordinate__lte=collection_image_count)\
-                                         .order_by('ycoordinate')
+                result = add_collection_column_task.delay_on_commit(request.user.id, matrix.id, column_id)
 
-                imageCounter = 1
+                #if result.ready():
 
-                for imageCell in imageCells:
-
-                    collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
-                                                                        .filter(ordering=imageCounter)\
-                                                                        .filter(permitted=request.user)
-
-                    image = None
-
-                    for collectionimageorder in collectionimageorders:
-
-                        image = collectionimageorder.image
-
-                    post_id = ''
-
-                    imageCell.title = image.name
-                    imageCell.description = image.name
-
-                    if imageCell.has_no_blogpost():
-
-                        if credential.has_apppwd() and environment.is_wordpress_active():
-
-                            returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                     imageCell.title,
-                                                                                     imageCell.description)
-
-                            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-                                post_id = returned_blogpost['id']
-
-                        imageCell.set_blogpost(post_id)
-
-                    imageCell.image = image
-
-                    if request.user.profile.is_hide_collection_image():
-
-                        image.set_hidden(True)
-                        image.save()
-
-                    imageCell.save()
-
-                    imageCounter = imageCounter + 1
-
-                actual_column = int(column_id)
+                #    task_message = result.get(timeout=1)
 
                 matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
-                                 ' Collection Added to Column ' + str(actual_column) + '!')
+                messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
 
             else:
 
-                # the collection will fit in the available cells
-                imageCells = Cell.objects.filter(matrix=matrix_id)\
-                                         .filter(xcoordinate=column_id)\
-                                         .filter(ycoordinate__gt=0)\
-                                         .filter(ycoordinate__lte=collection_image_count)\
-                                         .order_by('ycoordinate')
+                collection = Collection.objects.get(id=matrix.last_used_collection.id)
 
-                imageCounter = 1
+                collection_image_count = collection.get_images_count()
 
-                for imageCell in imageCells:
+                cells = Cell.objects.filter(matrix=matrix_id, xcoordinate=int(column_id)).order_by('ycoordinate')
 
-                    collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
-                                                                        .filter(ordering=imageCounter)\
-                                                                        .filter(permitted=request.user)
+                cell_count_minus_footer = len(cells) - 1
 
-                    image = None
+                free_cell_count = 0
 
-                    for collectionimageorder in collectionimageorders:
+                for cell in cells:
 
-                        image = collectionimageorder.image
+                    if cell.has_image():
 
-                    post_id = ''
+                        break
 
-                    imageCell.title = image.name
-                    imageCell.description = image.name
+                    else:
 
-                    if imageCell.has_no_blogpost():
+                        if not cell.is_header():
 
-                        if credential.has_apppwd() and environment.is_wordpress_active():
+                            free_cell_count = free_cell_count + 1
 
-                            returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                     imageCell.title,
-                                                                                     imageCell.description)
+                if free_cell_count == cell_count_minus_footer:
 
-                            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                    # Deduct 1 for the Footer cell only
+                    free_cell_count = free_cell_count - 1
 
-                                post_id = returned_blogpost['id']
+                row_id = free_cell_count
 
-                        imageCell.set_blogpost(post_id)
+                rows_to_add = 0
 
-                    imageCell.image = image
+                if collection_image_count > free_cell_count:
 
-                    if request.user.profile.is_hide_collection_image():
+                    # the collection is too big for the available cells
+                    rows_to_add = collection_image_count - free_cell_count
 
-                        image.set_hidden(True)
-                        image.save()
+                    oldCells = Cell.objects.filter(matrix=matrix_id).filter(ycoordinate__gt=row_id)
+                    columns = matrix.get_columns()
 
-                    imageCell.save()
+                    for oldcell in oldCells:
 
-                    imageCounter = imageCounter + 1
+                        oldcell.add_to_y(rows_to_add)
+                        oldcell.save()
 
-                actual_column = int(column_id)
+                    max_row_id = int(row_id) + rows_to_add + 1
+                    new_row_id = int(row_id) + 1
 
-                matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
-                                 ' Collection Added to Column ' + str(actual_column) + '!')
+                    for row in range(new_row_id, max_row_id):
+
+                        for i, column in enumerate(columns):
+
+                            cell = Cell.create(matrix, "", "", "", i, row, "", None)
+                            cell.save()
+
+                    matrix.save()
+
+                    imageCells = Cell.objects.filter(matrix=matrix_id)\
+                                             .filter(xcoordinate=column_id)\
+                                             .filter(ycoordinate__gt=0)\
+                                             .filter(ycoordinate__lte=collection_image_count)\
+                                             .order_by('ycoordinate')
+
+                    imageCounter = 1
+
+                    for imageCell in imageCells:
+
+                        collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
+                                                                            .filter(ordering=imageCounter)\
+                                                                            .filter(permitted=request.user)
+
+                        image = None
+
+                        for collectionimageorder in collectionimageorders:
+
+                            image = collectionimageorder.image
+
+                        post_id = ''
+
+                        imageCell.title = image.name
+                        imageCell.description = image.name
+
+                        if imageCell.has_no_blogpost():
+
+                            if credential.has_apppwd() and environment.is_wordpress_active():
+
+                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                         imageCell.title,
+                                                                                         imageCell.description)
+
+                                if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+                                    post_id = returned_blogpost['id']
+
+                            imageCell.set_blogpost(post_id)
+
+                        imageCell.image = image
+
+                        if request.user.profile.is_hide_collection_image():
+
+                            image.set_hidden(True)
+                            image.save()
+
+                        imageCell.save()
+
+                        imageCounter = imageCounter + 1
+
+                    actual_column = int(column_id)
+
+                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
+                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
+                                     ' Collection Added to Column ' + str(actual_column) + '!')
+
+                else:
+
+                    # the collection will fit in the available cells
+                    imageCells = Cell.objects.filter(matrix=matrix_id)\
+                                             .filter(xcoordinate=column_id)\
+                                             .filter(ycoordinate__gt=0)\
+                                             .filter(ycoordinate__lte=collection_image_count)\
+                                             .order_by('ycoordinate')
+
+                    imageCounter = 1
+
+                    for imageCell in imageCells:
+
+                        collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
+                                                                            .filter(ordering=imageCounter)\
+                                                                            .filter(permitted=request.user)
+
+                        image = None
+
+                        for collectionimageorder in collectionimageorders:
+
+                            image = collectionimageorder.image
+
+                        post_id = ''
+
+                        imageCell.title = image.name
+                        imageCell.description = image.name
+
+                        if imageCell.has_no_blogpost():
+
+                            if credential.has_apppwd() and environment.is_wordpress_active():
+
+                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                         imageCell.title,
+                                                                                         imageCell.description)
+
+                                if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+                                    post_id = returned_blogpost['id']
+
+                            imageCell.set_blogpost(post_id)
+
+                        imageCell.image = image
+
+                        if request.user.profile.is_hide_collection_image():
+
+                            image.set_hidden(True)
+                            image.save()
+
+                        imageCell.save()
+
+                        imageCounter = imageCounter + 1
+
+                    actual_column = int(column_id)
+
+                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
+                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
+                                     ' Collection Added to Column ' + str(actual_column) + '!')
 
             matrix_cells = matrix.get_matrix()
             columns = matrix.get_columns()

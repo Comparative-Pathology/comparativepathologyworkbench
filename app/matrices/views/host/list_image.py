@@ -296,7 +296,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
                 collection = get_object_or_404(Collection, pk=int_collection_id)
                 collection_image_list = collection.get_images()
-                collection_hidden_image_list = collection.get_all_images()
+                collection_hidden_image_list = collection.get_hidden_images()
 
         if search_tag_id != '':
 

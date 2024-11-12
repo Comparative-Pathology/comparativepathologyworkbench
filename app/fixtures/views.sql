@@ -111,48 +111,6 @@ JOIN public.auth_user c ON a.owner_id = c.id
 JOIN public.matrices_collectionimageorder d ON a.id = d.image_id
 JOIN public.auth_user e ON e.id = d.permitted_id
 ORDER BY a.id ASC
-)
-UNION
-(
-SELECT row_number() OVER (PARTITION BY true::boolean) AS id, 
-a.id AS image_id, 
-a.identifier AS image_identifier, 
-a.name AS image_name, 
-a.viewer_url AS image_viewer_url, 
-a.birdseye_url AS image_birdseye_url, 
-c.name AS image_server, 
-a.roi AS image_roi, 
-a.comment AS image_comment, 
-a.hidden AS image_hidden, 
-d.username AS image_owner, 
-e.ordering AS image_ordering, 
-f.username AS image_ordering_permitted, 
-f.id AS image_ordering_permitted_id,
-c.id AS image_server_id, 
-array_to_string(ARRAY(
-SELECT u.id
-FROM public.matrices_collection u
-JOIN public.matrices_collection_images v ON v.image_id = a.id
-JOIN public.matrices_collection w ON v.collection_id = w.id
-JOIN public.auth_user r ON w.owner_id = r.id
-WHERE u.id = v.collection_id), '|'
-) AS image_collection_ids,
-'' AS image_matrix_ids, 
-array_to_string(ARRAY(
-SELECT z.id
-FROM public.matrices_image x
-JOIN public.taggit_taggeditem y ON y.object_id = x.id
-JOIN public.taggit_tag z ON y.tag_id = z.id
-WHERE x.id = a.id), '|'
-) AS image_tag_ids
-FROM public.matrices_image a 
-LEFT JOIN public.matrices_cell b ON a.id = b.image_id
-JOIN public.matrices_server c ON a.server_id = c.id
-JOIN public.auth_user d ON a.owner_id = d.id
-JOIN public.matrices_collectionimageorder e ON a.id = e.image_id
-JOIN public.auth_user f ON f.id = e.permitted_id
-WHERE b.image_id IS NULL
-ORDER BY a.id ASC
 );
 
 GRANT ALL ON ALL TABLES IN SCHEMA public TO workbench_czi_user;

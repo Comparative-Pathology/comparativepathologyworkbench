@@ -122,18 +122,18 @@ The view matrix (bench) template
     	{% if collection_image_list %}
         	{% for collection_image in collection_image_list %}
 		  		{% if updateBoolean %}
-	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ collection_image.identifier }}">
+	<div class="collection-item" draggable="true" ondragstart="drag(event)" id="image_{{ collection_image.id }}">
 	  <div class="collection-image">
 	  				{% csrf_token %}
 				{% else %}
-	<div class="collection-item" id="image_{{ collection_image.identifier }}">
+	<div class="collection-item" id="image_{{ collection_image.id }}">
 	  <div class="collection-image">
 	        	{% endif %}
 				{% if matrix.has_last_used_collection == True %}
 					{% if matrix.has_last_used_tag == True %}
-		<a href="{{ collection_image.viewer_url }}" target="_blank"><img id="image_{{ collection_image.identifier }}" alt="{{ collection_image.name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+		<a href="{{ collection_image.viewer_url }}" target="_blank"><img id="image_{{ collection_image.id }}" alt="{{ collection_image.name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 					{% else %}
-		<a href="{{ collection_image.image_viewer_url }}" target="_blank"><img id="image_{{ collection_image.image_identifier }}" alt="{{ collection_image.image_name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.image_birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
+		<a href="{{ collection_image.image_viewer_url }}" target="_blank"><img id="image_{{ collection_image.image_id }}" alt="{{ collection_image.image_name }}" title="{{ collection_image.image_name }}" class="image-holder" src="{{ collection_image.image_birdseye_url }}" draggable="true" ondragstart="drag(event)"> </a>
 					{% endif %}
 	        	{% endif %}
 	  </div>

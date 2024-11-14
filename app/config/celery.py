@@ -46,5 +46,8 @@ app = Celery('matrices_background')
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
+app.conf.task_routes = {'feed.tasks.*': {'queue': config('CELERY_QUEUE_NAME')}}
+app.conf.task_default_queue = config('CELERY_QUEUE_NAME')
+
 app.conf.broker_url = config('BROKER_URL')
 app.conf.result_backend = config('RESULTS_URL')

@@ -78,6 +78,9 @@ def add_collection(request, matrix_id, cell_id):
         credential = get_credential_for_user(request.user)
 
         matrix = get_object_or_404(Matrix, pk=matrix_id)
+
+        owner = matrix.owner
+
         cell = get_object_or_404(Cell, pk=cell_id)
 
         cell_xcoordinate = cell.xcoordinate
@@ -90,6 +93,10 @@ def add_collection(request, matrix_id, cell_id):
             return HttpResponseRedirect(reverse('home', args=()))
 
         else:
+
+            if authority.is_editor():
+
+                owner = request.user
 
             template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -113,11 +120,9 @@ def add_collection(request, matrix_id, cell_id):
                                 matrix.set_locked()
                                 matrix.save()
 
-                                result = add_collection_row_cell_task.delay_on_commit(request.user.id, matrix.id, cell.id)
-
-                                if result.ready():
-
-                                    task_message = result.get(timeout=1)
+                                result = add_collection_row_cell_task.delay_on_commit(owner.id, 
+                                                                                      matrix.id, 
+                                                                                      cell.id)
 
                                 matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
                                 messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
@@ -196,9 +201,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                     for imageCell in imageCells:
 
-                                        collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
-                                                                                        .filter(ordering=imageCounter)\
-                                                                                        .filter(permitted=request.user)
+                                        collectionimageorders = CollectionImageOrder.objects\
+                                                                    .filter(collection=collection)\
+                                                                    .filter(ordering=imageCounter)\
+                                                                    .filter(permitted=owner)
 
                                         image = None
 
@@ -215,9 +221,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                             if credential.has_apppwd() and environment.is_wordpress_active():
 
-                                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                                         imageCell.title,
-                                                                                                         imageCell.description)
+                                                returned_blogpost = environment\
+                                                                    .post_a_post_to_wordpress(credential,
+                                                                                              imageCell.title,
+                                                                                              imageCell.description)
 
                                                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -227,7 +234,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                         imageCell.image = image
 
-                                        if request.user.profile.is_hide_collection_image():
+                                        if owner.profile.is_hide_collection_image():
 
                                             image.set_hidden(True)
                                             image.save()
@@ -259,9 +266,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                     for imageCell in imageCells:
 
-                                        collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
-                                                                                            .filter(ordering=imageCounter)\
-                                                                                            .filter(permitted=request.user)
+                                        collectionimageorders = CollectionImageOrder.objects\
+                                                                    .filter(collection=collection)\
+                                                                    .filter(ordering=imageCounter)\
+                                                                    .filter(permitted=owner)
 
                                         image = None
 
@@ -278,9 +286,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                             if credential.has_apppwd() and environment.is_wordpress_active():
 
-                                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                                         imageCell.title,
-                                                                                                         imageCell.description)
+                                                returned_blogpost = environment\
+                                                                    .post_a_post_to_wordpress(credential,
+                                                                                              imageCell.title,
+                                                                                              imageCell.description)
 
                                                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -290,7 +299,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                         imageCell.image = image
 
-                                        if request.user.profile.is_hide_collection_image():
+                                        if owner.profile.is_hide_collection_image():
 
                                             image.set_hidden(True)
                                             image.save()
@@ -317,13 +326,9 @@ def add_collection(request, matrix_id, cell_id):
                                 matrix.set_locked()
                                 matrix.save()
 
-                                result = add_collection_column_cell_task.delay_on_commit(request.user.id,
+                                result = add_collection_column_cell_task.delay_on_commit(owner.id,
                                                                                          matrix.id,
                                                                                          cell.id)
-
-                                #if result.ready():
-
-                                #    task_message = result.get(timeout=1)
 
                                 matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
                                 messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
@@ -402,9 +407,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                     for imageCell in imageCells:
 
-                                        collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
-                                                                                            .filter(ordering=imageCounter)\
-                                                                                            .filter(permitted=request.user)
+                                        collectionimageorders = CollectionImageOrder.objects\
+                                                                    .filter(collection=collection)\
+                                                                    .filter(ordering=imageCounter)\
+                                                                    .filter(permitted=owner)
 
                                         image = None
 
@@ -421,9 +427,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                             if credential.has_apppwd() and environment.is_wordpress_active():
 
-                                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                                         imageCell.title,
-                                                                                                         imageCell.description)
+                                                returned_blogpost = environment\
+                                                                    .post_a_post_to_wordpress(credential,
+                                                                                              imageCell.title,
+                                                                                              imageCell.description)
 
                                                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -433,7 +440,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                         imageCell.image = image
 
-                                        if request.user.profile.is_hide_collection_image():
+                                        if owner.profile.is_hide_collection_image():
 
                                             image.set_hidden(True)
                                             image.save()
@@ -465,9 +472,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                     for imageCell in imageCells:
 
-                                        collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
-                                                                                            .filter(ordering=imageCounter)\
-                                                                                            .filter(permitted=request.user)
+                                        collectionimageorders = CollectionImageOrder.objects\
+                                                                    .filter(collection=collection)\
+                                                                    .filter(ordering=imageCounter)\
+                                                                    .filter(permitted=owner)
 
                                         image = None
 
@@ -484,9 +492,10 @@ def add_collection(request, matrix_id, cell_id):
 
                                             if credential.has_apppwd() and environment.is_wordpress_active():
 
-                                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                                         imageCell.title,
-                                                                                                         imageCell.description)
+                                                returned_blogpost = environment\
+                                                                        .post_a_post_to_wordpress(credential,
+                                                                                                  imageCell.title,
+                                                                                                  imageCell.description)
 
                                                 if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
@@ -496,7 +505,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                         imageCell.image = image
 
-                                        if request.user.profile.is_hide_collection_image():
+                                        if owner.profile.is_hide_collection_image():
 
                                             image.set_hidden(True)
                                             image.save()

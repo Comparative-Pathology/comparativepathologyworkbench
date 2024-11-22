@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# #
+# ##
 # \file         credential_exists.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Does a particular User have any Credentials?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Does a particular User have any Credentials?
-"""
+#
+#   Does a particular User have any Credentials?
+#
 def credential_exists(a_user):
 
     Credential = apps.get_model('matrices', 'Credential')

@@ -25,9 +25,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 #  A Pause Routine ...
-#
 # ##
 #
 from __future__ import unicode_literals

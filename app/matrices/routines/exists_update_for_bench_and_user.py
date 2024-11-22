@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_update_for_bench_and_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,23 +26,19 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Can the supplied User UPDATE the supplied Bench?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 from django.db.models import Q
 
 
-"""
-    Get the Authorisation for a particular Bench and particular User
-"""
+#
+#   Get the Authorisation for a particular Bench and particular User
+#
 def exists_update_for_bench_and_user(a_matrix, a_user):
 
-    Authority = apps.get_model('matrices', 'Authority')
     Authorisation = apps.get_model('matrices', 'Authorisation')
 
     update_authority = False

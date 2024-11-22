@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_header_data.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Data to Populate Base.html (The Header Template)
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.apps import apps

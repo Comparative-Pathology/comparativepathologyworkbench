@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_authority_for_bench_and_user_and_requester.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,20 +26,17 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Authorisation for a particular Bench and particular User
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 from django.db.models import Q
 
 
-"""
-    Get the Authorisation for a particular Bench and particular User
-"""
+#
+#   Get the Authority for a particular Bench and particular User
+#
 def get_authority_for_bench_and_user_and_requester(a_matrix, a_user):
 
     Authority = apps.get_model('matrices', 'Authority')

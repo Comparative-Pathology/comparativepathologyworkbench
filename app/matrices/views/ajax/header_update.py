@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         header_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -40,6 +40,7 @@ from frontend_forms.utils import get_object_by_uuid_or_404
 from matrices.forms import HeaderForm
 
 from matrices.models import Cell
+from matrices.models import Matrix
 
 from matrices.routines import credential_exists
 
@@ -47,7 +48,7 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# EDIT A BENCH
+#   EDIT A BENCH
 #
 @login_required()
 def header_update(request, bench_id, header_id):
@@ -61,6 +62,12 @@ def header_update(request, bench_id, header_id):
         raise PermissionDenied
 
     if not credential_exists(request.user):
+
+        raise PermissionDenied
+
+    matrix = get_object_by_uuid_or_404(Matrix, pk=bench_id)
+
+    if matrix.is_locked():
 
         raise PermissionDenied
 

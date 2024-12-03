@@ -97,6 +97,13 @@ The list images template (with Search)
 		{% endif %}
     {% endfor %}
 {% endif %}
+{% if not allBoolean %}
+	{% if collection.is_locked %}
+  <div class="panel-alert">
+	<p>Collection {{ collection.id|stringformat:"06d" }} is LOCKED pending Update!!</p>
+  </div>
+	{% endif %}
+{% endif %}
 
 <!-- <p>tagBoolean: {{ tagBoolean }}; allBoolean: {{ allBoolean }}; tag_id: {{ tag_id }}</p> -->
 
@@ -317,22 +324,26 @@ The list images template (with Search)
         {% if image_summary.is_cpw %}
               <a class="link-button btn btn-primary" href="{% url 'webgallery_show_cpw_image' image_summary.image_server_id image_summary.image_name %}"><i class="fa fa-info"></i> Image Info.</a>
         {% endif %}
+
+        {% if collection.is_not_locked %}
 			  <a class="link-button btn btn-primary" href="{% url 'webgallery_edit_image' image_summary.image_id %}"><i class="fa fa-edit"></i> Tag Image</a>
-		{% for image_collection in image_summary.get_collections %}
-			{% if image_summary.image_owner == user.username or user.username == 'admin' %}
+			{% for image_collection in image_summary.get_collections %}
+				{% if image_summary.image_owner == user.username or user.username == 'admin' %}
 			  <a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_collection.id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
-			{% endif %}
-			{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
+				{% endif %}
+				{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
 			  <a class="link-button btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
-			{% endif %}
+				{% endif %}
 			  <a class="link-button btn btn-primary" href="{% url 'collection_ordering_selection' image_collection.id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_collection.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
               <a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.id|stringformat:"06d" }}"</a>
-		{% endfor %}
-	    {% if image_summary.has_matrices %}
-			{% for image_matrix in image_summary.get_matrices %}
-			<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_matrix.id|stringformat:"06d" }}"</a>
 			{% endfor %}
+	    	{% if image_summary.has_matrices %}
+				{% for image_matrix in image_summary.get_matrices %}
+			<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_matrix.id|stringformat:"06d" }}"</a>
+				{% endfor %}
+			{% endif %}
 		{% endif %}
+		
 			</div><!-- End of generic-dropdown-content -->
         </div><!-- End of generic-dropdown -->
     </td>
@@ -530,6 +541,15 @@ The list images template (with Search)
 	  });
 
 	});
+
+{% if collection.is_locked %}
+
+	setTimeout(function(){
+	   window.location.reload(1);
+	}, {{ environment_summary.environment_window_refresh_time_milliseconds }});
+
+
+{% endif %}
 
 </script>
 

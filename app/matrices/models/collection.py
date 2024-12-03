@@ -50,6 +50,7 @@ class Collection(models.Model):
                               on_delete=models.DO_NOTHING)
     images = models.ManyToManyField(Image,
                                     related_name='collections')
+    locked = models.BooleanField(default=False)
 
     @classmethod
     def create(cls, title, description, owner):
@@ -64,10 +65,10 @@ class Collection(models.Model):
         cancel_collection.images.remove(current_image)
 
     def __str__(self):
-        return f"{self.id:06d}, {self.owner.username}, {self.title}"
+        return f"{self.id:06d}, {self.owner.username}, {self.title}, {self.locked}"
 
     def __repr__(self):
-        return f"{self.id}, {self.title}, {self.description}, {self.owner.id}"
+        return f"{self.id}, {self.title}, {self.description}, {self.owner.id}, {self.locked}"
 
     def set_matrix(self, a_matrix):
         self.matrix = a_matrix
@@ -86,6 +87,60 @@ class Collection(models.Model):
             return True
         else:
             return False
+
+    #
+    #   If this Collection is Locked, then True, else False
+    #
+    def is_locked(self):
+
+        if self.locked is True:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Collection is NOT Locked, then True, else False
+    #
+    def is_not_locked(self):
+
+        if self.locked is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Collection is Unlocked, then True, else False
+    #
+    def is_unlocked(self):
+
+        if self.locked is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Collection is NOT Locked, then True, else False
+    #
+    def is_not_unlocked(self):
+
+        if self.locked is True:
+            return True
+        else:
+            return False
+
+    #
+    #   Sets the Locked field of the Collection to True
+    #
+    def set_locked(self):
+
+        self.locked = True
+
+    #
+    #   Sets the Locked field of the Collection to False
+    #
+    def set_unlocked(self):
+
+        self.locked = False
 
     def get_tags(self):
 

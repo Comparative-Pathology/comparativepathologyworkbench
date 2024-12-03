@@ -99,12 +99,16 @@ The list collections template (with Search)
 	<td>&nbsp;</td>
   </tr>
 		{% endif %}
-		{% if collection_summary.collection_id == user.profile.active_collection.id %}
+		{% if collection_summary.is_locked %}
+  <tr id="collection_summary-{{collection_summary.collection_id}}" class="locked">
+		{% else %}
+			{% if collection_summary.collection_id == user.profile.active_collection.id %}
   <tr id="collection_summary-{{collection_summary.collection_id}}" class="active">
 			{% else %}
   <tr id="collection_summary-{{collection_summary.collection_id}}" class="{% if request.GET.selected_record == collection_summary.collection_id|stringformat:'s' %}selected{% endif %}">
+			{% endif %}
 		{% endif %}
-	{% if readBoolean %}
+		{% if readBoolean %}
     <td>
 	  <div class="generic-dropdown">
 		<button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
@@ -116,31 +120,33 @@ The list collections template (with Search)
 			{% if collection_summary.collection_authorisation_authority == 'OWNER' %}
 		  <a href="{% url 'list_images' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
 		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+		  		{% if collection_summary.is_not_locked %}
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-				
-		  		{% if user.username != 'guest' %}
+		  			{% if user.username != 'guest' %}
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-				{% endif %}
-
-				{% if collection_summary.collection_id == user.profile.active_collection.id %}
-				{% else %}
-					{% if collection_summary.collection_owner == user.username %}
+					{% endif %}
+					{% if collection_summary.collection_id == user.profile.active_collection.id %}
+					{% else %}
+						{% if collection_summary.collection_owner == user.username %}
 		  <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
+						{% endif %}
 					{% endif %}
 				{% endif %}
 			{% endif %}
 			{% if collection_summary.collection_authorisation_authority == 'ADMIN' %}
 		  <a href="{% url 'list_images' collection_summary.collection_id %}"><i class="fa fa-eye"></i> View</a>
 		  <a data-value="{{ collection_summary.collection_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+			  	{% if collection_summary.is_not_locked %}
 		  <a href="{% url 'collection_update' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Updating Collection {{ collection_summary.collection_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 		  <a href="{% url 'collection_delete' collection_summary.collection_id %}" onclick="delete_collection_summary(event, 'Deleting Collection {{ collection_summary.collection_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
 		  <a href="{% url 'list_collection_authorisation' collection_summary.collection_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
 		  <a href="{% url 'collection_update_owner' collection_summary.collection_id %}" onclick="open_collection_summary_edit_dialog(event, 'Change Owner of Collection {{ collection_summary.collection_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Ownership</a>
-			    {% if collection_summary.collection_id == user.profile.active_collection.id %}
-				{% else %}
-			        {% if collection_summary.collection_owner == user.username %}
+			    	{% if collection_summary.collection_id == user.profile.active_collection.id %}
+					{% else %}
+			        	{% if collection_summary.collection_owner == user.username %}
 		  <a href="{% url 'activate_collection' collection_summary.collection_id %}" onclick="return confirm('Are you sure you want to ACTIVATE this COLLECTION?')"><i class="fa fa-bell"></i> Activate</a>
+						{% endif %}
 					{% endif %}
 				{% endif %}
 			{% endif %}
@@ -167,11 +173,11 @@ The list collections template (with Search)
   </tr>
   <tr>
 			{% if readBoolean %}
-			{% if createBoolean %}
+				{% if createBoolean %}
     <td>
 	  <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 	</td>
-			{% endif %}
+				{% endif %}
 			{% else %}
 	<td>&nbsp;</td>
 			{% endif %}
@@ -188,11 +194,11 @@ The list collections template (with Search)
 {% else %}
 <p>No Collections are available.</p>
 	{% if readBoolean %}
-	{% if createBoolean %}
+		{% if createBoolean %}
 <p>
   <a href="{% url 'collection_create' %}" class="btn button button-add" onclick="open_collection_summary_edit_dialog(event, 'Create a Collection ...'); return false;"><i class="fa fa-plus"></i> Add</a>
 </p>
-	{% endif %}
+		{% endif %}
 	{% else %}
 <p>You are not authorised to add Collections yet!</p>
 	{% endif %}

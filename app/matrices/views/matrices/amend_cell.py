@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file		   amend_cell.py
 # \author	   Mike Wicks
 # \date		   March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the amend_cell view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -58,8 +58,9 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 HTTP_POST = 'POST'
 WORDPRESS_SUCCESS = 'Success!'
 
+
 #
-# VIEW THE CELL DETAILS
+#   VIEW THE CELL DETAILS
 #
 @login_required
 def amend_cell(request, matrix_id, cell_id):
@@ -135,9 +136,9 @@ def amend_cell(request, matrix_id, cell_id):
 
                         if exists_active_collection_for_user(request.user):
 
-                            image = add_image_to_collection(request.user, server, image_id, 0)
-
                             collection = get_active_collection_for_user(request.user)
+
+                            image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
 
                             matrix.set_last_used_collection(collection)
 

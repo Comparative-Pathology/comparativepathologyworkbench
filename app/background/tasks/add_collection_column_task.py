@@ -46,6 +46,9 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 WORDPRESS_SUCCESS = 'Success!'
 
 
+#
+#   Add ALL the images from a Collection to a Column
+#
 @shared_task
 def add_collection_column_task(user_id, matrix_id, column_id):
 

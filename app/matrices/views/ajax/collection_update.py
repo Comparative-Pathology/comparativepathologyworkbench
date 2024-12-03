@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX collection_authorisation_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -45,7 +45,7 @@ from matrices.routines import credential_exists
 
 
 #
-# EDIT A COLLECTION AUTHORISATION
+#   EDIT A COLLECTION AUTHORISATION
 #
 @login_required()
 def collection_update(request, collection_id):
@@ -63,6 +63,10 @@ def collection_update(request, collection_id):
         raise PermissionDenied
 
     object = get_object_by_uuid_or_404(Collection, collection_id)
+
+    if object.is_locked():
+
+        raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 

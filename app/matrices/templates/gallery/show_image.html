@@ -83,7 +83,7 @@ The show image template
 			  <button class="button button-view">
 				  <div class="tooltipcolumn">
 				  <i class="fa-solid fa-eye"></i>
-				  <span class="tooltipcolumntext"> View Active Image Collection</span>
+				  <span class="tooltipcolumntext"> View Active Image Collection ({{user.profile.active_collection.id|stringformat:"06d"}}, {{user.profile.active_collection.title}})</span>
 				</div>
 			  </button>
 			</a>
@@ -109,7 +109,7 @@ The show image template
 			  <button class="button button-add">
 				  <div class="tooltipcolumn">
 				  <i class="fa-solid fa-plus"></i>
-				  <span class="tooltipcolumntext"> Add Image to Active Image Collection</span>
+				  <span class="tooltipcolumntext"> Add Image to Active Image Collection ({{user.profile.active_collection.id|stringformat:"06d"}}, {{user.profile.active_collection.title}})</span>
 				</div>
 			  </button>
 			</a>

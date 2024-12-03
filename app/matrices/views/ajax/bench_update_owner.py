@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_update_owner.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_update_owner view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -48,7 +48,7 @@ from matrices.routines import authorisation_exists_for_bench_and_permitted
 
 
 #
-# Re-Allocate the Bench Owner
+#   Re-Allocate the Bench Owner
 #
 @login_required()
 def bench_update_owner(request, bench_id):
@@ -67,6 +67,10 @@ def bench_update_owner(request, bench_id):
 
     bench = get_object_by_uuid_or_404(Matrix, bench_id)
     old_owner = bench.owner
+
+    if bench.is_locked():
+
+        raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 

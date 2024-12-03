@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         lock_bench_task.py
+# \file         unlock_collection_task.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,30 +25,30 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# The lock_bench_task Task.
+# The unlock_collection_task Task.
 # ##
 #
 from __future__ import absolute_import
 
-from matrices.models import Matrix
+from matrices.models import Collection
 
 from celery import shared_task
 
 
 #
-#   LOCK a Bench
+#   UNLOCK a Collection
 #
 @shared_task
-def lock_bench_task(matrix_id):
+def unlock_collection_task(collection_id):
 
-    matrix = Matrix.objects.get(id=matrix_id)
+    collection = Collection.objects.get(id=collection_id)
 
     out_message = ""
 
-    matrix.set_locked()
-    matrix.save()
+    collection.set_unlocked()
+    collection.save()
 
-    out_message = "Task lock_bench : Bench CPW:{0:06d} lock: {1} Complete!!"\
-        .format(matrix.id, matrix.locked)
+    out_message = "Task unlock_bench : Collection {0:06d} lock: {1} Complete!!"\
+        .format(collection.id, collection.locked)
 
     return out_message

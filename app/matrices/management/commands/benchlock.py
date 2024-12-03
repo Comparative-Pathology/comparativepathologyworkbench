@@ -25,9 +25,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the Bench Lock admin command USING a Task if possible
-#
 # ##
 #
 from __future__ import unicode_literals
@@ -42,7 +40,7 @@ from background.tasks import lock_bench_task
 
 
 #
-# The Check Blogposts admin command
+#   The Bench Lock admin command
 #
 class Command(BaseCommand):
     help = "Lock Bench USING a Task"

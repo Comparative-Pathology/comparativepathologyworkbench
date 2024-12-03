@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         active_collection_selection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,32 +25,26 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_collection_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
-from django.urls import reverse
 
 from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.forms import CollectionActiveSummarySelectionForm
 
-from matrices.models import Matrix
-from matrices.models import Collection
-
 from matrices.routines import credential_exists
 
 
 #
-# Select a Collection as the Active Collection 
+#   Select a Collection as the Active Collection
 #
 @login_required()
 def active_collection_selection(request, user_id):

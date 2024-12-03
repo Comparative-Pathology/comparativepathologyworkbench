@@ -35,6 +35,9 @@ from matrices.models import Matrix
 from celery import shared_task
 
 
+#
+#   UNLOCK a Bench
+#
 @shared_task
 def unlock_bench_task(matrix_id):
 

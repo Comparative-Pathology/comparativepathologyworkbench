@@ -24,15 +24,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_delete view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import subprocess
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -52,7 +50,7 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# DELETE A BENCH
+#   DELETE A BENCH
 #
 @login_required()
 def bench_delete(request, bench_id):
@@ -80,6 +78,10 @@ def bench_delete(request, bench_id):
     environment = get_primary_cpw_environment()
 
     matrix = get_object_or_404(Matrix, pk=bench_id)
+
+    if matrix.is_locked():
+
+        raise PermissionDenied
 
     oldCells = Cell.objects.filter(matrix=bench_id)
 

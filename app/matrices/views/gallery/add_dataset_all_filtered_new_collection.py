@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         add_dataset_all_filtered_new_collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the add_dataset_all_filtered_new_collection view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
@@ -44,13 +44,18 @@ from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_collection_for_user_and_title
 from matrices.routines import get_collection_for_user_and_title
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+
+from background.tasks import add_images_to_collection_task
 
 
 #
-# Add ALL the FILTERED images from a Dataset to a NEW Collection
+#   Add ALL the FILTERED images from a Dataset to a NEW Collection
 #
 @login_required
 def add_dataset_all_filtered_new_collection(request, server_id, dataset_id):
+
+    environment = get_primary_cpw_environment()
 
     if credential_exists(request.user):
 
@@ -79,23 +84,34 @@ def add_dataset_all_filtered_new_collection(request, server_id, dataset_id):
 
         if exists_active_collection_for_user(request.user):
 
-            imageCounter = 0
+            if environment.is_background_processing():
 
-            for image in images_list:
+                collection.set_locked()
+                collection.save()
 
-                image_id = image["id"]
-
-                image = add_image_to_collection(request.user, server, image_id, 0)
-
-                imageCounter = imageCounter + 1
-
-            if imageCounter > 1:
-
-                messages.success(request, str(imageCounter) + ' Images ADDED to Active Collection!')
+                result = add_images_to_collection_task.delay_on_commit(images_list, request.user.id, server.id, collection.id)
 
             else:
 
-                messages.success(request, str(imageCounter) + ' Image ADDED to Active Collection!')
+                imageCounter = 0
+
+                for image in images_list:
+
+                    image_id = image["id"]
+
+                    image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
+
+                    imageCounter = imageCounter + 1
+
+                if imageCounter > 1:
+
+                    messages.success(request, str(imageCounter) + ' Images ADDED to Active Collection!')
+
+                else:
+
+                    messages.success(request, str(imageCounter) + ' Image ADDED to Active Collection!')
+
+            return HttpResponseRedirect(reverse('list_images', args=(collection.id, )))
 
         else:
 
@@ -103,8 +119,6 @@ def add_dataset_all_filtered_new_collection(request, server_id, dataset_id):
                            "create a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
-
-        return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, dataset_id)))
 
     else:
 

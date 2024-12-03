@@ -24,7 +24,7 @@ FROM public.matrices_matrix a, public.auth_user b
 WHERE a.public = True AND b.id = a.owner_id);
 
 CREATE OR REPLACE VIEW matrices_collection_summary AS
-(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, d.id as collection_authorisation_id, e.username AS collection_authorisation_permitted, f.name AS collection_authorisation_authority
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, a.locked as collection_locked, d.id as collection_authorisation_id, e.username AS collection_authorisation_permitted, f.name AS collection_authorisation_authority
 FROM public.auth_user b,
 public.auth_user e,
 public.matrices_collectionauthorisation d,
@@ -39,7 +39,7 @@ AND f.id = d.collection_authority_id
 GROUP BY a.id, b.username, d.id, e.username, f.name
 ORDER BY a.id)
 UNION
-(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, '0' as collection_authorisation_id, b.username AS collection_authorisation_permitted, 'OWNER' AS matrix_authorisation_authority
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, a.locked as collection_locked, '0' as collection_authorisation_id, b.username AS collection_authorisation_permitted, 'OWNER' AS matrix_authorisation_authority
 FROM public.auth_user b,
 public.matrices_collection a
 LEFT JOIN public.matrices_collection_images c
@@ -48,7 +48,7 @@ WHERE b.id = a.owner_id
 GROUP BY a.id, b.username
 ORDER BY a.id)
 UNION
-(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, '0' as collection_authorisation_id, b.username AS collection_authorisation_permitted, 'ADMIN' AS matrix_authorisation_authority
+(SELECT row_number() OVER (PARTITION BY true::boolean) AS id, a.id AS collection_id, a.title AS collection_title, a.description AS collection_description, b.username AS collection_owner, count(c.image_id) AS collection_image_count, a.locked as collection_locked, '0' as collection_authorisation_id, b.username AS collection_authorisation_permitted, 'ADMIN' AS matrix_authorisation_authority
 FROM public.auth_user b,
 public.matrices_collection a
 LEFT JOIN public.matrices_collection_images c

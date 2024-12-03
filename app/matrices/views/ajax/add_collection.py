@@ -71,13 +71,17 @@ def add_collection(request, matrix_id, cell_id):
 
         raise PermissionDenied
 
+    matrix = get_object_or_404(Matrix, pk=matrix_id)
+
+    if matrix.is_locked():
+
+        raise PermissionDenied
+
     environment = get_primary_cpw_environment()
 
     if credential_exists(request.user):
 
         credential = get_credential_for_user(request.user)
-
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
 
         owner = matrix.owner
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -49,7 +49,7 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# EDIT A BENCH
+#   EDIT A BENCH
 #
 @login_required()
 def bench_update(request, bench_id):
@@ -71,6 +71,10 @@ def bench_update(request, bench_id):
     environment = get_primary_cpw_environment()
 
     object = get_object_by_uuid_or_404(Matrix, bench_id)
+
+    if object.is_locked():
+
+        raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 

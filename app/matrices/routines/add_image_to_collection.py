@@ -42,7 +42,6 @@ from django.contrib.auth.models import User
 from decouple import config
 
 from matrices.routines.aescipher import AESCipher
-from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.exists_image_for_id_server_owner_roi import exists_image_for_id_server_owner_roi
 from matrices.routines.get_images_for_id_server_owner_roi import get_images_for_id_server_owner_roi
 from matrices.routines.get_an_ebi_sca_experiment_id_from_chart_id import get_an_ebi_sca_experiment_id_from_chart_id
@@ -53,9 +52,9 @@ from matrices.routines.get_max_collection_image_ordering_for_collection \
 
 
 #
-#   ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
+#   Add a new Image from an Image Server to a Collection
 #
-def add_image_to_collection(credential, server, image_id, roi_id):
+def add_image_to_collection(credential, server, image_id, roi_id, collection_id):
 
     Image = apps.get_model('matrices', 'Image')
     Collection = apps.get_model('matrices', 'Collection')
@@ -66,6 +65,8 @@ def add_image_to_collection(credential, server, image_id, roi_id):
     environment = get_primary_cpw_environment()
 
     user = User.objects.get(username=credential.username)
+
+    collection = Collection.objects.get(id=collection_id)
 
     image_out = None
 
@@ -254,8 +255,6 @@ def add_image_to_collection(credential, server, image_id, roi_id):
 
             image_out.save()
 
-        collection = get_active_collection_for_user(user)
-
         Collection.assign_image(image_out, collection)
 
         max_ordering = get_max_collection_image_ordering_for_collection(collection.id)
@@ -305,8 +304,6 @@ def add_image_to_collection(credential, server, image_id, roi_id):
                                                  image_birdseye_url, roi_id, user, comment, image_hidden)
 
                         image_out.save()
-
-                    collection = get_active_collection_for_user(user)
 
                     Collection.assign_image(image_out, collection)
 

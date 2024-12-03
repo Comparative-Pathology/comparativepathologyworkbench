@@ -48,6 +48,7 @@ class CollectionSummary(models.Model):
                                         default='')
     collection_image_count = models.IntegerField(default=0,
                                                  blank=False)
+    collection_locked = models.BooleanField(default=False)
     collection_authorisation_id = models.IntegerField(default=0,
                                                       blank=False)
     collection_authorisation_permitted = models.CharField(max_length=50,
@@ -62,9 +63,52 @@ class CollectionSummary(models.Model):
     def __str__(self):
         return f"{self.collection_id}, {self.collection_title}, {self.collection_description}, \
             {self.collection_owner}, {self.collection_description}, {self.collection_image_count}, \
-            {self.collection_authorisation_permitted}, {self.collection_authorisation_authority}"
+            {self.collection_locked}, {self.collection_authorisation_permitted}, \
+            {self.collection_authorisation_authority}"
 
     def __repr__(self):
         return f"{self.collection_id}, {self.collection_title}, {self.collection_description}, \
             {self.collection_owner}, {self.collection_description}, {self.collection_image_count}, \
-            {self.collection_authorisation_permitted}, {self.collection_authorisation_authority}"
+            {self.collection_locked}, {self.collection_authorisation_permitted}, \
+            {self.collection_authorisation_authority}"
+
+    #
+    #   If this Collection is Locked, then True, else False
+    #
+    def is_locked(self):
+
+        if self.collection_locked is True:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Collection is NOT Locked, then True, else False
+    #
+    def is_not_locked(self):
+
+        if self.collection_locked is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Collection is Unlocked, then True, else False
+    #
+    def is_unlocked(self):
+
+        if self.collection_locked is False:
+            return True
+        else:
+            return False
+
+    #
+    #   If this Collection is NOT Locked, then True, else False
+    #
+    def is_not_unlocked(self):
+
+        if self.collection_locked is True:
+            return True
+        else:
+            return False
+

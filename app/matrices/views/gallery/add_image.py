@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         add_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the add_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
@@ -38,10 +38,14 @@ from django.contrib import messages
 
 from matrices.models import Server
 
+from matrices.routines import add_image_to_collection
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
+from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_credential_for_user
-from matrices.routines import add_image_to_collection
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+
+from background.tasks import add_images_to_collection_task
 
 
 #
@@ -50,39 +54,49 @@ from matrices.routines import add_image_to_collection
 @login_required
 def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
+    environment = get_primary_cpw_environment()
+
     if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
         if exists_active_collection_for_user(request.user):
 
+            collection = get_active_collection_for_user(request.user)
+
             credential = get_credential_for_user(request.user)
 
-            image = add_image_to_collection(credential, server, image_id, roi_id)
+            images_list = list()
 
-            messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+            imagedict = {}
+            imagedict["id"] = image_id
+
+            images_list.append(imagedict)
+
+            if environment.is_background_processing():
+
+                collection.set_locked()
+                collection.save()
+
+                result = add_images_to_collection_task.delay_on_commit(images_list,
+                                                                       request.user.id,
+                                                                       server.id,
+                                                                       collection.id)
+
+            else:
+
+                image = add_image_to_collection(credential, server, image_id, roi_id, collection.id)
+
+                messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+
+            return HttpResponseRedirect(reverse('list_images', args=(collection.id, )))
 
         else:
 
-            messages.error(request, "CPW_WEB:0450 Add Image - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0450 Add Image - You have no Active Image Collection; Please create "
+                           "a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
-
-        if server.is_omero547():
-
-            if path_from == "show_image":
-
-                return HttpResponseRedirect(reverse('webgallery_show_image', args=(server_id, image_id)))
-
-            if path_from == "show_dataset":
-
-                return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, identifier)))
-
-        else:
-
-            if server.is_wordpress():
-
-                return HttpResponseRedirect(reverse('webgallery_show_wordpress_image', args=(server_id, image_id)))
 
     else:
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_cell.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -54,7 +54,7 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# EDIT A BENCH
+#   EDIT A BENCH
 #
 @login_required()
 def delete_cell(request, matrix_id, cell_id):
@@ -69,11 +69,16 @@ def delete_cell(request, matrix_id, cell_id):
 
         raise PermissionDenied
 
+    matrix = get_object_or_404(Matrix, pk=matrix_id)
+
+    if matrix.is_locked():
+
+        raise PermissionDenied
+
     if credential_exists(request.user):
 
         credential = get_credential_for_user(request.user)
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
         cell = get_object_or_404(Cell, pk=cell_id)
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)

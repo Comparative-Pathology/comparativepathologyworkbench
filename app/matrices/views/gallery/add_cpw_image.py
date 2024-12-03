@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         add_cpw_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the add_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
@@ -39,17 +39,17 @@ from django.contrib import messages
 
 from matrices.models import Server
 
+from matrices.routines import add_image_to_collection
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
-from matrices.routines import get_header_data
-from matrices.routines import add_image_to_collection
+from matrices.routines import get_active_collection_for_user
 
 SHOW_CPW_IMAGE = 'show_cpw_image'
 SHOW_CPW_UPLOAD_IMAGE = 'show_cpw_upload_image'
 
 
 #
-# ADD A NEW IMAGE FROM THE CPW ITSELF TO THE ACTIVE COLLECTION
+#   ADD A NEW IMAGE FROM THE CPW ITSELF TO THE ACTIVE COLLECTION
 #
 @login_required
 def add_cpw_image(request, server_id, image_id, path_from):
@@ -58,16 +58,15 @@ def add_cpw_image(request, server_id, image_id, path_from):
 
         raise PermissionDenied
 
-
-    data = get_header_data(request.user)
-
     if credential_exists(request.user):
 
         server = get_object_or_404(Server, pk=server_id)
 
         if exists_active_collection_for_user(request.user):
 
-            image = add_image_to_collection(request.user, server, image_id, 0)
+            collection = get_active_collection_for_user(request.user)
+
+            image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
 
             messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
 
@@ -86,7 +85,6 @@ def add_cpw_image(request, server_id, image_id, path_from):
             if path_from == SHOW_CPW_UPLOAD_IMAGE:
 
                 return HttpResponseRedirect(reverse('webgallery_show_cpw_upload_image', args=(server_id, image_id)))
-
 
     else:
 

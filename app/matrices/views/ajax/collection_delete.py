@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_delete.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX collection_authorisation_delete view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -43,7 +43,7 @@ from matrices.routines import credential_exists
 
 
 #
-# DELETE A COLLECTION
+#   DELETE A COLLECTION
 #
 @login_required()
 def collection_delete(request, collection_id):
@@ -61,6 +61,10 @@ def collection_delete(request, collection_id):
         raise PermissionDenied
 
     collection = get_object_or_404(Collection, pk=collection_id)
+
+    if collection.is_locked():
+
+        raise PermissionDenied
 
     object_id = collection.id
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         bench_collection_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_collection_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -45,7 +45,7 @@ from matrices.routines import credential_exists
 
 
 #
-# EDIT A BENCH
+#   EDIT A BENCH
 #
 @login_required()
 def bench_collection_update(request, bench_id):
@@ -69,7 +69,10 @@ def bench_collection_update(request, bench_id):
 
     if request.method == 'POST':
 
-        form = CollectionSummarySelectionForm(instance=object, initial={'last_used_collection': collection }, data=request.POST, request=request)
+        form = CollectionSummarySelectionForm(instance=object, 
+                                              initial={'last_used_collection': collection},
+                                              data=request.POST,
+                                              request=request)
 
         if form.is_valid():
 
@@ -86,7 +89,9 @@ def bench_collection_update(request, bench_id):
 
     else:
 
-        form = CollectionSummarySelectionForm(instance=object, request=request, initial={'last_used_collection': collection } )
+        form = CollectionSummarySelectionForm(instance=object,
+                                              request=request,
+                                              initial={'last_used_collection': collection})
 
     return render(request, template_name, {
         'form': form,

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         add_dataset.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the add_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
@@ -37,20 +37,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from matrices.models import Server
+from matrices.models import Image
 
+from matrices.routines import add_image_to_collection
 from matrices.routines import credential_exists
 from matrices.routines import exists_active_collection_for_user
-from matrices.routines import get_header_data
-from matrices.routines import add_image_to_collection
+from matrices.routines import get_active_collection_for_user
+from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+
+from background.tasks import add_images_to_collection_task
 
 
 #
-# ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
+#   ADD A NEW IMAGE FROM AN IMAGE SERVER TO THE ACTIVE COLLECTION
 #
 @login_required
 def add_dataset(request, server_id, dataset_id):
 
-    data = get_header_data(request.user)
+    environment = get_primary_cpw_environment()
 
     if credential_exists(request.user):
 
@@ -58,31 +62,55 @@ def add_dataset(request, server_id, dataset_id):
 
         if exists_active_collection_for_user(request.user):
 
+            collection = get_active_collection_for_user(request.user)
+
             image_ids = request.POST.getlist('checks[]')
 
-            imageCounter = 0
+            images_list = list()
 
             for image_id in image_ids:
 
-                image = add_image_to_collection(request.user, server, image_id, 0)
+                imagedict = {}
+                imagedict["id"] = image_id
 
-                imageCounter = imageCounter + 1
+                images_list.append(imagedict)
 
-            if imageCounter > 1:
+            if environment.is_background_processing():
 
-                messages.success(request, str(imageCounter) + ' Images ADDED to Active Collection!')
+                collection.set_locked()
+                collection.save()
+
+                result = add_images_to_collection_task.delay_on_commit(images_list,
+                                                                       request.user.id,
+                                                                       server.id,
+                                                                       collection.id)
 
             else:
 
-                messages.success(request, str(imageCounter) + ' Image ADDED to Active Collection!')
+                imageCounter = 0
+
+                for image_id in image_ids:
+
+                    image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
+
+                    imageCounter = imageCounter + 1
+
+                if imageCounter > 1:
+
+                    messages.success(request, str(imageCounter) + ' Images ADDED to Active Collection!')
+
+                else:
+
+                    messages.success(request, str(imageCounter) + ' Image ADDED to Active Collection!')
+
+            return HttpResponseRedirect(reverse('list_images', args=(collection.id, )))
 
         else:
 
-            messages.error(request, "CPW_WEB:0430 Add Dataset - You have no Active Image Collection; Please create a Collection!")
+            messages.error(request, "CPW_WEB:0430 Add Dataset - You have no Active Image Collection; Please create "
+                           "a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
-
-        return HttpResponseRedirect(reverse('webgallery_show_dataset', args=(server_id, dataset_id)))
 
     else:
 

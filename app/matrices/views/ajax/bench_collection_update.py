@@ -35,13 +35,10 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import CollectionSummarySelectionForm
 
+from matrices.models import Credential
 from matrices.models import Matrix
-
-from matrices.routines import credential_exists
 
 
 #
@@ -58,11 +55,18 @@ def bench_collection_update(request, bench_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(Matrix, bench_id)
+    object = Matrix.objects.get_or_none(id=bench_id)
+
+    if not object:
+
+        raise PermissionDenied
+
     collection = object.last_used_collection
 
     template_name = 'frontend_forms/generic_form_inner.html'
@@ -84,8 +88,7 @@ def bench_collection_update(request, bench_id):
 
             object.save()
 
-            matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-            messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
+            messages.success(request, 'EXISTING Bench ' + object.get_formatted_id() + ' Updated!')
 
     else:
 
@@ -93,7 +96,5 @@ def bench_collection_update(request, bench_id):
                                               request=request,
                                               initial={'last_used_collection': collection})
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

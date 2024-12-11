@@ -47,7 +47,7 @@ The list images template (with Search)
 
 	{% else %}
 	<!-- A Tag, A Collection -->
-			<li>Images for Collection: "{{ collection_id|stringformat:"06d" }}", with Tag "{{ tag.name }}"</li>
+			<li>Images for Collection: "{{ collection_id_formatted }}", with Tag "{{ tag.name }}"</li>
 
 	{% endif %}
 
@@ -59,7 +59,7 @@ The list images template (with Search)
 
 	{% else %}
 	<!-- No Tag, A Collection -->
-			<li>Images for Collection: "{{ collection_id|stringformat:"06d" }}"</li>
+			<li>Images for Collection: "{{ collection_id_formatted }}"</li>
 
 	{% endif %}
 
@@ -100,7 +100,7 @@ The list images template (with Search)
 {% if not allBoolean %}
 	{% if collection.is_locked %}
   <div class="panel-alert">
-	<p>Collection {{ collection.id|stringformat:"06d" }} is LOCKED pending Update!!</p>
+	<p>Collection {{ collection.get_formatted_id }} is LOCKED pending Update!!</p>
   </div>
 	{% endif %}
 {% endif %}
@@ -129,7 +129,7 @@ The list images template (with Search)
 <!-- A Tag, A Collection -->
 
 		{% if collection.id == user.profile.active_collection.id %}
-<h1 class="active">Search Images from the ACTIVE Collection "{{ collection.id|stringformat:"06d" }}", "{{ collection.title }}", with Tag "{{ tag.name }}"</h1>
+<h1 class="active">Search Images from the ACTIVE Collection "{{ collection.get_formatted_id }}", "{{ collection.title }}", with Tag "{{ tag.name }}"</h1>
 			{% if collection_hidden_image_list|length == 0 %}
 				{% if request.user.username == collection.owner.username %}
 <p>You have collected {{ collection_image_list|length }} Images in this Collection</p>
@@ -145,7 +145,7 @@ The list images template (with Search)
 			{% endif %}
 		{% else %}
 			{% if collection.owner == user %}
-<h1 class="inactive">Search Images from the Collection "{{ collection.id|stringformat:"06d" }}", "{{ collection.title }}", with Tag "{{ tag.name }}"</h1>
+<h1 class="inactive">Search Images from the Collection "{{ collection.get_formatted_id }}", "{{ collection.title }}", with Tag "{{ tag.name }}"</h1>
 				{% if collection_hidden_image_list|length == 0 %}
 					{% if request.user.username == collection.owner.username %}
 <p><a href="{% url 'activate_in_collection' collection.id %}"><button class="button button-delete"><i class="fa-solid fa-bell"></i></button></a> You have collected {{ collection_image_list|length }} Images in this Collection</p>
@@ -160,7 +160,7 @@ The list images template (with Search)
 					{% endif %}
 				{% endif %}
 			{% else %}
-<h1 class="inactive">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}", with Tag "{{ tag.name }}"</h1>
+<h1 class="inactive">Collection {{ collection.get_formatted_id }}, "{{ collection.title }}", with Tag "{{ tag.name }}"</h1>
 				{% if collection_hidden_image_list|length == 0 %}
 					{% if request.user.username == collection.owner.username %}
 <p>You have collected {{ collection_image_list|length }} Images in this Collection</p>
@@ -197,7 +197,7 @@ The list images template (with Search)
 <!-- No Tag, A Collection -->
 
 		{% if collection.id == user.profile.active_collection.id %}
-<h1 class="active">Search Images from the ACTIVE Collection "{{ collection.id|stringformat:"06d" }}", "{{ collection.title }}"</h1>
+<h1 class="active">Search Images from the ACTIVE Collection "{{ collection.get_formatted_id }}", "{{ collection.title }}"</h1>
 			{% if collection_hidden_image_list|length == 0 %}
 				{% if request.user.username == collection.owner.username %}
 <p>You have collected {{ collection_image_list|length }} Images in this Collection</p>
@@ -213,7 +213,7 @@ The list images template (with Search)
 			{% endif %}
 		{% else %}
 			{% if collection.owner == user %}
-<h1 class="inactive">Search Images from the Collection "{{ collection.id|stringformat:"06d" }}", "{{ collection.title }}"</h1>
+<h1 class="inactive">Search Images from the Collection "{{ collection.get_formatted_id }}", "{{ collection.title }}"</h1>
 				{% if collection_hidden_image_list|length == 0 %}
 					{% if request.user.username == collection.owner.username %}
 <p><a href="{% url 'activate_in_collection' collection.id %}"><button class="button button-delete"><i class="fa-solid fa-bell"></i></button></a> You have collected {{ collection_image_list|length }} Images in this Collection</p>
@@ -228,7 +228,7 @@ The list images template (with Search)
 					{% endif %}
 				{% endif %}
 			{% else %}
-<h1 class="inactive">Collection {{ collection.id|stringformat:"06d" }}, "{{ collection.title }}"</h1>
+<h1 class="inactive">Collection {{ collection.get_formatted_id }}, "{{ collection.title }}"</h1>
 				{% if collection_hidden_image_list|length == 0 %}
 					{% if request.user.username == collection.owner.username %}
 <p>You have collected {{ collection_image_list|length }} Images in this Collection</p>
@@ -334,12 +334,12 @@ The list images template (with Search)
 				{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
 			  <a class="link-button btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
 				{% endif %}
-			  <a class="link-button btn btn-primary" href="{% url 'collection_ordering_selection' image_collection.id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_collection.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
-              <a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.id|stringformat:"06d" }}"</a>
+			  <a class="link-button btn btn-primary" href="{% url 'collection_ordering_selection' image_collection.id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_collection.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
+              <a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.get_formatted_id }}"</a>
 			{% endfor %}
 	    	{% if image_summary.has_matrices %}
 				{% for image_matrix in image_summary.get_matrices %}
-			<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_matrix.id|stringformat:"06d" }}"</a>
+			<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "{{ image_matrix.get_formatted_id }}"</a>
 				{% endfor %}
 			{% endif %}
 		{% endif %}
@@ -389,7 +389,7 @@ The list images template (with Search)
 	{% else %}
 	<td>&nbsp;</td>
 	{% endif %}
-	<td colspan="7"><a href="{% url 'list_images' image_collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a> "{{ image_collection.id|stringformat:"06d" }}"; "{{ image_collection.title }}"; (Owned By {{ image_collection.owner }})</td>
+	<td colspan="7"><a href="{% url 'list_images' image_collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a> "{{ image_collection.get_formatted_id }}"; "{{ image_collection.title }}"; (Owned By {{ image_collection.owner }})</td>
   </tr>
   {% endfor %}
 
@@ -402,7 +402,7 @@ The list images template (with Search)
 	{% else %}
 	<td>&nbsp;</td>
 	{% endif %}
-	<td colspan="7"><a href="{% url 'matrix' image_matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a> "CPW:{{ image_matrix.id|stringformat:"06d" }}"; "{{ image_matrix.title }}"; (Owned By {{ image_matrix.owner }})</td>
+	<td colspan="7"><a href="{% url 'matrix' image_matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a> "{{ image_matrix.get_formatted_id }}"; "{{ image_matrix.title }}"; (Owned By {{ image_matrix.owner }})</td>
   </tr>
 	  {% endfor %}
   {% else %}

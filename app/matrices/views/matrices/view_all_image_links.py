@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_all_image_links.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,24 +25,24 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_all_image_links view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
+from matrices.models import Credential
 from matrices.models import ImageLink
 
-from matrices.routines import credential_exists
 from matrices.routines import get_last_used_collection_for_user
 from matrices.routines import get_header_data
 
+
 #
-# VIEW ALL LINKED IMAGES
+#   VIEW ALL LINKED IMAGES
 #
 @login_required
 def view_all_image_links(request):
@@ -58,8 +59,9 @@ def view_all_image_links(request):
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
         selected_collection = get_last_used_collection_for_user(request.user)
 
@@ -75,7 +77,8 @@ def view_all_image_links(request):
 
         data = get_header_data(request.user)
 
-        data.update({ 'image_link_list': image_link_list, 'selected_collection': selected_collection })
+        data.update({'image_link_list': image_link_list,
+                     'selected_collection': selected_collection})
 
         return render(request, 'matrices/view_all_image_links.html', data)
 

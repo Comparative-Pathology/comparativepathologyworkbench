@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         validate_an_ebi_sca_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Do we have a valid OMERO URL?
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from urllib.parse import urlparse
-
-
-"""
-    Do we have a Valid EBI SCA Image?
-"""
+#
+#   Do we have a Valid EBI SCA Image?
+#
 def validate_an_ebi_sca_image(an_image):
 
     extention_list = ["png", "jpg", "jpeg", "pdf", "svg"]

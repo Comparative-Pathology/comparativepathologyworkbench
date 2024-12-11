@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         maintenance.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the maintenance view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -47,8 +47,9 @@ from matrices.models import Gateway
 
 from matrices.routines import get_header_data
 
+
 #
-# SHOW THE MAINTENANCE PAGE
+#   SHOW THE MAINTENANCE PAGE
 #
 @login_required
 def maintenance(request):

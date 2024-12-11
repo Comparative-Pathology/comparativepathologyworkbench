@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_collection_authority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_collection_authority view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -45,48 +44,57 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
-# EDIT A COLLECTION AUTHORITY
+#   EDIT A COLLECTION AUTHORITY
 #
 @login_required
 def edit_collection_authority(request, collection_authority_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        collection_authority = CollectionAuthority.objects.get_or_none(id=collection_authority_id)
 
-        collection_authority = get_object_or_404(CollectionAuthority, pk=collection_authority_id)
+        if collection_authority:
 
-        if request.method == HTTP_POST:
+            data = get_header_data(request.user)
 
-            form = CollectionAuthorityForm(request.POST, instance=collection_authority)
+            if request.method == HTTP_POST:
 
-            if form.is_valid():
+                form = CollectionAuthorityForm(request.POST, instance=collection_authority)
 
-                collection_authority = form.save(commit=False)
+                if form.is_valid():
 
-                collection_authority.set_owner(request.user)
+                    collection_authority = form.save(commit=False)
 
-                collection_authority.save()
+                    collection_authority.set_owner(request.user)
 
-                messages.success(request, 'Collection Authority ' + collection_authority.name + ' Updated!')
+                    collection_authority.save()
 
-                return HttpResponseRedirect(reverse('maintenance', args=()))
+                    messages.success(request, 'Collection Authority ' + collection_authority.name + ' Updated!')
+
+                    return HttpResponseRedirect(reverse('maintenance', args=()))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0110 Edit Collection Authority - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0110 Edit Collection Authority - Form is Invalid!")
+
+                    data.update({'form': form,
+                                 'collection_authority': collection_authority})
 
             else:
 
-                messages.error(request, "CPW_WEB:0110 Edit Collection Authority - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0110 Edit Collection Authority - Form is Invalid!")
+                form = CollectionAuthorityForm(instance=collection_authority)
 
-                data.update({ 'form': form, 'collection_authority': collection_authority })
+                data.update({'form': form,
+                             'collection_authority': collection_authority})
+
+            return render(request, 'maintenance/edit_collection_authority.html', data)
 
         else:
 
-            form = CollectionAuthorityForm(instance=collection_authority)
-
-            data.update({ 'form': form, 'collection_authority': collection_authority })
-
-        return render(request, 'maintenance/edit_collection_authority.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

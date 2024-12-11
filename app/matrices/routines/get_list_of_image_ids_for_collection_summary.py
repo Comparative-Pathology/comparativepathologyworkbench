@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_list_of_image_ids_for_collection_summary.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,21 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the List of Image Ids from a particular Collection Summary List
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from django.apps import apps
 
-from django.db.models import Q
 
-from os import urandom
-
-
-"""
-    Get the List of Image Ids from a particular Collection Summary List
-"""
+#
+#   Get the List of Image Ids from a particular Collection Summary List
+#
 def get_list_of_image_ids_for_collection_summary(a_collection_summary_list):
 
     Collection = apps.get_model('matrices', 'Collection')

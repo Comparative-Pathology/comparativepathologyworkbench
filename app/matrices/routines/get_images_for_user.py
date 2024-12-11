@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_images_for_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get Active Images for a particular User
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Get Active Images for a particular User
-"""
+#
+#   Get Active Images for a particular User
+#
 def get_images_for_user(a_user):
 
     Image = apps.get_model('matrices', 'Image')

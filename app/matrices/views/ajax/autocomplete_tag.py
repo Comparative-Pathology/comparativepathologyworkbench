@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         autocomplete_tag_2.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,18 +25,15 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # The autocomplete_tag_2 VIEW
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import json
 
-from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from taggit.models import Tag
@@ -46,40 +44,49 @@ from matrices.models import Image
 
 
 #
-# The autocomplete_tag VIEW
+#   The autocomplete_tag VIEW
 #
 def autocompleteTag(request, image_id):
 
-    local_image = get_object_or_404(Image, pk=image_id)
-
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
-        if request.method == 'GET':
+        local_image = Image.objects.get_or_none(id=image_id)
 
-            search_term = request.GET.get('term', '').capitalize()
+        if local_image:
 
-            search_qs = Tag.objects.filter(name__startswith=search_term)
+            if request.method == 'GET':
 
-            results = []
+                search_term = request.GET.get('term', '').capitalize()
 
-            for tag in search_qs:
-                results.append(tag.name)
+                search_qs = Tag.objects.filter(name__startswith=search_term)
 
-            json_data = json.dumps(results)
-            mimetype = 'application/json'
+                results = []
 
-            return HttpResponse(json_data, mimetype)
-    
+                for tag in search_qs:
+
+                    results.append(tag.name)
+
+                json_data = json.dumps(results)
+                mimetype = 'application/json'
+
+                return HttpResponse(json_data, mimetype)
+
+            if request.method == 'POST':
+
+                tags = request.POST.get('txtSearch', '').capitalize()
+
+                tag_list = parse_tags(tags)
+
+                for tag in tag_list:
+
+                    local_image.tags.add(tag)
+
+                return HttpResponseRedirect(reverse('webgallery_edit_image', args=(image_id, )))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
+
     else:
 
-        if request.method == 'POST':
-
-            tags = request.POST.get('txtSearch', '').capitalize()
-
-            tag_list = parse_tags(tags)
-
-            for tag in tag_list:
-
-                local_image.tags.add(tag)
-
-    return HttpResponseRedirect(reverse('webgallery_edit_image', args=(image_id, )))
+        return HttpResponseRedirect(reverse('home', args=()))

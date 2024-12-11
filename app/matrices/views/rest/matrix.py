@@ -36,8 +36,9 @@ from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
+from matrices.models import Matrix
 
 from matrices.permissions import MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor
 
@@ -46,7 +47,6 @@ from matrices.serializers import MatrixSerializer
 from matrices.routines import bench_list_by_user_and_direction
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
-from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 
@@ -302,7 +302,7 @@ class MatrixViewSet(viewsets.ModelViewSet):
         # Get All the Cells for this Bench
         cell_list = Cell.objects.filter(Q(matrix=matrix))
 
-        credential = get_credential_for_user(request.user)
+        credential = Credential.objects.get_or_none(username=request.user.username)
 
         environment = get_primary_cpw_environment()
 

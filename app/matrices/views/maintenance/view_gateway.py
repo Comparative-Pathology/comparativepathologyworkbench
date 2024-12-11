@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_gateway.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,13 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This file contains the view_gateway view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -48,16 +48,20 @@ def view_gateway(request, gateway_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        gateway = Gateway.objects.get_or_none(id=gateway_id)
 
-        gateway = get_object_or_404(Gateway, pk=gateway_id)
+        if gateway:
 
-        data.update({
-            'gateway_id': gateway_id,
-            'gateway': gateway
-        })
+            data = get_header_data(request.user)
 
-        return render(request, 'maintenance/detail_gateway.html', data)
+            data.update({'gateway_id': gateway_id,
+                         'gateway': gateway})
+
+            return render(request, 'maintenance/detail_gateway.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

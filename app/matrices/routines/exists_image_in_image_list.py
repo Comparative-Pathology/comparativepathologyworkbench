@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_image_in_image_list.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is the supplied image in the supplied image list?
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from os import urandom
-
-
-"""
-    Get the Images from a particular Collection
-"""
+#
+#   Get the Images from a particular Collection
+#
 def exists_image_in_image_list(a_image, a_image_list):
 
     image_exist = False
@@ -45,6 +43,5 @@ def exists_image_in_image_list(a_image, a_image_list):
         if image.id == a_image.id:
 
             image_exist = True
-
 
     return image_exist

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         convert_url_ebi_sca_to_chart_id.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,26 +26,20 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Convert an EBI SCA URL to a CPW Chart Id
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from datetime import datetime
 
-from os import urandom
-
 from urllib.parse import urlparse
 
-from matrices.routines import exists_server_for_url
-from matrices.routines import get_server_list_for_url
-from matrices.routines.validate_an_omero_url import validate_an_omero_url
 from matrices.routines.validate_an_ebi_sca_url import validate_an_ebi_sca_url
 
 
-"""
-    Convert an EBI SCA URL to a CPW Chart Id
-"""
+#
+#   Convert an EBI SCA URL to a CPW Chart Id
+#
 def convert_url_ebi_sca_to_chart_id(a_url):
 
     chart_string_out = ""
@@ -93,10 +88,12 @@ def convert_url_ebi_sca_to_chart_id(a_url):
 
             if geneId != '':
 
-                chart_string_out = date_time + '_' + experiment_id + '_' + str(type.upper()) + '_' + str(option) + '_' + str(colourBy) + '_' + geneId + '.png'
+                chart_string_out = date_time + '_' + experiment_id + '_' + str(type.upper()) + \
+                    '_' + str(option) + '_' + str(colourBy) + '_' + geneId + '.png'
 
             else:
 
-                chart_string_out = date_time + '_' + experiment_id + '_' + str(type.upper()) + '_' + str(option) + '_' + str(colourBy) + '_NoGene' + '.png'
+                chart_string_out = date_time + '_' + experiment_id + '_' + str(type.upper()) + \
+                    '_' + str(option) + '_' + str(colourBy) + '_NoGene' + '.png'
 
     return chart_string_out

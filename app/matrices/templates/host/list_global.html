@@ -139,7 +139,7 @@ The list global template
     {% else %}
     <td>&nbsp;</td>
 		{% endif %}
-    <td>CPW:{{ bench.matrix_id|stringformat:"06d" }}</td>
+    <td>{{ bench.get_formatted_id }}</td>
 	  <td>{{ bench.matrix_title|truncatechars:75 }}</td>
 	  <td>{% userdateformat bench.matrix_created date_format %}</td>
   	<td>{% userdateformat bench.matrix_modified date_format %}</td>
@@ -225,7 +225,7 @@ The list global template
     <td>&nbsp;</td>
 		{% endif %}
 
-  	<td>{{ collection.collection_id|stringformat:"06d" }}</td>
+  	<td>{{ collection.get_formatted_id }}</td>
 	  <td>{{ collection.collection_title }}</td>
 	  <td>{{ collection.collection_image_count }}</td>
 	  <td>{{ collection.collection_owner }}</td>
@@ -299,10 +299,14 @@ The list global template
 				  <a class="btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
 		    {% endif %}
 
-          <a class="btn btn-primary" href="{% url 'list_images' image_summary.image_collection_id %}"><i class="fa fa-eye"></i> View Collection "{{ image_summary.image_collection_id|stringformat:"06d" }}"</a>
+        {% for image_collection in image_summary.get_collections %}
+          <a class="btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.get_formatted_id }}"</a>
+        {% endfor %}
 
-        {% if image_summary.image_matrix_id != 0 %}
-          <a class="btn btn-primary" href="{% url 'matrix' image_summary.image_matrix_id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"</a>
+        {% if image_summary.has_matrices %}
+          {% for image_matrix in image_summary.get_matrices %}
+          <a class="btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "{{ image_matrix.get_formatted_id }}"</a>
+          {% endfor %}
         {% endif %}
 
         </div><!-- End of generic-dropdown-content -->
@@ -338,26 +342,43 @@ The list global template
 	<td colspan="3">{{ image_summary.image_server }}</td>
 </tr>
 
-<tr id="image_summary-{{image_summary.image_id}}-D">
+      {% for image_collection in image_summary.get_collections %}
+<tr id="image_summary-{{image_summary.image_id}}{{image_summary.image_ordering_permitted_id}}-D">
+        {% if forloop.first %}
   <td colspan="1">&nbsp;</td>
-	<td><strong>Hidden:</strong></td>
-	<td colspan="2">{{ image_summary.image_hidden }}</td>
-	<td><strong>Collection:</strong></td>
-	<td colspan="3">"{{ image_summary.image_collection_id|stringformat:"06d" }}"; "{{ image_summary.image_collection_title }}"; (Owned By {{ image_summary.image_collection_owner }}) <a href="{% url 'list_images' image_summary.image_collection_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
-</tr>
-
-<tr id="image_summary-{{image_summary.image_id}}-E">
+  <td><strong>Hidden:</strong></td>
+  <td colspan="2">{{ image_summary.image_hidden }}</td>
+        {% else %}
   <td colspan="1">&nbsp;</td>
-	<td><strong>Owner:</strong></td>
-	<td colspan="2">{{ image_summary.image_owner }}</td>
-	<td><strong>Bench:</strong></td>
-      {% if image_summary.image_matrix_id == 0 %}
-	<td colspan="3">Image NOT Used in a Bench!</td>
-      {% else %}
-	<td colspan="3">"CPW:{{ image_summary.image_matrix_id|stringformat:"06d" }}"; "{{ image_summary.image_matrix_title }}"; (Owned By {{ image_summary.image_matrix_owner }}) <a href="{% url 'matrix' image_summary.image_matrix_id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
-      {% endif %}
+  <td>&nbsp;</td>
+  <td colspan="2">&nbsp;</td>
+        {% endif %}
+  <td><strong>Collection:</strong></td>
+  <td colspan="3">"{{ image_collection.get_formatted_id }}"; "{{ image_collection.title }}"; (Owned By {{ image_collection.owner.username }}) <a href="{% url 'list_images' image_collection.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
 </tr>
+      {% endfor %}
 
+    {% if image_summary.has_matrices %}
+      {% for image_matrix in image_summary.get_matrices %}
+  <tr id="image_summary-{{image_summary.image_id}}-E">
+    <td colspan="1">&nbsp;</td>
+        {% if forloop.first %}
+    <td><strong>Owner:</strong></td>
+    <td colspan="2">{{ image_summary.image_owner }}</td>
+        {% else %}
+    <td><strong>&nbsp;</td>
+    <td colspan="2">&nbsp;</td>
+        {% endif %}
+    <td><strong>Bench:</strong></td>
+        {% if image_summary.image_matrix_id == 0 %}
+    <td colspan="3">Image NOT Used in a Bench!</td>
+        {% else %}
+    <td colspan="3">"{{ image_matrix.get_formatted_id }}"; "{{ image_matrix.title }}"; (Owned By {{ image_matrix.owner.username }}) <a href="{% url 'matrix' image_matrix.id %}"><button class="button button-view"><i class="fa fa-eye"></i></button></a></td>
+        {% endif %}
+  </tr>
+      {% endfor %}
+    {% endif %}
+  
       {% if image_summary.has_tags %}
 <tr id="image_summary-{{image_summary.image_id}}-F">
   <td colspan="3">&nbsp;
@@ -365,9 +386,6 @@ The list global template
   <td><strong>Tags:</strong>
 	</td>
   <td colspan="6">
-	      {% for tag in image_summary.get_tags %}
-    <a href="{% url 'list_images' image_summary.image_collection_id tag.id %}" class="badge badge-info">#{{ tag.name }}</a>
-	      {% endfor %}
 	</td>
 </tr>
       {% else %}
@@ -440,7 +458,7 @@ The list global template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ bench.matrix_id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench {{ bench.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -479,7 +497,7 @@ The list global template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Collection {{ collection.collection_id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Collection {{ collection.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });

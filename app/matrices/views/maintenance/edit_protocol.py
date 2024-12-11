@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_protocol.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -23,17 +24,15 @@
 # License along with this program; if not, write to the Free
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
-#\brief
-#
+# \brief
 # This file contains the edit_protocol view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -45,8 +44,9 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
-# EDIT A TRANSMISSION PROTOCOL
+#   EDIT A TRANSMISSION PROTOCOL
 #
 @login_required
 def edit_protocol(request, protocol_id):
@@ -55,38 +55,46 @@ def edit_protocol(request, protocol_id):
 
         data = get_header_data(request.user)
 
-        protocol = get_object_or_404(Protocol, pk=protocol_id)
+        protocol = Protocol.objects.get_or_none(id=protocol_id)
 
-        if request.method == HTTP_POST:
+        if protocol:
 
-            form = ProtocolForm(request.POST, instance=protocol)
+            if request.method == HTTP_POST:
 
-            if form.is_valid():
+                form = ProtocolForm(request.POST, instance=protocol)
 
-                protocol = form.save(commit=False)
+                if form.is_valid():
 
-                protocol.set_owner(request.user)
+                    protocol = form.save(commit=False)
 
-                protocol.save()
+                    protocol.set_owner(request.user)
 
-                messages.success(request, 'Protocol ' + protocol.name + ' Updated!')
+                    protocol.save()
 
-                return HttpResponseRedirect(reverse('maintenance', args=()))
+                    messages.success(request, 'Protocol ' + protocol.name + ' Updated!')
+
+                    return HttpResponseRedirect(reverse('maintenance', args=()))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0130 Edit Protocol - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0130 Edit Protocol - Form is Invalid!")
+
+                    data.update({'form': form,
+                                 'protocol': protocol})
 
             else:
 
-                messages.error(request, "CPW_WEB:0130 Edit Protocol - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0130 Edit Protocol - Form is Invalid!")
+                form = ProtocolForm(instance=protocol)
 
-                data.update({ 'form': form, 'protocol': protocol })
+                data.update({'form': form,
+                             'protocol': protocol})
+
+            return render(request, 'maintenance/edit_protocol.html', data)
 
         else:
 
-            form = ProtocolForm(instance=protocol)
-
-            data.update({ 'form': form, 'protocol': protocol })
-
-        return render(request, 'maintenance/edit_protocol.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

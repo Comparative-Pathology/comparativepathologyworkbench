@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_image_link.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_image_link view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import subprocess
@@ -35,52 +35,64 @@ import subprocess
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Artefact
+from matrices.models import Credential
 from matrices.models import ImageLink
-
-from matrices.routines import credential_exists
-from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_header_data
 
 
 #
-# DELETE AN IMAGE LINK
+#   DELETE AN IMAGE LINK
 #
 @login_required
 def delete_image_link(request, image_link_id):
 
-    data = get_header_data(request.user)
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
-        collection = get_active_collection_for_user(request.user)
+        image_link = ImageLink.objects.get_or_none(id=image_link_id)
 
-        image_link = get_object_or_404(ImageLink, pk=image_link_id)
+        if image_link:
 
-        if image_link.is_owned_by(request.user) or request.user.is_superuser:
+            if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
-            artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+                artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
 
-            if artefact.has_location():
+                if artefact:
 
-                rm_command = 'rm ' + str(artefact.location)
+                    if artefact.has_location():
 
-                process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                        rm_command = 'rm ' + str(artefact.location)
 
-            messages.success(request, 'Image Link ' + str(image_link.id) + ' DELETED from the Workbench!')
+                        process = subprocess.Popen(rm_command,
+                                                   shell=True,
+                                                   stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE,
+                                                   universal_newlines=True)
 
-            image_link.delete()
+                    messages.success(request, 'Image Link ' + str(image_link.id) + ' DELETED from the Workbench!')
 
-            artefact.delete()
+                    image_link.delete()
+
+                    artefact.delete()
+
+                else:
+
+                    messages.success(request, 'Image Link ' + str(image_link.id) + ' DELETED from the Workbench!')
+
+                    image_link.delete()
+
+            else:
+
+                messages.error(request, 'Image Link ' + str(image_link.id) + ' NOT DELETED from the Workbench!')
+
+            return HttpResponseRedirect(reverse('link_images', args=(0, 0)))
 
         else:
 
-            messages.error(request, 'Image Link ' + str(image_link.id) + ' NOT DELETED from the Workbench!')
-
-        return HttpResponseRedirect(reverse('link_images', args=(0, 0)))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_public_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,12 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # The list_public_matrix VIEW
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
-
-from sortable_listview import SortableListView
 
 from matrices.models import MatrixPublicSummary
 
@@ -41,6 +39,8 @@ from matrices.forms import MatrixPublicSummarySearchForm
 from matrices.routines import get_header_data
 from matrices.routines import bench_public_list_by_direction
 from matrices.routines import get_primary_cpw_environment
+
+from sortable_listview import SortableListView
 
 
 #

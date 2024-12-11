@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-###!
-# \file         get_image_count_for_image.py
+#
+# ##
+# \file         get_or_none_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,22 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Count the Images for a particular Image
-###
+# Return the User OR None for a particular User Id
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from django.apps import apps
+from django.contrib.auth.models import User
 
 
-"""
-    Count the Images for a particular Image
-"""
-def get_image_count_for_image(image_id):
+#
+#   Return the User OR None for a particular User Id
+#
+def get_or_none_user(user_id):
 
-    Image = apps.get_model('matrices', 'Image')
+    user = None
 
-    return Image.objects.filter(identifier=image_id).count()
+    if User.objects.filter(id=user_id).exists():
+
+        user = User.objects.get(id=user_id)
+
+    return user

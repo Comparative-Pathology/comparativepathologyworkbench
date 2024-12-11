@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         matrixisreadonlyorisadminorisowneroriseditor.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,12 +26,13 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Matrix Is Read Only Or (User) Is Admin Or Is Owner Or Is Editor Permission.
-###
+# ##
+#
 from rest_framework import permissions
 
+from matrices.models import Credential
+
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import credential_exists
-from matrices.routines import credential_apppwd
 
 
 class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
@@ -70,7 +72,9 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
                 if obj.owner == request.user:
 
                     # A Users must have a Credential record and a Password to write to WordPress.
-                    if credential_exists(request.user) and credential_apppwd(request.user) != '':
+                    credential = Credential.objects.get_or_none(username=request.user.username)
+
+                    if credential and credential.has_apppwd():
 
                         return_flag = True
 
@@ -80,18 +84,17 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
                     if authority.is_editor() or authority.is_owner() or authority.is_admin():
 
                         # A Users must have a Credential record and a Password to write to WordPress.
-                        if credential_exists(request.user) and credential_apppwd(request.user) != '':
+                        credential = Credential.objects.get_or_none(username=request.user.username)
+
+                        if credential and credential.has_apppwd():
 
                             return_flag = True
-
 
         if request.user.username == 'guest':
 
             return_flag = False
 
-
         return return_flag
-
 
     """
     Custom permission to allow:
@@ -112,14 +115,14 @@ class MatrixIsReadOnlyOrIsAdminOrIsOwnerOrIsEditor(permissions.BasePermission):
         else:
 
             # A Users must have a Credential record and a Password to write to WordPress.
-            if credential_exists(request.user) and credential_apppwd(request.user) != '':
+            credential = Credential.objects.get_or_none(username=request.user.username)
+
+            if credential and credential.has_apppwd():
 
                 return_flag = True
-
 
         if request.user.username == 'guest':
 
             return_flag = False
-
 
         return return_flag

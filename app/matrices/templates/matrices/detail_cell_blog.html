@@ -37,7 +37,7 @@ The detail cell blog template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
-			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">{{ matrix.get_formatted_id }}</a></li>
 			<li>Cell Commentary</li>
 
 {% endblock %}
@@ -87,7 +87,7 @@ The detail cell blog template
 {% endif %}
 
 
-	<h1>CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"</h1>
+	<h1>{{ cell.get_formatted_id }}, "{{ matrix.title }}"</h1>
 
 	<h3>Cell Commentary</h3>
 

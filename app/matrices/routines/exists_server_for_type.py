@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_server_for_type.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Are there any Servers for a particular Server Type?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Are there any Servers for a particular Server Type?
-"""
+#
+#   Are there any Servers for a particular Server Type?
+#
 def exists_server_for_type(a_type):
 
     Server = apps.get_model('matrices', 'Server')

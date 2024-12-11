@@ -34,7 +34,6 @@ import subprocess
 
 from django.apps import apps
 
-from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
 from matrices.routines.get_collections_for_image import get_collections_for_image
 from matrices.routines.exists_image_in_cells import exists_image_in_cells
 from matrices.routines.exists_bench_for_last_used_collection import exists_bench_for_last_used_collection
@@ -166,7 +165,7 @@ def collection_delete_consequences(a_user, a_collection):
                 user.profile.set_last_used_collection(None)
                 user.save()
 
-        if a_collection == get_active_collection_for_user(a_user):
+        if a_collection == a_user.profile.active_collection:
 
             a_user.profile.set_active_collection(None)
             a_user.save()

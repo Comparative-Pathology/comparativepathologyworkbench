@@ -73,13 +73,13 @@ def new_collection_authority(request):
                 messages.error(request, "CPW_WEB:0170 New Collection Authority - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0170 New Collection Authority - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = CollectionAuthorityForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'maintenance/new_collection_authority.html', data)
 

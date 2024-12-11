@@ -36,15 +36,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import ImageSummaryOrderingForm
 
 from matrices.models import Collection
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 from matrices.models import Image
-
-from matrices.routines import credential_exists
 
 
 #
@@ -61,11 +58,17 @@ def collection_ordering_selection(request, collection_id, image_id, permitted_id
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(Collection, collection_id)
+    object = Collection.objects.get_or_none(id=collection_id)
+
+    if not object:
+
+        raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -156,7 +159,5 @@ def collection_ordering_selection(request, collection_id, image_id, permitted_id
 
         form = ImageSummaryOrderingForm(my_ordering_list, init_ordering=my_init_ordering)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

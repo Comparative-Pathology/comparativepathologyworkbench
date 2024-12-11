@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         shuffle_columns.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,26 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the shuffle_columns view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 
 from matrices.models import Cell
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
 
 
 #
-# SHUFFLE COLUMNS - MOVE COLUMN AND PUSH EXISTING COLUMNS TO LEFT OR RIGHT
+#   SHUFFLE COLUMNS - MOVE COLUMN AND PUSH EXISTING COLUMNS TO LEFT OR RIGHT
 #
 @login_required()
 def shuffle_columns(request):
@@ -56,24 +54,29 @@ def shuffle_columns(request):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
-
-        raise PermissionDenied
-
     source = request.POST['source']
     target = request.POST['target']
 
-    in_source_cell = get_object_or_404(Cell, pk=source)
-    in_target_cell = get_object_or_404(Cell, pk=target)
+    in_source_cell = Cell.objects.get_or_none(id=source)
 
-    source_xcoordinate = in_source_cell.xcoordinate
-    target_xcoordinate = in_target_cell.xcoordinate
+    if not in_source_cell:
 
-    matrix = in_source_cell.matrix
+        raise PermissionDenied
 
-    user = get_object_or_404(User, pk=request.user.id)
+    in_target_cell = Cell.objects.get_or_none(id=target)
 
-    if credential_exists(user):
+    if not in_target_cell:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        source_xcoordinate = in_source_cell.xcoordinate
+        target_xcoordinate = in_target_cell.xcoordinate
+
+        matrix = in_source_cell.matrix
 
         if exists_update_for_bench_and_user(matrix, request.user):
 

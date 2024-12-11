@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_bench_authority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_bench_authority view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Authority
@@ -41,32 +40,41 @@ from matrices.models import Authority
 from matrices.routines import exists_bench_authorisation_viewer
 from matrices.routines import exists_bench_authorisation_editor
 
+
 #
-# DELETE A BENCH AUTHORITY
+#   DELETE A BENCH AUTHORITY
 #
 @login_required
 def delete_bench_authority(request, bench_authority_id):
 
     if request.user.is_superuser:
 
-        authority = get_object_or_404(Authority, pk=bench_authority_id)
+        authority = Authority.objects.get_or_none(id=bench_authority_id)
 
-        if authority.is_viewer() and exists_bench_authorisation_viewer():
+        if authority:
 
-            messages.error(request, 'CPW_WEB:0460 Bench Authority ' + authority.name + ' NOT Deleted - VIEWER Bench Authorisations still exist!')
+            if authority.is_viewer() and exists_bench_authorisation_viewer():
 
-        else:
-
-            if authority.is_editor() and exists_bench_authorisation_editor():
-
-                messages.error(request, 'CPW_WEB:0470 Bench Authority ' + authority.name + ' NOT Deleted - EDITOR Bench Authorisations still exist!')
+                messages.error(request, 'CPW_WEB:0460 Bench Authority ' + authority.name +
+                               ' NOT Deleted - VIEWER Bench Authorisations still exist!')
 
             else:
 
-                messages.success(request, 'Bench Authority ' + authority.name + ' Deleted!')
-                authority.delete()
+                if authority.is_editor() and exists_bench_authorisation_editor():
 
-        return HttpResponseRedirect(reverse('maintenance', args=()))
+                    messages.error(request, 'CPW_WEB:0470 Bench Authority ' + authority.name +
+                                   ' NOT Deleted - EDITOR Bench Authorisations still exist!')
+
+                else:
+
+                    messages.success(request, 'Bench Authority ' + authority.name + ' Deleted!')
+                    authority.delete()
+
+            return HttpResponseRedirect(reverse('maintenance', args=()))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

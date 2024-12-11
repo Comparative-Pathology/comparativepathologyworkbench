@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         matrixsummary.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,10 +26,27 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Bench Summary Model - for a VIEW not a table ;-)
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
+
+
+#
+#    The MatrixSummary Manager Class
+#
+class MatrixSummaryManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, MatrixSummary.DoesNotExist):
+
+            return None
 
 
 #
@@ -50,6 +68,8 @@ class MatrixSummary(models.Model):
     matrix_authorisation_id = models.IntegerField(default=0, blank=False)
     matrix_authorisation_permitted = models.CharField(max_length=50, default='')
     matrix_authorisation_authority = models.CharField(max_length=12, default='')
+
+    objects = MatrixSummaryManager()
 
     class Meta:
         managed = False
@@ -73,7 +93,7 @@ class MatrixSummary(models.Model):
             {self.matrix_authorisation_authority}"
 
     def __repr__(self):
-        
+
         return f"{self.matrix_id}, \
             {self.matrix_title}, \
             {self.matrix_description}, \
@@ -169,3 +189,9 @@ class MatrixSummary(models.Model):
         else:
             return False
 
+    #
+    #   Returns the Formatted ID for the Bench
+    #
+    def get_formatted_id(self):
+
+        return "CPW:" + format(int(self.matrix_id), '06d')

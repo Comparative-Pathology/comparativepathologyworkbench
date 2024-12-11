@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         show_cpw_upload_server.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the show_cpw_upload_server view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import os
@@ -38,18 +38,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import Server
 
+from matrices.models import Credential
 from matrices.models import Document
 
 from matrices.forms import DocumentForm
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import validate_a_cpw_url
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
@@ -58,86 +57,92 @@ HTTP_POST = 'POST'
 
 
 #
-# SHOW A SEARCH BOX FOR THE CPW SERVER TO UPLOAD A FILE
+#   SHOW A SEARCH BOX FOR THE CPW SERVER TO UPLOAD A FILE
 #
 @login_required()
 def show_cpw_upload_server(request, server_id):
-    """
-    Show the CPW Server
-    """
 
     if request.user.username == 'guest':
 
         raise PermissionDenied
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        server = Server.objects.get_or_none(id=server_id)
 
-        server = get_object_or_404(Server, pk=server_id)
+        if server:
 
-        if server.is_cpw():
+            if server.is_cpw():
 
-            if request.method == HTTP_POST:
+                if request.method == HTTP_POST:
 
-                form = DocumentForm(request.POST, request.FILES)
+                    form = DocumentForm(request.POST, request.FILES)
 
-                if form.is_valid():
+                    if form.is_valid():
 
-                    cd = form.cleaned_data
+                        cd = form.cleaned_data
 
-                    url_string = cd.get('source_url')
+                        url_string = cd.get('source_url')
 
-                    if validate_a_cpw_url(url_string):
+                        if validate_a_cpw_url(url_string):
 
-                        if Document.objects.filter(owner=request.user).exists():
+                            if Document.objects.filter(owner=request.user).exists():
 
-                            Document.objects.filter(owner=request.user).delete()
+                                Document.objects.filter(owner=request.user).delete()
 
-                        document = form.save(commit=False)
-                        
-                        document.set_owner(request.user)
+                            document = form.save(commit=False)
 
-                        chart_id = str(document.location)
+                            document.set_owner(request.user)
 
-                        document.save()
+                            chart_id = str(document.location)
 
-                        now = datetime.now()
-                        date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
+                            document.save()
 
-                        initial_path = document.location.path
-                        new_chart_id = date_time + '_' + chart_id
-                        new_path = '/' + new_chart_id
+                            now = datetime.now()
+                            date_time = now.strftime('%Y%m%d-%H:%M:%S.%f')[:-3]
 
-                        new_full_path = environment.document_root + '/' + new_chart_id
+                            initial_path = document.location.path
+                            new_chart_id = date_time + '_' + chart_id
+                            new_path = '/' + new_chart_id
 
-                        document.set_location(new_path)
+                            environment = get_primary_cpw_environment()
 
-                        os.rename(initial_path, new_full_path)
+                            new_full_path = environment.document_root + '/' + new_chart_id
 
-                        document.save()
+                            document.set_location(new_path)
 
-                        return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=new_chart_id)
+                            os.rename(initial_path, new_full_path)
+
+                            document.save()
+
+                            return redirect('webgallery_show_cpw_image', server_id=server.id, image_id=new_chart_id)
+
+                        else:
+
+                            messages.error(request, "CPW_WEB:0280 Show CPW Upload - Invalid URL!")
+                            form.add_error(None, "CPW_WEB:0280 Show CPW Upload - Invalid URL!")
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0280 Show CPW Upload - Invalid URL!")
-                        form.add_error(None, "CPW_WEB:0280 Show CPW Upload - Invalid URL!")
+                        messages.error(request, "CPW_WEB:0080 Show CPW Upload - Form is Invalid!")
+                        form.add_error(None, "CPW_WEB:0080 Show CPW Upload - Form is Invalid!")
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0080 Show CPW Upload - Form is Invalid!")
-                    form.add_error(None, "CPW_WEB:0080 Show CPW Upload - Form is Invalid!")
+                    form = DocumentForm()
+
+                data = get_header_data(request.user)
+
+                data.update({'server': server,
+                             'form': form})
+
+                return render(request, 'gallery/show_cpw_upload_server.html', data)
 
             else:
 
-                form = DocumentForm()
-
-            data.update({ 'server': server, 'form': form })
-
-            return render(request, 'gallery/show_cpw_upload_server.html', data)
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         convert_url_omero_to_cpw.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # try to convert an OMERO URL to a CPW Equivalent?
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from urllib.parse import urlparse
@@ -126,7 +128,8 @@ def convert_url_omero_to_cpw(request, a_url):
 
                             if environment.is_blitz_gateway():
 
-                                server_data = server.get_imaging_server_project_json_blitz(query_id,
+                                server_data = \
+                                    server.get_imaging_server_project_json_blitz(query_id,
                                                                                  1,
                                                                                  environment.gateway_pagination,
                                                                                  environment.gateway_port)

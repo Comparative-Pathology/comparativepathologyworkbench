@@ -34,12 +34,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 
 from matrices.models import Collection
+from matrices.models import Credential
 
 from matrices.routines import collection_delete_consequences
-from matrices.routines import credential_exists
 
 
 #
@@ -56,11 +55,17 @@ def collection_delete(request, collection_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    collection = get_object_or_404(Collection, pk=collection_id)
+    collection = Collection.objects.get_or_none(id=collection_id)
+
+    if not collection:
+
+        raise PermissionDenied
 
     if collection.is_locked():
 
@@ -72,12 +77,12 @@ def collection_delete(request, collection_id):
 
     if collection_delete_flag is True:
 
-        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' DELETED!')
+        messages.success(request, 'Collection ' + collection.get_formatted_id() + ' DELETED!')
 
         collection.delete()
 
     else:
 
-        messages.error(request, 'Collection ' + "{:06d}".format(collection.id) + ' NOT Deleted!')
+        messages.error(request, 'Collection ' + collection.get_formatted_id() + ' NOT Deleted!')
 
     return JsonResponse({'object_id': object_id})

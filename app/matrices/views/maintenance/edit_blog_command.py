@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_blog_command.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_blog_command view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -45,8 +44,9 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
-# EDIT A COMMAND TO ACCESS THE BLOGGING ENGINE
+#   EDIT A COMMAND TO ACCESS THE BLOGGING ENGINE
 #
 @login_required
 def edit_blog_command(request, blog_id):
@@ -55,38 +55,46 @@ def edit_blog_command(request, blog_id):
 
         data = get_header_data(request.user)
 
-        blog = get_object_or_404(Blog, pk=blog_id)
+        blog = Blog.objects.get_or_none(id=blog_id)
 
-        if request.method == HTTP_POST:
+        if blog:
 
-            form = BlogForm(request.POST, instance=blog)
+            if request.method == HTTP_POST:
 
-            if form.is_valid():
+                form = BlogForm(request.POST, instance=blog)
 
-                blog = form.save(commit=False)
+                if form.is_valid():
 
-                blog.set_owner(request.user)
+                    blog = form.save(commit=False)
 
-                blog.save()
+                    blog.set_owner(request.user)
 
-                messages.success(request, 'Blog Command ' + blog.name + ' Updated!')
+                    blog.save()
 
-                return HttpResponseRedirect(reverse('maintenance', args=()))
+                    messages.success(request, 'Blog Command ' + blog.name + ' Updated!')
+
+                    return HttpResponseRedirect(reverse('maintenance', args=()))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0100 Edit Blog Command - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0100 Edit Blog Command - Form is Invalid!")
+
+                    data.update({'form': form,
+                                 'blog': blog})
 
             else:
 
-                messages.error(request, "CPW_WEB:0100 Edit Blog Command - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0100 Edit Blog Command - Form is Invalid!")
+                form = BlogForm(instance=blog)
 
-                data.update({ 'form': form, 'blog': blog })
+                data.update({'form': form,
+                             'blog': blog})
+
+            return render(request, 'maintenance/edit_blog_command.html', data)
 
         else:
 
-            form = BlogForm(instance=blog)
-
-            data.update({ 'form': form, 'blog': blog })
-
-        return render(request, 'maintenance/edit_blog_command.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_authorisation_create.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,34 +25,31 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_authorisation_create view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import AuthorisationForm
 
-from matrices.models import Matrix
 from matrices.models import Authority
-from matrices.models import Authorisation
+from matrices.models import Credential
+from matrices.models import Matrix
 
 from matrices.routines import authorisation_crud_consequences
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
 
 
 #
-# ADD A BENCH AUTHORISATION
+#   ADD A BENCH AUTHORISATION
 #
 @login_required()
 def bench_authorisation_create(request, bench_id=None):
@@ -68,7 +66,9 @@ def bench_authorisation_create(request, bench_id=None):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
@@ -77,7 +77,6 @@ def bench_authorisation_create(request, bench_id=None):
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
-
 
         form = AuthorisationForm(instance=object, data=request.POST)
 
@@ -93,7 +92,6 @@ def bench_authorisation_create(request, bench_id=None):
 
                 raise PermissionDenied
 
-
             object.set_matrix(bench)
             object.set_authority(authority)
 
@@ -101,12 +99,12 @@ def bench_authorisation_create(request, bench_id=None):
 
             object.save()
 
-            messages.success(request, 'Bench Authorisation ' + str(object.id) + ' ADDED for Bench CPW:' + '{num:06d}'.format(num=object.matrix.id))
+            messages.success(request, 'Bench Authorisation ' + str(object.id) + ' ADDED for Bench ' +
+                             object.matrix.get_formatted_id())
 
     else:
 
         form = AuthorisationForm()
-
 
     if bench_id is None:
 
@@ -120,9 +118,15 @@ def bench_authorisation_create(request, bench_id=None):
 
     else:
 
-        bench = get_object_by_uuid_or_404(Matrix, bench_id)
+        bench = Matrix.objects.get_or_none(id=bench_id)
 
-        if not exists_update_for_bench_and_user(bench, request.user):
+        if bench:
+
+            if not exists_update_for_bench_and_user(bench, request.user):
+
+                raise PermissionDenied
+
+        else:
 
             raise PermissionDenied
 
@@ -137,7 +141,5 @@ def bench_authorisation_create(request, bench_id=None):
 
     form.fields['bench'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id, obj.title)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

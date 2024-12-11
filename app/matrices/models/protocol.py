@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         protocol.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,30 +26,38 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The (communications) Protocol (for a server) Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
 
-from random import randint
 
-"""
-    PROTOCOL
-"""
+#
+#    The Protocol Manager Class
+#
+class ProtocolManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Protocol.DoesNotExist):
+
+            return None
+
+
+#
+#   Protocol
+#
 class Protocol(models.Model):
     name = models.CharField(max_length=12, blank=False, unique=True, default='')
     owner = models.ForeignKey(User, related_name='protocols', on_delete=models.DO_NOTHING)
+
+    objects = ProtocolManager()
 
     @classmethod
     def create(cls, name, owner):

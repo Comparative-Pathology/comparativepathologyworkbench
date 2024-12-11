@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_command_for_protocol.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Are there any API Commands for a particular Protocol?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Are there any API Commands for a particular Protocol?
-"""
+#
+#   Are there any API Commands for a particular Protocol?
+#
 def exists_command_for_protocol(a_protocol):
 
     Command = apps.get_model('matrices', 'Command')

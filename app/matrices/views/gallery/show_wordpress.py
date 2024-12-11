@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         show_wordpress.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,56 +25,55 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the show_wordpress view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 
+from matrices.models import Credential
 from matrices.models import Server
 
-from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 
 
 #
-# SHOW THE AVAILABLE IMAGES
-#  FROM A WORDPRESS SERVER
+#   SHOW THE AVAILABLE IMAGES
+#    FROM A WORDPRESS SERVER
 #
 @login_required()
 def show_wordpress(request, server_id, page_id):
-    """
-    Show the Wordpress Server
-    """
 
     if request.user.username == 'guest':
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        server = Server.objects.get_or_none(id=server_id)
 
-        server = get_object_or_404(Server, pk=server_id)
+        if server:
 
-        credential = get_credential_for_user(request.user)
+            if server.is_wordpress():
 
-        if server.is_wordpress():
+                server_data = server.get_wordpress_json(credential, page_id)
 
-            server_data = server.get_wordpress_json(credential, page_id)
+                data = get_header_data(request.user)
 
-            data.update(server_data)
+                data.update(server_data)
 
-            return render(request, 'gallery/show_wordpress.html', data)
+                return render(request, 'gallery/show_wordpress.html', data)
+
+            else:
+
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
 

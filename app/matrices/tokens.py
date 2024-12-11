@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         tokens.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,10 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This contains the Account Activation Token Generator
-###
+# ##
+#
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 import six
+
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
@@ -36,5 +39,6 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
             six.text_type(user.pk) + six.text_type(timestamp) +
             six.text_type(user.profile.email_confirmed)
         )
+
 
 account_activation_token = AccountActivationTokenGenerator()

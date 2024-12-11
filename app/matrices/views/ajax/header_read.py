@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         header_read.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,51 +25,55 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX header_read.py view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
-
-from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Cell
 
 
 #
-# READ A HEADER CELL
+#   READ A HEADER CELL
 #
 def header_read(request, bench_id, header_id):
 
-    object = get_object_by_uuid_or_404(Cell, header_id)
-
     htmlString = ''
-    out_title = ''
-    out_description = ''
 
-    if object.title == '':
+    object = Cell.objects.get_or_none(id=header_id)
 
-        out_title = 'No Title'
+    if object:
+
+        out_title = ''
+        out_description = ''
+
+        if object.title == '':
+
+            out_title = 'No Title'
+
+        else:
+
+            out_title = object.title
+
+        if object.description == '':
+
+            out_description = 'No Description'
+
+        else:
+
+            out_description = object.description
+
+        htmlString = '<dl class=\"standard\">'\
+                     '<dt>Title</dt>'\
+                     '<dd>' + out_title + '</dd>'\
+                     '<dt>Description</dt>'\
+                     '<dd>' + out_description + '</dd>'\
+                     '</dl>'
 
     else:
 
-        out_title = object.title
-
-    if object.description == '':
-
-        out_description = 'No Description'
-
-    else:
-
-        out_description = object.description
-
-    htmlString = '<dl class=\"standard\">'\
-                 '<dt>Title</dt>'\
-                 '<dd>' + out_title + '</dd>'\
-                 '<dt>Description</dt>'\
-                 '<dd>' + out_description + '</dd>'\
-                 '</dl>'
+        htmlString = '<h1>HEADER CELL DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

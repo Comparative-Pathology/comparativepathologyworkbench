@@ -34,6 +34,22 @@ from django.db import models
 
 
 #
+#    The CollectionSummary Manager Class
+#
+class CollectionSummaryManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, CollectionSummary.DoesNotExist):
+
+            return None
+
+
+#
 #   The Collection Summary Model (a VIEW for ALL Collections)
 #
 class CollectionSummary(models.Model):
@@ -55,6 +71,8 @@ class CollectionSummary(models.Model):
                                                           default='')
     collection_authorisation_authority = models.CharField(max_length=12,
                                                           default='')
+
+    objects = CollectionSummaryManager()
 
     class Meta:
         managed = False
@@ -112,3 +130,9 @@ class CollectionSummary(models.Model):
         else:
             return False
 
+    #
+    #   Returns the Formatted ID for the Bench
+    #
+    def get_formatted_id(self):
+
+        return format(int(self.collection_id), '06d')

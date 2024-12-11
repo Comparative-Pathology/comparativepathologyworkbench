@@ -24,10 +24,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the signup view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -46,8 +45,9 @@ from matrices.tokens import account_activation_token
 
 HTTP_POST = 'POST'
 
+
 #
-# VIEWS FOR SIGNUP
+#   VIEWS FOR SIGNUP
 #
 def signup(request):
 
@@ -85,12 +85,12 @@ def signup(request):
             messages.error(request, "CPW_WEB:0360 Sign Up - Form is Invalid!")
             form.add_error(None, "CPW_WEB:0360 Sign Up - Form is Invalid!")
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
     else:
 
         form = SignUpForm()
 
-        data.update({ 'form': form })
+        data.update({'form': form})
 
     return render(request, 'user/signup.html', data)

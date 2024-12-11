@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-###!
-# \file         edit_user.py
+#
+# ##
+# \file         edit_constrained_user.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,92 +25,101 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
+# This file contains the edit_constrained_user view routine
+# ##
 #
-# This file contains the edit_user view routine
-#
-###
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib import messages
 
 from matrices.forms import EditConstrainedUserForm
 from matrices.forms import EditConstrainedProfileForm
 
 from matrices.models import Image
 
+from matrices.routines import get_or_none_user
 from matrices.routines import get_header_data
 
 
 HTTP_POST = 'POST'
 
+
 #
-# EDIT A USER
+#   EDIT A USER (Constrained)
 #
 @login_required
 def edit_constrained_user(request, user_id):
 
-    data = get_header_data(request.user)
+    user = get_or_none_user(request.user.id)
 
-    user = get_object_or_404(User, pk=request.user.id)
+    subject = get_or_none_user(user_id)
 
-    subject = get_object_or_404(User, pk=user_id)
+    if not user and not subject:
 
-    data.update({ 'subject': subject })
+        data = get_header_data(request.user)
 
-    if request.method == HTTP_POST:
+        data.update({'subject': subject})
 
-        user_form = EditConstrainedUserForm(request.POST, instance=subject)
-        profile_form = EditConstrainedProfileForm(request.POST, instance=subject.profile)
+        if request.method == HTTP_POST:
 
-        if all((profile_form.is_valid(), user_form.is_valid())):
+            user_form = EditConstrainedUserForm(request.POST, instance=subject)
+            profile_form = EditConstrainedProfileForm(request.POST, instance=subject.profile)
 
-            user = user_form.save()
-            profile = profile_form.save()
+            if all((profile_form.is_valid(), user_form.is_valid())):
 
-            username = subject.username
-            
-            column_map = {'pk': 'e.id'}
-    
-            raw_image_queryset = Image.objects.raw('select e.id from matrices_collection a, auth_user b, matrices_collection_images c, matrices_cell d, matrices_image e \
-                                 where a.owner_id = b.id and b.username = %s and a.id = c.collection_id and c.image_id = d.image_id \
-                                 and c.image_id = e.id', [username], translations=column_map)
+                user = user_form.save()
+                profile = profile_form.save()
 
-            list_of_image_ids = []
+                username = subject.username
 
-            for image in raw_image_queryset:
-        
-                list_of_image_ids.append(int(image.id))
+                column_map = {'pk': 'e.id'}
 
-            image_queryset = Image.objects.filter(pk__in=list_of_image_ids).order_by('id')
+                raw_image_queryset = Image.objects.raw('select e.id from matrices_collection a, auth_user b, \
+                                                       matrices_collection_images c, matrices_cell d, \
+                                                       matrices_image e where a.owner_id = b.id and \
+                                                       b.username = %s and a.id = c.collection_id and \
+                                                       c.image_id = d.image_id and c.image_id = e.id', 
+                                                       [username], translations=column_map)
 
-            image_queryset.update(hidden=profile.hide_collection_image)
+                list_of_image_ids = []
 
-            user.save()
-            profile.save()
+                for image in raw_image_queryset:
 
-            messages.success(request, 'User ' + subject.username + ' Updated!')
+                    list_of_image_ids.append(int(image.id))
 
-            return HttpResponseRedirect(reverse('view_constrained_user', args=(user_id, )))
+                image_queryset = Image.objects.filter(pk__in=list_of_image_ids).order_by('id')
+
+                image_queryset.update(hidden=profile.hide_collection_image)
+
+                user.save()
+                profile.save()
+
+                messages.success(request, 'User ' + subject.username + ' Updated!')
+
+                return HttpResponseRedirect(reverse('view_constrained_user', args=(user_id, )))
+
+            else:
+
+                messages.error(request, "CPW_WEB:0020 Edit User - Form is Invalid!")
+                user_form.add_error(None, "CPW_WEB:0020 Edit User - Form is Invalid!")
+
+                data.update({'user_form': user_form,
+                             'profile_form': profile_form})
 
         else:
 
-            messages.error(request, "CPW_WEB:0020 Edit User - Form is Invalid!")
-            user_form.add_error(None, "CPW_WEB:0020 Edit User - Form is Invalid!")
+            user_form = EditConstrainedUserForm(instance=subject)
+            profile_form = EditConstrainedProfileForm(instance=subject.profile)
 
-            data.update({ 'user_form': user_form, 'profile_form': profile_form })
+            data.update({'user_form': user_form,
+                         'profile_form': profile_form})
+
+        return render(request, 'authorisation/edit_constrained_user.html', data)
 
     else:
 
-        user_form = EditConstrainedUserForm(instance=subject)
-        profile_form = EditConstrainedProfileForm(instance=subject.profile)
-
-        data.update({ 'user_form': user_form, 'profile_form': profile_form })
-
-    return render(request, 'authorisation/edit_constrained_user.html', data)
+        return HttpResponseRedirect(reverse('home', args=()))

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_matrix_blog.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,26 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_matrix_blog view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.forms import CommentForm
+from matrices.models import Credential
 
 from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
@@ -52,44 +50,68 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# VIEW THE BENCH BLOG ENTRY
+#   VIEW THE BENCH BLOG ENTRY
 #
 @login_required
 def view_matrix_blog(request, matrix_id):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    credential = get_credential_for_user(request.user)
+        matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-    if credential_exists(request.user):
+        if matrix:
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
+            environment = get_primary_cpw_environment()
 
-        matrix_cells = matrix.get_matrix()
-        columns = matrix.get_columns()
-        rows = matrix.get_rows()
+            data = get_header_data(request.user)
 
-        blogpost = ''
+            matrix_cells = matrix.get_matrix()
+            columns = matrix.get_columns()
+            rows = matrix.get_rows()
 
-        comment_list = list()
+            blogpost = ''
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
+            comment_list = list()
 
-        if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
+            authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-            if matrix.has_blogpost():
+            if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
 
-                if credential.has_apppwd() and environment.is_wordpress_active():
+                if matrix.has_blogpost():
 
-                    blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
+                    if credential.has_apppwd() and environment.is_wordpress_active():
 
-                    if blogpost['status'] != WORDPRESS_SUCCESS:
+                        blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-                        post_id = ''
+                        if blogpost['status'] != WORDPRESS_SUCCESS:
 
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
+                            post_id = ''
+
+                            returned_blogpost = environment.post_a_post_to_wordpress(credential, matrix.title,
+                                                                                     matrix.description)
+
+                            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+
+                                post_id = returned_blogpost['id']
+
+                            matrix.set_blogpost(post_id)
+
+                            matrix.save()
+
+                            blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
+
+                        comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+
+                else:
+
+                    post_id = ''
+
+                    if credential.has_apppwd() and environment.is_wordpress_active():
+
+                        returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                 matrix.title,
                                                                                  matrix.description)
 
                         if returned_blogpost['status'] == WORDPRESS_SUCCESS:
@@ -102,69 +124,49 @@ def view_matrix_blog(request, matrix_id):
 
                         blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-                    comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+                        comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+
+            if request.method == HTTP_POST:
+
+                form = CommentForm(request.POST)
+
+                if form.is_valid():
+
+                    cd = form.cleaned_data
+
+                    comment = cd.get('comment')
+
+                    if comment != '':
+
+                        if credential.has_apppwd() and environment.is_wordpress_active():
+
+                            returned_comment = environment.post_a_comment_to_wordpress(credential,
+                                                                                       matrix.blogpost,
+                                                                                       comment)
+
+                    return HttpResponseRedirect(reverse('detail_matrix_blog', args=(matrix_id,)))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0580 View Bench Blog - Form is Invalid!")
 
             else:
 
-                post_id = ''
+                form = CommentForm()
 
-                if credential.has_apppwd() and environment.is_wordpress_active():
+            data.update({'form': form,
+                         'matrix': matrix,
+                         'blogpost': blogpost,
+                         'rows': rows,
+                         'columns': columns,
+                         'matrix_cells': matrix_cells,
+                         'comment_list': comment_list})
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                             matrix.title,
-                                                                             matrix.description)
-
-                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-                        post_id = returned_blogpost['id']
-
-                    matrix.set_blogpost(post_id)
-
-                    matrix.save()
-
-                    blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
-
-                    comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
-
-        if request.method == HTTP_POST:
-
-            form = CommentForm(request.POST)
-
-            if form.is_valid():
-
-                cd = form.cleaned_data
-
-                comment = cd.get('comment')
-
-                if comment != '':
-
-                    if credential.has_apppwd() and environment.is_wordpress_active():
-
-                        returned_comment = environment.post_a_comment_to_wordpress(credential,
-                                                                                   matrix.blogpost,
-                                                                                   comment)
-
-                return HttpResponseRedirect(reverse('detail_matrix_blog', args=(matrix_id,)))
-
-            else:
-
-                messages.error(request, "CPW_WEB:0580 View Bench Blog - Form is Invalid!")
+            return render(request, 'matrices/detail_matrix_blog.html', data)
 
         else:
 
-            form = CommentForm()
-
-        data.update({
-            'form': form,
-            'matrix': matrix,
-            'blogpost': blogpost,
-            'rows': rows,
-            'columns': columns,
-            'matrix_cells': matrix_cells,
-            'comment_list': comment_list
-        })
-
-        return render(request, 'matrices/detail_matrix_blog.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

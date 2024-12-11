@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         server_read.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,36 +25,42 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX server_read view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.models import Server
 
+
 #
-# ADD or EDIT AN IMAGE SERVER
+#   Read AN IMAGE SERVER
 #
 @login_required()
 def server_read(request, server_id):
 
-    object = get_object_by_uuid_or_404(Server, server_id)
+    htmlString = ''
 
-    htmlString = '<dl class=\"standard\">'\
-		'<dt>Name</dt>'\
-		'<dd>' + object.name + '</dd>'\
-		'<dt>URL</dt>'\
-		'<dd>' + object.url_server + '</dd>'\
-		'<dt>Type</dt>'\
-		'<dd>' + object.type.name + '</dd>'\
-		'<dt>Accessible</dt>'\
-		'<dd>' + str(object.accessible) + '</dd>'\
-	'</dl>'
+    object = Server.objects.get_or_none(id=server_id)
+
+    if object:
+
+        htmlString = '<dl class=\"standard\">'\
+            '<dt>Name</dt>'\
+            '<dd>' + object.name + '</dd>'\
+            '<dt>URL</dt>'\
+            '<dd>' + object.url_server + '</dd>'\
+            '<dt>Type</dt>'\
+            '<dd>' + object.type.name + '</dd>'\
+            '<dt>Accessible</dt>'\
+            '<dd>' + str(object.accessible) + '</dd>'\
+            '</dl>'
+
+    else:
+
+        htmlString = '<h1>IMAGE SERVER DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

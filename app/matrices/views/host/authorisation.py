@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         authorisation.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,14 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the authorisation view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -39,6 +39,7 @@ from django.urls import reverse
 from matrices.models import Credential
 
 from matrices.routines import get_header_data
+
 
 #
 # SHOW THE AUTHORISATION PAGE
@@ -53,8 +54,7 @@ def authorisation(request):
         user_list = User.objects.all()
         credential_list = Credential.objects.all()
 
-        data.update({ 'user_list': user_list })
-        data.update({ 'credential_list': credential_list })
+        data.update({'user_list': user_list, 'credential_list': credential_list})
 
         return render(request, 'host/authorisation.html', data)
 

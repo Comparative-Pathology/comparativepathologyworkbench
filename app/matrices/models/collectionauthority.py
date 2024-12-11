@@ -40,6 +40,22 @@ AUTHORITY_ADMIN = 'ADMIN'
 
 
 #
+#    The CollectionAuthority Manager Class
+#
+class CollectionAuthorityManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, CollectionAuthority.DoesNotExist):
+
+            return None
+
+
+#
 #   The Collection Authority Model (for Collection Authorisations)
 #
 class CollectionAuthority(models.Model):
@@ -51,6 +67,8 @@ class CollectionAuthority(models.Model):
     owner = models.ForeignKey(User,
                               related_name='collectionauthorities',
                               on_delete=models.DO_NOTHING)
+
+    objects = CollectionAuthorityManager()
 
     @classmethod
     def create(cls, name, owner):

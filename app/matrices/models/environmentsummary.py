@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         environmentsummary.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Environment Summary Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -36,6 +38,22 @@ ENVIRONMENT_CZI = 'CZI'
 ENVIRONMENT_CANADA = 'CANADA'
 ENVIRONMENT_COELIAC = 'COELIAC'
 ENVIRONMENT_DEVELOPMENT = 'DEVELOPMENT'
+
+
+#
+#    The EnvironmentSummary Manager Class
+#
+class EnvironmentSummaryManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, EnvironmentSummary.DoesNotExist):
+
+            return None
 
 
 #
@@ -57,6 +75,8 @@ class EnvironmentSummary(models.Model):
     environment_background_processing = models.BooleanField(default=False)
     environment_window_refresh_time_milliseconds = models.IntegerField(default=0,
                                                                        blank=False)
+
+    objects = EnvironmentSummaryManager()
 
     class Meta:
         managed = False

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,29 +25,36 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_user view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
 from matrices.routines import get_header_data
+from matrices.routines import get_or_none_user
+
 
 #
-# VIEW A USER
+#   VIEW A USER
 #
 @login_required
 def view_user(request, user_id):
 
-    data = get_header_data(request.user)
+    subject = get_or_none_user(user_id)
 
-    subject = get_object_or_404(User, pk=user_id)
+    if subject:
 
-    data.update({ 'subject': subject })
+        data = get_header_data(request.user)
 
-    return render(request, 'authorisation/detail_user.html', data)
+        data.update({'subject': subject})
+
+        return render(request, 'authorisation/detail_user.html', data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

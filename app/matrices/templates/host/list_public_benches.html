@@ -109,7 +109,7 @@ The list benches template
 		</div><!-- End of generic-dropdown -->
 	  </td>
 	
-	  <td>CPW:{{ matrix_public_summary.matrix_public_id|stringformat:"06d" }}</td>
+	  <td>{{ matrix_public_summary.get_formatted_id }}</td>
 	  <td>{{ matrix_public_summary.matrix_public_title|truncatechars:75 }}</td>
 	  <td>{% userdateformat matrix_public_summary.matrix_public_created date_format %}</td>
 	  <td>{% userdateformat matrix_public_summary.matrix_public_modified date_format %}</td>
@@ -312,7 +312,7 @@ The list benches template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_public_summary.matrix_public_id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench {{ matrix_public_summary.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });

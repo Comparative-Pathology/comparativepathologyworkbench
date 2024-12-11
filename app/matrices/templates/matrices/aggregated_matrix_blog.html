@@ -38,10 +38,10 @@ The detail matrix (bench) blog template
 
 			<li><a href="{% url 'list_benches' %}">Workbenches</a></li>
 {% if matrix.is_private %}
-			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">{{ matrix.get_formatted_id }}</a></li>
 {% endif %}
 {% if matrix.is_public %}
-			<li><a href="{% url 'public_matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li><a href="{% url 'public_matrix' matrix.id %}">{{ matrix.get_formatted_id }}</a></li>
 {% endif %}
 			<li>Aggregated Bench and Cell Commentary</li>
 
@@ -93,7 +93,7 @@ The detail matrix (bench) blog template
 
     <h1>Bench and Cell Commentary</h1>
 
-	<h3>Bench Commentary, Bench: CPW:{{ matrix.id|stringformat:"06d" }}, "{{ matrix.title }}"</h3>
+	<h3>Bench Commentary, Bench: {{ matrix.get_formatted_id }}, "{{ matrix.title }}"</h3>
 
 	<h5>Bench Title: "{{ matrix.title }}"</h5>
 
@@ -207,7 +207,7 @@ The detail matrix (bench) blog template
 
     <br />
 
-	<h3>Cell Commentary, Cell: {{ matrix_cell.id }}, Bench: CPW:{{ matrix.id|stringformat:"06d" }}</h3>
+	<h3>Cell Commentary, Cell: {{ matrix_cell.id }}, Bench: {{ matrix.get_formatted_id }}</h3>
 	
 	<h5>Cell Title: "{{ matrix_cell.title|safe }}"</h5>
 

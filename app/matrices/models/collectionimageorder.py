@@ -38,6 +38,22 @@ from matrices.models import Image
 
 
 #
+#    The CollectionImageOrder Manager Class
+#
+class CollectionImageOrderManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, CollectionImageOrder.DoesNotExist):
+
+            return None
+
+
+#
 #   The Collection Image Order Model (for Collections, Images and Users)
 #
 class CollectionImageOrder(models.Model):
@@ -52,6 +68,8 @@ class CollectionImageOrder(models.Model):
                                   related_name='collectionimageorders',
                                   on_delete=models.DO_NOTHING)
     ordering = models.IntegerField(default=0)
+
+    objects = CollectionImageOrderManager()
 
     @classmethod
     def create(cls, collection, image, permitted, ordering):

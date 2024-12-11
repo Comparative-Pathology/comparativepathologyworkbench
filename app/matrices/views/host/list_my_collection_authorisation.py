@@ -37,8 +37,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import CollectionAuthorisation
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 
@@ -52,10 +52,11 @@ def list_my_collection_authorisation(request):
 
         raise PermissionDenied
 
-    data = get_header_data(request.user)
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
+        data = get_header_data(request.user)
         collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__owner=request.user)
 
         text_flag = ' YOUR Collection Permissions'

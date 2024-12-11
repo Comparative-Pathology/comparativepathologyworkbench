@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+#
+# ##
 # \file         charttidyup.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -23,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the Chart Tidy Up admin command
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import subprocess
@@ -39,7 +40,6 @@ from matrices.models import Artefact
 from matrices.models import Server
 
 from matrices.routines import escape_string
-from matrices.routines import exists_artefact_in_table
 from matrices.routines import exists_image_in_table
 from matrices.routines import exists_image_on_webserver
 from matrices.routines import get_images_for_server
@@ -50,6 +50,7 @@ from matrices.routines import get_primary_cpw_environment
 # The Chart Tidy Up admin command
 #
 class Command(BaseCommand):
+
     help = "Tidy Up the Charts stored on the webserver"
 
     def add_arguments(self, parser):
@@ -155,7 +156,9 @@ class Command(BaseCommand):
 
                 new_output = environment.document_root + '/' + output.strip()
 
-                if not exists_artefact_in_table(new_output):
+                artefact = Artefact.objects.get_or_none(location=new_output)
+
+                if not artefact:
 
                     if not exists_image_on_webserver(output.strip()):
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         show_ebi_widget.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,50 +25,53 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the show_ebi_widget view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Server
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 
 #
-# BROWSE THE EBI SERVER WIDGET
+#   BROWSE THE EBI SERVER WIDGET
 #
 @login_required()
 def show_ebi_widget(request, server_id, experiment_id):
-    """
-    Show the EBI widget
-    """
 
-    data = get_header_data(request.user)
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
-        server = get_object_or_404(Server, pk=server_id)
+        server = Server.objects.get_or_none(id=server_id)
 
-        if server.is_ebi_sca():
+        if server:
 
-            server_data = server.get_ebi_widget_json()
+            if server.is_ebi_sca():
 
-            gene = ''
+                data = get_header_data(request.user)
 
-            data.update({ 'experimentAccession': experiment_id, 'geneId': gene })
+                server_data = server.get_ebi_widget_json()
 
-            data.update(server_data)
+                gene = ''
 
-            return render(request, 'ebi/show_widget.html', data)
+                data.update({'experimentAccession': experiment_id, 'geneId': gene})
+
+                data.update(server_data)
+
+                return render(request, 'ebi/show_widget.html', data)
+
+            else:
+
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
 

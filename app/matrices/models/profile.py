@@ -39,7 +39,23 @@ from matrices.models import Collection
 
 
 #
-#   PROFILE
+#    The Profile Manager Class
+#
+class ProfileManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Profile.DoesNotExist):
+
+            return None
+
+
+#
+#   Profile
 #
 class Profile(models.Model):
     user = models.OneToOneField(User,
@@ -61,6 +77,8 @@ class Profile(models.Model):
                                              null=True,
                                              on_delete=models.DO_NOTHING)
     hide_collection_image = models.BooleanField(default=False)
+
+    objects = ProfileManager()
 
     @classmethod
     def create(cls, user, bio, location, birth_date, email_confirmed, active_collection, last_used_collection,

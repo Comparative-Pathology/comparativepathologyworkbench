@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# 
+#
 # ##
 # \file         add_cell.py
 # \author       Mike Wicks
@@ -25,7 +25,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# This file contains the AJAX bench_update view routine
+# This file contains the AJAX add_cell view routine
 # ##
 #
 from __future__ import unicode_literals
@@ -35,20 +35,19 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.forms import MatrixAddCellForm
 
-from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
+from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 
 
 #
-# EDIT A BENCH
+#   Add a Cell
 #
 @login_required()
 def add_cell(request, matrix_id, cell_id):
@@ -61,15 +60,25 @@ def add_cell(request, matrix_id, cell_id):
 
         raise PermissionDenied
 
-    matrix = get_object_or_404(Matrix, pk=matrix_id)
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
+
+    if not matrix:
+
+        raise PermissionDenied
 
     if matrix.is_locked():
 
         raise PermissionDenied
 
-    if credential_exists(request.user):
+    cell = Cell.objects.get_or_none(id=cell_id)
 
-        cell = get_object_or_404(Cell, pk=cell_id)
+    if not cell:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
@@ -118,8 +127,7 @@ def add_cell(request, matrix_id, cell_id):
 
                             shuffleCell.save()
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str()
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
                                          + ' Cell Added with Push Right!')
 
                     # PUSH Down
@@ -149,8 +157,7 @@ def add_cell(request, matrix_id, cell_id):
 
                             shuffleCell.save()
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str()
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
                                          + ' Cell Added with Push Down!')
 
             else:
@@ -158,9 +165,7 @@ def add_cell(request, matrix_id, cell_id):
                 form = MatrixAddCellForm()
                 form.fields['direction'].initial = [1]
 
-            return render(request, template_name, {
-                'form': form,
-            })
+            return render(request, template_name, {'form': form, })
 
     else:
 

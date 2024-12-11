@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,76 +25,87 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_user view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from matrices.routines import credential_exists
-from matrices.routines import exists_authorisation_for_permitted
+from matrices.models import Authorisation
+from matrices.models import Credential
+
+from matrices.routines import get_or_none_user
 from matrices.routines import exists_collection_authorisation_for_permitted
 from matrices.routines import exists_bench_for_user
 from matrices.routines import exists_collection_for_user
 from matrices.routines import exists_image_for_user
 
+
 #
-# DELETE A USER
+#   DELETE A USER
 #
 @login_required
 def delete_user(request, user_id):
 
     if request.user.is_superuser:
 
-        subject = get_object_or_404(User, pk=user_id)
+        subject = get_or_none_user(user_id)
 
-        if exists_authorisation_for_permitted(subject):
+        if not subject:
 
-            messages.error(request, 'CPW_WEB:0370 User NOT Deleted - Outstanding Bench Permissions Exist!')
+            messages.error(request, 'CPW_WEB:043 User NOT Deleted - User does NOT Exist!')
 
         else:
 
-            if exists_collection_authorisation_for_permitted(subject):
+            authorisation = Authorisation.objects.get_or_none(permitted=subject)
 
-                messages.error(request, 'CPW_WEB:0380 User NOT Deleted - Outstanding Collection Permissions Exist!')
+            if authorisation:
+
+                messages.error(request, 'CPW_WEB:0370 User NOT Deleted - Outstanding Bench Permissions Exist!')
 
             else:
 
-                if exists_bench_for_user(subject):
+                if exists_collection_authorisation_for_permitted(subject):
 
-                    messages.error(request, 'CPW_WEB:0390 User NOT Deleted - Outstanding Benches Exist!')
+                    messages.error(request, 'CPW_WEB:0380 User NOT Deleted - Outstanding Collection Permissions Exist!')
 
                 else:
 
-                    if exists_collection_for_user(subject):
+                    if exists_bench_for_user(subject):
 
-                        messages.error(request, 'CPW_WEB:0400 User NOT Deleted - Outstanding Collections Exist!')
+                        messages.error(request, 'CPW_WEB:0390 User NOT Deleted - Outstanding Benches Exist!')
 
                     else:
 
-                        if exists_image_for_user(subject):
+                        if exists_collection_for_user(subject):
 
-                            messages.error(request, 'CPW_WEB:0410 User NOT Deleted - Outstanding Images Exist!')
+                            messages.error(request, 'CPW_WEB:0400 User NOT Deleted - Outstanding Collections Exist!')
 
                         else:
 
-                            if credential_exists(subject):
+                            if exists_image_for_user(subject):
 
-                                messages.error(request, 'CPW_WEB:0420 User NOT Deleted - Outstanding Blog Credential Exists!')
+                                messages.error(request, 'CPW_WEB:0410 User NOT Deleted - Outstanding Images Exist!')
 
                             else:
 
-                                messages.success(request, 'User ' + subject.username + ' Deleted!')
+                                credential = Credential.objects.get_or_none(username=subject.username)
+
+                                if credential:
+
+                                    messages.error(request, 'CPW_WEB:0420 User NOT Deleted - Outstanding Blog Credential '
+                                                   'Exists!')
+
+                                else:
+
+                                    messages.success(request, 'User ' + subject.username + ' Deleted!')
                                 subject.delete()
 
-        return HttpResponseRedirect(reverse('authorisation', args=()))
+            return HttpResponseRedirect(reverse('authorisation', args=()))
 
     else:
 

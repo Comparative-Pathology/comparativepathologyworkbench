@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_image_link.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,25 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_image_link view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
+from matrices.models import Credential
 from matrices.models import ImageLink
 
-from matrices.routines import credential_exists
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 
+
 #
-# VIEW ALL IMAGE LINKS
+#   VIEW ALL IMAGE LINKS
 #
 @login_required
 def view_image_link(request, image_link_id):
@@ -59,18 +58,26 @@ def view_image_link(request, image_link_id):
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
-        data = get_header_data(request.user)
+        selected_collection = request.user.profile.active_collection
 
-        selected_collection = get_active_collection_for_user(request.user)
+        image_link = ImageLink.objects.get_or_none(id=image_link_id)
 
-        image_link = get_object_or_404(ImageLink, pk=image_link_id)
+        if image_link:
 
-        data.update({ 'image_link': image_link, 'selected_collection': selected_collection })
+            data = get_header_data(request.user)
 
-        return render(request, 'matrices/view_image_link.html', data)
+            data.update({'image_link': image_link,
+                         'selected_collection': selected_collection})
+
+            return render(request, 'matrices/view_image_link.html', data)
+
+        else:
+
+            raise PermissionDenied
 
     else:
 

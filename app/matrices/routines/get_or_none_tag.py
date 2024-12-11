@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         get_credential_for_user.py
+# \file         get_or_none_tag.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,19 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Return the Credential for a particular User
+# Return the Tag OR None for a particular Tag Id
 # ##
 #
 from __future__ import unicode_literals
 
-from django.apps import apps
+from taggit.models import Tag
 
 
 #
-#   Return the Credential for a particular User
+#   Return the Tag OR None for a particular Tag Id
 #
-def get_credential_for_user(a_user):
+def get_or_none_tag(tag_id):
 
-    Credential = apps.get_model('matrices', 'Credential')
+    tag = None
 
-    return Credential.objects.get(username=a_user.username)
+    if Tag.objects.filter(id=tag_id).exists():
+
+        tag = Tag.objects.get(id=tag_id)
+
+    return tag

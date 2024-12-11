@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         authorisationform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,16 +26,15 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for adding/editing Bench Authorisations.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Matrix
@@ -45,7 +45,7 @@ from matrices.routines import authorisation_exists_for_bench_and_permitted
 
 
 #
-# BENCH AUTHORISATION FORM
+#   BENCH AUTHORISATION FORM
 #
 class AuthorisationForm(forms.ModelForm):
 
@@ -56,7 +56,6 @@ class AuthorisationForm(forms.ModelForm):
     class Meta:
         model = Authorisation
         fields = ('bench', 'permitted', 'authority', )
-
 
     def clean(self):
 
@@ -84,5 +83,6 @@ class AuthorisationForm(forms.ModelForm):
 
             if authorisation_old.authority == authority:
 
-                msg = 'A Bench Authorisation for \"' + str(permitted.username) + '\" and ' + str(authority.name) + ' already exists for Bench CPW:' + '{num:06d}'.format(num=bench.id)
+                msg = 'A Bench Authorisation for \"' + str(permitted.username) + '\" and ' + str(authority.name) +\
+                    ' already exists for Bench ' + bench.get_formatted_id()
                 raise ValidationError(msg)

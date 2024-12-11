@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         server.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The (image) Server Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 import requests
 import base64
+import omero
 
 from django.db import models
 from django.contrib.auth.models import User
 from django.apps import apps
 
-import omero
 from omero.gateway import BlitzGateway
 
 from random import randint
@@ -77,6 +79,22 @@ SERVER_IDR = 'idr.openmicroscopy.org'
 
 
 #
+#    The Server Manager Class
+#
+class ServerManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Server.DoesNotExist):
+
+            return None
+
+
+#
 #   Class SERVER
 #
 class Server(models.Model):
@@ -87,6 +105,8 @@ class Server(models.Model):
     type = models.ForeignKey(Type, related_name='servers', default=0, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, related_name='servers', on_delete=models.DO_NOTHING)
     accessible = models.BooleanField(default=False)
+
+    objects = ServerManager()
 
     @classmethod
     def create(cls, name, url_server, uid, pwd, type, owner, accessible):
@@ -3499,7 +3519,7 @@ class Server(models.Model):
         rdata = rois_data['data']
 
         for r in rdata:
-            
+
             roi_id = r['@id']
 
             if in_roi_id == roi_id:

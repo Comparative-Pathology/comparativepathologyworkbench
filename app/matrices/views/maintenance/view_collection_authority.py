@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_collection_authority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_collection_authority view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -40,21 +39,29 @@ from matrices.models import CollectionAuthority
 
 from matrices.routines import get_header_data
 
+
 #
-# VIEW A COLLECTION AUTHORITY
+#   VIEW A COLLECTION AUTHORITY
 #
 @login_required
 def view_collection_authority(request, collection_authority_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        collection_authority = CollectionAuthority.objects.get_or_none(id=collection_authority_id)
 
-        collection_authority = get_object_or_404(CollectionAuthority, pk=collection_authority_id)
+        if collection_authority:
 
-        data.update({ 'collection_authority_id': collection_authority_id, 'collection_authority': collection_authority })
+            data = get_header_data(request.user)
 
-        return render(request, 'maintenance/detail_collection_authority.html', data)
+            data.update({'collection_authority_id': collection_authority_id,
+                         'collection_authority': collection_authority})
+
+            return render(request, 'maintenance/detail_collection_authority.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

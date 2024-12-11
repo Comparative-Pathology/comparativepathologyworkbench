@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         location.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,8 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# The (server) Type Model.
-###
+# The Location Model.
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -33,12 +35,30 @@ from django.contrib.auth.models import User
 
 
 #
-#    The LOCATION Model
+#    The Location Manager Class
+#
+class LocationManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Location.DoesNotExist):
+
+            return None
+
+
+#
+#    The Location Model
 #
 class Location(models.Model):
     name = models.CharField(max_length=25, blank=False, unique=True, default='')
     colour = models.CharField(max_length=6, blank=False, default='FFFFFF')
     owner = models.ForeignKey(User, related_name='locations', on_delete=models.DO_NOTHING)
+
+    objects = LocationManager()
 
     @classmethod
     def create(cls, name, owner):

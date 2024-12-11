@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_location.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_location view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Location
@@ -42,27 +41,33 @@ from matrices.routines import exists_environment_for_location
 
 
 #
-# DELETE A TYPE OF ENVIRONMENT
+#   DELETE A TYPE OF ENVIRONMENT
 #
 @login_required
 def delete_location(request, location_id):
 
     if request.user.is_superuser:
 
-        location = get_object_or_404(Location, pk=location_id)
+        location = Location.objects.get_or_none(id=location_id)
 
-        if exists_environment_for_location(location):
+        if location:
 
-            messages.error(request, 'CPW_WEB:0510 Environment Location ' + location.name + ' NOT Deleted - '
-                           'Environments still exist!')
+            if exists_environment_for_location(location):
+
+                messages.error(request, 'CPW_WEB:0510 Environment Location ' + location.name + ' NOT Deleted - '
+                               'Environments still exist!')
+
+            else:
+
+                messages.success(request, 'Environment Location ' + location.name + ' Deleted!')
+
+                location.delete()
+
+            return HttpResponseRedirect(reverse('maintenance', args=()))
 
         else:
 
-            messages.success(request, 'Environment Location ' + location.name + ' Deleted!')
-
-            location.delete()
-
-        return HttpResponseRedirect(reverse('maintenance', args=()))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

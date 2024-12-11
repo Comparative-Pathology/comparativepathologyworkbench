@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         validate_a_cpw_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Do we have a valid EBI Single Cell Atlas URL?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from urllib.parse import urlparse
 
 
-"""
-    Do we have a Valid CPW URL?
-"""
+#
+#   Do we have a Valid CPW URL?
+#
 def validate_a_cpw_url(a_url):
 
     protocol_list = ["http", "https"]

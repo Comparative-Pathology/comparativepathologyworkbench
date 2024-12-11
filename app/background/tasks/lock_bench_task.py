@@ -48,7 +48,7 @@ def lock_bench_task(matrix_id):
     matrix.set_locked()
     matrix.save()
 
-    out_message = "Task lock_bench : Bench CPW:{0:06d} lock: {1} Complete!!"\
-        .format(matrix.id, matrix.locked)
+    out_message = "Task lock_bench : Bench " + matrix.get_formatted_id() + " lock: " + str(matrix.locked) + \
+        " Complete!!"
 
     return out_message

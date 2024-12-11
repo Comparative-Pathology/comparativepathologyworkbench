@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         set_last_used_tag_in_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,39 +25,52 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the set_last_used_tag_in_matrix view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
+
+from matrices.models import Credential
 from matrices.models import Matrix
 
-from taggit.models import Tag
-
-from matrices.routines import credential_exists
+from matrices.routines import get_or_none_tag
 
 
 #
-# ACTIVATE AN IMAGE COLLECTION
+#   ACTIVATE AN IMAGE COLLECTION
 #
 @login_required
 def set_last_used_tag_in_matrix(request, matrix_id, tag_id):
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
-        tag = get_object_or_404(Tag, pk=tag_id)
+    if credential:
 
-        matrix.set_last_used_tag(tag)
-        matrix.save()
+        matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-        return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+        if matrix:
+
+            tag = get_or_none_tag(tag_id)
+
+            if tag:
+
+                matrix.set_last_used_tag(tag)
+                matrix.save()
+
+                return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+
+            else:
+
+                return HttpResponseRedirect(reverse('home', args=()))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

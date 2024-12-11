@@ -34,17 +34,15 @@ import subprocess
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
+from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_cells_for_image
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
@@ -55,58 +53,63 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 @login_required
 def delete_this_row(request, matrix_id, row_id):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
+        if matrix:
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
+            authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-        credential = get_credential_for_user(request.user)
+            if authority.is_viewer() or authority.is_none():
 
-        if authority.is_viewer() or authority.is_none():
+                return HttpResponseRedirect(reverse('home', args=()))
 
-            return HttpResponseRedirect(reverse('home', args=()))
+            else:
 
-        else:
+                environment = get_primary_cpw_environment()
 
-            matrix = Matrix.objects.get(id=matrix_id)
+                data = get_header_data(request.user)
 
-            deleteRow = int(row_id)
+                deleteRow = int(row_id)
 
-            oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
+                oldCells = Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow)
 
-            for oldCell in oldCells:
+                for oldCell in oldCells:
 
-                if oldCell.has_blogpost():
+                    if oldCell.has_blogpost():
 
-                    if credential.has_apppwd() and environment.is_wordpress_active():
+                        if credential.has_apppwd() and environment.is_wordpress_active():
 
-                        response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
+                            response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
-                if oldCell.has_image():
+                    if oldCell.has_image():
 
-                    if exists_collections_for_image(oldCell.image):
+                        if exists_collections_for_image(oldCell.image):
 
-                        cell_list = get_cells_for_image(oldCell.image)
+                            cell_list = get_cells_for_image(oldCell.image)
 
-                        other_bench_Flag = False
+                            other_bench_Flag = False
 
-                        for otherCell in cell_list:
+                            for otherCell in cell_list:
 
-                            if otherCell.matrix.id != matrix.id:
+                                if otherCell.matrix.id != matrix.id:
 
-                                other_bench_Flag = True
+                                    other_bench_Flag = True
 
-                        if other_bench_Flag is True:
+                            if other_bench_Flag is True:
 
-                            if request.user.profile.is_hide_collection_image():
+                                if request.user.profile.is_hide_collection_image():
 
-                                oldCell.image.set_hidden(True)
-                                oldCell.image.save()
+                                    oldCell.image.set_hidden(True)
+                                    oldCell.image.save()
+
+                                else:
+
+                                    oldCell.image.set_hidden(False)
+                                    oldCell.image.save()
 
                             else:
 
@@ -115,76 +118,75 @@ def delete_this_row(request, matrix_id, row_id):
 
                         else:
 
-                            oldCell.image.set_hidden(False)
-                            oldCell.image.save()
+                            cell_list = get_cells_for_image(oldCell.image)
 
-                    else:
+                            delete_flag = True
 
-                        cell_list = get_cells_for_image(oldCell.image)
+                            for otherCell in cell_list:
 
-                        delete_flag = True
+                                if otherCell.matrix.id != matrix_id:
 
-                        for otherCell in cell_list:
+                                    delete_flag = False
 
-                            if otherCell.matrix.id != matrix_id:
+                            if delete_flag is True:
 
-                                delete_flag = False
+                                image = oldCell.image
 
-                        if delete_flag is True:
+                                oldCell.image = None
 
-                            image = oldCell.image
+                                oldCell.save()
 
-                            oldCell.image = None
+                                if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                            oldCell.save()
+                                    image_path = environment.document_root + '/' + image.name
 
-                            if image.server.is_ebi_sca() or image.server.is_cpw():
+                                    rm_command = 'rm ' + str(image_path)
+                                    rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                image_path = environment.document_root + '/' + image.name
+                                    process = subprocess.Popen(rm_escaped,
+                                                               shell=True,
+                                                               stdout=subprocess.PIPE,
+                                                               stderr=subprocess.PIPE,
+                                                               universal_newlines=True)
 
-                                rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
+                                if image.server.is_omero547() and not image.server.is_idr():
 
-                                process = subprocess.Popen(rm_escaped,
-                                                           shell=True,
-                                                           stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE,
-                                                           universal_newlines=True)
+                                    image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
 
-                            if image.server.is_omero547() and not image.server.is_idr():
+                                    rm_command = 'rm ' + str(image_path)
+                                    rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
+                                    process = subprocess.Popen(rm_escaped,
+                                                               shell=True,
+                                                               stdout=subprocess.PIPE,
+                                                               stderr=subprocess.PIPE,
+                                                               universal_newlines=True)
 
-                                rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
+                                image.delete()
 
-                                process = subprocess.Popen(rm_escaped,
-                                                           shell=True,
-                                                           stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE,
-                                                           universal_newlines=True)
+                Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
 
-                            image.delete()
+                matrix.save()
 
-            Cell.objects.filter(matrix=matrix_id, ycoordinate=deleteRow).delete()
+                moveCells = Cell.objects.filter(matrix=matrix_id, ycoordinate__gt=deleteRow)
 
-            matrix.save()
+                for moveCell in moveCells:
 
-            moveCells = Cell.objects.filter(matrix=matrix_id, ycoordinate__gt=deleteRow)
+                    moveCell.decrement_y()
 
-            for moveCell in moveCells:
+                    moveCell.save()
 
-                moveCell.decrement_y()
+                matrix_cells = matrix.get_matrix()
+                columns = matrix.get_columns()
+                rows = matrix.get_rows()
 
-                moveCell.save()
+                data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
 
-            matrix_cells = matrix.get_matrix()
-            columns = matrix.get_columns()
-            rows = matrix.get_rows()
+                return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
-            data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
+        else:
 
-            return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

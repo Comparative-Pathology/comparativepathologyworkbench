@@ -73,13 +73,13 @@ def new_environment(request):
                 messages.error(request, "CPW_WEB:0200 New Environment - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0200 New Environment - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = EnvironmentForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'maintenance/new_environment.html', data)
 

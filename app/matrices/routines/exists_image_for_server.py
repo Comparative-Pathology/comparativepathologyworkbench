@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_image_for_server.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there an Image for a particular Server?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Is there an Image for a particular Server?
-"""
+#
+#   Is there an Image for a particular Server?
+#
 def exists_image_for_server(a_server):
 
     Image = apps.get_model('matrices', 'Image')

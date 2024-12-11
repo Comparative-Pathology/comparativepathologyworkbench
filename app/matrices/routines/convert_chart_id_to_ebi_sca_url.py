@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         convert_chart_id_to_ebi_sca_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,18 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Convert a CPW Chart Id to an EBI SCA URL
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from datetime import datetime
-
-from os import urandom
-
-"""
-    Convert a CPW Chart Id to an EBI SCA URL
-"""
+#
+#   Convert a CPW Chart Id to an EBI SCA URL
+#
 def convert_chart_id_to_ebi_sca_url(a_url_server, a_chart_id):
 
     experiment_id = ''
@@ -47,7 +44,6 @@ def convert_chart_id_to_ebi_sca_url(a_url_server, a_chart_id):
 
     chart_array = a_chart_id.split("_")
 
-    datetime = chart_array[0]
     experiment_id = chart_array[1]
     type = chart_array[2]
     option = chart_array[3]

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_collection_in_collection_summary_list.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is the supplied collection in the supplied colleciton summary list?
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from os import urandom
-
-
-"""
-    Get the Images from a particular Collection
-"""
+#
+#   Get the Images from a particular Collection
+#
 def exists_collection_in_collection_summary_list(a_collection, a_collection_summary_list):
 
     collection_exist = False

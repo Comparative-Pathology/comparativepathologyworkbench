@@ -1,5 +1,5 @@
 <!--
-\file         list_images.html
+\file         list_images_simple.html
 \author       Mike Wicks
 \date         March 2021
 \version      $Id$
@@ -136,12 +136,12 @@ The list images template (with Search)
 			{% endif %}
 
 			{% for image_collection in image_summary.get_collections %}
-					<a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.id|stringformat:"06d" }}"</a>
+					<a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.get_formatted_id }}"</a>
 			{% endfor %}
 
 			{% if image_summary.has_matrices %}
 			  {% for image_matrix in image_summary.get_matrices %}
-					<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "CPW:{{ image_matrix.id|stringformat:"06d" }}"</a>
+					<a class="link-button btn btn-primary" href="{% url 'matrix' image_matrix.id %}"><i class="fa fa-eye"></i> View Bench: "{{ image_matrix.get_formatted_id }}"</a>
 			  {% endfor %}
 			{% endif %}
 	
@@ -189,7 +189,7 @@ The list images template (with Search)
 		<td colspan="2">
 		</td>
 		<td colspan="4">
-			<strong>Collection:</strong> <a href="{% url 'list_images' image_collection.id %}" class="badge badge-info"><i class="fa fa-eye"></i></a> "{{ image_collection.id|stringformat:"06d" }}"; "{{ image_collection.title }}"; (Owned By {{ image_collection.owner }})
+			<strong>Collection:</strong> <a href="{% url 'list_images' image_collection.id %}" class="badge badge-info"><i class="fa fa-eye"></i></a> "{{ image_collection.get_formatted_id }}"; "{{ image_collection.title }}"; (Owned By {{ image_collection.owner }})
 	    </td>
       </tr>
 	  {% endfor %}
@@ -201,7 +201,7 @@ The list images template (with Search)
 		</td>
 		<td colspan="4">
 			<strong>Bench: </strong>  
-			<a href="{% url 'matrix' image_matrix.id %}" class="badge badge-info"><i class="fa fa-eye"></i></a> "CPW:{{ image_matrix.id|stringformat:"06d" }}"; "{{ image_matrix.title }}"; (Owned By {{ image_matrix.owner }})
+			<a href="{% url 'matrix' image_matrix.id %}" class="badge badge-info"><i class="fa fa-eye"></i></a> "{{ image_matrix.get_formatted_id }}"; "{{ image_matrix.title }}"; (Owned By {{ image_matrix.owner }})
 	    </td>
       </tr>
 		{% endfor %}

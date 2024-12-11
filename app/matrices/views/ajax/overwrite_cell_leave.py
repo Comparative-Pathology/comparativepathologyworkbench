@@ -31,22 +31,20 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 
-from matrices.models import Collection
 from matrices.models import Cell
-from matrices.models import Image
+from matrices.models import Collection
 from matrices.models import CollectionImageOrder
 from matrices.models import CollectionAuthorisation
+from matrices.models import Credential
+from matrices.models import Image
 
-from matrices.routines import credential_exists
-from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
-from matrices.routines import get_credential_for_user
+from matrices.routines import exists_collections_for_image
 from matrices.routines import exists_update_for_bench_and_user
+from matrices.routines import get_or_none_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines.get_max_collection_image_ordering_for_collection \
     import get_max_collection_image_ordering_for_collection
@@ -68,25 +66,40 @@ def overwrite_cell_leave(request):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
     source = request.POST['source']
     target = request.POST['target']
 
-    source_cell = get_object_or_404(Cell, pk=source)
-    target_cell = get_object_or_404(Cell, pk=target)
+    source_cell = Cell.objects.get_or_none(id=source)
 
-    matrix = source_cell.matrix
+    if not source_cell:
 
-    user = get_object_or_404(User, pk=request.user.id)
+        raise PermissionDenied
 
-    environment = get_primary_cpw_environment()
+    target_cell = Cell.objects.get_or_none(id=target)
 
-    if credential_exists(user):
+    if not target_cell:
 
-        credential = get_credential_for_user(request.user)
+        raise PermissionDenied
+
+    user = get_or_none_user(request.user.id)
+
+    if not user:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        matrix = source_cell.matrix
+
+        environment = get_primary_cpw_environment()
 
         if exists_update_for_bench_and_user(matrix, request.user):
 
@@ -209,7 +222,7 @@ def overwrite_cell_leave(request):
 
                 collectionimageorder.save()
 
-                collection_authorisation_list = CollectionAuthorisation.object\
+                collection_authorisation_list = CollectionAuthorisation.objects\
                     .filter(collection__id=matrix.last_used_collection.id)
 
                 for collection_authorisation in collection_authorisation_list:

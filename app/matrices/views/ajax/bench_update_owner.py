@@ -36,14 +36,12 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import MatrixOwnerSelectionForm
 
-from matrices.models import Matrix
 from matrices.models import Authorisation
+from matrices.models import Credential
+from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import authorisation_exists_for_bench_and_permitted
 
 
@@ -61,11 +59,18 @@ def bench_update_owner(request, bench_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    bench = get_object_by_uuid_or_404(Matrix, bench_id)
+    bench = Matrix.objects.get_or_none(id=bench_id)
+
+    if not bench:
+
+        raise PermissionDenied
+
     old_owner = bench.owner
 
     if bench.is_locked():
@@ -99,13 +104,11 @@ def bench_update_owner(request, bench_id):
             object.save()
 
             messages.success(request, 'New Owner ' + str(object.owner.username) +
-                             ' for Bench CPW:' + "{:06d}".format(object.id) + ' Updated!')
+                             ' for Bench ' + bench.get_formatted_id() + ' Updated!')
 
     else:
 
         form = MatrixOwnerSelectionForm(instance=bench, initial={'owner': bench.owner.id}, )
 
-    return render(request, template_name, {
-        'form': form,
-        'object': bench
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': bench})

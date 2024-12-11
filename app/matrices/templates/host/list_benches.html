@@ -112,66 +112,102 @@ The list benches template
 		<div class="generic-dropdown">
 		  <button class="generic-drop-button btn button button-add"><i class="fas fa-bars"></i></button>
 		<div class="generic-dropdown-content">
-			{% if matrix_summary.is_private %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'VIEWER' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-			    {% endif %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'EDITOR' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-          <a href="{% url 'bench_update' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Updating Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-          <a href="{% url 'bench_delete' matrix_summary.matrix_id %}" onclick="delete_matrix_summary(event, 'Deleting Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-			    {% endif %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'OWNER' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-          <a href="{% url 'bench_update' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Updating Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-          <a href="{% url 'bench_delete' matrix_summary.matrix_id %}" onclick="delete_matrix_summary(event, 'Deleting Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-			        {% if user.username != 'guest' %}
-		  <a href="{% url 'list_bench_authorisation' matrix_summary.matrix_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-		  <a href="{% url 'publicise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PUBLIC?')"><i class="fa fa-bell"></i> Set to Public</a>
-			        {% endif %}
-			    {% endif %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'ADMIN' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-          <a href="{% url 'bench_update' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Updating Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
-          <a href="{% url 'bench_delete' matrix_summary.matrix_id %}" onclick="delete_matrix_summary(event, 'Deleting Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
-		  <a href="{% url 'list_bench_authorisation' matrix_summary.matrix_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
-          <a href="{% url 'bench_update_owner' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Change Owner of Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Ownership</a>
-		  <a href="{% url 'publicise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PUBLIC?')"><i class="fa fa-bell"></i> Set to Public</a>
-			    {% endif %}
-			{% endif %}
-			{% if matrix_summary.is_public %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'VIEWER' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-			    {% endif %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'EDITOR' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-			    {% endif %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'OWNER' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-			        {% if user.username != 'guest' %}
-		  <a href="{% url 'privatise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PRIVATE?')"><i class="fa fa-bell"></i> Set to Private</a>
-			        {% endif %}
-			    {% endif %}
-			    {% if matrix_summary.matrix_authorisation_authority == 'ADMIN' %}
-		  <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
-		  <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
-		  <a href="{% url 'privatise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PRIVATE?')"><i class="fa fa-bell"></i> Set to Private</a>
-			  {% endif %}
-			{% endif %}
+            {% if matrix_summary.is_locked %}
+                {% if matrix_summary.is_private %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'VIEWER' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'EDITOR' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'OWNER' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                        {% if user.username != 'guest' %}
+                        {% endif %}
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'ADMIN' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                {% endif %}
+                {% if matrix_summary.is_public %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'VIEWER' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'EDITOR' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'OWNER' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                        {% if user.username != 'guest' %}
+                        {% endif %}
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'ADMIN' %}
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                  {% endif %}
+                {% endif %}
+            {% endif %}
+            {% if matrix_summary.is_not_locked %}
+                {% if matrix_summary.is_private %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'VIEWER' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'EDITOR' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+          <a href="{% url 'bench_update' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Updating Bench {{ matrix_summary.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+          <a href="{% url 'delete_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH .... ?')"><i class="fa fa-trash"></i> Delete</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'OWNER' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+          <a href="{% url 'bench_update' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Updating Bench {{ matrix_summary.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+          <a href="{% url 'delete_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH .... ?')"><i class="fa fa-trash"></i> Delete</a>
+                        {% if user.username != 'guest' %}
+          <a href="{% url 'list_bench_authorisation' matrix_summary.matrix_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
+          <a href="{% url 'publicise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PUBLIC?')"><i class="fa fa-bell"></i> Set to Public</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'ADMIN' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+          <a href="{% url 'bench_update' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Updating Bench {{ matrix_summary.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+          <a href="{% url 'delete_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH .... ?')"><i class="fa fa-trash"></i> Delete</a>
+          <a href="{% url 'list_bench_authorisation' matrix_summary.matrix_id %}"><i class="fa fa-universal-access"></i> Permissions</a>
+          <a href="{% url 'bench_update_owner' matrix_summary.matrix_id %}" onclick="open_matrix_summary_edit_dialog(event, 'Change Owner of Bench {{ matrix_summary.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Ownership</a>
+          <a href="{% url 'publicise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PUBLIC?')"><i class="fa fa-bell"></i> Set to Public</a>
+                    {% endif %}
+                {% endif %}
+                {% if matrix_summary.is_public %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'VIEWER' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'EDITOR' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'OWNER' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+                        {% if user.username != 'guest' %}
+          <a href="{% url 'privatise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PRIVATE?')"><i class="fa fa-bell"></i> Set to Private</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if matrix_summary.matrix_authorisation_authority == 'ADMIN' %}
+          <a href="{% url 'matrix' matrix_summary.matrix_id %}"><i class="fa fa-eye"></i> View</a>
+          <a data-value="{{ matrix_summary.matrix_id }}" href="#" class="link-button btn btn-primary"><i class="fa fa-info"></i> Info.</a>
+          <a href="{% url 'privatise_bench' matrix_summary.matrix_id %}" onclick="return confirm('Are you sure you want to set this BENCH to PRIVATE?')"><i class="fa fa-bell"></i> Set to Private</a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
 		</div><!-- End of generic-dropdown-content -->
 	  </div><!-- End of generic-dropdown -->
 	</td>
         {% else %}
     <td>&nbsp;</td>
 		{% endif %}
-	<td>CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }}</td>
+	<td>{{ matrix_summary.get_formatted_id }}</td>
 	<td>{{ matrix_summary.matrix_title|truncatechars:75 }}</td>
 	<td>{% userdateformat matrix_summary.matrix_created date_format %}</td>
 	<td>{% userdateformat matrix_summary.matrix_modified date_format %}</td>
@@ -301,34 +337,6 @@ The list benches template
 	  dialog_edit.open(event);
 	}
 
-	function delete_matrix_summary(event, title) {
-	  event.preventDefault();
-	  var url = $(event.target).attr('href');
-	  FrontendForms.confirmRemoteAction(
-	    url, {
-	      title: title,
-	      text: 'Are you sure?',
-	      confirmButtonClass: 'btn-danger',
-	      icon: 'question'
-	    },
-	    function (data) {
-
-	      //FrontendForms.reload_page(true);
-	      var row = $('tr#matrix_summary-' + data.object_id);
-	      row.remove();
-
-          var benchNum = data.object_id.toString().padStart(6, '0');
-
-	      Swal.fire({
-	        text: 'Bench CPW:' + benchNum + ' has been deleted!',
-	        icon: 'warning'
-	      })
-	    },
-	    data = true // set to any value to obtain POST
-	  );
-	}
-
-
 	$(document).ready(function () {
 
 	  dialog_edit = new Dialog({
@@ -389,7 +397,7 @@ The list benches template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_summary.matrix_id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench {{ matrix_summary.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });

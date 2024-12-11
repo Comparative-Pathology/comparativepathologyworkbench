@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_this_column.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,166 +25,174 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_this_column view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 import subprocess
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Matrix
+from matrices.models import Credential
 from matrices.models import Cell
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_cells_for_image
-from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines import get_header_data
 
 
 #
-# DELETE THE GIVEN COLUMN IN THE BENCH
+#   DELETE THE GIVEN COLUMN IN THE BENCH
 #
 @login_required
 def delete_this_column(request, matrix_id, column_id):
 
-    environment = get_primary_cpw_environment()
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-    data = get_header_data(request.user)
+    if matrix:
 
-    if credential_exists(request.user):
+        credential = Credential.objects.get_or_none(username=request.user.username)
 
-        credential = get_credential_for_user(request.user)
+        if credential:
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
+            environment = get_primary_cpw_environment()
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
+            data = get_header_data(request.user)
 
-        if authority.is_viewer() or authority.is_none():
+            authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-            return HttpResponseRedirect(reverse('home', args=()))
+            if authority.is_viewer() or authority.is_none():
 
-        else:
+                return HttpResponseRedirect(reverse('home', args=()))
 
-            matrix = Matrix.objects.get(id=matrix_id)
+            else:
 
-            deleteColumn = int(column_id)
+                matrix = Matrix.objects.get(id=matrix_id)
 
-            oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
+                deleteColumn = int(column_id)
 
-            for oldCell in oldCells:
+                oldCells = Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn)
 
-                if oldCell.has_blogpost():
+                for oldCell in oldCells:
 
-                    if credential.has_apppwd() and environment.is_wordpress_active():
+                    if oldCell.has_blogpost():
 
-                        response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
+                        if credential.has_apppwd() and environment.is_wordpress_active():
 
-                if oldCell.has_image():
+                            response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
 
-                    if exists_collections_for_image(oldCell.image):
+                    if oldCell.has_image():
 
-                        cell_list = get_cells_for_image(oldCell.image)
+                        if exists_collections_for_image(oldCell.image):
 
-                        other_bench_Flag = False
+                            cell_list = get_cells_for_image(oldCell.image)
 
-                        for otherCell in cell_list:
+                            other_bench_Flag = False
 
-                            if otherCell.matrix.id != matrix.id:
+                            for otherCell in cell_list:
 
-                                other_bench_Flag = True
+                                if otherCell.matrix.id != matrix.id:
 
-                        if other_bench_Flag is True:
+                                    other_bench_Flag = True
 
-                            if request.user.profile.is_hide_collection_image():
+                            if other_bench_Flag is True:
 
-                                oldCell.image.set_hidden(True)
-                                oldCell.image.save()
+                                if request.user.profile.is_hide_collection_image():
+
+                                    oldCell.image.set_hidden(True)
+                                    oldCell.image.save()
+
+                                else:
+
+                                    oldCell.image.set_hidden(False)
+                                    oldCell.image.save()
 
                             else:
 
                                 oldCell.image.set_hidden(False)
                                 oldCell.image.save()
+
                         else:
 
-                            oldCell.image.set_hidden(False)
-                            oldCell.image.save()
+                            cell_list = get_cells_for_image(oldCell.image)
 
-                    else:
+                            delete_flag = True
 
-                        cell_list = get_cells_for_image(oldCell.image)
+                            for otherCell in cell_list:
 
-                        delete_flag = True
+                                if otherCell.matrix.id != matrix_id:
 
-                        for otherCell in cell_list:
+                                    delete_flag = False
 
-                            if otherCell.matrix.id != matrix_id:
+                            if delete_flag is True:
 
-                                delete_flag = False
+                                image = oldCell.image
 
-                        if delete_flag is True:
+                                oldCell.image = None
 
-                            image = oldCell.image
+                                oldCell.save()
 
-                            oldCell.image = None
+                                if image.server.is_ebi_sca() or image.server.is_cpw():
 
-                            oldCell.save()
+                                    image_path = environment.document_root + '/' + image.name
 
-                            if image.server.is_ebi_sca() or image.server.is_cpw():
+                                    rm_command = 'rm ' + str(image_path)
+                                    rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                image_path = environment.document_root + '/' + image.name
+                                    process = subprocess.Popen(rm_escaped,
+                                                               shell=True,
+                                                               stdout=subprocess.PIPE,
+                                                               stderr=subprocess.PIPE,
+                                                               universal_newlines=True)
 
-                                rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
+                                if image.server.is_omero547() and not image.server.is_idr():
 
-                                process = subprocess.Popen(rm_escaped,
-                                                           shell=True,
-                                                           stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE,
-                                                           universal_newlines=True)
+                                    image_path = environment.document_root + '/' +\
+                                        image.get_file_name_from_birdseye_url()
 
-                            if image.server.is_omero547() and not image.server.is_idr():
+                                    rm_command = 'rm ' + str(image_path)
+                                    rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
 
-                                image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
+                                    process = subprocess.Popen(rm_escaped,
+                                                               shell=True,
+                                                               stdout=subprocess.PIPE,
+                                                               stderr=subprocess.PIPE,
+                                                               universal_newlines=True)
 
-                                rm_command = 'rm ' + str(image_path)
-                                rm_escaped = rm_command.replace("(", "\(").replace(")", "\)")
+                                image.delete()
 
-                                process = subprocess.Popen(rm_escaped,
-                                                           shell=True,
-                                                           stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE,
-                                                           universal_newlines=True)
+                Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
 
-                            image.delete()
+                moveCells = Cell.objects.filter(matrix=matrix_id, xcoordinate__gt=deleteColumn)
 
-            Cell.objects.filter(matrix=matrix_id, xcoordinate=deleteColumn).delete()
+                for moveCell in moveCells:
 
-            moveCells = Cell.objects.filter(matrix=matrix_id, xcoordinate__gt=deleteColumn)
+                    moveCell.decrement_x()
 
-            for moveCell in moveCells:
+                    moveCell.save()
 
-                moveCell.decrement_x()
+                matrix.save()
 
-                moveCell.save()
+                matrix_cells = matrix.get_matrix()
+                columns = matrix.get_columns()
+                rows = matrix.get_rows()
 
-            matrix.save()
+                data.update({'matrix': matrix,
+                             'rows': rows,
+                             'columns': columns,
+                             'matrix_cells': matrix_cells})
 
-            matrix_cells = matrix.get_matrix()
-            columns = matrix.get_columns()
-            rows = matrix.get_rows()
+                return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
 
-            data.update({'matrix': matrix, 'rows': rows, 'columns': columns, 'matrix_cells': matrix_cells})
+        else:
 
-            return HttpResponseRedirect(reverse('matrix', args=(matrix_id,)))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

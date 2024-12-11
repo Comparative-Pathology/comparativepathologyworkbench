@@ -32,20 +32,18 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
-
-from sortable_listview import SortableListView
 
 from matrices.models import Collection
+from matrices.models import Credential
 from matrices.models import ImageSummary
-
-from taggit.models import Tag
 
 from matrices.forms import ImageSummarySearchForm
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+from matrices.routines import get_or_none_tag
 from matrices.routines import image_list_by_user_and_direction
+
+from sortable_listview import SortableListView
 
 
 #
@@ -286,6 +284,8 @@ class ImageListView(LoginRequiredMixin, SortableListView):
         int_collection_id = 0
         int_tag_id = 0
 
+        collection_id_formatted = ''
+
         if search_collection_id != '':
 
             allBoolean = False
@@ -294,9 +294,10 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             if int_collection_id != 0:
 
-                collection = get_object_or_404(Collection, pk=int_collection_id)
+                collection = Collection.objects.get_or_none(id=int_collection_id)
                 collection_image_list = collection.get_images()
                 collection_hidden_image_list = collection.get_hidden_images()
+                collection_id_formatted = collection.get_formatted_id()
 
         if search_tag_id != '':
 
@@ -306,7 +307,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
             if int_tag_id != 0:
 
-                tag = get_object_or_404(Tag, pk=int_tag_id)
+                tag = get_or_none_tag(int_tag_id)
 
         allBoolean = True
         tagBoolean = True
@@ -339,7 +340,9 @@ class ImageListView(LoginRequiredMixin, SortableListView):
 
         readBoolean = False
 
-        if credential_exists(self.request.user):
+        credential = Credential.objects.get_or_none(username=self.request.user.username)
+
+        if credential:
 
             readBoolean = True
 
@@ -361,6 +364,7 @@ class ImageListView(LoginRequiredMixin, SortableListView):
                      'allBoolean': allBoolean,
                      'readBoolean': readBoolean,
                      'collection_id': int_collection_id,
+                     'collection_id_formatted': collection_id_formatted,
                      'tag': tag,
                      'collection': collection,
                      'tag_id': int_tag_id,

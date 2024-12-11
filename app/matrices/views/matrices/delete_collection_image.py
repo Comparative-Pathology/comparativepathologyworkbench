@@ -35,16 +35,14 @@ import subprocess
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from matrices.models import Collection
-from matrices.models import Image
 from matrices.models import Artefact
+from matrices.models import Collection
+from matrices.models import Credential
+from matrices.models import Image
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_image_in_cells
-from matrices.routines import get_header_data
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines.exists_collection_image_orders_for_collection_and_image_and_permitted \
     import exists_collection_image_orders_for_collection_and_image_and_permitted
@@ -62,140 +60,168 @@ from matrices.routines.get_collection_image_orders_for_collection_and_ordering_a
 @login_required
 def delete_collection_image(request, collection_id, image_id):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        image = Image.objects.get_or_none(id=image_id)
 
-        image = get_object_or_404(Image, pk=image_id)
+        if image:
 
-        if exists_image_in_cells(image):
+            if exists_image_in_cells(image):
 
-            messages.error(request, 'CPW_WEB:0530 Image ' + str(image.id) +
-                           ' NOT deleted - Still referenced in Benches!')
-
-        else:
-
-            list_collections = image.collections.all()
-
-            boolAllowDelete = True
-
-            if image.exists_image_links():
-
-                if image.exists_parent_image_links():
-
-                    image_link_list_parent = image.get_parent_image_links()
-
-                    for image_link in image_link_list_parent:
-
-                        if image_link.is_owned_by(request.user):
-
-                            artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
-
-                            if artefact.has_location():
-
-                                rm_command = 'rm ' + str(artefact.location)
-                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
-
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE, universal_newlines=True)
-
-                            image_link.delete()
-
-                            artefact.delete()
-
-                        else:
-
-                            boolAllowDelete = False
-
-
-                if image.exists_child_image_links():
-
-                    image_link_list_child = image.get_child_image_links()
-
-                    for image_link in image_link_list_child:
-
-                        if image_link.is_owned_by(request.user):
-
-                            artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
-
-                            if artefact.has_location():
-
-                                rm_command = 'rm ' + str(artefact.location)
-                                rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
-
-                                process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE,
-                                                           stderr=subprocess.PIPE, universal_newlines=True)
-
-                            image_link.delete()
-
-                            artefact.delete()
-
-                        else:
-
-                            boolAllowDelete = False
-
-            if boolAllowDelete is True:
-
-                for collection in list_collections:
-
-                    Collection.unassign_image(image, collection)
-
-                    if exists_collection_image_orders_for_collection_and_image_and_permitted(collection,
-                                                                                             image,
-                                                                                             request.user):
-
-                        ordering = get_collection_image_ordering_for_collection_and_image_and_user(collection,
-                                                                                                   image,
-                                                                                                   request.user)
-
-                        collection_image_order_delete_list = \
-                            get_collection_image_orders_for_collection_and_ordering_equals(collection, ordering)
-
-                        for collection_image_order_delete in collection_image_order_delete_list:
-
-                            collection_image_order_delete.delete()
-
-                        collection_image_order_update_list = \
-                            get_collection_image_orders_for_collection_and_ordering_above(collection, ordering)
-
-                        for collection_image_order_update in collection_image_order_update_list:
-
-                            collection_image_order_update.decrement_ordering()
-
-                            collection_image_order_update.save()
-
-                messages.success(request, 'Image ' + str(image.id) + ' DELETED from the Workbench!')
-
-                if image.server.is_ebi_sca() or image.server.is_cpw():
-
-                    image_path = environment.document_root + '/' + image.name
-
-                    rm_command = 'rm ' + str(image_path)
-                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
-
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                               universal_newlines=True)
-
-                if image.server.is_omero547() and not image.server.is_idr():
-
-                    image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
-
-                    rm_command = 'rm ' + str(image_path)
-                    rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
-
-                    process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                               universal_newlines=True)
-
-                image.delete()
+                messages.error(request, 'CPW_WEB:0530 Image ' + str(image.id) +
+                               ' NOT deleted - Still referenced in Benches!')
 
             else:
 
-                messages.error(request, 'Image ' + str(image.id) + ' NOT DELETED from the Workbench!')
+                environment = get_primary_cpw_environment()
 
+                list_collections = image.collections.all()
 
-        return HttpResponseRedirect(reverse('list_images', args=(collection_id, )))
+                boolAllowDelete = True
+
+                if image.exists_image_links():
+
+                    if image.exists_parent_image_links():
+
+                        image_link_list_parent = image.get_parent_image_links()
+
+                        for image_link in image_link_list_parent:
+
+                            if image_link.is_owned_by(request.user):
+
+                                artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
+
+                                if artefact:
+
+                                    if artefact.has_location():
+
+                                        rm_command = 'rm ' + str(artefact.location)
+                                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                                        process = subprocess.Popen(rm_escaped,
+                                                                   shell=True,
+                                                                   stdout=subprocess.PIPE,
+                                                                   stderr=subprocess.PIPE,
+                                                                   universal_newlines=True)
+
+                                    image_link.delete()
+
+                                    artefact.delete()
+
+                                else:
+
+                                    image_link.delete()
+
+                            else:
+
+                                boolAllowDelete = False
+
+                    if image.exists_child_image_links():
+
+                        image_link_list_child = image.get_child_image_links()
+
+                        for image_link in image_link_list_child:
+
+                            if image_link.is_owned_by(request.user):
+
+                                artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
+
+                                if artefact:
+
+                                    if artefact.has_location():
+
+                                        rm_command = 'rm ' + str(artefact.location)
+                                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                                        process = subprocess.Popen(rm_escaped,
+                                                                   shell=True,
+                                                                   stdout=subprocess.PIPE,
+                                                                   stderr=subprocess.PIPE,
+                                                                   universal_newlines=True)
+
+                                    image_link.delete()
+
+                                    artefact.delete()
+
+                                else:
+
+                                    image_link.delete()
+
+                            else:
+
+                                boolAllowDelete = False
+
+                if boolAllowDelete is True:
+
+                    for collection in list_collections:
+
+                        Collection.unassign_image(image, collection)
+
+                        if exists_collection_image_orders_for_collection_and_image_and_permitted(collection,
+                                                                                                 image,
+                                                                                                 request.user):
+
+                            ordering = get_collection_image_ordering_for_collection_and_image_and_user(collection,
+                                                                                                       image,
+                                                                                                       request.user)
+
+                            collection_image_order_delete_list = \
+                                get_collection_image_orders_for_collection_and_ordering_equals(collection, ordering)
+
+                            for collection_image_order_delete in collection_image_order_delete_list:
+
+                                collection_image_order_delete.delete()
+
+                            collection_image_order_update_list = \
+                                get_collection_image_orders_for_collection_and_ordering_above(collection, ordering)
+
+                            for collection_image_order_update in collection_image_order_update_list:
+
+                                collection_image_order_update.decrement_ordering()
+
+                                collection_image_order_update.save()
+
+                    messages.success(request, 'Image ' + str(image.id) + ' DELETED from the Workbench!')
+
+                    if image.server.is_ebi_sca() or image.server.is_cpw():
+
+                        image_path = environment.document_root + '/' + image.name
+
+                        rm_command = 'rm ' + str(image_path)
+                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                        process = subprocess.Popen(rm_escaped,
+                                                   shell=True,
+                                                   stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE,
+                                                   universal_newlines=True)
+
+                    if image.server.is_omero547() and not image.server.is_idr():
+
+                        image_path = environment.document_root + '/' + image.get_file_name_from_birdseye_url()
+
+                        rm_command = 'rm ' + str(image_path)
+                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+
+                        process = subprocess.Popen(rm_escaped,
+                                                   shell=True,
+                                                   stdout=subprocess.PIPE,
+                                                   stderr=subprocess.PIPE,
+                                                   universal_newlines=True)
+
+                    image.delete()
+
+                else:
+
+                    messages.error(request, 'Image ' + str(image.id) + ' NOT DELETED from the Workbench!')
+
+            return HttpResponseRedirect(reverse('list_images', args=(collection_id, )))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

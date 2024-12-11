@@ -37,16 +37,14 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import CollectionAuthorisationForm
 
 from matrices.models import Collection
 from matrices.models import CollectionAuthority
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 
 from matrices.routines import collection_authorisation_create_update_consequences
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_collection_and_user
 from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 
@@ -69,7 +67,9 @@ def collection_authorisation_create(request, collection_id=None):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
@@ -112,7 +112,7 @@ def collection_authorisation_create(request, collection_id=None):
             object.save()
 
             messages.success(request, 'Collection Authorisation ' + str(object.id) +
-                             ' ADDED for Collection ' + '{num:06d}'.format(num=object.collection.id))
+                             ' ADDED for Collection ' + object.collection.get_formatted_id())
 
     else:
 
@@ -130,7 +130,11 @@ def collection_authorisation_create(request, collection_id=None):
 
     else:
 
-        collection = get_object_by_uuid_or_404(Collection, collection_id)
+        collection = Collection.objects.get_or_none(id=collection_id)
+
+        if not collection:
+
+            raise PermissionDenied
 
         if not exists_update_for_collection_and_user(collection, request.user):
 
@@ -148,7 +152,5 @@ def collection_authorisation_create(request, collection_id=None):
 
     form.fields['collection'].label_from_instance = lambda obj: "{0:06d}, {1}".format(obj.id, obj.title)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

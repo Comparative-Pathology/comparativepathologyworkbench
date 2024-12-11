@@ -34,7 +34,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -42,14 +41,11 @@ from matrices.forms import SearchUrlForm
 
 from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
 
 from matrices.routines import add_image_to_collection
 from matrices.routines import convert_url_omero_image_to_cpw
-from matrices.routines import credential_exists
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_read_for_bench_and_user
-from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_id_from_omero_url import get_id_from_omero_url
 from matrices.routines import get_server_from_omero_url
@@ -73,15 +69,24 @@ def amend_cell(request, matrix_id, cell_id):
 
         raise PermissionDenied
 
-    if credential_exists(request.user):
+    cell = Cell.objects.get_or_none(id=cell_id)
 
-        credential = get_credential_for_user(request.user)
+    if not cell:
+
+        raise PermissionDenied
+
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
+
+    if not matrix:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
 
         data = get_header_data(request.user)
         environment = get_primary_cpw_environment()
-
-        cell = get_object_or_404(Cell, pk=cell_id)
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
 
         if exists_read_for_bench_and_user(matrix, request.user):
 
@@ -132,32 +137,39 @@ def amend_cell(request, matrix_id, cell_id):
                     else:
 
                         server = get_server_from_omero_url(url_string_omero_out)
-                        image_id = get_id_from_omero_url(url_string_omero_out)
 
-                        if exists_active_collection_for_user(request.user):
+                        if server:
 
-                            collection = get_active_collection_for_user(request.user)
+                            image_id = get_id_from_omero_url(url_string_omero_out)
 
-                            image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
+                            if request.user.profile.has_active_collection():
 
-                            matrix.set_last_used_collection(collection)
+                                collection = request.user.profile.active_collection
+
+                                image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
+
+                                matrix.set_last_used_collection(collection)
+
+                            else:
+
+                                messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; " +
+                                               "Please create a Collection!")
+                                form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; " +
+                                               "Please create a Collection!")
+
+                                data.update({'form': form,
+                                             'collection_image_list': collection_image_list,
+                                             'amend_cell': amend_cell,
+                                             'matrix_link': matrix_link,
+                                             'cell': cell,
+                                             'cell_link': cell_link,
+                                             'matrix': matrix})
+
+                                return render(request, 'matrices/amend_cell.html', data)
 
                         else:
 
-                            messages.error(request, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; " +
-                                           "Please create a Collection!")
-                            form.add_error(None, "CPW_WEB:0230 Amend Cell - You have no Active Image Collection; " +
-                                           "Please create a Collection!")
-
-                            data.update({'form': form,
-                                         'collection_image_list': collection_image_list,
-                                         'amend_cell': amend_cell,
-                                         'matrix_link': matrix_link,
-                                         'cell': cell,
-                                         'cell_link': cell_link,
-                                         'matrix': matrix})
-
-                            return render(request, 'matrices/amend_cell.html', data)
+                            raise PermissionDenied
 
                     cell.set_title(image.name)
                     cell.set_description(image.name)
@@ -200,9 +212,7 @@ def amend_cell(request, matrix_id, cell_id):
 
                     matrix.save()
 
-                    cell_id_formatted = "CPW:" + "{:06d}".format(matrix.id) + "_" + str(cell.id)
-
-                    messages.success(request, 'Cell ' + cell_id_formatted + ' Updated!')
+                    messages.success(request, 'Cell ' + cell.get_formatted_id() + ' Updated!')
 
                     data.update({'form': form,
                                  'collection_image_list': collection_image_list,

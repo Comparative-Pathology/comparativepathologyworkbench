@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_user_bench_authorisation.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,24 +25,22 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the list_user_bench_authorisation view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import Authorisation
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+from matrices.routines import get_or_none_user
 
 
 #
@@ -54,18 +53,26 @@ def list_user_bench_authorisation(request, user_id):
 
         raise PermissionDenied
 
+    user = get_or_none_user(user_id)
 
-    data = get_header_data(request.user)
+    if not user:
 
-    if credential_exists(request.user):
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        data = get_header_data(request.user)
 
         authorisation_list = Authorisation.objects.filter(matrix__owner=user_id)
-        user = get_object_or_404(User, pk=user_id)
 
         text_flag = " ALL Bench Permissions for " + user.username
         matrix_id = ''
 
-        data.update({ 'matrix_id': matrix_id, 'text_flag': text_flag, 'authorisation_list': authorisation_list })
+        data.update({'matrix_id': matrix_id,
+                     'text_flag': text_flag,
+                     'authorisation_list': authorisation_list})
 
         return render(request, 'host/list_bench_authorisation.html', data)
 

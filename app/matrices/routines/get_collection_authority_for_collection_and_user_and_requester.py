@@ -31,6 +31,7 @@
 from __future__ import unicode_literals
 
 from django.apps import apps
+
 from django.db.models import Q
 
 

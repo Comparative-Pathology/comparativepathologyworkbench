@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_authorisation_delete.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,27 +25,24 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_authorisation_delete view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.models import Authorisation
+from matrices.models import Credential
 from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
 
 
 #
-# DELETE A BENCH AUTHORISATION
+#   DELETE A BENCH AUTHORISATION
 #
 @login_required()
 def bench_authorisation_delete(request, authorisation_id):
@@ -61,18 +59,27 @@ def bench_authorisation_delete(request, authorisation_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
+    authorisation = Authorisation.objects.get_or_none(id=authorisation_id)
 
-    authorisation = get_object_by_uuid_or_404(Authorisation, authorisation_id)
-    bench = get_object_by_uuid_or_404(Matrix, authorisation.matrix.id)
+    if not authorisation:
+
+        raise PermissionDenied
+
+    bench = Matrix.objects.get_or_none(id=authorisation.matrix.id)
+
+    if not bench:
+
+        raise PermissionDenied
 
     if not exists_update_for_bench_and_user(bench, request.user):
 
         raise PermissionDenied
-
 
     authorisation_id = authorisation.id
 

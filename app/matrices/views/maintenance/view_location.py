@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_location.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,13 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This file contains the view_location view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -41,20 +41,27 @@ from matrices.routines import get_header_data
 
 
 #
-# VIEW AN ENVIRONMENT LOCATION
+#   VIEW AN ENVIRONMENT LOCATION
 #
 @login_required
 def view_location(request, location_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        location = Location.objects.get_or_none(id=location_id)
 
-        location = get_object_or_404(Location, pk=location_id)
+        if location:
 
-        data.update({'location_id': location_id, 'location': location})
+            data = get_header_data(request.user)
 
-        return render(request, 'maintenance/detail_location.html', data)
+            data.update({'location_id': location_id,
+                         'location': location})
+
+            return render(request, 'maintenance/detail_location.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

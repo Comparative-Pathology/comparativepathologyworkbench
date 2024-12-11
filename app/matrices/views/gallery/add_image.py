@@ -30,19 +30,15 @@
 #
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from matrices.models import Server
+from matrices.models import Credential
 
 from matrices.routines import add_image_to_collection
-from matrices.routines import credential_exists
-from matrices.routines import exists_active_collection_for_user
-from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 from background.tasks import add_images_to_collection_task
@@ -54,47 +50,53 @@ from background.tasks import add_images_to_collection_task
 @login_required
 def add_image(request, server_id, image_id, roi_id, path_from, identifier):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
-        server = get_object_or_404(Server, pk=server_id)
+        server = Server.objects.get_or_none(id=server_id)
 
-        if exists_active_collection_for_user(request.user):
+        if server:
 
-            collection = get_active_collection_for_user(request.user)
+            if request.user.profile.has_active_collection():
 
-            credential = get_credential_for_user(request.user)
+                collection = request.user.profile.active_collection
 
-            images_list = list()
+                images_list = list()
 
-            imagedict = {}
-            imagedict["id"] = image_id
+                imagedict = {}
+                imagedict["id"] = image_id
 
-            images_list.append(imagedict)
+                images_list.append(imagedict)
 
-            if environment.is_background_processing():
+                environment = get_primary_cpw_environment()
 
-                collection.set_locked()
-                collection.save()
+                if environment.is_background_processing():
 
-                result = add_images_to_collection_task.delay_on_commit(images_list,
-                                                                       request.user.id,
-                                                                       server.id,
-                                                                       collection.id)
+                    collection.set_locked()
+                    collection.save()
+
+                    result = add_images_to_collection_task.delay_on_commit(images_list,
+                                                                           request.user.id,
+                                                                           server.id,
+                                                                           collection.id)
+
+                else:
+
+                    image = add_image_to_collection(credential, server, image_id, roi_id, collection.id)
+
+                    messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+
+                return HttpResponseRedirect(reverse('list_images', args=(collection.id, )))
 
             else:
 
-                image = add_image_to_collection(credential, server, image_id, roi_id, collection.id)
+                messages.error(request, "CPW_WEB:0450 Add Image - You have no Active Image Collection; Please create "
+                               "a Collection!")
 
-                messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
-
-            return HttpResponseRedirect(reverse('list_images', args=(collection.id, )))
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
-
-            messages.error(request, "CPW_WEB:0450 Add Image - You have no Active Image Collection; Please create "
-                           "a Collection!")
 
             return HttpResponseRedirect(reverse('home', args=()))
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_collection_for_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get A Collection for an Image
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from os import urandom
-
-
-"""
-    Is there a Collection for an Image
-"""
+#
+#   Is there a Collection for an Image
+#
 def exists_collection_for_image(a_collection, a_image):
 
     collection_list = a_image.collections.all()
@@ -45,7 +43,7 @@ def exists_collection_for_image(a_collection, a_image):
     if not collection_list:
 
         collection_exist = False
-    
+
     else:
 
         for collection in collection_list:
@@ -53,6 +51,5 @@ def exists_collection_for_image(a_collection, a_image):
             if collection == a_collection:
 
                 collection_exist = True
-
 
     return collection_exist

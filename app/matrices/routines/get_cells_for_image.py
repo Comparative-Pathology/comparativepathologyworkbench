@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_cells_for_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get Cells for a particular Image
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Get Cells for a particular Image
-"""
+#
+#   Get Cells for a particular Image
+#
 def get_cells_for_image(a_image):
 
     Cell = apps.get_model('matrices', 'Cell')

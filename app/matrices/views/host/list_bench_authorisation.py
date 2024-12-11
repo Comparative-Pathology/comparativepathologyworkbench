@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_bench_authorisation.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the list_bench_authorisation view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -37,13 +37,14 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import Authorisation
+from matrices.models import Credential
+from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 
 #
-# LIST ALL PERMISSIONS FOR ALL BENCHES
+#   LIST ALL PERMISSIONS FOR ALL BENCHES
 #
 @login_required
 def list_bench_authorisation(request, matrix_id=None):
@@ -52,10 +53,11 @@ def list_bench_authorisation(request, matrix_id=None):
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        data = get_header_data(request.user)
 
         if matrix_id is None:
 
@@ -66,10 +68,18 @@ def list_bench_authorisation(request, matrix_id=None):
 
         else:
 
-            authorisation_list = Authorisation.objects.filter(matrix__id=matrix_id)
-            text_flag = "Permissions for Bench CPW:" + format(int(matrix_id), '06d')
+            matrix = Matrix.objects.get(id=matrix_id)
 
-        data.update({ 'matrix_id': matrix_id, 'text_flag': text_flag, 'authorisation_list': authorisation_list })
+            if matrix.is_locked():
+
+                raise PermissionDenied
+
+            authorisation_list = Authorisation.objects.filter(matrix__id=matrix_id)
+            text_flag = "Permissions for Bench " + matrix.get_formatted_id()
+
+        data.update({'matrix_id': matrix_id,
+                     'text_flag': text_flag,
+                     'authorisation_list': authorisation_list})
 
         return render(request, 'host/list_bench_authorisation.html', data)
 

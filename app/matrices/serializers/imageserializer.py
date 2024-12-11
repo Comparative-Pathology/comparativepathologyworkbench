@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         imageserializer.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,22 +26,20 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This Serializer provides Create, Read and Update functions for an Image
-###
+# ##
+#
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from django.db import models
 from rest_framework.authtoken.models import Token
 
 from matrices.models import Image
 from matrices.models import Collection
 
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_collection_for_image
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import exists_user_for_username
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_servers_for_uid_url
 from matrices.routines import get_user_from_username
 
@@ -70,12 +69,10 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     image_id = serializers.IntegerField(default=0)
     comment = serializers.CharField(max_length=4095, required=False, allow_blank=True)
 
-
     class Meta:
         model = Image
         fields = ('url', 'id', 'owner', 'roi', 'server', 'image_id', 'comment')
         read_only_fields = ('id', 'url' )
-
 
     def create(self, validated_data):
         """Create Method.
@@ -93,7 +90,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0060 - Attempting to Create an Image for a different Owner.
             ValidationError:
                 CPW_REST:0530 - the Image Owner Does NOT Exist!
-          
+
         """
 
         request_user = None
@@ -111,7 +108,6 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             user_id = Token.objects.get(key=request.auth.key).user_id
             request_user = User.objects.get(id=user_id)
 
-
         image_server = validated_data.get('server')
         owner = validated_data.get('owner')
         image_id = validated_data.get('image_id')
@@ -127,7 +123,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
             # Get the Image Owner Object
             image_owner = get_user_from_username(owner)
-        
+
         # No User exists, Raise an Error!
         else:
 
@@ -148,14 +144,14 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         collection = None
 
         # Does the User have an Active Image Collection?
-        if exists_active_collection_for_user(request_user):
+        if request_user.profile.has_active_collection():
 
             # Yes - get the User's Active Image Collection
-            collection = get_active_collection_for_user(request_user)
+            collection = request_user.profile.active_collection
 
         else:
-            
-            # No 
+
+            # No
             collection_title = "A Default REST Collection"
             collection_description = "A Collection created by a REST Request"
             collection_owner = request_user
@@ -205,7 +201,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
                 json_roi = data['roi']
                 image_roi = int(json_roi['id'])
-        
+
         # CREATE an new Image Object!
         image = Image.create(image_id, image_name, server, image_viewer_url, image_birdseye_url, image_roi, image_owner, image_comment, image_hidden)
         image.save()
@@ -215,7 +211,6 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
         # RETURN the created Image Object
         return image
-
 
     def update(self, instance, validated_data):
         """Update Method.
@@ -266,7 +261,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
             # Get the Image Owner Object
             image_owner = get_user_from_username(owner)
-        
+
         # No User exists, Raise an Error!
         else:
 
@@ -282,22 +277,20 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 message = 'CPW_REST:0060 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
                 raise serializers.ValidationError(message)
 
-
-
         # Validate the Image parameters against the Server and return the Server Object
         server = self.validate_image_json(image_server, image_owner, image_id, image_roi_id, image_comment)
 
         collection = None
 
         # Does the User have an Active Image Collection?
-        if exists_active_collection_for_user(request_user):
+        if request_user.profile.has_active_collection():
 
             # Yes - get the User's Active Image Collection
-            collection = get_active_collection_for_user(request_user)
+            collection = request_user.profile.active_collection
 
         else:
-            
-            # No 
+
+            # No
             collection_title = "A Default REST Collection"
             collection_description = "A Collection created by a REST Request"
             collection_owner = request_user
@@ -341,7 +334,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
             # Was an ROI supplied?
             if image_roi_id != 0:
-                
+
                 # Get the Image and ROI Data from the Server
                 data = server.check_imaging_server_image_roi(image_id, image_roi_id)
 
@@ -370,7 +363,6 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             Collection.assign_image(instance, collection)
 
         return instance
-
 
     def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id, a_comment):
         """Validates the supplied Server, Owner, Image Id and ROI ID Fields
@@ -403,7 +395,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 CPW_REST:0260 - Server is Unknown
 
         """
-        
+
         server = None
 
         len_comment = len(a_comment)
@@ -433,7 +425,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
                     message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
-            
+
             # No
             else:
 
@@ -458,7 +450,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
                         message = 'CPW_REST:0200 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + a_server_str + '!'
                         raise serializers.ValidationError(message)
-                
+
                 # No - Server type unrecognised, Raise Error!
                 else:
 
@@ -472,7 +464,6 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
             message = 'CPW_REST:0260 ERROR! Server Unknown : ' + a_server_str + '!'
             raise serializers.ValidationError(message)
-
 
     def validate_wordpress_image_id(self, a_server, a_user, a_image_id):
         """For a WordPress Image, Check the supplied Image Exists
@@ -504,7 +495,6 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         else:
             return True
 
-
     def validate_imaging_image_id(self, a_server, a_image_id):
         """For an OMERO Image, Check the supplied Image Exists
 
@@ -525,16 +515,15 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
         # Get the OMERO Image Data from the Server
         data = a_server.check_imaging_server_image(a_image_id)
-        
+
         json_image = data['image']
         image_name = json_image['name']
-        
+
         # If the Image data is Empty then the Image does NOT exist
         if image_name == "":
             return False
         else:
             return True
-
 
     def validate_roi_id(self, a_server, a_image_id, a_roi_id):
         """For an OMERO Image ROI, Check the supplied ROI Exists

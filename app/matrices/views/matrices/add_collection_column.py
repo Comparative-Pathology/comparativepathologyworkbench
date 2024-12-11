@@ -39,11 +39,10 @@ from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Collection
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines import get_header_data
 
@@ -58,13 +57,13 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def add_collection_column(request, matrix_id, column_id):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        environment = get_primary_cpw_environment()
 
-        credential = get_credential_for_user(request.user)
+        data = get_header_data(request.user)
 
         matrix = Matrix.objects.get(id=matrix_id)
 
@@ -91,8 +90,7 @@ def add_collection_column(request, matrix_id, column_id):
 
                     result = add_collection_column_task.delay_on_commit(owner.id, matrix.id, column_id)
 
-                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                    messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
+                    messages.error(request, 'Bench ' + matrix.get_formatted_id() + ' LOCKED pending Update!')
 
                 else:
 
@@ -204,9 +202,8 @@ def add_collection_column(request, matrix_id, column_id):
 
                         actual_column = int(column_id)
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
-                                         ' Collection Added to Column ' + str(actual_column) + '!')
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
+                                                  ' Collection Added to Column ' + str(actual_column) + '!')
 
                     else:
 
@@ -220,7 +217,7 @@ def add_collection_column(request, matrix_id, column_id):
                         imageCounter = 1
 
                         for imageCell in imageCells:
-                        
+
                             collectionimageorders = CollectionImageOrder.objects.filter(collection=collection)\
                                                                                 .filter(ordering=imageCounter)\
                                                                                 .filter(permitted=owner)
@@ -237,7 +234,7 @@ def add_collection_column(request, matrix_id, column_id):
                             imageCell.description = image.name
 
                             if imageCell.has_no_blogpost():
-                            
+
                                 if credential.has_apppwd() and environment.is_wordpress_active():
 
                                     returned_blogpost = environment.post_a_post_to_wordpress(credential,
@@ -263,9 +260,8 @@ def add_collection_column(request, matrix_id, column_id):
 
                         actual_column = int(column_id)
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
-                                        ' Collection Added to Column ' + str(actual_column) + '!')
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
+                                                  ' Collection Added to Column ' + str(actual_column) + '!')
 
                 matrix_cells = matrix.get_matrix()
                 columns = matrix.get_columns()

@@ -141,7 +141,7 @@ The list collection authorisations template
 					</div><!-- End of generic-dropdown-content -->
   				</div><!-- End of generic-dropdown -->
 			</td>
-			<td>{{ collection_authorisation.collection.id|stringformat:"06d" }}</td>
+			<td>{{ collection_authorisation.collection.get_formatted_id }}</td>
 			<td>{{ collection_authorisation.collection.owner.username }}</td>
 			<td>{{ collection_authorisation.permitted.username }}</td>
 			<td>{{ collection_authorisation.collection_authority.name }}</td>

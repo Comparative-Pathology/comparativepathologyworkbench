@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_user_from_username.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,22 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get a User from the username
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from urllib.parse import urlparse
-
-from django.apps import apps
 from django.contrib.auth.models import User
 
 
-"""
-    Get a User from the username
-"""
+#
+#   Get a User from the username
+#
 def get_user_from_username(a_username):
 
     return User.objects.get(username=a_username)

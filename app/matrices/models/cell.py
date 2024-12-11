@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         cell.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Bench Cell Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -41,7 +43,23 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-#    CELL (in a BENCH)
+#    The Cell Manager Class
+#
+class CellManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Cell.DoesNotExist):
+
+            return None
+
+
+#
+#    Cell (in a BENCH)
 #
 class Cell(models.Model):
 
@@ -53,6 +71,8 @@ class Cell(models.Model):
     ycoordinate = models.IntegerField(default=0)
     blogpost = models.CharField(max_length=50, blank=True, default='')
     image = models.ForeignKey(Image, null=True, related_name='image', on_delete=models.SET_NULL)
+
+    objects = CellManager()
 
     def set_matrix(self, a_matrix):
         self.matrix = a_matrix
@@ -263,3 +283,17 @@ class Cell(models.Model):
                 })
 
         return cellComments
+
+    #
+    #   Returns the Formatted ID for the Cell
+    #
+    def get_formatted_id(self):
+
+        return self.matrix.get_formatted_id() + "_" + format(int(self.id), '09d')
+
+    #
+    #   Returns the Formatted Bench ID for the Cell
+    #
+    def get_formatted_bench_id(self):
+
+        return self.matrix.get_formatted_id()

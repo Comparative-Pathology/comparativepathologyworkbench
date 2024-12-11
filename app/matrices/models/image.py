@@ -45,6 +45,22 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 
 
 #
+#    The Image Manager Class
+#
+class ImageManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Image.DoesNotExist):
+
+            return None
+
+
+#
 #   The Image Model
 #
 class Image(models.Model):
@@ -71,6 +87,8 @@ class Image(models.Model):
     hidden = models.BooleanField(default=False)
 
     tags = TaggableManager()
+
+    objects = ImageManager()
 
     def set_identifier(self, an_identifier):
         self.identifier = an_identifier

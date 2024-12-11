@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_hidden_images_for_collection_summary.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,21 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Images from a particular Collection Summary List
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from django.apps import apps
 
-from django.db.models import Q
 
-from os import urandom
-
-
-"""
-    Get the Hidden Images from a particular Collection Summary List
-"""
+#
+#   Get the Hidden Images from a particular Collection Summary List
+#
 def get_hidden_images_for_collection_summary(a_collection_summary_list):
 
     Collection = apps.get_model('matrices', 'Collection')

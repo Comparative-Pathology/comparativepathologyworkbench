@@ -73,13 +73,13 @@ def new_blog_command(request):
                 messages.error(request, "CPW_WEB:0160 New Blog Command - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0160 New Blog Command - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = BlogForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'maintenance/new_blog_command.html', data)
 

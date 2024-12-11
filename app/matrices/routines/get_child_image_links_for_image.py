@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_child_image_links_for_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Child Image Links from a particular Image
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.apps import apps

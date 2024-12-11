@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         login_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,23 +25,21 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the login view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
-
 from django.shortcuts import redirect, render, reverse
-
-from django.contrib.auth.forms import AuthenticationForm
 
 from matrices.routines import get_header_data
 
 
 HTTP_POST = 'POST'
+
 
 #
 # VIEW FOR LOGIN
@@ -60,10 +59,10 @@ def login_user(request):
         form = AuthenticationForm(request, data=request.POST)
 
         if form.is_valid():
-            
+
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-			
+
             user = authenticate(username=username, password=password)
 
             if user is not None:
@@ -71,21 +70,21 @@ def login_user(request):
                 login(request, user)
 
                 if next == "":
-        
+
                     return redirect(reverse('home', args=()))
-                
+
                 else:
-                    
+
                     return HttpResponseRedirect(next)
-        
+
         else:
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
     else:
 
         form = AuthenticationForm()
 
-        data.update({ 'form': form })
-    
+        data.update({'form': form})
+
     return render(request, 'user/login.html', data)

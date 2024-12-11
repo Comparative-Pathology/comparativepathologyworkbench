@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_location.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_location view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -47,47 +46,55 @@ HTTP_POST = 'POST'
 
 
 #
-# EDIT A ENVIRONMENT LOCATION
+#   EDIT A ENVIRONMENT LOCATION
 #
 @login_required
 def edit_location(request, location_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        location = Location.objects.get_or_none(id=location_id)
 
-        location = get_object_or_404(Location, pk=location_id)
+        if location:
 
-        if request.method == HTTP_POST:
+            data = get_header_data(request.user)
 
-            form = LocationForm(request.POST, instance=location)
+            if request.method == HTTP_POST:
 
-            if form.is_valid():
+                form = LocationForm(request.POST, instance=location)
 
-                location = form.save(commit=False)
+                if form.is_valid():
 
-                location.set_owner(request.user)
+                    location = form.save(commit=False)
 
-                location.save()
+                    location.set_owner(request.user)
 
-                messages.success(request, 'Environment Location ' + location.name + ' Updated!')
+                    location.save()
 
-                return HttpResponseRedirect(reverse('maintenance', args=()))
+                    messages.success(request, 'Environment Location ' + location.name + ' Updated!')
+
+                    return HttpResponseRedirect(reverse('maintenance', args=()))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
+
+                    data.update({'form': form,
+                                 'location': location})
 
             else:
 
-                messages.error(request, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
+                form = LocationForm(instance=location)
 
-                data.update({'form': form, 'location': location})
+                data.update({'form': form,
+                             'location': location})
+
+            return render(request, 'maintenance/edit_location.html', data)
 
         else:
 
-            form = LocationForm(instance=location)
-
-            data.update({'form': form, 'location': location})
-
-        return render(request, 'maintenance/edit_location.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         userserializer.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,16 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This Serializer provides Read functions for a Collection
-###
+# ##
+#
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
 
-"""
-	This Serializer provides Create, Read, Update and Delete functions for a USER
-"""
-
+#
+#   This Serializer provides Create, Read, Update and Delete functions for a USER
+#
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:

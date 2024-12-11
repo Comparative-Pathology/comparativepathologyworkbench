@@ -30,19 +30,16 @@
 #
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from matrices.models import Server
+from matrices.models import Credential
 
 from matrices.routines import add_image_to_collection
-from matrices.routines import credential_exists
-from matrices.routines import exists_active_collection_for_user
-from matrices.routines import get_active_collection_for_user
 
 SHOW_CPW_IMAGE = 'show_cpw_image'
 SHOW_CPW_UPLOAD_IMAGE = 'show_cpw_upload_image'
@@ -58,33 +55,41 @@ def add_cpw_image(request, server_id, image_id, path_from):
 
         raise PermissionDenied
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-        server = get_object_or_404(Server, pk=server_id)
+    if credential:
 
-        if exists_active_collection_for_user(request.user):
+        server = Server.objects.get_or_none(id=server_id)
 
-            collection = get_active_collection_for_user(request.user)
+        if server:
 
-            image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
+            if request.user.profile.has_active_collection():
 
-            messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+                collection = request.user.profile.active_collection
+
+                image = add_image_to_collection(request.user, server, image_id, 0, collection.id)
+
+                messages.success(request, 'Image ' + str(image.id) + ' ADDED to Active Collection!')
+
+            else:
+
+                messages.error(request, "CPW_WEB:0070 Add CPW - You have no Active Image Collection; Please create a Collection!")
+
+                return HttpResponseRedirect(reverse('home', args=()))
+
+            if server.is_cpw():
+
+                if path_from == SHOW_CPW_IMAGE:
+
+                    return HttpResponseRedirect(reverse('webgallery_show_cpw_image', args=(server_id, image_id)))
+
+                if path_from == SHOW_CPW_UPLOAD_IMAGE:
+
+                    return HttpResponseRedirect(reverse('webgallery_show_cpw_upload_image', args=(server_id, image_id)))
 
         else:
 
-            messages.error(request, "CPW_WEB:0070 Add CPW - You have no Active Image Collection; Please create a Collection!")
-
             return HttpResponseRedirect(reverse('home', args=()))
-
-        if server.is_cpw():
-
-            if path_from == SHOW_CPW_IMAGE:
-
-                return HttpResponseRedirect(reverse('webgallery_show_cpw_image', args=(server_id, image_id)))
-
-            if path_from == SHOW_CPW_UPLOAD_IMAGE:
-
-                return HttpResponseRedirect(reverse('webgallery_show_cpw_upload_image', args=(server_id, image_id)))
 
     else:
 

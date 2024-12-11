@@ -43,6 +43,7 @@ from background.tasks import unlock_collection_task
 #   The Collection Unlock Admin Command
 #
 class Command(BaseCommand):
+
     help = "Unlock Collection USING a Task"
 
     def add_arguments(self, parser):
@@ -108,8 +109,8 @@ class Command(BaseCommand):
 
                     collection.save()
 
-            out_message = "Program collectionunlocktask : Collection {0:06d} lock: {1}!!"\
-                .format(collection.id, collection.locked)
+            out_message = "Program collectionunlocktask : Collection " + collection.get_formatted_id() + " lock: " +\
+                str(collection.locked) + "!!"
             self.stdout.write(self.style.SUCCESS(out_message))
 
             out_message = "Program Unlock Collection TASK Complete!!"

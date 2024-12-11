@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         validate_an_ebi_sca_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Do we have a valid EBI Single Cell Atlas URL?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from urllib.parse import urlparse
 
 
-"""
-    Do we have a Valid EBI Single Cell Atlas URL?
-"""
+#
+#   Do we have a Valid EBI Single Cell Atlas URL?
+#
 def validate_an_ebi_sca_url(a_url):
 
     result = urlparse(a_url)
@@ -76,7 +76,6 @@ def validate_an_ebi_sca_url(a_url):
             if path_array[6] != "tsne":
 
                 return False
-
 
         query_url = result.query
 
@@ -179,7 +178,6 @@ def validate_an_ebi_sca_url(a_url):
             else:
 
                 presentGene = False
-
 
         if validOption and validType and validColourBy and presentGene and validGene:
 

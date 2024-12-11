@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_bench_authority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,18 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_bench_authority view routine
+# ##
 #
-###
 from __future__ import unicode_literals
-
-import time
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -56,42 +53,48 @@ def edit_bench_authority(request, bench_authority_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        authority = Authority.objects.get_or_none(id=bench_authority_id)
 
-        authority = get_object_or_404(Authority, pk=bench_authority_id)
+        if authority:
 
-        if request.method == HTTP_POST:
+            data = get_header_data(request.user)
 
-            time.sleep(3.0)
+            if request.method == HTTP_POST:
 
-            form = AuthorityForm(request.POST, instance=authority)
+                form = AuthorityForm(request.POST, instance=authority)
 
-            if form.is_valid():
+                if form.is_valid():
 
-                authority = form.save(commit=False)
+                    authority = form.save(commit=False)
 
-                authority.set_owner(request.user)
+                    authority.set_owner(request.user)
 
-                authority.save()
+                    authority.save()
 
-                messages.success(request, 'Bench Authority ' + authority.name + ' Updated!')
+                    messages.success(request, 'Bench Authority ' + authority.name + ' Updated!')
 
-                return HttpResponseRedirect(reverse('maintenance', args=()))
+                    return HttpResponseRedirect(reverse('maintenance', args=()))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0090 Edit Bench Authority - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0090 Edit Bench Authority - Form is Invalid!")
+
+                    data.update({'form': form,
+                                 'authority': authority})
 
             else:
 
-                messages.error(request, "CPW_WEB:0090 Edit Bench Authority - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0090 Edit Bench Authority - Form is Invalid!")
+                form = AuthorityForm(instance=authority)
 
-                data.update({ 'form': form, 'authority': authority })
+                data.update({'form': form,
+                             'authority': authority})
+
+            return render(request, 'maintenance/edit_bench_authority.html', data)
 
         else:
 
-            form = AuthorityForm(instance=authority)
-
-            data.update({ 'form': form, 'authority': authority })
-
-        return render(request, 'maintenance/edit_bench_authority.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

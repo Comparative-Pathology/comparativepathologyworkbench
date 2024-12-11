@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         show_wordpress_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,65 +25,64 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the show_wordpress_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 
+from matrices.models import Credential
 from matrices.models import Server
 
-from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
-from matrices.routines import exists_active_collection_for_user
 
 
 #
-# SHOW AN IMAGE
-#  FROM A WORDPRESS SERVER
+#   SHOW AN IMAGE
+#    FROM A WORDPRESS SERVER
 #
 @login_required()
 def show_wordpress_image(request, server_id, image_id):
-    """
-    Show an image
-    """
 
     if request.user.username == 'guest':
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
-
-    if credential_exists(request.user):
+    if credential:
 
         image_flag = False
 
-        credential = get_credential_for_user(request.user)
-
-        if exists_active_collection_for_user(request.user):
+        if request.user.profile.has_active_collection():
 
             image_flag = True
 
-        data.update({ 'image_flag': image_flag, 'add_from': "show_wordpress_image" })
+        data = get_header_data(request.user)
 
-        server = get_object_or_404(Server, pk=server_id)
+        data.update({'image_flag': image_flag,
+                     'add_from': "show_wordpress_image"})
 
-        if server.is_wordpress():
+        server = Server.objects.get_or_none(id=server_id)
 
-            server_data = server.get_wordpress_image_json(credential, image_id)
+        if server:
 
-            data.update(server_data)
+            if server.is_wordpress():
 
-            return render(request, 'gallery/show_wordpress_image.html', data)
+                server_data = server.get_wordpress_image_json(credential, image_id)
+
+                data.update(server_data)
+
+                return render(request, 'gallery/show_wordpress_image.html', data)
+
+            else:
+
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
 

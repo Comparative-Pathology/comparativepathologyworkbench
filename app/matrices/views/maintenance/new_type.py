@@ -73,13 +73,13 @@ def new_type(request):
                 messages.error(request, "CPW_WEB:0200 New Server Type - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0200 New Server Type - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = TypeForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'maintenance/new_type.html', data)
 

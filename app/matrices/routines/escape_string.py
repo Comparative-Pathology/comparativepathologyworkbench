@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         escape_string.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,14 +26,15 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Escape all characters in a string that need escaping
-###
+# ##
+#
 from __future__ import unicode_literals
 
 
+#
+#   Escape all characters in a string that need escaping
+#
 def escape_string(a_string):
-    """
-        Escape all characters in a string that need escaping
-    """
 
     output_string = a_string.replace(" ", "\ ").replace("!", "\!").replace("#", "\#").replace("$", "\$") \
         .replace("&", "\&").replace("'", r"\'").replace("(", "\(").replace(")", "\)").replace("*", "\*") \

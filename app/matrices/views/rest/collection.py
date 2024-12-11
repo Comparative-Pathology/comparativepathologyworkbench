@@ -33,8 +33,6 @@ from __future__ import unicode_literals
 
 import subprocess
 
-from django.shortcuts import get_object_or_404
-
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -46,10 +44,8 @@ from matrices.permissions import CollectionIsReadOnlyOrIsAdminOrIsOwner
 from matrices.serializers import CollectionSerializer
 
 from matrices.routines import exists_image_in_cells
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_bench_for_last_used_collection
 from matrices.routines import exists_user_for_last_used_collection
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_benches_for_last_used_collection
 from matrices.routines import get_users_for_last_used_collection
 
@@ -169,22 +165,36 @@ class CollectionViewSet(viewsets.ModelViewSet):
                                 if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
                                     # Get the Artefact associated with this Image Link
-                                    artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+                                    artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
 
-                                    # Does the Image Link have a file location
-                                    if artefact.has_location():
+                                    # Is there an Artefact ...
+                                    #  Yes
+                                    if artefact:
 
-                                        rm_command = 'rm ' + str(artefact.location)
-                                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                                        # Does the Image Link have a file location
+                                        if artefact.has_location():
 
-                                        # Delete the located file for this artefact
-                                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                            rm_command = 'rm ' + str(artefact.location)
+                                            rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                    # Delete the Image Link
-                                    image_link.delete()
+                                            # Delete the located file for this artefact
+                                            process = subprocess.Popen(rm_escaped,
+                                                                       shell=True,
+                                                                       stdout=subprocess.PIPE,
+                                                                       stderr=subprocess.PIPE,
+                                                                       universal_newlines=True)
 
-                                    # Delete the Artefact
-                                    artefact.delete()
+                                        # Delete the Image Link
+                                        image_link.delete()
+
+                                        # Delete the Artefact
+                                        artefact.delete()
+
+                                    # No
+                                    else:
+
+                                        # Delete the Image Link
+                                        image_link.delete()
 
                                 # No, disallow the Image deletion
                                 else:
@@ -206,22 +216,36 @@ class CollectionViewSet(viewsets.ModelViewSet):
                                 if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
                                     # Get the Artefact associated with this Image Link
-                                    artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+                                    artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
 
-                                    # Does the Image Link have a file location
-                                    if artefact.has_location():
+                                    # Is there an Artefact ... ?
+                                    #  Yes
+                                    if artefact:
 
-                                        rm_command = 'rm ' + str(artefact.location)
-                                        rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
+                                        # Does the Image Link have a file location
+                                        if artefact.has_location():
 
-                                        # Delete the located file for this artefact
-                                        process = subprocess.Popen(rm_escaped, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                            rm_command = 'rm ' + str(artefact.location)
+                                            rm_escaped = rm_command.replace("(", "\(" ).replace(")", "\)" )
 
-                                    # Delete the Image Link
-                                    image_link.delete()
+                                            # Delete the located file for this artefact
+                                            process = subprocess.Popen(rm_escaped,
+                                                                       shell=True,
+                                                                       stdout=subprocess.PIPE,
+                                                                       stderr=subprocess.PIPE,
+                                                                       universal_newlines=True)
 
-                                    # Delete the Artefact
-                                    artefact.delete()
+                                        # Delete the Image Link
+                                        image_link.delete()
+
+                                        # Delete the Artefact
+                                        artefact.delete()
+
+                                    # No
+                                    else:
+
+                                        # Delete the Image Link
+                                        image_link.delete()
 
                                 else:
 
@@ -260,7 +284,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
                     responseMsg = 'Collection Deletion NOT Allowed - Image Server is NOT OMERO or WordPress!'
 
         #  Can we delete this image ... ?
-        #  Yes ... 
+        #  Yes ...
         if boolAllowDelete is True:
 
             # Has this Collection been Last Used in a Bench ... ?
@@ -297,7 +321,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
             # Is this Collection the User's Active Collection ... ?
             #  Yes
-            if collection == get_active_collection_for_user(request.user):
+            if collection == request.user.profile.active_collection:
 
                 # Set the User to have NO Active Collection
                 request.user.profile.set_active_collection(None)
@@ -307,10 +331,10 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
             # Does the User have an Active Collection ... ?
             #  Yes
-            if exists_active_collection_for_user(request.user):
+            if request.user.profile.has_active_collection():
 
                 # Get the Active Collection
-                active_collection = get_active_collection_for_user(request.user)
+                active_collection = request.user.profile.active_collection
 
                 # Is this Collection the Active Collection ... ?
                 #  Yes

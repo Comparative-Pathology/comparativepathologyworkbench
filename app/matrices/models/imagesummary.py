@@ -42,7 +42,23 @@ from matrices.routines.exists_child_image_links_for_image import exists_child_im
 
 
 #
-#   IMAGE SUMMARY (a VIEW for ALL Images)
+#    The ImageSummary Manager Class
+#
+class ImageSummaryManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, ImageSummary.DoesNotExist):
+
+            return None
+
+
+#
+#   ImageSummary (a VIEW for ALL Images)
 #
 class ImageSummary(models.Model):
     image_id = models.IntegerField(default=0, blank=False)
@@ -62,6 +78,8 @@ class ImageSummary(models.Model):
     image_collection_ids = models.CharField(max_length=255, blank=False, default='')
     image_matrix_ids = models.CharField(max_length=255, blank=False, default='')
     image_tag_ids = models.CharField(max_length=255, blank=False, default='')
+
+    objects = ImageSummaryManager()
 
     class Meta:
         managed = False

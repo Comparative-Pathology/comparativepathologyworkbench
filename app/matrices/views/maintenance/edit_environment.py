@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_environment.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,16 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_environment view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -51,54 +50,66 @@ HTTP_POST = 'POST'
 
 
 #
-# EDIT AN ENVIRONMENT
+#   EDIT AN ENVIRONMENT
 #
 @login_required
 def edit_environment(request, environment_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        environment = Environment.objects.get_or_none(id=environment_id)
 
-        environment = get_object_or_404(Environment, pk=environment_id)
+        if environment:
 
-        environment_old_name = environment.name
+            data = get_header_data(request.user)
 
-        if request.method == HTTP_POST:
+            environment_old_name = environment.name
 
-            form = EnvironmentForm(request.POST, instance=environment)
+            if request.method == HTTP_POST:
 
-            if form.is_valid():
+                form = EnvironmentForm(request.POST, instance=environment)
 
-                if environment_old_name == ENVIRONMENT_NAME_CPW:
+                if form.is_valid():
 
-                    if environment.is_cpw():
+                    if environment_old_name == ENVIRONMENT_NAME_CPW:
 
-                        environment = form.save(commit=False)
+                        if environment.is_cpw():
 
-                        environment.set_owner(request.user)
+                            environment = form.save(commit=False)
 
-                        environment.save()
+                            environment.set_owner(request.user)
 
-                        messages.success(request, 'Environment ' + environment.name + ' Updated!')
+                            environment.save()
+
+                            messages.success(request, 'Environment ' + environment.name + ' Updated!')
+
+                        else:
+
+                            messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the '
+                                           'Primary Environment!')
+                            form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the Primary '
+                                           'Environment')
 
                     else:
 
-                        messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the '
-                                       'Primary Environment!')
-                        form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the Primary '
-                                       'Environment')
+                        if exists_primary_environment():
 
-                else:
+                            if environment.name == ENVIRONMENT_NAME_CPW:
 
-                    if exists_primary_environment():
-
-                        if environment.name == ENVIRONMENT_NAME_CPW:
-
-                            messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of '
+                                messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of '
                                            'the Primary Environment!')
-                            form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of the '
+                                form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of the '
                                            'Primary Environment')
+
+                            else:
+
+                                environment = form.save(commit=False)
+
+                                environment.set_owner(request.user)
+
+                                environment.save()
+
+                                messages.success(request, 'Environment ' + environment.name + ' Updated!')
 
                         else:
 
@@ -110,32 +121,27 @@ def edit_environment(request, environment_id):
 
                             messages.success(request, 'Environment ' + environment.name + ' Updated!')
 
-                    else:
+                    return HttpResponseRedirect(reverse('maintenance', args=()))
 
-                        environment = form.save(commit=False)
+                else:
 
-                        environment.set_owner(request.user)
+                    messages.error(request, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
+                    form.add_error(None, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
 
-                        environment.save()
-
-                        messages.success(request, 'Environment ' + environment.name + ' Updated!')
-
-                return HttpResponseRedirect(reverse('maintenance', args=()))
+                    data.update({'form': form,
+                                 'environment': environment})
 
             else:
 
-                messages.error(request, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
-                form.add_error(None, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
+                form = EnvironmentForm(instance=environment)
 
                 data.update({'form': form, 'environment': environment})
 
+            return render(request, 'maintenance/edit_environment.html', data)
+
         else:
 
-            form = EnvironmentForm(instance=environment)
-
-            data.update({'form': form, 'environment': environment})
-
-        return render(request, 'maintenance/edit_environment.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

@@ -67,8 +67,6 @@ def add_images_to_collection_task(images_list, user_id, server_id, collection_id
 
         imageCounter = imageCounter + 1
 
-    collection_id_formatted = "{:06d}".format(collection.id)
-
     if imageCounter > 1:
 
         message_str = str(imageCounter) + ' Images ADDED to Collection!'
@@ -77,7 +75,7 @@ def add_images_to_collection_task(images_list, user_id, server_id, collection_id
 
         message_str = str(imageCounter) + ' Image ADDED to Active Collection!'
 
-    result_message = 'ACTIVE Collection ' + collection_id_formatted + ' Updated - ' + message_str
+    result_message = 'ACTIVE Collection ' + collection.get_formatted_id() + ' Updated - ' + message_str
 
     collection.set_unlocked()
     collection.save()

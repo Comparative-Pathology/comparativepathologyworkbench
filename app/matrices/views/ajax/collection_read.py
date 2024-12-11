@@ -33,8 +33,6 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.models import Collection
 
 
@@ -44,41 +42,48 @@ from matrices.models import Collection
 @login_required()
 def collection_read(request, collection_id):
 
-    object = get_object_by_uuid_or_404(Collection, collection_id)
-
-    activeFlag = True
     htmlString = ''
 
-    if object.owner == request.user:
+    object = Collection.objects.get_or_none(id=collection_id)
 
-        if request.user.profile.active_collection_id == collection_id:
+    if object:
 
-            activeFlag = True
+        activeFlag = True
+
+        if object.owner == request.user:
+
+            if request.user.profile.active_collection_id == collection_id:
+
+                activeFlag = True
+
+            else:
+
+                activeFlag = False
+
+            htmlString = '<dl class=\"standard\">'\
+                '<dt>Title</dt>'\
+                '<dd>' + object.title + '</dd>'\
+                '<dt>Description</dt>'\
+                '<dd>' + object.description + '</dd>'\
+                '<dt>Owner</dt>'\
+                '<dd>' + object.owner.username + '</dd>'\
+                '<dt>Active</dt>'\
+                '<dd>' + str(activeFlag) + '</dd>'\
+                '</dl>'
 
         else:
 
-            activeFlag = False
-
-        htmlString = '<dl class=\"standard\">'\
-            '<dt>Title</dt>'\
-            '<dd>' + object.title + '</dd>'\
-            '<dt>Description</dt>'\
-            '<dd>' + object.description + '</dd>'\
-            '<dt>Owner</dt>'\
-            '<dd>' + object.owner.username + '</dd>'\
-            '<dt>Active</dt>'\
-            '<dd>' + str(activeFlag) + '</dd>'\
-            '</dl>'
+            htmlString = '<dl class=\"standard\">'\
+                '<dt>Title</dt>'\
+                '<dd>' + object.title + '</dd>'\
+                '<dt>Description</dt>'\
+                '<dd>' + object.description + '</dd>'\
+                '<dt>Owner</dt>'\
+                '<dd>' + object.owner.username + '</dd>'\
+                '</dl>'
 
     else:
 
-        htmlString = '<dl class=\"standard\">'\
-            '<dt>Title</dt>'\
-            '<dd>' + object.title + '</dd>'\
-            '<dt>Description</dt>'\
-            '<dd>' + object.description + '</dd>'\
-            '<dt>Owner</dt>'\
-            '<dd>' + object.owner.username + '</dd>'\
-            '</dl>'
+        htmlString = '<h1>COLLECTION DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

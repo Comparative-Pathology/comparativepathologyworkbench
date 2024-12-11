@@ -33,18 +33,16 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from matrices.models import Matrix
 from matrices.models import Cell
-from matrices.models import Image
 from matrices.models import Collection
+from matrices.models import Credential
+from matrices.models import Matrix
+from matrices.models import Image
 
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_collection_for_image
 from matrices.routines import exists_image_for_id_server_owner_roi
 from matrices.routines import exists_server_for_uid_url
 from matrices.routines import exists_user_for_username
-from matrices.routines import get_active_collection_for_user
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_images_for_id_server_owner_roi
 from matrices.routines import get_servers_for_uid_url
 from matrices.routines import get_user_from_username
@@ -407,10 +405,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         collection = None
 
                         # Does the Requesting User have a Active Collection?
-                        if exists_active_collection_for_user(request_user):
+                        if request_user.profile.has_active_collection():
 
                             # Get the Active Collection
-                            collection = get_active_collection_for_user(request_user)
+                            collection = request_user.profile.active_collection
 
                         # No ...
                         else:
@@ -455,7 +453,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         environment = get_primary_cpw_environment()
 
         # Get the Credentials for Requesting User
-        credential = get_credential_for_user(request.user)
+        credential = Credential.objects.get_or_none(username=request.user.username)
 
         post_id = ''
 
@@ -625,7 +623,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         if instance.has_no_blogpost():
 
             # Get the Credentials for Requesting User
-            credential = get_credential_for_user(request.user)
+            credential = Credential.objects.get_or_none(username=request.user.username)
 
             # Get the Primary Blogging Engine
             environment = get_primary_cpw_environment()
@@ -885,10 +883,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             collection = None
 
                             # Does the Requesting User have a Active Collection?
-                            if exists_active_collection_for_user(a_request_user):
+                            if a_request_user.profile.has_active_collection():
 
                                 # Get the Active Collection
-                                collection = get_active_collection_for_user(a_request_user)
+                                collection = a_request_user.profile.active_collection
 
                             # No ...
                             else:
@@ -922,7 +920,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             if not bench_cell.has_blogpost():
 
                                 # Get the Credentials for Requesting User
-                                credential = get_credential_for_user(a_request_user)
+                                credential = Credential.objects.get_or_none(username=a_request_user.user.username)
 
                                 # Get the Primary Blogging Engine
                                 environment = get_primary_cpw_environment()
@@ -1167,10 +1165,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 collection = None
 
                                 # Does the Requesting User have a Active Collection?
-                                if exists_active_collection_for_user(a_request_user):
+                                if a_request_user.profile.has_active_collection():
 
                                     # Get the Active Collection
-                                    collection = get_active_collection_for_user(a_request_user)
+                                    collection = a_request_user.profile.active_collection
 
                                 # No ...
                                 else:
@@ -1204,7 +1202,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                                 if bench_cell.has_blogpost():
 
                                     # Get the Credentials for Requesting User
-                                    credential = get_credential_for_user(a_request_user)
+                                    credential = Credential.objects.get_or_none(username=a_request_user.user.username)
 
                                     # Get the Primary Blogging Engine
                                     environment = get_primary_cpw_environment()
@@ -1255,7 +1253,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             if bench_cell.has_blogpost():
 
                                 # Get the Credentials for Requesting User
-                                credential = get_credential_for_user(a_request_user)
+                                credential = Credential.objects.get_or_none(username=a_request_user.user.username)
 
                                 # Get the Primary Blogging Engine
                                 environment = get_primary_cpw_environment()
@@ -1346,7 +1344,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if delete_cell.has_blogpost():
 
                 # Get the Credential for the Requesting User
-                credential = get_credential_for_user(a_request_user)
+                credential = Credential.objects.get_or_none(username=a_request_user.user.username)
 
                 # Get the Primary Blogging Engine
                 environment = get_primary_cpw_environment()
@@ -1524,10 +1522,10 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
                     # Does the Requesting  User have an Active Collection?
                     #  Yes
-                    if exists_active_collection_for_user(a_request_user):
+                    if a_request_user.profile.has_active_collection(): 
 
                         # Get the Active Collection
-                        collection = get_active_collection_for_user(a_request_user)
+                        collection = a_request_user.profile.active_collection
 
                     # No active Collection - setup a Default Active Collection then
                     else:
@@ -1556,7 +1554,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                     post_id = ''
 
                     # Get the Credentials for the Requesting User
-                    credential = get_credential_for_user(a_request_user)
+                    credential = Credential.objects.get_or_none(username=a_request_user.user.username)
 
                     # Get the Primary WordPress Server - Blogging Engine
                     environment = get_primary_cpw_environment()

@@ -36,9 +36,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from matrices.models import Collection
 from matrices.models import CollectionAuthorisation
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 
@@ -52,9 +53,11 @@ def list_collection_authorisation(request, collection_id=None):
 
         raise PermissionDenied
 
-    data = get_header_data(request.user)
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
+
+        data = get_header_data(request.user)
 
         if collection_id is None:
 
@@ -65,8 +68,12 @@ def list_collection_authorisation(request, collection_id=None):
 
         else:
 
-            collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__id=collection_id)
-            text_flag = "Permissions for Collection:" + format(int(collection_id), '06d')
+            collection = Collection.objects.get_or_none(id=collection_id)
+
+            if collection:
+
+                collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__id=collection_id)
+                text_flag = "Permissions for Collection " + collection.get_formatted_id()
 
         data.update({'collection_id': collection_id,
                      'text_flag': text_flag,

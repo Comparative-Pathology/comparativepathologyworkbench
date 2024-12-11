@@ -33,15 +33,15 @@ from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from sortable_listview import SortableListView
-
+from matrices.models import Credential
 from matrices.models import ImageSummary
 
 from matrices.forms import ImageSummarySimpleSearchForm
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import image_list_by_user_and_direction
+
+from sortable_listview import SortableListView
 
 
 #
@@ -176,7 +176,9 @@ class ImageSimpleListView(LoginRequiredMixin, SortableListView):
 
         readBoolean = False
 
-        if credential_exists(self.request.user):
+        credential = Credential.objects.get_or_none(username=self.request.user.username)
+
+        if credential:
 
             readBoolean = True
 

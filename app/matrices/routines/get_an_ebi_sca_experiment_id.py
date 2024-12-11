@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_an_ebi_sca_experiment_id.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Extract the EBI SCA Experiment Id from an EBI SCA URL
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from urllib.parse import urlparse
 
 
-"""
-    Extract the EBI SCA Experiment Id from an EBI SCA URL
-"""
+#
+#   Extract the EBI SCA Experiment Id from an EBI SCA URL
+#
 def get_an_ebi_sca_experiment_id(a_url):
 
     experiment_id = ''

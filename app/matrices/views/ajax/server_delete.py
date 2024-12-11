@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         server_delete.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX server_delete view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -35,16 +35,14 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
+from matrices.models import Credential
 from matrices.models import Server
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_image_for_server
 
 
 #
-# DELETE AN IMAGE SERVER
+#   DELETE AN IMAGE SERVER
 #
 @login_required()
 def server_delete(request, server_id):
@@ -61,25 +59,31 @@ def server_delete(request, server_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
+    server = Server.objects.get_or_none(id=server_id)
 
-    server = get_object_by_uuid_or_404(Server, server_id)
+    if server:
 
-    if not request.user.is_superuser:
+        if not request.user.is_superuser:
 
-        if server.owner != request.user:
+            if server.owner != request.user:
+
+                raise PermissionDenied
+
+        if exists_image_for_server(server):
 
             raise PermissionDenied
 
-    if exists_image_for_server(server):
+        server.delete()
+
+    else:
 
         raise PermissionDenied
-
-
-    server.delete()
 
     messages.success(request, 'Server ' + str(server_id) + ' Deleted!')
 

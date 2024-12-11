@@ -35,13 +35,10 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import CollectionForm
 
 from matrices.models import Collection
-
-from matrices.routines import credential_exists
+from matrices.models import Credential
 
 
 #
@@ -58,11 +55,17 @@ def collection_update(request, collection_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(Collection, collection_id)
+    object = Collection.objects.get_or_none(id=collection_id)
+
+    if not object:
+
+        raise PermissionDenied
 
     if object.is_locked():
 
@@ -82,13 +85,11 @@ def collection_update(request, collection_id):
 
             object.save()
 
-            messages.success(request, 'EXISTING Collection ' + "{:06d}".format(object.id) + ' Updated!')
+            messages.success(request, 'EXISTING Collection ' + object.get_formatted_id() + ' Updated!')
 
     else:
 
         form = CollectionForm(instance=object, request=request)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

@@ -38,6 +38,22 @@ from matrices.models import CollectionAuthority
 
 
 #
+#    The CollectionAuthorisation Manager Class
+#
+class CollectionAuthorisationManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, CollectionAuthorisation.DoesNotExist):
+
+            return None
+
+
+#
 #   The Colleciton Authorisation Model (for Collections)
 #
 class CollectionAuthorisation(models.Model):
@@ -51,6 +67,8 @@ class CollectionAuthorisation(models.Model):
     collection_authority = models.ForeignKey(CollectionAuthority,
                                              related_name='collectionauthorisations',
                                              on_delete=models.DO_NOTHING)
+
+    objects = CollectionAuthorisationManager()
 
     @classmethod
     def create(cls, collection, permitted, collection_authority):

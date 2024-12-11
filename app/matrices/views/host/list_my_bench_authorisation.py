@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_my_bench_authorisation.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the list_my_bench_authorisation view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -37,13 +37,13 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import Authorisation
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 
 
 #
-# LIST ALL PERMISSIONS FOR A USERS BENCHES
+#   LIST ALL PERMISSIONS FOR A USERS BENCHES
 #
 @login_required
 def list_my_bench_authorisation(request):
@@ -52,17 +52,20 @@ def list_my_bench_authorisation(request):
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        data = get_header_data(request.user)
 
         authorisation_list = Authorisation.objects.filter(matrix__owner=request.user)
 
         text_flag = ' YOUR Bench Permissions'
         matrix_id = ''
 
-        data.update({ 'matrix_id': matrix_id, 'text_flag': text_flag, 'authorisation_list': authorisation_list })
+        data.update({'matrix_id': matrix_id,
+                     'text_flag': text_flag,
+                     'authorisation_list': authorisation_list})
 
         return render(request, 'host/list_bench_authorisation.html', data)
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_list_by_user_and_direction.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get All Collections for a particular User
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
@@ -35,11 +37,9 @@ from django.apps import apps
 from django.db.models import Q
 
 
-"""
-    Get All Collections for a particular User
-"""
-
-
+#
+#   Get All Collections for a particular User
+#
 def collection_list_by_user_and_direction(a_user,
                                           a_direction,
                                           a_query_title,

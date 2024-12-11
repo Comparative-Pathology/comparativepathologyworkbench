@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         new_blog_credential.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,20 +25,16 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the new_blog_credential view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-
-from matrices.models import Credential
 
 from matrices.forms import CredentialForm
 
@@ -45,8 +42,9 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
-# ADD A NEW USER BLOG CREDENTIAL
+#   ADD A NEW USER BLOG CREDENTIAL
 #
 @login_required
 def new_blog_credential(request):
@@ -76,13 +74,13 @@ def new_blog_credential(request):
                 messages.error(request, "CPW_WEB:0030 New Credential - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0030 New Credential - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = CredentialForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'authorisation/new_blog_credential.html', data)
 

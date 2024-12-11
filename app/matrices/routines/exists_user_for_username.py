@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_user_for_username.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,20 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there a User for a particular username?
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from django.apps import apps
 from django.contrib.auth.models import User
 
 
-"""
-    Is there a User for a Username string?
-"""
+#
+#   Is there a User for a Username string?
+#
 def exists_user_for_username(a_username):
 
     return User.objects.filter(username=a_username).exists()

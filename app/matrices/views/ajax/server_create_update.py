@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         server_create_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX server_create_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -35,21 +35,19 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from decouple import config
 
+from matrices.models import Credential
 from matrices.models import Server
 
 from matrices.forms import ServerForm
 
 from matrices.routines import AESCipher
-from matrices.routines import credential_exists
 from matrices.routines import exists_server_for_uid_url
 
 
 #
-# ADD or EDIT AN IMAGE SERVER
+#   ADD or EDIT AN IMAGE SERVER
 #
 @login_required()
 def server_create_update(request, server_id=None):
@@ -66,7 +64,9 @@ def server_create_update(request, server_id=None):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
@@ -80,13 +80,19 @@ def server_create_update(request, server_id=None):
     else:
         # "Change" mode
 
-        object = get_object_by_uuid_or_404(Server, server_id)
+        object = Server.objects.get_or_none(id=server_id)
 
-        if not request.user.is_superuser:
+        if object:
 
-            if object.owner != request.user:
+            if not request.user.is_superuser:
 
-                raise PermissionDenied
+                if object.owner != request.user:
+
+                    raise PermissionDenied
+
+        else:
+
+            raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -132,7 +138,5 @@ def server_create_update(request, server_id=None):
 
         form = ServerForm(instance=object)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

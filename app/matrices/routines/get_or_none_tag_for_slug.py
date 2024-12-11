@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# #
+#
 # ##
-# \file         credential_exists.py
+# \file         get_or_none_tag_for_slug.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,19 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Does a particular User have any Credentials?
+# Return the Tag OR None for a particular Tag Slug
 # ##
 #
 from __future__ import unicode_literals
 
-from django.apps import apps
+from taggit.models import Tag
 
 
 #
-#   Does a particular User have any Credentials?
+#   Return the Tag OR None for a particular Tag Id
 #
-def credential_exists(a_user):
+def get_or_none_tag_for_slug(a_slug):
 
-    Credential = apps.get_model('matrices', 'Credential')
+    tag = None
 
-    return Credential.objects.filter(username=a_user.username).values('username').exists()
+    if Tag.objects.filter(slug=a_slug).exists():
+
+        tag = Tag.objects.get(slug=a_slug)
+
+    return tag

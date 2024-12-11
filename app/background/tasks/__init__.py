@@ -28,12 +28,13 @@
 # tasks Package Description.
 # ##
 #
-from .add_collection_row_task import add_collection_row_task
-from .add_collection_column_task import add_collection_column_task
 from .add_collection_column_cell_task import add_collection_column_cell_task
+from .add_collection_column_task import add_collection_column_task
 from .add_collection_row_cell_task import add_collection_row_cell_task
+from .add_collection_row_task import add_collection_row_task
+from .add_images_to_collection_task import add_images_to_collection_task
 from .lock_bench_task import lock_bench_task
+from .delete_bench_task import delete_bench_task
 from .lock_collection_task import lock_collection_task
 from .unlock_bench_task import unlock_bench_task
 from .unlock_collection_task import unlock_collection_task
-from .add_images_to_collection_task import add_images_to_collection_task

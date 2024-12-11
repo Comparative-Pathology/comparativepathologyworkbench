@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_server_from_omero_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,28 +26,23 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get a Server from an OMERO URL
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
-
-from django.shortcuts import get_object_or_404
 
 from urllib.parse import urlparse
 
 from django.apps import apps
 
 
-"""
-    Get a Server from an OMERO URL
-"""
+#
+#   Get a Server from an OMERO URL
+#
 def get_server_from_omero_url(a_url):
 
-    result = urlparse(a_url)
+    Server = apps.get_model('matrices', 'Server')
 
-    a_server_url = ''
+    result = urlparse(a_url)
 
     if all([result.scheme, result.netloc, result.path]):
 
@@ -54,8 +50,6 @@ def get_server_from_omero_url(a_url):
 
         query_server = query_array[2]
 
-    Server = apps.get_model('matrices', 'Server')
-
-    server = get_object_or_404(Server, pk=query_server)
+    server = Server.objects.get_or_none(id=query_server)
 
     return server

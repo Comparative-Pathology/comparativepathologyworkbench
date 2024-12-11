@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         import_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,33 +25,30 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the import_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 
 from matrices.models import Cell
+from matrices.models import Credential
 from matrices.models import Image
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
-from matrices.routines import get_credential_for_user
 from matrices.routines import exists_update_for_bench_and_user
+from matrices.routines import get_or_none_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# IMPORT AN IMAGE FROM BASKET TO CELL - IMPORT
+#   IMPORT AN IMAGE FROM BASKET TO CELL - IMPORT
 #
 @login_required()
 def import_image(request):
@@ -63,25 +61,40 @@ def import_image(request):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
     source = request.POST['source']
     target = request.POST['target']
 
-    source_image = get_object_or_404(Image, pk=source)
-    target_cell = get_object_or_404(Cell, pk=target)
+    source_image = Image.objects.get_or_none(id=source)
 
-    matrix = target_cell.matrix
+    if not source_image:
 
-    user = get_object_or_404(User, pk=request.user.id)
+        raise PermissionDenied
 
-    environment = get_primary_cpw_environment()
+    target_cell = Cell.objects.get_or_none(id=target)
 
-    if credential_exists(user):
+    if not target_cell:
 
-        credential = get_credential_for_user(request.user)
+        raise PermissionDenied
+
+    user = get_or_none_user(request.user.id)
+
+    if not user:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        matrix = target_cell.matrix
+
+        environment = get_primary_cpw_environment()
 
         if exists_update_for_bench_and_user(matrix, request.user):
 
@@ -120,7 +133,8 @@ def import_image(request):
 
                 if credential.has_apppwd() and environment.is_wordpress_active():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential, target_cell.title,
+                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                             target_cell.title,
                                                                              target_cell.description)
 
                     if returned_blogpost['status'] == WORDPRESS_SUCCESS:

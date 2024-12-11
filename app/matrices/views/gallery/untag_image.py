@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         untag_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,45 +25,54 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the untag_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-from taggit.models import Tag
-
+from matrices.models import Credential
 from matrices.models import Image
 
-from matrices.routines import credential_exists
-from matrices.routines import get_header_data
+from matrices.routines import get_or_none_tag_for_slug
 
 
+#
+#   Untag an image
+#
 @login_required()
 def untag_image(request, image_id, slug):
-    """
-    Un Tag an image
-    """
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-        tag = get_object_or_404(Tag, slug=slug)
+    if credential:
 
-        image = get_object_or_404(Image, pk=image_id)
+        tag = get_or_none_tag_for_slug(slug)
 
-        image.tags.remove(tag)
+        if tag:
 
-        if tag.taggit_taggeditem_items.count() <= 0:
+            image = Image.objects.get_or_none(id=image_id)
 
-            tag.delete()
+            if image:
 
-        return HttpResponseRedirect(reverse('webgallery_edit_image', args=(image_id, )))
+                image.tags.remove(tag)
+
+                if tag.taggit_taggeditem_items.count() <= 0:
+
+                    tag.delete()
+
+                return HttpResponseRedirect(reverse('webgallery_edit_image', args=(image_id, )))
+
+            else:
+
+                return HttpResponseRedirect(reverse('home', args=()))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

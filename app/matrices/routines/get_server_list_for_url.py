@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_server_list_for_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,21 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Servers for a particular URL
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.db.models import Q
 
 from django.apps import apps
 
 
-"""
-    Get the Servers for a particular URL
-"""
+#
+#   Get the Servers for a particular URL
+#
 def get_server_list_for_url(a_url):
 
     Server = apps.get_model('matrices', 'Server')

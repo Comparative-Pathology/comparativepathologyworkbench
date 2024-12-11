@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         list_collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,25 +25,25 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # The list_collections View
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from sortable_listview import SortableListView
-
 from matrices.models import CollectionSummary
+from matrices.models import Credential
+
 from matrices.forms import CollectionSummarySearchForm
 
-from matrices.routines import credential_exists
 from matrices.routines import get_collection_count_for_user
 from matrices.routines import get_header_data
 from matrices.routines import collection_list_by_user_and_direction
 from matrices.routines import get_primary_cpw_environment
+
+from sortable_listview import SortableListView
 
 
 #
@@ -117,7 +118,9 @@ class CollectionListView(LoginRequiredMixin, SortableListView):
 
         readBoolean = False
 
-        if credential_exists(self.request.user):
+        credential = Credential.objects.get_or_none(username=self.request.user.username)
+
+        if credential:
 
             readBoolean = True
 

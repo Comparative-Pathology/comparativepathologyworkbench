@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_cell_blog_read.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,71 +25,70 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_read.py view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from datetime import datetime
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponse
-
-from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Cell
 
 
 #
-# READ A BENCH
+#   READ A CELL BLOG
 #
 def bench_cell_blog_read(request, cell_id):
 
-    object = get_object_by_uuid_or_404(Cell, cell_id)
-
-    cell_comments = object.get_cell_comments()
-
     htmlString = ''
 
-    introString = '<dl class=\"standard\">'\
-                  '<dt>Cell Title</dt>'\
-                  '<dd>' + object.title[:20] + '</dd>'\
-                  '<dt>Description</dt>'\
-                  '<dd>' + object.description[:20] + '</dd>'\
-                  '</dl>'
+    object = Cell.objects.get_or_none(id=cell_id)
 
-    commentsString = ''
+    if object:
 
-    if cell_comments['comment_list']:
+        cell_comments = object.get_cell_comments()
 
-        commentsString = '<h3>Commentary</h3>'\
-                         '<table>'\
-                         '<tr>'\
-                         '<th>Date</th>'\
-                         '<th>Time</th>'\
-                         '<th>Author</th>'\
-                         '<th>Comment</th>'\
-                         '</tr>'
+        introString = '<dl class=\"standard\">'\
+                      '<dt>Cell Title</dt>'\
+                      '<dd>' + object.title[:20] + '</dd>'\
+                      '<dt>Description</dt>'\
+                      '<dd>' + object.description[:20] + '</dd>'\
+                      '</dl>'
 
-        for comment in cell_comments['comment_list']:
+        commentsString = ''
 
-            commentString = '<tr>'\
-                            '<td>' + str(comment['date']) + '</td>'\
-                            '<td>' + str(comment['time']) + '</td>'\
-                            '<td>' + str(comment['author_name']) + '</td>'\
-                            '<td>' + str(comment['content'][:50]) + '</td>'\
-                            '</tr>'
+        if cell_comments['comment_list']:
 
-            commentsString = commentsString + commentString
+            commentsString = '<h3>Commentary</h3>'\
+                             '<table>'\
+                             '<tr>'\
+                             '<th>Date</th>'\
+                             '<th>Time</th>'\
+                             '<th>Author</th>'\
+                             '<th>Comment</th>'\
+                             '</tr>'
 
-        commentsString = commentsString + '</table><p></p>'
+            for comment in cell_comments['comment_list']:
+
+                commentString = '<tr>'\
+                                '<td>' + str(comment['date']) + '</td>'\
+                                '<td>' + str(comment['time']) + '</td>'\
+                                '<td>' + str(comment['author_name']) + '</td>'\
+                                '<td>' + str(comment['content'][:50]) + '</td>'\
+                                '</tr>'
+
+                commentsString = commentsString + commentString
+
+            commentsString = commentsString + '</table><p></p>'
+
+        else:
+
+            commentsString = '<p>There are NO Comments for this Cell!</p>'
+
+        htmlString = introString + commentsString
 
     else:
 
-        commentsString = '<p>There are NO Comments for this Cell!</p>'
-
-    htmlString = introString + commentsString
+        htmlString = '<h1>CELL DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_cell_blog.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,27 +25,24 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_cell_blog view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.forms import CommentForm
 
-from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
+from matrices.models import Matrix
 
-from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_header_data
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
@@ -53,115 +51,127 @@ WORDPRESS_SUCCESS = 'Success!'
 
 
 #
-# VIEW THE CELL BLOG ENTRY
+#   VIEW THE CELL BLOG ENTRY
 #
 @login_required
 def view_cell_blog(request, matrix_id, cell_id):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-        credential = get_credential_for_user(request.user)
+        if matrix:
 
-        cell = get_object_or_404(Cell, pk=cell_id)
+            cell = Cell.objects.get_or_none(id=cell_id)
 
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
+            if cell:
 
-        blogpost = ''
+                environment = get_primary_cpw_environment()
 
-        comment_list = list()
+                data = get_header_data(request.user)
 
-        authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
+                blogpost = ''
 
-        if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
+                comment_list = list()
 
-            if cell.has_no_blogpost() and cell.has_image():
+                authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
-                post_id = ''
+                if authority.is_viewer() or authority.is_editor() or authority.is_owner() or authority.is_admin():
 
-                if credential.has_apppwd() and environment.is_wordpress_active():
+                    if cell.has_no_blogpost() and cell.has_image():
 
-                    returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                             cell.title,
-                                                                             cell.description)
+                        post_id = ''
 
-                    if returned_blogpost['status'] == WORDPRESS_SUCCESS:
+                        if credential.has_apppwd() and environment.is_wordpress_active():
 
-                        post_id = returned_blogpost['id']
+                            returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                     cell.title,
+                                                                                     cell.description)
 
-                    cell.set_blogpost(post_id)
+                            if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-                    cell.save()
+                                post_id = returned_blogpost['id']
 
-                    blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+                            cell.set_blogpost(post_id)
 
-                    comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
+                            cell.save()
 
-            if cell.has_blogpost():
+                            blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
-                blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
+                            comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
 
-                if blogpost['status'] != WORDPRESS_SUCCESS:
-
-                    post_id = ''
-
-                    if credential.has_apppwd() and environment.is_wordpress_active():
-
-                        returned_blogpost = environment.post_a_post_to_wordpress(credential,
-                                                                                 cell.title,
-                                                                                 cell.description)
-
-                        if returned_blogpost['status'] == WORDPRESS_SUCCESS:
-
-                            post_id = returned_blogpost['id']
-
-                        cell.set_blogpost(post_id)
-
-                        cell.save()
+                    if cell.has_blogpost():
 
                         blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
-                comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
+                        if blogpost['status'] != WORDPRESS_SUCCESS:
 
-        if request.method == HTTP_POST:
+                            post_id = ''
 
-            form = CommentForm(request.POST)
+                            if credential.has_apppwd() and environment.is_wordpress_active():
 
-            if form.is_valid():
+                                returned_blogpost = environment.post_a_post_to_wordpress(credential,
+                                                                                         cell.title,
+                                                                                         cell.description)
 
-                cd = form.cleaned_data
+                                if returned_blogpost['status'] == WORDPRESS_SUCCESS:
 
-                comment = cd.get('comment')
+                                    post_id = returned_blogpost['id']
 
-                if comment != '':
+                                cell.set_blogpost(post_id)
 
-                    if credential.has_apppwd() and environment.is_wordpress_active():
+                                cell.save()
 
-                        returned_comment = environment.post_a_comment_to_wordpress(credential, cell.blogpost, comment)
+                                blogpost = environment.get_a_post_from_wordpress(cell.blogpost)
 
-                return HttpResponseRedirect(reverse('view_cell_blog', args=(matrix_id, cell_id)))
+                        comment_list = environment.get_a_post_comments_from_wordpress(cell.blogpost)
+
+                if request.method == HTTP_POST:
+
+                    form = CommentForm(request.POST)
+
+                    if form.is_valid():
+
+                        cd = form.cleaned_data
+
+                        comment = cd.get('comment')
+
+                        if comment != '':
+
+                            if credential.has_apppwd() and environment.is_wordpress_active():
+
+                                returned_comment = environment.post_a_comment_to_wordpress(credential,
+                                                                                           cell.blogpost,
+                                                                                           comment)
+
+                        return HttpResponseRedirect(reverse('view_cell_blog', args=(matrix_id, cell_id)))
+
+                    else:
+
+                        messages.error(request, "CPW_WEB:0570 View Cell Blog - Form is Invalid!")
+
+                else:
+
+                    form = CommentForm()
+
+                data.update({'form': form,
+                             'matrix_id': matrix_id,
+                             'cell': cell,
+                             'matrix': matrix,
+                             'blogpost': blogpost,
+                             'comment_list': comment_list})
+
+                return render(request, 'matrices/detail_cell_blog.html', data)
 
             else:
 
-                messages.error(request, "CPW_WEB:0570 View Cell Blog - Form is Invalid!")
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
 
-            form = CommentForm()
-
-        data.update({
-            'form': form,
-            'matrix_id': matrix_id,
-            'cell': cell,
-            'matrix': matrix,
-            'blogpost': blogpost,
-            'comment_list': comment_list
-        })
-
-        return render(request, 'matrices/detail_cell_blog.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

@@ -32,8 +32,6 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from django.http import HttpResponse
 
 from matrices.models import CollectionAuthorisation
@@ -45,17 +43,25 @@ from matrices.models import CollectionAuthorisation
 @login_required()
 def collection_authorisation_read(request, collection_authorisation_id):
 
-    object = get_object_by_uuid_or_404(CollectionAuthorisation, collection_authorisation_id)
+    htmlString = ''
 
-    htmlString = '<dl class=\"standard\">'\
-        '<dt>Collection Authorisation Id</dt>'\
-        '<dd>' + str(object.id) + '</dd>'\
-        '<dt>Collection Id</dt>'\
-        '<dd>' + '{num:06d}'.format(num=object.collection.id) + '</dd>'\
-        '<dt>User</dt>'\
-        '<dd>' + object.permitted.username + '</dd>'\
-        '<dt>Authority</dt>'\
-        '<dd>' + object.collection_authority.name + '</dd>'\
-        '</dl>'
+    object = CollectionAuthorisation.objects.get_or_none(id=collection_authorisation_id)
+
+    if object:
+
+        htmlString = '<dl class=\"standard\">'\
+            '<dt>Collection Authorisation Id</dt>'\
+            '<dd>' + str(object.id) + '</dd>'\
+            '<dt>Collection Id</dt>'\
+            '<dd>' + object.collection.get_formatted_id() + '</dd>'\
+            '<dt>User</dt>'\
+            '<dd>' + object.permitted.username + '</dd>'\
+            '<dt>Authority</dt>'\
+            '<dd>' + object.collection_authority.name + '</dd>'\
+            '</dl>'
+
+    else:
+
+        htmlString = '<h1>COLLECTIONAUTHORISATION DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

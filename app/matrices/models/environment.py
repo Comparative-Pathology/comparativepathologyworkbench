@@ -64,6 +64,22 @@ CMD_BLOG_GET_LINK_POST = 'LinkPost'
 
 
 #
+#    The Environment Manager Class
+#
+class EnvironmentManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Environment.DoesNotExist):
+
+            return None
+
+
+#
 #   The Environment Model
 #
 class Environment(models.Model):
@@ -142,6 +158,8 @@ class Environment(models.Model):
                                               blank=False)
     task_pause_time = models.IntegerField(default=5,
                                           blank=False)
+
+    objects = EnvironmentManager()
 
     @classmethod
     def create(cls, name, location, protocol, web_root, document_root, nginx_private_location, wordpress_web_root,

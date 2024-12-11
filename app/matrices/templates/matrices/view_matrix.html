@@ -40,7 +40,7 @@ The view matrix (bench) template
 				<a href="{% url 'list_benches' %}">Workbenches</a>
 			</li>
 			<li>
-				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
+				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">{{ matrix.get_formatted_id }}, {{ matrix.title }}</a>
 			</li>
 	{% if environment_summary.is_wordpress_active %}
 			<li>
@@ -94,7 +94,7 @@ The view matrix (bench) template
 		  <div class="collection-dropdown">
 			<button class="collection-drop-button"><i class="fas fa-bars"></i></button>
 			<div class="collection-dropdown-content">
-				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
+				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench {{ matrix.get_formatted_id }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
     	{% if collection_list %}
 			{% for collection in collection_list %}
 				{% if matrix.has_last_used_collection == True %}
@@ -171,7 +171,7 @@ The view matrix (bench) template
 {% else %}
 {% if matrix.is_private and matrix.is_locked %}
 <div class="panel-alert">
-	<p>Bench CPW:{{ matrix.id|stringformat:"06d" }} is LOCKED pending Update!!</p>
+	<p>Bench {{ matrix.get_formatted_id }} is LOCKED pending Update!!</p>
 </div>
 {% endif %}
 
@@ -197,7 +197,7 @@ The view matrix (bench) template
 	  		  <a href="{% url 'aggregated_matrix_blog' matrix.id %}"><i class="fa fa-bullhorn"></i><span class="menu-item">&#9;</span> Aggregated Commentary</a>
 						{% endif %}
 					  	{% if updateBoolean %}
-	  		  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
+	  		  <a href="{% url 'bench_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Updating Bench {{ matrix.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit</a>
 					  	{% endif %}
 						{% if environment_summary.is_wordpress_active %}
 	  		  <a href="{% url 'detail_matrix_blog' matrix.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Bench Commentary</a>
@@ -208,7 +208,7 @@ The view matrix (bench) template
 							  {% else %}
 			  <a href="{% url 'swap_bench_headers' matrix.id %}" onclick="return confirm('Are you sure you want to Show Heading Titles ... ?')"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Show Heading Titles</a>
 							{% endif %}
-			  <a href="{% url 'bench_delete' matrix.id %}" onclick="delete_matrix(event, 'Deleting Bench CPW:{{ matrix.id|stringformat:"06d" }}'); return false;"><i class="fa fa-trash"></i> Delete</a>
+			  <a href="{% url 'delete_bench' matrix.id %}" onclick="return confirm('Are you sure you want to DELETE this BENCH .... ?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Delete</a>
 						{% endif %}
 					{% endif %}
 				{% endif %}
@@ -361,8 +361,8 @@ The view matrix (bench) template
 						{% if matrix.is_private and matrix.is_unlocked %}
 							{% if updateBoolean %}
 			  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Row Header</a>
-			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Row Header</a>
-			  <a href="{% url 'add_rows' matrix.id forloop.parentloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Rows to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Rows ...</a>
+			  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench Header Cell {{ matrix_cell.get_formatted_id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Row Header</a>
+			  <a href="{% url 'add_rows' matrix.id forloop.parentloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Rows to Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Add Rows ...</a>
 			  <a href="{% url 'delete_this_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Row</a>
 								{% if matrix.has_last_used_collection %}
 			  <a href="{% url 'add_collection_row' matrix.id forloop.parentloop.counter0 %}" onclick="return confirm('Are you sure you want to ADD a Collection to this ROW?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Add Collection to Row</a>
@@ -510,8 +510,8 @@ The view matrix (bench) template
 						{% if matrix.is_private and matrix.is_unlocked %}
 							{% if updateBoolean %}
 	  		  <a data-value="{{ matrix_cell.id }}" href="#" class="bench-cell-header-button btn btn-primary"><i class="fa fa-info"></i> View Column Header</a>
-	  		  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Column Header</a>
-	  		  <a href="{% url 'add_columns' matrix.id forloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Columns to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Columns ...</a>
+	  		  <a href="{% url 'header_update' matrix.id matrix_cell.id %}" onclick="open_header_edit_dialog(event, 'Updating Bench Header Cell {{ matrix_cell.get_formatted_id }} ... ...'); return false;"><i class="fa fa-edit"></i> Edit Column Header</a>
+	  		  <a href="{% url 'add_columns' matrix.id forloop.counter0 %}" onclick="open_edit_cell_dialog(event, 'Add Columns to Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Add Columns ...</a>
 	  		  <a href="{% url 'delete_this_column' matrix.id forloop.counter0 %}" onclick="return confirm('Are you sure you want to DELETE this COLUMN?')"><i class="fa fa-trash-alt"></i><span class="menu-item">&#9;</span>Delete Column</a>
 							{% endif %}
 							{% if matrix.has_last_used_collection %}
@@ -660,19 +660,19 @@ The view matrix (bench) template
 										{% if environment_summary.is_wordpress_active %}
 			  <a href="{% url 'view_cell_blog' matrix.id matrix_cell.id %}" target="_blank"><i class="fa fa-edit"></i><span class="menu-item">&#9;</span>Edit Cell Commentary</a>
 										{% endif %}
-			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
+			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
 			  <a href="{% url 'clear_cell' matrix.id matrix_cell.id view_matrix %}" onclick="return confirm('Are you sure you want to CLEAR this CELL?')"><i class="fa fa-trash"></i><span class="menu-item">&#9;</span>Clear Cell</a>
-			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
+			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
 										{% if matrix.has_last_used_collection %}
-			  <a href="{% url 'add_collection' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Collection to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Collection ...</a>
+			  <a href="{% url 'add_collection' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Collection to Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Add Collection ...</a>
 										{% endif %}
 									{% else %}
-			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
+			  <a href="{% url 'add_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Cell to Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Add Cell ...</a>
 			  <a href="{% url 'amend_cell' matrix.id matrix_cell.id %}"><i class="fa fa-pencil-alt"></i><span class="menu-item">&#9;</span>Edit Cell</a>
-			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
+			  <a href="{% url 'delete_cell' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Delete Cell from {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Delete Cell ...</a>
 										{% if matrix.has_last_used_collection %}
-			  <a href="{% url 'add_collection' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Collection to Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}'); return false;"><i class="fa fa-edit"></i> Add Collection ...</a>
+			  <a href="{% url 'add_collection' matrix.id matrix_cell.id %}" onclick="open_edit_cell_dialog(event, 'Add Collection to Bench {{ matrix_cell.get_formatted_bench_id }}'); return false;"><i class="fa fa-edit"></i> Add Collection ...</a>
 			  							{% endif %}
 									{% endif %}
 								{% endif %}
@@ -1211,29 +1211,6 @@ The view matrix (bench) template
 	  dialog_edit.open(event);
 	}
 
-	function delete_matrix(event, title) {
-	  event.preventDefault();
-	  var url = $(event.target).attr('href');
-	  FrontendForms.confirmRemoteAction(
-	    url, {
-	      title: title,
-	      text: 'Are you sure?',
-	      confirmButtonClass: 'btn-danger',
-	      icon: 'question'
-	    },
-	    function (data) {
-	      Swal.fire({
-	        text: 'Bench "' + data.object_id + '" has been deleted',
-	        icon: 'warning'
-	      })
-		  var url = "{% url 'list_benches' %}"
-		  FrontendForms.gotourl(url, show_layer=true);
-	    },
-	    data = true // set to any value to obtain POST
-	  );
-	}
-
-
 	$(document).ready(function () {
 	  dialog_edit = new Dialog({
 	    dialog_selector: '#dialog_generic',
@@ -1281,7 +1258,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Info. for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Info. for Bench {{ matrix.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -1306,7 +1283,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Commentary for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Commentary for Bench {{ matrix.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -1352,7 +1329,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Cell:{{ cell.id }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench Cell {{ cell.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -1404,7 +1381,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench Header Cell {{ matrix_cell.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });

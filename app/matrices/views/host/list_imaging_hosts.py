@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         list_imaging_hosts.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the list_imaging_hosts view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -37,28 +37,32 @@ from django.urls import reverse
 
 from matrices.forms import SearchUrlForm
 
-from matrices.routines import credential_exists
+from matrices.models import Credential
+
 from matrices.routines import get_header_data
 
 
 #
-# LIST SERVERS
+#   LIST SERVERS
 #
 @login_required
 def list_imaging_hosts(request):
 
-    data = get_header_data(request.user)
-
     readBoolean = False
-    updateBoolean = False
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        data = get_header_data(request.user)
 
         readBoolean = True
 
         form = SearchUrlForm()
 
-        data.update({ 'form': form, 'search_from': "list_imaging_hosts", 'readBoolean': readBoolean })
+        data.update({'form': form,
+                     'search_from': "list_imaging_hosts",
+                     'readBoolean': readBoolean})
 
         return render(request, 'host/list_imaging_hosts.html', data)
 

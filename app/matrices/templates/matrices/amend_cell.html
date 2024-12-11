@@ -39,7 +39,7 @@ The amend cell template
 <!-- Breadcrumb Menu -->
 
 			<li><a href="{% url 'list_benches' %}">Benches</a></li>
-			<li><a href="{% url 'matrix' matrix.id %}">CPW:{{ matrix.id|stringformat:"06d" }}</a></li>
+			<li><a href="{% url 'matrix' matrix.id %}">{{ matrix.get_formatted_id }}</a></li>
 			<li>Edit Cell: {{ cell.get_coordinates }}</li>
 
 {% endblock %}
@@ -66,7 +66,7 @@ The amend cell template
 		  <div class="collection-dropdown">
 		    <button class="collection-drop-button"><i class="fas fa-bars"></i></button>
 			<div class="collection-dropdown-content">
-				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
+				<a class="test-font" href="{% url 'bench_collection_update' matrix.id %}" onclick="open_matrix_edit_dialog(event, 'Select Collection for Bench {{ matrix.get_formatted_id }} ...'); return false;"><button class="button-mini button-add"><i class="fa fa-edit"></i></button> Select Collection</a>
 	{% if collection_list %}
 		{% for collection in collection_list %}
 			{% if cell.matrix.has_last_used_collection == True %}
@@ -126,7 +126,7 @@ The amend cell template
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate != 0 %}
-  <h1>CELL - CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}"; {{ cell.get_coordinates }}</h1>
+  <h1>CELL - {{ cell.get_formatted_id }}, "{{ matrix.title }}"; {{ cell.get_coordinates }}</h1>
   <p>Amend the Cell Details</p>
   <hr>
   <br />
@@ -226,7 +226,7 @@ The amend cell template
 {% endif %}
 
 {% if cell.xcoordinate == 0 and cell.ycoordinate != 0 %}
-	<h1>ROW HEADER - CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}""; Column {{ cell.xcoordinate }}, Row {{ cell.ycoordinate }}</h1>
+	<h1>ROW HEADER - {{ cell.get_formatted_id }}, "{{ matrix.title }}""; Column {{ cell.xcoordinate }}, Row {{ cell.ycoordinate }}</h1>
 	<p>Amend the Row Header Details</p>
 	<hr>
 	<br />
@@ -243,7 +243,7 @@ The amend cell template
 {% endif %}
 
 {% if cell.xcoordinate != 0 and cell.ycoordinate == 0 %}
-	<h1>COLUMN HEADER - CPW:{{ matrix.id|stringformat:"06d" }}_{{ cell.id }}, "{{ matrix.title }}""; Column {{ cell.xcoordinate }}, Row {{ cell.ycoordinate }}</h1>
+	<h1>COLUMN HEADER - {{ cell.get_formatted_id }}, "{{ matrix.title }}""; Column {{ cell.xcoordinate }}, Row {{ cell.ycoordinate }}</h1>
 	<p>Amend the Row Header Details</p>
 	<hr>
 	<br />

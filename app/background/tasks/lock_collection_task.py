@@ -48,7 +48,7 @@ def lock_collection_task(collection_id):
     collection.set_locked()
     collection.save()
 
-    out_message = "Task lock_bench : Collection :{0:06d} lock: {1} Complete!!"\
-        .format(collection.id, collection.locked)
+    out_message = "Task lock_collection : Collection " + collection.get_formatted_id() + " lock: " +\
+        str(collection.locked) + " Complete!!"
 
     return out_message

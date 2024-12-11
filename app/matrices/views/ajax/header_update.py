@@ -35,14 +35,11 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import HeaderForm
 
 from matrices.models import Cell
+from matrices.models import Credential
 from matrices.models import Matrix
-
-from matrices.routines import credential_exists
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -61,17 +58,27 @@ def header_update(request, bench_id, header_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    matrix = get_object_by_uuid_or_404(Matrix, pk=bench_id)
+    matrix = Matrix.objects.get_or_none(id=bench_id)
+
+    if not matrix:
+
+        raise PermissionDenied
 
     if matrix.is_locked():
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(Cell, header_id)
+    object = Cell.objects.get_or_none(id=header_id)
+
+    if not object:
+
+        raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -85,14 +92,11 @@ def header_update(request, bench_id, header_id):
 
             object.save()
 
-            cell_id_formatted = "CPW:" + "{:06d}".format(bench_id) + "_" + str(header_id)
-            messages.success(request, 'Header ' + cell_id_formatted + ' Updated!')
+            messages.success(request, 'Header ' + object.get_formatted_id + ' Updated!')
 
     else:
 
         form = HeaderForm(instance=object)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

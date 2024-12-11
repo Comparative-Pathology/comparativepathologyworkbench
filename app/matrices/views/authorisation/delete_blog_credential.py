@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_blog_credential.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,36 +25,40 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_blog_credential view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from matrices.models import Credential
 
+
 #
-# DELETE A USER BLOG CREDENTIAL
+#   DELETE A USER BLOG CREDENTIAL
 #
 @login_required
 def delete_blog_credential(request, credential_id):
 
     if request.user.is_superuser:
 
-        credential = get_object_or_404(Credential, pk=credential_id)
+        credential = Credential.objects.get_or_none(id=credential_id)
 
-        messages.success(request, 'Credential ' + str(credential.id) + ' Deleted!')
+        if credential:
 
-        credential.delete()
+            messages.success(request, 'Credential ' + str(credential.id) + ' Deleted!')
 
-        return HttpResponseRedirect(reverse('authorisation', args=()))
+            credential.delete()
+
+            return HttpResponseRedirect(reverse('authorisation', args=()))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

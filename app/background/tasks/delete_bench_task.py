@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-###!
-# \file         bench_delete.py
+#
+# ##
+# \file         delete_bench_task.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -24,77 +25,52 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# This file contains the AJAX bench_delete view routine
+# The delete_bench_task Task.
 # ##
 #
-from __future__ import unicode_literals
+from __future__ import absolute_import
 
 import subprocess
 
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.core.exceptions import PermissionDenied
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from celery import shared_task
+
+from django.contrib.auth.models import User
 
 from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
-
-WORDPRESS_SUCCESS = 'Success!'
+from matrices.routines.simulate_network_latency import simulate_network_latency
 
 
 #
-#   DELETE A BENCH
+#   DELETE a Bench
 #
-@login_required()
-def bench_delete(request, bench_id):
+@shared_task
+def delete_bench_task(matrix_id, user_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
-
-        raise PermissionDenied
-
-    if not request.user.is_authenticated:
-
-        raise PermissionDenied
-
-    if not credential_exists(request.user):
-
-        raise PermissionDenied
-
-    credential = get_credential_for_user(request.user)
-
-    if not credential.has_apppwd():
-
-        raise PermissionDenied
-
-    object_id = ''
+    simulate_network_latency()
 
     environment = get_primary_cpw_environment()
 
-    matrix = get_object_or_404(Matrix, pk=bench_id)
+    user = User.objects.get(id=user_id)
 
-    if matrix.is_locked():
+    credential = Credential.objects.get_or_none(username=user.username)
 
-        raise PermissionDenied
+    matrix = Matrix.objects.get(id=matrix_id)
 
-    oldCells = Cell.objects.filter(matrix=bench_id)
+    oldCells = Cell.objects.filter(matrix=matrix_id)
+
+    out_message = ""
 
     if matrix.has_blogpost():
 
         if credential.has_apppwd() and environment.is_wordpress_active():
 
             response = environment.delete_a_post_from_wordpress(credential, matrix.blogpost)
-
-            if response != WORDPRESS_SUCCESS:
-
-                messages.error(request, "CPW_WEB:0560 Delete Bench - WordPress Error, Contact System " +
-                               "Administrator!")
 
     for oldCell in oldCells:
 
@@ -103,11 +79,6 @@ def bench_delete(request, bench_id):
             if credential.has_apppwd() and environment.is_wordpress_active():
 
                 response = environment.delete_a_post_from_wordpress(credential, oldCell.blogpost)
-
-                if response != WORDPRESS_SUCCESS:
-
-                    messages.error(request, "CPW_WEB:0550 Delete Bench - WordPress Error, Contact System " +
-                                   "Administrator!")
 
         if oldCell.has_image():
 
@@ -119,13 +90,13 @@ def bench_delete(request, bench_id):
 
                 for otherCell in cell_list:
 
-                    if otherCell.matrix.id != bench_id:
+                    if otherCell.matrix.id != matrix_id:
 
                         other_bench_Flag = True
 
                 if other_bench_Flag is True:
 
-                    if request.user.profile.is_hide_collection_image():
+                    if user.profile.is_hide_collection_image():
 
                         oldCell.image.set_hidden(True)
                         oldCell.image.save()
@@ -148,7 +119,7 @@ def bench_delete(request, bench_id):
 
                 for otherCell in cell_list:
 
-                    if otherCell.matrix.id != bench_id:
+                    if otherCell.matrix.id != matrix_id:
 
                         delete_flag = False
 
@@ -188,11 +159,8 @@ def bench_delete(request, bench_id):
 
                     image.delete()
 
-    object_id = matrix.id
+    out_message = 'Bench ' + matrix.get_formatted_id() + ' DELETED!'
 
     matrix.delete()
 
-    matrix_id_formatted = "CPW:" + "{:06d}".format(object_id)
-    messages.success(request, 'Bench ' + matrix_id_formatted + ' DELETED!')
-
-    return JsonResponse({'object_id': object_id})
+    return out_message

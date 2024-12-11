@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_user_for_last_used_collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,20 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Are there any Users that have last used a particular Collection?
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
-from os import urandom
-
-from django.apps import apps
 from django.contrib.auth.models import User
 
 
-"""
-    Are there any Benches that have last used a particular Collection?
-"""
+#
+#   Are there any Benches that have last used a particular Collection?
+#
 def exists_user_for_last_used_collection(a_collection):
 
     return User.objects.filter(profile__last_used_collection=a_collection).exists()

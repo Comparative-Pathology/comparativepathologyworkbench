@@ -35,15 +35,14 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.forms import MatrixAddRowForm
 
 from matrices.models import Matrix
 from matrices.models import Cell
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 
 
@@ -61,13 +60,19 @@ def add_rows(request, matrix_id, row_id):
 
         raise PermissionDenied
 
-    matrix = get_object_or_404(Matrix, pk=matrix_id)
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
+
+    if not matrix:
+
+        raise PermissionDenied
 
     if matrix.is_locked():
 
         raise PermissionDenied
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
 
         authority = get_authority_for_bench_and_user_and_requester(matrix, request.user)
 
@@ -112,8 +117,7 @@ def add_rows(request, matrix_id, row_id):
 
                         matrix.save()
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str(amount)
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' + str(amount)
                                          + ' Rows Added Above!')
 
                     else:
@@ -138,8 +142,7 @@ def add_rows(request, matrix_id, row_id):
 
                         matrix.save()
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str(amount)
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' + str(amount)
                                          + ' Rows Added Below!')
 
             else:
@@ -147,9 +150,7 @@ def add_rows(request, matrix_id, row_id):
                 form = MatrixAddRowForm()
                 form.fields['direction'].initial = [1]
 
-            return render(request, template_name, {
-                'form': form,
-            })
+            return render(request, template_name, {'form': form, })
 
     else:
 

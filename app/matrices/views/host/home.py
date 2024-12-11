@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         home.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,21 +25,21 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the home view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from matrices.routines import credential_exists
+from matrices.models import Credential
+
 from matrices.routines import get_header_data
 
 
 #
-# HOME VIEW
+#   HOME VIEW
 #
 def home(request):
 
@@ -48,9 +49,15 @@ def home(request):
 
     credentialExists = False
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
 
         credentialExists = True
+
+    else:
+
+        raise PermissionDenied
 
     data = get_header_data(request.user)
 

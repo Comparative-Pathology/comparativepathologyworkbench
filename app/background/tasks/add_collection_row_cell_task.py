@@ -38,8 +38,8 @@ from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Collection
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 
-from matrices.routines import get_credential_for_user
 from matrices.routines.simulate_network_latency import simulate_network_latency
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
@@ -64,7 +64,7 @@ def add_collection_row_cell_task(user_id, matrix_id, cell_id):
     cell_ycoordinate = cell.ycoordinate
 
     environment = get_primary_cpw_environment()
-    credential = get_credential_for_user(user)
+    credential = Credential.objects.get_or_none(username=user.username)
 
     collection = Collection.objects.get(id=matrix.last_used_collection.id)
 
@@ -180,8 +180,7 @@ def add_collection_row_cell_task(user_id, matrix_id, cell_id):
 
         actual_row = int(cell_ycoordinate)
 
-        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-        result_message = 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() + \
+        result_message = 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' + str() + \
                          ' Collection Added to Row ' + str(actual_row) + \
                          ' From Cell (X:' + str(cell_xcoordinate) + \
                          ', Y:' + str(cell_ycoordinate) + ')'
@@ -243,8 +242,7 @@ def add_collection_row_cell_task(user_id, matrix_id, cell_id):
 
         actual_row = int(cell_ycoordinate)
 
-        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-        result_message = 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() + \
+        result_message = 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' + \
                          ' Collection Added to Row ' + str(actual_row) + \
                          ' From Cell (X:' + str(cell_xcoordinate) + \
                          ', Y:' + str(cell_ycoordinate) + ')'

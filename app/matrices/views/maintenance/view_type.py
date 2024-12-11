@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_type.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,13 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This file contains the view_type view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -39,7 +39,9 @@ from matrices.models import Type
 
 from matrices.routines import get_header_data
 
-# VIEW A TYPE OF SERVER
+
+#
+#   VIEW A TYPE OF SERVER
 #
 @login_required
 def view_type(request, type_id):
@@ -48,11 +50,18 @@ def view_type(request, type_id):
 
         data = get_header_data(request.user)
 
-        type = get_object_or_404(Type, pk=type_id)
+        type = Type.objects.get_or_none(id=type_id)
 
-        data.update({ 'type_id': type_id, 'type': type })
+        if type:
 
-        return render(request, 'maintenance/detail_type.html', data)
+            data.update({'type_id': type_id,
+                         'type': type})
+
+            return render(request, 'maintenance/detail_type.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

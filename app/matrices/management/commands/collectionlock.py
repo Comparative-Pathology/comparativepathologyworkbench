@@ -43,6 +43,7 @@ from background.tasks import lock_collection_task
 #   The Collection Lock admin command
 #
 class Command(BaseCommand):
+
     help = "Lock Collection USING a Task"
 
     def add_arguments(self, parser):
@@ -108,8 +109,8 @@ class Command(BaseCommand):
 
                     collection.save()
 
-            out_message = "Program collectionlocktask : Collection CPW:{0:06d} lock: {1}!!"\
-                .format(collection.id, collection.locked)
+            out_message = "Program collectionlocktask : Collection " + collection.get_formatted_id() + " lock: " +\
+                str(collection.locked) + "!!"
             self.stdout.write(self.style.SUCCESS(out_message))
 
         out_message = "Program : Lock Collection TASK Complete!!"

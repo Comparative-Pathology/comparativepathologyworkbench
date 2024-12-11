@@ -1,5 +1,6 @@
 # !/usr/bin/python3
-# !
+# 
+# ##
 # \file         search_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the search_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -39,7 +39,8 @@ from django.urls import reverse
 
 from matrices.forms import SearchUrlForm
 
-from matrices.routines import credential_exists
+from matrices.models import Credential
+
 from matrices.routines import convert_url_ebi_sca_to_json
 from matrices.routines import convert_url_omero_to_cpw
 from matrices.routines import get_header_data
@@ -47,15 +48,18 @@ from matrices.routines import get_header_data
 HTTP_POST = 'POST'
 LIST_IMAGING_HOSTS = "list_imaging_hosts"
 
+
 #
 # Search for an Image
 #
 @login_required
 def search_image(request, path_from, identifier):
 
-    data = get_header_data(request.user)
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
+
+        data = get_header_data(request.user)
 
         form = SearchUrlForm()
 

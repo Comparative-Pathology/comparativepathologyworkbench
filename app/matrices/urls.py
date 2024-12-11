@@ -133,7 +133,6 @@ urlpatterns = [
          name='bench_collection_update'),
     path('bench_update_owner/<int:bench_id>/', matrices_views.ajax.bench_update_owner,
          name="bench_update_owner"),
-    path('bench_delete/<int:bench_id>/', matrices_views.ajax.bench_delete, name='bench_delete'),
 
     path('header_read/<int:bench_id>/<int:header_id>/', matrices_views.ajax.header_read, name='header_read'),
     path('header_update/<int:bench_id>/<int:header_id>/', matrices_views.ajax.header_update, name='header_update'),
@@ -373,6 +372,8 @@ urlpatterns = [
          name='view_b_image_link'),
     path('view_a_and_b_image_links/<int:image_selected_id>/',
          matrices_views.matrices.view_parent_and_child_image_links, name='view_a_and_b_image_links'),
+
+    path('delete_bench/<int:bench_id>/', matrices_views.matrices.delete_bench, name='delete_bench'),
 
     #   views/user
     path('login/', matrices_views.user.login_user, name="login"),

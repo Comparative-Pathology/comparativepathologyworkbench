@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         document.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,39 +26,42 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Document Model - for items that are uploaded to the CPW ;-)
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.shortcuts import get_object_or_404
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
-
-from random import randint
-
-from requests.exceptions import HTTPError
-
-from matrices.models import Server
 
 
-"""
-    DOCUMENT
-"""
+#
+#    The Document Manager Class
+#
+class DocumentManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Document.DoesNotExist):
+
+            return None
+
+
+#
+#   Document
+#
 class Document(models.Model):
     comment = models.TextField(max_length=4095, default='')
     source_url = models.CharField(max_length=255, blank=False, default='')
     location = models.FileField(upload_to='', validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'pdf', 'svg'])])
     uploaded_at = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, related_name='uploads', on_delete=models.DO_NOTHING)
+
+    objects = DocumentManager()
 
     def set_comment(self, a_comment):
         self.comment = a_comment
@@ -74,7 +78,6 @@ class Document(models.Model):
     def set_owner(self, a_user):
         self.owner = a_user
 
-
     @classmethod
     def create(cls, comment, source_url, location, uploaded_at, owner):
         return cls(comment=comment, source_url=source_url, location=location, uploaded_at=uploaded_at)
@@ -84,7 +87,6 @@ class Document(models.Model):
 
     def __repr__(self):
         return f"{self.id}, {self.comment}, {self.source_url}, {self.location}, {self.uploaded_at}, {self.owner.id}"
-
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:

@@ -25,9 +25,7 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the renumber_bench view routine
-#
 # ##
 #
 from __future__ import unicode_literals
@@ -35,12 +33,10 @@ from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
+from matrices.models import Credential
 from matrices.models import Matrix
-
-from matrices.routines import credential_exists
 
 from matrices.routines import Base26
 
@@ -51,87 +47,93 @@ from matrices.routines import Base26
 @login_required
 def swap_bench_headers(request, bench_id):
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-        bench = get_object_or_404(Matrix, pk=bench_id)
+    if credential:
 
-        max_row_index = bench.get_max_row()
-        max_column_index = bench.get_max_column()
+        bench = Matrix.objects.get_or_none(id=bench_id)
 
-        row_header_cells = bench.get_row_header_cells()
-        column_header_cells = bench.get_column_header_cells()
+        if bench:
 
-        row = 0
-        title_label = ''
-        row_comment_flag = False
-        column_comment_flag = False
+            max_row_index = bench.get_max_row()
+            max_column_index = bench.get_max_column()
 
-        for row_header_cell in row_header_cells:
+            row_header_cells = bench.get_row_header_cells()
+            column_header_cells = bench.get_column_header_cells()
 
-            if row_header_cell.ycoordinate > 0:
+            row = 0
+            title_label = ''
+            row_comment_flag = False
+            column_comment_flag = False
 
-                if row < max_row_index:
+            for row_header_cell in row_header_cells:
 
-                    title_label = str(row)
+                if row_header_cell.ycoordinate > 0:
 
-                    if row_header_cell.comment == title_label:
+                    if row < max_row_index:
 
-                        row_comment_flag = True
+                        title_label = str(row)
 
-                    if row_comment_flag is True:
+                        if row_header_cell.comment == title_label:
 
-                        row_header_cell.comment = row_header_cell.title
-                        row_header_cell.title = title_label
+                            row_comment_flag = True
 
-                    else:
+                        if row_comment_flag is True:
 
-                        row_header_cell.title = row_header_cell.comment
-                        row_header_cell.comment = title_label
+                            row_header_cell.comment = row_header_cell.title
+                            row_header_cell.title = title_label
 
-                    row_header_cell.save()
+                        else:
 
-            row = row + 1
+                            row_header_cell.title = row_header_cell.comment
+                            row_header_cell.comment = title_label
 
-        column = 0
-        title_label = ''
+                        row_header_cell.save()
 
-        for column_header_cell in column_header_cells:
+                row = row + 1
 
-            if column_header_cell.xcoordinate > 0:
+            column = 0
+            title_label = ''
 
-                if column < max_column_index:
+            for column_header_cell in column_header_cells:
 
-                    title_label = Base26.to_excel(column)
+                if column_header_cell.xcoordinate > 0:
 
-                    if column_header_cell.comment == title_label:
+                    if column < max_column_index:
 
-                        column_comment_flag = True
+                        title_label = Base26.to_excel(column)
 
-                    if column_comment_flag is True:
+                        if column_header_cell.comment == title_label:
 
-                        column_header_cell.comment = column_header_cell.title
-                        column_header_cell.title = title_label
+                            column_comment_flag = True
 
-                    else:
+                        if column_comment_flag is True:
 
-                        column_header_cell.title = column_header_cell.comment
-                        column_header_cell.comment = title_label
+                            column_header_cell.comment = column_header_cell.title
+                            column_header_cell.title = title_label
 
-                    column_header_cell.save()
+                        else:
 
-            column = column + 1
+                            column_header_cell.title = column_header_cell.comment
+                            column_header_cell.comment = title_label
 
-        if column_comment_flag is True and row_comment_flag is True:
+                        column_header_cell.save()
 
-            matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
-            messages.success(request, 'Bench ' + matrix_id_formatted + ' showing Header Numbers!')
+                column = column + 1
+
+            if column_comment_flag is True and row_comment_flag is True:
+
+                messages.success(request, 'Bench ' + bench.get_formatted_id() + ' showing Header Numbers!')
+
+            else:
+
+                messages.success(request, 'Bench ' + bench.get_formatted_id() + ' showing Header Titles!')
+
+            return HttpResponseRedirect(reverse('matrix', args=(bench_id,)))
 
         else:
 
-            matrix_id_formatted = "CPW:" + "{:06d}".format(bench.id)
-            messages.success(request, 'Bench ' + matrix_id_formatted + ' showing Header Titles!')
-
-        return HttpResponseRedirect(reverse('matrix', args=(bench_id,)))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

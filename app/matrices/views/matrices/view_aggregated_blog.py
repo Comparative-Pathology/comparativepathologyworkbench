@@ -30,8 +30,9 @@
 #
 from __future__ import unicode_literals
 
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from matrices.models import Matrix
 
@@ -44,27 +45,33 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 #
 def view_aggregated_blog(request, matrix_id):
 
-    environment = get_primary_cpw_environment()
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-    data = get_header_data(request.user)
+    if matrix:
 
-    matrix = get_object_or_404(Matrix, pk=matrix_id)
+        environment = get_primary_cpw_environment()
 
-    matrix_cells = matrix.get_matrix_cells_with_blog()
+        data = get_header_data(request.user)
 
-    bench_comment_list = list()
+        matrix_cells = matrix.get_matrix_cells_with_blog()
 
-    bench_blogpost = ''
+        bench_comment_list = list()
 
-    if matrix.has_blogpost():
+        bench_blogpost = ''
 
-        bench_blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
+        if matrix.has_blogpost():
 
-        bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
+            bench_blogpost = environment.get_a_post_from_wordpress(matrix.blogpost)
 
-    data.update({'matrix': matrix,
-                 'bench_blogpost': bench_blogpost,
-                 'bench_comment_list': bench_comment_list,
-                 'matrix_cells': matrix_cells})
+            bench_comment_list = environment.get_a_post_comments_from_wordpress(matrix.blogpost)
 
-    return render(request, 'matrices/aggregated_matrix_blog.html', data)
+        data.update({'matrix': matrix,
+                     'bench_blogpost': bench_blogpost,
+                     'bench_comment_list': bench_comment_list,
+                     'matrix_cells': matrix_cells})
+
+        return render(request, 'matrices/aggregated_matrix_blog.html', data)
+
+    else:
+
+        return HttpResponseRedirect(reverse('home', args=()))

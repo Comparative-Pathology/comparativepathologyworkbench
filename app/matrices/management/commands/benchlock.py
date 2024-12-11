@@ -43,6 +43,7 @@ from background.tasks import lock_bench_task
 #   The Bench Lock admin command
 #
 class Command(BaseCommand):
+
     help = "Lock Bench USING a Task"
 
     def add_arguments(self, parser):
@@ -108,8 +109,7 @@ class Command(BaseCommand):
 
                     matrix.save()
 
-            out_message = "Program benchlocktask : Bench CPW:{0:06d} lock: {1}!!"\
-                .format(matrix.id, matrix.locked)
+            out_message = "Program benchlocktask : Bench " + matrix.get_formatted_id + " lock: " + str(matrix.locked)
             self.stdout.write(self.style.SUCCESS(out_message))
 
         out_message = "Program : Lock Bench TASK Complete!!"

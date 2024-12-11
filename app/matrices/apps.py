@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         apps.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,8 +26,10 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This add the Matrices app to the Django application.
-###
+# ##
+#
 from django.apps import AppConfig
+
 
 class MatricesConfig(AppConfig):
     name = 'matrices'

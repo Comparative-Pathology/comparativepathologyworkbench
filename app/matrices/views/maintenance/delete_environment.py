@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_environment.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,43 +25,47 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_environment view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Environment
 
 
 #
-# DELETE AN ENVIRONMENT
+#   DELETE AN ENVIRONMENT
 #
 @login_required
 def delete_environment(request, environment_id):
 
     if request.user.is_superuser:
 
-        environment = get_object_or_404(Environment, pk=environment_id)
+        environment = Environment.objects.get_or_none(id=environment_id)
 
-        if environment.name == 'CPW':
+        if environment:
 
-            messages.error(request, 'CPW_WEB:0510 Environment Location ' + environment.name + ' NOT Deleted - '
-                           'CANNOT Delete the Primary Environment!')
+            if environment.name == 'CPW':
+
+                messages.error(request, 'CPW_WEB:0510 Environment Location ' + environment.name + ' NOT Deleted - '
+                               'CANNOT Delete the Primary Environment!')
+
+            else:
+
+                messages.success(request, 'Environment ' + environment.name + ' Deleted!')
+
+                environment.delete()
+
+            return HttpResponseRedirect(reverse('maintenance', args=()))
 
         else:
 
-            messages.success(request, 'Environment ' + environment.name + ' Deleted!')
-
-            environment.delete()
-
-        return HttpResponseRedirect(reverse('maintenance', args=()))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

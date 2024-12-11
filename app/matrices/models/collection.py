@@ -38,6 +38,22 @@ from matrices.models import Image
 
 
 #
+#    The Collection Manager Class
+#
+class CollectionManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Collection.DoesNotExist):
+
+            return None
+
+
+#
 #   The Collection Model
 #
 class Collection(models.Model):
@@ -51,6 +67,8 @@ class Collection(models.Model):
     images = models.ManyToManyField(Image,
                                     related_name='collections')
     locked = models.BooleanField(default=False)
+
+    objects = CollectionManager()
 
     @classmethod
     def create(cls, title, description, owner):
@@ -175,3 +193,10 @@ class Collection(models.Model):
 
     def get_all_images(self):
         return self.images.all()
+
+    #
+    #   Returns the Formatted ID for the Collection
+    #
+    def get_formatted_id(self):
+
+        return format(int(self.id), '06d')

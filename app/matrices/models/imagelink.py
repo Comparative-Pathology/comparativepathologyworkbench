@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         imagelink.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Image Link Model
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -35,12 +37,30 @@ from matrices.models import Artefact
 
 
 #
+#    The ImageLinkage Manager Class
+#
+class ImageLinkManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, ImageLink.DoesNotExist):
+
+            return None
+
+
+#
 #   IMAGE
 #
 class ImageLink(models.Model):
     parent_image = models.ForeignKey(Image, related_name='parent', on_delete=models.DO_NOTHING)
     child_image = models.ForeignKey(Image, related_name='child', on_delete=models.DO_NOTHING)
     artefact = models.ForeignKey(Artefact, related_name='file', on_delete=models.DO_NOTHING)
+
+    objects = ImageLinkManager()
 
     def set_parent_image(self, a_parent_image):
         self.parent_image = a_parent_image

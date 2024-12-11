@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         list_global.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the list_imaging_hosts view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -35,9 +35,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from matrices.forms import SearchUrlForm
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
 from matrices.routines import bench_list_by_user_and_direction
 from matrices.routines import collection_list_by_user_and_direction
@@ -46,18 +45,20 @@ from matrices.routines import get_primary_cpw_environment
 
 
 #
-# LIST SERVERS
+#   LIST SERVERS
 #
 @login_required
 def list_global(request):
 
-    data = get_header_data(request.user)
-
-    environment = get_primary_cpw_environment()
-
     readBoolean = False
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        data = get_header_data(request.user)
+
+        environment = get_primary_cpw_environment()
 
         readBoolean = True
 

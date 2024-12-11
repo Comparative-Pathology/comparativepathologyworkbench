@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         artefact.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,35 +26,42 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Artefact Model - for items that are uploaded to the CPW when Images are linked
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
-from urllib.parse import urlparse
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
 
 
+#
+#    The Artefact Manager Class
+#
+class ArtefactManager(models.Manager):
 
-"""
-    ARTEFACT
-"""
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Artefact.DoesNotExist):
+
+            return None
+
+
+#
+#   Artefact
+#
 class Artefact(models.Model):
     comment = models.TextField(max_length=4095, default='')
     location = models.FileField(upload_to='', validators=[FileExtensionValidator(['zip'])], max_length=500, blank=True)
     url = models.CharField(max_length=255, blank=False, default='')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, related_name='artefacts', on_delete=models.DO_NOTHING)
+
+    objects = ArtefactManager()
 
     def set_comment(self, a_comment):
         self.comment = a_comment
@@ -70,7 +78,6 @@ class Artefact(models.Model):
     def set_owner(self, a_user):
         self.owner = a_user
 
-
     @classmethod
     def create(cls, comment, location, url, uploaded_at, owner):
         return cls(comment=comment, location=location, url=url, uploaded_at=uploaded_at)
@@ -81,7 +88,6 @@ class Artefact(models.Model):
     def __repr__(self):
         return f"{self.id}, {self.comment}, {self.location}, {self.url}, {self.uploaded_at}, {self.owner.id}"
 
-
     def is_owned_by(self, a_user):
         if self.owner == a_user:
             return True
@@ -89,7 +95,8 @@ class Artefact(models.Model):
             return False
 
     def is_duplicate(self, a_comment, a_location, an_uploaded_at, a_owner):
-        if self.comment == a_comment and self.location == a_location and self.url == url and self.uploaded_at == an_uploaded_at and self.owner == a_owner:
+        if self.comment == a_comment and self.location == a_location and self.uploaded_at == an_uploaded_at and\
+           self.owner == a_owner:
             return True
         else:
             return False

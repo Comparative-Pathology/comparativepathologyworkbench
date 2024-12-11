@@ -36,19 +36,15 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import CollectionOwnerSelectionForm
 
 from matrices.models import Collection
 from matrices.models import CollectionAuthority
 from matrices.models import CollectionAuthorisation
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import collection_authorisation_exists_for_collection_and_permitted
-from matrices.routines.get_active_collection_for_user import get_active_collection_for_user
-
 from matrices.routines import exists_collection_image_orders_for_collection_and_permitted
 from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
 
@@ -66,11 +62,18 @@ def collection_update_owner(request, collection_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    collection = get_object_by_uuid_or_404(Collection, collection_id)
+    collection = Collection.objects.get_or_none(id=collection_id)
+
+    if not collection:
+
+        raise PermissionDenied
+
     existing_owner = collection.owner
 
     template_name = 'frontend_forms/generic_form_inner.html'
@@ -85,7 +88,7 @@ def collection_update_owner(request, collection_id):
 
             new_owner = object.owner
 
-            if collection == get_active_collection_for_user(existing_owner):
+            if collection == existing_owner.profile.active_collection:
 
                 existing_owner.profile.set_active_collection(None)
                 existing_owner.save()
@@ -160,13 +163,11 @@ def collection_update_owner(request, collection_id):
             object.save()
 
             messages.success(request, 'New Owner ' + str(collection.owner.username) +
-                             ' for Collection ' + "{:06d}".format(collection.id) + '!')
+                             ' for Collection ' + collection.get_formatted_id() + '!')
 
     else:
 
         form = CollectionOwnerSelectionForm(instance=collection, initial={'owner': collection.owner.id}, )
 
-    return render(request, template_name, {
-        'form': form,
-        'object': collection
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': collection})

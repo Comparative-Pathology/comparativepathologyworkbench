@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_bench_authorisation_viewer.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there any VIEWER Bench Authorisations?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Is there any VIEWER Bench Authorisations?
-"""
+#
+#   Is there any VIEWER Bench Authorisations?
+#
 def exists_bench_authorisation_viewer():
 
     Authorisation = apps.get_model('matrices', 'Authorisation')

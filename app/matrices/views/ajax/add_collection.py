@@ -35,7 +35,6 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.forms import MatrixAddCollectionForm
@@ -44,10 +43,9 @@ from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Collection
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_authority_for_bench_and_user_and_requester
 from matrices.routines import get_primary_cpw_environment
 
@@ -71,21 +69,29 @@ def add_collection(request, matrix_id, cell_id):
 
         raise PermissionDenied
 
-    matrix = get_object_or_404(Matrix, pk=matrix_id)
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
+
+    if not matrix:
+
+        raise PermissionDenied
 
     if matrix.is_locked():
 
         raise PermissionDenied
 
+    cell = Cell.objects.get_or_none(id=cell_id)
+
+    if not cell:
+
+        raise PermissionDenied
+
     environment = get_primary_cpw_environment()
 
-    if credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-        credential = get_credential_for_user(request.user)
+    if credential:
 
         owner = matrix.owner
-
-        cell = get_object_or_404(Cell, pk=cell_id)
 
         cell_xcoordinate = cell.xcoordinate
         cell_ycoordinate = cell.ycoordinate
@@ -128,8 +134,7 @@ def add_collection(request, matrix_id, cell_id):
                                                                                       matrix.id, 
                                                                                       cell.id)
 
-                                matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                                messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
+                                messages.error(request, 'Bench ' + matrix.get_formatted_id() + ' LOCKED pending Update!')
 
                             else:
 
@@ -249,8 +254,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                     actual_row = int(cell_ycoordinate)
 
-                                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' +
+                                    messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
                                                  ' Collection Added to Row ' + str(actual_row) +
                                                  ' From Cell (X:' + str(cell_xcoordinate) +
                                                  ', Y:' + str(cell_ycoordinate) + ')')
@@ -314,8 +318,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                     actual_row = int(cell_ycoordinate)
 
-                                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' +
+                                    messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
                                                      ' Collection Added to Row ' + str(actual_row) +
                                                      ' From Cell (X:' + str(cell_xcoordinate) +
                                                      ', Y:' + str(cell_ycoordinate) + ')')
@@ -334,8 +337,7 @@ def add_collection(request, matrix_id, cell_id):
                                                                                          matrix.id,
                                                                                          cell.id)
 
-                                matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                                messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
+                                messages.error(request, 'Bench ' + matrix.get_formatted_id + ' LOCKED pending Update!')
 
                             else:
 
@@ -455,8 +457,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                     actual_column = int(cell_xcoordinate)
 
-                                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' +
+                                    messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id + ' Updated - ' +
                                                      ' Collection Added to Column ' + str(actual_column) +
                                                      ' From Cell (X:' + str(cell_xcoordinate) +
                                                      ', Y:' + str(cell_ycoordinate) + ')')
@@ -520,8 +521,7 @@ def add_collection(request, matrix_id, cell_id):
 
                                     actual_column = int(cell_xcoordinate)
 
-                                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' +
+                                    messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' +
                                                      ' Collection Added to Column ' + str(actual_column) +
                                                      ' From Cell (X:' + str(cell_xcoordinate) +
                                                      ', Y:' + str(cell_ycoordinate) + ')')
@@ -531,9 +531,7 @@ def add_collection(request, matrix_id, cell_id):
                 form = MatrixAddCollectionForm()
                 form.fields['direction'].initial = [1]
 
-            return render(request, template_name, {
-                'form': form,
-            })
+            return render(request, template_name, {'form': form, })
 
     else:
 

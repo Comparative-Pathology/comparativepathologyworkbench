@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_blog_read.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,12 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_read.py view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
-
-from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Matrix
 
@@ -42,49 +40,55 @@ from matrices.models import Matrix
 #
 def bench_blog_read(request, bench_id):
 
-    object = get_object_by_uuid_or_404(Matrix, bench_id)
-
-    matrix_comments = object.get_matrix_comments()
-
     htmlString = ''
 
-    introString = '<dl class=\"standard\">'\
-                  '<dt>Bench Title</dt>'\
-                  '<dd>' + object.title + '</dd>'\
-                  '<dt>Description</dt>'\
-                  '<dd>' + object.description[:20] + '</dd>'\
-                  '</dl>'
+    object = Matrix.objects.get_or_none(id=bench_id)
 
-    commentsString = ''
+    if object:
 
-    if matrix_comments['comment_list']:
+        matrix_comments = object.get_matrix_comments()
 
-        commentsString = '<h3>Commentary</h3>'\
-                         '<table>'\
-                         '<tr>'\
-                         '<th>Date</th>'\
-                         '<th>Time</th>'\
-                         '<th>Author</th>'\
-                         '<th>Comment</th>'\
-                         '</tr>'
+        introString = '<dl class=\"standard\">'\
+                      '<dt>Bench Title</dt>'\
+                      '<dd>' + object.title + '</dd>'\
+                      '<dt>Description</dt>'\
+                      '<dd>' + object.description[:20] + '</dd>'\
+                      '</dl>'
 
-        for comment in matrix_comments['comment_list']:
+        commentsString = ''
 
-            commentString = '<tr>'\
-                            '<td>' + str(comment['date']) + '</td>'\
-                            '<td>' + str(comment['time']) + '</td>'\
-                            '<td>' + str(comment['author_name']) + '</td>'\
-                            '<td>' + str(comment['content'][:50]) + '</td>'\
-                            '</tr>'
+        if matrix_comments['comment_list']:
 
-            commentsString = commentsString + commentString
+            commentsString = '<h3>Commentary</h3>'\
+                             '<table>'\
+                             '<tr>'\
+                             '<th>Date</th>'\
+                             '<th>Time</th>'\
+                             '<th>Author</th>'\
+                             '<th>Comment</th>'\
+                             '</tr>'
 
-        commentsString = commentsString + '</table><p></p>'
+            for comment in matrix_comments['comment_list']:
+
+                commentString = '<tr>'\
+                                '<td>' + str(comment['date']) + '</td>'\
+                                '<td>' + str(comment['time']) + '</td>'\
+                                '<td>' + str(comment['author_name']) + '</td>'\
+                                '<td>' + str(comment['content'][:50]) + '</td>'\
+                                '</tr>'
+
+                commentsString = commentsString + commentString
+
+            commentsString = commentsString + '</table><p></p>'
+
+        else:
+
+            commentsString = '<p>There are NO Comments for this Bench!</p>'
+
+        htmlString = introString + commentsString
 
     else:
 
-        commentsString = '<p>There are NO Comments for this Bench!</p>'
-
-    htmlString = introString + commentsString
+        htmlString = '<h1>BENCH DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

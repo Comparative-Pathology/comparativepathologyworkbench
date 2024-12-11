@@ -32,6 +32,7 @@
 # def activate_in_collection(request, collection_id):
 # def amend_cell(request, matrix_id, cell_id):
 # def clear_cell(request, matrix_id, cell_id):
+# def delete_bench(request, matrix_id):
 # def delete_image(request, image_id):
 # def delete_image_link(request, image_link_id):
 # def delete_collection_image(request, collection_id, image_id):
@@ -62,6 +63,7 @@ from .add_collection_column import add_collection_column
 from .add_collection_row import add_collection_row
 from .amend_cell import amend_cell
 from .clear_cell import clear_cell
+from .delete_bench import delete_bench
 from .delete_image import delete_image
 from .delete_image_link import delete_image_link
 from .delete_collection_image import delete_collection_image

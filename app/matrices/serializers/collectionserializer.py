@@ -38,7 +38,6 @@ from matrices.models import Image
 
 from matrices.serializers import ImageSerializer
 
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_image_for_id_server_owner_roi
 from matrices.routines import exists_image_in_cells
 from matrices.routines import exists_user_for_username
@@ -129,7 +128,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
             collection_title = validated_data.get('title')
 
-
         # Is there a Description supplied?
         if validated_data.get('description', None) is None:
 
@@ -182,7 +180,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
             # Create the Collection
             collection = Collection.create(collection_title, collection_description, collection_owner)
 
-        # Yes ... 
+        # Yes ...
         else:
 
             # Get the Images Data
@@ -300,12 +298,11 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         collection.save()
 
         # Does the User have an Active Image Collection?
-        if not exists_active_collection_for_user(request_user):
+        if not request_user.profile.has_active_collection():
 
             # Make the new Collection Object the User's Active Collection
             request_user.profile.set_active_collection(collection)
             request_user.save()
-
 
         # Add All the Images in Image List to the New Collection
         for image_out in image_list:
@@ -409,7 +406,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         self.add_new_images(instance, images_data)
 
         # Does the User have an Active Image Collection?
-        if not exists_active_collection_for_user(request_user):
+        if not request_user.profile.has_active_collection():
 
             # Make the new Collection Object the User's Active Collection
             request_user.profile.set_active_collection(instance)

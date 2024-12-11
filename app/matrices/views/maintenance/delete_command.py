@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_command.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,35 +25,40 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_command view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Command
 
+
 #
-# DELETE AN OMERO API COMMAND
+#   DELETE AN OMERO API COMMAND
 #
 @login_required
 def delete_command(request, command_id):
 
     if request.user.is_superuser:
 
-        command = get_object_or_404(Command, pk=command_id)
+        command = Command.objects.get_or_none(id=command_id)
 
-        messages.success(request, 'API Command ' + command.name + ' Deleted!')
+        if command:
 
-        command.delete()
+            messages.success(request, 'API Command ' + command.name + ' Deleted!')
 
-        return HttpResponseRedirect(reverse('maintenance', args=()))
+            command.delete()
+
+            return HttpResponseRedirect(reverse('maintenance', args=()))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

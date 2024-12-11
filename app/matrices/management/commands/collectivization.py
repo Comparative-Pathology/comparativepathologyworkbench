@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+#
+# ##
 # \file         collectivization.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -23,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the Setup Default Collections admin command
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.core.management.base import BaseCommand
@@ -35,7 +36,6 @@ from django.contrib.auth.models import User
 
 from matrices.models import Collection
 
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import exists_image_for_user
 from matrices.routines import get_images_for_user
 
@@ -44,6 +44,7 @@ from matrices.routines import get_images_for_user
 # The Setup Default Collections admin command
 #
 class Command(BaseCommand):
+
     help = "Setup Default Collections for each User"
 
     def add_arguments(self, parser):
@@ -77,7 +78,7 @@ class Command(BaseCommand):
 
                 image_list = get_images_for_user(user)
 
-                if exists_active_collection_for_user(user):
+                if user.profile.has_active_collection():
 
                     out_message = "Default Collection ALREADY exists for User             : {}"\
                         .format(user.username)

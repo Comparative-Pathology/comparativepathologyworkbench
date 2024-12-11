@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         activate_in_collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,29 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the activate_collection view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from matrices.forms import SearchUrlForm
-
 from matrices.models import Collection
-from matrices.models import CollectionSummary
-
-from matrices.routines import credential_exists
+from matrices.models import Credential
 
 
 #
-# ACTIVATE AN IMAGE COLLECTION on View Collection Page
+#   ACTIVATE AN IMAGE COLLECTION on View Collection Page
 #
 @login_required
 def activate_in_collection(request, collection_id):
@@ -59,17 +54,24 @@ def activate_in_collection(request, collection_id):
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
-        collection = get_object_or_404(Collection, pk=collection_id)
+        collection = Collection.objects.get_or_none(id=collection_id)
 
-        request.user.profile.set_active_collection(collection)
-        request.user.save()
+        if collection:
 
-        messages.success(request, 'Collection ' + "{:06d}".format(collection.id) + ' Activated!')
+            request.user.profile.set_active_collection(collection)
+            request.user.save()
 
-        return HttpResponseRedirect(reverse('list_images', args=(collection_id, )))
+            messages.success(request, 'Collection ' + collection.get_formatted_id() + ' Activated!')
+
+            return HttpResponseRedirect(reverse('list_images', args=(collection_id, )))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

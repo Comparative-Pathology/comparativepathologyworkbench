@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,24 +25,21 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 
-from matrices.models import Server
+from matrices.models import Credential
 from matrices.models import Image
+from matrices.models import Server
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_an_ebi_sca_experiment_id_from_chart_id
 from matrices.routines import get_an_ebi_sca_parameters_from_chart_id
 from matrices.routines import get_primary_cpw_environment
@@ -53,83 +51,98 @@ from matrices.routines import get_primary_cpw_environment
 @login_required()
 def edit_image(request, image_id):
 
-    data = get_header_data(request.user)
+    local_image = Image.objects.get_or_none(id=image_id)
 
-    local_image = get_object_or_404(Image, pk=image_id)
+    if local_image:
 
-    credential = get_credential_for_user(request.user)
+        template = ''
 
-    environment = get_primary_cpw_environment()
+        credential = Credential.objects.get_or_none(username=request.user.username)
 
-    common_tags = Image.tags.most_common()
-    used_tags = local_image.tags.all()
-    all_unused_tags = set(common_tags).difference(set(used_tags))
-    unused_tags = list(all_unused_tags)[:10]
+        if credential:
 
-    data.update({'unused_tags': unused_tags})
+            server = Server.objects.get_or_none(id=local_image.server_id)
 
-    template = ''
+            if server:
 
-    if credential_exists(request.user):
+                data = get_header_data(request.user)
 
-        server = get_object_or_404(Server, pk=local_image.server_id)
+                common_tags = Image.tags.most_common()
+                used_tags = local_image.tags.all()
+                all_unused_tags = set(common_tags).difference(set(used_tags))
+                unused_tags = list(all_unused_tags)[:10]
 
-        data.update({'local_image': local_image})
+                data.update({'unused_tags': unused_tags})
 
-        if server.is_wordpress():
+                data.update({'local_image': local_image})
 
-            server_data = server.get_wordpress_image_json(credential, image_id)
+                if server.is_wordpress():
 
-            data.update(server_data)
-            data.update({'image': local_image})
+                    server_data = server.get_wordpress_image_json(credential, image_id)
 
-            template = 'gallery/edit_wordpress_image.html'
+                    data.update(server_data)
+                    data.update({'image': local_image})
 
-        if server.is_omero547():
+                    template = 'gallery/edit_wordpress_image.html'
 
-            server_data = {}
+                if server.is_omero547():
 
-            if environment.is_web_gateway() or server.is_idr():
+                    server_data = {}
 
-                server_data = server.get_imaging_server_image_json(local_image.identifier)
+                    environment = get_primary_cpw_environment()
+
+                    if environment.is_web_gateway() or server.is_idr():
+
+                        server_data = server.get_imaging_server_image_json(local_image.identifier)
+
+                    else:
+
+                        if environment.is_blitz_gateway():
+
+                            server_data = server.get_imaging_server_image_json_blitz(local_image.identifier,
+                                                                                     environment.gateway_port)
+
+                    data.update(server_data)
+
+                    template = 'gallery/edit_image.html'
+
+                if server.is_cpw():
+
+                    chart = ({'chart_id': local_image.name,
+                              'viewer_url': local_image.viewer_url,
+                              'birdseye_url': local_image.birdseye_url})
+
+                    data.update({'image_url': local_image.viewer_url,
+                                 'image_comment': local_image.comment,
+                                 'server': server,
+                                 'chart': chart})
+
+                    template = 'gallery/edit_cpw_image.html'
+
+                if server.is_ebi_sca():
+
+                    experiment_id = get_an_ebi_sca_experiment_id_from_chart_id(local_image.name)
+
+                    metadata = server.get_ebi_server_experiment_metadata(experiment_id)
+
+                    chart = get_an_ebi_sca_parameters_from_chart_id(server.url_server, local_image.name)
+
+                    data.update({'image_comment': local_image.comment,
+                                 'server': server,
+                                 'chart': chart,
+                                 'metadata': metadata})
+
+                    template = 'gallery/edit_ebi_sca_image.html'
+
+                return render(request, template, data)
 
             else:
 
-                if environment.is_blitz_gateway():
+                return HttpResponseRedirect(reverse('home', args=()))
 
-                    server_data = server.get_imaging_server_image_json_blitz(local_image.identifier,
-                                                                             environment.gateway_port)
+        else:
 
-            data.update(server_data)
-
-            template = 'gallery/edit_image.html'
-
-        if server.is_cpw():
-
-            chart = ({
-                'chart_id': local_image.name,
-                'viewer_url': local_image.viewer_url,
-                'birdseye_url': local_image.birdseye_url,
-            })
-
-            data.update({'image_url': local_image.viewer_url, 'image_comment': local_image.comment, 'server': server,
-                         'chart': chart})
-
-            template = 'gallery/edit_cpw_image.html'
-
-        if server.is_ebi_sca():
-
-            experiment_id = get_an_ebi_sca_experiment_id_from_chart_id(local_image.name)
-
-            metadata = server.get_ebi_server_experiment_metadata(experiment_id)
-
-            chart = get_an_ebi_sca_parameters_from_chart_id(server.url_server, local_image.name)
-
-            data.update({'image_comment': local_image.comment, 'server': server, 'chart': chart, 'metadata': metadata})
-
-            template = 'gallery/edit_ebi_sca_image.html'
-
-        return render(request, template, data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

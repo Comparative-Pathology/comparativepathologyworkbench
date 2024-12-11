@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_server_for_uid_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,21 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there an Image for a particular Identifier, Server, Owner and ROI?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.db.models import Q
 
 from django.apps import apps
 
 
-"""
-    Is there an Image for a particular Identifier, Server, Owner and ROI?
-"""
+#
+#   Is there an Image for a particular Identifier, Server, Owner and ROI?
+#
 def exists_server_for_uid_url(a_uid, a_url):
 
     Server = apps.get_model('matrices', 'Server')

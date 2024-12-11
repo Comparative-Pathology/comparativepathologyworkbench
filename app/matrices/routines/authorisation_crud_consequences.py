@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         authorisation_crud_consequences.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,23 +26,20 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Consequential Actions for Bench Authorisation Updates
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
 from django.db.models import Q
-
-from os import urandom
 
 from django.apps import apps
 
 from matrices.routines.authorisation_exists_for_bench_and_permitted import authorisation_exists_for_bench_and_permitted
 
 
-"""
-    Consequential Actions for Bench Authorisation Updates
-"""
+#
+#   Consequential Actions for Bench Authorisation Updates
+#
 def authorisation_crud_consequences(a_permitted, a_matrix, a_authority):
 
     Authorisation = apps.get_model('matrices', 'Authorisation')

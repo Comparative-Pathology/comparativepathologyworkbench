@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_image_for_id_server_owner_roi.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,21 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there an Image for a particular Identifier, Server, Owner and ROI?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.db.models import Q
 
 from django.apps import apps
 
 
-"""
-    Is there an Image for a particular Identifier, Server, Owner and ROI?
-"""
+#
+#   Is there an Image for a particular Identifier, Server, Owner and ROI?
+#
 def exists_image_for_id_server_owner_roi(a_id, a_server, a_owner, a_roi):
 
     Image = apps.get_model('matrices', 'Image')

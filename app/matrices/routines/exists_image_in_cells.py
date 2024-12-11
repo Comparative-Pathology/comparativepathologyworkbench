@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_image_in_cells.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there a Cell for a particular Image?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Is there a Cell for a particular Image?
-"""
+#
+#   Is there a Cell for a particular Image?
+#
 def exists_image_in_cells(a_image):
 
     Cell = apps.get_model('matrices', 'Cell')

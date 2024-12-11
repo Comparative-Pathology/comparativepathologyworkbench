@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_environment.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,13 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This file contains the view_environment view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -39,21 +39,29 @@ from matrices.models import Environment
 
 from matrices.routines import get_header_data
 
+
 #
-# VIEW AN ENVIRONMENT
+#   VIEW AN ENVIRONMENT
 #
 @login_required
 def view_environment(request, environment_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        environment = Environment.objects.get_or_none(id=environment_id)
 
-        environment = get_object_or_404(Environment, pk=environment_id)
+        if environment:
 
-        data.update({'environment_id': environment_id, 'environment': environment})
+            data = get_header_data(request.user)
 
-        return render(request, 'maintenance/detail_environment.html', data)
+            data.update({'environment_id': environment_id,
+                         'environment': environment})
+
+            return render(request, 'maintenance/detail_environment.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

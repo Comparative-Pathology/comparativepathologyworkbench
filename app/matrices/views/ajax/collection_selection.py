@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collection_selection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,27 +25,21 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_collection_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
-
-from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.forms import CollectionSummarySelectionForm
 
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
+from matrices.routines import get_or_none_user
 
 
 #
@@ -61,18 +56,28 @@ def collection_selection(request, user_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(User, user_id)
+    object = get_or_none_user(user_id)
+
+    if not object:
+
+        raise PermissionDenied
+
     collection = object.profile.last_used_collection
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
 
-        form = CollectionSummarySelectionForm(instance=object, initial={'last_used_collection': collection }, data=request.POST, request=request)
+        form = CollectionSummarySelectionForm(instance=object,
+                                              initial={'last_used_collection': collection},
+                                              data=request.POST,
+                                              request=request)
 
         if form.is_valid():
 
@@ -83,14 +88,14 @@ def collection_selection(request, user_id):
             object.profile.set_last_used_collection(collection)
             object.save()
 
-            collection_id_formatted = "{:06d}".format(collection.id)
-            messages.success(request, 'User ' + str(user_id) + ' Updated with NEW Last Used Collection ' + collection_id_formatted + '!')
+            messages.success(request, 'User ' + str(user_id) + ' Updated with NEW Last Used Collection ' +
+                             collection.get_formatted_id() + '!')
 
     else:
 
-        form = CollectionSummarySelectionForm(instance=object, request=request, initial={'last_used_collection': collection } )
+        form = CollectionSummarySelectionForm(instance=object,
+                                              request=request,
+                                              initial={'last_used_collection': collection})
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

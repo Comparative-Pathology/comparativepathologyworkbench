@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         wsgi.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -27,10 +28,12 @@
 # This exposes the WSGI callable as a module-level variable named
 # ``application``. from "comparativepathologyworkbench.settings"
 ###
-"""
-WSGI config for matrices project.
-It exposes the WSGI callable as a module-level variable named ``application``.
-"""
+#
+
+#
+#   WSGI config for matrices project.
+#    It exposes the WSGI callable as a module-level variable named ``application``.
+#
 import os
 
 from django.core.wsgi import get_wsgi_application

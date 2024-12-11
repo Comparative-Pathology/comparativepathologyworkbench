@@ -83,5 +83,5 @@ class CollectionAuthorisationForm(forms.ModelForm):
             if collection_authorisation_old.collection_authority == authority:
 
                 msg = 'A Collection Authorisation for \"' + str(permitted.username) + '\" and ' + \
-                    str(authority.name) + ' already exists for Collection ' + '{num:06d}'.format(num=collection.id)
+                    str(authority.name) + ' already exists for Collection ' + collection.get_formatted_id()
                 raise ValidationError(msg)

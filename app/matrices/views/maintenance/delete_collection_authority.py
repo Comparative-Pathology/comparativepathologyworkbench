@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_collection_authority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,43 +25,49 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_collection_authority view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import CollectionAuthority
 
 from matrices.routines import exists_collection_authorisation_viewer
 
+
 #
-# DELETE A COLLECTION AUTHORITY
+#   DELETE A COLLECTION AUTHORITY
 #
 @login_required
 def delete_collection_authority(request, collection_authority_id):
 
     if request.user.is_superuser:
 
-        collection_authority = get_object_or_404(CollectionAuthority, pk=collection_authority_id)
+        collection_authority = CollectionAuthority.objects.get_or_none(id=collection_authority_id)
 
-        if collection_authority.is_viewer() and exists_collection_authorisation_viewer():
+        if collection_authority:
 
-            messages.error(request, 'CPW_WEB:0480 Collection Authority ' + collection_authority.name + ' NOT Deleted - Collection Authorisations still exist!')
+            if collection_authority.is_viewer() and exists_collection_authorisation_viewer():
+
+                messages.error(request, 'CPW_WEB:0480 Collection Authority ' + collection_authority.name +
+                               ' NOT Deleted - Collection Authorisations still exist!')
+
+            else:
+
+                messages.success(request, 'Collection Authority ' + collection_authority.name + ' Deleted!')
+
+                collection_authority.delete()
+
+            return HttpResponseRedirect(reverse('maintenance', args=()))
 
         else:
 
-            messages.success(request, 'Collection Authority ' + collection_authority.name + ' Deleted!')
-
-            collection_authority.delete()
-
-        return HttpResponseRedirect(reverse('maintenance', args=()))
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

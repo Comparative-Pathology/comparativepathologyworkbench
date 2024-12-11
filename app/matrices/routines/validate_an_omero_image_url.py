@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         validate_an_omero_image_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Do we have a valid OMERO IMAGE URL?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
 
 from urllib.parse import urlparse
 
 
-"""
-    Do we have a Valid OMERO IMAGE URL?
-"""
+#
+#   Do we have a Valid OMERO IMAGE URL?
+#
 def validate_an_omero_image_url(a_url):
 
     result = urlparse(a_url)
@@ -59,8 +59,8 @@ def validate_an_omero_image_url(a_url):
         query_prefix = query_array[0].lower()
 
         if query_prefix != "show":
-            return False
 
+            return False
 
         query_type = query_params[0].lower()
 
@@ -68,13 +68,11 @@ def validate_an_omero_image_url(a_url):
 
             return False
 
-
         query_id = query_params[1]
 
         if not query_id.isnumeric():
 
             return False
-
 
         return True
 

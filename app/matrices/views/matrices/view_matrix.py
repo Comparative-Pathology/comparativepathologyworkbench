@@ -31,20 +31,19 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
+from matrices.models import Credential
 from matrices.models import Matrix
 from matrices.models import MatrixSummary
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_read_for_bench_and_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_header_data
+from matrices.routines import get_or_none_user
 from matrices.routines import image_list_by_user_and_direction
 from matrices.routines import Base26
 
@@ -63,12 +62,23 @@ def view_matrix(request, matrix_id):
 
         raise PermissionDenied
 
-    if credential_exists(request.user):
+    user = get_or_none_user(request.user.id)
+
+    if not user:
+
+        raise PermissionDenied
+
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
+
+    if not matrix:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
 
         data = get_header_data(request.user)
-
-        matrix = get_object_or_404(Matrix, pk=matrix_id)
-        user = get_object_or_404(User, pk=request.user.id)
 
         readBoolean = False
 
@@ -130,9 +140,9 @@ def view_matrix(request, matrix_id):
 
                 matrix_summary_list_qs = MatrixSummary.objects.raw('SELECT id, matrix_id, LAG(\"matrix_id\") ' +
                                                                    'OVER(ORDER BY \"matrix_id\") AS \"prev_val\", ' +
-                                                                   'LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) ' +
-                                                                   'AS \"next_val\" FROM public.matrices_bench_summary ' +
-                                                                   'WHERE matrix_authorisation_authority = \'OWNER\' ' +
+                                                                   'LEAD(\"matrix_id\") OVER(ORDER BY \"matrix_id\" ) '+
+                                                                   'AS \"next_val\" FROM public.matrices_bench_summary '+
+                                                                   'WHERE matrix_authorisation_authority = \'OWNER\' '+
                                                                    'AND matrix_public = False'
                                                                    )
 

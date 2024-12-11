@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         aggregate_bench_cell_blog_read.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,12 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX aggregate_bench_cell_blog_read.py view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
-
-from frontend_forms.utils import get_object_by_uuid_or_404
 
 from matrices.models import Cell
 
@@ -40,58 +38,37 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 
 
 #
-# READ A BENCH
+#   READ A BENCH
 #
 def aggregate_bench_cell_blog_read(request, cell_id):
 
-    environment = get_primary_cpw_environment()
-
-    object = get_object_by_uuid_or_404(Cell, cell_id)
-
-    cell_blogpost = environment.get_a_post_from_wordpress(object.blogpost)
-
-    cell_comments = object.get_cell_comments()
-
     htmlString = ''
     imageString = ''
+    introString = ''
+    commentsString = ''
 
-    introString = '<table border="0">'\
-                  '<tr>'\
-                  '<th style="text-align: left; width: 100px;">Date</th>'\
-                  '<th style="text-align: left; width: 100px;">Time</th>'\
-                  '<th style="text-align: left; width: 100px;">Author</th>'\
-                  '<th style="text-align: left;">Post</th>'\
-                  '</tr>'\
-                  '<tr>'\
-                  '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['date'] + '</td>'\
-                  '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['time'] + '</td>'\
-                  '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['author'] + '</td>'\
-                  '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['content'] + '</td>'\
-                  '</tr>'\
-                  '<tr>'\
-                  '<td>&nbsp;</td>'\
-                  '<td>&nbsp;</td>'\
-                  '<td>&nbsp;</td>'\
-                  '<td>&nbsp;</td>'\
-                  '</tr>'
+    environment = get_primary_cpw_environment()
 
-    if object.image.viewer_url != '':
+    object = Cell.objects.get_or_none(id=cell_id)
 
-        imageString = '<tr>'\
-                      '<td>&nbsp;</td>'\
-                      '<td>&nbsp;</td>'\
-                      '<td>&nbsp;</td>'\
-                      '<td>&nbsp;</td>'\
+    if object:
+
+        cell_blogpost = environment.get_a_post_from_wordpress(object.blogpost)
+
+        cell_comments = object.get_cell_comments()
+
+        introString = '<table border="0">'\
+                      '<tr>'\
+                      '<th style="text-align: left; width: 100px;">Date</th>'\
+                      '<th style="text-align: left; width: 100px;">Time</th>'\
+                      '<th style="text-align: left; width: 100px;">Author</th>'\
+                      '<th style="text-align: left;">Post</th>'\
                       '</tr>'\
                       '<tr>'\
-                      '<td>&nbsp;</td>'\
-                      '<td>&nbsp;</td>'\
-                      '<td>&nbsp;</td>'\
-                      '<td>'\
-                      '<a href=\"' + object.image.viewer_url + '\" target="_blank"><img alt=\"' + object.image.name +\
-                        '\" title=\"' + object.image.name + '\" style=\"width:450px; height:450px;\" src=\"' + \
-                        object.image.birdseye_url + '\" ></a>'\
-                      '</td>'\
+                      '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['date'] + '</td>'\
+                      '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['time'] + '</td>'\
+                      '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['author'] + '</td>'\
+                      '<td style="text-align: left; vertical-align: text-top;">' + cell_blogpost['content'] + '</td>'\
                       '</tr>'\
                       '<tr>'\
                       '<td>&nbsp;</td>'\
@@ -100,69 +77,96 @@ def aggregate_bench_cell_blog_read(request, cell_id):
                       '<td>&nbsp;</td>'\
                       '</tr>'
 
-    introString = introString + imageString
+        if object.image.viewer_url != '':
 
-    commentsString = ''
+            imageString = '<tr>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '</tr>'\
+                          '<tr>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>'\
+                          '<a href=\"' + object.image.viewer_url + '\" target="_blank"><img alt=\"' + object.image.name +\
+                            '\" title=\"' + object.image.name + '\" style=\"width:450px; height:450px;\" src=\"' + \
+                            object.image.birdseye_url + '\" ></a>'\
+                          '</td>'\
+                          '</tr>'\
+                          '<tr>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '<td>&nbsp;</td>'\
+                          '</tr>'
 
-    if cell_comments['comment_list']:
+        introString = introString + imageString
 
-        commentsString = '<tr>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '</tr>'\
-                         '<tr>'\
-                         '<th style="text-align: left; width: 100px;">Date</th>'\
-                         '<th style="text-align: left; width: 100px;">Time</th>'\
-                         '<th style="text-align: left; width: 100px;">Author</th>'\
-                         '<th style="text-align: left;">Comment</th>'\
-                         '</tr>'
+        if cell_comments['comment_list']:
 
-        for comment in cell_comments['comment_list']:
+            commentsString = '<tr>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '</tr>'\
+                             '<tr>'\
+                             '<th style="text-align: left; width: 100px;">Date</th>'\
+                             '<th style="text-align: left; width: 100px;">Time</th>'\
+                             '<th style="text-align: left; width: 100px;">Author</th>'\
+                             '<th style="text-align: left;">Comment</th>'\
+                             '</tr>'
 
-            commentString = '<tr>'\
-                            '<td style="text-align: left; vertical-align: text-top;">' + str(comment['date']) +\
+            for comment in cell_comments['comment_list']:
+
+                commentString = '<tr>'\
+                                '<td style="text-align: left; vertical-align: text-top;">' + str(comment['date']) +\
                                 '</td>'\
-                            '<td style="text-align: left; vertical-align: text-top;">' + str(comment['time']) +\
+                                '<td style="text-align: left; vertical-align: text-top;">' + str(comment['time']) +\
                                 '</td>'\
-                            '<td style="text-align: left; vertical-align: text-top;">' + str(comment['author_name']) +\
+                                '<td style="text-align: left; vertical-align: text-top;">' + str(comment['author_name']) +\
                                 '</td>'\
-                            '<td style="text-align: left; vertical-align: text-top;">' + str(comment['content']) +\
+                                '<td style="text-align: left; vertical-align: text-top;">' + str(comment['content']) +\
                                 '</td>'\
-                            '</tr>'\
-                            '<tr>'\
-                            '<td>&nbsp;</td>'\
-                            '<td>&nbsp;</td>'\
-                            '<td>&nbsp;</td>'\
-                            '<td>&nbsp;</td>'\
-                            '</tr>'
+                                '</tr>'\
+                                '<tr>'\
+                                '<td>&nbsp;</td>'\
+                                '<td>&nbsp;</td>'\
+                                '<td>&nbsp;</td>'\
+                                '<td>&nbsp;</td>'\
+                                '</tr>'
 
-            commentsString = commentsString + commentString
+                commentsString = commentsString + commentString
 
-        commentsString = commentsString + '</table>'
+            commentsString = commentsString + '</table>'
+
+        else:
+
+            commentsString = '<tr>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '</tr>'\
+                             '<tr>'\
+                             '<th style="text-align: left; width: 100px;">Date</th>'\
+                             '<th style="text-align: left; width: 100px;">Time</th>'\
+                             '<th style="text-align: left; width: 100px;">Author</th>'\
+                             '<th style="text-align: left;">Comment</th>'\
+                             '</tr>'\
+                             '<tr>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>&nbsp;</td>'\
+                             '<td>No Cell Comments!</td>'\
+                             '</tr></table>'
+
+        htmlString = introString + commentsString
 
     else:
 
-        commentsString = '<tr>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '</tr>'\
-                         '<tr>'\
-                         '<th style="text-align: left; width: 100px;">Date</th>'\
-                         '<th style="text-align: left; width: 100px;">Time</th>'\
-                         '<th style="text-align: left; width: 100px;">Author</th>'\
-                         '<th style="text-align: left;">Comment</th>'\
-                         '</tr>'\
-                         '<tr>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>&nbsp;</td>'\
-                         '<td>No Cell Comments!</td>'\
-                         '</tr></table>'
-
-    htmlString = introString + commentsString
+        htmlString = '<h1>CELL DOES NOT EXIST!!!</h1>'
 
     return HttpResponse(htmlString)

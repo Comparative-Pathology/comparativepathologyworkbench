@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         blocked_adaptor.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,9 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Restricts editing to owner and superuser.
-###
-from django import forms
-
+# ##
+#
 from inlineedit.adaptors import BasicAdaptor
 
 
@@ -59,6 +59,5 @@ class BlockedAdaptor(BasicAdaptor):
             if user.is_superuser:
 
                 allow_flag = True
-
 
         return allow_flag

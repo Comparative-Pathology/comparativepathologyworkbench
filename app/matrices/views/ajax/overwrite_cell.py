@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         overwrite_cell.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,31 +25,28 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the overwrite_cell view routine - CUT
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 
 from matrices.models import Cell
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
-from matrices.routines import get_credential_for_user
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
+
 #
-# OVERWRITE A CELL - MOVE - CUT
+#   OVERWRITE A CELL - MOVE - CUT
 #
-#  Overwrites Target Cell with Source Cell, Source Cell is emptied - CUT
+#    Overwrites Target Cell with Source Cell, Source Cell is emptied - CUT
 #
 @login_required()
 def overwrite_cell(request):
@@ -61,25 +59,34 @@ def overwrite_cell(request):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
     source = request.POST['source']
     target = request.POST['target']
 
-    source_cell = get_object_or_404(Cell, pk=source)
-    target_cell = get_object_or_404(Cell, pk=target)
+    source_cell = Cell.objects.get_or_none(id=source)
 
-    matrix = source_cell.matrix
+    if not source_cell:
 
-    user = get_object_or_404(User, pk=request.user.id)
+        raise PermissionDenied
 
-    environment = get_primary_cpw_environment()
+    target_cell = Cell.objects.get_or_none(id=target)
 
-    if credential_exists(user):
+    if not target_cell:
 
-        credential = get_credential_for_user(request.user)
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        matrix = source_cell.matrix
+
+        environment = get_primary_cpw_environment()
 
         if exists_update_for_bench_and_user(matrix, request.user):
 

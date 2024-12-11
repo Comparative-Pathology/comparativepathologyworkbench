@@ -73,13 +73,13 @@ def new_command(request):
                 messages.error(request, "CPW_WEB:0180 New API Command - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0180 New API Command - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = CommandForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'maintenance/new_command.html', data)
 

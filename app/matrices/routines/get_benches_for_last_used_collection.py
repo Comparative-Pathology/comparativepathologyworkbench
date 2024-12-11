@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_benches_for_last_used_collection.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,19 +26,16 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Benches that have last used a particular Collection
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Get the Benches that have last used a particular Collection
-"""
+#
+#   Get the Benches that have last used a particular Collection
+#
 def get_benches_for_last_used_collection(a_collection):
 
     Matrix = apps.get_model('matrices', 'Matrix')

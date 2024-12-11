@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_blog_command.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_blog_command view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -40,21 +39,29 @@ from matrices.models import Blog
 
 from matrices.routines import get_header_data
 
+
 #
-# VIEW A COMMAND TO ACCESS THE BLOGGING ENGINE
+#   VIEW A COMMAND TO ACCESS THE BLOGGING ENGINE
 #
 @login_required
 def view_blog_command(request, blog_id):
 
     data = get_header_data(request.user)
 
-    blog = get_object_or_404(Blog, pk=blog_id)
+    blog = Blog.objects.get_or_none(id=blog_id)
 
-    if request.user.is_superuser:
+    if blog:
 
-        data.update({ 'blog_id': blog_id, 'blog': blog })
+        if request.user.is_superuser:
 
-        return render(request, 'maintenance/detail_blog_command.html', data)
+            data.update({'blog_id': blog_id,
+                         'blog': blog})
+
+            return render(request, 'maintenance/detail_blog_command.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

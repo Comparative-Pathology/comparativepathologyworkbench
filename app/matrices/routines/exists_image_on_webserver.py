@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_image_on_webserver.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,20 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there an Image for a particular Server?
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from django.apps import apps
 
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
-"""
-    Is there an Image for a particular Image on the Webserver?
-"""
+
+#
+#   Is there an Image for a particular Image on the Webserver?
+#
 def exists_image_on_webserver(an_image_name):
 
     Image = apps.get_model('matrices', 'Image')

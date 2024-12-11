@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_collections_for_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,17 +26,14 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get All Collections for an Image
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
 
-from os import urandom
-
-
-"""
-    Get All Collections for an Image
-"""
+#
+#   Get All Collections for an Image
+#
 def get_collections_for_image(a_image):
 
     collections = a_image.collections.all()

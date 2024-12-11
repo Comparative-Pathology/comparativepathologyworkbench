@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         matrixpublicsummary.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,10 +26,27 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Bench Public Summary Model - for a VIEW not a table ;-)
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
+
+
+#
+#    The MatrixPublicSummary Manager Class
+#
+class MatrixPublicSummaryManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, MatrixPublicSummary.DoesNotExist):
+
+            return None
 
 
 #
@@ -47,6 +65,8 @@ class MatrixPublicSummary(models.Model):
     matrix_public_owner = models.CharField(max_length=50, default='')
     matrix_public_public = models.BooleanField(default=False)
     matrix_public_locked = models.BooleanField(default=False)
+
+    objects = MatrixPublicSummaryManager()
 
     class Meta:
         managed = False
@@ -79,3 +99,10 @@ class MatrixPublicSummary(models.Model):
             {self.matrix_public_owner}, \
             {self.matrix_public_public}, \
             {self.matrix_public_locked}"
+
+    #
+    #   Returns the Formatted ID for the Bench
+    #
+    def get_formatted_id(self):
+
+        return "CPW:" + format(int(self.matrix_public_id), '06d')

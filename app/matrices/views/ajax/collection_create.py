@@ -37,7 +37,8 @@ from django.shortcuts import render
 
 from matrices.forms import CollectionCreateForm
 
-from matrices.routines import credential_exists
+from matrices.models import Credential
+
 from matrices.routines import get_collection_count_for_user
 from matrices.routines import get_primary_cpw_environment
 
@@ -56,7 +57,9 @@ def collection_create(request):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
@@ -92,13 +95,11 @@ def collection_create(request):
                     request.user.profile.set_active_collection(object)
                     request.user.save()
 
-                messages.success(request, 'NEW Collection ' + "{:06d}".format(object.id) + ' Created!')
+                messages.success(request, 'NEW Collection ' + object.get_formatted_id() + ' Created!')
 
     else:
 
         form = CollectionCreateForm(request=request)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

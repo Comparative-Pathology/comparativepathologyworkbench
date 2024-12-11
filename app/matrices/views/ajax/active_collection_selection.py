@@ -31,16 +31,15 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import CollectionActiveSummarySelectionForm
 
-from matrices.routines import credential_exists
+from matrices.models import Credential
+
+from matrices.routines import get_or_none_user
 
 
 #
@@ -57,18 +56,28 @@ def active_collection_selection(request, user_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(User, user_id)
+    object = get_or_none_user(user_id)
+
+    if not object:
+
+        raise PermissionDenied
+
     collection = object.profile.active_collection
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
 
-        form = CollectionActiveSummarySelectionForm(instance=object, initial={'active_collection': collection }, data=request.POST, request=request)
+        form = CollectionActiveSummarySelectionForm(instance=object,
+                                                    initial={'active_collection': collection},
+                                                    data=request.POST,
+                                                    request=request)
 
         if form.is_valid():
 
@@ -79,14 +88,15 @@ def active_collection_selection(request, user_id):
             object.profile.set_active_collection(collection)
             object.save()
 
-            collection_id_formatted = "{:06d}".format(collection.id)
-            messages.success(request, 'User ' + str(user_id) + ' Updated with NEW Active Collection ' + collection_id_formatted + '!')
+            messages.success(request,
+                             'User ' + str(user_id) + ' Updated with NEW Active Collection ' +
+                             collection.get_formatted_id() + '!')
 
     else:
 
-        form = CollectionActiveSummarySelectionForm(instance=object, request=request, initial={'active_collection': collection } )
+        form = CollectionActiveSummarySelectionForm(instance=object,
+                                                    request=request,
+                                                    initial={'active_collection': collection})
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

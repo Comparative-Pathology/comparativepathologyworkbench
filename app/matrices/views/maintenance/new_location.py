@@ -73,13 +73,13 @@ def new_location(request):
                 messages.error(request, "CPW_WEB:0200 New Environment Location - Form is Invalid!")
                 form.add_error(None, "CPW_WEB:0200 New Environment Location - Form is Invalid!")
 
-                data.update({ 'form': form })
+                data.update({'form': form})
 
         else:
 
             form = LocationForm()
 
-            data.update({ 'form': form })
+            data.update({'form': form})
 
         return render(request, 'maintenance/new_location.html', data)
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         edit_blog_credential.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,17 +25,14 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the edit_blog_credential view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
-from django.http import HttpResponseRedirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -46,48 +44,57 @@ from matrices.routines import get_header_data
 
 HTTP_POST = 'POST'
 
+
 #
-# EDIT A USER BLOG CREDENTIAL
+#   EDIT A USER BLOG CREDENTIAL
 #
 @login_required
 def edit_blog_credential(request, credential_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        credential = Credential.objects.get_or_none(id=credential_id)
 
-        credential = get_object_or_404(Credential, pk=credential_id)
+        if credential:
 
-        if request.method == HTTP_POST:
+            data = get_header_data(request.user)
 
-            form = CredentialForm(request.POST, instance=credential)
+            if request.method == HTTP_POST:
 
-            if form.is_valid():
+                form = CredentialForm(request.POST, instance=credential)
 
-                credential = form.save(commit=False)
+                if form.is_valid():
 
-                credential.set_owner(request.user)
+                    credential = form.save(commit=False)
 
-                credential.save()
+                    credential.set_owner(request.user)
 
-                messages.success(request, 'Credential ' + str(credential.id) + ' Updated!')
+                    credential.save()
 
-                return HttpResponseRedirect(reverse('authorisation', args=()))
+                    messages.success(request, 'Credential ' + str(credential.id) + ' Updated!')
+
+                    return HttpResponseRedirect(reverse('authorisation', args=()))
+
+                else:
+
+                    messages.error(request, "CPW_WEB:0010 Edit Blog Credential - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0010 Edit Blog Credential - Form is Invalid!")
+
+                    data.update({'form': form,
+                                 'credential': credential})
 
             else:
 
-                messages.error(request, "CPW_WEB:0010 Edit Blog Credential - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0010 Edit Blog Credential - Form is Invalid!")
+                form = CredentialForm(instance=credential)
 
-                data.update({ 'form': form, 'credential': credential })
+                data.update({'form': form,
+                             'credential': credential})
+
+            return render(request, 'authorisation/edit_blog_credential.html', data)
 
         else:
 
-            form = CredentialForm(instance=credential)
-
-            data.update({ 'form': form, 'credential': credential })
-
-        return render(request, 'authorisation/edit_blog_credential.html', data)
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

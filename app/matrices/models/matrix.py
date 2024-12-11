@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Matrix Model - a Matrix is a Bench!
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -40,6 +42,22 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 
 
 WORDPRESS_SUCCESS = 'Success!'
+
+
+#
+#    The Matrix Manager Class
+#
+class MatrixManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Matrix.DoesNotExist):
+
+            return None
 
 
 class Matrix(models.Model):
@@ -83,6 +101,8 @@ class Matrix(models.Model):
                                       on_delete=models.DO_NOTHING)
     public = models.BooleanField(default=False)
     locked = models.BooleanField(default=False)
+
+    objects = MatrixManager()
 
     class Meta:
         verbose_name = 'Bench'
@@ -347,6 +367,13 @@ class Matrix(models.Model):
     def set_private(self):
 
         self.public = False
+
+    #
+    #   Returns the Formatted ID for the Bench
+    #
+    def get_formatted_id(self):
+
+        return "CPW:" + format(int(self.id), '06d')
 
     #
     #   Returns the Cells associated with this Bench as a 2 Dimensional Array

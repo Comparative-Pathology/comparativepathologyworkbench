@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         gateway.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The (OMERO) Gateway Model.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.db import models
@@ -33,12 +35,30 @@ from django.contrib.auth.models import User
 
 
 #
-#   GATEWAY
+#    The Gateway Manager Class
+#
+class GatewayManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Gateway.DoesNotExist):
+
+            return None
+
+
+#
+#   Gateway
 #
 class Gateway(models.Model):
 
     name = models.CharField(max_length=25, blank=False, unique=True, default='')
     owner = models.ForeignKey(User, related_name='gateways', on_delete=models.DO_NOTHING)
+
+    objects = GatewayManager()
 
     @classmethod
     def create(cls, name, owner):

@@ -141,7 +141,7 @@ The list bench authorisation template
 					</div><!-- End of generic-dropdown -->
 				</td>
 
-				<td>CPW:{{ authorisation.matrix.id|stringformat:"06d" }}</td>
+				<td>{{ authorisation.matrix.get_formatted_id }}</td>
 				<td>{{ authorisation.matrix.owner.username }}</td>
 				<td>{{ authorisation.permitted.username }}</td>
 				<td>{{ authorisation.authority.name }}</td>

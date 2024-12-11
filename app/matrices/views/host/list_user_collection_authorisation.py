@@ -31,17 +31,16 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
 from matrices.models import CollectionAuthorisation
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import get_header_data
+from matrices.routines import get_or_none_user
 
 
 #
@@ -54,13 +53,19 @@ def list_user_collection_authorisation(request, user_id):
 
         raise PermissionDenied
 
-    data = get_header_data(request.user)
+    user = get_or_none_user(user_id)
 
-    if credential_exists(request.user):
+    if not user:
+
+        raise PermissionDenied
+
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if credential:
+
+        data = get_header_data(request.user)
 
         collection_authorisation_list = CollectionAuthorisation.objects.filter(collection__owner=user_id)
-
-        user = get_object_or_404(User, pk=user_id)
 
         text_flag = " ALL Collection Permissions for " + user.username
         collection_id = ''

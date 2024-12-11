@@ -41,7 +41,7 @@ The view matrix (bench) template
 				<a href="{% url 'list_public_benches' %}">Public Workbenches</a>
 			</li>
 			<li>
-				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">CPW:{{ matrix.id|stringformat:"06d" }}, {{ matrix.title }}</a>
+				<a data-value="{{ matrix.id }}" href="#" class="bench-info-button btn btn-primary">{{ matrix.get_formatted_id }}, {{ matrix.title }}</a>
 			</li>
 			<li>
 				<a href="{% url 'aggregated_matrix_blog' matrix.id %}">
@@ -455,7 +455,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Info. for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Info. for Bench {{ matrix.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -480,7 +480,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Commentary for Bench CPW:{{ matrix.id|stringformat:"06d" }} ...',
+            title: '<i class="fa fa-calculator"></i> Commentary for Bench {{ matrix.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -526,7 +526,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Cell:{{ cell.id }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench Cell {{ cell.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });
@@ -578,7 +578,7 @@ The view matrix (bench) template
             html: '<h1>Loading ...</h1>',
             width: '600px',
             min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Bench CPW:{{ matrix_cell.matrix_id|stringformat:"06d" }}, Header Cell:{{ matrix_cell.id }} ...',
+            title: '<i class="fa fa-calculator"></i> Bench Header Cell {{ matrix_cell.get_formatted_id }} ...',
             button_save_label: null,
             enable_trace: true
         });

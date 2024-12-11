@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_create.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX bench_create view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
@@ -37,9 +37,9 @@ from django.shortcuts import render
 
 from matrices.forms import NewMatrixForm
 
-from matrices.routines import credential_exists
+from matrices.models import Credential
+
 from matrices.routines import bench_creation_consequences
-from matrices.routines import get_credential_for_user
 from matrices.routines import get_bench_count_for_user
 from matrices.routines import get_primary_cpw_environment
 
@@ -60,11 +60,12 @@ def bench_create(request):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    credential = get_credential_for_user(request.user)
     environment = get_primary_cpw_environment()
 
     object = None
@@ -117,8 +118,7 @@ def bench_create(request):
 
                             bench_creation_consequences(object, columns, rows, number_headers)
 
-                            matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                            messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+                            messages.success(request, 'NEW Bench ' + object.get_formatted_id() + ' Created!')
 
                         else:
 
@@ -142,14 +142,11 @@ def bench_create(request):
 
                     bench_creation_consequences(object, columns, rows, number_headers)
 
-                    matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                    messages.success(request, 'NEW Bench ' + matrix_id_formatted + ' Created!')
+                    messages.success(request, 'NEW Bench ' + object.get_formatted_id() + ' Created!')
 
     else:
 
         form = NewMatrixForm()
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         show_image.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,22 +25,19 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the show_image view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 
+from matrices.models import Credential
 from matrices.models import Server
 
-from matrices.routines import credential_exists
-from matrices.routines import exists_active_collection_for_user
 from matrices.routines import get_header_data
 from matrices.routines.exists_image_for_id_server_roi import exists_image_for_id_server_roi
 from matrices.routines.get_images_for_id_server_roi import get_images_for_id_server_roi
@@ -52,55 +50,59 @@ from matrices.routines import get_primary_cpw_environment
 @login_required()
 def show_image(request, server_id, image_id):
 
-    data = get_header_data(request.user)
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    environment = get_primary_cpw_environment()
+    if credential:
 
-    local_image = None
-
-    if credential_exists(request.user):
+        local_image = None
 
         image_flag = False
 
-        if exists_active_collection_for_user(request.user):
+        if request.user.profile.has_active_collection():
 
             image_flag = True
 
-        data.update({
-            'image_flag': image_flag,
-            'add_from': "show_image"
-        })
+        data = get_header_data(request.user)
 
-        server = get_object_or_404(Server, pk=server_id)
+        data.update({'image_flag': image_flag,
+                     'add_from': "show_image"})
 
-        if server.is_omero547():
+        server = Server.objects.get_or_none(id=server_id)
 
-            if exists_image_for_id_server_roi(image_id, server, 0):
+        if server:
 
-                existing_image_list = get_images_for_id_server_roi(image_id, server, 0)
+            if server.is_omero547():
 
-                local_image = existing_image_list[0]
+                if exists_image_for_id_server_roi(image_id, server, 0):
 
-            server_data = {}
+                    existing_image_list = get_images_for_id_server_roi(image_id, server, 0)
 
-            if environment.is_web_gateway() or server.is_idr():
+                    local_image = existing_image_list[0]
 
-                server_data = server.get_imaging_server_image_json(image_id)
+                server_data = {}
+
+                environment = get_primary_cpw_environment()
+
+                if environment.is_web_gateway() or server.is_idr():
+
+                    server_data = server.get_imaging_server_image_json(image_id)
+
+                else:
+
+                    if environment.is_blitz_gateway():
+
+                        server_data = server.get_imaging_server_image_json_blitz(image_id,
+                                                                                 environment.gateway_port)
+
+                data.update(server_data)
+
+                data.update({'local_image': local_image})
+
+                return render(request, 'gallery/show_image.html', data)
 
             else:
 
-                if environment.is_blitz_gateway():
-
-                    server_data = server.get_imaging_server_image_json_blitz(image_id,
-                                                                             environment.gateway_port)
-
-            data.update(server_data)
-
-            data.update({
-                'local_image': local_image
-            })
-
-            return render(request, 'gallery/show_image.html', data)
+                return HttpResponseRedirect(reverse('home', args=()))
 
         else:
 

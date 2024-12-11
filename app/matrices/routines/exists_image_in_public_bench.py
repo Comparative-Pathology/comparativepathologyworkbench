@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         exists_image_in_public_bench.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,12 +26,11 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Is there a Public Bench for a particular Image?
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django.apps import apps
-
-from django.shortcuts import get_object_or_404
 
 
 #

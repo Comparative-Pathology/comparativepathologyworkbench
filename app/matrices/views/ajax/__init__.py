@@ -25,24 +25,8 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
+# ##
 # AJAX INTERFACE ROUTINES
-#
-# def overwrite_cell(request) - MOVE
-#      (Overwrites Target Cell with Source Cell, Source Cell is emptied)
-# def overwrite_cell_leave(request) - COPY
-#      (Overwrites Target Cell with Source Cell, Source Cell is left in place)
-# def swap_cells(request) - SWAP
-#      (Target Cell becomes Source Cell, Source Cell becomes Target Cell)
-#
-# def import_image(request)
-#
-# def swap_rows(request) - SWAP ROW A WITH ROW B
-# def swap_columns(request) - SWAP COLUMN A WITH COLUMN B
-#
-# def shuffle_columns(request) - MOVE COLUMN AND PUSH EXISTING COLUMNS TO LEFT OR RIGHT
-# def shuffle_rows(request) - MOVE ROW AND PUSH EXISTING ROWS TO LEFT OR RIGHT
-#
 # ##
 #
 from .active_collection_selection import active_collection_selection
@@ -69,7 +53,6 @@ from .bench_read import bench_read
 from .bench_update import bench_update
 from .bench_update_owner import bench_update_owner
 from .bench_collection_update import bench_collection_update
-from .bench_delete import bench_delete
 
 from .collection_authorisation_create import collection_authorisation_create
 from .collection_authorisation_read import collection_authorisation_read

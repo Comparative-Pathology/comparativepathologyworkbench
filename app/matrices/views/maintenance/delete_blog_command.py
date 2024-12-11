@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         delete_blog_command.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,35 +25,40 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the delete_blog_command view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from matrices.models import Blog
 
+
 #
-# DELETE A COMMAND TO ACCESS THE BLOGGING ENGINE
+#   DELETE A COMMAND TO ACCESS THE BLOGGING ENGINE
 #
 @login_required
 def delete_blog_command(request, blog_id):
 
     if request.user.is_superuser:
 
-        blog = get_object_or_404(Blog, pk=blog_id)
+        blog = Blog.objects.get_or_none(id=blog_id)
 
-        messages.success(request, 'Blog Command ' + blog.name + ' Deleted!')
+        if blog:
 
-        blog.delete()
+            messages.success(request, 'Blog Command ' + blog.name + ' Deleted!')
 
-        return HttpResponseRedirect(reverse('maintenance', args=()))
+            blog.delete()
+
+            return HttpResponseRedirect(reverse('maintenance', args=()))
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

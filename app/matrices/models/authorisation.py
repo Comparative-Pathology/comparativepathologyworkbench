@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         authorisation.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,35 +26,43 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Bench Authorisation Model.
-###
+# ##
+# #
 from __future__ import unicode_literals
 
-import json, urllib, requests, base64, hashlib, requests
-
 from django.db import models
-from django.db.models import Q
-from django.db.models import Count
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.utils.timezone import now
-from django.conf import settings
-from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
-
-from random import randint
 
 from matrices.models import Matrix
 from matrices.models import Authority
 
 
-"""
-    AUTHORISATION (for a Bench)
-"""
+#
+#    The Authorisation Manager Class
+#
+class AuthorisationManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+
+        try:
+
+            return self.get(*args, **kwargs)
+
+        except (KeyError, Authorisation.DoesNotExist):
+
+            return None
+
+
+#
+#   Authorisation (for a Bench)
+#
 class Authorisation(models.Model):
     matrix = models.ForeignKey(Matrix, related_name='authorisations', on_delete=models.CASCADE, verbose_name=_('Bench'))
     permitted = models.ForeignKey(User, related_name='authorisations', on_delete=models.DO_NOTHING)
     authority = models.ForeignKey(Authority, related_name='authorisations', on_delete=models.DO_NOTHING)
+
+    objects = AuthorisationManager()
 
     class Meta:
         verbose_name = _('Authorisation')
@@ -68,7 +77,6 @@ class Authorisation(models.Model):
 
     def __repr__(self):
         return f"{self.id}, {self.matrix.id}, {self.permitted.id}, {self.authority.id}"
-
 
     def set_matrix(self, a_matrix):
         self.matrix = a_matrix

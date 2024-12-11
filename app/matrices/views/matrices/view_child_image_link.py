@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_child_image_link.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,26 +25,23 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_child_image_link view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
+from matrices.models import Credential
 from matrices.models import Image
-from matrices.models import ImageLink
 
-from matrices.routines import credential_exists
-from matrices.routines import get_active_collection_for_user
 from matrices.routines import get_header_data
 
+
 #
-# VIEW ALL IMAGE LINKS for the Child Image
+#   VIEW ALL IMAGE LINKS for the Child Image
 #
 @login_required
 def view_child_image_link(request, image_child_id):
@@ -60,24 +58,33 @@ def view_child_image_link(request, image_child_id):
 
         raise PermissionDenied
 
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    if credential_exists(request.user):
+    if credential:
 
-        data = get_header_data(request.user)
+        image_child = Image.objects.get_or_none(id=image_child_id)
 
-        selected_collection = get_active_collection_for_user(request.user)
+        if image_child:
 
-        image_child = get_object_or_404(Image, pk=image_child_id)
+            data = get_header_data(request.user)
 
-        image_link_list = list()
+            selected_collection = request.user.profile.active_collection
 
-        if image_child.exists_child_image_links():
+            image_link_list = list()
 
-            image_link_list = image_child.get_child_image_links()
+            if image_child.exists_child_image_links():
 
-        data.update({ 'image_link_list': image_link_list, 'image_child': image_child, 'selected_collection': selected_collection })
+                image_link_list = image_child.get_child_image_links()
 
-        return render(request, 'matrices/view_child_image_links.html', data)
+            data.update({'image_link_list': image_link_list,
+                         'image_child': image_child,
+                         'selected_collection': selected_collection})
+
+            return render(request, 'matrices/view_child_image_links.html', data)
+
+        else:
+
+            raise PermissionDenied
 
     else:
 

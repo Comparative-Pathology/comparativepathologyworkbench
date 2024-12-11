@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_unique_title_for_collection_for_user.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,21 +26,18 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get the Existing Collection with the Same Title for a particular User
-###
+# ##
+#
 from __future__ import unicode_literals
 
-import base64, hashlib
-
 from django.db.models import Q
-
-from os import urandom
 
 from django.apps import apps
 
 
-"""
-    Get the Existing Collection with the Same Title for a particular User?
-"""
+#
+#   Get the Existing Collection with the Same Title for a particular User?
+#
 def get_unique_title_for_collection_for_user(a_user, a_title):
 
     Collection = apps.get_model('matrices', 'Collection')

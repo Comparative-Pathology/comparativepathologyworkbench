@@ -35,14 +35,11 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import MatrixForm
 
+from matrices.models import Credential
 from matrices.models import Matrix
 
-from matrices.routines import credential_exists
-from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 
 WORDPRESS_SUCCESS = 'Success!'
@@ -62,15 +59,17 @@ def bench_update(request, bench_id):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    credential = get_credential_for_user(request.user)
+    object = Matrix.objects.get_or_none(id=bench_id)
 
-    environment = get_primary_cpw_environment()
+    if not object:
 
-    object = get_object_by_uuid_or_404(Matrix, bench_id)
+        raise PermissionDenied
 
     if object.is_locked():
 
@@ -79,6 +78,8 @@ def bench_update(request, bench_id):
     template_name = 'frontend_forms/generic_form_inner.html'
 
     if request.method == 'POST':
+
+        environment = get_primary_cpw_environment()
 
         form = MatrixForm(instance=object, data=request.POST)
 
@@ -106,8 +107,7 @@ def bench_update(request, bench_id):
 
                         object.save()
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
+                        messages.success(request, 'EXISTING Bench ' + object.get_formatted_id() + ' Updated!')
 
                     else:
 
@@ -120,21 +120,17 @@ def bench_update(request, bench_id):
 
                     object.save()
 
-                    matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                    messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
+                    messages.success(request, 'EXISTING Bench ' + object.get_formatted_id() + ' Updated!')
 
             else:
 
                 object.save()
 
-                matrix_id_formatted = "CPW:" + "{:06d}".format(object.id)
-                messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated!')
+                messages.success(request, 'EXISTING Bench ' + object.get_formatted_id() + ' Updated!')
 
     else:
 
         form = MatrixForm(instance=object)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_command.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_command view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -40,8 +39,9 @@ from matrices.models import Command
 
 from matrices.routines import get_header_data
 
+
 #
-# VIEW AN OMERO API COMMAND
+#   VIEW AN OMERO API COMMAND
 #
 @login_required
 def view_command(request, command_id):
@@ -50,11 +50,18 @@ def view_command(request, command_id):
 
         data = get_header_data(request.user)
 
-        command = get_object_or_404(Command, pk=command_id)
+        command = Command.objects.get_or_none(id=command_id)
 
-        data.update({ 'command_id': command_id, 'command': command })
+        if command:
 
-        return render(request, 'maintenance/detail_command.html', data)
+            data.update({'command_id': command_id,
+                         'command': command})
+
+            return render(request, 'maintenance/detail_command.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

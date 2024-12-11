@@ -39,11 +39,10 @@ from matrices.models import Matrix
 from matrices.models import Cell
 from matrices.models import Collection
 from matrices.models import CollectionImageOrder
+from matrices.models import Credential
 
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines import get_authority_for_bench_and_user_and_requester
-from matrices.routines import get_credential_for_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines import get_header_data
 
@@ -58,13 +57,13 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def add_collection_row(request, matrix_id, row_id):
 
-    environment = get_primary_cpw_environment()
+    credential = Credential.objects.get_or_none(username=request.user.username)
 
-    data = get_header_data(request.user)
+    if credential:
 
-    if credential_exists(request.user):
+        environment = get_primary_cpw_environment()
 
-        credential = get_credential_for_user(request.user)
+        data = get_header_data(request.user)
 
         matrix = Matrix.objects.get(id=matrix_id)
 
@@ -91,8 +90,7 @@ def add_collection_row(request, matrix_id, row_id):
 
                     result = add_collection_row_task.delay_on_commit(owner.id, matrix.id, row_id)
 
-                    matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                    messages.error(request, 'Bench ' + matrix_id_formatted + ' LOCKED pending Update!')
+                    messages.error(request, 'Bench ' + matrix.get_formatted_id() + ' LOCKED pending Update!')
 
                 else:
 
@@ -204,8 +202,7 @@ def add_collection_row(request, matrix_id, row_id):
 
                         actual_row = int(row_id)
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' + str() +
                                          ' Collection Added to Row ' + str(actual_row) + '!')
 
                     else:
@@ -263,8 +260,7 @@ def add_collection_row(request, matrix_id, row_id):
 
                         actual_row = int(row_id)
 
-                        matrix_id_formatted = "CPW:" + "{:06d}".format(matrix_id)
-                        messages.success(request, 'EXISTING Bench ' + matrix_id_formatted + ' Updated - ' + str() +
+                        messages.success(request, 'EXISTING Bench ' + matrix.get_formatted_id() + ' Updated - ' + str() +
                                          ' Collection Added to Row ' + str(actual_row) + '!')
 
                 matrix_cells = matrix.get_matrix()

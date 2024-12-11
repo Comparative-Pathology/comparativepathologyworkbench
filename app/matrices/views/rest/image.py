@@ -33,8 +33,6 @@ from __future__ import unicode_literals
 
 import subprocess
 
-from django.shortcuts import get_object_or_404
-
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 
@@ -150,25 +148,35 @@ class ImageViewSet(viewsets.ModelViewSet):
                             if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
                                 # Get the Artefact associated with this Image Link
-                                artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+                                artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
 
-                                # Does the Image Link have a file location
-                                if artefact.has_location():
+                                # Is there an Artefact ... ?
+                                #  Yes
+                                if artefact:
 
-                                    rm_command = 'rm ' + str(artefact.location)
+                                    # Does the Image Link have a file location
+                                    if artefact.has_location():
 
-                                    # Delete the located file for this artefact
-                                    process = subprocess.Popen(rm_command,
-                                                               shell=True,
-                                                               stdout=subprocess.PIPE,
-                                                               stderr=subprocess.PIPE,
-                                                               universal_newlines=True)
+                                        rm_command = 'rm ' + str(artefact.location)
 
-                                # Delete the Image Link
-                                image_link.delete()
+                                        # Delete the located file for this artefact
+                                        process = subprocess.Popen(rm_command,
+                                                                   shell=True,
+                                                                   stdout=subprocess.PIPE,
+                                                                   stderr=subprocess.PIPE,
+                                                                   universal_newlines=True)
 
-                                # Delete the Artefact
-                                artefact.delete()
+                                    # Delete the Image Link
+                                    image_link.delete()
+
+                                    # Delete the Artefact
+                                    artefact.delete()
+
+                                # No
+                                else:
+
+                                    # Delete the Image Link
+                                    image_link.delete()
 
                             # No, disallow the Image deletion
                             else:
@@ -190,21 +198,35 @@ class ImageViewSet(viewsets.ModelViewSet):
                             if image_link.is_owned_by(request.user) or request.user.is_superuser:
 
                                 # Get the Artefact associated with this Image Link
-                                artefact = get_object_or_404(Artefact, pk=image_link.artefact.id)
+                                artefact = Artefact.objects.get_or_none(id=image_link.artefact.id)
 
-                                # Does the Image Link have a file location
-                                if artefact.has_location():
+                                # Is there an Artefact ... ?
+                                #  Yes
+                                if artefact:
 
-                                    rm_command = 'rm ' + str(artefact.location)
+                                    # Does the Image Link have a file location
+                                    if artefact.has_location():
 
-                                    # Delete the located file for this artefact
-                                    process = subprocess.Popen(rm_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                                        rm_command = 'rm ' + str(artefact.location)
 
-                                # Delete the Image Link
-                                image_link.delete()
+                                        # Delete the located file for this artefact
+                                        process = subprocess.Popen(rm_command,
+                                                                   shell=True,
+                                                                   stdout=subprocess.PIPE,
+                                                                   stderr=subprocess.PIPE,
+                                                                   universal_newlines=True)
 
-                                # Delete the Artefact
-                                artefact.delete()
+                                    # Delete the Image Link
+                                    image_link.delete()
+
+                                    # Delete the Artefact
+                                    artefact.delete()
+
+                                #  No
+                                else:
+
+                                    # Delete the Image Link
+                                    image_link.delete()
 
                             else:
 

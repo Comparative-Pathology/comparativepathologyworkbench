@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_bench_authority.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,15 +25,13 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_bench_authority view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -40,21 +39,29 @@ from matrices.models import Authority
 
 from matrices.routines import get_header_data
 
+
 #
-# VIEW A BENCH AUTHORITY
+#   VIEW A BENCH AUTHORITY
 #
 @login_required
 def view_bench_authority(request, bench_authority_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        authority = Authority.objects.get_or_none(id=bench_authority_id)
 
-        authority = get_object_or_404(Authority, pk=bench_authority_id)
+        if authority:
 
-        data.update({ 'bench_authority_id': bench_authority_id, 'authority': authority })
+            data = get_header_data(request.user)
 
-        return render(request, 'maintenance/detail_bench_authority.html', data)
+            data.update({'bench_authority_id': bench_authority_id,
+                         'authority': authority})
+
+            return render(request, 'maintenance/detail_bench_authority.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

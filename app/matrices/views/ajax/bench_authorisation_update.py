@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         bench_authorisation_update.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +25,9 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the AJAX authorisation_update view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django import forms
@@ -37,21 +37,19 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
-from frontend_forms.utils import get_object_by_uuid_or_404
-
 from matrices.forms import AuthorisationForm
 
 from matrices.models import Matrix
 from matrices.models import Authorisation
 from matrices.models import Authority
+from matrices.models import Credential
 
 from matrices.routines import authorisation_crud_consequences
-from matrices.routines import credential_exists
 from matrices.routines import exists_update_for_bench_and_user
 
 
 #
-# EDIT A BENCH AUTHORISATION
+#   EDIT A BENCH AUTHORISATION
 #
 @login_required()
 def bench_authorisation_update(request, authorisation_id, bench_id=None):
@@ -68,11 +66,17 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
 
         raise PermissionDenied
 
-    if not credential_exists(request.user):
+    credential = Credential.objects.get_or_none(username=request.user.username)
+
+    if not credential:
 
         raise PermissionDenied
 
-    object = get_object_by_uuid_or_404(Authorisation, authorisation_id)
+    object = Authorisation.objects.get_or_none(id=authorisation_id)
+
+    if not object:
+
+        raise PermissionDenied
 
     template_name = 'frontend_forms/generic_form_inner.html'
 
@@ -99,7 +103,8 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
 
             object.save()
 
-            messages.success(request, 'Authorisation ' + str(object.id) + ' UPDATED for Bench CPW:' + '{num:06d}'.format(num=object.matrix.id))
+            messages.success(request, 'Authorisation ' + str(object.id) + ' UPDATED for Bench ' +
+                             object.matrix.get_formatted_id())
 
     else:
 
@@ -117,7 +122,11 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
 
     else:
 
-        bench = get_object_by_uuid_or_404(Matrix, bench_id)
+        bench = Matrix.objects.get_or_none(id=bench_id)
+
+        if not bench:
+
+            raise PermissionDenied
 
         if not exists_update_for_bench_and_user(bench, request.user):
 
@@ -136,7 +145,5 @@ def bench_authorisation_update(request, authorisation_id, bench_id=None):
 
     form.fields['bench'].label_from_instance = lambda obj: "CPW:{0:06d}, {1}".format(obj.id, obj.title)
 
-    return render(request, template_name, {
-        'form': form,
-        'object': object
-    })
+    return render(request, template_name, {'form': form,
+                                           'object': object})

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_public_matrix.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,14 +25,12 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-#
 # This file contains the view_public_matrix view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
 from matrices.models import Matrix
@@ -48,9 +47,13 @@ def view_public_matrix(request, matrix_id):
 
         raise PermissionDenied
 
-    data = get_header_data(request.user)
+    matrix = Matrix.objects.get_or_none(id=matrix_id)
 
-    matrix = get_object_or_404(Matrix, pk=matrix_id)
+    if not matrix:
+
+        raise PermissionDenied
+
+    data = get_header_data(request.user)
 
     matrix_cells = matrix.get_matrix()
 

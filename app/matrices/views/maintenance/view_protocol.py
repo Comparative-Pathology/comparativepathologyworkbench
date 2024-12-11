@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         view_protocol.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -23,16 +24,14 @@
 # License along with this program; if not, write to the Free
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
-#\brief
-#
+# \brief
 # This file contains the view_protocol view routine
+# ##
 #
-###
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -40,21 +39,29 @@ from matrices.models import Protocol
 
 from matrices.routines import get_header_data
 
+
 #
-# VIEW A TRANSMISSION PROTOCOL
+#   VIEW A TRANSMISSION PROTOCOL
 #
 @login_required
 def view_protocol(request, protocol_id):
 
     if request.user.is_superuser:
 
-        data = get_header_data(request.user)
+        protocol = Protocol.objects.get_or_none(id=protocol_id)
 
-        protocol = get_object_or_404(Protocol, pk=protocol_id)
+        if protocol:
 
-        data.update({ 'protocol_id': protocol_id, 'protocol': protocol })
+            data = get_header_data(request.user)
 
-        return render(request, 'maintenance/detail_protocol.html', data)
+            data.update({'protocol_id': protocol_id,
+                         'protocol': protocol})
+
+            return render(request, 'maintenance/detail_protocol.html', data)
+
+        else:
+
+            return HttpResponseRedirect(reverse('home', args=()))
 
     else:
 

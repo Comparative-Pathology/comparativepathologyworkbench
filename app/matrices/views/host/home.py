@@ -36,6 +36,7 @@ from django.shortcuts import render
 from matrices.models import Credential
 
 from matrices.routines import get_header_data
+from matrices.routines import get_or_none_user
 
 
 #
@@ -49,15 +50,15 @@ def home(request):
 
     credentialExists = False
 
-    credential = Credential.objects.get_or_none(username=request.user.username)
+    user = get_or_none_user(request.user.id)
 
-    if credential:
+    if user:
 
-        credentialExists = True
+        credential = Credential.objects.get_or_none(username=request.user.username)
 
-    else:
+        if credential:
 
-        raise PermissionDenied
+            credentialExists = True
 
     data = get_header_data(request.user)
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collectionsummaryselectionform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,15 +26,11 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for selecting a collection.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Collection
 from matrices.models import Profile
@@ -54,7 +51,13 @@ class CollectionSummarySelectionForm(forms.ModelForm):
 
         super(CollectionSummarySelectionForm, self).__init__(*args, **kwargs)
 
-        collection_summary_queryset = collection_list_by_user_and_direction(self.request.user, 'collection_id', '', '', '', '', '')
+        collection_summary_queryset = collection_list_by_user_and_direction(self.request.user,
+                                                                            'collection_id',
+                                                                            '',
+                                                                            '',
+                                                                            '',
+                                                                            '',
+                                                                            '')
 
         collection_queryset = Collection.objects.none()
 

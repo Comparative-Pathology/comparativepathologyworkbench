@@ -79,9 +79,20 @@ def link_images(request, image_parent_id, image_child_id):
 
     if credential:
 
-        collection_summary_list = collection_list_by_user_and_direction(request.user, '', '', '', '', '', '')
+        collection_summary_list = collection_list_by_user_and_direction(request.user,
+                                                                        '',
+                                                                        '',
+                                                                        '',
+                                                                        '',
+                                                                        '',
+                                                                        '')
 
         image_list = get_images_for_collection_summary(collection_summary_list)
+
+        image_parent = None
+        image_child = None
+        selected_collection = None
+        collection_image_list = list()
 
         if image_parent_id != 0:
 

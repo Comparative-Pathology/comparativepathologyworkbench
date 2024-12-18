@@ -327,15 +327,17 @@ The list images template (with Search)
 
         {% if collection.is_not_locked %}
 			  <a class="link-button btn btn-primary" href="{% url 'webgallery_edit_image' image_summary.image_id %}"><i class="fa fa-edit"></i> Tag Image</a>
-			{% for image_collection in image_summary.get_collections %}
-				{% if image_summary.image_owner == user.username or user.username == 'admin' %}
-			  <a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_collection.id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
-				{% endif %}
-				{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
+			{% if image_summary.exists_parent_image_links or image_summary.exists_child_image_links %}
 			  <a class="link-button btn btn-primary" href="{% url 'view_a_and_b_image_links' image_summary.image_id %}"><i class="fa fa-chain"></i> Links</a>
-				{% endif %}
+			{% endif %}
+			{% for image_collection in image_summary.get_collections %}
+			    {% if image_collection.id == collection_id %}
+				    {% if image_summary.image_owner == user.username or user.username == 'admin' %}
+			  <a class="link-button btn btn-primary" href="{% url 'webgallery_delete_collection_image' image_collection.id image_summary.image_id %}" onclick="return confirm('Are you sure you want to DELETE this IMAGE?')"><i class="fa fa-trash"></i> Delete</a>
+				    {% endif %}
 			  <a class="link-button btn btn-primary" href="{% url 'collection_ordering_selection' image_collection.id image_summary.image_id image_summary.image_ordering_permitted_id %}" onclick="open_image_ordering_edit_dialog(event, 'Updating Image Ordering {{ image_collection.get_formatted_id }} ...'); return false;"><i class="fa fa-edit"></i> Edit Image Ordering</a>
-              <a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection "{{ image_collection.get_formatted_id }}"</a>
+			  <a class="link-button btn btn-primary" href="{% url 'list_images' image_collection.id %}"><i class="fa fa-eye"></i> View Collection</a>
+			    {% endif %}
 			{% endfor %}
 	    	{% if image_summary.has_matrices %}
 				{% for image_matrix in image_summary.get_matrices %}

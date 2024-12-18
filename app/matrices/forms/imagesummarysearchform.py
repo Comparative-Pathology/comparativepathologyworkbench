@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+#
+# ##
 # \file         imagesummarysearchform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for searching Images.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
@@ -177,7 +180,17 @@ class ImageSummarySearchForm(forms.ModelForm):
         self.fields['collection'].queryset = collection_queryset
 
         # Update the Bench Selection Box to Only show Benches that the user has access to
-        bench_summary_queryset = bench_list_by_user_and_direction(request.user, '', '', '', '', '', '', '', '', '', '')
+        bench_summary_queryset = bench_list_by_user_and_direction(request.user,
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '',
+                                                                  '')
 
         bench_queryset = Matrix.objects.none()
 

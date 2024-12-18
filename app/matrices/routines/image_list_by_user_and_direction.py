@@ -88,7 +88,13 @@ def image_list_by_user_and_direction(a_user,
     collection = None
     matrix = None
 
-    collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '', '')
+    collection_summary_list = collection_list_by_user_and_direction(a_user,
+                                                                    '',
+                                                                    '',
+                                                                    '',
+                                                                    '',
+                                                                    '',
+                                                                    '')
 
     list_of_image_ids = get_list_of_image_ids_for_collection_summary(collection_summary_list)
 

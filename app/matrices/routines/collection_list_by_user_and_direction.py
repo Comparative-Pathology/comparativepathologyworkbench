@@ -198,8 +198,8 @@ def collection_list_by_user_and_direction(a_user,
         else:
 
             queryset = CollectionSummary.objects.filter(Q(collection_authorisation_authority='ADMIN') &
-                                                        Q(collection_title__icontains=a_query_search_term) |
-                                                        Q(collection_description__icontains=a_query_search_term))\
+                                                        (Q(collection_title__icontains=a_query_search_term) |
+                                                        Q(collection_description__icontains=a_query_search_term)))\
                 .order_by(sort_parameter)
 
     else:
@@ -208,6 +208,7 @@ def collection_list_by_user_and_direction(a_user,
 
             if a_query_title == '' and a_query_description == '' and str_query_owner == '' and \
                str_query_authority == '':
+
                 queryset = CollectionSummary.objects.filter(~Q(collection_authorisation_authority='ADMIN') &
                                                             Q(collection_authorisation_permitted=a_user.username))\
                     .order_by(sort_parameter)
@@ -337,8 +338,8 @@ def collection_list_by_user_and_direction(a_user,
         else:
 
             queryset = CollectionSummary.objects.filter(~Q(collection_authorisation_authority='ADMIN') &
-                                                        Q(collection_title__icontains=a_query_search_term) |
-                                                        Q(collection_description__icontains=a_query_search_term))\
+                                                        (Q(collection_title__icontains=a_query_search_term) |
+                                                        Q(collection_description__icontains=a_query_search_term)))\
                 .order_by(sort_parameter)
 
     return queryset

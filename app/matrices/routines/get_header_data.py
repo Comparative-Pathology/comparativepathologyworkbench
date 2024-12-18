@@ -58,7 +58,15 @@ def get_header_data(a_user):
 
     if a_user.is_anonymous:
 
-        matrix_public_list = bench_public_list_by_direction('', '', '', '', '', '', '', '', '')
+        matrix_public_list = bench_public_list_by_direction('',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '')
 
     else:
 
@@ -72,11 +80,35 @@ def get_header_data(a_user):
 
             server_list = Server.objects.all().order_by('id')
 
-        matrix_list = bench_list_by_user_and_direction(a_user, '', '', '', '', '', '', '', '', '', '')
+        matrix_list = bench_list_by_user_and_direction(a_user,
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '',
+                                                       '')
 
-        matrix_public_list = bench_public_list_by_direction('', '', '', '', '', '', '', '', '')
+        matrix_public_list = bench_public_list_by_direction('',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '',
+                                                            '')
 
-        collection_summary_list = collection_list_by_user_and_direction(a_user, '', '', '', '', '', '')
+        collection_summary_list = collection_list_by_user_and_direction(a_user,
+                                                                        '',
+                                                                        '',
+                                                                        '',
+                                                                        '',
+                                                                        '',
+                                                                        '')
 
         image_list = get_images_for_collection_summary(collection_summary_list)
         hidden_image_list = get_hidden_images_for_collection_summary(collection_summary_list)

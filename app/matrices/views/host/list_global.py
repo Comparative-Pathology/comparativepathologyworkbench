@@ -67,14 +67,24 @@ def list_global(request):
 
         bench_list = bench_list_by_user_and_direction(request.user,
                                                       sort_parameter,
-                                                      '', '', '', '', '', '', '', '',
+                                                      '',
+                                                      '',
+                                                      '',
+                                                      '',
+                                                      '',
+                                                      '',
+                                                      '',
+                                                      '',
                                                       query_search)
 
         sort_parameter = 'collection_id'
 
         collection_list = collection_list_by_user_and_direction(request.user,
                                                                 sort_parameter,
-                                                                '', '', '', '',
+                                                                '',
+                                                                '',
+                                                                '',
+                                                                '',
                                                                 query_search)
 
         sort_parameter = 'image_name'
@@ -82,9 +92,14 @@ def list_global(request):
         image_list = image_list_by_user_and_direction(request.user,
                                                       sort_parameter,
                                                       query_search,
-                                                      '', '', '',
+                                                      '',
+                                                      '',
+                                                      '',
                                                       False,
-                                                      '', '', '', '')
+                                                      '',
+                                                      '',
+                                                      '',
+                                                      '')
 
         data.update({'search_term': query_search,
                      'search_bench_list': bench_list,

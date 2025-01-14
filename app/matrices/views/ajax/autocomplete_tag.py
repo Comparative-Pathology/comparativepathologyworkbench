@@ -42,13 +42,15 @@ from taggit.utils import parse_tags
 
 from matrices.models import Image
 
+from matrices.routines import is_request_ajax
+
 
 #
 #   The autocomplete_tag VIEW
 #
 def autocompleteTag(request, image_id):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         local_image = Image.objects.get_or_none(id=image_id)
 

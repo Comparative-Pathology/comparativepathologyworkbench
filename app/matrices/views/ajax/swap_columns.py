@@ -38,6 +38,7 @@ from matrices.models import Cell
 from matrices.models import Credential
 
 from matrices.routines import exists_update_for_bench_and_user
+from matrices.routines import is_request_ajax
 
 
 #
@@ -46,7 +47,7 @@ from matrices.routines import exists_update_for_bench_and_user
 @login_required()
 def swap_columns(request):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

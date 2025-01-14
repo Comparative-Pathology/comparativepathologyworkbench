@@ -39,6 +39,7 @@ from matrices.models import Credential
 from matrices.models import Server
 
 from matrices.routines import exists_image_for_server
+from matrices.routines import is_request_ajax
 
 
 #
@@ -51,7 +52,7 @@ def server_delete(request, server_id):
 
         raise PermissionDenied
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

@@ -50,6 +50,7 @@ from matrices.routines import get_header_data
 from matrices.routines.get_id_from_omero_url import get_id_from_omero_url
 from matrices.routines import get_server_from_omero_url
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines import is_request_ajax
 
 HTTP_POST = 'POST'
 WORDPRESS_SUCCESS = 'Success!'
@@ -61,7 +62,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required
 def amend_cell(request, matrix_id, cell_id):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

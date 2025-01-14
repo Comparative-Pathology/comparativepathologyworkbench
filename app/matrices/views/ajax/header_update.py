@@ -41,6 +41,8 @@ from matrices.models import Cell
 from matrices.models import Credential
 from matrices.models import Matrix
 
+from matrices.routines import is_request_ajax
+
 WORDPRESS_SUCCESS = 'Success!'
 
 
@@ -50,7 +52,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required()
 def header_update(request, bench_id, header_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 
@@ -92,7 +94,7 @@ def header_update(request, bench_id, header_id):
 
             object.save()
 
-            messages.success(request, 'Header ' + object.get_formatted_id + ' Updated!')
+            messages.success(request, 'Header ' + object.get_formatted_id() + ' Updated!')
 
     else:
 

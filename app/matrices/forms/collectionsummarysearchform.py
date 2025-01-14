@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collectionsummarysearchform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,10 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for searching collections.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
+
 from django.contrib.auth.models import User
 
 from matrices.models import CollectionSummary

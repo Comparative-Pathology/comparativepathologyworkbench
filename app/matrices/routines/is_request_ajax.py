@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         blocked_adaptor.py
+# \file         is_request_ajax.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,39 +25,21 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# Restricts editing to owner and superuser.
+# Is the Request an AJAX call?
 # ##
 #
-from inlineedit.adaptors import BasicAdaptor
+from __future__ import unicode_literals
 
 
-class BlockedAdaptor(BasicAdaptor):
+#
+#   Is the Request an AJAX call?
+#
+def is_request_ajax(a_request):
 
-    # "Demonstrate adaptor level permission setting"
-    def has_edit_perm(self, user):
+    is_ajax = False
 
-        model_name = self._model.__class__.__name__
+    if a_request.headers.get('x-requested-with') == 'XMLHttpRequest':
 
-        owner = ''
+        is_ajax = True
 
-        if model_name == 'Cell':
-
-            owner = self._model.matrix.owner
-
-        else:
-
-            owner = self._model.owner
-
-        allow_flag = False
-
-        if owner == user:
-
-            allow_flag = True
-
-        else:
-
-            if user.is_superuser:
-
-                allow_flag = True
-
-        return allow_flag
+    return is_ajax

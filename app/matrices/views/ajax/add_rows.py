@@ -44,6 +44,7 @@ from matrices.models import Cell
 from matrices.models import Credential
 
 from matrices.routines import get_authority_for_bench_and_user_and_requester
+from matrices.routines import is_request_ajax
 
 
 #
@@ -52,7 +53,7 @@ from matrices.routines import get_authority_for_bench_and_user_and_requester
 @login_required()
 def add_rows(request, matrix_id, row_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

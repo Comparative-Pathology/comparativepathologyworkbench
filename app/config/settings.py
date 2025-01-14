@@ -126,6 +126,9 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
+        'TEST': {
+            'MIRROR': 'default',
+        },
     }
 }
 
@@ -206,9 +209,9 @@ CKEDITOR_CONFIGS = {
 
 INLINEEDIT_EDIT_ACCESS = lambda user, model, field: True
 
-INLINEEDIT_ADAPTORS = {
-    "blocked": "matrices.adaptors.BlockedAdaptor",
-}
+#INLINEEDIT_ADAPTORS = {
+#    "blocked": "matrices.adaptors.BlockedAdaptor",
+#}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

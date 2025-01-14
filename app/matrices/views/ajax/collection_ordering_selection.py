@@ -43,6 +43,8 @@ from matrices.models import CollectionImageOrder
 from matrices.models import Credential
 from matrices.models import Image
 
+from matrices.routines import is_request_ajax
+
 
 #
 #   Select a Collection
@@ -50,7 +52,7 @@ from matrices.models import Image
 @login_required()
 def collection_ordering_selection(request, collection_id, image_id, permitted_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

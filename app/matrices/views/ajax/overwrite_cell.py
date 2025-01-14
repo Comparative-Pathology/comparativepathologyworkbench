@@ -41,6 +41,7 @@ from matrices.routines import exists_collections_for_image
 from matrices.routines import get_cells_for_image
 from matrices.routines import exists_update_for_bench_and_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
+from matrices.routines import is_request_ajax
 
 
 #
@@ -51,7 +52,7 @@ from matrices.routines.get_primary_cpw_environment import get_primary_cpw_enviro
 @login_required()
 def overwrite_cell(request):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

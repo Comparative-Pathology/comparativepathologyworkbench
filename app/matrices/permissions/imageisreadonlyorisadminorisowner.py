@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         imageisreadonlyorisadminorisowner.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # The Image Is Read Only Or (User) Is Admin Or Is Owner Permission.
-###
+# ##
+#
 from rest_framework import permissions
 
 

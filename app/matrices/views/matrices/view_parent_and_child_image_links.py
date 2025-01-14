@@ -38,6 +38,7 @@ from matrices.models import Credential
 from matrices.models import Image
 
 from matrices.routines import get_header_data
+from matrices.routines import is_request_ajax
 
 
 #
@@ -46,7 +47,7 @@ from matrices.routines import get_header_data
 @login_required
 def view_parent_and_child_image_links(request, image_selected_id):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

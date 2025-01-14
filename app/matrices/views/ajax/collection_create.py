@@ -41,6 +41,7 @@ from matrices.models import Credential
 
 from matrices.routines import get_collection_count_for_user
 from matrices.routines import get_primary_cpw_environment
+from matrices.routines import is_request_ajax
 
 
 #
@@ -49,7 +50,7 @@ from matrices.routines import get_primary_cpw_environment
 @login_required()
 def collection_create(request):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

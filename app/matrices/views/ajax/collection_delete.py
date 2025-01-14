@@ -39,6 +39,7 @@ from matrices.models import Collection
 from matrices.models import Credential
 
 from matrices.routines import collection_delete_consequences
+from matrices.routines import is_request_ajax
 
 
 #
@@ -47,7 +48,7 @@ from matrices.routines import collection_delete_consequences
 @login_required()
 def collection_delete(request, collection_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

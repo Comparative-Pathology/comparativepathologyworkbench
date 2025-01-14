@@ -40,6 +40,8 @@ from matrices.forms import CollectionSummarySelectionForm
 from matrices.models import Credential
 from matrices.models import Matrix
 
+from matrices.routines import is_request_ajax
+
 
 #
 #   EDIT A BENCH
@@ -47,7 +49,7 @@ from matrices.models import Matrix
 @login_required()
 def bench_collection_update(request, bench_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

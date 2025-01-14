@@ -40,6 +40,7 @@ from matrices.forms import CollectionSummarySelectionForm
 from matrices.models import Credential
 
 from matrices.routines import get_or_none_user
+from matrices.routines import is_request_ajax
 
 
 #
@@ -48,7 +49,7 @@ from matrices.routines import get_or_none_user
 @login_required()
 def collection_selection(request, user_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

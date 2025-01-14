@@ -37,6 +37,7 @@ from matrices.models import Credential
 
 from matrices.routines import get_header_data
 from matrices.routines import get_or_none_user
+from matrices.routines import is_request_ajax
 
 
 #
@@ -44,7 +45,7 @@ from matrices.routines import get_or_none_user
 #
 def home(request):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

@@ -136,6 +136,7 @@ from .get_unique_title_for_collection_for_user import get_unique_title_for_colle
 from .get_user_from_username import get_user_from_username
 from .get_users_for_last_used_collection import get_users_for_last_used_collection
 from .image_list_by_user_and_direction import image_list_by_user_and_direction
+from .is_request_ajax import is_request_ajax
 from .validate_a_cpw_url import validate_a_cpw_url
 from .validate_an_ebi_sca_image import validate_an_ebi_sca_image
 from .validate_an_ebi_sca_url import validate_an_ebi_sca_url

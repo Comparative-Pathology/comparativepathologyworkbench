@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         matrixownerselectionform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,11 +26,11 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for selecting a new owner of a bench.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.models import User
 from matrices.models import Matrix

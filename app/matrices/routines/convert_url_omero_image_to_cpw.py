@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         convert_url_omero_image_to_cpw.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,7 +26,8 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # try to convert an OMERO URL to a CPW Equivalent?
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from urllib.parse import urlparse

@@ -44,6 +44,7 @@ from matrices.forms import ServerForm
 
 from matrices.routines import AESCipher
 from matrices.routines import exists_server_for_uid_url
+from matrices.routines import is_request_ajax
 
 
 #
@@ -56,7 +57,7 @@ def server_create_update(request, server_id=None):
 
         raise PermissionDenied
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

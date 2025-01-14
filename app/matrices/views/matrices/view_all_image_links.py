@@ -39,6 +39,7 @@ from matrices.models import ImageLink
 
 from matrices.routines import get_last_used_collection_for_user
 from matrices.routines import get_header_data
+from matrices.routines import is_request_ajax
 
 
 #
@@ -47,7 +48,7 @@ from matrices.routines import get_header_data
 @login_required
 def view_all_image_links(request):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

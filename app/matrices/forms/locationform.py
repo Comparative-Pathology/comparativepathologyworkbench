@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         locationform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,12 +26,11 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for adding/editing Locations.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
-
 
 from matrices.models import Location
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         signupform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,15 +26,13 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for signing up Users.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 
 class SignUpForm(UserCreationForm):

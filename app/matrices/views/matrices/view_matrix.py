@@ -46,6 +46,7 @@ from matrices.routines import get_header_data
 from matrices.routines import get_or_none_user
 from matrices.routines import image_list_by_user_and_direction
 from matrices.routines import Base26
+from matrices.routines import is_request_ajax
 
 
 #
@@ -54,7 +55,7 @@ from matrices.routines import Base26
 @login_required
 def view_matrix(request, matrix_id):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

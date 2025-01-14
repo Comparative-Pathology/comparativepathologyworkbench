@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         collectionform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,16 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for editing Collections.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Collection
 
@@ -51,7 +48,6 @@ class CollectionForm(forms.ModelForm):
         model = Collection
         fields = ('title', 'description', )
 
-
     def __init__(self, *args, **kwargs):
         # important to "pop" added kwarg before call to parent's constructor
         self.request = kwargs.pop('request')
@@ -65,7 +61,6 @@ class CollectionForm(forms.ModelForm):
             self.id = 0
 
         super(CollectionForm, self).__init__(*args, **kwargs)
-
 
     def clean(self):
 

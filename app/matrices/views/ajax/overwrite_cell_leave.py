@@ -48,6 +48,7 @@ from matrices.routines import get_or_none_user
 from matrices.routines.get_primary_cpw_environment import get_primary_cpw_environment
 from matrices.routines.get_max_collection_image_ordering_for_collection \
     import get_max_collection_image_ordering_for_collection
+from matrices.routines import is_request_ajax
 
 WORDPRESS_SUCCESS = 'Success!'
 
@@ -58,7 +59,7 @@ WORDPRESS_SUCCESS = 'Success!'
 @login_required()
 def overwrite_cell_leave(request):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

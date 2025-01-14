@@ -40,6 +40,8 @@ from matrices.forms import CollectionForm
 from matrices.models import Collection
 from matrices.models import Credential
 
+from matrices.routines import is_request_ajax
+
 
 #
 #   EDIT A COLLECTION AUTHORISATION
@@ -47,7 +49,7 @@ from matrices.models import Credential
 @login_required()
 def collection_update(request, collection_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

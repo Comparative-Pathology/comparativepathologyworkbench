@@ -36,6 +36,7 @@ from django.shortcuts import render
 from matrices.models import Matrix
 
 from matrices.routines import get_header_data
+from matrices.routines import is_request_ajax
 
 
 #
@@ -43,7 +44,7 @@ from matrices.routines import get_header_data
 #
 def view_public_matrix(request, matrix_id):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+# 
+# ##
 # \file         cellserializer.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,12 +26,9 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # This Serializer provides Read functions for a Cell ONLY
-###
-from django.contrib.auth.models import User
-
+# ##
+#
 from rest_framework import serializers
-
-from django.db import models
 
 from matrices.models import Cell
 

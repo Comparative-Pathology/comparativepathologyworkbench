@@ -39,6 +39,8 @@ from django.urls import reverse
 from matrices.models import Collection
 from matrices.models import Credential
 
+from matrices.routines import is_request_ajax
+
 
 #
 #   ACTIVATE AN IMAGE COLLECTION on View Collection Page
@@ -46,7 +48,7 @@ from matrices.models import Credential
 @login_required
 def activate_in_collection(request, collection_id):
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if is_request_ajax(request):
 
         raise PermissionDenied
 

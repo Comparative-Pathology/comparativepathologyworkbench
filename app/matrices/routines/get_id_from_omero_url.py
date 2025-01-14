@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         get_id_from_omero_url.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,24 +26,19 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Get an id from an OMERO URL
-###
+# ##
+#
 from __future__ import unicode_literals
-
-import base64, hashlib
-
-from os import urandom
 
 from urllib.parse import urlparse
 
-from django.apps import apps
 
-
-"""
-    Get a Server from an OMERO URL
-"""
+#
+#   Get a Server from an OMERO URL
+#
 def get_id_from_omero_url(a_url):
 
-    #<scheme>://<netloc>/show_image/26/1654
+    # <scheme>://<netloc>/show_image/26/1654
 
     result = urlparse(a_url)
 

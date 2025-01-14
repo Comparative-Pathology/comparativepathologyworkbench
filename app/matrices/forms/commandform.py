@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         commandform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,15 +26,11 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for adding/editing OMERO API Commands.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Type
 from matrices.models import Protocol
@@ -47,7 +44,6 @@ class CommandForm(forms.ModelForm):
         fields = ('name', 'type', 'application', 'preamble', 'postamble', 'protocol')
         protocol = forms.ModelChoiceField(queryset=Protocol.objects.all())
         type = forms.ModelChoiceField(queryset=Type.objects.all())
-
 
     def __init__(self, *args, **kwargs):
 

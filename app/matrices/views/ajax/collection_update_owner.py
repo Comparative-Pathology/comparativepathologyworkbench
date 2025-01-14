@@ -47,6 +47,8 @@ from matrices.models import Credential
 from matrices.routines import collection_authorisation_exists_for_collection_and_permitted
 from matrices.routines import exists_collection_image_orders_for_collection_and_permitted
 from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
+from matrices.routines import is_request_ajax
+
 
 #
 #   Re-Allocate the Collectio Owner
@@ -54,7 +56,7 @@ from matrices.routines import get_collection_image_orders_for_collection_and_per
 @login_required()
 def collection_update_owner(request, collection_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

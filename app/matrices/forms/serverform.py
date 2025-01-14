@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-###!
+#
+# ##
 # \file         serverform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -25,22 +26,20 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for adding/editing Servers.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+
 from django.core.exceptions import ValidationError
-from django.utils.html import conditional_escape
-from django.utils.html import mark_safe
-from django.utils.translation import gettext_lazy as _
 
 from matrices.models import Type
 from matrices.models import Server
 
+
 #
-# SERVER FORM
+#   SERVER FORM
 #
 class ServerForm(forms.ModelForm):
 
@@ -51,7 +50,6 @@ class ServerForm(forms.ModelForm):
             'pwd': forms.PasswordInput(),
         }
         type = forms.ModelChoiceField(queryset=Type.objects.all())
-
 
     def clean(self):
 
@@ -68,7 +66,6 @@ class ServerForm(forms.ModelForm):
         if not url_server:
             msg = "Please Supply a URL!"
             raise ValidationError(msg)
-
 
     def __init__(self, *args, **kwargs):
 

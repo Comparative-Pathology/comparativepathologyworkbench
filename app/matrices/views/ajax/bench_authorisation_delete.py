@@ -39,6 +39,7 @@ from matrices.models import Credential
 from matrices.models import Matrix
 
 from matrices.routines import exists_update_for_bench_and_user
+from matrices.routines import is_request_ajax
 
 
 #
@@ -51,7 +52,7 @@ def bench_authorisation_delete(request, authorisation_id):
 
         raise PermissionDenied
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

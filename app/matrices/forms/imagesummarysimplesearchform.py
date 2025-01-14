@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+#
+# ##
 # \file         imagesummarysimplesearchform.py
 # \author       Mike Wicks
 # \date         March 2021
@@ -24,10 +26,12 @@
 # Boston, MA  02110-1301, USA.
 # \brief
 # Form for searching Images.
-###
+# ##
+#
 from __future__ import unicode_literals
 
 from django import forms
+
 from django.contrib.auth.models import User
 
 PAGE_CHOICES = (('10', 'Paginate By ...'),

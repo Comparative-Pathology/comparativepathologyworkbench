@@ -43,6 +43,7 @@ from matrices.models import Credential
 from matrices.models import Matrix
 
 from matrices.routines import authorisation_exists_for_bench_and_permitted
+from matrices.routines import is_request_ajax
 
 
 #
@@ -51,7 +52,7 @@ from matrices.routines import authorisation_exists_for_bench_and_permitted
 @login_required()
 def bench_update_owner(request, bench_id):
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

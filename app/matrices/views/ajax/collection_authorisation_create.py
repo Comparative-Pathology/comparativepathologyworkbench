@@ -47,6 +47,7 @@ from matrices.models import Credential
 from matrices.routines import collection_authorisation_create_update_consequences
 from matrices.routines import exists_update_for_collection_and_user
 from matrices.routines import get_collection_image_orders_for_collection_and_permitted_orderedby_ordering
+from matrices.routines import is_request_ajax
 
 
 #
@@ -59,7 +60,7 @@ def collection_authorisation_create(request, collection_id=None):
 
         raise PermissionDenied
 
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if not is_request_ajax(request):
 
         raise PermissionDenied
 

@@ -71,12 +71,16 @@ class Blog(models.Model):
                    owner=owner)
 
     def __str__(self):
-        return f"{self.id}, {self.name}, {self.protocol.id}, {self.application}, {self.preamble}, {self.postamble}, \
-                 {self.owner.id}"
+        return (
+            f"{self.id}, {self.name}, {self.protocol.id}, {self.application}, {self.preamble}, "
+            f"{self.postamble}, {self.owner.id}"
+        )
 
     def __repr__(self):
-        return f"{self.id}, {self.name}, {self.protocol.id}, {self.application}, {self.preamble}, {self.postamble}, \
-                 {self.owner.id}"
+        return (
+            f"{self.id}, {self.name}, {self.protocol.id}, {self.application}, {self.preamble}, "
+            f"{self.postamble}, {self.owner.id}"
+        )
 
     def is_owned_by(self, a_user):
         if self.owner == a_user:

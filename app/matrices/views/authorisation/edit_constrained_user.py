@@ -58,7 +58,7 @@ def edit_constrained_user(request, user_id):
 
     subject = get_or_none_user(user_id)
 
-    if not user and not subject:
+    if user and subject:
 
         data = get_header_data(request.user)
 

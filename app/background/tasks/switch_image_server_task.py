@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # ##
-# \file         __init__.py
+# \file         switch_image_server_task.py
 # \author       Mike Wicks
 # \date         March 2021
 # \version      $Id$
@@ -25,17 +25,34 @@
 # Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # \brief
-# tasks Package Description.
+# The switch_image_server_task Task.
 # ##
 #
-from .add_collection_column_cell_task import add_collection_column_cell_task
-from .add_collection_column_task import add_collection_column_task
-from .add_collection_row_cell_task import add_collection_row_cell_task
-from .add_collection_row_task import add_collection_row_task
-from .add_images_to_collection_task import add_images_to_collection_task
-from .lock_bench_task import lock_bench_task
-from .delete_bench_task import delete_bench_task
-from .lock_collection_task import lock_collection_task
-from .switch_image_server_task import switch_image_server_task
-from .unlock_bench_task import unlock_bench_task
-from .unlock_collection_task import unlock_collection_task
+from __future__ import absolute_import
+
+from matrices.models import Image
+from matrices.models import Server
+
+from celery import shared_task
+
+
+#
+#   LOCK a Bench
+#
+@shared_task
+def switch_image_server_task(image_id, image_name, image_server_id):
+
+    image = Image.objects.get(id=image_id)
+    server = Server.objects.get(id=image_server_id)
+
+    out_message = ""
+
+    image.name = image_name
+    image.server = server
+    image.save()
+
+    out_message = "Task switch_image_server_task: Image " + str(image.id) + \
+                  " named: " + str(image.name) + \
+                  " has NEW server: " + str(image.server.name)
+
+    return out_message

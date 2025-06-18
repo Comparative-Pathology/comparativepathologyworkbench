@@ -25,28 +25,28 @@ See the following Documents:
 
 ### 1 CPW Installation Guide ##
 
-<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/01_CPWInstallDevelopment_2024-05-01.md">
-01_CPWInstallDevelopment_2024-05-01.md</a>
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/01_CPWInstallDevelopment.md">
+01_CPWInstallDevelopment.md</a>
 
 ### 2 Current Live Configuration ###
 
-<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/02_CPWCurrentConfiguration_2024-05-01.md">
-02_CPWCurrentConfiguration_2024-05-01.md</a>
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/02_CPWCurrentConfiguration.md">
+02_CPWCurrentConfiguration.md</a>
 
 ### 3 WordPress Installation Guide ###
 
-<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/03_CPWConfigureWordpress_2024-05-01.md">
-03_CPWConfigureWordpress_2024-05-01.md</a>
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/03_CPWConfigureWordpress.md">
+03_CPWConfigureWordpress.md</a>
 
 ### 4 CPW Administration Guide ###
 
-<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/04_CPWAdministration_2024-05-01.md">
-04_CPWAdministration_2024-05-01.md</a>
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/04_CPWAdministration.md">
+04_CPWAdministration.md</a>
 
 ### 5 Installation Checklist ###
 
-<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/05_CPWChecklist_2024-05-01.md">
-05_CPWChecklist_2024-05-01.md</a>
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/05_CPWChecklist.md">
+05_CPWChecklist.md</a>
 
 
 ## Acknowledgements and References

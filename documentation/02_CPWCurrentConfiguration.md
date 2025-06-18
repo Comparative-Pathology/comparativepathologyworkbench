@@ -4,31 +4,20 @@ This document describes the current configuration of the Software for the Compar
 
 Mike Wicks
 
-1<sup>st</sup> May 2024
+18<sup>th</sup> June 2025
 
 ## 1. Server ##
 
 The system runs using a non-root user, without superuser privileges:
 
-***"ehgcap"*** on the Server **workbench-czi-cpw.mvm.ed.ac.uk**
-
-
-### Folder Aliases ###
-
-There are a number of foder aliases required by the system:
-
-1. **/opt/cpw** points to **/home/ehgcap/Django/comparativepathologyworkbench/app**
-
-2. **/opt/cpw-about** points to **/home/ehgcap/WWW/html/about-cpw**
-
-3. **/opt/private_media** points to **/home/ehgcap/WWW/private_media**
+***"ehgcap-czi"*** on the Server **workbench-czi-cpw.mvm.ed.ac.uk**
 
 
 ### Static Web Pages ###
 
 This system has a set of Static pages which live here:
 
-- **/home/ehgcap/WWW/html/about-cpw**
+- **/home/ehgcap-czi/WWW/html/cpw-about**
 
 ## 2. Webserver (NGINX) ##
 
@@ -36,31 +25,31 @@ The NGINX Configuration File lives here: **/etc/nginx/conf.d/czi-ws.conf**
 
 The configuration file contains the following Endpoints:
 
-- **/media** points to **/opt/cpw/media**
+- **/media** points to **/home/ehgcap-czi/Django/comparativepathologyworkbench/app/media**
 
-- **/static** points to **/opt/cpw/static**
+- **/static** points to **/home/ehgcap-czi/Django/comparativepathologyworkbench/app/static**
 
-- **/private_media** points to **/opt/private_media** (internal)
+- **/private_media** points to **/home/ehgcap-czi/WWW/private_media** (internal)
 
-- **/about** points to **/opt/cpw-about**
+- **/about** points to **/home/ehgcap-czi/WWW/html/cpw-about**
 
-- **/** points to **/opt/cpw/uwsgi_params**, uwsgi_pass Django
+- **/** points to **/home/ehgcap-czi/Django/comparativepathologyworkbench/app/uwsgi_params**
 
 ### CPW Application Home Directories ###
 
 The CPW is a Django Application and has the following folders
 
-- **/home/ehgcap/Django/comparativepathologyworkbench/app**
-	- **/home/ehgcap/Django/comparativepathologyworkbench/app/config**
-	- **/home/ehgcap/Django/comparativepathologyworkbench/app/matrices**
-	- **/home/ehgcap/Django/comparativepathologyworkbench/app/reports**
-	- **/home/ehgcap/Django/comparativepathologyworkbench/app/scripts**
-	- **/home/ehgcap/Django/comparativepathologyworkbench/app/static**
-	- **/home/ehgcap/Django/comparativepathologyworkbench/app/staticfiles**
+- **/home/ehgcap-czi/Django/comparativepathologyworkbench/app**
+	- **config**
+	- **matrices**
+	- **reports**
+	- **scripts**
+	- **static**
+	- **staticfiles**
 
 Note the following Softlink:
 
-**/home/ehgcap/Django/comparativepathologyworkbench/app/media** points to **/home/ehgcap/WWW/media**
+- **media** points to **/home/ehgcap-czi/WWW/media**
 
 ## 3. Database Connection ##
 
@@ -70,7 +59,7 @@ This can be achieved Directly within an Environment File, or via a Connection Se
 
 The Environment file lives here:
 
-- **/home/ehgcap/Django/comparativepathologyworkbench/app/config/.env**
+- **/home/ehgcap-czi/Django/comparativepathologyworkbench/app/config/.env**
 
 This contains the following example Environment Variables:
 
@@ -101,13 +90,13 @@ These variables are picked up in the python file, **settings.py**, thus:
 
 Alternatively, a Connection Service File with a Password File, can be used (it could be argued that this is a more secure solution).
 
-The password file is called **.cpw_password**, and is stored in **/home/ehgcap/Django/comparativepathologyworkbench/app**.
+The password file is called **.cpw_password**, and is stored in **/home/ehgcap-czi/Django/comparativepathologyworkbench/app**.
 
 An example **.cpw_password** file:
 
 	localhost:5432:workbench_canada:workbench_canada_user:password
 
-The connection service file is called **.pg_service.conf**, and is stored in **/home/ehgcap**.
+The connection service file is called **.pg_service.conf**, and is stored in **/home/ehgcap-czi**.
 
 An example **.pg_service.conf** file:
 
@@ -143,7 +132,7 @@ Requests to **/protected** are forwarded by the program **nginx_accel.py**, to *
 
 	path(protected /\<str:image_id\>/\', matrices_views.nginx_accel, name=\'nginx_accel\')"
 
-- **Document Root** set to **/home/ehgcap/WWW/private_media**
+- **Document Root** set to **/home/ehgcap-czi/WWW/private_media**
 
 - **NGINX Private Location** set to **private_media**
 

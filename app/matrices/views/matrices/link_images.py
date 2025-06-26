@@ -138,15 +138,15 @@ def link_images(request, image_parent_id, image_child_id):
 
             if image_parent is None:
 
-                messages.error(request, "CPW_WEB:0080 Link Images - No Parent Image Supplied!")
-                form.add_error(None, "CPW_WEB:0080 Link Images - No Parent Image Supplied!")
+                messages.error(request, "CPW_WEB:0650 Link Images - No Parent Image Supplied!")
+                form.add_error(None, "CPW_WEB:0650 Link Images - No Parent Image Supplied!")
 
             else:
 
                 if image_child is None:
 
-                    messages.error(request, "CPW_WEB:0080 Link Images - No Child Image Supplied!")
-                    form.add_error(None, "CPW_WEB:0080 Link Images - No Child Image Supplied!")
+                    messages.error(request, "CPW_WEB:0640 Link Images - No Child Image Supplied!")
+                    form.add_error(None, "CPW_WEB:0640 Link Images - No Child Image Supplied!")
 
                 else:
 

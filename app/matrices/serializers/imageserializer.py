@@ -127,7 +127,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:0530 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0530 Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
         # Check the User in the Request matches the Supplied Image Owner
@@ -135,7 +135,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
             if not request_user.is_superuser:
 
-                message = 'CPW_REST:0060 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
+                message = 'CPW_REST:0060 Attempting to Add a new Image for a different Owner: ' \
+                    + str(image_owner) + '!'
                 raise serializers.ValidationError(message)
 
         # Validate the Image Id, ROI, Owner, and Server and return the associated Server Object
@@ -265,7 +266,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:0540 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0540 Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
 
@@ -274,7 +275,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
             if not request_user.is_superuser:
 
-                message = 'CPW_REST:0060 ERROR! Attempting to Add a new Image for a different Owner: ' + str(image_owner) + '!'
+                message = 'CPW_REST:0560 Attempting to Add a new Image for a different Owner: ' \
+                    + str(image_owner) + '!'
                 raise serializers.ValidationError(message)
 
         # Validate the Image parameters against the Server and return the Server Object
@@ -403,7 +405,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Comment greater than 255 Characters? IF so, Raise an Error!
         if len_comment > CONST_4095:
 
-            message = 'CPW_REST:0550 ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
+            message = 'CPW_REST:0550 Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         server_list = a_server_str.split("@")
@@ -423,7 +425,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 # Does the Image exist on the WordPress Server?
                 if not self.validate_wordpress_image_id(server, a_user, a_image_id):
 
-                    message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + a_server_str + '!'
+                    message = 'CPW_REST:0320 Image NOT Present on : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
 
             # No
@@ -442,19 +444,21 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                             if not self.validate_roi_id(server, a_image_id, a_roi_id):
 
                                 # No such ROI, Raise Error!
-                                message = 'CPW_REST:0240 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
+                                message = 'CPW_REST:0240 ROI ID ' + str(a_roi_id) + ', for Image ID ' + \
+                                    str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
                                 raise serializers.ValidationError(message)
 
                     # Image does not exist on the Server, Raise Error!
                     else:
 
-                        message = 'CPW_REST:0200 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + a_server_str + '!'
+                        message = 'CPW_REST:0200 Image ID ' + str(a_image_id) + ', NOT Present on : ' + \
+                            a_server_str + '!'
                         raise serializers.ValidationError(message)
 
                 # No - Server type unrecognised, Raise Error!
                 else:
 
-                    message = 'CPW_REST:0340 ERROR! Server Type Unknown : ' + a_server_str + '!'
+                    message = 'CPW_REST:0340 Server Type Unknown : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
 
             return server
@@ -462,7 +466,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # No Server exists, Raise Error!
         else:
 
-            message = 'CPW_REST:0260 ERROR! Server Unknown : ' + a_server_str + '!'
+            message = 'CPW_REST:0260 Server Unknown : ' + a_server_str + '!'
             raise serializers.ValidationError(message)
 
     def validate_wordpress_image_id(self, a_server, a_user, a_image_id):

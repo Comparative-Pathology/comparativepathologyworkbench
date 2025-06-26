@@ -118,8 +118,8 @@ def server_create_update(request, server_id=None):
 
                 if exists_server_for_uid_url(object.uid, object.url_server):
 
-                    messages.error(request, "CPW_WEB:0610 NEW Server - A Server already Exist for that User Id and URL!")
-                    form.add_error(None, "CPW_WEB:0610 NEW Server - A Server already Exist for that User Id and URL!")
+                    messages.error(request, "CPW_WEB:0620 NEW Server - A Server already Exist for that User Id and URL!")
+                    form.add_error(None, "CPW_WEB:0620 NEW Server - A Server already Exist for that User Id and URL!")
 
                 else:
 

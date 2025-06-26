@@ -55,13 +55,15 @@ def delete_type(request, type_id):
 
             if exists_server_for_type(type):
 
-                messages.error(request, 'CPW_WEB:0510 Server Type ' + type.name + ' NOT Deleted - Servers still exist!')
+                messages.error(request, 'CPW_WEB:0590 Server Type ' + type.name + ' NOT Deleted - Servers still '
+                               'exist!')
 
             else:
 
                 if exists_command_for_type(type):
 
-                    messages.error(request, 'CPW_WEB:0520 Server Type ' + type.name + ' NOT Deleted - API Commands still exist!')
+                    messages.error(request, 'CPW_WEB:0520 Server Type ' + type.name + ' NOT Deleted - API Commands '
+                                   'still exist!')
 
                 else:
 

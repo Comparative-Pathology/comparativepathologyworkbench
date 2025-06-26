@@ -52,7 +52,7 @@ def delete_environment(request, environment_id):
 
             if environment.name == 'CPW':
 
-                messages.error(request, 'CPW_WEB:0510 Environment Location ' + environment.name + ' NOT Deleted - '
+                messages.error(request, 'CPW_WEB:0240 Environment Location ' + environment.name + ' NOT Deleted - '
                                'CANNOT Delete the Primary Environment!')
 
             else:

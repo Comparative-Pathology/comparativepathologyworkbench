@@ -92,8 +92,6 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
         Raises:
             ValidationError:
-                CPW_REST:0060 - Attempting to Create an Image for a different Owner.
-            ValidationError:
                 CPW_REST:0390 - Attempting to Add a new Collection for a different Owner
             ValidationError:
                 CPW_REST:0490 - the Image Owner Does NOT Exist!
@@ -152,7 +150,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:0490 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0490 Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
         # Check the supplied Owner of the Collection against the Requesting User
@@ -162,7 +160,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
             # AND the Requesting User is NOT a Super-User, then Raise an Error!
             if not request_user.is_superuser:
 
-                message = 'CPW_REST:0390 ERROR! Attempting to Add a new Collection for a different Owner: ' + \
+                message = 'CPW_REST:0390 Attempting to Add a new Collection for a different Owner: ' + \
                     str(collection_owner) + '!'
                 raise serializers.ValidationError(message)
 
@@ -220,14 +218,14 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                         # And the User is NOT a Super-User, then Raise an Error!
                         if not request_user.is_superuser:
 
-                            message = 'CPW_REST:0430 ERROR! Attempting to Add an Image to a Collection for a ' + \
+                            message = 'CPW_REST:0430 Attempting to Add an Image to a Collection for a ' + \
                                 'different Owner: ' + str(image_owner) + '!'
                             raise serializers.ValidationError(message)
 
                 # No User exists, Raise an Error!
                 else:
 
-                    message = 'CPW_REST:0500 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+                    message = 'CPW_REST:0500 Image Owner: ' + str(owner) + ' Does NOT Exist!'
                     raise serializers.ValidationError(message)
 
                 # Validate the supplied Image attributes against the supplied Server, and return the Server
@@ -365,7 +363,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # No User exists, Raise an Error!
         else:
 
-            message = 'CPW_REST:0510 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+            message = 'CPW_REST:0510 Image Owner: ' + str(owner) + ' Does NOT Exist!'
             raise serializers.ValidationError(message)
 
         # Update the Collection Object Attributes
@@ -379,7 +377,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
             # AND the Requesting User is NOT a Super-User, then Raise an Error!
             if not request_user.is_superuser:
 
-                message = 'CPW_REST:0400 ERROR! Attempting to Update an existing Collection for a ' + \
+                message = 'CPW_REST:0400 Attempting to Update an existing Collection for a ' + \
                     'different Owner: ' + str(collection_owner) + '!'
                 raise serializers.ValidationError(message)
 
@@ -441,7 +439,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # Check we have been supplied with BOTH a Title and Description
         if a_title == '' and a_description == '':
 
-            message = 'CPW_REST:0380 ERROR! NO data supplied for Collection Creation!'
+            message = 'CPW_REST:0380 NO data supplied for Collection Creation!'
             raise serializers.ValidationError(message)
 
         len_title = len(a_title)
@@ -450,13 +448,13 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Title greater than 255 Characters?
         if len_title > CONST_255:
 
-            message = 'CPW_REST:0410 ERROR! Collection Title Length (' + str(len_title) + ') is greater than 255!'
+            message = 'CPW_REST:0410 Collection Title Length (' + str(len_title) + ') is greater than 255!'
             raise serializers.ValidationError(message)
 
         # Is the Description greater than 4095 Characters?
         if len_description > CONST_4095:
 
-            message = 'CPW_REST:0420 ERROR! Collection Description Length (' + str(len_title) + ') is greater than 4095!'
+            message = 'CPW_REST:0420 Collection Description Length (' + str(len_title) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
     def delete_missing_images(self, instance, a_images_data):
@@ -648,7 +646,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                     # No User exists, Raise an Error!
                     else:
 
-                        message = 'CPW_REST:0520 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+                        message = 'CPW_REST:0520 Image Owner: ' + str(owner) + ' Does NOT Exist!'
                         raise serializers.ValidationError(message)
 
                     # Validate the supplied Image attributes against the supplied Server, and return the Server
@@ -738,7 +736,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
             ValidationError:
                 CPW_REST:0430 - Attempting to add an Image that belongs to somebody else!
             ValidationError:
-                CPW_REST:0530 - the Image Owner Does NOT Exist!
+                CPW_REST:0440 - the Image Owner Does NOT Exist!
 
         """
 
@@ -772,14 +770,14 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                             # And the User is NOT a Super-User, then Raise an Error!
                             if not a_request_user.is_superuser:
 
-                                message = 'CPW_REST:0430 ERROR! Attempting to Add an Image to a Collection ' +\
+                                message = 'CPW_REST:0480 Attempting to Add an Image to a Collection ' +\
                                     'for a different Owner: ' + str(image_owner) + '!'
                                 raise serializers.ValidationError(message)
 
                 # No User exists, Raise an Error!
                 else:
 
-                    message = 'CPW_REST:0530 ERROR! Image Owner: ' + str(owner) + ' Does NOT Exist!'
+                    message = 'CPW_REST:0440 Image Owner: ' + str(owner) + ' Does NOT Exist!'
                     raise serializers.ValidationError(message)
 
     def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id, a_image_comment):
@@ -800,11 +798,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
 
         Raises:
             ValidationError:
-                CPW_REST:0540 - Image Comment Title Length is greater than 4095!
-            ValidationError:
-                CPW_REST:0440 - Image NOT Present on the WordPress Server
-            ValidationError:
-                CPW_REST:0450 - ROI NOT Present on the Server
+                CPW_REST:0450 - Image Comment Title Length is greater than 4095!
             ValidationError:
                 CPW_REST:0460 - Image NOT Present on the OMERO Server
             ValidationError:
@@ -821,7 +815,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Comment greater than 255 Characters? IF so, Raise an Error!
         if len_comment > CONST_4095:
 
-            message = 'CPW_REST:0540 ERROR! Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
+            message = 'CPW_REST:0450 Image Comment Title Length (' + str(len_comment) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         # Split the Server String into UID and URL?
@@ -842,7 +836,7 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                 # Does the Image exist on the WordPress Server?
                 if not self.validate_wordpress_image_id(server, a_user, a_image_id):
 
-                    message = 'CPW_REST:0320 ERROR! Image NOT Present on : ' + a_server_str + '!'
+                    message = 'CPW_REST:0600 Image NOT Present on : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
 
             # No ... 
@@ -861,27 +855,27 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
                             if not self.validate_roi_id(server, a_image_id, a_roi_id):
 
                                 # No such ROI, Raise Error!
-                                message = 'CPW_REST:0240 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + \
+                                message = 'CPW_REST:0580 ROI ID ' + str(a_roi_id) + ', for Image ID ' + \
                                     str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
                                 raise serializers.ValidationError(message)
 
                     # Image does not exist on the Server, Raise Error!
                     else:
 
-                        message = 'CPW_REST:0200 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + \
+                        message = 'CPW_REST:0570 Image ID ' + str(a_image_id) + ', NOT Present on : ' + \
                             a_server_str + '!'
                         raise serializers.ValidationError(message)
 
                 # No - Server type unrecognised, Raise Error!
                 else:
 
-                    message = 'CPW_REST:0340 ERROR! Server Type Unknown : ' + a_server_str + '!'
+                    message = 'CPW_REST:0610 Server Type Unknown : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
 
         # No Server exists, Raise Error!
         else:
 
-            message = 'CPW_REST:0260 ERROR! Server Unknown : ' + a_server_str + '!'
+            message = 'CPW_REST:0590 Server Unknown : ' + a_server_str + '!'
             raise serializers.ValidationError(message)
 
         return server

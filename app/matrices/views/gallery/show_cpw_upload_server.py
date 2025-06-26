@@ -126,8 +126,8 @@ def show_cpw_upload_server(request, server_id):
 
                     else:
 
-                        messages.error(request, "CPW_WEB:0080 Show CPW Upload - Form is Invalid!")
-                        form.add_error(None, "CPW_WEB:0080 Show CPW Upload - Form is Invalid!")
+                        messages.error(request, "CPW_WEB:0660 Show CPW Upload - Form is Invalid!")
+                        form.add_error(None, "CPW_WEB:0660 Show CPW Upload - Form is Invalid!")
 
                 else:
 

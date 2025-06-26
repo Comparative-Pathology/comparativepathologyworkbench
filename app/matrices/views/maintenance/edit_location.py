@@ -77,8 +77,8 @@ def edit_location(request, location_id):
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
-                    form.add_error(None, "CPW_WEB:0140 Edit Environment Location - Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0680 Edit Environment Location - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0680 Edit Environment Location - Form is Invalid!")
 
                     data.update({'form': form,
                                  'location': location})

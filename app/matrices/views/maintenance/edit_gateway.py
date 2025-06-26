@@ -77,8 +77,8 @@ def edit_gateway(request, gateway_id):
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0140 Edit OMERO Gateway - Form is Invalid!")
-                    form.add_error(None, "CPW_WEB:0140 Edit OMERO Gateway - Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0690 Edit OMERO Gateway - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0690 Edit OMERO Gateway - Form is Invalid!")
 
                     data.update({'form': form,
                                  'gateway': gateway})

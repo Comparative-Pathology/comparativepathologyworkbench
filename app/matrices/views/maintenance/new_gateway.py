@@ -71,8 +71,8 @@ def new_gateway(request):
 
             else:
 
-                messages.error(request, "CPW_WEB:0200 New OMERO Gateway- Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0200 New OMERO Gateway - Form is Invalid!")
+                messages.error(request, "CPW_WEB:0720 New OMERO Gateway- Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0720 New OMERO Gateway - Form is Invalid!")
 
                 data.update({
                     'form': form

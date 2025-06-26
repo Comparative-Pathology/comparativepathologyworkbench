@@ -57,7 +57,7 @@ def delete_user(request, user_id):
 
         if not subject:
 
-            messages.error(request, 'CPW_WEB:043 User NOT Deleted - User does NOT Exist!')
+            messages.error(request, 'CPW_WEB:0630 User NOT Deleted - User does NOT Exist!')
 
         else:
 

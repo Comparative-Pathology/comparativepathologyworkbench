@@ -140,7 +140,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
            validated_data.get('bench_cells', None) is None:
 
             # No, then Raise an Error!
-            message = 'CPW_REST:0370 ERROR! NO data supplied for Bench Creation!'
+            message = 'CPW_REST:0370 NO data supplied for Bench Creation!'
             raise serializers.ValidationError(message)
 
         matrix_title = ""
@@ -179,7 +179,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if not request_user.is_superuser:
 
                 # No, then Raise an Error!
-                message = 'CPW_REST:0050 ERROR! Attempting to Add a new Bench for a different Owner: ' + \
+                message = 'CPW_REST:0050 Attempting to Add a new Bench for a different Owner: ' + \
                           str(matrix_owner) + '!'
                 raise serializers.ValidationError(message)
 
@@ -295,7 +295,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                         if cell_title == '' and cell_description == '':
 
                             # Yes, Raise an Error!
-                            message = 'CPW_REST:0070 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title ' + \
+                            message = 'CPW_REST:0070 Attempting to Add an Image to a Bench WITHOUT a Title ' + \
                                       'or Description!'
                             raise serializers.ValidationError(message)
 
@@ -579,7 +579,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             if not request_user.is_superuser:
 
                 # No, then Raise an Error!
-                message = 'CPW_REST:0100 ERROR! Attempting to Update an existing Bench for a different Owner: ' + \
+                message = 'CPW_REST:0100 Attempting to Update an existing Bench for a different Owner: ' + \
                     str(bench_owner) + '!'
                 raise serializers.ValidationError(message)
 
@@ -590,7 +590,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         if validated_data.get('bench_cells', None) is None:
 
             # No, then Raise an Error!
-            message = 'CPW_REST:0360 ERROR! No Cells Supplied for UPDATE!'
+            message = 'CPW_REST:0360 No Cells Supplied for UPDATE!'
             raise serializers.ValidationError(message)
 
         # Get the Cell JSON Data
@@ -1637,37 +1637,37 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Title greater than 255 Characters? IF so, Raise an Error!
         if len_title > CONST_255:
 
-            message = 'CPW_REST:0160 ERROR! Bench Title Length (' + str(len_title) + ') is greater than 255!'
+            message = 'CPW_REST:0160 Bench Title Length (' + str(len_title) + ') is greater than 255!'
             raise serializers.ValidationError(message)
 
         # Is the Description greater than 4095 Characters? IF so, Raise an Error!
         if len_description > CONST_4095:
 
-            message = 'CPW_REST:0150 ERROR! Bench Description Length (' + str(len_title) + ') is greater than 4095!'
+            message = 'CPW_REST:0150 Bench Description Length (' + str(len_title) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
         # Is the Height greater than 450 Pixels? IF so, Raise an Error!
         if a_height > CONST_450:
 
-            message = 'CPW_REST:0110 ERROR! Bench Cell Height (' + str(a_height) + ') is greater than 450!'
+            message = 'CPW_REST:0110 Bench Cell Height (' + str(a_height) + ') is greater than 450!'
             raise serializers.ValidationError(message)
 
         # Is the Height less than 75 Pixels? IF so, Raise an Error!
         if a_height < CONST_75:
 
-            message = 'CPW_REST:0120 ERROR! Bench Cell Height (' + str(a_height) + ') is less than 75!'
+            message = 'CPW_REST:0120 Bench Cell Height (' + str(a_height) + ') is less than 75!'
             raise serializers.ValidationError(message)
 
         # Is the Width greater than 450 Pixels? IF so, Raise an Error!
         if a_width > CONST_450:
 
-            message = 'CPW_REST:0130 ERROR! Bench Cell Width (' + str(a_width) + ') is greater than 450!'
+            message = 'CPW_REST:0130 Bench Cell Width (' + str(a_width) + ') is greater than 450!'
             raise serializers.ValidationError(message)
 
         # Is the Width less than 75 Pixels? IF so, Raise an Error!
         if a_width < CONST_75:
 
-            message = 'CPW_REST:0140 ERROR! Bench Cell Width (' + str(a_width) + ') is less than 75!'
+            message = 'CPW_REST:0140 Bench Cell Width (' + str(a_width) + ') is less than 75!'
             raise serializers.ValidationError(message)
 
     def validate_cells(self, a_cells_data, a_request_user, a_mode_flag):
@@ -1726,7 +1726,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Have any Cells been supplied with this Bench, if Not, Raise an Error!
         if not a_cells_data:
 
-            message = 'CPW_REST:0230 ERROR! NO Cells supplied with Bench!'
+            message = 'CPW_REST:0230 NO Cells supplied with Bench!'
             raise serializers.ValidationError(message)
 
         # Process the supplied Cells ...
@@ -1764,28 +1764,28 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Do we have more than 10,000 Columns?
         if maxX > environment.maximum_rest_columns:
 
-            message = 'CPW_REST:0300 ERROR! Too many Columns in Bench (' + str(maxX) + '); No more than ' + str() + \
+            message = 'CPW_REST:0300 Too many Columns in Bench (' + str(maxX) + '); No more than ' + str() + \
                 ' Columns allowed!'
             raise serializers.ValidationError(message)
 
         # Do we have more than 10,000 Rows?
         if maxY > environment.maximum_rest_rows:
 
-            message = 'CPW_REST:0310 ERROR! Too many Rows in Bench (' + str(maxY) + '); No more than ' + str() + \
+            message = 'CPW_REST:0310 Too many Rows in Bench (' + str(maxY) + '); No more than ' + str() + \
                 ' Rows allowed!'
             raise serializers.ValidationError(message)
 
         # Do we have less than 3 Columns?
         if maxX < environment.minimum_rest_columns:
 
-            message = 'CPW_REST:0280 ERROR! Too few Columns in Bench (' + str(maxX) + '); At least ' + str() +\
+            message = 'CPW_REST:0280 Too few Columns in Bench (' + str(maxX) + '); At least ' + str() +\
                 ' Columns required!'
             raise serializers.ValidationError(message)
 
         # Do we have less than 3 Rows?
         if maxY < environment.minimum_rest_rows:
 
-            message = 'CPW_REST:0290 ERROR! Too few Rows in Bench (' + str(maxY) + '); At least ' + str() + \
+            message = 'CPW_REST:0290 Too few Rows in Bench (' + str(maxY) + '); At least ' + str() + \
                 ' Rows required!'
             raise serializers.ValidationError(message)
 
@@ -1821,7 +1821,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
             #  we have a Duplicate Cell, so Raise an Error!
             if bench_cells[i][j] is True:
 
-                message = 'CPW_REST:0190 ERROR! Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + \
+                message = 'CPW_REST:0190 Duplicate Cell : Column Index = ' + str(i) + ', Row Index = ' + \
                     str(j) + '!'
                 raise serializers.ValidationError(message)
 
@@ -1847,7 +1847,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 #  so Raise an Error!
                 if bench_cells[i][j] is False:
 
-                    message = 'CPW_REST:0220 ERROR! Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + \
+                    message = 'CPW_REST:0220 Missing Cell : Column Index = ' + str(i) + ', Row Index = ' + \
                         str(j) + '!'
                     raise serializers.ValidationError(message)
 
@@ -1872,36 +1872,36 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 # Do we have Image Data in the Column Header, if so, Raise an Error!
                 if xcoordinate == CONST_ZERO:
 
-                    message = 'CPW_REST:0010 ERROR! An Image is not Permitted in : Column Index = ' + \
+                    message = 'CPW_REST:0010 An Image is not Permitted in : Column Index = ' + \
                         str(xcoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # Do we have Image Data in the Column Footer, if so, Raise an Error!
                 if xcoordinate == max_column_index:
 
-                    message = 'CPW_REST:0020 ERROR! An Image is not Permitted in : Column Index = ' + \
+                    message = 'CPW_REST:0020 An Image is not Permitted in : Column Index = ' + \
                         str(xcoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # Do we have Image Data in the Row Header, if so, Raise an Error!
                 if ycoordinate == CONST_ZERO:
 
-                    message = 'CPW_REST:0030 ERROR! An Image is not Permitted in : Row Index = ' + \
+                    message = 'CPW_REST:0030 An Image is not Permitted in : Row Index = ' + \
                         str(ycoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # Do we have Image Data in the Row Footer, if so, Raise an Error!
                 if ycoordinate == max_row_index:
 
-                    message = 'CPW_REST:0040 ERROR! An Image is not Permitted in : Row Index = ' + \
+                    message = 'CPW_REST:0040 An Image is not Permitted in : Row Index = ' + \
                         str(ycoordinate) + '!'
                     raise serializers.ValidationError(message)
 
                 # There must be a Title and Description for a Cell containing an Image, else Raise an Error
                 if cell_title == '' or cell_description == '':
 
-                    message = 'CPW_REST:0080 ERROR! Attempting to Add an Image to a Bench WITHOUT a Title or " + \
-                        "Description!'
+                    message = 'CPW_REST:0080 Attempting to Add an Image to a Bench WITHOUT a Title or ' + \
+                        'Description!'
                     raise serializers.ValidationError(message)
 
             # Is there any Image data in the Cell?
@@ -1930,13 +1930,13 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             # And the User is NOT a Super-User, then Raise an Error!
                             if not a_request_user.is_superuser:
 
-                                message = 'CPW_REST:0090 ERROR! Attempting to Add an Image to a Bench for a " + \
-                                    "different Owner: ' + str(owner) + '!'
+                                message = 'CPW_REST:0090 Attempting to Add an Image to a Bench for a ' + \
+                                    'different Owner: ' + str(owner) + '!'
                                 raise serializers.ValidationError(message)
 
                 # No User exists, Raise an Error!
                 else:
-                    message = 'CPW_REST:XXXX ERROR! Image Owner: ' + str(image_owner) + ' Does NOT Exist!'
+                    message = 'CPW_REST:0470 Image Owner: ' + str(image_owner) + ' Does NOT Exist!'
                     raise serializers.ValidationError(message)
 
                 # Validate the Image in the Cell
@@ -1969,13 +1969,13 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Title greater than 255 Characters?
         if len_title > CONST_255:
 
-            message = 'CPW_REST:0180 ERROR! Cell Title Length (' + str(len_title) + ') is greater than 255!'
+            message = 'CPW_REST:0180 Cell Title Length (' + str(len_title) + ') is greater than 255!'
             raise serializers.ValidationError(message)
 
         # Is the Description greater than 4095 Characters?
         if len_description > CONST_4095:
 
-            message = 'CPW_REST:0170 ERROR! Cell Description Length (' + str(len_title) + ') is greater than 4095!'
+            message = 'CPW_REST:0170 Cell Description Length (' + str(len_title) + ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
     def validate_image_json(self, a_server_str, a_user, a_image_id, a_roi_id, a_image_comment):
@@ -1996,7 +1996,9 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
 
         Raises:
             ValidationError:
-                CPW_REST:XXXX - Image Comment Title Length is greater than 4095!
+                CPW_REST:0470 - Image Owner: Does NOT Exist!'
+            ValidationError:
+                CPW_REST:0460 - Image Comment Title Length is greater than 4095!
             ValidationError:
                 CPW_REST:0330 - Image NOT Present on the WordPress Server
             ValidationError:
@@ -2017,7 +2019,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
         # Is the Comment greater than 4095 Characters? IF so, Raise an Error!
         if len_comment > CONST_4095:
 
-            message = 'CPW_REST:XXXX ERROR! Image Comment Title Length (' + str(len_comment) + \
+            message = 'CPW_REST:0460 Image Comment Title Length (' + str(len_comment) + \
                 ') is greater than 4095!'
             raise serializers.ValidationError(message)
 
@@ -2040,7 +2042,7 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                 if not self.validate_wordpress_image_id(server, a_user, a_image_id):
 
                     # No, then Error
-                    message = 'CPW_REST:0330 ERROR! Image NOT Present on : ' + a_server_str + '!'
+                    message = 'CPW_REST:0330 Image NOT Present on : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
 
             # No ...
@@ -2059,27 +2061,27 @@ class MatrixSerializer(serializers.HyperlinkedModelSerializer):
                             if not self.validate_roi_id(server, a_image_id, a_roi_id):
 
                                 # No such ROI, Raise Error!
-                                message = 'CPW_REST:0250 ERROR! ROI ID ' + str(a_roi_id) + ', for Image ID ' + \
+                                message = 'CPW_REST:0250 ROI ID ' + str(a_roi_id) + ', for Image ID ' + \
                                     str(a_image_id) + ", NOT Present on : " + a_server_str + '!'
                                 raise serializers.ValidationError(message)
 
                     # No Image, then Error
                     else:
 
-                        message = 'CPW_REST:0210 ERROR! Image ID ' + str(a_image_id) + ', NOT Present on : ' + \
+                        message = 'CPW_REST:0210 Image ID ' + str(a_image_id) + ', NOT Present on : ' + \
                             a_server_str + '!'
                         raise serializers.ValidationError(message)
 
                 # Not an OMERO server, then Error
                 else:
 
-                    message = 'CPW_REST:0350 ERROR! Server Type Unknown : ' + a_server_str + '!'
+                    message = 'CPW_REST:0350 Server Type Unknown : ' + a_server_str + '!'
                     raise serializers.ValidationError(message)
 
         # No Server, then Error
         else:
 
-            message = 'CPW_REST:0270 ERROR! Server Unknown : ' + a_server_str + '!'
+            message = 'CPW_REST:0270 Server Unknown : ' + a_server_str + '!'
             raise serializers.ValidationError(message)
 
         return server

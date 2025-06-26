@@ -77,8 +77,8 @@ def edit_type(request, type_id):
 
                 else:
 
-                    messages.error(request, "CPW_WEB:0140 Edit Server Type - Form is Invalid!")
-                    form.add_error(None, "CPW_WEB:0140 Edit Server Type - Form is Invalid!")
+                    messages.error(request, "CPW_WEB:0700 Edit Server Type - Form is Invalid!")
+                    form.add_error(None, "CPW_WEB:0700 Edit Server Type - Form is Invalid!")
 
                     data.update({'form': form,
                                  'type': type})

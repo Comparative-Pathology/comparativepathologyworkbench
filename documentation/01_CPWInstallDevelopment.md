@@ -71,10 +71,24 @@ An example "**.env**" file is shown here:
 	DB_HOST=localhost
 	DB_PORT=5432
 	DB_ATOMIC_REQUESTS=True
-	EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend
-	EMAIL_FILE_PATH=a_folder_somewhere
 	SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 	SESSION_COOKIE_AGE=86400
+	BROKER_URL=a_broker_url
+	RESULTS_URL=a_results_url
+	CELERY_QUEUE_NAME=a_queue_name
+	DEFAULT_FROM_EMAIL=an_email_address
+
+Either:
+
+	EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend
+	EMAIL_FILE_PATH=a_folder_somewhere
+
+Or:
+
+	EMAIL_HOST=localhost
+	EMAIL_PORT=25
+	EMAIL_USE_TLS=False
+
 
 
 ## Step 4 - Set up an Empty Database ##

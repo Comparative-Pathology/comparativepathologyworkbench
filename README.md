@@ -48,6 +48,21 @@ See the following Documents:
 <a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/05_CPWChecklist.md">
 05_CPWChecklist.md</a>
 
+### 6 Web App Error Messages ###
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/06_CPW_WEB_ErrorMessages.md">
+06_CPW_WEB_ErrorMessages.md</a>
+
+### 7 REST Interface Error Messages ###
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/07_CPW_REST_ErrorMessages.md">
+07_CPW_REST_ErrorMessages.md</a>
+
+### 8 CPW Configuration Supplement ###
+
+<a href="https://github.com/Comparative-Pathology/comparativepathologyworkbench/blob/master/documentation/08_CPWConfigurationSupplement.md">
+08_CPWConfigurationSupplement.md</a>
+
 
 ## Acknowledgements and References
 

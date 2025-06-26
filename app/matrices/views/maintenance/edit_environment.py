@@ -87,8 +87,8 @@ def edit_environment(request, environment_id):
 
                             messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the '
                                            'Primary Environment!')
-                            form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the Primary '
-                                           'Environment')
+                            form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the '
+                                           'Primary Environment!')
 
                     else:
 
@@ -96,10 +96,10 @@ def edit_environment(request, environment_id):
 
                             if environment.name == ENVIRONMENT_NAME_CPW:
 
-                                messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of '
-                                           'the Primary Environment!')
-                                form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change to the name of the '
-                                           'Primary Environment')
+                                messages.error(request, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of '
+                                               'the Primary Environment!')
+                                form.add_error(None, 'CPW_WEB:0140 Edit Environment - CANNOT Change the name of the '
+                                               'Primary Environment!')
 
                             else:
 
@@ -125,8 +125,8 @@ def edit_environment(request, environment_id):
 
                 else:
 
-                    messages.error(request, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
-                    form.add_error(None, 'CPW_WEB:0140 Edit Environment - Form is Invalid!')
+                    messages.error(request, 'CPW_WEB:0670 Edit Environment - Form is Invalid!')
+                    form.add_error(None, 'CPW_WEB:0670 Edit Environment - Form is Invalid!')
 
                     data.update({'form': form,
                                  'environment': environment})

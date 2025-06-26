@@ -70,8 +70,8 @@ def new_location(request):
 
             else:
 
-                messages.error(request, "CPW_WEB:0200 New Environment Location - Form is Invalid!")
-                form.add_error(None, "CPW_WEB:0200 New Environment Location - Form is Invalid!")
+                messages.error(request, "CPW_WEB:0710 New Environment Location - Form is Invalid!")
+                form.add_error(None, "CPW_WEB:0710 New Environment Location - Form is Invalid!")
 
                 data.update({'form': form})
 

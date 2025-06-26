@@ -54,7 +54,7 @@ def delete_gateway(request, gateway_id):
 
             if exists_environment_for_gateway(gateway):
 
-                messages.error(request, 'CPW_WEB:0510 OMERO Gateway ' + gateway.name +
+                messages.error(request, 'CPW_WEB:0290 OMERO Gateway ' + gateway.name +
                                ' NOT Deleted - Environments still exist!')
 
             else:
